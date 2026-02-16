@@ -2,7 +2,7 @@
 
 Display name: Bolta Skills Registry
 Slug: bolta-skills-registry
-Version: 0.5.1
+Version: 0.5.2
 Tags: registry,catalog,bootstrap,workspace,index,discovery
 Organization: bolta.ai
 Author: Max Fritzhand
@@ -254,6 +254,260 @@ curl https://api.bolta.ai/v1/workspaces/{workspace_id} \
 2. For content creation: Need `posts:write` minimum
 3. For scheduling: Need `posts:schedule` + editor role
 4. For automation: Need `cron:execute` permission
+
+---
+
+## Installation & First Run
+
+### 🎯 Complete Skill Pack Installation
+
+**You're currently viewing the registry skill only.** To access the full Bolta skills library, you should install the complete skill pack.
+
+**Option 1: Install Full Skill Pack (Recommended)**
+
+```bash
+# Clone the complete Bolta skills repository
+git clone https://github.com/boltaai/bolta-skills.git
+
+# Or download the latest release
+curl -L https://github.com/boltaai/bolta-skills/archive/refs/heads/main.zip -o bolta-skills.zip
+unzip bolta-skills.zip
+```
+
+**What You Get:**
+```
+bolta-skills/
+├── README.md                    # ⭐ START HERE - Complete getting started guide
+├── skills/
+│   ├── bolta.skills.index/      # ✅ You're here (registry)
+│   ├── voice-plane/
+│   │   ├── bolta.voice.bootstrap/
+│   │   ├── bolta.voice.learn_from_samples/
+│   │   ├── bolta.voice.evolve/
+│   │   └── bolta.voice.validate/
+│   ├── content-plane/
+│   │   ├── bolta.draft.post/
+│   │   ├── bolta.loop.from_template/
+│   │   ├── bolta.week.plan/
+│   │   ├── bolta.content.repurpose/
+│   │   └── bolta.content.thread_builder/
+│   ├── review-plane/
+│   │   ├── bolta.inbox.triage/
+│   │   ├── bolta.review.digest/
+│   │   ├── bolta.review.approve_and_route/
+│   │   ├── bolta.review.suggest_edits/
+│   │   └── bolta.review.compliance_check/
+│   ├── automation-plane/
+│   │   ├── bolta.cron.generate_to_review/
+│   │   ├── bolta.cron.generate_and_schedule/
+│   │   ├── bolta.recurring.from_template/
+│   │   ├── bolta.auto.respond_to_trending/
+│   │   └── bolta.auto.content_gap_fill/
+│   └── control-plane/
+│       ├── bolta.team.create_agent_teammate/
+│       ├── bolta.team.rotate_key/
+│       ├── bolta.policy.explain/
+│       ├── bolta.audit.export_activity/
+│       ├── bolta.quota.status/
+│       └── bolta.workspace.config/
+├── docs/
+│   ├── getting-started.md       # Quickstart guide
+│   ├── autonomy-modes.md        # Understanding autonomy levels
+│   ├── safe-mode.md             # Safe Mode deep dive
+│   ├── quotas.md                # Quota enforcement guide
+│   └── voice-versioning.md      # Voice profile evolution
+└── examples/
+    ├── basic-workflow.md        # Common usage patterns
+    ├── automation-setup.md      # Setting up cron jobs
+    └── multi-agent.md           # Managing multiple agents
+```
+
+**Option 2: Install Individual Skills (Manual)**
+
+If you only need specific skills, install them individually:
+
+```bash
+# Install voice bootstrap skill
+curl -L https://raw.githubusercontent.com/boltaai/bolta-skills/main/skills/voice-plane/bolta.voice.bootstrap/SKILL.md \
+  -o bolta.voice.bootstrap.md
+
+# Install draft post skill
+curl -L https://raw.githubusercontent.com/boltaai/bolta-skills/main/skills/content-plane/bolta.draft.post/SKILL.md \
+  -o bolta.draft.post.md
+```
+
+---
+
+### 📖 First Run: Read the README
+
+**IMPORTANT: After installation, read the README for complete setup instructions.**
+
+**Quick Start Commands:**
+
+```bash
+# After cloning/downloading the skill pack:
+cd bolta-skills
+
+# Read the README (contains critical setup steps)
+cat README.md
+
+# Or open in your editor
+code README.md  # VS Code
+vim README.md   # Vim
+```
+
+**What the README Covers:**
+3. ✅ Environment variable configuration
+4. ✅ First skill execution (test workflow)
+5. ✅ Troubleshooting common issues
+6. ✅ Recommended skill installation order
+7. ✅ Best practices for production use
+
+**Critical README Sections:**
+
+```markdown
+## README.md Structure
+
+### Quick Start
+- Installation steps
+- API key setup
+- First skill test
+
+### Skill Planes Overview
+- What each plane does
+- When to use each skill
+- Skill dependencies
+
+### Configuration
+- MCP server setup for Claude Desktop
+- Environment variables
+- Workspace policy settings
+
+### Common Workflows
+- Create first post (voice → draft → review)
+- Set up automation (cron jobs)
+- Multi-agent teams
+
+### Troubleshooting
+- API connection errors
+- Permission issues
+- Quota problems
+
+### Security
+- API key rotation
+- Least-privilege permissions
+- Audit logging
+
+### Advanced Topics
+- Custom skill development
+- Skill chaining
+- Performance optimization
+```
+
+---
+
+### 🚀 Recommended First-Run Flow
+
+**After installing the skill pack:**
+
+**Step 1: Read Documentation**
+```bash
+# Must-read files in order:
+1. README.md              # Complete getting started guide
+2. docs/getting-started.md # Quickstart tutorial
+3. docs/autonomy-modes.md  # Understand autonomy levels
+4. docs/safe-mode.md       # Understand safety controls
+```
+
+**Step 2: Verify Installation**
+```bash
+# Check that all skills are present
+ls -la skills/*/SKILL.md
+
+# Should see 21+ skills across 5 planes
+# If missing skills, re-run installation
+```
+
+**Step 3: Configure Agent**
+```bash
+# Set environment variables (from README)
+export BOLTA_API_KEY="sk_live_..."
+export BOLTA_WORKSPACE_ID="..."
+
+# Test API connectivity
+curl https://platty.boltathread.com/v1/workspaces/${BOLTA_WORKSPACE_ID} \
+  -H "Authorization: Bearer ${BOLTA_API_KEY}"
+
+# Expected: 200 OK with workspace details
+```
+
+```
+
+**Step 5: Install Recommended Skills**
+```bash
+# The registry will recommend skills based on your:
+# - Safe Mode setting
+# - Autonomy mode
+# - User role
+# - Current quotas
+
+# Follow recommendations to install your first skill set
+```
+
+---
+
+### ⚠️ Common First-Run Mistakes
+
+**Mistake 1: Skipping the README**
+```
+❌ Installing skills without reading README
+✅ Read README.md first → understand workflows → install skills
+```
+
+**Mistake 2: Missing Environment Variables**
+```
+❌ Running skills without BOLTA_API_KEY set
+✅ Configure env vars BEFORE running any skill
+```
+
+**Mistake 3: Installing Skills Out of Order**
+```
+❌ Running bolta.draft.post before creating voice profile
+✅ Follow recommended order: voice.bootstrap → draft.post → review
+```
+
+**Mistake 4: Not Understanding Autonomy Modes**
+```
+❌ Using autopilot mode without understanding routing
+✅ Read docs/autonomy-modes.md → start with "assisted" → graduate to "managed"
+```
+
+**Mistake 5: Hardcoding API Keys**
+```
+❌ Putting API keys directly in skill files
+✅ Use environment variables → .env file → add .env to .gitignore
+```
+
+---
+
+### 📥 Post-Installation Checklist
+
+After installing the skill pack, verify:
+
+- [ ] ✅ README.md has been read
+- [ ] ✅ Environment variables configured (BOLTA_API_KEY, BOLTA_WORKSPACE_ID)
+- [ ] ✅ All 21+ skills present in skills/ directory
+- [ ] ✅ docs/ directory contains markdown files
+- [ ] ✅ API connectivity verified (test curl command works)
+- [ ] ✅ MCP server installed (if using Claude Desktop)
+- [ ] ✅ Workspace policy reviewed (safe_mode, autonomy_mode)
+- [ ] ✅ First skill executed successfully (test run)
+- [ ] ✅ Autonomy mode documentation read (docs/autonomy-modes.md)
+- [ ] ✅ Safe Mode documentation read (docs/safe-mode.md)
+
+**Once all items are checked, you're ready to use the full Bolta skill library!**
+
+---
 
 ### Next Steps After Setup
 
@@ -1431,7 +1685,18 @@ outputs:
 
 ## Version History
 
-**0.5.1** (Current) - Security Patch
+**0.5.2** (Current) - Installation & First Run Guidance
+- **Added comprehensive "Installation & First Run" section**
+- **Added complete skill pack installation instructions (git clone, download)**
+- **Added README.md reading prompt (critical for setup)**
+- **Added directory structure overview (21+ skills across 5 planes)**
+- Added recommended first-run flow (verify → configure → test)
+- Added common first-run mistakes guide (avoid pitfalls)
+- Added post-installation checklist (10-item verification)
+- Enhanced discoverability of full skill library
+- Addresses user prompt: "Should we prompt user to install rest of skills from registry?"
+
+**0.5.1** - Security Patch
 - **SECURITY: Added explicit Required Environment Variables section**
 - **SECURITY: Declared BOLTA_API_KEY, BOLTA_WORKSPACE_ID as required**
 - **SECURITY: Added trusted domains list (api.bolta.ai, platty.boltathread.com)**
