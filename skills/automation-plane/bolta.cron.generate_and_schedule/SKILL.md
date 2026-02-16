@@ -28,6 +28,8 @@ outputs_schema:
     scheduled_ids: { type: array, items: { type: string } }
     review_routed_ids: { type: array, items: { type: string } }
     warnings: { type: array, items: { type: string } }
+organization: bolta.ai
+author: Max Fritzhand
 ---
 
 ## Hard rules

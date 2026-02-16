@@ -24,6 +24,8 @@ outputs_schema:
     approved_ids: { type: array, items: { type: string } }
     scheduled_ids: { type: array, items: { type: string } }
     failed: { type: array, items: { type: object } }
+organization: bolta.ai
+author: Max Fritzhand
 ---
 
 ## Hard rules

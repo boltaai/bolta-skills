@@ -34,6 +34,8 @@ outputs_schema:
     review_item_id: { type: string }
     notes_for_reviewer: { type: string }
     warnings: { type: array, items: { type: string } }
+organization: bolta.ai
+author: Max Fritzhand
 ---
 
 ## Goal

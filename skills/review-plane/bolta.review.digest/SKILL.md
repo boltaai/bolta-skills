@@ -20,6 +20,8 @@ outputs_schema:
     needs_edit: { type: array, items: { type: object } }
     high_risk: { type: array, items: { type: object } }
     summary: { type: string }
+organization: bolta.ai
+author: Max Fritzhand
 ---
 
 ## Goal

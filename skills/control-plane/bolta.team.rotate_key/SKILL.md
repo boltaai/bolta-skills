@@ -20,6 +20,8 @@ outputs_schema:
   properties:
     result: { type: string, enum: [rotated, revoked] }
     new_api_key_preview: { type: string }
+organization: bolta.ai
+author: Max Fritzhand
 ---
 
 ## Steps

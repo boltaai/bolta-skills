@@ -20,6 +20,8 @@ outputs_schema:
     capabilities: { type: array, items: { type: string } }
     allowed_actions_summary: { type: string }
     forbidden_actions_summary: { type: string }
+organization: bolta.ai
+author: Max Fritzhand
 ---
 
 ## Steps

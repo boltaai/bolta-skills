@@ -31,6 +31,8 @@ outputs_schema:
     post_ids: { type: array, items: { type: string } }
     calendar: { type: array, items: { type: object } }
     final_state: { type: string, enum: [draft, pending_review] }
+organization: bolta.ai
+author: Max Fritzhand
 ---
 
 ## Goal

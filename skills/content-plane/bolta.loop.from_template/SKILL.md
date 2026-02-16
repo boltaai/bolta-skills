@@ -33,6 +33,8 @@ outputs_schema:
     review_bundle_id: { type: string }
     final_state: { type: string, enum: [pending_review] }
     warnings: { type: array, items: { type: string } }
+organization: bolta.ai
+author: Max Fritzhand
 ---
 
 ## Goal

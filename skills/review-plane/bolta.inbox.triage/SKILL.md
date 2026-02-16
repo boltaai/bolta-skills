@@ -28,6 +28,8 @@ outputs_schema:
     clusters: { type: array, items: { type: object } }
     suggested_actions: { type: array, items: { type: object } }
     created_variant_post_ids: { type: array, items: { type: string } }
+organization: bolta.ai
+author: Max Fritzhand
 ---
 
 ## Goal

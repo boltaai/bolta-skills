@@ -1,3 +1,8 @@
+---
+organization: bolta.ai
+author: Max Fritzhand
+---
+
 ## bolta.voice.learn_from_samples
 
 Purpose:

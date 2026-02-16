@@ -22,6 +22,8 @@ outputs_schema:
     role: { type: string }
     api_key_preview: { type: string }
     allowed_actions: { type: array, items: { type: string } }
+organization: bolta.ai
+author: Max Fritzhand
 ---
 
 ## Rules

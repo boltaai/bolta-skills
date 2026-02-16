@@ -19,6 +19,8 @@ outputs_schema:
   properties:
     events: { type: array, items: { type: object } }
     summary: { type: string }
+organization: bolta.ai
+author: Max Fritzhand
 ---
 
 ## Steps

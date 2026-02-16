@@ -29,6 +29,8 @@ outputs_schema:
     post_ids: { type: array, items: { type: string } }
     review_bundle_id: { type: string }
     warnings: { type: array, items: { type: string } }
+organization: bolta.ai
+author: Max Fritzhand
 ---
 
 ## Rules
