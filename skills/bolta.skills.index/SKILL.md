@@ -81,13 +81,65 @@ Executes: false
 - **Purpose:** Identifies which workspace the API key is authorized for
 
 **BOLTA_AGENT_ID** (OPTIONAL, RECOMMENDED)
+- **Format:** UUID
+- **Purpose:** Links API activity to specific agent principal for audit logs
+- **Benefit:** Enables traceability and compliance reporting
+
+### Trusted Network Endpoints
+
 This skill makes HTTPS requests to:
 - ✅ `https://platty.boltathread.com` - Bolta API server
 - ✅ `https://bolta.ai` - Main application and agent registration portal
+
 **No other domains are contacted.** All requests are authenticated with your API key.
+
+### Third-Party Dependencies
+
+This skill references:
 - `@boltaai/mcp-server` (npm package for Claude Desktop integration)
+  - **Source:** https://github.com/boltaai/bolta-mcp-server
+  - **Verified:** Yes (official Bolta package)
+  - **Purpose:** Connects Claude Desktop to Bolta API via MCP protocol
+
+### Pre-Installation Checklist
+
+**Before installing this skill, you MUST:**
 - [ ] Verify the source repository: https://github.com/boltaai/bolta-skills
+- [ ] Review the SKILL.md and confirm version matches metadata (currently 0.5.4)
+- [ ] Obtain a LEAST-PRIVILEGE API key from https://bolta.ai/register
+- [ ] Store API key in environment variables (NEVER hardcode or commit)
+- [ ] Verify you trust the domains: `platty.boltathread.com` and `bolta.ai`
 - [ ] Test in a disposable/test workspace first (recommended)
+- [ ] Confirm your API key is scoped ONLY to the intended workspace
+
+**If you cannot verify the above, DO NOT install this skill.**
+
+### Security Best Practices
+
+1. **Credential Management**
+   - Use environment variables: `export BOLTA_API_KEY="sk_live_..."`
+   - Or use secret managers: AWS Secrets Manager, 1Password, etc.
+   - NEVER paste API keys in chat, logs, or public places
+
+2. **Key Rotation**
+   - Rotate keys every 90 days minimum
+   - Use `bolta.team.rotate_key` skill for zero-downtime rotation
+   - Revoke compromised keys immediately at bolta.ai/settings
+
+3. **Permission Scoping**
+   - Grant ONLY required permissions (e.g., `posts:write`, `voice:read`)
+   - Avoid `workspace:admin` unless absolutely necessary
+   - Review permissions quarterly
+
+4. **Monitoring**
+   - Review audit logs weekly via `bolta.audit.export_activity`
+   - Monitor quota usage via `bolta.quota.status`
+   - Set up alerts for unusual API activity
+
+5. **Workspace Isolation**
+   - One API key per workspace (NEVER share keys across workspaces)
+   - Use separate keys for dev/staging/production environments
+   - Revoke keys when decommissioning workspaces
 
 ## Purpose
 
