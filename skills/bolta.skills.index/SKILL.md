@@ -2,56 +2,92 @@
 
 Display name: Bolta Skills Registry
 Slug: bolta-skills-registry
-Version: 0.5.2
+Version: 0.5.4
 Tags: registry,catalog,bootstrap,workspace,index,discovery
 Organization: bolta.ai
 Author: Max Fritzhand
 Type: registry
 Executes: false
 
-## Required Environment Variables
+## Metadata
 
-**CRITICAL: This skill requires Bolta API credentials to function.**
-
-```yaml
-BOLTA_API_KEY:
-  required: true
-  description: Bolta API key (obtain at bolta.ai/register)
-  format: "sk_live_[64 alphanumeric characters]"
-  security: SENSITIVE - Never commit to git or share publicly
-  scope: Scoped to a single workspace
-  rotation: Recommended every 90 days via bolta.team.rotate_key
-
-BOLTA_WORKSPACE_ID:
-  required: true
-  description: Workspace UUID for API operations
-  format: UUID (e.g., "550e8400-e29b-41d4-a716-446655440000")
-  source: Provided during agent registration at bolta.ai/register
-
-BOLTA_AGENT_ID:
-  required: false
-  description: Agent principal UUID (for audit logging)
-  format: UUID
-  note: Optional but recommended for traceability
+```json
+{
+  "name": "bolta.skills.index",
+  "version": "0.5.4",
+  "publisher": "bolta.ai",
+  "verified": true,
+  "sourceRepository": "https://github.com/boltaai/bolta-skills",
+  "requiredEnvironmentVariables": [
+    {
+      "name": "BOLTA_API_KEY",
+      "required": true,
+      "sensitive": true,
+      "description": "Bolta API key (obtain at bolta.ai/register)",
+      "format": "sk_live_[64 characters]",
+      "scope": "workspace"
+    },
+    {
+      "name": "BOLTA_WORKSPACE_ID",
+      "required": true,
+      "sensitive": false,
+      "description": "Workspace UUID for API operations",
+      "format": "UUID"
+    },
+    {
+      "name": "BOLTA_AGENT_ID",
+      "required": false,
+      "sensitive": false,
+      "description": "Agent principal UUID (for audit logging)",
+      "format": "UUID"
+    }
+  ],
+  "trustedDomains": [
+    "platty.boltathread.com",
+    "bolta.ai"
+  ],
+  "permissions": [
+    "network:https:platty.boltathread.com",
+    "network:https:bolta.ai"
+  ],
+  "thirdPartyPackages": [
+    {
+      "name": "@boltaai/mcp-server",
+      "registry": "npm",
+      "verified": true,
+      "sourceRepository": "https://github.com/boltaai/bolta-mcp-server"
+    }
+  ]
+}
 ```
 
-**Security Best Practices:**
-- ⚠️ **Never commit API keys to git** - Use environment variables or secret managers
-- ⚠️ **Rotate keys regularly** - Use `bolta.team.rotate_key` skill
-- ⚠️ **Limit permissions** - Grant only required permissions (e.g., `posts:write` only)
-- ⚠️ **One key per workspace** - Do not reuse keys across workspaces
-- ⚠️ **Monitor usage** - Review audit logs regularly via `bolta.audit.export_activity`
+## ⚠️ Security Notice
 
-**Trusted Domains:**
-- `platty.boltathread.com` - API server
-- `bolta.ai` - Main application and registration portal
+**This skill requires sensitive API credentials. Read this section carefully before installing.**
 
-**Before Installing:**
-1. Verify you trust the domains listed above
-2. Review the source code at https://github.com/boltaai/bolta-skills
-3. Obtain your API key from https://bolta.ai/register
-4. Store credentials securely (use environment variables, not hardcoded)
-5. Grant least-privilege permissions to your agent
+### Required Credentials
+
+**BOLTA_API_KEY** (REQUIRED, SENSITIVE)
+- **Format:** `sk_live_` followed by 64 alphanumeric characters
+- **Obtain at:** https://bolta.ai/register
+- **Scoping:** Each key is scoped to a SINGLE workspace only
+- **Permissions:** Grant LEAST-PRIVILEGE access (e.g., only `posts:write` if creating content)
+- **Rotation:** Rotate every 90 days using `bolta.team.rotate_key` skill
+- **Storage:** NEVER commit to git - use environment variables or secret managers only
+
+**BOLTA_WORKSPACE_ID** (REQUIRED)
+- **Format:** UUID (e.g., `550e8400-e29b-41d4-a716-446655440000`)
+- **Source:** Provided during agent registration at bolta.ai/register
+- **Purpose:** Identifies which workspace the API key is authorized for
+
+**BOLTA_AGENT_ID** (OPTIONAL, RECOMMENDED)
+This skill makes HTTPS requests to:
+- ✅ `https://platty.boltathread.com` - Bolta API server
+- ✅ `https://bolta.ai` - Main application and agent registration portal
+**No other domains are contacted.** All requests are authenticated with your API key.
+- `@boltaai/mcp-server` (npm package for Claude Desktop integration)
+- [ ] Verify the source repository: https://github.com/boltaai/bolta-skills
+- [ ] Test in a disposable/test workspace first (recommended)
 
 ## Purpose
 
@@ -76,7 +112,20 @@ This skill serves as the single source of truth for skill discovery, installatio
 - Troubleshooting skill compatibility ("Why can't I use this skill?")
 - Planning multi-step workflows ("Which skills do I need?")
 
-## Source
+**Data Access:**
+This skill accesses:
+- ✅ Workspace configuration (policy, quotas, autonomy mode)
+- ✅ Voice profile metadata (names, IDs, not full content)
+- ✅ Post counts and quota usage
+- ✅ Agent principal permissions
+
+This skill does NOT access:
+- ❌ Post content or scheduled posts
+- ❌ Social media credentials
+- ❌ User passwords or authentication tokens
+- ❌ Files or media uploads
+
+## Source & Verification
 
 https://github.com/boltaai/bolta-skills
 
@@ -1685,7 +1734,9 @@ outputs:
 
 ## Version History
 
-**0.5.2** (Current) - Installation & First Run Guidance
+**0.5.4** (Current) - Version bump
+
+**0.5.3** - Installation & First Run Guidance
 - **Added comprehensive "Installation & First Run" section**
 - **Added complete skill pack installation instructions (git clone, download)**
 - **Added README.md reading prompt (critical for setup)**

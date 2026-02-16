@@ -373,6 +373,7 @@ Before running: bolta.draft.post
 ## Need Help?
 
 - **Documentation:** [bolta.ai/docs](https://bolta.ai/docs)
+- **API Reference:** [bolta.ai/docs/api](https://bolta.ai/docs/api) — endpoints, request/response schemas, and examples
 - **GitHub Issues:** [github.com/boltaai/bolta-skills/issues](https://github.com/boltaai/bolta-skills/issues)
 - **Email Support:** support@bolta.ai
 - **Community:** [discord.gg/bolta](https://discord.gg/bolta) (coming soon)
