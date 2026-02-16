@@ -43,8 +43,7 @@ BOLTA_AGENT_ID:
 - ⚠️ **Monitor usage** - Review audit logs regularly via `bolta.audit.export_activity`
 
 **Trusted Domains:**
-- `api.bolta.ai` - Production API endpoint (Vercel)
-- `platty.boltathread.com` - Backend API server (Render)
+- `platty.boltathread.com` - API server
 - `bolta.ai` - Main application and registration portal
 
 **Before Installing:**
