@@ -2,12 +2,57 @@
 
 Display name: Bolta Skills Registry
 Slug: bolta-skills-registry
-Version: 0.4.0
+Version: 0.5.1
 Tags: registry,catalog,bootstrap,workspace,index,discovery
 Organization: bolta.ai
 Author: Max Fritzhand
 Type: registry
 Executes: false
+
+## Required Environment Variables
+
+**CRITICAL: This skill requires Bolta API credentials to function.**
+
+```yaml
+BOLTA_API_KEY:
+  required: true
+  description: Bolta API key (obtain at bolta.ai/register)
+  format: "sk_live_[64 alphanumeric characters]"
+  security: SENSITIVE - Never commit to git or share publicly
+  scope: Scoped to a single workspace
+  rotation: Recommended every 90 days via bolta.team.rotate_key
+
+BOLTA_WORKSPACE_ID:
+  required: true
+  description: Workspace UUID for API operations
+  format: UUID (e.g., "550e8400-e29b-41d4-a716-446655440000")
+  source: Provided during agent registration at bolta.ai/register
+
+BOLTA_AGENT_ID:
+  required: false
+  description: Agent principal UUID (for audit logging)
+  format: UUID
+  note: Optional but recommended for traceability
+```
+
+**Security Best Practices:**
+- ⚠️ **Never commit API keys to git** - Use environment variables or secret managers
+- ⚠️ **Rotate keys regularly** - Use `bolta.team.rotate_key` skill
+- ⚠️ **Limit permissions** - Grant only required permissions (e.g., `posts:write` only)
+- ⚠️ **One key per workspace** - Do not reuse keys across workspaces
+- ⚠️ **Monitor usage** - Review audit logs regularly via `bolta.audit.export_activity`
+
+**Trusted Domains:**
+- `api.bolta.ai` - Production API endpoint (Vercel)
+- `platty.boltathread.com` - Backend API server (Render)
+- `bolta.ai` - Main application and registration portal
+
+**Before Installing:**
+1. Verify you trust the domains listed above
+2. Review the source code at https://github.com/boltaai/bolta-skills
+3. Obtain your API key from https://bolta.ai/register
+4. Store credentials securely (use environment variables, not hardcoded)
+5. Grant least-privilege permissions to your agent
 
 ## Purpose
 
@@ -35,6 +80,212 @@ This skill serves as the single source of truth for skill discovery, installatio
 ## Source
 
 https://github.com/boltaai/bolta-skills
+
+---
+
+## Getting Started: Agent API Setup
+
+Before using Bolta skills, you need to set up agent API access to authenticate your requests.
+
+### Step 1: Register Your Agent
+
+Visit **[bolta.ai/register](https://bolta.ai/register)** to create your agent principal and obtain an API key.
+
+**What you'll need:**
+- Bolta workspace (create one at bolta.ai if you don't have one)
+- Admin or Owner role in your workspace
+
+### Step 2: Create Agent Principal
+
+During registration, you'll configure:
+
+**Agent Name**
+```
+Example: "Claude Content Agent"
+Description: Human-readable name for audit logs
+```
+
+**Agent Role**
+```
+Options:
+- creator  - Can create drafts (recommended for testing)
+- editor   - Can create + schedule posts
+- reviewer - Can approve/reject posts (review-only access)
+
+Recommended: Start with "creator" role for safety
+```
+
+**Permissions**
+```
+Minimum for content skills:
+✓ posts:write  - Create posts
+✓ voice:read   - Read voice profiles
+
+Optional (based on use case):
+□ posts:schedule  - Schedule posts (requires editor+ role)
+□ posts:approve   - Approve posts for publishing
+□ templates:read  - Use content templates
+□ cron:execute    - Run automated jobs
+```
+
+### Step 3: Copy Your API Key
+
+After registration, you'll receive:
+
+```
+API Key: sk_live_00000000000000000000000000000000
+Workspace ID: 550e8400-e29b-41d4-a716-446655440000
+Agent ID: 660e8400-e29b-41d4-a716-446655440001
+```
+
+**IMPORTANT:**
+- ⚠️ Store API key securely (never commit to git)
+- ⚠️ Keys cannot be recovered (only regenerated via `bolta.team.rotate_key`)
+- ⚠️ Each key is scoped to ONE workspace
+
+### Step 4: Configure Your Environment
+
+**Set Required Environment Variables:**
+
+Before using any Bolta skills, you MUST configure these environment variables:
+
+```bash
+# Required: Your Bolta API key (from bolta.ai/register)
+export BOLTA_API_KEY="sk_live_your_actual_key_here"
+
+# Required: Your workspace UUID (from bolta.ai/register)
+export BOLTA_WORKSPACE_ID="550e8400-e29b-41d4-a716-446655440000"
+
+# Optional: Agent principal UUID (for audit logging)
+export BOLTA_AGENT_ID="660e8400-e29b-41d4-a716-446655440001"
+```
+
+**For Claude Desktop (MCP):**
+```json
+{
+  "mcpServers": {
+    "bolta": {
+      "command": "npx",
+      "args": ["-y", "@boltaai/mcp-server"],
+      "env": {
+        "BOLTA_API_KEY": "sk_live_your_actual_key_here",
+        "BOLTA_WORKSPACE_ID": "550e8400-e29b-41d4-a716-446655440000",
+        "BOLTA_AGENT_ID": "660e8400-e29b-41d4-a716-446655440001"
+      }
+    }
+  }
+}
+```
+
+**For Direct API Calls:**
+```bash
+# Use environment variables in your requests
+curl https://platty.boltathread.com/v1/posts \
+  -H "Authorization: Bearer ${BOLTA_API_KEY}" \
+  -H "X-Workspace-ID: ${BOLTA_WORKSPACE_ID}" \
+  -H "Content-Type: application/json" \
+  -d '{ "prompt": "Create a post about productivity" }'
+```
+
+**For Node.js/TypeScript Applications:**
+```javascript
+import { BoltaClient } from '@boltaai/sdk';
+
+// Load from environment variables (recommended)
+const bolta = new BoltaClient({
+  apiKey: process.env.BOLTA_API_KEY,
+  workspaceId: process.env.BOLTA_WORKSPACE_ID,
+  agentId: process.env.BOLTA_AGENT_ID // Optional
+});
+
+// Verify all required vars are set
+if (!process.env.BOLTA_API_KEY || !process.env.BOLTA_WORKSPACE_ID) {
+  throw new Error('Missing required Bolta credentials. Set BOLTA_API_KEY and BOLTA_WORKSPACE_ID');
+}
+```
+
+**Security Reminder:**
+- ⚠️ Never hardcode API keys in your code
+- ⚠️ Use `.env` files locally (add `.env` to `.gitignore`)
+- ⚠️ Use secret managers in production (AWS Secrets Manager, Vercel Secrets, etc.)
+- ⚠️ Rotate keys every 90 days via `bolta.team.rotate_key`
+
+
+### Step 5: Verify Setup
+
+Test your configuration with a simple skill:
+
+# Via API
+curl https://api.bolta.ai/v1/workspaces/{workspace_id} \
+  -H "Authorization: Bearer YOUR_API_KEY"
+
+# Expected response:
+{
+  "id": "550e8400-...",
+  "name": "My Workspace",
+  "safe_mode": true,
+  "autonomy_mode": "managed",
+  "max_posts_per_day": 100
+}
+```
+
+### Troubleshooting Setup
+
+#### Error: "Invalid API Key"
+**Cause:** Key is incorrect or has been rotated
+
+**Solutions:**
+1. Verify key matches exactly (no extra spaces)
+2. Check if key was rotated → Get new key at bolta.ai/register
+3. Ensure you're using the correct workspace key
+
+#### Error: "Workspace Not Found"
+**Cause:** Workspace ID mismatch or no access
+
+**Solutions:**
+1. Verify workspace_id matches your registration
+2. Confirm you have access to this workspace (visit bolta.ai/workspaces)
+3. Check if workspace was deleted
+
+#### Error: "Permission Denied"
+**Cause:** Agent role lacks required permission
+
+**Solutions:**
+1. Check your agent's permissions at bolta.ai/register
+2. For content creation: Need `posts:write` minimum
+3. For scheduling: Need `posts:schedule` + editor role
+4. For automation: Need `cron:execute` permission
+
+### Next Steps After Setup
+
+Once your API is configured:
+
+1. **Create Voice Profile** (if new workspace)
+   ```
+   Run: bolta.voice.bootstrap
+   → Establishes your brand voice
+   ```
+
+2. **Test Content Creation**
+   ```
+   Run: bolta.draft.post
+   → Creates a test post in Draft status
+   ```
+
+3. **Install Recommended Skills**
+   ```
+   Run: bolta.skills.index
+   → Returns personalized skill recommendations
+   ```
+
+4. **Configure Workspace Policy**
+   ```
+   Review: Safe Mode (ON/OFF)
+   Review: Autonomy Mode (assisted/managed/autopilot)
+   Set: Daily quota limits
+   ```
+
+---
 
 ## Architecture: The Five Planes
 
@@ -1181,7 +1432,23 @@ outputs:
 
 ## Version History
 
-**0.4.0** (Current)
+**0.5.1** (Current) - Security Patch
+- **SECURITY: Added explicit Required Environment Variables section**
+- **SECURITY: Declared BOLTA_API_KEY, BOLTA_WORKSPACE_ID as required**
+- **SECURITY: Added trusted domains list (api.bolta.ai, platty.boltathread.com)**
+- **SECURITY: Enhanced security best practices (rotation, least-privilege, monitoring)**
+- Added environment variable configuration examples for all platforms
+- Added credential security reminders throughout documentation
+- Addressed security audit finding: "manifest does not declare required env vars"
+
+**0.5.0**
+- Added comprehensive Getting Started guide
+- Added Agent API setup instructions (bolta.ai/register)
+- Added setup verification steps
+- Added troubleshooting section for common setup issues
+- Added next steps after agent registration
+
+**0.4.0** 
 - Added comprehensive skill descriptions with metadata
 - Added detailed decision matrix and authorization integration
 - Added 6 output examples covering all scenarios
