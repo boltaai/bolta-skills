@@ -82,11 +82,68 @@ Update dos/donts based on performance:
 - **Remove from donts**: False positives (avoided but shouldn't be)
 
 ### 4. Founder Signals Refinement (if founder mode)
-Strengthen or add founder signals based on resonance:
-- Which beliefs drive engagement?
-- Which lessons get shared/saved?
-- Which contrarian opinions spark discussion?
-- Which scars/backstory moments resonate?
+Strengthen, prioritize, or add founder signals based on engagement and authenticity:
+
+**Belief Evolution:**
+- Track which beliefs appear in high-performing posts
+- Measure engagement (likes, shares, saves, comments) by belief
+- Identify beliefs that drive thoughtful discussion vs viral engagement
+- Add new beliefs discovered from recent content
+- Remove beliefs that feel inauthentic or outdated
+
+**Lesson Evolution:**
+- Score lessons by how often they're referenced in content
+- Identify lessons that appear in high-retention/deep-read posts
+- Track which lessons get shared most frequently
+- Add newly-learned lessons as you build/fail
+- Deprioritize lessons that feel generic
+
+**Contrarian Opinion Evolution:**
+- Measure impact: Do contrarian opinions spark discussion?
+- Track sentiment: Positive debate vs negative pushback
+- Identify which contrarians resonate with target audience
+- Add new contrarian positions as industry evolves
+- Soften or remove contrarians that feel forced
+
+**Scar Evolution:**
+- Measure vulnerability: Posts with scars get personal comments
+- Track emotional resonance (comment depth > engagement metrics)
+- Identify scars that create connection with audience
+- Add new scars as you experience them (keep fresh, not stale failures)
+- Balance: Don't over-share same scars repeatedly
+
+**Backstory Evolution:**
+- Measure narrative coherence: Does backstory explain current positions?
+- Track which backstory moments lead to aha moments in comments
+- Identify moments that set you apart from other founders
+- Add moments that explain recent pivots/decisions
+- Ensure backstory stays relevant to current work
+
+**Example Evolution:**
+```
+Before: {
+  beliefs: ["Shipping beats planning", "Users first", "Avoid hype"],
+  lessons: [3 generic lessons],
+  contrarianOpinions: [2 contrarian takes],
+  scars: [2 old failures],
+  backstoryMoments: [1 origin story]
+}
+
+After: {
+  beliefs: ["Shipping beats planning", "Users first", "Avoid hype", "Voice > volume", "Speed compounds"],
+  lessons: [3 original lessons + 2 new specific lessons],
+  contrarianOpinions: [2 original takes + 1 new industry critique],
+  scars: [1 old failure, 2 recent learnings],
+  backstoryMoments: [1 origin story, 2 new pivotal moments]
+}
+
+Reason: Analysis of 127 posts + QA results showed:
+- Posts with "speed compounds" belief got 2.3x engagement
+- New lessons about product-market fit resonated more than generic "failure is good"
+- Two new contrarian takes sparked thoughtful debate (avg 8 comments vs 2.1 avg)
+- Shared recent scar about pivoting late—got strong personal resonance
+- Updated backstory with recent inflection point explains current direction better
+```
 
 ### 5. Platform-Specific Rules
 Create or refine platform-specific adaptations:

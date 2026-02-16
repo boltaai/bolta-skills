@@ -95,6 +95,24 @@ Identifies common closing patterns:
 - Pain points frequently addressed
 - Value propositions emphasized
 
+### 7. Founder Signals Extraction (If founder mode)
+When analyzing content from a founder, extract:
+- **Beliefs**: Core convictions about industry, strategy, product development
+  - Example: "Most AI tools optimize for length, not clarity"
+  - Example: "The best marketing is just solving real problems publicly"
+- **Lessons**: Hard-won insights from building/failing
+  - Example: "Shipping fast beats perfect planning"
+  - Example: "Your first 100 users teach more than 100 strategy docs"
+- **Contrarian Opinions**: Industry myths you push back on
+  - Example: "Most 'thought leadership' is repackaged LinkedIn wisdom"
+  - Example: "Engagement metrics are vanity. Pipeline metrics are sanity."
+- **Scars**: Failures, mistakes, and what you learned
+  - Example: "Built a feature no one asked for—wasted 3 months"
+  - Example: "Hired for culture fit over skill—set team back 6 months"
+- **Backstory Moments**: Experiences that shaped your thinking
+  - Example: "Watched my first startup fail because we couldn't articulate our value"
+  - Example: "Spent years ghostwriting for founders—saw the patterns that work"
+
 ## Step-by-Step Process
 
 ### Step 1: Analyze Account Content
@@ -199,8 +217,9 @@ curl -X POST "https://platty.boltathread.com/users/voice/workspaces/{workspace_i
 
 3. **Construct Voice Profile Payload**
 
-Combine automated analysis with user input:
+Combine automated analysis with user input. If founder mode, include founder_signals:
 
+**Example: Brand Voice (learned from company content)**
 ```json
 {
   "name": "Analyzed Voice Profile",
@@ -229,7 +248,69 @@ Combine automated analysis with user input:
   "contentSize": "standard",
   "useEmojis": false,
   "language": "en",
+  "speakerMode": "brand",
   "isDefault": true
+}
+```
+
+**Example: Founder Voice (learned from founder's personal content)**
+```json
+{
+  "name": "Max - Analyzed Founder Voice",
+  "description": "Voice profile learned from 45 founder posts (Jan-Mar 2026)",
+  "tone": {
+    "playful": 3,
+    "professional": 6,
+    "direct": 10,
+    "thoughtful": 7
+  },
+  "dos": [
+    "Tell stories from the building experience",
+    "Share specific failures and lessons",
+    "Use concrete examples over abstractions",
+    "Write like you're talking to another founder",
+    "Lead with conviction, not hedging"
+  ],
+  "donts": [
+    "No inspirational quotes without context",
+    "Avoid humble-bragging",
+    "Don't soften hard truths",
+    "No theoretical advice—only battle-tested"
+  ],
+  "customRules": "## Hook Patterns (extracted from content)\n- 40% story hooks (sharing personal experience)\n- 35% lesson hooks (what I learned)\n- 25% contrarian hooks (pushback on industry norms)\n\n## Signature Phrases\n- \"real talk\"\n- \"here's what I learned\"\n- \"most founders think X, but actually Y\"",
+  "speakerMode": "founder",
+  "founderSignals": {
+    "beliefs": [
+      "Most AI content fails because it optimizes for length, not clarity",
+      "The best marketing is just solving real problems publicly",
+      "Brand voice isn't about tone—it's about what you refuse to say"
+    ],
+    "lessons": [
+      "Shipping fast beats perfect planning every time",
+      "Your first 100 users will teach you more than 100 strategy docs",
+      "Technical debt is fine. Strategic debt will kill you"
+    ],
+    "contrarianOpinions": [
+      "Most 'thought leadership' is just repackaged LinkedIn wisdom",
+      "You don't need a content calendar—you need conviction",
+      "Engagement metrics are vanity. Pipeline metrics are sanity."
+    ],
+    "scars": [
+      "Built a feature no one asked for—wasted 3 months",
+      "Hired for culture fit over skill—set team back 6 months",
+      "Tried to be everything to everyone—diluted the product"
+    ],
+    "backstoryMoments": [
+      "Watched my first startup fail because we couldn't articulate our value",
+      "Realized most founders struggle with consistent voice at scale",
+      "Spent years ghostwriting for founders—saw the patterns that work"
+    ]
+  },
+  "styleKeywords": ["direct", "honest", "battle-tested", "founder-led"],
+  "contentSize": "standard",
+  "useEmojis": false,
+  "language": "en",
+  "isDefault": false
 }
 ```
 
@@ -322,15 +403,36 @@ If updating an existing voice profile, generate a **delta report**:
    - Vocabulary frequency analysis
    - Content theme clustering
 
-3. **Generate Recommendations**
+3. **Extract Founder Signals (if applicable)**
+   - Scan content for beliefs, lessons, contrarian opinions, scars, backstory moments
+   - Extract direct quotes or paraphrased signals
+   - Group by category
+   - Filter for authenticity (real, verifiable experiences vs generic wisdom)
+   - Identify 3-7 strongest signals per category
+
+   **Extraction Examples:**
+   ```
+   Post: "Most founders waste months building features no one asked for..."
+   → Belief: "Most founders build features without user validation"
+
+   Post: "We tried to hire for culture fit and it set us back 6 months"
+   → Scar: "Hired for culture fit over skill—damaged team velocity"
+
+   Post: "I've learned that shipping fast beats perfect planning"
+   → Lesson: "Shipping fast beats perfect planning every time"
+   ```
+
+4. **Generate Recommendations**
    - Automated dos/donts based on patterns
    - Suggested customRules from analysis
+   - Founder signals (if extracting from content)
    - Confidence score for each recommendation
 
-4. **Interactive Refinement (if mode = "interactive")**
+5. **Interactive Refinement (if mode = "interactive")**
    - Show automated recommendations
+   - Show extracted founder signals (if founder mode)
    - Ask user to confirm, edit, or reject
-   - Allow manual additions
+   - Allow manual additions or corrections
 
 5. **Create/Update Voice Profile**
    - POST if creating new
@@ -378,12 +480,25 @@ If updating an existing voice profile, generate a **delta report**:
    }
    ```
 
-6. **recommendations** (string[])
+6. **founder_signals** (object, conditional - only if founder mode)
+   ```typescript
+   {
+     beliefs?: string[];              // Extracted hot takes (3-7)
+     lessons?: string[];              // Extracted hard-won lessons (3-7)
+     contrarianOpinions?: string[];   // Extracted contrarian opinions (3-7)
+     scars?: string[];                // Extracted failures/learnings (3-7)
+     backstoryMoments?: string[];     // Extracted formative experiences (3-7)
+     extraction_confidence?: number;  // 0-100: How confident in extractions
+   }
+   ```
+
+7. **recommendations** (string[])
    - Next steps to improve voice profile
    - Examples:
-     - "Add 3 more founder signal examples for authenticity"
+     - "Add 2 more founder signal examples for deeper authenticity"
      - "Consider creating platform-specific rules (LinkedIn vs Twitter)"
      - "Test voice profile with bolta.voice.validate on held-out content"
+     - "Review extracted founder signals—manually add any missing context"
 
 ## Voice Consistency Scoring
 

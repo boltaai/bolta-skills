@@ -39,7 +39,20 @@ author: Max Fritzhand
 ---
 
 ## Goal
-Create one post in the user's Brand Voice, optionally using a template, and route it safely.
+Create one post in the user's Brand Voice (or Founder Voice), optionally using a template, and route it safely.
+
+## Voice Profile Modes
+
+### Brand Voice
+- Company/brand speaking
+- Focus on tone, style rules, vocabulary
+- Professional and consistent across content
+
+### Founder Voice (Advanced)
+- Founder speaking personally
+- Includes founder_signals: beliefs, lessons, contrarian opinions, scars, backstory moments
+- More authentic, personal, thought-leadership focused
+- founder_signals are injected as constraints in content generation
 
 ## Policy Rules (must follow)
 1. Always call `bolta.get_workspace_policy` + `bolta.get_my_capabilities` first.
@@ -47,16 +60,67 @@ Create one post in the user's Brand Voice, optionally using a template, and rout
 3. If actor role does not include the required capability for an action (schedule/publish), you MUST NOT attempt it.
 4. If `requested_action` is omitted: default to `send_to_review` (pending review) if Safe Mode is ON, otherwise default to `draft`.
 
+## How Voice Profiles Constrain Generation
+
+### Tone Constraints (all modes)
+Content generation respects tone scores (playful, professional, direct, thoughtful):
+- Tone scores guide sentence structure, vocabulary choice, emoji usage
+- Direct tone (9/10) = fewer hedges, more imperatives
+- Thoughtful tone (7/10) = more context, nuance, depth
+
+### Style Rules (all modes)
+- `dos`: Patterns to follow (lead with pain points, use short sentences)
+- `donts`: Patterns to avoid (no corporate jargon, avoid hedging)
+- `styleKeywords`: Vocabulary bias (emphasize direct, confident, specific)
+
+### Founder Signals (founder mode only)
+When `speakerMode: "founder"` and `founderSignals` provided:
+- **Beliefs**: Constraints that shape main arguments
+  - Example: If belief is "Ship fast beats planning," posts favor speed over perfection
+- **Lessons**: Constraints that shape advice given
+  - Example: If lesson is "Users teach more than docs," content leads with user validation
+- **Contrarian Opinions**: Constraints that enable pushback
+  - Example: If contrarian is "Engagement metrics are vanity," posts optimize for substance over reach
+- **Scars**: Constraints that enable vulnerability
+  - Example: If scar is "Built feature no one asked for," posts emphasize user research
+- **Backstory Moments**: Constraints that enable narrative coherence
+  - Example: If backstory is "Spent years ghostwriting," posts demonstrate writing from real experience
+
+**Founder Signal Injection Example:**
+```
+Prompt: "Write about validating product ideas"
+Voice Profile:
+  - speakerMode: "founder"
+  - beliefs: ["Ship fast", "Users teach more than docs"]
+  - lesson: "Build what users ask for"
+  - scar: "Built feature no one wanted"
+
+Generated Content Characteristics:
+- Opens with user validation (belief: users teach)
+- Mentions framework for speed (belief: ship fast)
+- Includes personal example of failure (scar: built wrong feature)
+- Gives specific, actionable advice (lesson learned)
+- Tone: Direct + thoughtful (8/10 and 7/10)
+
+Generated: "Most founders waste months on features no one asked for—here's my 3-question filter..."
+(This naturally demonstrates the beliefs/lessons/scars without being forced)
+```
+
 ## Steps
 1. Fetch policy: `bolta.get_workspace_policy(workspace_id)`
 2. Fetch capabilities: `bolta.get_my_capabilities(workspace_id)`
 3. Fetch voice: `bolta.get_voice_profile(voice_profile_id)`
+   - If founder mode: Extract founder_signals for generation constraints
 4. If template_id provided:
    - Load template list if needed: `bolta.list_templates(workspace_id)`
    - Render: `bolta.render_template(template_id, {prompt, voice_profile_id})`
    - Use rendered text as the post body.
    Else:
-   - Generate body using voice profile constraints (tone, style rules, banned phrases).
+   - Generate body using voice profile constraints:
+     - Tone scores (all modes)
+     - Style rules (all modes)
+     - Founder signals (if founder mode)
+     - Custom rules and keywords
 5. Create the post:
    - `bolta.create_post({workspace_id, voice_profile_id, account_ids, body, status: "draft"})`
 6. Decide route:

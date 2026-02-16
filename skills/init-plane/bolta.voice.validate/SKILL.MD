@@ -93,11 +93,37 @@ Validates length against `contentSize` setting:
 - **standard**: 150-500 chars (LinkedIn, Threads)
 - **long**: 500-1500 chars (LinkedIn article, blog excerpt)
 
-### 6. Authenticity Check (Anti-AI Detection)
+### 6. Founder Signals Authenticity (if founder mode)
+For founder voice profiles, validate that content resonates with founder signals:
+- **Belief Alignment**: Does content reflect stated beliefs?
+- **Lesson Integration**: Are learned lessons woven into advice given?
+- **Contrarian Signal**: Do contrarian opinions appear in content?
+- **Scar Relevance**: Are scars referenced to prove hard-won wisdom?
+- **Backstory Coherence**: Does content align with founder's narrative?
+
+**Scoring:**
+- Strong alignment (post demonstrates 3+ signals authentically): 95-100
+- Good alignment (post demonstrates 2 signals): 85-94
+- Moderate alignment (post demonstrates 1 signal or generic): 70-84
+- Weak alignment (post contradicts signals or generic): <70
+
+**Example:**
+```
+Founder Signals: [belief: "Ship fast beats planning", lesson: "Users teach you more than docs"]
+Content: "Before writing code, ask: did users ask? Will it move metrics? Can we ship <1 week?"
+Analysis:
+- Uses "ship fast" belief explicitly ✓
+- Implies "user validation" from lessons ✓
+- Demonstrates conviction without hedging ✓
+- Score: 94 (strong signal alignment)
+```
+
+### 7. Authenticity Check (Anti-AI Detection)
 Optional: Check if content sounds human vs AI-generated
 - Detects common AI patterns
 - Flags overly polished language
 - Identifies lack of personality
+- For founder mode: checks if signals feel authentic (not generic founder platitudes)
 
 ## Step-by-Step Validation Process
 
@@ -154,6 +180,28 @@ curl -X POST "https://platty.boltathread.com/users/voice/verify/authenticity/" \
     "ai_probability": 0.23,
     "confidence": 0.87,
     "notes": "Natural flow, personal voice, specific examples - passes authenticity check"
+  },
+  "founder_signals_alignment": {
+    "mode": "founder",
+    "signals_demonstrated": [
+      {
+        "type": "belief",
+        "signal": "Ship fast beats planning",
+        "found_in_content": true,
+        "evidence": "Explicitly recommends shipping in <1 week",
+        "score": 95
+      },
+      {
+        "type": "lesson",
+        "signal": "Users teach you more than docs",
+        "found_in_content": true,
+        "evidence": "Starts with 'did users ask?' validation",
+        "score": 92
+      }
+    ],
+    "signals_missing": [],
+    "signal_authenticity_score": 93,
+    "notes": "Strong founder voice - demonstrates beliefs and lessons authentically with specific examples"
   },
   "deviations": [],
   "overall_score": 87
@@ -344,7 +392,28 @@ If `compliance_score < 70` AND user requests it:
    }
    ```
 
-7. **pass_fail** (boolean)
+7. **founder_signals_alignment** (object, conditional - if founder mode)
+   ```typescript
+   {
+     mode: "founder";
+     signals_demonstrated: Array<{
+       type: "belief" | "lesson" | "contrarian" | "scar" | "backstory";
+       signal: string;
+       found_in_content: boolean;
+       evidence?: string;
+       score: number;  // 0-100
+     }>;
+     signals_missing: Array<{
+       type: string;
+       signal: string;
+       explanation: string;
+     }>;
+     signal_authenticity_score: number;  // 0-100
+     notes: string;
+   }
+   ```
+
+8. **pass_fail** (boolean)
    - Based on validation_mode threshold
    - true = passes, false = fails
 
