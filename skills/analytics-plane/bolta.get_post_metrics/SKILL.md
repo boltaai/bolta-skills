@@ -1,49 +1,83 @@
-# bolta.get_post_metrics
-
-**Version:** 2.0.0  
-**Category:** Analytics  
-**Agent Types:** `analytics`, `content_creator`, `custom`  
-**Roles Allowed:** All
-
+---
+name: bolta.get_post_metrics
+version: 2.0.0
+description: Retrieve performance metrics for published posts including likes, comments, shares, views, and engagement rate
+category: analytics
+roles_allowed: [Viewer, Creator, Editor, Admin]
+agent_types: [analytics, content_creator, custom]
+safe_defaults: {}
+tools_required:
+  - platform_api_integration
+inputs_schema:
+  type: object
+  required: [account_id]
+  properties:
+    account_id: { type: string, description: "Social account UUID" }
+    limit: { type: number, description: "Number of posts to analyze", default: 50 }
+    date_from: { type: string, description: "ISO date (optional)" }
+    date_to: { type: string, description: "ISO date (optional)" }
+    platform: { type: string, enum: [linkedin, twitter, instagram], description: "Optional platform filter" }
+outputs_schema:
+  type: object
+  properties:
+    success: { type: boolean }
+    count: { type: number }
+    metrics: 
+      type: array
+      items:
+        type: object
+        properties:
+          post_id: { type: string }
+          content_preview: { type: string }
+          published_at: { type: string }
+          platform: { type: string }
+          likes: { type: number }
+          comments: { type: number }
+          shares: { type: number }
+          views: { type: number }
+          impressions: { type: number }
+          engagement_rate: { type: number }
+organization: bolta.ai
+author: Bolta Team
 ---
 
-## Purpose
+## Goal
+Retrieve performance metrics for published posts to identify patterns and make data-driven content recommendations. Analytics agents use this to understand what works and what doesn't.
 
-Retrieve performance metrics for published posts: likes, comments, shares, views, impressions, and engagement rate.
+## Which Agents Use This
+- **analytics** — Primary use case for performance analysis and reporting
+- **content_creator** — Check what content types/topics performed best before drafting
+- **custom** — Any agent needing historical performance context
 
-Analytics agents use this to identify patterns and make data-driven recommendations.
+## Hard Rules
+1. MUST only return metrics for published posts (not drafts or scheduled)
+2. SHOULD calculate engagement_rate consistently: (likes + comments + shares) / impressions
+3. SHOULD include enough context to identify content patterns (preview, platform, timestamp)
+4. Require valid account_id that belongs to workspace
 
----
+## Steps
 
-## When An Agent Uses This
+### 1. Validate input
+- Verify account_id exists and belongs to workspace
+- Validate date range if provided
+- Apply limit (max 100 posts per request)
 
-**Analytics Agent reasoning:**
-- "I need to identify which content types perform best"
-- "Let me compare performance across platforms"
-- "What posting times correlate with higher engagement?"
+### 2. Query posts
+- Fetch published posts for account_id within date range
+- Filter by platform if specified
+- Order by published_at desc
 
-**Content Creator reasoning:**
-- "Before drafting, let me see what worked last week"
-- "Educational posts seem to perform better — let me confirm with data"
+### 3. Fetch platform metrics
+- For each post, query platform API for performance data
+- Collect: likes, comments, shares, views, impressions
+- Calculate engagement_rate
 
----
+### 4. Return structured metrics
+- Include post metadata (id, preview, published_at, platform)
+- Include raw metrics (likes, comments, shares, views, impressions)
+- Include calculated metrics (engagement_rate)
 
-## Parameters
-
-```json
-{
-  "account_id": "uuid (required)",
-  "limit": 50,           // Number of posts to analyze
-  "date_from": "2026-02-01",  // ISO date (optional)
-  "date_to": "2026-02-20",    // ISO date (optional)
-  "platform": "linkedin | twitter | instagram"  // Optional filter
-}
-```
-
----
-
-## Returns
-
+## Output
 ```json
 {
   "success": true,
@@ -51,31 +85,34 @@ Analytics agents use this to identify patterns and make data-driven recommendati
   "metrics": [
     {
       "post_id": "uuid",
-      "content_preview": "First 100 chars...",
+      "content_preview": "🏠 5 remote work mistakes I made...",
       "published_at": "2026-02-15T09:00:00Z",
       "platform": "linkedin",
       "likes": 47,
       "comments": 12,
       "shares": 8,
       "views": 2340,
-      "impressions": 5670,
-      "engagement_rate": 0.028,  // (likes+comments+shares)/impressions
-      "ctr": 0.013  // clicks/impressions (if available)
+      "impressions": 8920,
+      "engagement_rate": 0.0075
     }
-  ],
-  "averages": {
-    "likes": 35.2,
-    "comments": 8.4,
-    "engagement_rate": 0.022
-  }
+  ]
 }
 ```
 
----
+## Failure Handling
+- If account_id not found: return error "Account not found"
+- If platform API fails: return cached/stale data with warning
+- If no posts found in date range: return empty array with message
 
-## Hard Rules
+## Example Usage
 
-- **MUST** return only published posts (not drafts)
-- **MUST** calculate engagement_rate consistently
-- **MUST** filter by account_id + workspace (security)
-- **SHOULD** include comparison to account averages
+### Scenario: Analytics agent analyzing recent performance
+```json
+{
+  "account_id": "uuid",
+  "limit": 50,
+  "date_from": "2026-01-01",
+  "platform": "linkedin"
+}
+```
+**Result:** Receive metrics for last 50 LinkedIn posts since Jan 1 for pattern analysis

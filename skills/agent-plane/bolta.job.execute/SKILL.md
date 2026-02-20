@@ -1,52 +1,53 @@
-# bolta.job.execute
-
-**Version:** 2.0.0  
-**Category:** Agent Lifecycle (Documentation)  
-**Type:** System Documentation (Not a Callable Tool)
-
+---
+name: bolta.job.execute
+version: 2.0.0
+description: Documentation of V2 execution engine - how jobs fire and agents reason through tasks (NOT a callable tool)
+category: agent
+type: documentation
+roles_allowed: []
+agent_types: []
+tools_required: []
+inputs_schema:
+  type: object
+  description: "This is system documentation, not a callable skill"
+  properties: {}
+outputs_schema:
+  type: object
+  description: "This is system documentation, not a callable skill"
+  properties: {}
+organization: bolta.ai
+author: Bolta Team
 ---
 
-## Purpose
-
-This is NOT a skill agents call directly. It's **documentation of how the V2 execution engine works** — the core system that powers agentic job execution.
-
-Understanding this helps:
-- Developers implement job execution correctly
-- Users understand what happens when a job fires
-- Agent designers understand the execution model
-
----
+## Goal
+Document how the V2 execution engine works — the core system that powers agentic job execution. This is **not a skill agents call**, but documentation for developers and users.
 
 ## What Is Job Execution?
 
-In Bolta V2, a **Job** is a task binding that connects:
+A **Job** connects:
 - An **Agent** (who does the work)
 - A **Voice Profile** (how they sound)
 - **Account(s)** (where they post)
 - A **Schedule** (when they run)
 - **Run Instructions** (what they should do)
 
-When a job fires, the execution engine:
-1. Loads the agent's context (persona, memory, voice profile)
-2. Builds a system prompt with all relevant context
-3. Sends the task brief to Claude Messages API
-4. Agent reasons about the task and chooses tools
+When a job fires:
+1. Loads agent's context (persona, memory, voice profile)
+2. Builds system prompt with all relevant context
+3. Sends task brief to Claude Messages API
+4. Agent reasons and chooses tools
 5. Execution loop runs until agent completes or hits max turns
 6. Output is stored (draft posts, analytics reports, etc.)
 
----
-
-## Architecture Components
-
-### 1. Job Model
+## Job Model Structure
 
 ```python
-class Job(models.Model):
+class Job:
     agent = ForeignKey(Agent)           # Which agent executes this
     name = CharField()                  # Human-readable job name
-    voice_profile_id = UUIDField()      # Voice to use (required for content)
+    voice_profile_id = UUIDField()      # Voice to use
     account_ids = JSONField()           # Social accounts to target
-    schedule = JSONField()              # Cron expression or event trigger
+    schedule = JSONField()              # Cron expression
     trigger = CharField()               # "scheduled" | "manual" | "event"
     status = CharField()                # "active" | "paused" | "failed"
     run_instructions = TextField()      # Natural language task brief
@@ -54,222 +55,70 @@ class Job(models.Model):
 
 **Key insight:** `run_instructions` is a BRIEF, not a script. The agent reads it and decides its own path.
 
----
+## Execution Engine Flow
 
-### 2. Execution Engine (`execute_claude`)
+### 1. Scheduled Job (Most Common)
 
-**Core function signature:**
+```
+Celery Beat (every 60s)
+  → Query: Jobs WHERE status='active' AND next_run <= now()
+  → For each due job: Create Run object, spawn Celery task
 
-```python
-def execute_claude(agent, messages, mode="job") -> dict:
-    """
-    Run the agent's reasoning loop with tool access.
-    
-    Args:
-        agent: Agent model instance
-        messages: List of message dicts for Claude API
-        mode: "job" | "chat" | "mention"
-    
-    Returns:
-        {
-            "success": bool,
-            "output": str,
-            "tool_calls": int,
-            "total_tokens": int,
-            "cost_usd": float,
-            "trace": [...],
-        }
-    """
+Worker picks up task:
+  → Acquire Postgres advisory lock (prevent concurrent posts to same account)
+  → Load agent, job, voice profile, account
+  → Build initial message with task brief
+  → Call execute_claude(agent, messages, mode="job")
+
+Agent reasoning loop:
+  → Read task brief
+  → Recall memory
+  → Call tools (get_voice_profile, list_recent_posts, draft_post, etc.)
+  → Return output
+
+Run completes:
+  → Update Run (status, tokens, cost, trace)
+  → Release lock
+  → Update Job (last_run, next_run)
+  → Draft appears in Inbox
 ```
 
-**How it works:**
+### 2. System Prompt Builder
 
-```python
-# 1. Build system prompt (THE MAGIC)
-system_prompt = build_system_prompt(agent, mode)
-# Includes: persona + business DNA + voice profile + memory + task brief
-
-# 2. Get tools for this agent
-tools = get_tools_for_agent(agent, mode)
-# Filtered by agent type + role (defense in depth)
-
-# 3. Run Claude Messages API loop
-for turn in range(max_turns):
-    response = claude.messages.create(
-        model=agent.model,
-        system=system_prompt,
-        tools=tools,
-        messages=messages,
-    )
-    
-    # If agent finished, return output
-    if response.stop_reason == "end_turn":
-        return extract_output(messages)
-    
-    # If agent used tools, execute them
-    if response.stop_reason == "tool_use":
-        results = [execute_tool_safe(block) for block in response.content]
-        messages.append({"role": "user", "content": results})
-        continue
-    
-    # Max turns exceeded
-    return {"error": "max_turns_exceeded"}
-```
-
-**The orchestrator is ~50 lines. The intelligence is in:**
-- System prompt construction
-- Tool filtering and execution
-- Context injection
-
----
-
-### 3. System Prompt Builder
-
-**Structure:**
-
+System prompt structure:
 ```
 [Base Template for Agent Type]
   → Type-specific behavioral guidelines
-  → What the agent should/shouldn't do
 
 [Persona]
   → User-editable personality
-  → Tone, style, approach
 
 [Memory]
-  → What the agent has learned over time
-  → Cross-run accumulated insights
+  → What agent has learned over time
 
 [Runtime Context]
   → Current task brief
-  → Mode-specific instructions
-  → Available tool list
-```
-
-**Example for Content Creator:**
-
-```
-You are a Content Creator agent for Acme Corp.
-
-## Your Role
-Create compelling social media content that resonates...
-
-## YOUR PERSONALITY
-Bold, trend-aware, audience-obsessed. You use data hooks...
-
-## WHAT YOU REMEMBER
-- audience_preference: Educational content performs 3x better
-- best_posting_time: Thursday 9am EST
-- successful_hooks: Lead with specific numbers
-
-## CURRENT TASK
-Create 3 LinkedIn posts about remote work best practices.
-Voice Profile ID: 284de8cd-6344-4c8c-8c4d-6da61b97e807
+  → Available tools
 ```
 
 **This context makes the agent intelligent.**
 
----
-
-### 4. Tool Execution
-
-**Tool filtering (defense in depth):**
+### 3. Tool Filtering (Defense in Depth)
 
 1. **By agent type:**
-   - Content Creator → `draft_post`, `get_voice_profile`, `list_recent_posts`
-   - Reviewer → `approve_post`, `reject_post`, `add_comment`
-   - Analytics → `get_post_metrics`, `get_audience_insights`
+   - Content Creator → draft_post, get_voice_profile, list_recent_posts
+   - Reviewer → approve_post, reject_post, add_comment
+   - Analytics → get_post_metrics, get_audience_insights
 
 2. **By agent role:**
-   - `creator` role → can draft, can't approve
-   - `editor` role → can draft, can approve
-   - `admin` role → full access
+   - Creator role → can draft, can't approve
+   - Editor role → can draft, can approve
+   - Admin role → full access
 
 3. **Runtime validation:**
-   - Tool execution checks role again (defense in depth)
+   - Tool execution checks role again
    - Logs all tool calls
    - Returns clear success/error responses
-
-**Tool safety:**
-
-```python
-def execute_tool_safe(tool_name, tool_input, agent):
-    # Role check
-    if tool_name in ROLE_GATED_TOOLS:
-        if agent.role not in ROLE_GATED_TOOLS[tool_name]:
-            return {"error": "Permission denied"}
-    
-    # Execute with error handling
-    try:
-        result = _get_tool_handler(tool_name)(tool_input, agent)
-        return result
-    except Exception as e:
-        logger.error(f"Tool error: {e}")
-        return {"error": str(e)}
-```
-
----
-
-## Job Execution Flow
-
-### Scheduled Job (Most Common)
-
-```
-1. Celery Beat runs every 60s
-   → Queries: Jobs WHERE status='active' AND next_run <= now()
-
-2. For each due job:
-   → Create Run object (status='running')
-   → Spawn Celery task: execute_job_run.delay(job_id, run_id, account_id)
-
-3. Worker picks up task:
-   → Acquires Postgres advisory lock (prevent concurrent posts to same account)
-   → Loads agent, job, voice profile, account
-   → Builds initial message with task brief
-   → Calls execute_claude(agent, messages, mode="job")
-
-4. Agent reasoning loop:
-   → Reads task brief: "Create 3 LinkedIn posts about remote work"
-   → Recalls memory: "Educational > promotional, Thursday is best"
-   → Calls tools:
-     - get_voice_profile(voice_profile_id)
-     - list_recent_posts(account_id, limit=10)
-     - draft_post(content, platform, account_id, voice_profile_id)
-   → Returns output
-
-5. Run completes:
-   → Update Run (status='completed', tokens, cost, trace)
-   → Release advisory lock
-   → Update Job (last_run, next_run, run_count)
-
-6. Draft appears in Inbox
-   → Human reviews
-   → Approves or rejects
-   → If approved → scheduled → published
-```
-
----
-
-### Manual Job
-
-```
-User triggers job manually via UI
-→ Same flow as scheduled, but trigger="manual"
-→ Runs immediately, doesn't update next_run
-```
-
----
-
-### Event-Triggered Job
-
-```
-Event fires (new mention, new follower, etc.)
-→ Job.trigger = "event"
-→ Event payload passed to agent as context
-→ Same execution flow
-```
-
----
 
 ## What Agents Decide vs. What System Enforces
 
@@ -284,62 +133,23 @@ Event fires (new mention, new follower, etc.)
 - Tool access (type + role filtering)
 - Max iterations (prevent infinite loops)
 - Safe Mode (approval gates)
-- Role permissions (creator can't publish directly)
-- Workspace quotas (token limits, run limits)
+- Role permissions
+- Workspace quotas
 
 **The balance:** Agent has creative freedom within safety constraints.
 
----
-
-## Cost Tracking
-
-**Token-based pricing:**
-
-```python
-# After execution:
-run.input_tokens = sum([turn.input_tokens for turn in trace])
-run.output_tokens = sum([turn.output_tokens for turn in trace])
-run.total_tokens = run.input_tokens + run.output_tokens
-
-# Cost calculation (example for Claude Sonnet):
-input_cost_per_million = 3.00   # $3/M input tokens
-output_cost_per_million = 15.00  # $15/M output tokens
-
-run.cost_usd = (
-    (run.input_tokens / 1_000_000) * input_cost_per_million +
-    (run.output_tokens / 1_000_000) * output_cost_per_million
-)
-```
-
-**Workspace quota enforcement:**
-
-```python
-if workspace.total_cost_this_month > workspace.quota_limit:
-    pause_all_jobs(workspace)
-    notify_admin("Quota exceeded")
-```
-
----
-
-## Debugging Job Execution
-
-**Run trace structure:**
+## Run Trace Structure
 
 ```json
 {
   "run_id": "uuid",
-  "agent_id": "uuid",
-  "job_id": "uuid",
   "status": "completed",
-  "started_at": "2026-02-20T14:30:00Z",
-  "completed_at": "2026-02-20T14:30:45Z",
   "total_tokens": 4523,
   "cost_usd": 0.087,
   "trace": [
     {
       "turn": 1,
-      "role": "assistant",
-      "thinking": "I need to check recent posts and voice profile first...",
+      "thinking": "I need to check recent posts first...",
       "tool_calls": [
         {"tool": "bolta.list_recent_posts", "input": {...}, "output": {...}},
         {"tool": "bolta.get_voice_profile", "input": {...}, "output": {...}}
@@ -347,52 +157,32 @@ if workspace.total_cost_this_month > workspace.quota_limit:
     },
     {
       "turn": 2,
-      "role": "assistant",
       "thinking": "Now I'll draft the post...",
       "tool_calls": [
         {"tool": "bolta.draft_post", "input": {...}, "output": {...}}
       ]
-    },
-    {
-      "turn": 3,
-      "role": "assistant",
-      "content": "Task completed. Draft created with ID abc-123.",
-      "stop_reason": "end_turn"
     }
   ]
 }
 ```
 
-**This trace shows:**
-- How the agent reasoned
-- Which tools it chose
-- In what order
-- What it decided at each step
+This shows how the agent reasoned, which tools it chose, and in what order — essential for debugging.
 
-**Essential for debugging and improving prompts.**
-
----
-
-## Key Differences from V1 RecurringTemplates
+## V1 vs V2 Comparison
 
 | Aspect | V1 (RecurringTemplates) | V2 (Job Execution) |
 |--------|-------------------------|---------------------|
-| **Execution** | Template fill → post | Agent reasoning → tools → output |
-| **Flexibility** | Fixed pipeline | Agent chooses path |
-| **Learning** | Static template | Memory accumulation |
-| **Context** | Template variables | Full business DNA + voice + memory |
-| **Adaptation** | Manual template edits | Agents adapt based on performance |
-| **Intelligence** | None (regex-level) | Claude reasoning (LLM-level) |
-
----
+| Execution | Template fill → post | Agent reasoning → tools → output |
+| Flexibility | Fixed pipeline | Agent chooses path |
+| Learning | Static template | Memory accumulation |
+| Adaptation | Manual template edits | Agents adapt based on performance |
+| Intelligence | Regex-level | LLM reasoning |
 
 ## Notes
 
 - The execution engine is **thin by design** — intelligence lives in prompts, not code
-- Jobs are **creative briefs**, not scripts to execute
+- Jobs are **creative briefs**, not scripts
 - Agents **choose their own paths** — same brief, different executions over time
 - Memory makes agents **improve without human intervention**
 - Tool access is **filtered defensively** at multiple layers
 - Traces provide **full observability** into agent decision-making
-
-**This is what "truly agentic" means.**

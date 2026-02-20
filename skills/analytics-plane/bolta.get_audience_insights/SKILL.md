@@ -1,47 +1,73 @@
-# bolta.get_audience_insights
-
-**Version:** 2.0.0  
-**Category:** Analytics  
-**Agent Types:** `analytics`, `custom`  
-**Roles Allowed:** All
-
+---
+name: bolta.get_audience_insights
+version: 2.0.0
+description: Retrieve audience demographics, behavior patterns, and engagement trends for data-driven content strategy
+category: analytics
+roles_allowed: [Viewer, Creator, Editor, Admin]
+agent_types: [analytics, content_creator, custom]
+safe_defaults: {}
+tools_required:
+  - platform_api_integration
+inputs_schema:
+  type: object
+  required: [account_id]
+  properties:
+    account_id: { type: string, description: "Social account UUID" }
+    insights_type: { type: string, enum: [demographics, behavior, content_preferences], description: "Type of insights to retrieve" }
+    time_period: { type: string, enum: [7d, 30d, 90d], description: "Rolling time window for analysis" }
+outputs_schema:
+  type: object
+  properties:
+    success: { type: boolean }
+    account_id: { type: string }
+    time_period: { type: string }
+    insights: 
+      type: object
+      properties:
+        demographics: { type: object }
+        behavior: { type: object }
+        content_preferences: { type: object }
+organization: bolta.ai
+author: Bolta Team
 ---
 
-## Purpose
+## Goal
+Retrieve audience demographics, behavior patterns, and engagement trends to help agents understand WHO they're creating content for and HOW that audience behaves.
 
-Retrieve audience demographics, behavior patterns, and engagement trends.
+## Which Agents Use This
+- **analytics** — Primary use case for audience analysis and reporting
+- **content_creator** — Check audience preferences before drafting content
+- **custom** — Any agent needing audience context for decision-making
 
-Helps agents understand WHO they're creating content for and HOW that audience behaves.
+## Hard Rules
+1. MUST aggregate over time period (not single snapshot)
+2. MUST identify actionable patterns (not just raw counts)
+3. SHOULD compare to platform benchmarks when available
+4. Require valid account_id that belongs to workspace
 
----
+## Steps
 
-## When An Agent Uses This
+### 1. Validate input
+- Verify account_id exists and belongs to workspace
+- Validate time_period is supported
 
-**Analytics Agent reasoning:**
-- "I need to understand our audience composition"
-- "What topics resonate most with our followers?"
-- "When is our audience most active?"
+### 2. Query platform APIs
+- Fetch follower demographics from platform (LinkedIn, Twitter, etc.)
+- Fetch engagement behavior data
+- Fetch content performance by type
 
-**Content Creator reasoning:**
-- "Let me check if my audience is B2B or B2C"
-- "What content format does my audience prefer?"
+### 3. Aggregate and analyze
+- Calculate growth rates
+- Identify peak activity times
+- Determine content format preferences
+- Extract actionable patterns
 
----
+### 4. Return structured insights
+- Demographics: follower count, growth rate, locations, industries
+- Behavior: peak activity times, session duration, engagement by day
+- Content preferences: top formats, topics, optimal post length
 
-## Parameters
-
-```json
-{
-  "account_id": "uuid (required)",
-  "insights_type": "demographics | behavior | content_preferences",
-  "time_period": "7d | 30d | 90d"  // Rolling window
-}
-```
-
----
-
-## Returns
-
+## Output
 ```json
 {
   "success": true,
@@ -52,16 +78,13 @@ Helps agents understand WHO they're creating content for and HOW that audience b
       "follower_count": 12450,
       "growth_rate_30d": 0.08,
       "top_locations": ["United States", "United Kingdom", "Canada"],
-      "top_industries": ["Technology", "Marketing", "SaaS"],
-      "avg_follower_size": "1k-10k"  // How big is typical follower
+      "top_industries": ["Technology", "Marketing", "SaaS"]
     },
     "behavior": {
       "peak_activity_times": ["9am-11am EST", "2pm-4pm EST"],
-      "avg_session_duration": "3m 42s",
       "engagement_by_day": {
-        "monday": 0.024,
-        "thursday": 0.038,  // Highest
-        "sunday": 0.012     // Lowest
+        "thursday": 0.038,
+        "sunday": 0.012
       }
     },
     "content_preferences": {
@@ -70,17 +93,26 @@ Helps agents understand WHO they're creating content for and HOW that audience b
       "avg_engagement_by_length": {
         "short": 0.021,
         "medium": 0.028,
-        "long": 0.034  // Longer content performs better
+        "long": 0.034
       }
     }
   }
 }
 ```
 
----
+## Failure Handling
+- If account_id not found: return error "Account not found"
+- If platform API fails: return cached data with warning
+- If insufficient data for time_period: suggest longer period
 
-## Hard Rules
+## Example Usage
 
-- **MUST** aggregate over time period (not single snapshot)
-- **MUST** identify actionable patterns (not just raw counts)
-- **SHOULD** compare to platform benchmarks when available
+### Scenario: Analytics agent analyzing audience
+```json
+{
+  "account_id": "uuid",
+  "insights_type": "demographics",
+  "time_period": "30d"
+}
+```
+**Result:** Receive demographic breakdown for strategy planning

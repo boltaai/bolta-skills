@@ -1,38 +1,78 @@
-# bolta.list_recent_posts
-
-**Version:** 2.0.0  
-**Category:** Content Creation  
-**Agent Types:** `content_creator`, `analytics`, `custom`  
-**Roles Allowed:** All
-
+---
+name: bolta.list_recent_posts
+version: 2.0.0
+description: Get the last N published posts for an account to avoid repetition and maintain content variety
+category: content
+roles_allowed: [Viewer, Creator, Editor, Admin]
+agent_types: [content_creator, analytics, custom]
+safe_defaults:
+  default_limit: 10
+  max_limit: 50
+tools_required: []
+inputs_schema:
+  type: object
+  required: [account_id]
+  properties:
+    account_id: { type: string, description: "Social account UUID" }
+    limit: { type: number, description: "Number of posts to retrieve (default 10, max 50)", default: 10 }
+outputs_schema:
+  type: object
+  properties:
+    success: { type: boolean }
+    count: { type: number }
+    posts: 
+      type: array
+      items:
+        type: object
+        properties:
+          id: { type: string }
+          content: { type: string }
+          platform: { type: string }
+          published_at: { type: string }
+          voice_profile_id: { type: string }
+          is_ai_generated: { type: boolean }
+          metrics: { type: object }
+organization: bolta.ai
+author: Bolta Team
 ---
 
-## Purpose
-
+## Goal
 Get the last N published posts for an account. Use this to avoid repetition and maintain content variety.
 
----
+## Which Agents Use This
+- **content_creator** — Check what was posted recently to avoid repeating topics
+- **analytics** — Analyze recent performance to inform strategy
+- **reviewer** — Verify new content is different from recent posts
+- All content-related agents benefit from recent post context
 
-## When An Agent Uses This
+## Hard Rules
+1. MUST only return published posts (not drafts or scheduled)
+2. MUST order by published_at descending (most recent first)
+3. MUST respect limit parameter (max 50 posts)
+4. SHOULD include metrics if available
 
-**Content Creator:** "Before drafting, let me check what I posted recently to avoid repeating topics"  
-**Analytics:** "Let me analyze recent performance to inform strategy"
+## Steps
 
----
+### 1. Validate input
+- Verify account_id exists and belongs to workspace
+- Validate limit (default 10, max 50)
 
-## Parameters
+### 2. Query recent posts
+- Fetch published posts for account_id
+- Order by published_at desc
+- Apply limit
 
-```json
-{
-  "account_id": "string (UUID, required)",
-  "limit": 10  // Default: 10, max: 50
-}
-```
+### 3. Include post metadata
+- Post content (full text)
+- Platform, published timestamp
+- Voice profile used
+- Whether AI-generated
+- Basic metrics if available
 
----
+### 4. Return posts array
+- Return count and posts array
 
-## Returns
-
+## Output
 ```json
 {
   "success": true,
@@ -40,7 +80,7 @@ Get the last N published posts for an account. Use this to avoid repetition and 
   "posts": [
     {
       "id": "uuid",
-      "content": "Post content...",
+      "content": "🏠 5 remote work mistakes I made...",
       "platform": "linkedin",
       "published_at": "2026-02-20T09:00:00Z",
       "voice_profile_id": "uuid",
@@ -48,18 +88,25 @@ Get the last N published posts for an account. Use this to avoid repetition and 
       "metrics": {
         "likes": 47,
         "comments": 12,
-        "shares": 8
+        "shares": 8,
+        "engagement_rate": 0.028
       }
     }
-  ],
-  "account_platform": "linkedin"
+  ]
 }
 ```
 
----
+## Failure Handling
+- If account_id not found: return error "Account not found"
+- If no published posts: return empty array with count: 0
 
-## Hard Rules
+## Example Usage
 
-- **MUST** return only published posts (status="Published")
-- **MUST** order by `created_at` DESC (most recent first)
-- **MUST** cap limit at 50 (prevent excessive queries)
+### Scenario: Content creator checking recent posts before drafting
+```json
+{
+  "account_id": "uuid",
+  "limit": 10
+}
+```
+**Result:** Receive last 10 published posts to avoid topic repetition and maintain variety
