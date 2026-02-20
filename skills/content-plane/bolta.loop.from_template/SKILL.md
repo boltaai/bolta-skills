@@ -4,6 +4,8 @@ version: 1.0.0
 description: Create a recurring content loop from a template using a voice profile, then send all generated posts into Inbox Review as a bundle.
 category: creator
 roles_allowed: [Owner, Admin, Creator]
+deprecated: true
+deprecation_notice: "V1 skill - Replaced by bolta.job.execute (V2 agentic jobs). This skill still works for backward compatibility but V2 jobs are recommended for adaptive, learning-based content generation."
 safe_defaults:
   always_route_to_review: true
 tools_required:
@@ -35,6 +37,29 @@ outputs_schema:
     warnings: { type: array, items: { type: string } }
 organization: bolta.ai
 author: Max Fritzhand
+---
+
+## ⚠️ DEPRECATED — V2 Migration Recommended
+
+**This is a V1 skill (template-based loops).** It still works for backward compatibility.
+
+**V2 equivalent:** Use `bolta.job.execute` with a Content Creator agent instead.
+
+### Why migrate to V2?
+- **Adaptive generation:** Agents reason about context instead of filling templates
+- **Learning:** Agents improve over time based on performance data
+- **Flexibility:** Natural language instructions instead of rigid template variables
+- **Memory:** Agents remember what works and adapt their approach
+
+### Migration path:
+1. Create Content Creator agent via `bolta.agent.hire`
+2. Create Job with natural language instructions (e.g., "Create 7 LinkedIn posts about remote work best practices")
+3. Bind voice_profile_id, account_ids to the job
+4. Activate job via `bolta.agent.activate_job`
+5. Agent generates posts adaptively (not template fills)
+
+**For details, see:** `skills/automation-plane/DEPRECATED.md`
+
 ---
 
 ## Goal

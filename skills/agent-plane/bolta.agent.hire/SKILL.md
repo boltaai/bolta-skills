@@ -1,313 +1,198 @@
-# bolta.agent.hire
-
-**Version:** 2.0.0  
-**Category:** Agent Lifecycle  
-**Agent Types:** `custom` (typically used by system/onboarding flows)  
-**Roles Allowed:** `admin`, `editor`
-
+---
+name: bolta.agent.hire
+version: 2.0.0
+description: Create and onboard a new AI agent teammate from marketplace presets with conversational discovery and preview generation.
+category: agent_lifecycle
+roles_allowed: [Editor, Admin]
+safe_defaults:
+  jobs_start_paused: true
+  require_preview_approval: true
+tools_required:
+  - bolta.get_workspace_policy
+  - bolta.get_my_capabilities
+  - bolta.get_voice_profile
+  - bolta.list_agent_presets
+  - bolta.create_agent
+  - bolta.create_job
+  - bolta.draft_post
+  - bolta.get_business_context
+inputs_schema:
+  type: object
+  required: [workspace_id, preset_id]
+  properties:
+    workspace_id: { type: string }
+    preset_id: { type: string, description: "Agent marketplace preset (e.g., 'hype_man', 'qa_bot')" }
+    business_context: { type: string, description: "Business description from conversation" }
+    content_goals: { type: string, description: "Content strategy from conversation" }
+    posting_frequency: { type: string, description: "e.g., '3x/week', 'daily'" }
+    platform_ids: { type: array, items: { type: string } }
+    voice_profile_id: { type: string, description: "Existing voice profile or null to create new" }
+    custom_persona: { type: string, description: "User-requested persona adjustments" }
+outputs_schema:
+  type: object
+  properties:
+    agent_id: { type: string }
+    job_ids: { type: array, items: { type: string } }
+    preview_post_id: { type: string }
+    status: { type: string, enum: [paused, ready_to_activate] }
+    next_step: { type: string }
+organization: bolta.ai
+author: Max Fritzhand
 ---
 
-## Purpose
+## Goal
+Hire and configure a new AI agent teammate from marketplace presets using conversational onboarding instead of forms.
 
-Create and onboard a new AI agent teammate from the marketplace with conversational discovery. This is NOT a form-fill — it's a hiring conversation where the agent proposes its own configuration based on understanding the business.
-
-This skill transforms workspace setup from "configure software" to "hire a team member."
-
----
-
-## When An Agent Uses This
-
-**Typical context:**
-- User says "I want to hire a content creator"
-- User browses agent marketplace and selects a preset
-- Onboarding flow guides user through agent setup
-- System agent (onboarding assistant) uses this skill to instantiate the hired agent
-
-**Agent reasoning:**
-- "User selected 'The Hype Man' preset — I need to gather their business context, voice preferences, and content goals"
-- "Rather than presenting a form, I'll have a conversation to understand what they need"
-- "Once I have enough context, I'll create the agent + jobs in paused state"
-- "Then I'll generate a preview draft so they can see the voice before activating"
-
----
-
-## What This Skill Does
-
-1. **Conversational Discovery:**
-   - Asks about business, content goals, target platforms, posting frequency
-   - Adapts questions based on agent preset type
-   - Agent proposes its own configuration based on responses
-
-2. **Agent Creation:**
-   - Instantiates Agent model with type, role, persona from preset
-   - Applies user customizations from conversation
-   - Sets appropriate model tier (Sonnet/Opus for creators, Haiku for engagement)
-
-3. **Job Setup:**
-   - Creates Jobs in `paused` status
-   - Pre-fills run_instructions based on conversation
-   - Binds voice_profile_id (if exists) or prompts creation
-   - Binds account_ids from user selection
-
-4. **Preview Generation:**
-   - Generates sample draft using the new agent
-   - Shows user what the voice/output will look like
-   - Allows voice adjustment before activation
-
----
-
-## How It Works Differently Than V1
-
-**V1 Approach (Template Loop Setup):**
-```
-Fill form:
-- Name: ___
-- Posting frequency: ___
-- Topics: ___
-- Tone: ___
-- Template: ___
-→ RecurringTemplate created
-```
-
-**V2 Approach (Agent Hiring):**
-```
-System Agent: "Tell me about your business."
-User: "B2B SaaS for project management."
-
-System Agent: "What's your content strategy?"
-User: "Thought leadership on remote work."
-
-System Agent: "How often do you want to post?"
-User: "3x/week on LinkedIn."
-
-System Agent: "Perfect. I'll set up The Hype Man to:
-- Create 3x/week LinkedIn thought pieces on remote work
-- Use professional but bold tone
-- Focus on actionable insights
-
-Want to see a sample post first?"
-→ Agent created with Jobs (paused)
-→ Sample draft generated
-→ User tweaks voice
-→ Jobs activated
-```
-
-**The difference:** The agent PROPOSES its own setup. The user confirms or adjusts.
-
----
-
-## Parameters
-
-### Input
-
-```json
-{
-  "preset_id": "string (UUID)",          // AgentPreset ID from marketplace
-  "workspace_id": "string (UUID)",       // Target workspace
-  "conversation_context": {              // Gathered from conversational flow
-    "business_description": "string",
-    "content_goals": "string",
-    "platforms": ["linkedin", "twitter"],
-    "posting_frequency": "3x/week",
-    "tone_preference": "professional_bold"
-  },
-  "voice_profile_id": "string (UUID, optional)",  // If already exists
-  "account_ids": ["string (UUID)"],               // Social accounts to use
-  "agent_name": "string (optional)",              // Override preset name
-  "persona_overrides": "string (optional)"        // Customize persona
-}
-```
-
-### Output
-
-```json
-{
-  "success": true,
-  "agent_id": "string (UUID)",
-  "agent_name": "The Hype Man",
-  "agent_type": "content_creator",
-  "jobs_created": [
-    {
-      "job_id": "string (UUID)",
-      "name": "LinkedIn Thought Leadership",
-      "schedule": "cron: 0 9 * * 1,3,5",
-      "status": "paused",
-      "run_instructions": "Create engaging LinkedIn posts..."
-    }
-  ],
-  "preview_draft_id": "string (UUID, optional)",
-  "next_steps": [
-    "Review the preview draft",
-    "Adjust voice profile if needed",
-    "Activate jobs when ready"
-  ],
-  "activation_url": "/agents/{agent_id}/activate"
-}
-```
-
----
+## Which Agent Types Use This
+- **custom** (system/onboarding flows)
+- Typically triggered by user selecting preset in marketplace UI
 
 ## Hard Rules
+1. Jobs MUST start in `paused` status — never auto-activate without preview approval.
+2. MUST generate preview draft before allowing activation.
+3. If no voice_profile_id provided, MUST prompt user to create one before agent activation.
+4. Never create agents without explicit user intent (no auto-hiring).
 
-**MUST:**
-- Create agent in database (Agent model)
-- Create jobs in `paused` status (Job model)
-- Generate preview draft before activation (Post model, status=Draft)
-- Bind voice_profile_id to jobs (required for content_creator agents)
-- Bind account_ids to jobs
+## Steps
 
-**MUST NOT:**
-- Activate jobs immediately (user must explicitly activate)
-- Skip preview draft generation (user needs to see voice first)
-- Create agent without persona (defaults to preset persona, but must exist)
-- Allow content_creator agents without voice_profile_id
+### 1. Check policy & capabilities
+- `bolta.get_workspace_policy(workspace_id)` → verify agent hiring allowed
+- `bolta.get_my_capabilities(workspace_id)` → verify Editor/Admin role
 
-**SHOULD:**
-- Ask clarifying questions if conversation_context is incomplete
-- Suggest voice profile creation if none exists
-- Show clear "what you'll get" summary before creation
-- Offer voice adjustment after preview
+### 2. Load marketplace preset
+- `bolta.list_agent_presets()` → get available presets
+- Find preset by `preset_id` (e.g., "hype_man", "qa_bot", "analytics_pro")
+- Extract default configuration:
+  - `agent_type` (content_creator, reviewer, analytics, etc.)
+  - `default_persona` (personality + behavioral guidelines)
+  - `recommended_model_tier` (Sonnet/Opus for creators, Haiku for engagement)
+  - `default_job_templates` (job types this agent excels at)
 
----
+### 3. Gather business context (conversational)
+- Load existing: `bolta.get_business_context(workspace_id)`
+- If missing or incomplete, conduct discovery conversation:
+  - "Tell me about your business" → business_context
+  - "What's your content strategy?" → content_goals
+  - "How often do you want to post?" → posting_frequency
+  - "Which platforms?" → platform_ids
+- Store responses for agent configuration
 
-## Agent Type Mapping
+### 4. Validate voice profile
+- If `voice_profile_id` provided:
+  - `bolta.get_voice_profile(voice_profile_id)` → verify it exists
+- If null:
+  - Prompt user: "This agent needs a voice profile to match your brand. Create one now?"
+  - Link to `bolta.voice.bootstrap` flow
+  - BLOCK agent creation until voice exists
 
-Different agent types require different conversation flows:
+### 5. Create agent
+- `bolta.create_agent({
+    workspace_id,
+    type: preset.agent_type,
+    name: user_chosen_name || preset.default_name,
+    persona: custom_persona || preset.default_persona,
+    model_tier: preset.recommended_model_tier,
+    voice_profile_id,
+    enabled_skills: preset.default_skills
+  })`
+- Returns `agent_id`
 
-**content_creator:**
-- Ask: business, content goals, platforms, frequency, tone
-- Bind: voice_profile_id (required), account_ids
-- Preview: sample post draft
+### 6. Create jobs (paused)
+- For each job template in preset.default_job_templates:
+  - `bolta.create_job({
+      workspace_id,
+      agent_id,
+      run_instructions: fill_template(template, {business_context, content_goals}),
+      schedule: derive_schedule(posting_frequency),
+      status: "paused",
+      metadata: {source: "agent_hiring"}
+    })`
+  - Collect `job_ids`
 
-**reviewer:**
-- Ask: review standards, what to flag, approval criteria
-- Bind: voice_profile_id (as reference), account_ids (optional)
-- Preview: sample review comment
+### 7. Generate preview draft
+- Use the newly created agent to generate a sample post:
+  - `bolta.draft_post({
+      workspace_id,
+      agent_id,
+      voice_profile_id,
+      account_ids: platform_ids,
+      prompt: "Create a sample post to demonstrate your voice and style",
+      requested_action: "draft_only",
+      metadata: {preview_draft: true}
+    })`
+- Returns `preview_post_id`
 
-**engagement:**
-- Ask: engagement style, escalation rules, response speed
-- Bind: voice_profile_id (for brand voice), account_ids
-- Preview: sample reply to mention
+### 8. Return for user review
+- Status: `paused` (jobs not active yet)
+- Show user:
+  - Agent name and persona
+  - Job schedule and instructions
+  - **Preview draft** (critical — user sees actual output before activation)
+- Next step: "Review preview. If you like it, activate jobs. If not, adjust voice or persona."
 
-**analytics:**
-- Ask: metrics to track, reporting frequency, format
-- Bind: account_ids, reporting schedule
-- Preview: sample analytics report
-
-**acquisition:**
-- Ask: ICP, outreach style, follow-up rules
-- Bind: voice_profile_id (for outreach tone), lead sources
-- Preview: sample outreach message
-
----
-
-## Example: Hiring a Content Creator
-
-**Conversation Flow:**
-
-```
-System Agent (using this skill):
-
-"You're hiring The Hype Man — a content creator agent that crafts bold, engaging posts.
-
-Tell me about your business in 1-2 sentences."
-
-→ User responds: "B2B SaaS for async team collaboration."
-
-"Got it. What's your content goal?"
-
-→ User: "Establish thought leadership on remote work."
-
-"Perfect. Which platforms?"
-
-→ User: "LinkedIn mainly, maybe Twitter later."
-
-"How often should The Hype Man post?"
-
-→ User: "3 times per week."
-
-"Great. I'll configure The Hype Man to:
-- Create LinkedIn posts 3x/week (Mon, Wed, Fri at 9am)
-- Focus on remote work best practices
-- Use professional but bold tone (your audience is B2B)
-
-Do you already have a voice profile set up?"
-
-→ User: "No, not yet."
-
-"No problem. I'll create jobs in paused mode. You can set up your voice profile next, then activate.
-
-Want me to generate a sample post so you can see the style first?"
-
-→ User: "Yes."
-
-[Creates agent + jobs (paused) + generates preview draft]
-
-"Here's a sample post The Hype Man would create:
-[Shows draft]
-
-Like the voice? You can tweak it in voice settings, then activate The Hype Man's jobs."
+## Output
+```json
+{
+  "agent_id": "uuid",
+  "job_ids": ["job-uuid1", "job-uuid2"],
+  "preview_post_id": "draft-uuid",
+  "status": "paused",
+  "next_step": "Review preview draft (ID: draft-uuid). If approved, call bolta.agent.activate_job."
+}
 ```
 
----
+## Failure Handling
+- If voice_profile_id missing and user declines creation: fail with clear message.
+- If preview draft generation fails: agent still created but jobs remain paused, add warning.
+- If job creation fails: agent created but incomplete, return partial job_ids + error details.
+- Never auto-activate jobs on partial failures.
 
-## Integration with Other Skills
+## V2 Agent Context
 
-**Before this skill:**
-- User browses AgentPreset marketplace
-- User selects preset (e.g., "The Hype Man")
-- User triggers hire flow
+**Why conversational instead of forms?**
 
-**After this skill:**
-- `bolta.agent.configure` — Adjust persona, model tier, skills
-- `bolta.voice.bootstrap` — Create voice profile if none exists
-- `bolta.agent.activate_job` — Activate jobs (preview → schedule → go live)
+Hiring an agent should feel like hiring a team member, not configuring software. The conversation:
+1. Gathers context naturally
+2. Lets the agent propose its own setup
+3. Adapts based on user's business
+4. Shows a preview before activation
 
-**Related skills:**
-- `bolta.agent.memory` — Agents use this to remember learnings
-- `bolta.job.execute` — The execution engine that runs the jobs
+**Example conversation flow:**
+```
+System: "You selected The Hype Man. Tell me about your business."
+User: "B2B SaaS for project management."
 
----
+System: "What's your content strategy?"
+User: "Thought leadership on remote work."
 
-## Metrics to Track
+System: "How often do you want to post?"
+User: "3x/week on LinkedIn."
 
-- **Time to hire** — How long from preset selection to agent creation
-- **Activation rate** — % of hired agents that get activated within 7 days
-- **Preview satisfaction** — Did user accept/reject preview draft
-- **Voice adjustment rate** — % of users who modify voice after preview
+System: "Perfect. I'll set up The Hype Man to create 3x/week LinkedIn 
+thought pieces on remote work. Let me generate a sample post first..."
 
----
+[Preview draft generated]
 
-## Error Handling
+System: "Here's a sample. Like the voice? If yes, I'll activate the jobs."
+```
 
-**Common scenarios:**
+## Example Usage
 
-1. **No voice profile exists (content_creator hire):**
-   - Pause job creation
-   - Guide user to create voice profile first
-   - Resume hiring after voice created
+### Scenario: Hire Content Creator
+```json
+{
+  "workspace_id": "uuid",
+  "preset_id": "hype_man",
+  "business_context": "B2B SaaS for project management",
+  "content_goals": "Thought leadership on remote work",
+  "posting_frequency": "3x/week",
+  "platform_ids": ["linkedin-uuid"],
+  "voice_profile_id": "uuid"
+}
+```
 
-2. **No social accounts connected:**
-   - Pause job creation
-   - Guide user to connect account
-   - Resume hiring after account connected
-
-3. **Preset not found:**
-   - Show marketplace link
-   - Suggest similar agent types
-   - Ask user to select valid preset
-
-4. **Insufficient permissions:**
-   - Check user role (must be editor/admin)
-   - Show clear permission error
-   - Suggest who can grant access
-
----
-
-## Notes
-
-- Agent hiring is an **explicit trust moment** — make it clear what the agent will do
-- Jobs start **paused** by default — activation is a separate, deliberate step
-- Preview drafts are critical — users need to SEE the agent's work before trusting it
-- Voice profile binding is HARD REQUIREMENT for content_creator agents
-- The conversational flow makes onboarding feel like hiring, not configuring
+**Result:**
+- Agent created (The Hype Man)
+- 1 job created (3x/week LinkedIn content)
+- Preview draft generated
+- Jobs paused until user approves preview

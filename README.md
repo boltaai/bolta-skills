@@ -1,426 +1,606 @@
-# Bolta Skills Pack — V2 Agentic Architecture
+# Bolta Agentic Skills Pack v2
 
-**Version:** 2.0.0  
-**Philosophy:** [V2-AGENTIC-PHILOSOPHY.md](https://github.com/bolta-ai/Bolta-Server/blob/main/docs/V2-AGENTIC-PHILOSOPHY.md)  
-**Status:** Production-ready
+Bolta is a **policy-aware creative workflow runtime**.
 
----
+This Skills Pack transforms Bolta from a scheduling tool into an
+**agent-native content operating system** — where agents generate,
+route, review, and automate content safely inside governed workspaces.
 
-## What This Is
-
-This is the **capability library** for Bolta V2's agentic automation platform.
-
-Skills are not pipelines. Skills are **capabilities** that agents choose to use based on their reasoning about the task.
-
-Different agents use the same skills differently. A Content Creator and a Reviewer both use `bolta.get_voice_profile`, but for different purposes:
-- **Creator:** "What tone should I match?"
-- **Reviewer:** "Does this draft match our canonical voice?"
-
-**The agent's mindset determines how the tool serves them.**
+Agents act.  
+Bolta enforces.  
+Humans retain control.
 
 ---
 
-## Core Philosophy
+## What's New in V2
 
-### Tools Are Hands, Reasoning Is the Product
+**V2 introduces agentic job execution:**
+- Jobs replace RecurringTemplates (agents reason about tasks instead of filling templates)
+- Agent memory and learning (agents improve over time)
+- Agent hiring flow (marketplace-driven onboarding)
+- @Mention review workflow (feedback loops)
+- Enhanced business context (products, audience DNA, performance data)
 
-> "Most 'AI-powered' products are Perplexity wrappers. Bolta V2 is different. The agent reasoning IS the product."
+**Core philosophy:** Skills are capabilities that agents choose based on reasoning, not pipeline steps.
 
-**Not this:**
-```
-Template loop → fill variables → post
-```
-
-**This:**
-```
-Agent receives brief → considers context → chooses tools → reasons about approach → delivers output
-```
-
-**Same brief, different executions over time** — the agent adapts based on memory and performance data.
+Different agents use the same skills differently based on their role and context.
 
 ---
 
-## How Agents Use Skills
+## Agent Types
 
-### Agent Types Have Different Mindsets
+V2 introduces specialized agent types with different mindsets:
 
-| Agent Type | Mindset | Primary Skills Used |
-|------------|---------|---------------------|
+| Agent Type | Mindset | Primary Skills |
+|------------|---------|----------------|
 | **Content Creator** | Creative, audience-focused | `draft_post`, `get_voice_profile`, `list_recent_posts` |
-| **Reviewer** | Critical, brand-protective | `approve_post`, `reject_post`, `get_voice_profile` |
-| **Analytics** | Data-driven, insight-focused | `get_post_metrics`, `get_audience_insights`, `get_best_posting_times` |
-| **Engagement** | Social, de-escalation | `get_mentions`, `reply_to_mention`, `get_comments` |
+| **Reviewer** | Critical, brand-protective | `approve_post`, `reject_post`, `inbox.triage` |
+| **Analytics** | Data-driven, insight-focused | `get_post_metrics`, `get_audience_insights` |
+| **Engagement** | Social, community-focused | `get_mentions`, `reply_to_mention` |
 | **Moderator** | Protective, fair | `get_comments`, moderation tools |
-| **Acquisition** | Strategic, personalized | Lead scoring, outreach tools |
 | **Custom** | User-defined | All tools (requires explicit configuration) |
 
-### Example: Same Skill, Different Usage
+---
 
-**Skill:** `bolta.list_recent_posts`
+# 🧠 Primary Agentic Workflows
 
-**Content Creator uses it:**
-- **Goal:** Avoid repetition
-- **Reasoning:** "What did I post recently? I shouldn't repeat the same topic 3 days in a row."
-- **Action:** Checks last 10 posts, sees 2 about pricing, decides to write about product features instead
-
-**Analytics uses it:**
-- **Goal:** Performance analysis
-- **Reasoning:** "Which content types performed best? I need to recommend strategy adjustments."
-- **Action:** Fetches last 50 posts with metrics, identifies patterns, stores findings in memory
-
-**Reviewer uses it:**
-- **Goal:** Strategic fit check
-- **Reasoning:** "Is this draft timing appropriate given our recent content calendar?"
-- **Action:** Checks last week's posts, sees we posted about pricing yesterday, flags draft as "too soon"
-
-**Same tool. Three completely different use cases. The agent's mindset determines HOW the tool serves them.**
+Bolta supports five foundational workflows.
 
 ---
 
-## Skill Planes (Capability Categories)
+## Workflow A — Agent Job → Inbox Review
 
-### agent-plane/ — Agent Lifecycle & Orchestration
-**Purpose:** Hiring, configuring, and managing AI agents as team members
+**Purpose**  
+Agents generate content using jobs (not templates), then route to Inbox Review.
 
-- **bolta.agent.hire** — Conversational agent onboarding from marketplace presets
-- **bolta.agent.configure** — Modify agent persona, model tier, enabled skills
-- **bolta.agent.activate_job** — Activate paused jobs after preview validation
-- **bolta.agent.memory** — `remember` and `recall` for cross-run learning
-- **bolta.agent.mention** — @mention handling (read-only feedback mode)
-- **bolta.job.execute** — Documentation of the V2 execution engine
+**What Happens**
+- Agent receives job brief (natural language instructions)
+- Agent reasons about task and chooses tools
+- Agent drafts content in Brand Voice
+- Content automatically routes to Inbox for human review
+- Routing follows workspace policy automatically
 
-**Used by:** System/onboarding flows, all agent types (memory)
+**Policy Enforcement**
+- Safe Mode ON → always routes to Inbox Review  
+- Safe Mode OFF → defaults to Inbox unless role is Editor/Admin  
+- Role capabilities enforced server-side
 
----
+**Skills Used**
+- `bolta.draft.post`
+- `bolta.get_voice_profile`
+- `bolta.list_recent_posts`
+- `bolta.agent.memory` (remember/recall)
 
-### content-plane/ — Content Creation Tools
-**Purpose:** Drafting, voice matching, context gathering for content generation
-
-- **bolta.draft_post** — Create draft post in brand voice for Inbox review
-- **bolta.get_voice_profile** — Load voice details (tone, style, dos/donts)
-- **bolta.list_recent_posts** — Check recent content to avoid repetition
-- **bolta.get_business_context** — Load products, audience, brand DNA
-- **bolta.get_account_info** — Social account details and token status
-- **bolta.week.plan** — Content calendar planning (multi-post strategy)
-
-**Used by:** Content Creator, Reviewer (for voice reference)
+**V2 Enhancement:** Agents learn from feedback and adapt drafts over time.
 
 ---
 
-### review-plane/ — Review/QA Tools
-**Purpose:** Quality gates, approval workflows, feedback loops
+## Workflow B — Scheduled Job → Recurring Automation
 
-- **bolta.approve_post** — Approve draft (Draft → Approved)
-- **bolta.reject_post** — Reject with specific feedback
-- **bolta.add_comment** — Add review notes without approve/reject
-- **bolta.inbox.triage** — Inbox management and prioritization
-- **bolta.review.digest** — Review summary and activity log
+**Purpose**  
+Run scheduled content generation automatically.
 
-**Used by:** Reviewer agents, human reviewers
+**What Happens**
+- Job fires on schedule (cron, event trigger, or manual)
+- Agent loads context (voice, memory, business DNA)
+- Agent generates content
+- Either routes to review or schedules directly (based on policy)
 
----
+**Hard Constraints**
+- Safe Mode must be respected
+- Scheduling requires explicit permission
+- Role capabilities enforced server-side
 
-### analytics-plane/ — Analytics Tools
-**Purpose:** Performance tracking, audience insights, data-driven recommendations
+**Skills Used**
+- `bolta.job.execute`
+- `bolta.draft.post`
+- `bolta.get_voice_profile`
 
-- **bolta.get_post_metrics** — Post performance data (likes, shares, engagement rate)
-- **bolta.get_audience_insights** — Demographics, behavior patterns, preferences
-- **bolta.get_best_posting_times** — Optimal schedule based on YOUR data
-
-**Used by:** Analytics agents, Content Creators (for informed strategy)
-
----
-
-### engagement-plane/ — Engagement Tools
-**Purpose:** Community management, mentions, replies, moderation
-
-- **bolta.get_mentions** — Fetch mentions and replies directed at account
-- **bolta.reply_to_mention** — Draft replies in brand voice
-- **bolta.get_comments** — Fetch comments for response or moderation
-
-**Used by:** Engagement agents, Moderator agents
+**V2 Enhancement:** Jobs use agent reasoning instead of template fills.
 
 ---
 
-### voice-plane/ — Voice Profile Tools
-**Purpose:** Voice creation, learning, validation
+## Workflow C — Inbox Triage + Review
 
-- **bolta.voice.bootstrap** — Create comprehensive voice profile
-- **bolta.voice.learn_from_samples** — Refine voice from existing content
+**Purpose**  
+Human or agent reviews pending content before approval/scheduling.
 
-**Used by:** Onboarding flows, voice management
+**What Happens**
+- Drafts accumulate in Inbox
+- Reviewer (human or agent) triages items
+- Items approved/rejected with feedback
+- Approved items scheduled or published
 
----
+**Skills Used**
+- `bolta.inbox.triage`
+- `bolta.review.approve_and_route`
+- `bolta.reject_post`
+- `bolta.add_comment`
 
-### control-plane/ — Workspace Management
-**Purpose:** Governance, policy, audit, team management
-
-- **bolta.workspace.config** — Workspace settings and preferences
-- **bolta.policy.explain** — Explain workspace policies and rules
-- **bolta.audit.export_activity** — Export activity logs for compliance
-- **bolta.team.create_agent_teammate** — Create new agent (V2-aware)
-
-**Used by:** Admin users, system flows
-
----
-
-### automation-plane/ — ⚠️ Partial Deprecation
-**Purpose:** V1 legacy automation (migrating to job execution)
-
-- ~~**bolta.loop.from_template**~~ — **DEPRECATED** (see `DEPRECATED.md`)
-- **bolta.cron.generate_and_schedule** — Cron-based job execution (updated for V2)
-- **bolta.cron.generate_to_review** — Cron → draft → Inbox flow
-
-**Migration path:** Use Job execution instead of RecurringTemplates
+**V2 Enhancement:** Reviewer agents can auto-triage with confidence scores.
 
 ---
 
-## Skill Documentation Structure
+## Workflow D — Agent Hiring Flow (New in V2)
+
+**Purpose**  
+Onboard agents as teammates from marketplace presets.
+
+**What Happens**
+- User selects agent preset (e.g., "The Hype Man")
+- Agent configuration loads (persona, model tier, skills)
+- Agent generates preview draft
+- User reviews preview and activates agent
+- Agent jobs become active
+
+**Skills Used**
+- `bolta.agent.hire`
+- `bolta.agent.configure`
+- `bolta.agent.activate_job`
+
+---
+
+## Workflow E — @Mention Review (New in V2)
+
+**Purpose**  
+Capture feedback on live posts to improve future content.
+
+**What Happens**
+- User mentions agent on published post (@AgentName)
+- Mention captured as feedback signal
+- Agent stores learning in memory
+- Future drafts incorporate feedback
+
+**Skills Used**
+- `bolta.agent.mention` (read-only)
+- `bolta.agent.memory` (remember)
+
+---
+
+# 🏛 Bolta Agentic Architecture
+
+Bolta is divided into skill planes. Skills orchestrate workflows; the backend enforces identity, permissions, and routing.
+
+## Core Concepts
+
+### Principal
+A first-class actor in the system.
+- `type`: `human` | `agent`
+- Owns API keys / auth tokens
+- Produces auditable actions
+
+### Workspace
+The governance boundary.
+- Policies (Safe Mode, Inbox Direct Scheduling, etc.)
+- Memberships (principals + roles)
+- Resources (voices, templates, posts, jobs, accounts)
+
+### Role → Capabilities
+Roles determine what a principal can do.
+- Viewer / Creator / Editor / Admin
+- Capabilities map to actions (create, submit, approve, schedule, publish)
+
+### Policy Gate
+A centralized decision layer used by every entrypoint (UI, API, MCP tools):
+- `authorize(principal, workspace, action, resource) -> allow/deny (+reason)`
+- `resolve_route(policy, action, requested_state) -> final_state`
+
+---
+
+## State Machine
+
+```
+draft
+  → inbox (submit_for_review OR Safe Mode routing)
+  → approved (Editor/Admin approval)
+  → scheduled (if allowed)
+  → published
+```
+
+**Failure routing:**
+- schedule/publish denied or fails → `inbox` with warning (preferred)
+- hard failures → `draft` + error metadata
+
+**V2 Note:** State names updated (`pending_review` → `inbox` in V2 codebase, but conceptually identical).
+
+---
+
+## 0️⃣ Voice Plane
+
+Voice is a first-class primitive in Bolta.
+
+Before content can be generated, a workspace must have an active Voice Profile.
+Voice Profiles define tone, structure, vocabulary bias, and stylistic rules
+that agents must follow.
+
+**Rule:** Before executing any Content Plane skill, if no active voice_profile, require `bolta.voice.bootstrap`.
+
+Voice is a hard dependency for content generation.
+
+**Skills:**
+- `bolta.voice.bootstrap` — Create comprehensive voice profile
+- `bolta.voice.learn_from_samples` — Refine voice from existing content
+
+---
+
+## 1️⃣ Content Plane
+
+Creates and shapes content.
+
+**Responsibilities:**
+- Voice application (tone, style rules)
+- Template rendering (V1 compatibility)
+- Draft generation
+- Job execution (V2)
+
+**Primary primitives:**
+- Voice Profiles
+- Templates (deprecated in V2, use jobs)
+- Draft Posts
+- Jobs (V2)
+
+**Typical states:**
+- `draft`
+- `inbox` (V2)
+
+**Skills:**
+- `bolta.draft.post` — Create draft post in brand voice
+- `bolta.get_voice_profile` — Load voice details
+- `bolta.list_recent_posts` — Check recent content
+- `bolta.get_business_context` — Load products, audience, brand DNA (V2)
+- `bolta.week.plan` — Content calendar planning (V2)
+
+---
+
+## 2️⃣ Review Plane
+
+Controls human oversight and safe routing.
+
+**Responsibilities:**
+- Inbox Review queue
+- Bundling posts for review
+- Approvals and edits
+- Safe Mode enforcement
+
+**Primary primitives:**
+- Inbox Items
+- Review Bundles
+- Review Status transitions
+
+**Typical states:**
+- `inbox`
+- `approved`
+- `needs_edits`
+
+**Rule:** If Safe Mode is ON, content must pass through this plane before schedule/publish.
+
+**Skills:**
+- `bolta.inbox.triage` — Inbox management and prioritization (V2)
+- `bolta.review.approve_and_route` — Approve and schedule
+- `bolta.reject_post` — Reject with feedback
+- `bolta.add_comment` — Add review notes
+
+---
+
+## 3️⃣ Automation Plane
+
+Runs recurring workflows and conditional scheduling.
+
+**Responsibilities:**
+- Job-triggered generation (V2)
+- Cron-triggered generation (V1 compatibility)
+- Scheduling posts (only if allowed)
+- Retry logic + idempotency keys
+- Backoff + failure routing to review
+
+**Primary primitives:**
+- Jobs (V2)
+- Job Runs (V2)
+- Generation Tasks
+- Scheduling Requests
+
+**Typical states:**
+- `scheduled`
+- `failed → inbox`
+
+**Skills:**
+- `bolta.job.execute` — V2 job execution engine (documentation)
+- `bolta.cron.generate_and_schedule` — Cron-based automation (V1 compatibility)
+- ~~`bolta.loop.from_template`~~ — **DEPRECATED** (V1 legacy, see DEPRECATED.md)
+
+---
+
+## 4️⃣ Agent Plane (New in V2)
+
+Agent lifecycle, orchestration, and memory.
+
+**Responsibilities:**
+- Agent hiring and configuration
+- Agent memory (cross-run learning)
+- @Mention feedback loops
+- Job activation
+
+**Primary primitives:**
+- Agent Teammates
+- Agent Memory
+- Agent Jobs
+- Mentions
+
+**Skills:**
+- `bolta.agent.hire` — Conversational agent onboarding
+- `bolta.agent.configure` — Modify agent settings
+- `bolta.agent.activate_job` — Activate paused jobs
+- `bolta.agent.memory` — remember/recall for learning
+- `bolta.agent.mention` — @mention handling (read-only)
+
+---
+
+## 5️⃣ Analytics Plane (New in V2)
+
+Performance tracking, audience insights, data-driven recommendations.
+
+**Skills:**
+- `bolta.get_post_metrics` — Post performance data
+- `bolta.get_audience_insights` — Demographics, behavior patterns
+- `bolta.get_best_posting_times` — Optimal schedule based on YOUR data
+
+---
+
+## 6️⃣ Engagement Plane (New in V2)
+
+Community management, mentions, replies, moderation.
+
+**Skills:**
+- `bolta.get_mentions` — Fetch mentions and replies
+- `bolta.reply_to_mention` — Draft replies in brand voice
+- `bolta.get_comments` — Fetch comments for moderation
+
+---
+
+## 7️⃣ Control Plane
+
+Governance, identity, security, and observability.
+
+**Responsibilities:**
+- Principals (humans + agents)
+- Workspace memberships
+- Role assignment
+- API keys (scoped)
+- Audit logs
+- Policy configuration
+
+**Primary primitives:**
+- Principals
+- Memberships
+- Policies
+- Keys
+- Audit Events
+
+**Skills:**
+- `bolta.workspace.config` — Workspace settings
+- `bolta.policy.explain` — Explain workspace policies
+- `bolta.audit.export_activity` — Export activity logs
+- `bolta.team.create_agent_teammate` — Create agent (V2)
+
+---
+
+# 🔧 Core Tool Surface
+
+All skills rely on a consistent, policy-aware tool layer:
+
+**Policy & Capabilities:**
+- `bolta.get_workspace_policy`
+- `bolta.get_my_capabilities`
+
+**Voice & Context:**
+- `bolta.get_voice_profile`
+- `bolta.get_business_context` (V2)
+- `bolta.list_templates`
+- `bolta.render_template`
+
+**Content Operations:**
+- `bolta.draft_post` (V2, replaces `create_post`)
+- `bolta.create_loop` (V1 compatibility)
+- `bolta.list_recent_posts` (V2)
+
+**Review Operations:**
+- `bolta.inbox.triage` (V2)
+- `bolta.approve_post`
+- `bolta.reject_post`
+- `bolta.add_comment` (V2)
+- `bolta.schedule_post`
+- `bolta.publish_post`
+
+**Agent Operations (V2):**
+- `bolta.agent.hire`
+- `bolta.agent.configure`
+- `bolta.agent.activate_job`
+- `bolta.agent.memory` (remember/recall)
+
+**Control Plane:**
+- `bolta.team.create_agent_teammate`
+- `bolta.workspace.config`
+- `bolta.policy.explain`
+- `bolta.audit.export_activity`
+
+Every skill must:
+
+1. Query workspace policy  
+2. Query effective capabilities  
+3. Respect Safe Mode  
+4. Never bypass server authorization  
+
+---
+
+# 🚀 Autonomy Levels
+
+Bolta scales from assisted generation to fully autonomous runtime. These levels describe how customers typically adopt Bolta over time.
+
+## Assisted Mode
+- Draft generation
+- Job creation (V2)
+- Weekly planning
+- Human approval required
+
+## Managed Automation
+- Inbox triage
+- Review digest
+- Controlled approval routing
+- Optional conditional scheduling
+
+## Autopilot
+- Job-based generation (V2)
+- Conditional scheduling
+- Policy-aware automation
+- Agent learning from feedback
+
+## Governance & Enterprise
+- Agent management
+- Key rotation
+- Workspace policy controls
+- Audit exports
+- Activity filtering
+
+---
+
+# 🎯 Design Philosophy
+
+Bolta is not:
+- An API wrapper  
+- A content generator  
+- A basic scheduler  
+
+Bolta is:
+A **policy-aware agent runtime for creative systems**.
+
+Agents generate.  
+Policies govern.  
+Humans approve.  
+
+**V2 Addition:**
+Skills are capabilities agents choose based on reasoning, not pipeline steps.
+The same skill serves different purposes depending on the agent's role and context.
+
+This is how autonomous content becomes safe, scalable, and enterprise-ready.
+
+---
+
+# 📦 Skill Documentation Structure
 
 Each skill includes:
 
-### 1. SKILL.md — Comprehensive Documentation
+## 1. SKILL.md — Comprehensive Documentation
 
-- **What it does** (capability, not pipeline step)
-- **Which agent types use it**
-- **When an agent might choose this skill**
-- **Parameters and return format**
-- **Examples of agentic usage** (agent reasoning about when to use it)
-- **Hard rules** (must/must not)
+**Required sections:**
+- **YAML frontmatter** (name, version, description, category, roles_allowed, inputs_schema, outputs_schema)
+- **Goal** — What the skill does (1-2 sentences)
+- **Steps** — Numbered workflow
+- **Hard rules** — Must/must not constraints
+- **Failure handling** — What happens when things go wrong
+- **Output** — Return format
 
-### 2. schema.json — Claude Messages API Tool Definition
+**V2 additions (optional):**
+- **Which agent types use this** — Brief context
+- **Example usage** — Real-world scenarios
 
-- **name** — Matches exactly what `agents/tools.py` defines
+## 2. schema.json — Claude Messages API Tool Definition
+
+- **name** — Matches server-side tool definition
 - **description** — How agents understand the tool
 - **input_schema** — Parameters with descriptions
-- **required** — Which fields are mandatory
+- **required** — Mandatory fields
 
-**Critical:** Schema MUST match server-side tool definitions in `Bolta-Server/agents/tools.py`
-
-### 3. handler.example.py — Optional Reference Implementation
+## 3. handler.example.py — Optional Reference Implementation
 
 Shows how the tool connects to data (not always included).
 
 ---
 
-## How Jobs Execute (High-Level)
-
-```
-1. Job fires (scheduled, manual, or event-triggered)
-   ↓
-2. Execution engine loads agent context:
-   - Persona (agent personality + behavioral guidelines)
-   - Memory (what the agent has learned)
-   - Voice profile (brand voice reference)
-   - Business DNA (products, audience, positioning)
-   ↓
-3. Agent receives task brief (natural language, not template)
-   ↓
-4. Agent reasons about task:
-   - "What context do I need?"
-   - "What approach makes sense?"
-   - "What did I learn from previous runs?"
-   ↓
-5. Agent chooses tools:
-   - get_voice_profile()
-   - list_recent_posts()
-   - recall("audience_preference")
-   - draft_post(...)
-   ↓
-6. Agent iterates until complete or max turns
-   ↓
-7. Output delivered (draft in Inbox, report, etc.)
-   ↓
-8. Run logged (tokens, cost, trace)
-```
-
-**Key insight:** The agent chooses its own path. Same brief can result in different tool sequences based on context.
-
----
-
-## Example: Content Creator Workflow
-
-**Job:** "Create 3 LinkedIn posts about remote work best practices"
-
-**Agent reasoning:**
-
-```
-Turn 1 (Context gathering):
-Agent: "I need to understand the brand voice and recent content first."
-→ Calls: get_voice_profile(voice_profile_id)
-→ Calls: list_recent_posts(account_id, limit=10)
-→ Calls: recall()  // Check what I've learned
-
-Turn 2 (Analysis):
-Agent: "Voice profile says: direct, specific, no jargon. Recent posts: 
-2 about pricing (skip that topic). Memory says: educational > promotional 3:1.
-Audience prefers how-to content with specific numbers."
-
-Turn 3 (Drafting):
-Agent: "I'll create an educational post with a numbered list and specific data."
-→ Calls: draft_post(
-    content="🏠 5 remote work mistakes...",
-    platform="linkedin",
-    account_id="...",
-    voice_profile_id="...",
-    notes="Educational format (performs 3x better). Used numbered list..."
-  )
-
-Turn 4 (Completion):
-Agent: "Task complete. Draft created with ID abc-123. Ready for review."
-→ Stores memory: remember(key="recent_topic", value="remote work mistakes")
-```
-
-**Result:** Draft in Inbox, human reviews, approves, schedules.
-
----
-
-## Key Differences from V1
-
-| Aspect | V1 (RecurringTemplates) | V2 (Agentic Jobs) |
-|--------|-------------------------|-------------------|
-| **Execution** | Template fill → post | Agent reasoning → tools → output |
-| **Flexibility** | Fixed pipeline | Agent chooses path |
-| **Learning** | Static template | Memory accumulation |
-| **Context** | Template variables | Full business DNA + voice + memory |
-| **Adaptation** | Manual edits | Agents adapt based on performance |
-| **Intelligence** | None (regex-level) | Claude reasoning (LLM-level) |
-| **Output** | Predictable, repetitive | Adaptive, context-aware |
-
----
-
-## The Moat: Why This Is Defensible
-
-Competitors can copy:
-- The Messages API integration ✅
-- The skill definitions ✅
-- The UI ✅
-
-Competitors **cannot** copy:
-- Your voice profile after 260 feedback iterations ❌
-- Your agent's accumulated memory (6 months of learned patterns) ❌
-- Your business DNA (products, positioning, audience insights) ❌
-- Your cross-agent coordination patterns (how your team learned to work together) ❌
-
-**The longer you use Bolta, the smarter your agents get.**
-
-And critically: **It's not one agent getting smarter — it's the SYSTEM getting smarter.**
-
-Content Creator learns audience preferences → stores in memory  
-Analytics agent identifies best posting times → stores in memory  
-Content Creator reads Analytics' memory → adapts strategy  
-Reviewer enforces new standards based on what works
-
-**This is emergent team intelligence. Competitors can't replicate that with a signup form.**
-
----
-
-## For Developers
-
-### Adding a New Skill
-
-1. **Choose the right plane** (content, review, analytics, etc.)
-2. **Create directory:** `skills/{plane}/bolta.skill_name/`
-3. **Write SKILL.md** — Focus on WHEN an agent uses this, not just WHAT it does
-4. **Write schema.json** — Match format in `Bolta-Server/agents/tools.py`
-5. **Implement handler** — Add to `agents/tools.py` tool registry
-6. **Update this README** — Add to plane documentation
-7. **Test with agent** — Does the agent choose it appropriately?
-
-### Testing Skills
-
-```bash
-# Create test agent
-curl -X POST /api/agents \
-  -d '{"type": "content_creator", "name": "Test Agent"}'
-
-# Create test job
-curl -X POST /api/jobs \
-  -d '{"agent_id": "...", "run_instructions": "Test task"}'
-
-# Trigger execution
-curl -X POST /api/jobs/{job_id}/run
-
-# Check Run trace
-curl /api/runs/{run_id}/trace
-```
-
----
-
-## For Users
-
-### Getting Started
-
-1. **Hire an agent** from the marketplace (e.g., "The Hype Man")
-2. **Set up voice profile** (`bolta.voice.bootstrap`)
-3. **Connect social accounts**
-4. **Review preview draft** the agent generates
-5. **Activate jobs** when ready
-6. **Monitor Inbox** for agent-created drafts
-7. **Approve/reject** with feedback
-8. **Watch agents improve** as they learn from performance data
-
-### Agent + Skill Pairing
-
-- **Need content?** → Hire Content Creator → Uses content-plane skills
-- **Need QA?** → Hire Reviewer → Uses review-plane skills
-- **Need insights?** → Hire Analytics → Uses analytics-plane skills
-- **Need community mgmt?** → Hire Engagement → Uses engagement-plane skills
-
-**You can hire multiple agents** — they coordinate as a team.
-
----
-
-## Migration from V1
+# 🔄 Migration from V1
 
 If you're using RecurringTemplates (V1 loops):
 
-1. **Read:** `skills/content-plane/bolta.loop.from_template/DEPRECATED.md`
+1. **Read:** `skills/automation-plane/bolta.loop.from_template/DEPRECATED.md`
 2. **For each template:**
-   - Create Content Creator agent
-   - Create Job with natural language instructions (not template)
+   - Create Content Creator agent via `bolta.agent.hire`
+   - Create Job with natural language instructions (not template variables)
    - Bind voice_profile_id, account_ids
-   - Activate job
-3. **Delete old template**
-4. **Observe improvement:** V2 agents will outperform static templates within 2 weeks
+   - Activate job via `bolta.agent.activate_job`
+3. **Optional:** Delete old template
+4. **Observe improvement:** V2 agents adapt and improve over time
+
+**V1 skills still work** for backward compatibility, but V2 jobs are recommended.
 
 ---
 
-## Philosophy in Practice
+# 📚 For Developers
 
-### Skills Are Capabilities
+## Adding a New Skill
 
-Don't think: "This skill does X, then Y, then Z."
+1. **Choose the right plane** (content, review, agent, analytics, etc.)
+2. **Create directory:** `skills/{plane}/bolta.skill_name/`
+3. **Write SKILL.md:**
+   - Start with YAML frontmatter
+   - Write concrete steps (numbered)
+   - Add hard rules and failure handling
+   - Optionally add V2 agent context (brief)
+4. **Write schema.json** — Match server-side tool definition
+5. **Implement handler** — Add to server tool registry
+6. **Update this README** — Add to plane documentation
 
-Think: "This skill gives the agent the ability to X. The agent decides when to use it."
+## Testing Skills
 
-### Agents Are Team Members
+Use the Bolta API or MCP server to test skills in context:
 
-Don't think: "I configured this automation."
+```bash
+# Create test agent
+curl -X POST /api/v1/agents \
+  -d '{"type": "content_creator", "name": "Test Agent"}'
 
-Think: "I hired this agent. It's learning how to help me."
+# Create test job
+curl -X POST /api/v1/jobs \
+  -d '{"agent_id": "...", "run_instructions": "Test task"}'
 
-### Reasoning Is the Product
-
-Don't think: "Is this feature AI-powered?"
-
-Think: "Does the AI reason about the task, or just execute a script?"
-
-**If there's no reasoning, it's not agentic.**
+# Trigger execution
+curl -X POST /api/v1/jobs/{job_id}/run
+```
 
 ---
 
-## Links
+# 📚 For Users
 
-- **Philosophy:** [V2-AGENTIC-PHILOSOPHY.md](https://github.com/bolta-ai/Bolta-Server/blob/main/docs/V2-AGENTIC-PHILOSOPHY.md)
-- **Execution Engine:** `bolta.job.execute` documentation
-- **Server Implementation:** [Bolta-Server/agents/](https://github.com/bolta-ai/Bolta-Server/tree/main/agents)
-- **Changelog:** [CHANGELOG.md](./CHANGELOG.md)
+## Getting Started
+
+1. **Create workspace** and connect social accounts
+2. **Set up voice profile** via `bolta.voice.bootstrap`
+3. **Hire an agent** from the marketplace (optional, V2 feature)
+4. **Create drafts** via `bolta.draft.post` or job execution
+5. **Review in Inbox** and approve/reject with feedback
+6. **Schedule or publish** approved content
+7. **Watch agents improve** as they learn from feedback (V2)
+
+## Quick Start (V1 Compatibility)
+
+```bash
+# Draft a post
+bolta.draft.post({
+  workspace_id: "...",
+  voice_profile_id: "...",
+  prompt: "Write about our new feature"
+})
+
+# Review and approve
+bolta.review.approve_and_route({
+  workspace_id: "...",
+  post_ids: ["..."],
+  schedule_mode: "use_suggested_time"
+})
+```
 
 ---
 
-**This is what "truly agentic" means.**
+**This is what policy-aware agentic automation looks like.**
 
-Tools are hands. Reasoning is the product. Agents are team members.
+Agents act. Bolta enforces. Humans retain control.
 
-Welcome to Bolta V2. 🚀
+Welcome to Bolta Skills Pack V2. 🚀
