@@ -1,9 +1,20 @@
 ---
+name: bolta.voice.learn_from_samples
+version: 2.0.0
+description: Evolve a voice profile by learning from new content samples. V2-ready - continuous voice refinement.
+category: voice
+roles_allowed: [Creator, Editor, Admin]
+agent_types: [content_creator, reviewer, analytics, custom]
 organization: bolta.ai
 author: Max Fritzhand
 ---
 
 ## bolta.voice.learn_from_samples
+
+## V2 Context
+- **Continuous refinement** — agents can call this periodically to evolve voice
+- **Feedback-driven** — uses approval rates and engagement metrics to refine
+- **Agent memory integration** — stores refinement history for audit
 
 Purpose:
 Extract structured voice rules from past content to refine or create a voice profile. Uses AI to analyze writing patterns, tone, structure, and style from existing posts, then either creates a new voice profile or updates an existing one.

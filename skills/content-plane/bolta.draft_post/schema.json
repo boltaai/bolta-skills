@@ -1,0 +1,30 @@
+{
+  "name": "bolta.draft_post",
+  "description": "Create a draft post for review. The draft will be sent to the Inbox for human approval before publishing. Use the voice_profile_id to match the brand's tone and style.",
+  "input_schema": {
+    "type": "object",
+    "properties": {
+      "content": {
+        "type": "string",
+        "description": "The post content (text, with formatting if needed)"
+      },
+      "platform": {
+        "type": "string",
+        "description": "Target platform (twitter, linkedin, instagram, etc.)"
+      },
+      "voice_profile_id": {
+        "type": "string",
+        "description": "Voice profile UUID to apply"
+      },
+      "account_id": {
+        "type": "string",
+        "description": "Social account UUID to post from"
+      },
+      "notes": {
+        "type": "string",
+        "description": "Optional notes for human reviewer"
+      }
+    },
+    "required": ["content", "platform", "account_id"]
+  }
+}

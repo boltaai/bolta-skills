@@ -1,0 +1,14 @@
+{
+  "name": "bolta.get_account_info",
+  "description": "Get social account details (platform, handle, status).",
+  "input_schema": {
+    "type": "object",
+    "properties": {
+      "account_id": {
+        "type": "string",
+        "description": "Social account UUID"
+      }
+    },
+    "required": ["account_id"]
+  }
+}

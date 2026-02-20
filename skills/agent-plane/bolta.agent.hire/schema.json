@@ -1,0 +1,62 @@
+{
+  "name": "bolta.agent.hire",
+  "description": "Create and onboard a new AI agent teammate from the marketplace with conversational discovery. Gathers business context, creates agent with jobs in paused state, and generates preview draft.",
+  "input_schema": {
+    "type": "object",
+    "properties": {
+      "preset_id": {
+        "type": "string",
+        "description": "AgentPreset UUID from marketplace (e.g., 'the-hype-man', 'qa-reviewer')"
+      },
+      "workspace_id": {
+        "type": "string",
+        "description": "Target workspace UUID"
+      },
+      "conversation_context": {
+        "type": "object",
+        "description": "Context gathered from conversational onboarding flow",
+        "properties": {
+          "business_description": {
+            "type": "string",
+            "description": "1-2 sentence business description"
+          },
+          "content_goals": {
+            "type": "string",
+            "description": "What the user wants to achieve with content"
+          },
+          "platforms": {
+            "type": "array",
+            "items": {"type": "string"},
+            "description": "Target platforms (linkedin, twitter, instagram, etc.)"
+          },
+          "posting_frequency": {
+            "type": "string",
+            "description": "How often to post (e.g., '3x/week', 'daily')"
+          },
+          "tone_preference": {
+            "type": "string",
+            "description": "Desired tone (e.g., 'professional_bold', 'casual_friendly')"
+          }
+        }
+      },
+      "voice_profile_id": {
+        "type": "string",
+        "description": "Voice profile UUID if already exists (optional for preview, required for activation)"
+      },
+      "account_ids": {
+        "type": "array",
+        "items": {"type": "string"},
+        "description": "Social account UUIDs to bind to jobs"
+      },
+      "agent_name": {
+        "type": "string",
+        "description": "Override preset name with custom agent name (optional)"
+      },
+      "persona_overrides": {
+        "type": "string",
+        "description": "Customize preset persona with specific instructions (optional)"
+      }
+    },
+    "required": ["preset_id", "workspace_id", "conversation_context", "account_ids"]
+  }
+}
