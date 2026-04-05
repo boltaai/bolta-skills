@@ -24,11 +24,10 @@ These skills have both a schema.json definition AND a working backend tool handl
 | `bolta.add_comment` | tools.py | Review comments |
 | `bolta.inbox.triage` | tools.py | Inbox listing with priority |
 | `bolta.review.digest` | tools.py | Review activity summary |
-| `bolta.review.approve_and_route` | tools.py | Bulk approve + schedule routing |
-| `bolta.voice.validate` | tools.py | Content voice compliance check |
+| `bolta.voice.validate` | tools_atomic.py | Via `score_voice_compliance` (pattern match, no LLM) |
 | `bolta.quota.status` | tools.py | Credit/rate limit status |
 | `bolta.workspace.config` | tools.py | Workspace settings reader |
-| `bolta.week.plan` | tools.py | Content calendar planning context |
+| `bolta.week.plan` | tools_atomic.py | Agent composes from `count_posts_by_platform` + `build_calendar_skeleton` + `get_best_posting_times` |
 | `bolta.agent.hire` | tools.py | Hire preset via create_agent_from_preset |
 | `bolta.agent.activate_job` | tools.py | Toggle job status to active |
 | `bolta.agent.configure` | tools.py | Update agent persona/model/status |
@@ -51,7 +50,8 @@ These skills are defined in the pack with schema.json but are handled by the MCP
 | `bolta.agent.memory` | tools.py (remember/recall) | Both remember and recall tool handlers exist |
 | `bolta.agent.mention` | consumers.py | Real-time WebSocket event, not tool call |
 | `bolta.job.execute` | tasks.py | Documentation-only skill (execution is internal) |
-| `bolta.voice.validate` | tools.py | Also available as tool (dual path) |
+| `bolta.review.approve_and_route` | agent-composed | Agent calls `approve_post` per item (no bulk handler) |
+| `bolta.voice.validate` | tools_atomic.py | Thin atomic: `score_voice_compliance` (pattern match, no LLM) |
 | `bolta.draft.post` | tools_atomic.py | Legacy alias for bolta_draft_post |
 
 ## Backend Only (Not in Skills Pack)
@@ -60,6 +60,9 @@ These are internal/atomic tools used by the execution engine. They don't need sk
 
 **Content Pipeline:**
 generate_post_content, save_draft, review_content, refine_content, humanize_content, format_for_platform, qa_score_content, evaluate_voice_quality, generate_reply_content, generate_companion_images, bulk_draft_posts
+
+**Thin Atomics (Wave 4):**
+score_voice_compliance, detect_forbidden_phrases, classify_inbox_priority, flag_quality_risks, calculate_approval_stats, score_post_engagement, count_posts_by_platform, build_calendar_skeleton, get_edit_stats
 
 **Research & SEO:**
 research_topic, generate_blog_outline, generate_blog_post, generate_seo_metadata, extract_content_structure
@@ -83,9 +86,11 @@ analyze_sentiment, analyze_account_voice, analyze_edit_patterns, get_growth_tren
 
 | Category | Count |
 |-|-|
-| Fully implemented (both sides) | 33 |
+| Fully implemented (both sides) | 31 |
+| Agent-composed (skill exists, agent chains atomics) | 2 |
 | Dual-path (tool + MCP/event) | 3 |
 | Documentation-only | 1 |
 | Deprecated | 1 |
-| Backend only (internal tools) | 60+ |
+| Backend only (internal tools) | 55+ |
+| Backend only (thin atomics, Wave 4) | 9 |
 | **Total skills pack** | **38** |
