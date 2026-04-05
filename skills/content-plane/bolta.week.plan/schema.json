@@ -1,0 +1,18 @@
+{
+  "name": "bolta.week.plan",
+  "description": "Generate a 7-day content calendar draft using voice profile + optional templates. V2 - Agent-aware, routes via workspace Safe Mode governance.",
+  "input_schema": {
+    "type": "object",
+    "properties": {
+      "workspace_id": { "type": "string" },
+      "agent_id": { "type": "string", "description": "V2 - Agent executing this skill" },
+      "voice_profile_id": { "type": "string" },
+      "account_ids": { "type": "array", "items": { "type": "string" } },
+      "templates": { "type": "array", "items": { "type": "string" }, "description": "template_ids; optional" },
+      "weekly_theme": { "type": "string" },
+      "requested_action": { "type": "string", "enum": ["draft_only", "send_to_inbox"] },
+      "job_id": { "type": "string", "description": "V2 - Job ID if executed as part of a job" }
+    },
+    "required": ["workspace_id", "voice_profile_id"]
+  }
+}

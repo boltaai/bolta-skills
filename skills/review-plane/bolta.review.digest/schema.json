@@ -1,0 +1,26 @@
+{
+  "name": "bolta.review.digest",
+  "description": "V2 - Generate a human-readable review summary (daily/weekly digest) of inbox activity, agent performance, and pending actions.",
+  "input_schema": {
+    "type": "object",
+    "properties": {
+      "workspace_id": {
+        "type": "string"
+      },
+      "agent_id": {
+        "type": "string",
+        "description": "V2 - Agent generating digest"
+      },
+      "period": {
+        "type": "string",
+        "enum": ["daily", "weekly", "monthly"],
+        "default": "weekly"
+      },
+      "client_tag": {
+        "type": "string",
+        "description": "V2 - Filter by client (agency feature)"
+      }
+    },
+    "required": ["workspace_id"]
+  }
+}

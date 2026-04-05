@@ -1,0 +1,35 @@
+{
+  "name": "bolta.inbox.triage",
+  "description": "V2 Reviewer agent skill - Cluster inbox items, flag risks, propose edits, optionally create improved variants. Makes the inbox manageable.",
+  "input_schema": {
+    "type": "object",
+    "properties": {
+      "workspace_id": {
+        "type": "string"
+      },
+      "agent_id": {
+        "type": "string",
+        "description": "V2 - Reviewer agent executing this skill"
+      },
+      "status_filter": {
+        "type": "string",
+        "enum": ["inbox", "draft", "approved"],
+        "default": "inbox"
+      },
+      "limit": {
+        "type": "number",
+        "default": 20
+      },
+      "create_variants": {
+        "type": "boolean",
+        "default": false,
+        "description": "Create improved draft variants for flagged items"
+      },
+      "client_tag": {
+        "type": "string",
+        "description": "V2 - Filter by client tag (agency feature)"
+      }
+    },
+    "required": ["workspace_id"]
+  }
+}

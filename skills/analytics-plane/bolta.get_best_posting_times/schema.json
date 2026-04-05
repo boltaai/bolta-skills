@@ -1,0 +1,29 @@
+{
+  "name": "bolta.get_best_posting_times",
+  "description": "Analyze historical performance to recommend optimal posting schedule based on when YOUR specific audience is most engaged",
+  "input_schema": {
+    "type": "object",
+    "properties": {
+      "account_id": {
+        "type": "string",
+        "description": "Social account UUID"
+      },
+      "platform": {
+        "type": "string",
+        "enum": ["linkedin", "twitter", "instagram"],
+        "description": "Target platform"
+      },
+      "analysis_period": {
+        "type": "string",
+        "enum": ["30d", "90d"],
+        "description": "How far back to analyze"
+      },
+      "min_posts_required": {
+        "type": "number",
+        "description": "Minimum posts needed for valid analysis",
+        "default": 10
+      }
+    },
+    "required": ["account_id"]
+  }
+}

@@ -1,0 +1,58 @@
+{
+  "name": "bolta.cron.generate_to_review",
+  "description": "V2 Job execution skill - Agent generates N posts per run, routes to Inbox for review. Called by Celery job runner. Replaces RecurringTemplate logic.",
+  "input_schema": {
+    "type": "object",
+    "properties": {
+      "workspace_id": {
+        "type": "string"
+      },
+      "agent_id": {
+        "type": "string",
+        "description": "V2 - Agent executing this job"
+      },
+      "job_id": {
+        "type": "string",
+        "description": "V2 - Job ID for this run"
+      },
+      "run_id": {
+        "type": "string",
+        "description": "V2 - Run ID for audit logging"
+      },
+      "voice_profile_id": {
+        "type": "string"
+      },
+      "account_ids": {
+        "type": "array",
+        "items": {
+          "type": "string"
+        }
+      },
+      "template_id": {
+        "type": "string",
+        "description": "Optional template to use"
+      },
+      "n_posts": {
+        "type": "number",
+        "default": 3,
+        "description": "Number of posts to generate per run"
+      },
+      "topic_seeds": {
+        "type": "array",
+        "items": {
+          "type": "string"
+        },
+        "description": "Optional topic hints"
+      },
+      "run_instructions": {
+        "type": "string",
+        "description": "Job-specific override instructions"
+      },
+      "client_tag": {
+        "type": "string",
+        "description": "V2 - Agency client tag for organization"
+      }
+    },
+    "required": ["workspace_id", "agent_id", "job_id", "voice_profile_id", "account_ids"]
+  }
+}

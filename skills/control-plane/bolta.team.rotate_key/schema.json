@@ -1,0 +1,14 @@
+{
+  "name": "bolta.team.rotate_key",
+  "description": "Rotate or revoke an existing API key for a human or agent principal, issuing a replacement key.",
+  "input_schema": {
+    "type": "object",
+    "properties": {
+      "workspace_id": { "type": "string" },
+      "api_key_id": { "type": "string" },
+      "action": { "type": "string", "enum": ["rotate", "revoke"], "default": "rotate" },
+      "new_label": { "type": "string" }
+    },
+    "required": ["workspace_id", "api_key_id"]
+  }
+}

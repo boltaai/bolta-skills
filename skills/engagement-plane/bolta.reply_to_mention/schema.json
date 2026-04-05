@@ -1,0 +1,32 @@
+{
+  "name": "bolta.reply_to_mention",
+  "description": "Draft a reply to a mention, comment, or DM while maintaining brand voice and community presence",
+  "input_schema": {
+    "type": "object",
+    "properties": {
+      "mention_id": {
+        "type": "string",
+        "description": "Mention UUID to reply to"
+      },
+      "reply_text": {
+        "type": "string",
+        "description": "Draft reply content"
+      },
+      "tone": {
+        "type": "string",
+        "enum": ["helpful", "empathetic", "professional"],
+        "description": "Reply tone"
+      },
+      "escalate": {
+        "type": "boolean",
+        "description": "Flag for human review",
+        "default": false
+      },
+      "voice_profile_id": {
+        "type": "string",
+        "description": "Voice profile to match"
+      }
+    },
+    "required": ["mention_id", "reply_text"]
+  }
+}

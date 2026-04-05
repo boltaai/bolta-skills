@@ -220,6 +220,8 @@ Voice is a hard dependency for content generation.
 **Skills:**
 - `bolta.voice.bootstrap` — Create comprehensive voice profile
 - `bolta.voice.learn_from_samples` — Refine voice from existing content
+- `bolta.voice.evolve` — Evolve voice based on performance data and feedback
+- `bolta.voice.validate` — Validate content against voice profile rules
 
 ---
 
@@ -380,7 +382,9 @@ Governance, identity, security, and observability.
 - `bolta.workspace.config` — Workspace settings
 - `bolta.policy.explain` — Explain workspace policies
 - `bolta.audit.export_activity` — Export activity logs
-- `bolta.team.create_agent_teammate` — Create agent (V2)
+- `bolta.team.create_agent_teammate` — Create agent service account (V2)
+- `bolta.team.rotate_key` — Rotate agent API keys
+- `bolta.quota.status` — Check workspace quota and rate limits
 
 ---
 
@@ -504,6 +508,8 @@ Each skill includes:
 - **Example usage** — Real-world scenarios
 
 ## 2. schema.json — Claude Messages API Tool Definition
+
+Every skill has a `schema.json` file (100% coverage across all 38 skills).
 
 - **name** — Matches server-side tool definition
 - **description** — How agents understand the tool

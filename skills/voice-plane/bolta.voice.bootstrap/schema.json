@@ -1,0 +1,45 @@
+{
+  "name": "bolta.voice.bootstrap",
+  "description": "Create a comprehensive Voice Profile for a workspace. V2-ready - used by all agent types before content generation.",
+  "input_schema": {
+    "type": "object",
+    "properties": {
+      "workspace_id": { "type": "string", "description": "Workspace UUID" },
+      "voice_name": { "type": "string", "description": "Profile name (e.g., 'Founder Voice', 'Brand Voice')" },
+      "voice_description": { "type": "string", "description": "When to use this profile" },
+      "speaker_mode": { "type": "string", "enum": ["brand", "founder"], "description": "Who is speaking" },
+      "tone_scores": {
+        "type": "object",
+        "properties": {
+          "playful": { "type": "number", "minimum": 0, "maximum": 10 },
+          "professional": { "type": "number", "minimum": 0, "maximum": 10 },
+          "direct": { "type": "number", "minimum": 0, "maximum": 10 },
+          "thoughtful": { "type": "number", "minimum": 0, "maximum": 10 }
+        },
+        "required": ["playful", "professional", "direct", "thoughtful"]
+      },
+      "dos": { "type": "array", "items": { "type": "string" }, "description": "Things to do (3-7 items)" },
+      "donts": { "type": "array", "items": { "type": "string" }, "description": "Things to avoid (3-7 items)" },
+      "content_preferences": {
+        "type": "object",
+        "properties": {
+          "contentSize": { "type": "string", "enum": ["short", "standard", "long"] },
+          "useEmojis": { "type": ["boolean", "string"] },
+          "language": { "type": "string" }
+        }
+      },
+      "founder_signals": {
+        "type": "object",
+        "properties": {
+          "beliefs": { "type": "array", "items": { "type": "string" } },
+          "lessons": { "type": "array", "items": { "type": "string" } },
+          "contrarianOpinions": { "type": "array", "items": { "type": "string" } },
+          "scars": { "type": "array", "items": { "type": "string" } },
+          "backstoryMoments": { "type": "array", "items": { "type": "string" } }
+        }
+      },
+      "is_default": { "type": "boolean", "default": true }
+    },
+    "required": ["workspace_id", "voice_name", "speaker_mode", "tone_scores"]
+  }
+}

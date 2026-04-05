@@ -1,0 +1,30 @@
+{
+  "name": "bolta.agent.activate_job",
+  "description": "Activate a paused job after preview and voice validation - the explicit trust moment where user says \"yes, start posting\"",
+  "input_schema": {
+    "type": "object",
+    "properties": {
+      "job_id": {
+        "type": "string",
+        "description": "Job UUID to activate"
+      },
+      "confirm_preview_reviewed": {
+        "type": "boolean",
+        "description": "Explicit confirmation preview was reviewed"
+      },
+      "confirm_schedule_understood": {
+        "type": "boolean",
+        "description": "Explicit confirmation schedule is understood"
+      },
+      "override_checks": {
+        "type": "boolean",
+        "description": "Admin-only bypass for prerequisite checks"
+      }
+    },
+    "required": [
+      "job_id",
+      "confirm_preview_reviewed",
+      "confirm_schedule_understood"
+    ]
+  }
+}

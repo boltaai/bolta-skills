@@ -1,0 +1,14 @@
+{
+  "name": "bolta.audit.export_activity",
+  "description": "Export audit/activity events for a workspace (agent + human actions) for debugging and compliance.",
+  "input_schema": {
+    "type": "object",
+    "properties": {
+      "workspace_id": { "type": "string" },
+      "start_time": { "type": "string" },
+      "end_time": { "type": "string" },
+      "actor_filter": { "type": "string", "description": "optional principal_id" }
+    },
+    "required": ["workspace_id"]
+  }
+}

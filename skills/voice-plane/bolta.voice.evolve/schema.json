@@ -1,0 +1,22 @@
+{
+  "name": "bolta.voice.evolve",
+  "description": "Refine and optimize Voice Profiles based on engagement signals, user feedback, QA test results, and edit patterns.",
+  "input_schema": {
+    "type": "object",
+    "properties": {
+      "workspace_id": { "type": "string", "description": "Workspace UUID" },
+      "voice_profile_id": { "type": "string", "description": "Voice profile UUID to evolve" },
+      "analysis_period": { "type": "integer", "default": 90, "description": "How far back to analyze (days)" },
+      "minimum_posts": { "type": "integer", "default": 50, "description": "Minimum posts required for meaningful analysis" },
+      "data_sources": {
+        "type": "array",
+        "items": { "type": "string", "enum": ["edit_patterns", "qa_results", "engagement", "feedback"] },
+        "description": "Data sources to use for evolution analysis"
+      },
+      "evolution_mode": { "type": "string", "enum": ["conservative", "moderate", "aggressive"], "default": "conservative" },
+      "auto_apply": { "type": "boolean", "default": false, "description": "Automatically apply validated improvements" },
+      "version_comment": { "type": "string", "description": "Custom comment for this evolution version" }
+    },
+    "required": ["workspace_id", "voice_profile_id"]
+  }
+}

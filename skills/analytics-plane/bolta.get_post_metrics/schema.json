@@ -1,0 +1,32 @@
+{
+  "name": "bolta.get_post_metrics",
+  "description": "Retrieve performance metrics for published posts including likes, comments, shares, views, and engagement rate",
+  "input_schema": {
+    "type": "object",
+    "properties": {
+      "account_id": {
+        "type": "string",
+        "description": "Social account UUID"
+      },
+      "limit": {
+        "type": "number",
+        "description": "Number of posts to analyze",
+        "default": 50
+      },
+      "date_from": {
+        "type": "string",
+        "description": "ISO date (optional)"
+      },
+      "date_to": {
+        "type": "string",
+        "description": "ISO date (optional)"
+      },
+      "platform": {
+        "type": "string",
+        "enum": ["linkedin", "twitter", "instagram"],
+        "description": "Optional platform filter"
+      }
+    },
+    "required": ["account_id"]
+  }
+}

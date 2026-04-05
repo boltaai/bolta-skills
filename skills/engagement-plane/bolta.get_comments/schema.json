@@ -1,0 +1,27 @@
+{
+  "name": "bolta.get_comments",
+  "description": "Fetch comments on posts to monitor conversations and identify response opportunities or policy violations",
+  "input_schema": {
+    "type": "object",
+    "properties": {
+      "post_id": {
+        "type": "string",
+        "description": "Specific post UUID (optional)"
+      },
+      "account_id": {
+        "type": "string",
+        "description": "All recent posts for account (optional)"
+      },
+      "since": {
+        "type": "string",
+        "description": "ISO timestamp - fetch comments since this time"
+      },
+      "filter": {
+        "type": "string",
+        "enum": ["all", "unanswered", "flagged", "spam_suspected"],
+        "default": "all"
+      }
+    },
+    "required": []
+  }
+}

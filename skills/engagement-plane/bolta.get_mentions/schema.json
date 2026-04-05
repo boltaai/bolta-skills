@@ -1,0 +1,28 @@
+{
+  "name": "bolta.get_mentions",
+  "description": "Fetch recent mentions, replies, and comments directed at the account for community engagement monitoring",
+  "input_schema": {
+    "type": "object",
+    "properties": {
+      "account_id": {
+        "type": "string",
+        "description": "Social account UUID"
+      },
+      "since": {
+        "type": "string",
+        "description": "ISO timestamp - fetch mentions since this time"
+      },
+      "limit": {
+        "type": "number",
+        "description": "Max mentions to return",
+        "default": 50
+      },
+      "filter": {
+        "type": "string",
+        "enum": ["all", "unanswered", "flagged"],
+        "default": "all"
+      }
+    },
+    "required": ["account_id"]
+  }
+}

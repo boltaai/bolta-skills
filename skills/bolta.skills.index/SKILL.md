@@ -35,6 +35,8 @@ The Skills Index is a **registry**, not a callable skill. It provides:
 ### Plane 0: Voice
 - bolta.voice.bootstrap
 - bolta.voice.learn_from_samples
+- bolta.voice.evolve
+- bolta.voice.validate
 
 ### Plane 1: Content
 - bolta.draft.post

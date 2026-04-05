@@ -1,0 +1,27 @@
+{
+  "name": "bolta.reject_post",
+  "description": "Reject a draft post with specific feedback, sending it back for revision to enforce brand standards",
+  "input_schema": {
+    "type": "object",
+    "properties": {
+      "draft_id": {
+        "type": "string",
+        "description": "Draft post UUID to reject"
+      },
+      "reason": {
+        "type": "string",
+        "description": "WHY rejected (specific)"
+      },
+      "suggestions": {
+        "type": "string",
+        "description": "WHAT to fix (actionable)"
+      },
+      "severity": {
+        "type": "string",
+        "enum": ["minor", "major", "blocking"],
+        "default": "major"
+      }
+    },
+    "required": ["draft_id", "reason", "suggestions"]
+  }
+}
