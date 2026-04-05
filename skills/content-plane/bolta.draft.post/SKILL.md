@@ -42,7 +42,20 @@ author: Max Fritzhand
 ---
 
 ## Goal
-Create one post in the user's Brand Voice, optionally using a template, and route it safely through the V2 state machine.
+Create one post in the user's Brand Voice (or Founder Voice), optionally using a template, and route it safely through the V2 state machine.
+
+## Voice Profile Modes
+
+### Brand Voice
+- Company/brand speaking
+- Focus on tone, style rules, vocabulary
+- Professional and consistent across content
+
+### Founder Voice (Advanced)
+- Founder speaking personally
+- Includes founder_signals: beliefs, lessons, contrarian opinions, scars, backstory moments
+- More authentic, personal, thought-leadership focused
+- founder_signals are injected as constraints in content generation
 
 ## Which Agent Types Use This
 - **content_creator** — Primary use case (generates posts as part of jobs)
@@ -58,6 +71,52 @@ Create one post in the user's Brand Voice, optionally using a template, and rout
 5. Never publish directly without explicit approval.
 6. Never schedule unless capability includes `posts:schedule`.
 
+## How Voice Profiles Constrain Generation
+
+### Tone Constraints (all modes)
+Content generation respects tone scores (playful, professional, direct, thoughtful):
+- Tone scores guide sentence structure, vocabulary choice, emoji usage
+- Direct tone (9/10) = fewer hedges, more imperatives
+- Thoughtful tone (7/10) = more context, nuance, depth
+
+### Style Rules (all modes)
+- `dos`: Patterns to follow (lead with pain points, use short sentences)
+- `donts`: Patterns to avoid (no corporate jargon, avoid hedging)
+- `styleKeywords`: Vocabulary bias (emphasize direct, confident, specific)
+
+### Founder Signals (founder mode only)
+When `speakerMode: "founder"` and `founderSignals` provided:
+- **Beliefs**: Constraints that shape main arguments
+  - Example: If belief is "Ship fast beats planning," posts favor speed over perfection
+- **Lessons**: Constraints that shape advice given
+  - Example: If lesson is "Users teach more than docs," content leads with user validation
+- **Contrarian Opinions**: Constraints that enable pushback
+  - Example: If contrarian is "Engagement metrics are vanity," posts optimize for substance over reach
+- **Scars**: Constraints that enable vulnerability
+  - Example: If scar is "Built feature no one asked for," posts emphasize user research
+- **Backstory Moments**: Constraints that enable narrative coherence
+  - Example: If backstory is "Spent years ghostwriting," posts demonstrate writing from real experience
+
+**Founder Signal Injection Example:**
+```
+Prompt: "Write about validating product ideas"
+Voice Profile:
+  - speakerMode: "founder"
+  - beliefs: ["Ship fast", "Users teach more than docs"]
+  - lesson: "Build what users ask for"
+  - scar: "Built feature no one wanted"
+
+Generated Content Characteristics:
+- Opens with user validation (belief: users teach)
+- Mentions framework for speed (belief: ship fast)
+- Includes personal example of failure (scar: built wrong feature)
+- Gives specific, actionable advice (lesson learned)
+- Tone: Direct + thoughtful (8/10 and 7/10)
+
+Generated: "Most founders waste months on features no one asked for—here's my 3-question filter..."
+(This naturally demonstrates the beliefs/lessons/scars without being forced)
+```
+
 ## Steps
 
 ### 1. Check policy & capabilities
@@ -66,6 +125,7 @@ Create one post in the user's Brand Voice, optionally using a template, and rout
 
 ### 2. Load context for consistency
 - `bolta.get_voice_profile(voice_profile_id)` → tone, style rules, banned phrases
+  - If founder mode: Extract `founder_signals` for generation constraints
 - `bolta.list_recent_posts(account_ids, limit=5)` → avoid repetition, maintain consistency
 - If `agent_id` provided: `bolta.recall(agent_id, "content_preferences")` → retrieve agent memory
 
@@ -75,8 +135,11 @@ Create one post in the user's Brand Voice, optionally using a template, and rout
   - `bolta.render_template(template_id, {prompt, voice_profile_id, context})`
   - Use rendered text as the post body
 - **Else:**
-  - Generate body using voice profile constraints
-  - Apply tone, structure, vocabulary bias from voice
+  - Generate body using voice profile constraints:
+    - Tone scores (all modes)
+    - Style rules (all modes)
+    - Founder signals (if founder mode)
+    - Custom rules and keywords
   - Check recent posts to avoid repetition
 
 ### 4. Create the draft
