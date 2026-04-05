@@ -1,0 +1,27 @@
+{
+  "name": "bolta.approve_post",
+  "description": "Approve a draft post, moving it from Inbox to Approved status, ready for scheduling or publishing",
+  "input_schema": {
+    "type": "object",
+    "properties": {
+      "draft_id": {
+        "type": "string",
+        "description": "Draft post UUID to approve"
+      },
+      "notes": {
+        "type": "string",
+        "description": "Feedback for creator or human (optional)"
+      },
+      "approve_with_changes": {
+        "type": "boolean",
+        "description": "Approve despite minor suggested tweaks",
+        "default": false
+      },
+      "schedule_time": {
+        "type": "string",
+        "description": "ISO timestamp if scheduling immediately (optional)"
+      }
+    },
+    "required": ["draft_id"]
+  }
+}

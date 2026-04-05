@@ -1,0 +1,9 @@
+{
+  "name": "bolta.get_business_context",
+  "description": "Get business context including products, audience, values, and brand DNA. Use this to understand what the business does and who it serves.",
+  "input_schema": {
+    "type": "object",
+    "properties": {},
+    "required": []
+  }
+}

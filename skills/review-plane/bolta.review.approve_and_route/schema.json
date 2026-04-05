@@ -1,0 +1,40 @@
+{
+  "name": "bolta.review.approve_and_route",
+  "description": "Approve inbox posts and route to Approved→Scheduled based on workspace governance. Handles bulk approvals with flexible scheduling.",
+  "input_schema": {
+    "type": "object",
+    "properties": {
+      "workspace_id": {
+        "type": "string"
+      },
+      "agent_id": {
+        "type": "string",
+        "description": "Agent executing approval (optional, V2, for audit)"
+      },
+      "post_ids": {
+        "type": "array",
+        "items": {
+          "type": "string"
+        },
+        "description": "Posts to approve (can be bulk)"
+      },
+      "schedule_mode": {
+        "type": "string",
+        "enum": ["approve_only", "use_suggested_time", "set_fixed_time", "use_agent_memory"],
+        "default": "approve_only"
+      },
+      "fixed_time": {
+        "type": "string",
+        "description": "ISO timestamp if schedule_mode is set_fixed_time"
+      },
+      "schedule_times": {
+        "type": "array",
+        "items": {
+          "type": "string"
+        },
+        "description": "Per-post schedule times (length must match post_ids)"
+      }
+    },
+    "required": ["workspace_id", "post_ids"]
+  }
+}

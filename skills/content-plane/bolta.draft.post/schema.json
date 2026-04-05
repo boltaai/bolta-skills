@@ -1,0 +1,44 @@
+{
+  "name": "bolta.draft.post",
+  "description": "Create a single draft post using a workspace voice profile and optional template. Routes to Inbox or schedules based on workspace policy and actor role.",
+  "input_schema": {
+    "type": "object",
+    "properties": {
+      "workspace_id": {
+        "type": "string"
+      },
+      "agent_id": {
+        "type": "string",
+        "description": "Agent executing this skill (optional, V2)"
+      },
+      "voice_profile_id": {
+        "type": "string"
+      },
+      "prompt": {
+        "type": "string"
+      },
+      "template_id": {
+        "type": "string"
+      },
+      "account_ids": {
+        "type": "array",
+        "items": {
+          "type": "string"
+        }
+      },
+      "requested_action": {
+        "type": "string",
+        "enum": ["draft_only", "send_to_inbox", "schedule", "publish"]
+      },
+      "suggested_time": {
+        "type": "string",
+        "description": "ISO timestamp; only used if schedule allowed"
+      },
+      "job_id": {
+        "type": "string",
+        "description": "Job ID if executed as part of a job (V2)"
+      }
+    },
+    "required": ["workspace_id", "voice_profile_id", "prompt"]
+  }
+}

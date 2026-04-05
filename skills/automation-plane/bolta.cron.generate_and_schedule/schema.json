@@ -1,0 +1,63 @@
+{
+  "name": "bolta.cron.generate_and_schedule",
+  "description": "V2 Job execution skill with direct scheduling - Agent generates N posts and schedules them ONLY if Safe Mode OFF AND agent is Editor/Admin. Otherwise routes to Inbox.",
+  "input_schema": {
+    "type": "object",
+    "properties": {
+      "workspace_id": {
+        "type": "string"
+      },
+      "agent_id": {
+        "type": "string",
+        "description": "V2 - Agent executing this job (must have Editor/Admin role)"
+      },
+      "job_id": {
+        "type": "string",
+        "description": "V2 - Job ID for this run"
+      },
+      "run_id": {
+        "type": "string",
+        "description": "V2 - Run ID for audit logging"
+      },
+      "voice_profile_id": {
+        "type": "string"
+      },
+      "account_ids": {
+        "type": "array",
+        "items": {
+          "type": "string"
+        }
+      },
+      "template_id": {
+        "type": "string",
+        "description": "Optional template to use"
+      },
+      "n_posts": {
+        "type": "number",
+        "default": 3
+      },
+      "schedule_times": {
+        "type": "array",
+        "items": {
+          "type": "string"
+        },
+        "description": "ISO timestamps; length >= n_posts preferred"
+      },
+      "topic_seeds": {
+        "type": "array",
+        "items": {
+          "type": "string"
+        }
+      },
+      "run_instructions": {
+        "type": "string",
+        "description": "Job-specific override instructions"
+      },
+      "client_tag": {
+        "type": "string",
+        "description": "V2 - Agency client tag"
+      }
+    },
+    "required": ["workspace_id", "agent_id", "job_id", "voice_profile_id", "account_ids"]
+  }
+}

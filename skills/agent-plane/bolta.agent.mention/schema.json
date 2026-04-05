@@ -1,0 +1,30 @@
+{
+  "name": "bolta.agent.mention",
+  "description": "Handle @mention interactions where users ask agents for quick feedback on posts and drafts",
+  "input_schema": {
+    "type": "object",
+    "properties": {
+      "agent_id": {
+        "type": "string",
+        "description": "Agent being mentioned"
+      },
+      "post_id": {
+        "type": "string",
+        "description": "Post or draft where mention occurred"
+      },
+      "mention_comment_id": {
+        "type": "string",
+        "description": "Comment containing the @mention"
+      },
+      "context": {
+        "type": "string",
+        "description": "Additional context from the comment"
+      }
+    },
+    "required": [
+      "agent_id",
+      "post_id",
+      "mention_comment_id"
+    ]
+  }
+}

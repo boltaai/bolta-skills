@@ -1,0 +1,18 @@
+{
+  "name": "bolta.list_recent_posts",
+  "description": "Get the last N published posts for an account. Use this to avoid repetition and maintain content variety.",
+  "input_schema": {
+    "type": "object",
+    "properties": {
+      "account_id": {
+        "type": "string",
+        "description": "Social account UUID"
+      },
+      "limit": {
+        "type": "integer",
+        "description": "Number of posts to retrieve (default: 10, max: 50)"
+      }
+    },
+    "required": ["account_id"]
+  }
+}

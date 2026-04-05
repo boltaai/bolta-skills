@@ -1,0 +1,24 @@
+{
+  "name": "bolta.get_audience_insights",
+  "description": "Retrieve audience demographics, behavior patterns, and engagement trends for data-driven content strategy",
+  "input_schema": {
+    "type": "object",
+    "properties": {
+      "account_id": {
+        "type": "string",
+        "description": "Social account UUID"
+      },
+      "insights_type": {
+        "type": "string",
+        "enum": ["demographics", "behavior", "content_preferences"],
+        "description": "Type of insights to retrieve"
+      },
+      "time_period": {
+        "type": "string",
+        "enum": ["7d", "30d", "90d"],
+        "description": "Rolling time window for analysis"
+      }
+    },
+    "required": ["account_id"]
+  }
+}

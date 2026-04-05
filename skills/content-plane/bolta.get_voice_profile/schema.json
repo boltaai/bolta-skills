@@ -1,0 +1,14 @@
+{
+  "name": "bolta.get_voice_profile",
+  "description": "Retrieve voice profile details (tone, style, vocabulary, examples). Use this to understand the brand voice before creating content.",
+  "input_schema": {
+    "type": "object",
+    "properties": {
+      "voice_profile_id": {
+        "type": "string",
+        "description": "Voice profile UUID"
+      }
+    },
+    "required": ["voice_profile_id"]
+  }
+}

@@ -1,4 +1,10 @@
 ---
+name: bolta.voice.bootstrap
+version: 2.0.0
+description: Create a comprehensive Voice Profile for a workspace. V2-ready - used by all agent types before content generation.
+category: voice
+roles_allowed: [Creator, Editor, Admin]
+agent_types: [content_creator, reviewer, custom]
 organization: bolta.ai
 author: Max Fritzhand
 ---
@@ -7,6 +13,12 @@ author: Max Fritzhand
 
 Purpose:
 Create a comprehensive Voice Profile for a workspace using the Bolta API. This skill creates production-ready voice profiles with full support for tone, founder signals, business DNA, platform rules, and custom guidelines.
+
+## V2 Context
+- **Hard dependency for content generation** — ALL content-creator agents require an active voice profile
+- **Voice soft-delete in V2** — if voice profile deleted, all dependent jobs auto-pause
+- **Agent memory integration** — agents can learn from voice feedback and refine over time
+- **Voice is first-class primitive** — treated as core infrastructure, not configuration
 
 When Used:
 - First-time workspace onboarding

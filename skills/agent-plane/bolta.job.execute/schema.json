@@ -1,0 +1,9 @@
+{
+  "name": "bolta.job.execute",
+  "description": "Documentation of V2 execution engine - how jobs fire and agents reason through tasks (NOT a callable tool)",
+  "input_schema": {
+    "type": "object",
+    "description": "This is system documentation, not a callable skill",
+    "properties": {}
+  }
+}

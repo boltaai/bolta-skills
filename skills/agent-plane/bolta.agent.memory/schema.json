@@ -1,0 +1,36 @@
+{
+  "tools": [
+    {
+      "name": "bolta.remember",
+      "description": "Store a piece of information in your long-term memory. Use this to remember patterns, preferences, or insights across job runs.",
+      "input_schema": {
+        "type": "object",
+        "properties": {
+          "key": {
+            "type": "string",
+            "description": "Memory key (e.g., 'best_posting_time', 'top_topics', 'audience_preference')"
+          },
+          "value": {
+            "type": "string",
+            "description": "What to remember (store insights, not raw data)"
+          }
+        },
+        "required": ["key", "value"]
+      }
+    },
+    {
+      "name": "bolta.recall",
+      "description": "Retrieve information from your long-term memory. Use this to recall patterns, preferences, or insights you've stored in previous job runs.",
+      "input_schema": {
+        "type": "object",
+        "properties": {
+          "key": {
+            "type": "string",
+            "description": "Memory key to retrieve (e.g., 'best_posting_time', 'top_topics'). If omitted, returns all memories."
+          }
+        },
+        "required": []
+      }
+    }
+  ]
+}

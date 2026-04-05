@@ -1,0 +1,23 @@
+{
+  "name": "bolta.add_comment",
+  "description": "Add a review comment to a draft without approving or rejecting - used for suggestions, questions, or notes",
+  "input_schema": {
+    "type": "object",
+    "properties": {
+      "post_id": {
+        "type": "string",
+        "description": "Draft post UUID"
+      },
+      "comment": {
+        "type": "string",
+        "description": "Comment text"
+      },
+      "comment_type": {
+        "type": "string",
+        "enum": ["suggestion", "question", "note", "praise"],
+        "default": "note"
+      }
+    },
+    "required": ["post_id", "comment"]
+  }
+}

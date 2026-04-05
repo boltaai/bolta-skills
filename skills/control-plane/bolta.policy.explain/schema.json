@@ -1,0 +1,11 @@
+{
+  "name": "bolta.policy.explain",
+  "description": "Explain workspace policy and the caller's effective capabilities (what actions are allowed) in plain language.",
+  "input_schema": {
+    "type": "object",
+    "properties": {
+      "workspace_id": { "type": "string" }
+    },
+    "required": ["workspace_id"]
+  }
+}

@@ -1,0 +1,59 @@
+{
+  "name": "bolta.agent.configure",
+  "description": "Modify an existing agent's configuration including persona, model tier, enabled skills, and job settings",
+  "input_schema": {
+    "type": "object",
+    "properties": {
+      "agent_id": {
+        "type": "string",
+        "description": "Agent UUID to configure"
+      },
+      "updates": {
+        "type": "object",
+        "properties": {
+          "persona": {
+            "type": "string",
+            "description": "Personality and behavioral guidelines"
+          },
+          "model": {
+            "type": "string",
+            "enum": [
+              "claude-sonnet-4",
+              "claude-opus-4",
+              "claude-haiku-4"
+            ],
+            "description": "Claude model tier"
+          },
+          "enabled_skills": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            },
+            "description": "Skills this agent can use"
+          },
+          "job_updates": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "job_id": {
+                  "type": "string"
+                },
+                "schedule": {
+                  "type": "object"
+                },
+                "run_instructions": {
+                  "type": "string"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "required": [
+      "agent_id",
+      "updates"
+    ]
+  }
+}

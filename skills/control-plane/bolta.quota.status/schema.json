@@ -1,0 +1,11 @@
+{
+  "name": "bolta.quota.status",
+  "description": "View current quota usage and limits for a workspace including post count, API requests, and reset timers",
+  "input_schema": {
+    "type": "object",
+    "properties": {
+      "workspace_id": { "type": "string", "description": "Workspace UUID" }
+    },
+    "required": ["workspace_id"]
+  }
+}

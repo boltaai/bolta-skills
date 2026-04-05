@@ -1,0 +1,18 @@
+{
+  "name": "bolta.voice.validate",
+  "description": "Evaluate content against a Voice Profile to ensure brand consistency, style alignment, and quality standards.",
+  "input_schema": {
+    "type": "object",
+    "properties": {
+      "workspace_id": { "type": "string", "description": "Workspace UUID" },
+      "voice_profile_id": { "type": "string", "description": "Voice profile UUID to validate against" },
+      "content_text": { "type": "string", "description": "Content to validate" },
+      "account_id": { "type": "string", "description": "Account UUID for account-specific voice validation" },
+      "platform": { "type": "string", "enum": ["twitter", "linkedin", "threads", "facebook", "instagram"], "description": "Platform-specific validation rules" },
+      "validation_mode": { "type": "string", "enum": ["strict", "standard", "lenient"], "default": "standard" },
+      "suggest_rewrite": { "type": "boolean", "default": false, "description": "Generate rewrite suggestion if score is below threshold" },
+      "check_authenticity": { "type": "boolean", "default": true, "description": "Run AI detection / humanization check" }
+    },
+    "required": ["workspace_id", "voice_profile_id", "content_text"]
+  }
+}

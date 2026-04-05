@@ -1,225 +1,97 @@
-# SKILL: bolta.quota.status
-
-Display name: Quota Status
-Slug: bolta-quota-status
-Version: 1.0.0
-Category: control
-Plane: control
-Organization: bolta.ai
-Author: Max Fritzhand
-
+---
+name: bolta.quota.status
+version: 2.0.0
+description: View current quota usage and limits for a workspace including post count, API requests, and reset timers
+category: control
+roles_allowed: [Viewer, Creator, Editor, Admin]
+agent_types: [analytics, custom]
+safe_defaults: {}
+tools_required: []
+inputs_schema:
+  type: object
+  required: [workspace_id]
+  properties:
+    workspace_id: { type: string, description: "Workspace UUID" }
+outputs_schema:
+  type: object
+  properties:
+    success: { type: boolean }
+    daily_posts: { type: object }
+    hourly_api_requests: { type: object }
+    percentage_used: { type: number }
+    time_until_reset: { type: string }
+organization: bolta.ai
+author: Bolta Team
 ---
 
-## Purpose
+## Goal
+View current quota usage and limits for a workspace to monitor usage, check if approaching limits, and plan content schedules.
 
-**View current quota usage and limits for a workspace.**
+## Which Agents Use This
+- **analytics** — Monitor quota usage as part of workspace health reporting
+- **custom** — Any agent that needs to check quota status before executing tasks
+- Humans use this to troubleshoot quota exceeded errors
 
-This monitoring skill shows:
-- Daily post count (used/limit/remaining)
-- Hourly API request count (used/limit/remaining)
-- Percentage usage
-- Time until quota reset
+## Hard Rules
+1. MUST show current usage vs limits
+2. MUST show time until quota reset
+3. SHOULD show percentage usage for quick visual assessment
+4. Require workspace:read permission
 
-**When to Use:**
-- Monitoring quota usage
-- Checking if approaching limits
-- Troubleshooting quota exceeded errors
-- Planning content schedules
+## Steps
 
----
+### 1. Validate workspace access
+- Verify workspace_id exists
+- Verify user has workspace:read permission
 
-## Required Environment Variables
+### 2. Query quota usage
+- Fetch daily post count (used/limit)
+- Fetch hourly API request count (used/limit)
+- Calculate remaining quota
+- Calculate percentage used
 
-```yaml
-BOLTA_API_KEY:
-  required: true
-  description: Bolta API key
+### 3. Calculate reset time
+- Determine time until daily reset (midnight UTC)
+- Determine time until hourly reset (top of next hour)
 
-BOLTA_WORKSPACE_ID:
-  required: true
-  description: Workspace UUID
-```
+### 4. Return quota status
+- Usage counts, limits, remaining
+- Percentage used
+- Time until reset
 
----
-
-## Permissions
-
-**Required:**
-- `workspace:read` - View workspace information
-
-**Roles Allowed:** All roles (owner, admin, editor, creator, reviewer, viewer)
-
----
-
-## Input Schema
-
-```yaml
-type: object
-required:
-  - workspace_id
-
-properties:
-  workspace_id:
-    type: string
-    format: uuid
-    description: Workspace to check quota for
-```
-
----
-
-## Output Schema
-
-```yaml
-type: object
-properties:
-  workspace_id:
-    type: string
-    description: Workspace UUID
-
-  daily_posts:
-    type: object
-    properties:
-      limit:
-        type: integer
-        description: Maximum posts per day
-      used:
-        type: integer
-        description: Posts created today
-      remaining:
-        type: integer
-        description: Posts remaining today
-      percentage:
-        type: number
-        description: Usage percentage (0-100)
-
-  hourly_api_requests:
-    type: object
-    properties:
-      limit:
-        type: integer
-        description: Maximum API requests per hour
-      used:
-        type: integer
-        description: Requests made this hour
-      remaining:
-        type: integer
-        description: Requests remaining this hour
-      percentage:
-        type: number
-        description: Usage percentage (0-100)
-
-  date:
-    type: string
-    format: date
-    description: Current date (UTC)
-
-  quota_resets_at:
-    type: string
-    format: date-time
-    description: When daily quota resets (UTC midnight)
-
-  warnings:
-    type: array
-    items:
-      type: string
-    description: Warnings if approaching/exceeding limits
-```
-
----
-
-## Usage Examples
-
-### Example 1: Normal Usage (47%)
-
-**Request:**
+## Output
 ```json
 {
-  "workspace_id": "550e8400-e29b-41d4-a716-446655440000"
-}
-```
-
-**Response:**
-```json
-{
-  "workspace_id": "550e8400-e29b-41d4-a716-446655440000",
+  "success": true,
   "daily_posts": {
-    "limit": 100,
     "used": 47,
+    "limit": 100,
     "remaining": 53,
-    "percentage": 47.0
+    "resets_in": "4h 23m"
   },
   "hourly_api_requests": {
-    "limit": 1000,
     "used": 234,
+    "limit": 1000,
     "remaining": 766,
-    "percentage": 23.4
+    "resets_in": "23m"
   },
-  "date": "2024-03-15",
-  "quota_resets_at": "2024-03-16T00:00:00Z",
-  "warnings": []
+  "percentage_used": {
+    "posts": 0.47,
+    "api": 0.234
+  }
 }
 ```
 
-### Example 2: Approaching Limit (85%)
+## Failure Handling
+- If workspace_id not found: return error "Workspace not found"
+- If no permission: return error "Access denied"
 
-**Response:**
+## Example Usage
+
+### Scenario: Analytics agent checking quota before bulk job
 ```json
 {
-  "daily_posts": {
-    "limit": 100,
-    "used": 85,
-    "remaining": 15,
-    "percentage": 85.0
-  },
-  "warnings": [
-    "Approaching daily quota limit: 85/100 posts used (85%)"
-  ]
+  "workspace_id": "uuid"
 }
 ```
-
-### Example 3: Quota Exceeded
-
-**Response:**
-```json
-{
-  "daily_posts": {
-    "limit": 100,
-    "used": 100,
-    "remaining": 0,
-    "percentage": 100.0
-  },
-  "warnings": [
-    "Daily post quota exceeded: 100/100 posts used",
-    "No more posts can be created until 2024-03-16T00:00:00Z",
-    "Contact admin to increase quota limit or wait for reset"
-  ],
-  "quota_resets_at": "2024-03-16T00:00:00Z"
-}
-```
-
----
-
-## Integration with Other Skills
-
-**Use with:**
-- `bolta.workspace.config` - Increase quotas if needed
-- `bolta.draft.post` - Check before creating posts
-- `bolta.loop.from_template` - Verify quota before bulk operations
-
----
-
-## See Also
-
-**Documentation:**
-- [quotas.md](../../../docs/quotas.md) - Complete quota guide
-
-**Related Skills:**
-- `bolta.workspace.config` - Adjust quota limits
-- `bolta.audit.export_activity` - View quota usage history
-
----
-
-## Support
-
-- GitHub: https://github.com/boltaai/bolta-skills/issues
-- Email: support@bolta.ai
+**Result:** Receive current quota status to determine if bulk job can proceed
