@@ -4,6 +4,7 @@ version: 2.0.0
 description: Reject a draft post with specific feedback, sending it back for revision to enforce brand standards
 category: review
 roles_allowed: [Editor, Admin]
+required_scopes: [review:approve]
 agent_types: [reviewer, custom]
 safe_defaults:
   require_specific_feedback: true

@@ -4,6 +4,7 @@ version: 2.0.0
 description: Handle @mention interactions where users ask agents for quick feedback on posts and drafts
 category: agent
 roles_allowed: [Viewer, Creator, Editor, Admin]
+required_scopes: [posts:read, workspace:read]
 agent_types: [content_creator, reviewer, analytics, engagement, custom]
 safe_defaults:
   read_only_mode: true

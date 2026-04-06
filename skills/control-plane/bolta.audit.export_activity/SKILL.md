@@ -4,6 +4,7 @@ version: 1.0.0
 description: Export audit/activity events for a workspace (agent + human actions) for debugging and compliance.
 category: ops
 roles_allowed: [Owner, Admin]
+required_scopes: [audit:export]
 tools_required:
   - bolta.export_audit_log
 inputs_schema:

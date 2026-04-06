@@ -4,6 +4,7 @@ version: 1.0.0
 description: Rotate or revoke an existing API key for a human or agent principal, issuing a replacement key.
 category: ops
 roles_allowed: [Owner, Admin]
+required_scopes: [team:manage_keys]
 tools_required:
   - bolta.get_my_capabilities
   - bolta.rotate_api_key

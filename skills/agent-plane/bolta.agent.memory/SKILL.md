@@ -4,6 +4,7 @@ version: 2.0.0
 description: Store and retrieve information across job runs - how agents learn and improve over time
 category: agent
 roles_allowed: [Viewer, Creator, Editor, Admin]
+required_scopes: [workspace:read]
 agent_types: [content_creator, reviewer, analytics, engagement, custom]
 safe_defaults:
   memory_scoped_per_agent: true

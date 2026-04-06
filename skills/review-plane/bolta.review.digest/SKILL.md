@@ -4,6 +4,7 @@ version: 2.0.0
 description: V2 - Generate a human-readable review summary (daily/weekly digest) of inbox activity, agent performance, and pending actions.
 category: review
 roles_allowed: [Viewer, Creator, Editor, Admin]
+required_scopes: [posts:read, workspace:read]
 agent_types: [reviewer, analytics, custom]
 tools_required:
   - bolta.get_workspace_policy

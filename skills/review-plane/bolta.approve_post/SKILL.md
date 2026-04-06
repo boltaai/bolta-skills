@@ -4,6 +4,7 @@ version: 2.0.0
 description: Approve a draft post, moving it from Inbox to Approved status, ready for scheduling or publishing
 category: review
 roles_allowed: [Editor, Admin]
+required_scopes: [review:approve]
 agent_types: [reviewer, custom]
 safe_defaults:
   require_editor_role: true

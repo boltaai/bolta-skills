@@ -4,6 +4,7 @@ version: 2.0.0
 description: Create and onboard a new AI agent teammate from marketplace presets with conversational discovery and preview generation.
 category: agent_lifecycle
 roles_allowed: [Editor, Admin]
+required_scopes: [team:manage, workspace:read]
 safe_defaults:
   jobs_start_paused: true
   require_preview_approval: true

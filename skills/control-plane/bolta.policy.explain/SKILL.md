@@ -4,6 +4,7 @@ version: 1.0.0
 description: Explain workspace policy and the caller's effective capabilities (what actions are allowed) in plain language.
 category: ops
 roles_allowed: [Owner, Admin, Creator, Viewer]
+required_scopes: [workspace:read]
 tools_required:
   - bolta.get_workspace_policy
   - bolta.get_my_capabilities

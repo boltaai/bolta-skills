@@ -4,6 +4,7 @@ version: 2.0.0
 description: Approve inbox posts and route to Approved→Scheduled based on workspace governance. Handles bulk approvals with flexible scheduling.
 category: review
 roles_allowed: [Editor, Admin]
+required_scopes: [review:approve, workspace:read]
 tools_required:
   - bolta.get_workspace_policy
   - bolta.get_my_capabilities

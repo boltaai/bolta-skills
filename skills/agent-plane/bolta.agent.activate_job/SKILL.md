@@ -4,6 +4,7 @@ version: 2.0.0
 description: Activate a paused job after preview and voice validation - the explicit trust moment where user says "yes, start posting"
 category: agent
 roles_allowed: [Editor, Admin]
+required_scopes: [workspace:read]
 agent_types: [custom]
 safe_defaults:
   require_explicit_confirmation: true

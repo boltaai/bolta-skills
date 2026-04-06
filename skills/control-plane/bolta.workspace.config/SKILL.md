@@ -4,6 +4,7 @@ version: 2.0.0
 description: View and update workspace-level configuration settings including Safe Mode, autonomy mode, and quotas
 category: control
 roles_allowed: [Admin]
+required_scopes: [workspace:read]
 agent_types: [custom]
 safe_defaults:
   require_admin: true

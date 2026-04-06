@@ -4,6 +4,7 @@ version: 2.0.0
 description: Modify an existing agent's configuration including persona, model tier, enabled skills, and job settings
 category: agent
 roles_allowed: [Editor, Admin]
+required_scopes: [workspace:read]
 agent_types: [custom]
 safe_defaults:
   require_job_pause_for_breaking_changes: true

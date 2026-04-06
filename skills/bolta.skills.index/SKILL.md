@@ -1,6 +1,6 @@
 ---
 name: bolta.skills.index
-version: 2.0.0
+version: 2.0.1
 description: Bolta Skills Registry - canonical index and orchestration layer for all Bolta skills, organized by plane
 category: registry
 type: documentation
@@ -54,20 +54,28 @@ author: Max Fritzhand
   ],
   "trustedDomains": [
     "platty.boltathread.com",
-    "bolta.ai"
+    "bolta.ai",
+    "mcp.bolta.ai"
   ],
   "permissions": [
     "network:https:platty.boltathread.com",
-    "network:https:bolta.ai"
+    "network:https:bolta.ai",
+    "network:https:mcp.bolta.ai"
   ],
-  "thirdPartyPackages": [
+  "relatedRepositories": [
     {
-      "name": "@boltaai/mcp-server",
-      "registry": "npm",
-      "verified": true,
-      "sourceRepository": "https://github.com/boltaai/bolta-mcp-server"
+      "name": "bolta-skills",
+      "description": "Official Bolta Skills Pack",
+      "url": "https://github.com/boltaai/bolta-skills"
+    },
+    {
+      "name": "boltaclaw-self-hosted",
+      "description": "Self-hosted Bolta agent runtime (BoltaClaw)",
+      "url": "https://github.com/boltaai/boltaclaw-self-hosted"
     }
-  ]
+  ],
+  "mcpEndpoint": "https://mcp.bolta.ai/mcp",
+  "apiDocumentation": "https://bolta.ai/docs/api"
 }
 ```
 
@@ -78,10 +86,10 @@ author: Max Fritzhand
 ### Required Credentials
 
 **BOLTA_API_KEY** (REQUIRED, SENSITIVE)
-- **Format:** `sk_live_` followed by 64 alphanumeric characters
-- **Obtain at:** https://bolta.ai/register
+- **Format:** `bolta_sk_` followed by alphanumeric characters
+- **Obtain at:** https://bolta.ai/register (agent keys) or bolta.ai/settings (regular keys)
 - **Scoping:** Each key is scoped to a SINGLE workspace only
-- **Permissions:** Grant LEAST-PRIVILEGE access (e.g., only `posts:write` if creating content)
+- **Key Types:** Bolta issues two distinct key types (see [API Key Types](#api-key-types) below)
 - **Rotation:** Rotate every 90 days using `bolta.team.rotate_key` skill
 - **Storage:** NEVER commit to git - use environment variables or secret managers only
 
@@ -90,35 +98,122 @@ author: Max Fritzhand
 - **Source:** Provided during agent registration at bolta.ai/register
 - **Purpose:** Identifies which workspace the API key is authorized for
 
-**BOLTA_AGENT_ID** (OPTIONAL, RECOMMENDED)
+**BOLTA_AGENT_ID** (OPTIONAL — required for Agent API keys)
 - **Format:** UUID
 - **Purpose:** Links API activity to specific agent principal for audit logs
 - **Benefit:** Enables traceability and compliance reporting
+- **Note:** Automatically set when using an Agent API key; must be provided manually with Regular API keys if audit attribution is desired
+
+### API Key Types
+
+Bolta has **two distinct API key types** with different permission models. Skills must handle both correctly.
+
+#### Regular API Keys (`key_type: "regular"`)
+
+Created in **Settings → API Keys** by workspace members. Use **granular permission scopes** — each key is issued with an explicit list of allowed scopes.
+
+**Available scopes:**
+
+| Scope | Description |
+|-|-|
+| `posts:read` | View posts and schedules |
+| `posts:write` | Create and update posts |
+| `posts:delete` | Delete posts and scheduled content |
+| `accounts:read` | View connected social accounts |
+| `accounts:connect` | Initiate OAuth connections |
+| `recurring:manage` | Manage recurring post suggestions |
+| `voice:read` | View brand voice profiles |
+| `voice:write` | Modify brand voice profiles |
+| `ai:generate` | Use AI content generation |
+| `content:bulk` | Perform bulk content operations |
+
+**Permission groups (shortcuts):**
+- **READ_ONLY** — `posts:read`, `accounts:read`, `voice:read`
+- **CONTENT_CREATOR** — READ_ONLY + `posts:write`, `ai:generate`
+- **FULL_ACCESS** — All scopes
+
+**When to use:** Integrations, CI/CD pipelines, custom scripts, third-party tools that need specific scopes.
+
+#### Agent API Keys (`key_type: "agent"`)
+
+Created in **Settings → AI Agents → Add Agent** by workspace admins. Use **role-based permissions** — the key inherits all scopes from the assigned agent role, plus agent-specific scopes not available to regular keys.
+
+**Agent roles and their scopes:**
+
+| Role | Scopes | Best for |
+|-|-|-|
+| `viewer` | `posts:read`, `accounts:read`, `voice:read`, `workspace:read` | Monitoring, reporting agents |
+| `creator` | viewer + `posts:write`, `voice:write`, `ai:generate`, `review:submit`, `recurring:manage` | Content drafting agents (recommended default) |
+| `editor` | creator + `posts:delete`, `review:approve`, `content:bulk`, `audit:export`, `team:manage_keys` | Content managers, approval workflows |
+| `admin` | editor + `accounts:connect`, `team:manage` | Orchestrator agents, workspace automation |
+
+**Agent-only scopes** (not available on regular keys):
+
+| Scope | Description |
+|-|-|
+| `workspace:read` | View workspace policy and capabilities |
+| `review:submit` | Submit content for approval |
+| `review:approve` | Approve and route reviewed content |
+| `audit:export` | Export workspace audit and activity logs |
+| `team:manage` | Create and manage agent teammates |
+| `team:manage_keys` | Rotate and manage API keys |
+
+**Additional agent key behaviors:**
+- **Safe Mode** is always enforced for `creator` role agents
+- **Review required** — creator agents cannot publish directly; content goes through approval
+- Agent keys carry an `agent_id` that is automatically used for audit attribution
+- Agent keys link to an `AgentPrincipal` record for identity tracking
+
+#### Skill Plane Access by Role
+
+Agent roles determine which skill planes are accessible. Skills should check the caller's role before executing plane-restricted operations.
+
+| Skill Plane | Min Role | Skills |
+|-|-|-|
+| Review | `viewer` | Inbox triage, approve/reject, review digest |
+| Control | `viewer` | Audit export, key rotation, quota status, workspace config |
+| Init (Voice) | `creator` | Voice bootstrap, learn from samples |
+| Content | `creator` | Draft post, week plan, list recent posts |
+| Automation | `creator` | Cron generate & schedule, generate to review |
+
+A `viewer` can access Review and Control planes. A `creator` can access all planes. `editor` and `admin` can access all planes with additional capabilities within each.
+
+#### How Skills Should Handle Key Types
+
+1. **Check `key_type` on the API response** — the server returns `key_type: "regular" | "agent"` on authenticated responses
+2. **Regular keys:** Validate required scopes exist in the key's `permissions` array before executing
+3. **Agent keys:** The role determines capabilities — check the role rather than individual scopes
+4. **Agent-only operations** (review workflows, audit export, team management) — reject if `key_type` is `"regular"` since these scopes are not available
+5. **Audit attribution:** If `key_type` is `"agent"`, the `agent_id` is automatically attached; for regular keys, pass `BOLTA_AGENT_ID` env var if attribution is needed
 
 ### Trusted Network Endpoints
 
 This skill makes HTTPS requests to:
 - `https://platty.boltathread.com` - Bolta API server
 - `https://bolta.ai` - Main application and agent registration portal
+- `https://mcp.bolta.ai` - MCP protocol endpoint (for Claude Desktop / Claude Code)
 
 **No other domains are contacted.** All requests are authenticated with your API key.
 
-### Third-Party Dependencies
+### Related Projects & Resources
 
-This skill references:
-- `@boltaai/mcp-server` (npm package for Claude Desktop integration)
-  - **Source:** https://github.com/boltaai/bolta-mcp-server
-  - **Verified:** Yes (official Bolta package)
-  - **Purpose:** Connects Claude Desktop to Bolta API via MCP protocol
+- **Bolta Skills Pack** — Official skills repository
+  - **Source:** https://github.com/boltaai/bolta-skills
+- **BoltaClaw** — Self-hosted Bolta agent runtime
+  - **Source:** https://github.com/boltaai/boltaclaw-self-hosted
+- **Bolta MCP Server** — Remote MCP endpoint for Claude Desktop / Claude Code integration
+  - **Endpoint:** `https://mcp.bolta.ai/mcp`
+- **Bolta API Documentation** — Full API reference
+  - **Docs:** https://bolta.ai/docs/api
 
 ### Pre-Installation Checklist
 
 Before installing this skill, you MUST:
 - [ ] Verify the source repository: https://github.com/boltaai/bolta-skills
-- [ ] Review the SKILL.md and confirm version matches metadata (currently 2.0.0)
+- [ ] Review the SKILL.md and confirm version matches metadata (currently 2.0.1)
 - [ ] Obtain a LEAST-PRIVILEGE API key from https://bolta.ai/register
 - [ ] Store API key in environment variables (NEVER hardcode or commit)
-- [ ] Verify you trust the domains: `platty.boltathread.com` and `bolta.ai`
+- [ ] Verify you trust the domains: `platty.boltathread.com`, `bolta.ai`, and `mcp.bolta.ai`
 - [ ] Test in a disposable/test workspace first (recommended)
 - [ ] Confirm your API key is scoped ONLY to the intended workspace
 
@@ -192,99 +287,171 @@ https://github.com/boltaai/bolta-skills
 
 ---
 
-## Getting Started: Agent API Setup
+## Bolta Ecosystem: How It All Fits Together
 
-Before using Bolta skills, you need to set up agent API access to authenticate your requests.
-
-### Step 1: Register Your Agent
-
-Visit **[bolta.ai/register](https://bolta.ai/register)** to create your agent principal and obtain an API key.
-
-**What you'll need:**
-- Bolta workspace (create one at bolta.ai if you don't have one)
-- Admin or Owner role in your workspace
-
-### Step 2: Create Agent Principal
-
-During registration, you'll configure:
-
-**Agent Name**
-```
-Example: "Claude Content Agent"
-Description: Human-readable name for audit logs
-```
-
-**Agent Role**
-```
-Options:
-- creator  - Can create drafts (recommended for testing)
-- editor   - Can create + schedule posts
-- reviewer - Can approve/reject posts (review-only access)
-
-Recommendation: Start with "creator" role for safety
-```
-
-**Permissions**
-```
-Minimum for content skills:
-  posts:write  - Create posts
-  voice:read   - Read voice profiles
-
-Optional (based on use case):
-  posts:schedule  - Schedule posts (requires editor+ role)
-  posts:approve   - Approve posts for publishing
-  templates:read  - Use content templates
-  cron:execute    - Run automated jobs
-```
-
-### Step 3: Copy Your API Key
-
-After registration, you'll receive:
+Bolta is composed of four interconnected pieces. Understanding how they relate helps you choose the right setup path.
 
 ```
-API Key: sk_live_00000000000000000000000000000000
+┌─────────────────────────────────────────────────────────────┐
+│                      bolta.ai                               │
+│            Workspace management, dashboards,                │
+│            account connections, review UI                    │
+│                                                             │
+│  API Docs: https://bolta.ai/docs/api                       │
+└──────────────────────┬──────────────────────────────────────┘
+                       │ REST API
+                       ▼
+┌──────────────────────────────────────────────────────────────┐
+│                  MCP Server (mcp.bolta.ai/mcp)               │
+│     Bridges Claude Desktop / Claude Code to the Bolta API    │
+│     Exposes workspace tools: create posts, manage agents,    │
+│     approve content, run analytics — all via MCP protocol    │
+└──────────────────────┬───────────────────────────────────────┘
+                       │ uses
+                       ▼
+┌──────────────────────────────────────────────────────────────┐
+│            Bolta Skills Pack (this repo)                      │
+│     github.com/boltaai/bolta-skills                          │
+│                                                              │
+│     Structured prompts, workflows, and orchestration logic   │
+│     that teach AI agents HOW to use the API effectively:     │
+│     voice creation, content planning, review flows,          │
+│     automation, analytics, engagement, governance            │
+└──────────────────────────────────────────────────────────────┘
+
+┌──────────────────────────────────────────────────────────────┐
+│            BoltaClaw (turnkey self-hosted runtime)            │
+│     github.com/boltaai/boltaclaw-self-hosted                 │
+│                                                              │
+│     Everything above — pre-configured and ready to run.      │
+│     Ships with the skills pack, MCP integration, agent       │
+│     runtime, cron scheduler, and CLI out of the box.         │
+│     Clone, set your API key, and go.                         │
+└──────────────────────────────────────────────────────────────┘
+```
+
+### How they work together
+
+1. **The API** (`bolta.ai/docs/api`) is the foundation — every operation (creating posts, managing agents, approving content) flows through it. You can call it directly with `curl` or any HTTP client.
+
+2. **The MCP Server** (`mcp.bolta.ai/mcp`) wraps the API into the MCP protocol so Claude Desktop and Claude Code can call Bolta tools natively. Point your MCP config at the endpoint and your AI assistant gains full workspace access.
+
+3. **The Skills Pack** (`github.com/boltaai/bolta-skills`) provides the intelligence layer — structured prompts and multi-step workflows that teach agents *how* to use the API well. Skills handle things like voice-aware drafting, week planning, review triage, and cron automation that go beyond raw API calls.
+
+4. **BoltaClaw** (`github.com/boltaai/boltaclaw-self-hosted`) is the turnkey solution. It bundles the skills pack, MCP connectivity, agent runtime, job scheduler, and a **CLI** into a single self-hosted package. The CLI lets you manage posts, agents, jobs, and workspace settings directly from your terminal — no browser required. If you want to skip manual setup and get a fully operational Bolta agent running on your own infrastructure, BoltaClaw is the fastest path — clone, configure your API key, and you're live.
+
+### Which path is right for you?
+
+| Goal | Start here |
+|-|-|
+| Explore the API directly | [API Docs](https://bolta.ai/docs/api) |
+| Add Bolta tools to Claude Desktop / Claude Code | [MCP Server](https://mcp.bolta.ai/mcp) — configure the endpoint |
+| Customize agent workflows and prompts | [Skills Pack](https://github.com/boltaai/bolta-skills) — clone and adapt |
+| Manage Bolta from the terminal (CLI) | [BoltaClaw](https://github.com/boltaai/boltaclaw-self-hosted) — includes the CLI |
+| Get everything running immediately, self-hosted | [BoltaClaw](https://github.com/boltaai/boltaclaw-self-hosted) — turnkey, pre-configured |
+
+---
+
+## Getting Started: API Setup
+
+Before using Bolta skills, you need an API key. Choose the path that matches your use case.
+
+### Path A: Agent API Key (Recommended for AI Agents)
+
+Use this if you're setting up an AI agent (Claude, BoltaClaw, custom agent) to operate as a workspace member.
+
+#### Step 1: Create Agent Principal
+
+Go to **Settings → AI Agents → Add Agent** in your Bolta workspace.
+
+Configure:
+- **Agent Name** — Human-readable name for audit logs (e.g., "Claude Content Agent")
+- **Agent Role** — Determines permissions and skill plane access:
+
+| Role | What it can do | Recommended for |
+|-|-|-|
+| `creator` | Draft content, use voice profiles, submit for review | Most agents (default) |
+| `viewer` | Read-only access to all content | Monitoring / reporting |
+| `editor` | Full content management + approvals | Approval workflow agents |
+| `admin` | Everything + agent/account management | Orchestrators only |
+
+**Recommendation:** Start with `creator` role. Safe Mode is enforced and all content requires human review.
+
+#### Step 2: Copy Your Agent API Key
+
+After creation, you'll see the full key **once**:
+
+```
+API Key: bolta_sk_00000000000000000000000000000000
 Workspace ID: 550e8400-e29b-41d4-a716-446655440000
 Agent ID: 660e8400-e29b-41d4-a716-446655440001
 ```
 
-**IMPORTANT:**
-- Store API key securely (never commit to git)
-- Keys cannot be recovered (only regenerated via `bolta.team.rotate_key`)
-- Each key is scoped to ONE workspace
+The agent ID is automatically linked — no need to set `BOLTA_AGENT_ID` separately.
 
-### Step 4: Configure Your Environment
+### Path B: Regular API Key (For Integrations & Scripts)
+
+Use this for CI/CD pipelines, custom integrations, or scripts that need specific scopes.
+
+#### Step 1: Create API Key
+
+Go to **Settings → API Keys → Create New Key**.
+
+Select **only the scopes you need** (least privilege):
+- Content creation: `posts:write`, `voice:read`
+- Full content: `posts:read`, `posts:write`, `voice:read`, `ai:generate`
+- Read-only: `posts:read`, `accounts:read`, `voice:read`
+
+**Note:** Regular keys cannot access agent-only scopes (`review:submit`, `review:approve`, `audit:export`, `team:manage`, `team:manage_keys`, `workspace:read`). If you need those, use an Agent API key instead.
+
+#### Step 2: Copy Your API Key
+
+```
+API Key: bolta_sk_00000000000000000000000000000000
+```
+
+**IMPORTANT:** The full key is shown only once and cannot be recovered (only regenerated via `bolta.team.rotate_key`).
+
+### Configure Your Environment (Both Key Types)
 
 **Set Required Environment Variables:**
 
 ```bash
-# Required: Your Bolta API key (from bolta.ai/register)
-export BOLTA_API_KEY="sk_live_your_actual_key_here"
+# Required: Your Bolta API key (agent or regular)
+export BOLTA_API_KEY="bolta_sk_your_actual_key_here"
 
-# Required: Your workspace UUID (from bolta.ai/register)
+# Required: Your workspace UUID
 export BOLTA_WORKSPACE_ID="550e8400-e29b-41d4-a716-446655440000"
 
-# Optional: Agent principal UUID (for audit logging)
+# Optional: Agent principal UUID (automatic for agent keys, manual for regular keys)
 export BOLTA_AGENT_ID="660e8400-e29b-41d4-a716-446655440001"
 ```
 
-**For Claude Desktop (MCP):**
+**For Claude Desktop / Claude Code (MCP):**
+
+Connect via the remote MCP endpoint at `https://mcp.bolta.ai/mcp`:
+
 ```json
 {
   "mcpServers": {
     "bolta": {
-      "command": "npx",
-      "args": ["-y", "@boltaai/mcp-server"],
-      "env": {
-        "BOLTA_API_KEY": "sk_live_your_actual_key_here",
-        "BOLTA_WORKSPACE_ID": "550e8400-e29b-41d4-a716-446655440000",
-        "BOLTA_AGENT_ID": "660e8400-e29b-41d4-a716-446655440001"
+      "type": "url",
+      "url": "https://mcp.bolta.ai/mcp",
+      "headers": {
+        "Authorization": "Bearer bolta_sk_your_actual_key_here",
+        "X-Workspace-ID": "550e8400-e29b-41d4-a716-446655440000"
       }
     }
   }
 }
 ```
 
+**For self-hosted deployments**, see [BoltaClaw](https://github.com/boltaai/boltaclaw-self-hosted) for running your own agent runtime.
+
 **For Direct API Calls:**
+
+See the full [API documentation](https://bolta.ai/docs/api) for all available endpoints.
+
 ```bash
 curl https://platty.boltathread.com/v1/posts \
   -H "Authorization: Bearer ${BOLTA_API_KEY}" \
@@ -299,7 +466,7 @@ curl https://platty.boltathread.com/v1/posts \
 - Use secret managers in production (AWS Secrets Manager, Vercel Secrets, etc.)
 - Rotate keys every 90 days via `bolta.team.rotate_key`
 
-### Step 5: Verify Setup
+### Verify Setup
 
 Test your configuration:
 
@@ -313,7 +480,9 @@ curl https://platty.boltathread.com/v1/workspaces/${BOLTA_WORKSPACE_ID} \
 #   "name": "My Workspace",
 #   "safe_mode": true,
 #   "autonomy_mode": "managed",
-#   "max_posts_per_day": 100
+#   "max_posts_per_day": 100,
+#   "key_type": "agent",        ← indicates which key type authenticated
+#   "agent_role": "creator"     ← present only for agent keys
 # }
 ```
 
@@ -321,8 +490,9 @@ curl https://platty.boltathread.com/v1/workspaces/${BOLTA_WORKSPACE_ID} \
 
 **Error: "Invalid API Key"**
 - Verify key matches exactly (no extra spaces)
-- Check if key was rotated - get new key at bolta.ai/register
+- Check if key was rotated — get new key at bolta.ai/settings
 - Ensure you're using the correct workspace key
+- Confirm key prefix starts with `bolta_sk_`
 
 **Error: "Workspace Not Found"**
 - Verify workspace_id matches your registration
@@ -330,10 +500,19 @@ curl https://platty.boltathread.com/v1/workspaces/${BOLTA_WORKSPACE_ID} \
 - Check if workspace was deleted
 
 **Error: "Permission Denied"**
-- Check your agent's permissions at bolta.ai/register
-- For content creation: Need `posts:write` minimum
-- For scheduling: Need `posts:schedule` + editor role
-- For automation: Need `cron:execute` permission
+- **Regular keys:** Check granted scopes at Settings → API Keys
+  - Content creation: Need `posts:write` minimum
+  - Voice access: Need `voice:read` or `voice:write`
+- **Agent keys:** Check agent role at Settings → AI Agents
+  - Content creation: Need `creator` role or higher
+  - Approvals: Need `editor` role or higher
+  - Agent management: Need `admin` role
+- Agent-only scopes (`review:submit`, `audit:export`, etc.) are not available on regular keys — switch to an Agent API key if you need them
+
+**Error: "Insufficient Role"** (Agent keys only)
+- The agent's role doesn't have access to the requested skill plane
+- `viewer` cannot access Init, Content, or Automation planes
+- Upgrade the agent role at Settings → AI Agents, or use a different agent
 
 ---
 
@@ -488,7 +667,7 @@ curl https://platty.boltathread.com/v1/workspaces/${BOLTA_WORKSPACE_ID} \
 - [ ] All 36+ skills present in skills/ directory
 - [ ] docs/ directory contains markdown files
 - [ ] API connectivity verified (test curl command works)
-- [ ] MCP server installed (if using Claude Desktop)
+- [ ] MCP endpoint configured (if using Claude Desktop / Claude Code — see mcp.bolta.ai/mcp)
 - [ ] Workspace policy reviewed (safe_mode, autonomy_mode)
 - [ ] First skill executed successfully (test run)
 - [ ] Autonomy mode documentation read (docs/autonomy-modes.md)
@@ -1653,10 +1832,11 @@ Each skill provides structured metadata via YAML frontmatter for registry indexi
 ```yaml
 ---
 name: bolta.draft.post
-version: 2.0.0
+version: 2.0.1
 description: Create a single post in Draft status
 category: content
 roles_allowed: [Creator, Editor, Admin]
+required_scopes: [posts:write, voice:read]
 agent_types: [content_creator, custom]
 safe_defaults:
   never_publish_directly: true
@@ -1688,6 +1868,7 @@ outputs_schema:
 | `description` | Yes | One-line purpose |
 | `category` | Yes | Skill category (content, review, agent_lifecycle, etc.) |
 | `roles_allowed` | Yes | Array of roles that can use this skill |
+| `required_scopes` | Yes | API permission scopes needed (see [API Key Types](#api-key-types)). Skills listing agent-only scopes (`workspace:read`, `review:*`, `audit:export`, `team:*`) require an Agent API key. |
 | `agent_types` | Yes | Array of compatible agent types |
 | `safe_defaults` | No | Default safety behaviors |
 | `tools_required` | Yes | MCP tools this skill calls |

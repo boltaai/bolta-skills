@@ -4,6 +4,7 @@ version: 2.0.0
 description: Add a review comment to a draft without approving or rejecting - used for suggestions, questions, or notes
 category: review
 roles_allowed: [Viewer, Creator, Editor, Admin]
+required_scopes: [posts:write]
 agent_types: [reviewer, custom]
 safe_defaults: {}
 tools_required: []

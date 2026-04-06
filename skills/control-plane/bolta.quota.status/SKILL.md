@@ -4,6 +4,7 @@ version: 2.0.0
 description: View current quota usage and limits for a workspace including post count, API requests, and reset timers
 category: control
 roles_allowed: [Viewer, Creator, Editor, Admin]
+required_scopes: [workspace:read]
 agent_types: [analytics, custom]
 safe_defaults: {}
 tools_required: []

@@ -4,6 +4,7 @@ version: 1.0.0
 description: Create an agent identity (service account) inside a workspace and issue an API key with least privilege.
 category: ops
 roles_allowed: [Owner, Admin]
+required_scopes: [team:manage]
 tools_required:
   - bolta.get_my_capabilities
   - bolta.create_agent_principal

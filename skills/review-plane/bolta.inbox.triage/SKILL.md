@@ -4,6 +4,7 @@ version: 2.0.0
 description: V2 Reviewer agent skill - Cluster inbox items, flag risks, propose edits, optionally create improved variants. Makes the inbox manageable.
 category: reviewer
 roles_allowed: [Viewer, Creator, Editor, Admin]
+required_scopes: [posts:read, workspace:read]
 agent_types: [reviewer, custom]
 safe_defaults:
   never_approve: true
