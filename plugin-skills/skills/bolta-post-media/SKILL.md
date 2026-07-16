@@ -26,8 +26,6 @@ either a brand-new post or one that already exists.
 | `update-post` | Add or swap `media` on an existing post. |
 | `get-post` | Read the current post to see existing media before swapping. |
 
-Full contract: `../../references/bolta-tools.md`.
-
 ## The `media` shape (critical)
 `media` is an **array of file objects**. Each object uses ChatGPT's documented file schema:
 
@@ -43,7 +41,9 @@ fields. This applies identically to images ChatGPT just generated and files the 
 (image or video). Bolta downloads from `download_url` and stores a durable copy.
 
 ## Prerequisites
-- `workspace_id` — resolve via `list-workspaces`, reuse.
+- `workspace_id` — resolve once via `list-workspaces`, reuse. Auth is automatic via the Bolta
+  connector's OAuth grant — never ask for an API key. Default new content to Draft; confirm
+  before publish/delete.
 - The media file object(s) — from a ChatGPT image generation or a user upload.
 - For a new post: `account_ids` from `list-accounts` and the post `content`.
 - For an existing post: the `post_id`.

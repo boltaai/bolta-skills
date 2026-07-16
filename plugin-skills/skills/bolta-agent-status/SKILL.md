@@ -28,12 +28,11 @@ agent-runs widget in the Bolta dashboard.
 | `list-agent-jobs` | An agent's jobs — schedule and status (active/paused). |
 | `list-agent-job-runs` | Recent runs per job: status, cost, tokens, output. |
 
-For the full tool contract see `../../references/bolta-tools.md` and
-`../../references/bolta-ecosystem.md`.
-
 ## Prerequisites
-- `workspace_id` — resolve once via `list-workspaces`, reuse.
+- `workspace_id` — resolve once via `list-workspaces`, reuse. Auth is automatic via the Bolta
+  connector's OAuth grant — never ask for an API key.
 - No write role needed; every tool here is read-only, so any role (viewer+) can run this.
+  (Elsewhere, default new content to Draft; confirm before publish/delete.)
 
 ## Workflow
 

@@ -28,10 +28,10 @@ media (bolta-post-media).
 | `get-post-platform-details` | Read current per-platform fields for a post + platform. |
 | `update-post-platform-details` | Set per-platform `fields` (poll, flair, title, privacy…). |
 
-Full contract: `../../references/bolta-tools.md`.
-
 ## Prerequisites
-- `workspace_id` — resolve via `list-workspaces`, reuse.
+- `workspace_id` — resolve once via `list-workspaces`, reuse. Auth is automatic via the Bolta
+  connector's OAuth grant — never ask for an API key. Default new content to Draft; confirm
+  before publish/delete.
 - The `post_id` for an existing post (or create one first with `create-post`).
 - The exact platform slug: one of `x`, `threads`, `linkedin`, `facebook`, `instagram`,
   `bluesky`, `mastodon`, `discord`, `reddit`, `tiktok`, `pinterest`, `youtube`.

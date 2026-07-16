@@ -47,8 +47,9 @@ For each "We Are" attribute:
 - **Proof points** — the facts/numbers/outcomes the brand leans on.
 
 ## 6. Tone-by-Context Matrix
-Voice is constant; tone flexes by context. Minimum 3 contexts. Score each on three dimensions
-(see `../../brand-voice-enforce/references/voice-constant-tone-flexes.md`).
+Voice is the brand's constant personality — the We Are / We Are Not attributes that never
+change. Tone is what flexes by context along three dimensions: formality, energy, and technical
+depth. Minimum 3 contexts; score each on all three dimensions.
 
 | Context | Formality | Energy | Technical depth | Notes |
 |-|-|-|-|-|

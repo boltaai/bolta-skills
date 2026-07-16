@@ -28,11 +28,11 @@ Any request to see, compare, or explain how content or accounts are performing.
 | `list-account-insights` | Per-account snapshot for every connected account in one call. |
 | `get-account-analytics` | Time series for one specific account. |
 
-For deep guidance see `../../references/bolta-tools.md`, `../../references/bolta-ecosystem.md`.
-
 ## Prerequisites
-- `workspace_id` — resolve once via `list-workspaces`, reuse for every call.
-- These are all read-only tools — no confirmation or write permission needed.
+- `workspace_id` — resolve once via `list-workspaces`, reuse for every call. Auth is automatic
+  via the Bolta connector's OAuth grant — never ask for an API key.
+- These are all read-only tools — no confirmation or write permission needed. (Elsewhere,
+  default new content to Draft; confirm before publish/delete.)
 
 ## Choosing the right tool
 Map the question to the tool before calling anything:

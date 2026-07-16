@@ -25,11 +25,10 @@ publish or schedule unless the user explicitly asks (route those to bolta-schedu
 | `get-voice-context` | Load Bolta's compiled voice (tone, dos/donts, exemplars) before writing. |
 | `create-post` | Save the post as a Draft (`requested_action` omitted). |
 
-For the full tool contract see `../../references/bolta-tools.md` and
-`../../references/bolta-ecosystem.md`.
-
 ## Prerequisites
-- `workspace_id` — resolve once via `list-workspaces`, reuse for the whole flow.
+- `workspace_id` — resolve once via `list-workspaces`, reuse for the whole flow. Auth is
+  automatic via the Bolta connector's OAuth grant — never ask for an API key. Default new
+  content to Draft; confirm before publish/delete.
 - At least one connected social account (from `list-accounts`). If none, tell the user to
   connect an account in Bolta first.
 - A voice source: `get-voice-context`. If the workspace has no voice yet, still draft, but note

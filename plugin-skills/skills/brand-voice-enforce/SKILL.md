@@ -28,10 +28,12 @@ a proposal, a blog section, ad copy, a caption. This is the everyday writing ski
 | `voice-generate` | Bolta's voice-aware writer for social drafts; guideline maps onto its `tone`/`dos`/`donts`/`customRules`/`context` params. |
 | `create-post` | Optional — save the on-brand result as a Bolta Draft when the content is a social post. |
 
-For deep guidance see `../../references/bolta-tools.md`, `references/voice-constant-tone-flexes.md`.
+For the voice-vs-tone model see `references/voice-constant-tone-flexes.md`.
 
 ## Prerequisites
-- `workspace_id` — resolve once via `list-workspaces`, reuse.
+- `workspace_id` — resolve once via `list-workspaces` and reuse it. Auth is automatic via the
+  Bolta connector's OAuth grant — never ask for an API key. Default new content to Draft;
+  confirm before publish/delete.
 - A brand voice source, found in this order (stop at first hit):
   1. A guideline produced this session by `brand-voice-generate`.
   2. `get-voice-context` for the workspace (Bolta's stored voice).
@@ -56,16 +58,23 @@ content type to a row of the tone matrix (formality, energy, technical depth). S
   `tone`, `dos`, `donts`, `customRules`, `context`, `businessName`, `niche`, and `topics`.
   This runs Bolta's own writer so the output matches everything else Bolta produces.
 - **Non-social content (email, proposal, blog, deck):** write it directly, applying the same
-  voice constants and tone flexes. For long-form or high-stakes content, delegate to the
-  `content-generation` subagent (`../../agents/content-generation.md`).
+  voice constants and tone flexes. For long-form or high-stakes content, write from the
+  persisted Voice Profile holding the We Are / We Are Not constants fixed while flexing tone
+  (formality/energy/technical depth) to the format — hand social to `voice-generate` and write
+  non-social directly, holding the same voice constants across 1,200 words as across a
+  200-character post, then route (default to Draft, review for Safe Mode/creator callers,
+  publish only on explicit confirmed ask).
 - Apply voice constants throughout; flex tone to the context; use preferred terminology and
   never cross a "We Are Not" boundary.
 
 ### 4. Validate
 Check the draft against the guideline: every active "We Are" attribute present, no "We Are
 Not" boundary crossed, terminology compliant, tone matches the context row. For high-stakes
-content, delegate to the `quality-assurance` subagent
-(`../../agents/quality-assurance.md`) and revise on its findings.
+content, grade against the brand's OWN persisted Voice Profile (`get-voice-context`), not
+generic "good writing" — a blunt, no-emoji brand should score high for being blunt and
+emoji-free. Report which "We Are" attributes are present/missing, any "We Are Not" boundary
+crossed (quote the line), terminology compliance, and tone match for the context; then revise
+on those findings.
 
 ### 5. Present
 Return the content, then a short note on the brand choices made (which attributes led, the

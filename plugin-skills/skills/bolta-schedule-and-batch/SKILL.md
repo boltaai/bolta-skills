@@ -29,10 +29,10 @@ use explicit ISO 8601 offsets.
 | `bulk-create-posts` | Create many posts at once; returns a `task_id`. |
 | `bulk-create-status` | Poll the bulk job by `task_id` until done. |
 
-Full contract: `../../references/bolta-tools.md`.
-
 ## Prerequisites
-- `workspace_id` — resolve once via `list-workspaces`, reuse.
+- `workspace_id` — resolve once via `list-workspaces`, reuse. Auth is automatic via the Bolta
+  connector's OAuth grant — never ask for an API key. Default new content to Draft; confirm
+  before publish/delete.
 - Account UUIDs from `list-accounts` for every post.
 - A clear timezone. If the user says "9am Tuesday", confirm the intended zone (or the workspace
   default) and convert to an explicit ISO 8601 string with offset before scheduling.

@@ -34,10 +34,10 @@ drafts into review for someone else to approve.
 | `reject-recurring-review` | Reject an agent draft with a reason (feeds voice learning). |
 | `submit-for-review` | Push the user's own drafts into the review queue. |
 
-For deep guidance see `../../references/bolta-tools.md`, `../../references/bolta-ecosystem.md`.
-
 ## Prerequisites
-- `workspace_id` — resolve once via `list-workspaces`, reuse for every call.
+- `workspace_id` — resolve once via `list-workspaces`, reuse for every call. Auth is automatic
+  via the Bolta connector's OAuth grant — never ask for an API key. Default new content to
+  Draft; confirm before publish/delete.
 - Approving/rejecting requires **editor** or above. If a call returns a permission error,
   run `get-my-capabilities` and explain the missing role plainly rather than retrying.
 

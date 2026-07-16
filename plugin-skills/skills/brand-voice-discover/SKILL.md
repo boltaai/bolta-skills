@@ -32,15 +32,17 @@ guideline exists.
 | `list-accounts` | Connected platforms — shows where the brand actually speaks. |
 | `list-workspace-posts` | Published posts (`status=Published`) — these ARE primary voice evidence. |
 
-Heavy parsing of uploads is delegated to subagents — see Prerequisites.
-For the full tool contract see `../../references/bolta-tools.md` and `../../references/bolta-ecosystem.md`.
+Heavy parsing of uploads and posts is done inline using the analysis behaviors described in
+the workflow steps below.
 
 ## Prerequisites
-- `workspace_id` — resolve once via `list-workspaces`, reuse for every call.
+- `workspace_id` — resolve once via `list-workspaces` and reuse it for every call. Auth is
+  automatic via the Bolta connector's OAuth grant — never ask for an API key. Default any new
+  content to Draft; confirm before publish/delete.
 - Optional user uploads: brand docs (PDF/PPTX/DOCX/MD/TXT), sales/interview transcripts, or
-  pasted sample copy. These are classified and parsed by subagents:
-  - `../../agents/document-analysis.md` — brand documents.
-  - `../../agents/conversation-analysis.md` — transcripts AND the brand's own published posts.
+  pasted sample copy. Parse these inline: brand documents and transcripts via the
+  signal-distiller behavior (Step 4), and the brand's own published posts via the
+  voice-archaeologist behavior (Step 3).
 
 ## Workflow
 
@@ -59,17 +61,26 @@ This is authoritative brand-owned signal; weight it highest.
 ### 3. Pull published-content evidence
 Call `list-workspace-posts` with `status=Published` (page through with `limit`/`page`).
 Published posts are behavioral voice evidence — how the brand actually talks in public.
-Hand the post texts to the `conversation-analysis` subagent to extract implicit attributes,
-recurring language patterns, tone-by-context (which platform/topic gets which register), and
-anti-patterns the brand already avoids.
+Excavate the brand's lived voice from Bolta's own evidence (the **voice-archaeologist**
+behavior): pull the published posts, their engagement (`get-account-analytics` /
+`cross-platform-analytics`), and the review signal (`list-reviews`, `list-recurring-reviews`)
+— what the team approved untouched vs. edited vs. rejected. Extract voice attributes each
+backed by a quoted real post, ranked by consistency; mark attributes that correlate with
+higher engagement as "proven" not just "present"; treat systematic edits (always cutting hype,
+always adding a number) as implicit rules and rejected phrasings as "We Are Not" candidates.
+Redact customer names/PII from quotes. Weak evidence = 1 post; strong = a pattern across 8+.
 
 ### 4. Classify and parse uploads
-For each user-provided asset, route by type:
-- Documents (decks, one-pagers, style notes, brand books) → `document-analysis` subagent →
-  voice attributes, messaging themes, terminology, tone guidance, examples.
-- Transcripts (sales calls, founder interviews, customer conversations) → `conversation-analysis`
-  subagent → how the brand speaks unscripted (often the truest voice signal).
-Delegate the heavy reading; keep only the structured extractions.
+For each user-provided asset, distill it inline using the **signal-distiller** behavior:
+turn uploaded materials (decks, one-pagers, brand books, transcripts, site copy) into Bolta's
+structured models — Business DNA {industry, audience, positioning, offer} and Voice Profile
+fields {tone dials OR a `writing_sample` excerpt, `tone_of_voice`[], `dos`[], `donts`[],
+`target_audience`, terminology: must-use/preferred/avoid/never}. Attribute every field to its
+source; leave ungrounded fields empty rather than inventing; prefer a strong on-brand
+`writing_sample` over guessing precise tone dials when material is qualitative. Where uploaded
+materials disagree with the brand's shipped posts, flag it as an open question rather than
+silently picking one. Transcripts (sales calls, founder interviews) often carry the truest,
+unscripted voice signal. Keep only the structured extractions.
 
 ### 5. Reconcile and rank
 Merge every source into one picture. Rank sources by reliability (brand-owned DNA/Voice
@@ -93,16 +104,16 @@ Produce a structured report:
   ask the user for sample content rather than fabricating a voice.
 - No published posts → note the gap; discovery still proceeds from DNA/uploads, but flag that
   behavioral evidence is missing so confidence will be lower downstream.
-- Upload unreadable by a subagent → report which asset failed and continue with the rest.
+- Upload unreadable → report which asset failed and continue with the rest.
 
 ## Example
 User: "Analyze our brand voice — here's our pitch deck and last quarter's posts are in Bolta."
 1. `list-workspaces` → workspace_id.
 2. `list-business-dna`/`get-business-dna` → SaaS, ops leaders, "developer-first" positioning;
    `list-voice-profiles` empty; `get-voice-context` empty; `list-accounts` → LinkedIn + X.
-3. `list-workspace-posts(status=Published)` → 40 posts → `conversation-analysis` → "direct,
+3. `list-workspace-posts(status=Published)` → 40 posts → voice-archaeologist pass → "direct,
    proof-driven, dry humor; avoids hype; LinkedIn more formal than X."
-4. Pitch deck → `document-analysis` → terminology ("platform" not "tool"), 3 messaging pillars.
+4. Pitch deck → signal-distiller pass → terminology ("platform" not "tool"), 3 messaging pillars.
 5. Reconcile: deck says "visionary", posts read "pragmatic" → conflict flagged.
 6. Report: 5 ranked sources, 6 candidate attributes with evidence, 1 conflict, 2 gaps,
    3 open questions → hand to `brand-voice-generate`.

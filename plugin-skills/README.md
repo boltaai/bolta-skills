@@ -49,10 +49,14 @@ drafts, and every autonomous agent, so quality styling is consistent everywhere.
 ```
 plugin-skills/
   README.md
-  references/            # shared: bolta-tools.md (tool contract), bolta-ecosystem.md (auth/roles/voice model)
-  agents/                # subagents skills delegate to: document-analysis, conversation-analysis, quality-assurance, content-generation
-  skills/<skill>/SKILL.md
+  skills/<skill>/SKILL.md   # the upload target — each SKILL.md is fully self-contained
+  references/               # optional dev/Claude-Code extra — NOT uploaded, NOT required by the skills
+  agents/                   # optional dev/Claude-Code extra — NOT uploaded, NOT required by the skills
 ```
+
+Only the `skills/` folder is uploaded to the OpenAI plugin builder. The pack-level `references/`
+and `agents/` directories are convenience material for local development / Claude Code; the
+skills do not depend on them — every SKILL.md carries its own tool contract and behavior inline.
 
 ## Ground rules (all skills)
 - Resolve `workspace_id` once via `list-workspaces`; reuse it.

@@ -32,11 +32,10 @@ where hired agents earn their keep, and where voice learning happens.
 | `approve-recurring-review` | Approve a draft; optionally schedule it at the suggested time. |
 | `reject-recurring-review` | Reject a draft with a reason (this teaches the voice). |
 
-For the full tool contract see `../../references/bolta-tools.md` and
-`../../references/bolta-ecosystem.md`.
-
 ## Prerequisites
-- `workspace_id` — resolve once via `list-workspaces`, reuse.
+- `workspace_id` — resolve once via `list-workspaces`, reuse. Auth is automatic via the Bolta
+  connector's OAuth grant — never ask for an API key. Default new content to Draft; confirm
+  before publish/delete.
 - A hired agent with a job. If none exists, point the user to **bolta-hire-agent** first.
 - Approving/rejecting drafts needs editor+ (see `get-my-capabilities`); if the caller can only
   view, they can trigger and watch a run but not act on its drafts — say so.

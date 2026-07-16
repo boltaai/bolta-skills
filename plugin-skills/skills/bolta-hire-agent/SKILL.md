@@ -32,11 +32,10 @@ draft. This is the onboarding step; running and reviewing come next.
 | `hire-agent-preset` | Create the agent + its job from the chosen preset. |
 | `list-agent-jobs` | Verify the created job (paused, ready for preview). |
 
-For the full tool contract see `../../references/bolta-tools.md` and
-`../../references/bolta-ecosystem.md`.
-
 ## Prerequisites
-- `workspace_id` — resolve once via `list-workspaces`, reuse for every call.
+- `workspace_id` — resolve once via `list-workspaces`, reuse for every call. Auth is automatic
+  via the Bolta connector's OAuth grant — never ask for an API key. Default new content to
+  Draft; confirm before publish/delete.
 - **Hiring role.** `get-my-capabilities` must show admin/owner (agent hiring is not available
   to viewer/creator/editor). If the role is short, stop and explain the missing role plainly.
 - Optional but recommended: at least one voice profile and one connected account, so the

@@ -32,12 +32,13 @@ report exists in the session, run discovery first (or gather at least DNA + publ
 | `voice-generate` | Produce ONE sample draft to validate the mapping works end-to-end. |
 
 Synthesis structure comes from `references/guideline-template.md`; scoring from
-`references/confidence-scoring.md`. QA is delegated to `../../agents/quality-assurance.md`.
-See also `../../references/bolta-tools.md`.
+`references/confidence-scoring.md`. QA is done inline (Step 5).
 
 ## Prerequisites
 - A discovery report (from `brand-voice-discover`) or equivalent gathered signal.
-- `workspace_id` (reuse from discovery).
+- `workspace_id` — reuse from discovery (resolve once via `list-workspaces`). Auth is automatic
+  via the Bolta connector's OAuth grant — never ask for an API key. Default new content to
+  Draft; confirm before persisting/overwriting a profile.
 - `references/guideline-template.md` — output structure.
 - `references/confidence-scoring.md` — how to score each section.
 
@@ -66,10 +67,11 @@ For every gap or conflict, write an open question AND a recommended default the 
 accept as-is. Never leave a decision hanging without a recommendation.
 
 ### 5. QA
-Delegate the draft guideline to the `quality-assurance` subagent
-(`../../agents/quality-assurance.md`): all sections populated, 3+ attributes with evidence, 4+
-We-Are rows, tone matrix 3+ contexts, confidence assigned everywhere, sources attributed, no
-PII, every open question carries a recommendation. Revise on its findings.
+Guard the guideline before shipping it: verify all sections populated, 4+ We Are / We Are Not
+rows, tone matrix covering 3+ contexts, 3+ attributes each with quoted evidence, confidence
+assigned per section, every open question carrying a recommended default, sources attributed,
+no PII, and the `voice-generate` parameter mapping present and faithful. Return pass or a
+specific list of gaps and revise on them — never ship a partial guideline.
 
 ### 6. Express as `voice-generate` parameters — the operational half
 Map the guideline onto Bolta's writer params so it drives generation immediately (see the
@@ -117,7 +119,7 @@ every agent in this workspace now inherits the voice.
 - Permission error on `create-voice-profile` / `update-voice-profile` (needs voice:write) →
   report the missing scope; still deliver the guideline document + `voice-generate` mapping so
   the voice is usable without persistence.
-- QA subagent flags missing sections → fix before delivering; never ship a partial guideline.
+- QA (Step 5) flags missing sections → fix before delivering; never ship a partial guideline.
 
 ## Example
 User: "Turn our discovery report into brand guidelines."
@@ -125,7 +127,7 @@ User: "Turn our discovery report into brand guidelines."
 2. Synthesize: 5 We-Are rows, tone matrix for LinkedIn/X/email, terminology tables.
 3. Score: aggregate High (published-post evidence strong); email row Medium (thin evidence).
 4. Open Qs: "Is dry humor OK in cold email? Recommend: keep it minimal, default off."
-5. QA subagent → passes after adding evidence to one attribute.
+5. QA pass → passes after adding evidence to one attribute.
 6. Mapping: `tone={"professional":80,"direct":75,"playful":20}`, `dos=["lead with a number",
    "say platform not tool"]`, `donts=["no 'thrilled to announce'","no hype adjectives"]`.
 7. `voice-generate(maxPosts=1, topic="feature launch", ...)` → on-brand.

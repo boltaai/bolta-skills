@@ -24,10 +24,13 @@ paragraph, ad copy, a caption — or to spot-check content an agent produced.
 | `get-voice-context` | Load Bolta's compiled voice (tone, dos/donts, exemplars) when no session guideline exists. |
 | `list-voice-profiles` | Confirm which Voice Profile applies if the workspace has several. |
 
-Scoring is delegated to `../../agents/quality-assurance.md`. See `../../references/bolta-tools.md`.
+Scoring is done inline using the grading behavior in Step 2.
 
 ## Prerequisites
 - The content to score (pasted or referenced).
+- `workspace_id` — resolve once via `list-workspaces` and reuse it. Auth is automatic via the
+  Bolta connector's OAuth grant — never ask for an API key. Default new content to Draft;
+  confirm before publish/delete.
 - A voice source, in this order (stop at first hit):
   1. A guideline produced this session by `brand-voice-generate`.
   2. `get-voice-context` for the workspace (use `list-voice-profiles` to pick the right profile).
@@ -46,8 +49,12 @@ Evaluate the content on:
 - **We Are Not boundaries** — any crossed? (each crossing is a hard deduction)
 - **Terminology** — must-use present, avoid/never words absent.
 - **Tone-by-context** — does the register match the correct matrix row for this content type?
-Delegate the graded pass to the `quality-assurance` subagent for consistency, then compose the
-0-100 score (weight boundary crossings and never-words heaviest).
+Grade against the brand's OWN persisted Voice Profile (`get-voice-context`), not generic "good
+writing" — a blunt, no-emoji brand should score high for being blunt and emoji-free. Note which
+"We Are" attributes are present/missing, any "We Are Not" boundary crossed (quote the line),
+terminology compliance, tone match for the context, and — where engagement data exists — whether
+the format historically works for this brand. Then compose the 0-100 score (weight boundary
+crossings and never-words heaviest).
 
 ### 3. Build the deviation report
 List, specifically:
