@@ -2,12 +2,14 @@
 name: brand-voice-discover
 description: >
   Discover and inventory a brand's voice signal before any guideline is written. Use this
-  skill when the user asks to "discover our brand voice", "analyze my brand", "what's our
-  voice", "figure out how we sound", "extract brand voice from my content", "audit our
-  brand", or uploads brand docs, style notes, sales-call transcripts, or past posts and
-  wants them turned into voice signal. This is the research step — it gathers and ranks
-  evidence but does NOT synthesize the finished guideline (use brand-voice-generate for
-  that) or write on-brand content (use brand-voice-enforce).
+  skill when the user asks to "discover our brand voice", "analyze my brand", "learn my brand
+  voice from my website", "figure out how we sound", "extract brand voice from our site",
+  "audit our brand", gives a brand URL, or uploads brand docs, style notes, sales-call
+  transcripts, or past posts and wants them turned into voice signal. Pulls from four sources:
+  the brand's website, what's already in Bolta, the brand's own published posts, and anything
+  the user provides. This is the research step — it gathers and ranks evidence but does NOT
+  synthesize the finished guideline (use brand-voice-generate) or write content (use
+  brand-voice-enforce).
 ---
 
 # Brand Voice Discovery
@@ -31,9 +33,13 @@ guideline exists.
 | `get-voice-context` | Bolta's compiled voice context (tone, dos/donts, exemplars) if one exists. |
 | `list-accounts` | Connected platforms — shows where the brand actually speaks. |
 | `list-workspace-posts` | Published posts (`status=Published`) — these ARE primary voice evidence. |
+| `extract-business-dna` | Scrape the brand's **website** into a Business DNA record (needs a `url`; reaches the internet + uses AI credits). The fastest cold-start source. |
 
-Heavy parsing of uploads and posts is done inline using the analysis behaviors described in
-the workflow steps below.
+Two more sources need no tool call: the **brand's website** (you can read public pages
+directly since ChatGPT has internet access) and **what ChatGPT already knows** about a
+recognizable brand. Both are supporting evidence — always confirm against the brand-owned
+Bolta signal, never let outside knowledge override what the brand actually publishes.
+Heavy parsing of uploads and posts is done inline using the analysis behaviors below.
 
 ## Prerequisites
 - `workspace_id` — resolve once via `list-workspaces` and reuse it for every call. Auth is
@@ -41,8 +47,9 @@ the workflow steps below.
   content to Draft; confirm before publish/delete.
 - Optional user uploads: brand docs (PDF/PPTX/DOCX/MD/TXT), sales/interview transcripts, or
   pasted sample copy. Parse these inline: brand documents and transcripts via the
-  signal-distiller behavior (Step 4), and the brand's own published posts via the
-  voice-archaeologist behavior (Step 3).
+  signal-distiller behavior (Step 5), and the brand's own published posts via the
+  voice-archaeologist behavior (Step 4). A brand website URL is a strong optional input too
+  (Step 3).
 
 ## Workflow
 
@@ -58,7 +65,19 @@ In parallel where possible:
 - `list-accounts` — which platforms are connected (context for where the voice lives).
 This is authoritative brand-owned signal; weight it highest.
 
-### 3. Pull published-content evidence
+### 3. Pull website + external signal
+If the user gives (or you can infer) the brand's website, use it — it's the fastest cold-start
+source and often the clearest statement of positioning and voice:
+- Read the public site directly (homepage, about, product pages) for headline voice, value
+  props, and terminology; and/or call `extract-business-dna` with the `url` to structure it
+  into a Business DNA record you can reference later.
+- If the brand is recognizable, you may draw on what ChatGPT already knows about it — but treat
+  this as a hypothesis to confirm, never as fact. State that it's external knowledge.
+Rank this **below** brand-owned Bolta signal and published posts: the website says how the
+brand wants to sound; the posts show how it actually sounds. When they disagree, the posts win
+and the gap becomes an open question.
+
+### 4. Pull published-content evidence
 Call `list-workspace-posts` with `status=Published` (page through with `limit`/`page`).
 Published posts are behavioral voice evidence — how the brand actually talks in public.
 Excavate the brand's lived voice from Bolta's own evidence (the **voice-archaeologist**
@@ -70,7 +89,7 @@ higher engagement as "proven" not just "present"; treat systematic edits (always
 always adding a number) as implicit rules and rejected phrasings as "We Are Not" candidates.
 Redact customer names/PII from quotes. Weak evidence = 1 post; strong = a pattern across 8+.
 
-### 4. Classify and parse uploads
+### 5. Classify and parse uploads
 For each user-provided asset, distill it inline using the **signal-distiller** behavior:
 turn uploaded materials (decks, one-pagers, brand books, transcripts, site copy) into Bolta's
 structured models — Business DNA {industry, audience, positioning, offer} and Voice Profile
@@ -82,12 +101,12 @@ materials disagree with the brand's shipped posts, flag it as an open question r
 silently picking one. Transcripts (sales calls, founder interviews) often carry the truest,
 unscripted voice signal. Keep only the structured extractions.
 
-### 5. Reconcile and rank
+### 6. Reconcile and rank
 Merge every source into one picture. Rank sources by reliability (brand-owned DNA/Voice
 Profiles > published posts > brand documents > transcripts > pasted samples), noting recency
 and volume. Flag conflicts explicitly (e.g. DNA says "formal", published posts read casual).
 
-### 6. Output the discovery report
+### 7. Output the discovery report
 Produce a structured report:
 - **Ranked sources** — each with type, reliability weight, recency, and volume.
 - **Extracted attributes** — candidate "We Are" traits, each with the evidence behind it.
