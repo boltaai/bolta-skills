@@ -3,8 +3,10 @@ name: bolta-post-media
 description: >
   Attach images or video to a Bolta post. Use this skill when the user asks to "add this image
   to the post", "attach the video", "post with the picture I uploaded", "use the image you
-  generated", "put this photo on the draft", or "swap the media on this post". Handles both
-  ChatGPT-generated images and user-attached files (image or video) on new and existing posts.
+  generated", "put this photo on the draft", "swap the media on this post", "make an image for
+  this post", or "create a branded visual". Handles both ChatGPT-generated images and
+  user-attached files (image or video) on new and existing posts, and covers generating
+  on-brand images grounded in the workspace's Business DNA.
 ---
 
 # Bolta — Attach Media
@@ -25,6 +27,18 @@ either a brand-new post or one that already exists.
 | `create-post` | New post with `media` attached. |
 | `update-post` | Add or swap `media` on an existing post. |
 | `get-post` | Read the current post to see existing media before swapping. |
+| `list-business-dna` / `get-business-dna` | Brand identity (colors, fonts, visual aesthetics, logo) — ground image generation in it. |
+
+## Generating an image for a post — ground it in Business DNA
+When the user wants a NEW image for a post (rather than attaching an existing one), generate it
+yourself — but make it on-brand first:
+1. `list-business-dna` → `get-business-dna` for the default record.
+2. Fold the brand's **colors, fonts, visual aesthetics, logo guidance, and tagline** into the
+   image prompt (e.g. "flat illustration in #7B23CB and warm neutrals, minimal, no text overlay"
+   — whatever the DNA actually says). If `custom_image_instructions` exists, follow it verbatim.
+3. Generate the image, then attach it via `media` exactly as below — you do NOT need the user to
+   ask twice: generating an image for a post implies attaching it to that post.
+If no Business DNA exists, say so and generate from the post content alone.
 
 ## The `media` shape (critical)
 `media` is an **array of file objects**. Each object uses ChatGPT's documented file schema:
