@@ -7,7 +7,7 @@ Reusable skills for the **Bolta** plugin. Two layers:
    on any content — social posts, emails, proposals, blog posts, decks. Modeled on the
    discover → generate → enforce → validate loop, wired into Bolta's Voice Profile / Business
    DNA model.
-2. **Tool orchestration.** Workflow skills that drive the live curated Bolta MCP surface (43 tools) and
+2. **Tool orchestration.** Workflow skills that drive the live curated Bolta MCP surface (50 tools) and
    its autonomous agents to their fullest — drafting, scheduling, batching, media, per-platform
    tailoring, the full hire → run → review agent loop, the review queue, and analytics.
 
@@ -31,6 +31,7 @@ drafts, and every autonomous agent, so quality styling is consistent everywhere.
 | `bolta-schedule-and-batch` | Schedule posts and create many at once via the bulk pipeline. |
 | `bolta-post-media` | Attach ChatGPT-generated images or user files (image/video) to posts. |
 | `bolta-platform-tailoring` | Set per-platform options — Threads polls, Reddit, TikTok/Pinterest/YouTube. |
+| `bolta-accounts-and-buckets` | See what's connected; create/update social buckets (named account groups for one-shot multi-account publishing); resolve "post to my <bucket> bucket". |
 
 ### Agents
 | Skill | Does |
@@ -44,6 +45,11 @@ drafts, and every autonomous agent, so quality styling is consistent everywhere.
 |-|-|
 | `bolta-review-queue` | Work the standard + agent review queues (approve/reject/schedule). |
 | `bolta-analytics-report` | Cross-platform + per-account performance reporting. |
+
+### Cross-connector
+| Skill | Does |
+|-|-|
+| `bolta-winners-to-ads` | Organic→paid loop with Meta's Ads AI Connector (mcp.facebook.com/ads): top organic winners → paid gap read (Meta read-only) → voice-true ad variants + paste-ready campaign structure. Degrades gracefully when either connector is missing. |
 
 ## Structure
 ```

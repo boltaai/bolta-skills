@@ -2,7 +2,7 @@
 
 The single source of truth for every tool the Bolta plugin exposes. Skills MUST use
 these exact tool ids and parameter names. The server is **mcp.bolta.ai/mcp** (StreamableHTTP,
-stateless). 43 tools are exposed. Any tool name not on this list does not exist — do not call it.
+stateless). 50 tools are exposed. Any tool name not on this list does not exist — do not call it.
 
 ## Universal rules
 
@@ -17,7 +17,7 @@ stateless). 43 tools are exposed. Any tool name not on this list does not exist 
   scheduled, then published. `create-post` accepts `requested_action` to jump straight to a
   target state (see below).
 
-## Discovery & workspace (read-only)
+## Discovery, workspace & buckets
 
 | Tool | Method | Params | Notes |
 |-|-|-|-|
@@ -25,12 +25,15 @@ stateless). 43 tools are exposed. Any tool name not on this list does not exist 
 | `get-workspace` | GET · RO | `workspace_id`* | Settings, safe-mode, autonomy. |
 | `get-my-capabilities` | GET · RO | `workspace_id`* | Caller's role/scopes — check before writes. |
 | `list-accounts` | GET · RO | `workspace_id`*, `platform` | Connected social accounts + their UUIDs (`account_ids`). |
+| `list-buckets` | GET · RO | `workspace_id`* | Social buckets — named groups of accounts for one-shot multi-account publishing — with member accounts (id, platform, username). Renders the accounts card's Buckets tab. |
+| `create-social-bucket` | POST | `workspace_id`*, `name`*, `account_ids` | Create a bucket (name unique per workspace). `account_ids` = base account UUIDs from `list-accounts` (not virtual `linkedin_org_`/`facebook_page_` ids). |
+| `update-social-bucket` | PATCH | `workspace_id`*, `bucket_id`*, `name`, `account_ids` | Rename and/or replace members. `account_ids` is a **full replacement list** — fetch current members via `list-buckets`, adjust, resend the whole list. |
 
 ## Reading posts (read-only)
 
 | Tool | Method | Params | Notes |
 |-|-|-|-|
-| `list-workspace-posts` | GET · RO | `workspace_id`*, `status`, `account_ids`, `limit`, `page` | All posts; filter by status (Draft/Scheduled/Published/…). Also the best source of **published-content voice samples**. |
+| `list-workspace-posts` | GET · RO | `workspace_id`*, `status`, `platform`, `start_date`, `end_date`, `include_metrics`, `metrics_platforms`, `limit`, `page` | All posts; filter by status (Draft/Scheduled/Published/…). `include_metrics=true` attaches per-platform engagement (views, likes, comments, reposts) + `published_at` — THE tool for "how did my post(s) do" (combine `status=published` + a date window). Metrics sync **nightly**: for posts <24h old, zeros mean "not synced yet", not poor performance. Also the best source of **published-content voice samples**. |
 | `list-scheduled-posts` | GET · RO | `workspace_id`*, `limit`, `page` | Upcoming scheduled queue. |
 | `get-post` | GET · RO | `post_id`* | Single post detail. |
 | `get-post-platform-details` | GET · RO | `post_id`*, `platform`* | Per-platform metadata (Threads poll, Reddit flair, TikTok/Pinterest/YouTube fields, …). |
@@ -73,9 +76,11 @@ per-platform options use `update-post-platform-details`.
 | `approve-post` | POST | `workspace_id`*, `post_id`*, `schedule_mode`, `fixed_time`, `comments` | Approve a post in review. |
 | `list-reviews` | GET · RO | `workspace_id`*, `reviewer_id`, `workflow_type` | Standard review queue. |
 | `list-recurring-reviews` | GET · RO | `workspace_id`*, `status`, `template_id` | **Pending drafts produced by agents** (recurring/agent runs). This is the agent → human queue. |
-| `list-inbox-items` | GET · RO | `workspace_id`*, `source` (team\|recurring\|hunter), `status` | **Unified inbox** of everything pending review across team, recurring/agent, and hunter reply drafts. Prefer this for "what's waiting for me". |
+| `list-inbox-items` | GET · RO | `workspace_id`*, `source` (team\|recurring\|hunter\|report), `status`, `agent_id`, `limit`, `offset` | **Unified inbox** of everything pending review — team posts, recurring/agent drafts, hunter reply drafts (with the mention/lead context they respond to), and agent reports (with download links). Pass `agent_id` to answer "what did <agent> produce that needs me?". Prefer this for "what's waiting for me". |
 | `approve-recurring-review` | POST | `review_id`*, `approvalComments`, `approveWithSchedule`, `useSuggestedTime` | Approve an agent-produced draft; optionally schedule at the suggested time. |
 | `reject-recurring-review` | POST | `review_id`*, `rejectionReason` | Reject an agent-produced draft (feeds voice learning). |
+| `send-hunter-reply` | POST | `workspace_id`*, `reply_id`*, `content` | Approve + send a hunter reply draft (from `list-inbox-items`, `source=hunter`). Optional `content` overrides the draft text in the same call. Double-send is prevented server-side. |
+| `update-hunter-reply` | PATCH | `workspace_id`*, `reply_id`*, `content`* | Edit a hunter reply draft **without sending** (already-sent replies 409). Send later via `send-hunter-reply`. |
 
 ## Analytics (read-only)
 
@@ -97,6 +102,7 @@ per-platform options use `update-post-platform-details`.
 | `list-business-dna` | GET · RO | `workspace_id`* | Business DNA records (industry, audience, positioning). |
 | `get-business-dna` | GET · RO | `workspace_id`*, `dna_id`* | One Business DNA record. |
 | `extract-business-dna` | POST · **OW** | `workspace_id`*, `url`*, `name`, `set_as_default` | Scrape a brand's public website → a new Business DNA record. Reaches the internet + consumes AI credits. |
+| `update-business-dna` | PATCH | `workspace_id`*, `dna_id`*, `fields`* | **Safe partial merge** — only keys you send change; omitted fields are preserved server-side. `fields` is a flat object: brand basics (`name`, `tagline`, `tagline_on_images`, `business_overview`, `website_url`), visual identity (`colors` hex[], `fonts`, `visual_aesthetics`, `brand_values`, `logo_url`), image settings (`logo_placement`, `custom_image_instructions`), local identity (`city`, `neighborhood`, `service_area`, `years_in_business`, `owner_name`, `staff_names`), story (`origin_story`, `community_involvement`, `testimonials`). Call `get-business-dna` first to see current values. |
 | `voice-generate` | POST | `workspace_id`*, `topics`*, `dateRange`*, `time`*, `maxPosts`*, `voiceProfileId`, `context`, `businessName`, `niche`, `tone`, `dos`, `donts`, `customRules`, `enableMultiPlatform`, `selectedAccountsOrBuckets`, `platform` | Bolta's voice-aware writer. Brand-voice guidelines map directly onto `tone` / `dos` / `donts` / `customRules` / `context`. |
 
 > **Brand-voice bridge (persistent):** a captured brand guideline can be **written back into
@@ -118,7 +124,8 @@ per-platform options use `update-post-platform-details`.
 | `list-agent-jobs` | GET · RO | `workspace_id`*, `agent_id`* | An agent's jobs (schedule, status). |
 | `run-agent-job-now` | POST | `workspace_id`*, `agent_id`*, `job_id`*, `run_instructions`, `account_id` | Trigger a job immediately (optional one-off instructions). |
 | `list-agent-job-runs` | GET · RO | `workspace_id`*, `agent_id`*, `job_id`*, `limit` | Run history: status, tools used, tokens, cost, output. |
-| `list-agent-runs` | GET · RO | `workspace_id`*, `agent_id`, `status`, `limit` | **Workspace-wide** run history across all agents (agent/job attribution per run). Prefer this for "what did my agents do". |
+| `list-agent-runs` | GET · RO | `workspace_id`*, `agent_id`, `status`, `since`, `limit` | **Workspace-wide** run history across all agents (agent/job attribution per run), newest first, default last 7 days (`since` widens the window). Prefer this for "what did my agents do". |
+| `get-agent-run` | GET · RO | `workspace_id`*, `run_id`* | Full detail for one run: status, timing, cost, tokens, tool calls, final output, and error (stage/code) on failure. Drill-down after `list-agent-runs`. |
 
 ### The full agent loop
 `list-agent-presets` → `hire-agent-preset` → (verify) `list-agent-jobs` →

@@ -4,21 +4,27 @@ description: >
   Work the Bolta review and approval queues. Use this skill when the user asks
   "what needs my review", "show the approval queue", "approve pending posts",
   "review my content", "what's waiting for approval", "clear my review queue",
-  "anything to approve", "approve the agent drafts", or wants to triage, approve,
-  reject, or push content into review. Handles BOTH queues: the standard review
-  queue and the agent-produced recurring queue. Not for writing new content (use
-  brand-voice-enforce) or reading analytics (use bolta-analytics-report).
+  "anything to approve", "approve the agent drafts", "any replies to send", "send
+  that reply", or wants to triage, approve, reject, edit-and-send, or push content
+  into review. Handles ALL inbox sources: the standard review queue, the
+  agent-produced recurring queue, hunter reply drafts (edit + send), and agent
+  reports. Not for writing new content (use brand-voice-enforce) or reading
+  analytics (use bolta-analytics-report).
 ---
 
 # Bolta Review Queue
 
 Triage and clear what's waiting for a human decision. **Prefer `list-inbox-items`** —
 the unified inbox that returns everything pending review in one call (each item is
-labeled with its `source`: `team`, `recurring`, or `hunter`). The two per-queue tools
-remain available when you need one queue in isolation: the **standard review queue**
-(`list-reviews`) and the **agent-produced recurring queue** (`list-recurring-reviews`).
-Show what's waiting and act — approving or rejecting each item, with rejection reasons
-that feed Bolta's voice learning.
+labeled with its `source`: `team`, `recurring`, `hunter`, or `report`). Hunter rows
+carry the mention/lead context they respond to and are fully actionable here —
+edit the draft (`update-hunter-reply`) and send it (`send-hunter-reply`). Report rows
+carry the agent report and its download link. Pass `agent_id` to scope the inbox to
+one agent's output. The two per-queue tools remain available when you need one queue
+in isolation: the **standard review queue** (`list-reviews`) and the **agent-produced
+recurring queue** (`list-recurring-reviews`). Show what's waiting and act — approving,
+rejecting, or sending each item, with rejection reasons that feed Bolta's voice
+learning.
 
 ## When to use
 Any time the user wants to see, triage, or clear pending approvals — or to push their own
@@ -28,13 +34,15 @@ drafts into review for someone else to approve.
 | Tool | Why |
 |-|-|
 | `list-workspaces` | Resolve `workspace_id` if unknown. |
-| `list-inbox-items` | **Preferred**: unified inbox of everything pending (team + recurring + hunter), filterable by `source`/`status`. |
+| `list-inbox-items` | **Preferred**: unified inbox of everything pending (team + recurring + hunter + report), filterable by `source`/`status`, scopable to one agent via `agent_id`. |
 | `list-reviews` | Standard review queue only (posts routed to review). |
 | `list-recurring-reviews` | Agent-produced pending drafts (the agent → human queue). |
 | `get-post` | Optional — pull full detail for a queued item before deciding. |
 | `approve-post` | Approve a standard-queue post (optionally schedule at approval). |
 | `approve-recurring-review` | Approve an agent draft (optionally schedule at suggested time). |
 | `reject-recurring-review` | Reject an agent draft with a reason (feeds voice learning). |
+| `update-hunter-reply` | Edit a hunter reply draft without sending it (already-sent replies 409). |
+| `send-hunter-reply` | Approve + send a hunter reply; optional `content` overrides the draft in the same call. Double-send prevented server-side. |
 | `submit-for-review` | Push the user's own drafts into the review queue. |
 
 ## Prerequisites
@@ -51,13 +59,17 @@ Call `list-workspaces` and use the active workspace's `id`. Never guess a UUID.
 
 ### 2. Pull the inbox
 Prefer one call: `list-inbox-items(workspace_id)` — the unified inbox. Each item carries a
-`source` (`team`, `recurring`, `hunter`); filter with `source`/`status` when asked for one
-slice. Fall back to the per-queue tools only when you need queue-specific filters:
+`source` (`team`, `recurring`, `hunter`, `report`); filter with `source`/`status` when asked
+for one slice, and pass `agent_id` when the user asks about ONE agent's output ("what did
+Hunter produce that needs me?"). Fall back to the per-queue tools only when you need
+queue-specific filters:
 - `list-reviews(workspace_id)` — standard queue (`reviewer_id`, `workflow_type` filters).
 - `list-recurring-reviews(workspace_id)` — agent drafts (`status`, `template_id` filters).
 Present a single combined summary: how many from each source, and a one-line preview per item
-(content snippet, target account/platform, and — for agent items — the suggested schedule
-time). Make clear which source each item belongs to, since they approve through different tools.
+(content snippet, target account/platform, for agent items the suggested schedule time, and
+for hunter items the mention/lead being replied to). For `report` items, surface the report
+summary and its download link — reports are read-and-download, not approve/reject. Make clear
+which source each item belongs to, since they're actioned through different tools.
 
 ### 3. Inspect (optional)
 For any item the user wants to see in full before deciding, call `get-post(post_id)` for the
@@ -73,6 +85,15 @@ complete content, media, and target accounts. Do this when a snippet isn't enoug
   Always include a concrete reason — rejections and edits are what teach Bolta the brand's
   voice, so a specific reason ("too hypey", "wrong CTA") improves future drafts more than a
   bare reject.
+- **Hunter reply draft** (source=`hunter`; `reply_id` from the inbox row) → show the draft
+  alongside the mention/lead it responds to, then:
+  - Send as-is → `send-hunter-reply(workspace_id, reply_id)`.
+  - Send with a tweak → `send-hunter-reply(workspace_id, reply_id, content=<revised text>)` —
+    one call edits and sends.
+  - Edit but hold → `update-hunter-reply(workspace_id, reply_id, content)` (only unsent drafts;
+    already-sent replies 409). Confirm the final text with the user before sending — replies go
+    out publicly on the platform. Double-send is prevented server-side, so a retry is safe.
+- **Report item** (source=`report`) → nothing to approve; present the summary and download link.
 
 Approving finalizes content toward publishing. Confirm the batch with the user before mass
 approvals, and never publish outside these approve paths without an explicit ask.
@@ -92,6 +113,8 @@ queue. Note that rejection reasons feed the voice-learning loop.
   do not retry.
 - Wrong tool for the queue (e.g. `approve-post` on an agent item) errors — route standard
   items through `approve-post` and agent items through the `*-recurring-review` tools.
+- `update-hunter-reply` returns 409 → the reply was already sent; report that and re-pull the
+  inbox rather than retrying.
 - `get-post` not found → the item may have been actioned elsewhere; re-pull the queues.
 
 ## Example

@@ -26,7 +26,8 @@ agent-runs widget in the Bolta dashboard.
 | `list-agents` | The hired agents + their ids and top-line status. |
 | `get-agent` | One agent's persona/config/status detail. |
 | `list-agent-jobs` | An agent's jobs — schedule and status (active/paused). |
-| `list-agent-runs` | **Preferred**: workspace-wide recent runs across all agents in one call (each run attributed to its agent/job); optional `agent_id` filter. |
+| `list-agent-runs` | **THE workspace-activity tool**: recent runs across ALL agents in one call, newest first (default last 7 days), each attributed to its agent/job with status, timing, cost, and a deliverable summary. Filters: `agent_id`, `status` (running/completed/failed), `since` (ISO timestamp, widens the window), `limit`. |
+| `get-agent-run` | Drill into ONE run: full status, timing, cost, tokens, the tool calls it made, its final output text, and the error (stage/code) when it failed. `run_id` comes from `list-agent-runs` / `list-agent-job-runs`. |
 | `list-agent-job-runs` | Per-job run history when you need a single job's runs. |
 
 ## Prerequisites
@@ -46,11 +47,16 @@ to it; otherwise cover them all. If there are no agents, tell the user and offer
 **bolta-hire-agent**.
 
 ### 3. Gather run history and per-agent detail
-Prefer one call for the activity picture: `list-agent-runs(workspace_id, limit)` — the
-workspace-wide run history, each run attributed to its agent and job. Pass `agent_id` to scope
-to one agent. Then, per agent in scope (in parallel where possible):
+Start with ONE call for the whole activity picture: `list-agent-runs(workspace_id, limit)` —
+the workspace-wide run history, newest first, each run attributed to its agent and job with
+status, cost, and a deliverable summary. It defaults to the last 7 days; pass `since` (ISO
+timestamp) for a wider window, `agent_id` to scope to one agent, or `status=failed` to hunt
+failures. Then, per agent in scope (in parallel where possible):
 - `get-agent(workspace_id, agent_id)` — persona/config and current status.
 - `list-agent-jobs(workspace_id, agent_id)` — each job's schedule and status (active/paused).
+- `get-agent-run(workspace_id, run_id)` — when the user asks about one specific run ("why did
+  that run fail?", "what did it actually do?"): full timing, cost, tokens, the tool calls it
+  made, its output text, and the failure stage/code.
 - `list-agent-job-runs(workspace_id, agent_id, job_id, limit)` — only when you need one
   specific job's runs in isolation. Use a small `limit` (e.g. 5) so the report stays readable.
 
@@ -72,6 +78,8 @@ it. If runs produced drafts, note they may be waiting in the recurring-review qu
 - No agents → report it and offer **bolta-hire-agent**; don't fabricate activity.
 - `get-agent` or a runs call fails for one agent → note it and continue with the
   rest rather than aborting the whole report.
+- A run shows failed → drill in with `get-agent-run(workspace_id, run_id)` and report the
+  failure stage/code plainly instead of guessing.
 - A job with zero runs → report it as "no runs yet (likely paused for preview)", not a failure.
 - Long lists → cap `list-agent-job-runs` with `limit` and summarize rather than dumping every
   run.

@@ -2,10 +2,11 @@
 name: bolta-analytics-report
 description: >
   Report on social-media performance from Bolta's analytics. Use this skill when the
-  user asks "how are my posts doing", "show my analytics", "performance report", "how
-  did LinkedIn do this month", "which account is growing", "engagement over the last 30
-  days", "what's my best-performing account", or wants any rollup, comparison, or trend
-  of reach/engagement across their connected accounts. Not for reading the review queue
+  user asks "how are my posts doing", "how did that post do", "show my analytics",
+  "performance report", "how did LinkedIn do this month", "which account is growing",
+  "engagement over the last 30 days", "what's my best-performing account/post", or wants
+  any rollup, comparison, or trend of reach/engagement across their posts or connected
+  accounts. Not for reading the review queue
   (use bolta-review-queue) or writing content (use brand-voice-enforce).
 ---
 
@@ -27,6 +28,7 @@ Any request to see, compare, or explain how content or accounts are performing.
 | `cross-platform-analytics` | Workspace-wide rollup across all platforms. |
 | `list-account-insights` | Per-account snapshot for every connected account in one call. |
 | `get-account-analytics` | Time series for one specific account. |
+| `list-workspace-posts` | **Post-level performance**: `status=published` + a date window + `include_metrics=true` attaches per-platform engagement (views, likes, comments, reposts) and `published_at` to each post. `metrics_platforms` narrows the breakdown. |
 
 ## Prerequisites
 - `workspace_id` — resolve once via `list-workspaces`, reuse for every call. Auth is automatic
@@ -41,6 +43,9 @@ Map the question to the tool before calling anything:
   (one snapshot per account, ideal for ranking and comparison).
 - **"How did <one account> do?" / trend for a single account** → `get-account-analytics`,
   which needs an `account_id` from `list-accounts`.
+- **"How did my post(s) do?" / best-performing posts** → `list-workspace-posts` with
+  `status=published`, a `start_date`/`end_date` window, and `include_metrics=true` — each
+  post comes back with per-platform views/likes/comments/reposts.
 
 ## Workflow
 
@@ -58,8 +63,15 @@ number is never ambiguous.
 - **Single-account trend:** first `list-accounts(workspace_id)` (optionally filter by
   `platform`) to get the `account_id`, then
   `get-account-analytics(workspace_id, account_id, days)`.
-For a full report you may combine these — a rollup for the headline plus per-account insights
-for the breakdown.
+- **Post-level performance:** `list-workspace-posts(workspace_id, status="published",
+  start_date, end_date, include_metrics=true)` — rank posts by engagement, name the winners,
+  and quote the actual content that performed.
+For a full report you may combine these — a rollup for the headline, per-account insights for
+the breakdown, and post metrics for "which posts drove it".
+
+**Freshness honesty:** post metrics sync **nightly**. For posts published less than ~24h ago,
+say metrics may not have synced yet — zeros there mean "not synced", not poor performance.
+Never present an unsynced zero as a real result.
 
 ### 4. Synthesize an insights narrative
 Don't just dump numbers. Report:

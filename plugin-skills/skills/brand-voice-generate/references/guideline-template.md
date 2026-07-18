@@ -129,7 +129,9 @@ parameters as a copy-ready block. This is what `brand-voice-enforce` and every a
 ```
 
 > These params also flow through to every autonomous agent that writes for this workspace, so
-> the same voice governs ad-hoc drafts and the agent workforce. **Native VoiceProfile
-> persistence is future work** — it requires `create-voice-profile` / `extract-business-dna`,
-> which are not in the exposed MCP surface today. Until then this mapping IS the enforcement
-> mechanism.
+> the same voice governs ad-hoc drafts and the agent workforce. **Persist it natively too**:
+> `create-voice-profile` / `update-voice-profile` write the guideline back as a Bolta Voice
+> Profile, `extract-business-dna` seeds Business DNA from the brand's site, and
+> `update-business-dna` edits DNA fields in place (safe partial merge) — all live on the
+> exposed MCP surface. The mapping above stays the inline enforcement mechanism for one-off
+> generation.

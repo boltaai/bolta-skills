@@ -34,6 +34,7 @@ guideline exists.
 | `list-accounts` | Connected platforms — shows where the brand actually speaks. |
 | `list-workspace-posts` | Published posts (`status=Published`) — these ARE primary voice evidence. |
 | `extract-business-dna` | Scrape the brand's **website** into a Business DNA record (needs a `url`; reaches the internet + uses AI credits). The fastest cold-start source. |
+| `update-business-dna` | Fix what discovery finds wrong in the stored DNA — safe partial merge: only the keys sent in `fields` change, everything omitted is preserved. Tagline, overview, colors/fonts, local identity, story, image settings. |
 
 Two more sources need no tool call: the **brand's website** (you can read public pages
 directly since ChatGPT has internet access) and **what ChatGPT already knows** about a
@@ -60,6 +61,11 @@ with the user. Never guess a UUID.
 ### 2. Pull existing Bolta signal
 In parallel where possible:
 - `list-business-dna` → `get-business-dna` for each record (industry, audience, positioning).
+  If the user spots something stale or wrong in a record while reviewing it ("that tagline is
+  old", "we moved — the city is wrong", "our colors are navy and sky blue now"), fix it
+  conversationally with `update-business-dna(workspace_id, dna_id, fields={…changed keys
+  only…})` — it's a safe partial merge, omitted fields are preserved, so a one-field
+  correction can't wipe the rest. Confirm the change before writing.
 - `list-voice-profiles` → `get-voice-profile` for each profile (stored tone, dos/donts, exemplars).
 - `get-voice-context` — the compiled context Bolta's writer already uses, if any.
 - `list-accounts` — which platforms are connected (context for where the voice lives).

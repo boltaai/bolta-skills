@@ -26,6 +26,7 @@ report exists in the session, run discovery first (or gather at least DNA + publ
 | `get-voice-context` | Anchor the guideline to Bolta's existing compiled voice, if any. |
 | `list-business-dna` / `get-business-dna` | Confirm industry / audience / positioning for the mapping. |
 | `extract-business-dna` | Optional — seed Business DNA by scraping the brand's website (needs a `url`; reaches the internet + uses credits). |
+| `update-business-dna` | **Edit** an existing DNA record — safe partial merge: pass only the changed keys in `fields`; omitted fields are preserved server-side. Covers tagline, colors/fonts/aesthetics, overview, local identity (city, service area, owner/staff), story, and image settings (logo placement, custom image instructions). |
 | `list-voice-profiles` | Check whether a profile already exists (create new vs. evolve existing). |
 | `create-voice-profile` | **Persist** the guideline as a native Bolta Voice Profile every agent then consumes. |
 | `update-voice-profile` | **Evolve** an existing profile in place (partial update — omitted fields preserved). |
@@ -101,6 +102,12 @@ just this session. Confirm with the user before creating/overwriting, then:
   This is a partial update — omitted fields are preserved, so voice refines safely over time.
 - Optional: `extract-business-dna(workspace_id, url=<brand site>)` first to seed Business DNA,
   then reference it when generating.
+- If the guideline surfaced corrections to the brand identity itself — a sharper tagline,
+  updated positioning/overview, brand colors, local identity details, or image styling — apply
+  them with `update-business-dna(workspace_id, dna_id, fields={…only the changed keys…})`.
+  It's a safe partial merge (omitted fields preserved), so users can just say "change our
+  tagline to X" or "our brand colors are navy and sky blue" and you edit exactly that. Call
+  `get-business-dna` first to show current values, and confirm before writing.
 
 This is what makes brand voice foundational: the persisted profile flows into `voice-generate`,
 ad-hoc drafts, and every hired agent automatically.
