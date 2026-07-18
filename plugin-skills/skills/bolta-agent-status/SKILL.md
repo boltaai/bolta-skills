@@ -26,7 +26,8 @@ agent-runs widget in the Bolta dashboard.
 | `list-agents` | The hired agents + their ids and top-line status. |
 | `get-agent` | One agent's persona/config/status detail. |
 | `list-agent-jobs` | An agent's jobs — schedule and status (active/paused). |
-| `list-agent-job-runs` | Recent runs per job: status, cost, tokens, output. |
+| `list-agent-runs` | **Preferred**: workspace-wide recent runs across all agents in one call (each run attributed to its agent/job); optional `agent_id` filter. |
+| `list-agent-job-runs` | Per-job run history when you need a single job's runs. |
 
 ## Prerequisites
 - `workspace_id` — resolve once via `list-workspaces`, reuse. Auth is automatic via the Bolta
@@ -44,12 +45,14 @@ Call `list-agents(workspace_id)`. If the user named or implied a single agent, s
 to it; otherwise cover them all. If there are no agents, tell the user and offer
 **bolta-hire-agent**.
 
-### 3. Gather detail per agent
-For each agent in scope, in parallel where possible:
+### 3. Gather run history and per-agent detail
+Prefer one call for the activity picture: `list-agent-runs(workspace_id, limit)` — the
+workspace-wide run history, each run attributed to its agent and job. Pass `agent_id` to scope
+to one agent. Then, per agent in scope (in parallel where possible):
 - `get-agent(workspace_id, agent_id)` — persona/config and current status.
 - `list-agent-jobs(workspace_id, agent_id)` — each job's schedule and status (active/paused).
-- `list-agent-job-runs(workspace_id, agent_id, job_id, limit)` — the recent runs for each job.
-  Use a small `limit` (e.g. 5) so the report stays recent and readable.
+- `list-agent-job-runs(workspace_id, agent_id, job_id, limit)` — only when you need one
+  specific job's runs in isolation. Use a small `limit` (e.g. 5) so the report stays readable.
 
 ### 4. Summarize into a report
 Roll the data into a plain-language report:
@@ -67,7 +70,7 @@ it. If runs produced drafts, note they may be waiting in the recurring-review qu
 
 ## Failure handling
 - No agents → report it and offer **bolta-hire-agent**; don't fabricate activity.
-- `get-agent` or `list-agent-job-runs` fails for one agent → note it and continue with the
+- `get-agent` or a runs call fails for one agent → note it and continue with the
   rest rather than aborting the whole report.
 - A job with zero runs → report it as "no runs yet (likely paused for preview)", not a failure.
 - Long lists → cap `list-agent-job-runs` with `limit` and summarize rather than dumping every
@@ -77,8 +80,9 @@ it. If runs produced drafts, note they may be waiting in the recurring-review qu
 User: "How are my agents doing?"
 1. `list-workspaces` → `workspace_id`.
 2. `list-agents(workspace_id)` → Hype Man (active), Deep Diver (paused).
-3. Hype Man: `get-agent`, `list-agent-jobs` → daily job active; `list-agent-job-runs(limit=5)`
-   → 5 completed runs, ~$0.03 each, 12 drafts total. Deep Diver: job paused, 0 runs.
+3. `list-agent-runs(workspace_id, limit=10)` → 5 completed Hype Man runs (~$0.03 each,
+   12 drafts total), 0 Deep Diver runs. `get-agent` + `list-agent-jobs` per agent →
+   Hype Man daily job active; Deep Diver job paused.
 4. Report: "2 agents. Hype Man is active — 5 clean runs this week, 12 drafts, ~$0.15 total.
    Deep Diver is paused and hasn't previewed a run yet."
 5. "Want to preview a Deep Diver run to see its first drafts?"

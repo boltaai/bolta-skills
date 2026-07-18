@@ -2,7 +2,7 @@
 
 The single source of truth for every tool the Bolta plugin exposes. Skills MUST use
 these exact tool ids and parameter names. The server is **mcp.bolta.ai/mcp** (StreamableHTTP,
-stateless). 41 tools are exposed. Any tool name not on this list does not exist — do not call it.
+stateless). 43 tools are exposed. Any tool name not on this list does not exist — do not call it.
 
 ## Universal rules
 
@@ -73,6 +73,7 @@ per-platform options use `update-post-platform-details`.
 | `approve-post` | POST | `workspace_id`*, `post_id`*, `schedule_mode`, `fixed_time`, `comments` | Approve a post in review. |
 | `list-reviews` | GET · RO | `workspace_id`*, `reviewer_id`, `workflow_type` | Standard review queue. |
 | `list-recurring-reviews` | GET · RO | `workspace_id`*, `status`, `template_id` | **Pending drafts produced by agents** (recurring/agent runs). This is the agent → human queue. |
+| `list-inbox-items` | GET · RO | `workspace_id`*, `source` (team\|recurring\|hunter), `status` | **Unified inbox** of everything pending review across team, recurring/agent, and hunter reply drafts. Prefer this for "what's waiting for me". |
 | `approve-recurring-review` | POST | `review_id`*, `approvalComments`, `approveWithSchedule`, `useSuggestedTime` | Approve an agent-produced draft; optionally schedule at the suggested time. |
 | `reject-recurring-review` | POST | `review_id`*, `rejectionReason` | Reject an agent-produced draft (feeds voice learning). |
 
@@ -117,6 +118,7 @@ per-platform options use `update-post-platform-details`.
 | `list-agent-jobs` | GET · RO | `workspace_id`*, `agent_id`* | An agent's jobs (schedule, status). |
 | `run-agent-job-now` | POST | `workspace_id`*, `agent_id`*, `job_id`*, `run_instructions`, `account_id` | Trigger a job immediately (optional one-off instructions). |
 | `list-agent-job-runs` | GET · RO | `workspace_id`*, `agent_id`*, `job_id`*, `limit` | Run history: status, tools used, tokens, cost, output. |
+| `list-agent-runs` | GET · RO | `workspace_id`*, `agent_id`, `status`, `limit` | **Workspace-wide** run history across all agents (agent/job attribution per run). Prefer this for "what did my agents do". |
 
 ### The full agent loop
 `list-agent-presets` → `hire-agent-preset` → (verify) `list-agent-jobs` →

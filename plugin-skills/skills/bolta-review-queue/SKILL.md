@@ -12,11 +12,13 @@ description: >
 
 # Bolta Review Queue
 
-Triage and clear what's waiting for a human decision. Bolta has **two** queues and you
-should work both: the **standard review queue** (`list-reviews`) for posts routed to
-review, and the **agent-produced recurring queue** (`list-recurring-reviews`) for drafts
-that autonomous agents generated on a schedule. Pull both, show what's waiting, and act —
-approving or rejecting each item, with rejection reasons that feed Bolta's voice learning.
+Triage and clear what's waiting for a human decision. **Prefer `list-inbox-items`** —
+the unified inbox that returns everything pending review in one call (each item is
+labeled with its `source`: `team`, `recurring`, or `hunter`). The two per-queue tools
+remain available when you need one queue in isolation: the **standard review queue**
+(`list-reviews`) and the **agent-produced recurring queue** (`list-recurring-reviews`).
+Show what's waiting and act — approving or rejecting each item, with rejection reasons
+that feed Bolta's voice learning.
 
 ## When to use
 Any time the user wants to see, triage, or clear pending approvals — or to push their own
@@ -26,7 +28,8 @@ drafts into review for someone else to approve.
 | Tool | Why |
 |-|-|
 | `list-workspaces` | Resolve `workspace_id` if unknown. |
-| `list-reviews` | Standard review queue (posts routed to review). |
+| `list-inbox-items` | **Preferred**: unified inbox of everything pending (team + recurring + hunter), filterable by `source`/`status`. |
+| `list-reviews` | Standard review queue only (posts routed to review). |
 | `list-recurring-reviews` | Agent-produced pending drafts (the agent → human queue). |
 | `get-post` | Optional — pull full detail for a queued item before deciding. |
 | `approve-post` | Approve a standard-queue post (optionally schedule at approval). |
@@ -46,14 +49,15 @@ drafts into review for someone else to approve.
 ### 1. Resolve the workspace
 Call `list-workspaces` and use the active workspace's `id`. Never guess a UUID.
 
-### 2. Pull both queues
-- `list-reviews(workspace_id)` — standard queue. Optionally filter by `reviewer_id` or
-  `workflow_type`.
-- `list-recurring-reviews(workspace_id)` — agent-produced drafts. Optionally filter by
-  `status` or `template_id`.
-Present a single combined summary: how many in each queue, and a one-line preview per item
+### 2. Pull the inbox
+Prefer one call: `list-inbox-items(workspace_id)` — the unified inbox. Each item carries a
+`source` (`team`, `recurring`, `hunter`); filter with `source`/`status` when asked for one
+slice. Fall back to the per-queue tools only when you need queue-specific filters:
+- `list-reviews(workspace_id)` — standard queue (`reviewer_id`, `workflow_type` filters).
+- `list-recurring-reviews(workspace_id)` — agent drafts (`status`, `template_id` filters).
+Present a single combined summary: how many from each source, and a one-line preview per item
 (content snippet, target account/platform, and — for agent items — the suggested schedule
-time). Make clear which queue each item belongs to, since they approve through different tools.
+time). Make clear which source each item belongs to, since they approve through different tools.
 
 ### 3. Inspect (optional)
 For any item the user wants to see in full before deciding, call `get-post(post_id)` for the
@@ -93,8 +97,8 @@ queue. Note that rejection reasons feed the voice-learning loop.
 ## Example
 User: "What needs my review?"
 1. `list-workspaces` → workspace_id.
-2. `list-reviews(workspace_id)` → 2 standard posts. `list-recurring-reviews(workspace_id)` →
-   3 agent drafts (Hype Man, each with a suggested time).
+2. `list-inbox-items(workspace_id)` → 2 team posts + 3 agent drafts (Hype Man, each with a
+   suggested time), each labeled by `source`.
 3. Present: "5 waiting — 2 in your review queue, 3 agent drafts. Approve all, or review each?"
 4. User: "Approve the agent ones at their suggested times, reject the standard LinkedIn one —
    too salesy." →

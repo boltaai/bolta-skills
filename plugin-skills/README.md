@@ -7,7 +7,7 @@ Reusable skills for the **Bolta** plugin. Two layers:
    on any content — social posts, emails, proposals, blog posts, decks. Modeled on the
    discover → generate → enforce → validate loop, wired into Bolta's Voice Profile / Business
    DNA model.
-2. **Tool orchestration.** Workflow skills that drive the live 41-tool Bolta MCP surface and
+2. **Tool orchestration.** Workflow skills that drive the live curated Bolta MCP surface (43 tools) and
    its autonomous agents to their fullest — drafting, scheduling, batching, media, per-platform
    tailoring, the full hire → run → review agent loop, the review queue, and analytics.
 
