@@ -72,7 +72,7 @@ Present each draft to the user, then act on their decision:
 - **Approve:** `approve-recurring-review(review_id, approvalComments?, approveWithSchedule?,
   useSuggestedTime?)`. Set `approveWithSchedule`/`useSuggestedTime` to schedule it at Bolta's
   suggested time instead of leaving it as an approved draft.
-- **Reject:** `reject-recurring-review(review_id, rejectionReason)`. Always pass a concrete
+- **Reject:** `reject-recurring-review(review_id, rejectionReason, rejectionCategories)`. Pass `rejectionCategories` codes whenever the objection fits one (too_casual, too_formal, wrong_tone, off_brand, too_long, too_short, wrong_format, factual_error, spelling_grammar, missing_cta, wrong_cta, wrong_emoji, wrong_hashtag, not_engaging, platform_mismatch, too_salesy, off_topic, repetitive, other; invalid codes are silently dropped) — they feed voice learning better than prose. Always pass a concrete
   `rejectionReason` — explain to the user that the reason is what teaches Bolta's voice, so
   specific feedback ("too salesy", "wrong CTA") makes the next run better.
 

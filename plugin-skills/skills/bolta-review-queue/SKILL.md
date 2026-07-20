@@ -81,7 +81,7 @@ complete content, media, and target accounts. Do this when a snippet isn't enoug
 - **Agent (recurring) item, approve** → `approve-recurring-review(review_id)`. Pass
   `approveWithSchedule` + `useSuggestedTime` to schedule at the agent's suggested time, and
   `approvalComments` for notes.
-- **Agent (recurring) item, reject** → `reject-recurring-review(review_id, rejectionReason)`.
+- **Agent (recurring) item, reject** → `reject-recurring-review(review_id, rejectionReason, rejectionCategories)`. ALWAYS also pass `rejectionCategories` when the objection fits a code — structured categories train the voice far better than free text. Valid codes: too_casual, too_formal, wrong_tone, off_brand, too_long, too_short, wrong_format, factual_error, spelling_grammar, missing_cta, wrong_cta, wrong_emoji, wrong_hashtag, not_engaging, platform_mismatch, too_salesy, off_topic, repetitive, other (anything else is silently dropped).
   Always include a concrete reason — rejections and edits are what teach Bolta the brand's
   voice, so a specific reason ("too hypey", "wrong CTA") improves future drafts more than a
   bare reject.

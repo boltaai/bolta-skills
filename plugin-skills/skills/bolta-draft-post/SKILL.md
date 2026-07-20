@@ -54,7 +54,7 @@ Draft content that fits the chosen platform (length, format, hashtag/emoji norms
 voice. One post, ready to save.
 
 ### 5. Save as a Draft
-Call `create-post` with `workspace_id`, `content`, and `account_ids`. **Omit `requested_action`**
+Call `create-post` with `workspace_id`, `content`, and `account_ids` — or `social_buckets` (bucket IDs from `list-buckets`) to target a whole named account group in one shot. `account_ids` is optional for a plain draft (required only to schedule/publish). **Omit `requested_action`**
 (or set `draft`) so it lands as a Draft. Optionally pass an `idempotency_key` to avoid dupes.
 
 ### 6. Confirm and offer next steps

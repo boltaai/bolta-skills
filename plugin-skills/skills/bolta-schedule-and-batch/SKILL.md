@@ -48,7 +48,7 @@ If the zone is unclear, ask before proceeding — a wrong zone posts at the wron
 
 ### 3. Schedule
 - **New content:** `create-post` with `requested_action: "schedule"` and `scheduled_time` set to
-  the ISO string, plus `content` and `account_ids`.
+  the ISO string, plus `content` and `account_ids` (or `social_buckets` with bucket IDs from `list-buckets` to hit a whole account group).
 - **Existing Draft:** `schedule-post` with `workspace_id`, `post_id`, and `time` (ISO 8601).
 
 ### 4. Verify
