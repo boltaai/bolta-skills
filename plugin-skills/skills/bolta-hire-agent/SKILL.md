@@ -72,7 +72,8 @@ preset defaults stand. This creates the agent **and** its recurring job.
 Call `list-agent-jobs(workspace_id, agent_id)` for the new agent and confirm the job exists.
 State clearly: **the job starts paused for preview — it will not run until you preview it.**
 Do NOT call `run-agent-job-now` here. Point the user to **bolta-agent-run-and-review** to
-preview a run and approve its first drafts.
+preview a run and approve its first drafts. For later changes — schedule, instructions,
+trigger keywords, extra jobs, pause/resume — hand off to **bolta-agent-manage**.
 
 ## Failure handling
 - Role too low → report the missing admin/owner role from `get-my-capabilities`; do not retry.

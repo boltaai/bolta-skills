@@ -2,7 +2,7 @@
 
 The single source of truth for every tool the Bolta plugin exposes. Skills MUST use
 these exact tool ids and parameter names. The server is **mcp.bolta.ai/mcp** (StreamableHTTP,
-stateless). 50 tools are exposed. Any tool name not on this list does not exist — do not call it.
+stateless). 58 tools are exposed. Any tool name not on this list does not exist — do not call it.
 
 ## Universal rules
 
@@ -33,8 +33,8 @@ stateless). 50 tools are exposed. Any tool name not on this list does not exist 
 
 | Tool | Method | Params | Notes |
 |-|-|-|-|
-| `list-workspace-posts` | GET · RO | `workspace_id`*, `status`, `platform`, `start_date`, `end_date`, `include_metrics`, `metrics_platforms`, `limit`, `page` | All posts; filter by status (Draft/Scheduled/Published/…). `include_metrics=true` attaches per-platform engagement (views, likes, comments, reposts) + `published_at` — THE tool for "how did my post(s) do" (combine `status=published` + a date window). Metrics sync **nightly**: for posts <24h old, zeros mean "not synced yet", not poor performance. Also the best source of **published-content voice samples**. |
-| `list-scheduled-posts` | GET · RO | `workspace_id`*, `limit`, `page` | Upcoming scheduled queue. |
+| `list-workspace-posts` | GET · RO | `workspace_id`*, `status`, `platform`, `start_date`, `end_date`, `include_metrics`, `metrics_platforms`, `limit`, `page`, `sort_by`, `sort_order` | All posts; filter by status (Draft/Scheduled/Published/…). `include_metrics=true` attaches per-platform engagement (views, likes, comments, reposts) + `published_at` — THE tool for "how did my post(s) do" (combine `status=published` + a date window). Metrics sync **nightly**: for posts <24h old, zeros mean "not synced yet", not poor performance. Also the best source of **published-content voice samples**. |
+| `list-scheduled-posts` | GET · RO | `workspace_id`*, `limit`, `page`, `start_date`, `end_date` | Upcoming scheduled queue; window it with ISO dates ("what's going out this week"). |
 | `get-post` | GET · RO | `post_id`* | Single post detail. |
 | `get-post-platform-details` | GET · RO | `post_id`*, `platform`* | Per-platform metadata (Threads poll, Reddit flair, TikTok/Pinterest/YouTube fields, …). |
 
@@ -42,11 +42,11 @@ stateless). 50 tools are exposed. Any tool name not on this list does not exist 
 
 | Tool | Method | Params | Notes |
 |-|-|-|-|
-| `create-post` | POST | `workspace_id`*, `content`*, `account_ids`*, `media`, `scheduled_time`, `requested_action`, `poll`, `idempotency_key` | Primary creation tool. See `requested_action` + `media` + `poll` below. |
-| `update-post` | PATCH | `post_id`*, `content`, `media`, `poll`, `scheduled_time` | Edit an existing post (incl. swapping media). |
+| `create-post` | POST | `workspace_id`*, `content`*, `account_ids`, `social_buckets`, `media`, `scheduled_time`, `requested_action`, `poll`, `idempotency_key` | Primary creation tool. `account_ids` optional for plain drafts, required to schedule/publish — or pass `social_buckets` (bucket IDs from `list-buckets`) to target a whole named account group. See `requested_action` + `media` + `poll` below. |
+| `update-post` | PATCH | `post_id`*, `content`, `media`, `poll`, `scheduled_time`, `accounts` | Edit an existing post (incl. swapping media). `accounts` retargets the post — it is a FULL replacement list; resend every account the post should keep. |
 | `delete-post` | DELETE · **DES** | `post_id`* | Irreversible — confirm first. |
 | `update-post-platform-details` | PATCH | `post_id`*, `platform`*, `fields`* | Set per-platform options (poll, flair, title, privacy…). `fields` is an object. |
-| `bulk-create-posts` | POST | `workspace_id`*, `posts`* | `posts` = array of post objects. Returns a `task_id`. |
+| `bulk-create-posts` | POST | `workspace_id`*, `posts`* | NOT available from ChatGPT/Claude (assistant sessions get 403 — create posts individually with `create-post` so the approval flow applies). For raw API keys: `posts` items use the NESTED shape `{contents:[{content,index,media}], accounts:[…], status, scheduled_time, social_buckets}` — flat `content`/`account_ids` keys are silently ignored. Returns a `task_id`. |
 | `bulk-create-status` | GET · RO | `task_id`* | Poll the bulk job; returns per-item progress + previews. |
 | `schedule-post` | POST | `workspace_id`*, `post_id`*, `time`* | Schedule an existing Draft (`time` = ISO8601). |
 | `publish-post` | POST · **DES · OW** | `workspace_id`*, `post_id`* | Publishes NOW to the live platform. Irreversible + public — always confirm. |
@@ -74,11 +74,11 @@ per-platform options use `update-post-platform-details`.
 | Tool | Method | Params | Notes |
 |-|-|-|-|
 | `approve-post` | POST | `workspace_id`*, `post_id`*, `schedule_mode`, `fixed_time`, `comments` | Approve a post in review. |
-| `list-reviews` | GET · RO | `workspace_id`*, `reviewer_id`, `workflow_type` | Standard review queue. |
-| `list-recurring-reviews` | GET · RO | `workspace_id`*, `status`, `template_id` | **Pending drafts produced by agents** (recurring/agent runs). This is the agent → human queue. |
+| `list-reviews` | GET · RO | `workspace_id`*, `reviewer_id`, `workflow_type`, `limit`, `page` | Standard review queue. |
+| `list-recurring-reviews` | GET · RO | `workspace_id`*, `status`, `template_id`, `agent_creator_id`, `limit`, `page` | **Pending drafts produced by agents** (recurring/agent runs). This is the agent → human queue. |
 | `list-inbox-items` | GET · RO | `workspace_id`*, `source` (team\|recurring\|hunter\|report), `status`, `agent_id`, `limit`, `offset` | **Unified inbox** of everything pending review — team posts, recurring/agent drafts, hunter reply drafts (with the mention/lead context they respond to), and agent reports (with download links). Pass `agent_id` to answer "what did <agent> produce that needs me?". Prefer this for "what's waiting for me". |
-| `approve-recurring-review` | POST | `review_id`*, `approvalComments`, `approveWithSchedule`, `useSuggestedTime` | Approve an agent-produced draft; optionally schedule at the suggested time. |
-| `reject-recurring-review` | POST | `review_id`*, `rejectionReason` | Reject an agent-produced draft (feeds voice learning). |
+| `approve-recurring-review` | POST | `review_id`*, `approvalComments`, `approveWithSchedule`, `useSuggestedTime`, `newScheduleTime`, `account_ids` | Approve an agent-produced draft. `newScheduleTime` (ISO8601) = "approve it but post Friday 9am" in one call; `account_ids` retargets at approval time. |
+| `reject-recurring-review` | POST | `review_id`*, `rejectionReason`, `rejectionCategories` | Reject an agent-produced draft (feeds voice learning). ALWAYS pass `rejectionCategories` when the objection fits a code — structured categories train the voice far better than free text. Valid codes: too_casual, too_formal, wrong_tone, off_brand, too_long, too_short, wrong_format, factual_error, spelling_grammar, missing_cta, wrong_cta, wrong_emoji, wrong_hashtag, not_engaging, platform_mismatch, too_salesy, off_topic, repetitive, other (invalid codes are silently dropped). |
 | `send-hunter-reply` | POST | `workspace_id`*, `reply_id`*, `content` | Approve + send a hunter reply draft (from `list-inbox-items`, `source=hunter`). Optional `content` overrides the draft text in the same call. Double-send is prevented server-side. |
 | `update-hunter-reply` | PATCH | `workspace_id`*, `reply_id`*, `content`* | Edit a hunter reply draft **without sending** (already-sent replies 409). Send later via `send-hunter-reply`. |
 
@@ -97,13 +97,13 @@ per-platform options use `update-post-platform-details`.
 | `get-voice-context` | GET · RO | `workspace_id`*, `voice_profile_id`, `platforms` | The compiled voice context (tone, dos/donts, exemplars) Bolta injects into its writer. **Load this before drafting.** |
 | `list-voice-profiles` | GET · RO | `workspace_id`* | All voice profiles + ids. |
 | `get-voice-profile` | GET · RO | `workspace_id`*, `profile_id`* | One voice profile. |
-| `create-voice-profile` | POST | `workspace_id`*, `name`*, `tone`, `writing_sample`, `tone_of_voice`, `target_audience`, `dos`, `donts`, `content_size`, `pacing`, `speaker_mode`, `default_post_intent` | **Persist a captured brand voice as a native Bolta Voice Profile.** Provide `tone` (a 0-100 dials object, e.g. `{"playful":30,"professional":80,"direct":70,"thoughtful":60}`) **or** a `writing_sample` (≥50 chars — the server extracts the tone from it). |
-| `update-voice-profile` | PATCH | `workspace_id`*, `profile_id`*, `name`, `tone`, `tone_of_voice`, `target_audience`, `dos`, `donts`, `content_size`, `pacing`, `speaker_mode`, `default_post_intent` | **Evolve** a voice profile over time. Partial update — only the fields you send change; omitted fields are preserved. |
+| `create-voice-profile` | POST | `workspace_id`*, `name`*, `tone`, `writing_sample`, `tone_of_voice`, `target_audience`, `dos`, `donts`, `content_size`, `pacing`, `speaker_mode`, `default_post_intent`, `business_dna_id`, `is_default`, `description`, `custom_rules`, `topics`, `language` | **Persist a captured brand voice as a native Bolta Voice Profile.** `business_dna_id` links the profile to a specific Business DNA record (from `list-business-dna` / `extract-business-dna`) — wire the extract → profile flow explicitly with it; `is_default` makes it the workspace default. Provide `tone` (a 0-100 dials object, e.g. `{"playful":30,"professional":80,"direct":70,"thoughtful":60}`) **or** a `writing_sample` (≥50 chars — the server extracts the tone from it). |
+| `update-voice-profile` | PATCH | `workspace_id`*, `profile_id`*, `name`, `tone`, `tone_of_voice`, `target_audience`, `dos`, `donts`, `content_size`, `pacing`, `speaker_mode`, `default_post_intent`, `business_dna_id`, `is_default` | **Evolve** a voice profile over time. Partial update — only the fields you send change; omitted fields are preserved. |
 | `list-business-dna` | GET · RO | `workspace_id`* | Business DNA records (industry, audience, positioning). |
 | `get-business-dna` | GET · RO | `workspace_id`*, `dna_id`* | One Business DNA record. |
 | `extract-business-dna` | POST · **OW** | `workspace_id`*, `url`*, `name`, `set_as_default` | Scrape a brand's public website → a new Business DNA record. Reaches the internet + consumes AI credits. |
 | `update-business-dna` | PATCH | `workspace_id`*, `dna_id`*, `fields`* | **Safe partial merge** — only keys you send change; omitted fields are preserved server-side. `fields` is a flat object: brand basics (`name`, `tagline`, `tagline_on_images`, `business_overview`, `website_url`), visual identity (`colors` hex[], `fonts`, `visual_aesthetics`, `brand_values`, `logo_url`), image settings (`logo_placement`, `custom_image_instructions`), local identity (`city`, `neighborhood`, `service_area`, `years_in_business`, `owner_name`, `staff_names`), story (`origin_story`, `community_involvement`, `testimonials`). Call `get-business-dna` first to see current values. |
-| `voice-generate` | POST | `workspace_id`*, `topics`*, `dateRange`*, `time`*, `maxPosts`*, `voiceProfileId`, `context`, `businessName`, `niche`, `tone`, `dos`, `donts`, `customRules`, `enableMultiPlatform`, `selectedAccountsOrBuckets`, `platform` | Bolta's voice-aware writer. Brand-voice guidelines map directly onto `tone` / `dos` / `donts` / `customRules` / `context`. |
+| `voice-generate` | POST | `workspace_id`*, `topics`, `date_range`, `time`, `max_posts`, `voice_profile_id`, `context`, `business_name`, `niche`, `tone`, `dos`, `donts`, `custom_rules`, `enable_multi_platform`, `selected_accounts_or_buckets`, `platform`, `generate_images`, `post_intent`, `language` | Bolta's voice-aware writer (consumes AI credits). All params snake_case (unified 2026-07-19). Only `workspace_id` is required — but ALWAYS pass `topics` (omitting it generates generic content). Server defaults: `max_posts` 7, `time` "12:00 PM" (12-hour format). Brand-voice guidelines map onto `tone` / `dos` / `donts` / `custom_rules` / `context`. |
 
 > **Brand-voice bridge (persistent):** a captured brand guideline can be **written back into
 > Bolta**. `brand-voice-generate` maps the guideline onto `create-voice-profile` (`tone` object
@@ -120,8 +120,15 @@ per-platform options use `update-post-platform-details`.
 | `list-agent-presets` | GET · RO | `workspace_id`* | Marketplace presets (Hype Man, Deep Diver, Hunter, Engager, …) + their `preset_id`s. |
 | `hire-agent-preset` | POST | `workspace_id`*, `preset_id`*, `name`, `job_name`, `voice_profile_id`, `account_ids` | Hire a preset → creates the agent + its job (starts paused for preview). |
 | `list-agents` | GET · RO | `workspace_id`* | Hired agents + ids. |
+| `create-agent` | POST | `workspace_id`*, `name`*, `type`*, `role`, `description`, `avatar`, `config` | Create a custom agent from scratch (types: content_creator \| engagement \| acquisition \| reviewer \| analytics \| moderator \| custom). Free workspaces are capped at 1 agent (402 → explain the upgrade honestly). Prefer `hire-agent-preset` when a preset fits. |
 | `get-agent` | GET · RO | `workspace_id`*, `agent_id`* | One agent's config/persona/status. |
-| `list-agent-jobs` | GET · RO | `workspace_id`*, `agent_id`* | An agent's jobs (schedule, status). |
+| `update-agent` | PATCH | `workspace_id`*, `agent_id`*, `name`, `type`, `role`, `status`, `description`, `avatar`, `config` | Edit an agent. **Pause scope warning:** `status=paused` pauses the WHOLE agent and cascade-pauses ALL its active jobs (resume reverses exactly that cascade). If the user means one job/schedule, use `update-agent-job` instead; when ambiguous, list the jobs and ask. |
+| `delete-agent` | DELETE · **DES** | `workspace_id`*, `agent_id`* | Irreversible — confirm first. Pauses its jobs, purges its service-account API keys, cascades its campaigns. Offer `update-agent status=paused` as the soft alternative. |
+| `list-agent-jobs` | GET · RO | `workspace_id`*, `agent_id`* | An agent's jobs (schedule, status, `paused_by`). |
+| `get-agent-job` | GET · RO | `workspace_id`*, `agent_id`*, `job_id`* | One job's full detail: schedule, status, voice, accounts, trigger_config, and `paused_by` (see below). Fetch this BEFORE any job edit. |
+| `create-agent-job` | POST | `workspace_id`*, `agent_id`*, `name`*, `trigger`, `schedule`, `voice_profile_id`, `account_ids`, `trigger_config`, `run_instructions`, `max_retries`, `status`, `intended_platform` | Add a job to an agent. `status=paused` creates it dormant for config review; `intended_platform` steers platform-native style. Call `get-agent` first — config differs by type: content agents = `trigger=scheduled` + schedule + voice + accounts; engagement = on_new_mention/on_new_comment; acquisition (Hunter) = keyword_match + trigger_config keywords[]/subreddits[]; analytics/moderator may omit voice. Mirror a sibling job (`get-agent-job`) instead of guessing shapes. |
+| `update-agent-job` | PATCH | `workspace_id`*, `agent_id`*, `job_id`*, `name`, `status`, `schedule`, `trigger`, `trigger_config`, `voice_profile_id`, `account_ids`, `run_instructions`, `max_retries` | Edit a job. `status=paused` = the **job-level pause** (agent + other jobs keep running); `status=active` resumes and `next_run_at` recalculates on schedule changes. **`trigger_config` and `schedule` are FULL-REPLACE:** to add one keyword, `get-agent-job` → modify the returned object → resend the WHOLE thing. A partial send silently wipes sibling keys. |
+| `delete-agent-job` | DELETE · **DES** | `workspace_id`*, `agent_id`*, `job_id`* | Irreversible — confirm first; cascades the job's own Hunter/Engager campaign. Offer `status=paused` as the soft alternative. |
 | `run-agent-job-now` | POST | `workspace_id`*, `agent_id`*, `job_id`*, `run_instructions`, `account_id` | Trigger a job immediately (optional one-off instructions). |
 | `list-agent-job-runs` | GET · RO | `workspace_id`*, `agent_id`*, `job_id`*, `limit` | Run history: status, tools used, tokens, cost, output. |
 | `list-agent-runs` | GET · RO | `workspace_id`*, `agent_id`, `status`, `since`, `limit` | **Workspace-wide** run history across all agents (agent/job attribution per run), newest first, default last 7 days (`since` widens the window). Prefer this for "what did my agents do". |
@@ -133,5 +140,20 @@ per-platform options use `update-post-platform-details`.
 `list-recurring-reviews` (its drafts land here) → `approve-recurring-review` /
 `reject-recurring-review`. This closes the loop: the agent proposes, the human approves,
 and rejections/edits feed Bolta's voice learning so it gets better.
+
+### `paused_by` — explaining WHY something is paused
+Jobs expose a read-only `paused_by` when `status=paused`. Use it to explain honestly and
+to decide whether resuming is even possible:
+
+| Value | Meaning | Resume rule |
+|-|-|-|
+| `user` | The user paused it themselves | Only resume on the user's explicit ask |
+| `agent` | Cascade from an agent-level pause | Resume the agent (`update-agent status=active`) or the job directly |
+| `trial_quota` / `plan_gate` | Plan or credit limit hit | A status flip comes right back — an upgrade is required; say so |
+| `backpressure` | Too many undecided drafts piled up | Clear the review queue first, then resume |
+| `system` | Bolta paused it (e.g. errors) | Investigate the runs before resuming |
+
+**Never blind-resume.** Read `paused_by` (via `get-agent-job`) before setting
+`status=active`, and never resume a `user`-paused job as a side effect of another task.
 
 \* = required parameter.

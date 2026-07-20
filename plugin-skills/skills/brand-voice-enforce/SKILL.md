@@ -25,7 +25,7 @@ a proposal, a blog section, ad copy, a caption. This is the everyday writing ski
 |-|-|
 | `list-workspaces` | Resolve `workspace_id` if unknown. |
 | `get-voice-context` | Load Bolta's compiled voice context (tone, dos/donts, exemplars). |
-| `voice-generate` | Bolta's voice-aware writer for social drafts; guideline maps onto its `tone`/`dos`/`donts`/`customRules`/`context` params. |
+| `voice-generate` | Bolta's voice-aware writer for social drafts; guideline maps onto its `tone`/`dos`/`donts`/`custom_rules`/`context` params. |
 | `create-post` | Optional — save the on-brand result as a Bolta Draft when the content is a social post. |
 
 For the voice-vs-tone model see `references/voice-constant-tone-flexes.md`.
@@ -55,7 +55,7 @@ content type to a row of the tone matrix (formality, energy, technical depth). S
 
 ### 3. Generate
 - **Social post:** call `voice-generate`, passing the guideline through its params —
-  `tone`, `dos`, `donts`, `customRules`, `context`, `businessName`, `niche`, and `topics`.
+  `tone`, `dos`, `donts`, `custom_rules`, `context`, `business_name`, `niche`, and `topics`.
   This runs Bolta's own writer so the output matches everything else Bolta produces.
 - **Non-social content (email, proposal, blog, deck):** write it directly, applying the same
   voice constants and tone flexes. For long-form or high-stakes content, write from the

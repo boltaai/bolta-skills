@@ -109,9 +109,9 @@ parameters as a copy-ready block. This is what `brand-voice-enforce` and every a
 | `tone` | Dominant register from We-Are + default tone-matrix row | `"direct, proof-driven, plain-spoken"` |
 | `dos` | We-Are attributes + must-use/preferred terminology, as imperatives | `["lead with a concrete metric","say 'platform' not 'tool'","show the work behind claims"]` |
 | `donts` | We-Are-Not boundaries + avoid/never terminology | `["no 'thrilled to announce'","no hype adjectives (game-changing, revolutionary)","never dumb it down"]` |
-| `customRules` | Structural / formatting / tone-flex rules that don't fit dos/donts | `"One CTA per post. On X, one idea per post; dry humor OK. In email keep under 120 words."` |
+| `custom_rules` | Structural / formatting / tone-flex rules that don't fit dos/donts | `"One CTA per post. On X, one idea per post; dry humor OK. In email keep under 120 words."` |
 | `context` | Positioning + audience summary from Business DNA | `"DevOps SaaS for platform-engineering leads at mid-market companies; buyers are technical and skeptical of hype."` |
-| `businessName` | Business DNA name | `"Acme Platform"` |
+| `business_name` | Business DNA name | `"Acme Platform"` |
 | `niche` | Business DNA industry | `"DevOps / platform engineering"` |
 
 **Rendered block (ready to paste into a `voice-generate` call):**
@@ -121,9 +121,9 @@ parameters as a copy-ready block. This is what `brand-voice-enforce` and every a
   "tone": "direct, proof-driven, plain-spoken",
   "dos": ["lead with a concrete metric", "say 'platform' not 'tool'", "show the work behind claims"],
   "donts": ["no 'thrilled to announce'", "no hype adjectives", "never dumb it down"],
-  "customRules": "One CTA per post. On X, one idea per post; dry humor OK. Email under 120 words.",
+  "custom_rules": "One CTA per post. On X, one idea per post; dry humor OK. Email under 120 words.",
   "context": "DevOps SaaS for platform-engineering leads; technical, hype-skeptical buyers.",
-  "businessName": "Acme Platform",
+  "business_name": "Acme Platform",
   "niche": "DevOps / platform engineering"
 }
 ```

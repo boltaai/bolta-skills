@@ -7,7 +7,7 @@ Reusable skills for the **Bolta** plugin. Two layers:
    on any content — social posts, emails, proposals, blog posts, decks. Modeled on the
    discover → generate → enforce → validate loop, wired into Bolta's Voice Profile / Business
    DNA model.
-2. **Tool orchestration.** Workflow skills that drive the live curated Bolta MCP surface (50 tools) and
+2. **Tool orchestration.** Workflow skills that drive the live curated Bolta MCP surface (58 tools) and
    its autonomous agents to their fullest — drafting, scheduling, batching, media, per-platform
    tailoring, the full hire → run → review agent loop, the review queue, and analytics.
 
@@ -38,7 +38,8 @@ drafts, and every autonomous agent, so quality styling is consistent everywhere.
 |-|-|
 | `bolta-hire-agent` | Discover presets and hire an agent (paused for preview). |
 | `bolta-agent-run-and-review` | Run a job now, watch the run, then approve/reject the drafts it produced. |
-| `bolta-agent-status` | Report on hired agents, their jobs, and recent run history. |
+| `bolta-agent-status` | Report on hired agents, their jobs, and recent run history (incl. why a job is paused). |
+| `bolta-agent-manage` | Pause/resume at the right scope, reschedule, edit instructions & trigger config, add jobs, create custom agents, delete with confirmation. |
 
 ### Review & Analytics
 | Skill | Does |

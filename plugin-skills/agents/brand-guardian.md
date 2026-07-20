@@ -30,7 +30,7 @@ Verify the draft guideline is real and usable:
   contexts; **3+** voice attributes each backed by quoted evidence.
 - Confidence assigned per section; every open question carries a recommended default.
 - Sources attributed; no PII in examples.
-- The `voice-generate` parameter mapping (tone / dos / donts / customRules) is present and
+- The `voice-generate` parameter mapping (tone / dos / donts / custom_rules) is present and
   faithful to the guideline.
 Return: pass, or a specific list of what's missing. Never wave through a partial guideline.
 

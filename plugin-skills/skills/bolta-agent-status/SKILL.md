@@ -63,7 +63,11 @@ failures. Then, per agent in scope (in parallel where possible):
 ### 4. Summarize into a report
 Roll the data into a plain-language report:
 - **Per agent:** name, persona, active vs. paused.
-- **Jobs:** schedule (cadence) and whether each is active or paused.
+- **Jobs:** schedule (cadence) and whether each is active or paused — and for paused jobs,
+  WHY: the `paused_by` field says who paused it (`user` = the user themselves, `agent` =
+  cascade from an agent pause, `trial_quota`/`plan_gate` = plan or credit limit (needs an
+  upgrade, not a resume), `backpressure` = review backlog piled up, `system` = Bolta).
+  Report the reason plainly instead of just "paused".
 - **Recent activity:** last run status (completed/failed/running), when, what it produced, and
   cost/tokens. Flag anything notable — repeated failures, a paused job that should be active,
   or unusually high cost.
@@ -72,7 +76,10 @@ Roll the data into a plain-language report:
 
 ### 5. Suggest next steps
 If a job is paused and has never previewed, point to **bolta-agent-run-and-review** to preview
-it. If runs produced drafts, note they may be waiting in the recurring-review queue.
+it. If runs produced drafts, note they may be waiting in the recurring-review queue. If the
+user wants to act on what the report shows — pause/resume something, change a schedule, edit
+instructions, or remove an agent/job — hand off to **bolta-agent-manage** (never resume a
+`user`- or `plan_gate`-paused job from here).
 
 ## Failure handling
 - No agents → report it and offer **bolta-hire-agent**; don't fabricate activity.

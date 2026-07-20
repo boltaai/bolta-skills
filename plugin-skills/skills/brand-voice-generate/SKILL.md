@@ -80,13 +80,13 @@ Map the guideline onto Bolta's writer params so it drives generation immediately
 - `tone` ← the dominant register from the We-Are attributes + default tone-matrix row.
 - `dos[]` ← the "We Are" attributes and must-use / preferred terminology, as imperative rules.
 - `donts[]` ← the "We Are Not" boundaries and avoid / never terminology.
-- `customRules` ← nuanced rules that don't fit dos/donts (structural, formatting, tone flexes).
+- `custom_rules` ← nuanced rules that don't fit dos/donts (structural, formatting, tone flexes).
 - `context` ← positioning + audience summary.
-- `businessName` / `niche` ← from Business DNA.
+- `business_name` / `niche` ← from Business DNA.
 Present this block as copy-ready — it's what makes the guideline enforceable.
 
 ### 7. Validate the mapping with one sample
-Call `voice-generate` once with the mapped params (a single, low-`maxPosts` sample on a
+Call `voice-generate` once with the mapped params (a single, low-`max_posts` sample on a
 representative topic) to confirm the mapping yields on-brand output. Show the sample; if it
 misses, tune the mapping and note what changed. Do not publish the sample.
 
@@ -130,14 +130,14 @@ every agent in this workspace now inherits the voice.
 
 ## Example
 User: "Turn our discovery report into brand guidelines."
-1. Assemble report (+ `get-business-dna` for niche/businessName).
+1. Assemble report (+ `get-business-dna` for niche/business_name).
 2. Synthesize: 5 We-Are rows, tone matrix for LinkedIn/X/email, terminology tables.
 3. Score: aggregate High (published-post evidence strong); email row Medium (thin evidence).
 4. Open Qs: "Is dry humor OK in cold email? Recommend: keep it minimal, default off."
 5. QA pass → passes after adding evidence to one attribute.
 6. Mapping: `tone={"professional":80,"direct":75,"playful":20}`, `dos=["lead with a number",
    "say platform not tool"]`, `donts=["no 'thrilled to announce'","no hype adjectives"]`.
-7. `voice-generate(maxPosts=1, topic="feature launch", ...)` → on-brand.
+7. `voice-generate(max_posts=1, topic="feature launch", ...)` → on-brand.
 8. Persist: `create-voice-profile(workspace_id, name="Brand Voice", tone={…}, tone_of_voice=
    ["confident","proof-driven"], dos=[…], donts=[…], target_audience="DevOps leads")` → save
    guideline doc → "Created the 'Brand Voice' profile; every agent now writes in it."

@@ -32,7 +32,7 @@ expects.
 3. Set the tone flex for this format (formality / energy / technical depth) while holding the
    voice constants fixed.
 4. Write:
-   - Social → assemble `voice-generate` params (tone, dos, donts, customRules, context) and
+   - Social → assemble `voice-generate` params (tone, dos, donts, custom_rules, context) and
      generate; refine if it misses.
    - Non-social → write directly, leading with the 2-3 attributes that matter most for the
      format; use preferred terminology; never cross a "We Are Not" boundary.
