@@ -32,8 +32,8 @@ guideline exists.
 | `list-voice-profiles` / `get-voice-profile` | Any Voice Profiles already stored in Bolta. |
 | `get-voice-context` | Bolta's compiled voice context (tone, dos/donts, exemplars) if one exists. |
 | `list-accounts` | Connected platforms — shows where the brand actually speaks. |
-| `list-workspace-posts` | Published posts (`status=Published`) — these ARE primary voice evidence. |
-| `extract-business-dna` | Scrape the brand's **website** into a Business DNA record (needs a `url`; reaches the internet + uses AI credits). The fastest cold-start source. |
+| `list-workspace-posts` | Published posts (`status=published`) — these ARE primary voice evidence. Add `include_metrics=true` for per-post engagement. |
+| `extract-business-dna` | Scrape the brand's **website** into a Business DNA record (needs a `url`; reaches the internet + uses AI credits). The fastest cold-start source. **Pass `set_as_default=false`** — it defaults to true and silently demotes the workspace's existing default DNA. |
 | `update-business-dna` | Fix what discovery finds wrong in the stored DNA — safe partial merge: only the keys sent in `fields` change, everything omitted is preserved. Tagline, overview, colors/fonts, local identity, story, image settings. |
 
 Two more sources need no tool call: the **brand's website** (you can read public pages
@@ -76,7 +76,10 @@ If the user gives (or you can infer) the brand's website, use it — it's the fa
 source and often the clearest statement of positioning and voice:
 - Read the public site directly (homepage, about, product pages) for headline voice, value
   props, and terminology; and/or call `extract-business-dna` with the `url` to structure it
-  into a Business DNA record you can reference later.
+  into a Business DNA record you can reference later. Pass `set_as_default=false` — the
+  param defaults to true and silently demotes the workspace's existing default Business DNA.
+  Only set it true (or omit it) when the user explicitly wants the extracted record to
+  become the default, and confirm first if a default already exists.
 - If the brand is recognizable, you may draw on what ChatGPT already knows about it — but treat
   this as a hypothesis to confirm, never as fact. State that it's external knowledge.
 Rank this **below** brand-owned Bolta signal and published posts: the website says how the
@@ -84,11 +87,13 @@ brand wants to sound; the posts show how it actually sounds. When they disagree,
 and the gap becomes an open question.
 
 ### 4. Pull published-content evidence
-Call `list-workspace-posts` with `status=Published` (page through with `limit`/`page`).
-Published posts are behavioral voice evidence — how the brand actually talks in public.
-Excavate the brand's lived voice from Bolta's own evidence (the **voice-archaeologist**
-behavior): pull the published posts, their engagement (`get-account-analytics` /
-`cross-platform-analytics`), and the review signal (`list-reviews`, `list-recurring-reviews`)
+Call `list-workspace-posts` with `status=published` and `include_metrics=true` — each post
+then carries per-platform engagement (views, likes, comments, reposts) alongside its text.
+The default page is 50 posts (max 100); page through with `limit`/`page` so the evidence
+isn't silently truncated to the first page. Published posts are behavioral voice evidence —
+how the brand actually talks in public. Excavate the brand's lived voice from Bolta's own
+evidence (the **voice-archaeologist** behavior): pull the published posts with their
+per-post metrics, and the review signal (`list-reviews`, `list-recurring-reviews`)
 — what the team approved untouched vs. edited vs. rejected. Extract voice attributes each
 backed by a quoted real post, ranked by consistency; mark attributes that correlate with
 higher engagement as "proven" not just "present"; treat systematic edits (always cutting hype,
@@ -136,7 +141,7 @@ User: "Analyze our brand voice — here's our pitch deck and last quarter's post
 1. `list-workspaces` → workspace_id.
 2. `list-business-dna`/`get-business-dna` → SaaS, ops leaders, "developer-first" positioning;
    `list-voice-profiles` empty; `get-voice-context` empty; `list-accounts` → LinkedIn + X.
-3. `list-workspace-posts(status=Published)` → 40 posts → voice-archaeologist pass → "direct,
+3. `list-workspace-posts(status=published, include_metrics=true)` → 40 posts → voice-archaeologist pass → "direct,
    proof-driven, dry humor; avoids hype; LinkedIn more formal than X."
 4. Pitch deck → signal-distiller pass → terminology ("platform" not "tool"), 3 messaging pillars.
 5. Reconcile: deck says "visionary", posts read "pragmatic" → conflict flagged.

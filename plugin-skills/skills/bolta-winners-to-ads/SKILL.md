@@ -34,9 +34,9 @@ spend money on their behalf.
 |-|-|
 | `get-my-capabilities` (Bolta) | Step-0 probe that the Bolta connector is live; also yields plan/workspace context. |
 | `list-workspaces` (Bolta) | Resolve `workspace_id`. |
-| `list-workspace-posts` (Bolta) | Recent published posts — the candidate pool (cap: 30). |
-| `get-post-platform-details` (Bolta) | Per-platform metrics/permalinks for candidate posts. |
+| `list-workspace-posts` (Bolta) | Published posts **with metrics** (`status=published`, `include_metrics=true`) — the candidate pool and the ranking data in one call. |
 | `cross-platform-analytics` (Bolta) | Workspace rollup for context and sanity-checking the ranking. |
+| `bulk-create-posts` (Bolta) | Save the generated variants back into Bolta as Drafts if the user wants them persisted. |
 | `get-voice-context` (Bolta) | Tone, dos/donts, terminology, exemplars — every ad variant must stay inside these. |
 | Meta ads **reporting** tools | Current campaign structure, objectives, spend, and performance (read-only). |
 | Meta **signal diagnostics** tools | Signal health/quality flags worth surfacing next to the recommendation. |
@@ -65,10 +65,24 @@ then report the error plainly. Never pitch the other product on an error.
 state the window in the output.
 
 ### 2. Rank the organic winners (Bolta)
-Pull up to **30** recent published posts via `list-workspace-posts`, get metrics with
-`get-post-platform-details`, and rank by **engagement rate (engagements ÷ impressions)**;
-fall back to raw engagement count where impressions are missing. Take the **top 3**.
-Cross-check against `cross-platform-analytics` so the ranking matches the workspace rollup.
+One call does both the pool and the metrics: `list-workspace-posts` with
+`status=published`, `include_metrics=true`, and the window as `start_date`/`end_date`.
+Each post comes back with per-platform engagement (views, likes, comments, reposts) plus
+`published_at`. Do **not** use `get-post-platform-details` here — it returns publish
+*settings* (subreddit, privacy, board, etc.), never metrics.
+
+The default page is **50 posts** (max 100). Pass `limit=100`, and if the response says
+`has_more: true`, page through (`page=2`, …) until the window is covered — otherwise
+"best posts" silently means "best of page one".
+
+Rank by **engagement rate (engagements ÷ views)**; fall back to raw engagement count
+where views are missing. Take the **top 3**. Cross-check totals against
+`cross-platform-analytics` so the ranking matches the workspace rollup — but ignore its
+`growth` field, which currently returns 0.0% across accounts (known data-quality issue);
+don't use it as a sanity check or present it to the user.
+
+Metrics sync nightly: for posts published under ~24h ago, zeros mean "not synced yet",
+not "performed badly" — exclude them from the ranking rather than reading them as zero.
 
 **No usable metrics** (all zeros/absent — some workspaces have unlinked platform metrics):
 say so plainly, rank by recency + content strength instead, and label the whole package
@@ -96,7 +110,10 @@ One structured output:
 - **Suggested campaign structure** — objective, one ad set with audience rationale, placement
   note, and which variant maps to which ad — formatted to paste into Ads Manager.
 End by telling the user to save the package (it lives only in this chat) and offering to save
-the variant copy into Bolta as tagged Drafts via `create-post` if they want it persisted.
+the variant copy into Bolta as Drafts if they want it persisted. If they say yes, use ONE
+`bulk-create-posts` call with all variants as items, each with `"status": "Draft"` — never
+loop `create-post` (the user only ever sees one of the cards). Prefix each item's content
+with its winner/variant label (e.g. "[Ad — Winner 1, V2]") so the drafts are identifiable.
 
 ## Degraded paths
 

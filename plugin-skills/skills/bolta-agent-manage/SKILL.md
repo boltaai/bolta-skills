@@ -28,9 +28,10 @@ delete with confirmation. The cardinal rules: **resolve pause scope before actin
 | `create-agent` | Custom agent from scratch (prefer `hire-agent-preset` when a preset fits). |
 | `update-agent` | Rename, safe-mode, config — and the AGENT-level pause (cascades to all jobs). |
 | `delete-agent` | Irreversible agent removal (confirm; offer pause as the soft option). |
+| `list-recently-deleted` / `restore-deleted` | Undo path for job deletes within the 7-day window. |
 | `create-agent-job` | Add a job: schedule/trigger/voice/accounts/instructions. |
 | `update-agent-job` | The JOB-level pause/resume, reschedule, instruction and config edits. |
-| `delete-agent-job` | Irreversible job removal (confirm; offer pause as the soft option). |
+| `delete-agent-job` | SOFT delete — restorable for 7 days (still confirm; offer pause first). |
 
 ## The pause-scope rule (most important)
 "Pause the agent" is ambiguous — the user often means one job.
@@ -45,6 +46,11 @@ Procedure: if the agent has **one** job, either level works — do the job-level
 say which level you used. If it has **multiple** jobs and the user said "pause the agent",
 show the jobs and ask whether they mean everything or one schedule — do NOT blind-fire
 the agent-level pause.
+
+Caveat: a job-level pause stops *scheduled* runs only — `run-agent-job-now` still
+executes a paused job on demand (only an agent-level pause blocks it with a 409). Manual
+runs by non-owner teammates also hit a daily cap (429 `run_now_member_daily_cap`); the
+owner is exempt.
 
 ## Resuming — check `paused_by` first
 `get-agent-job` first, always. `paused_by` says why it's paused and whether resuming works:
@@ -62,24 +68,35 @@ A partial send silently wipes the keys you omitted. Same for `schedule`. Scalar 
 (`name`, `run_instructions`, `status`, `voice_profile_id`, `account_ids`, `max_retries`)
 are normal partial updates.
 
-Schedule edits: send the full schedule object (e.g. `{"interval":"daily","time":"18:00",
-"timezone":"America/New_York"}`) — the server recalculates `next_run_at`; report the new
-next-run time back to the user in their timezone.
+Schedule edits: send the full schedule object (e.g. `{"interval":"daily","time":"18:00"}`)
+— the server recalculates `next_run_at`. Times are naive wall-clock, interpreted in the
+workspace's timezone. **Omit `timezone`** unless the user explicitly names a zone ("6pm
+Pacific" → add `"timezone":"America/Los_Angeles"`); never infer one from your own locale
+or the conversation. Report the new next-run time back to the user.
 
 ## Creating
-- **Jobs:** `get-agent` first — the agent's type dictates the config shape (content =
-  scheduled + voice + accounts; engagement = on_new_mention/on_new_comment; acquisition =
-  keyword_match + keywords[]/subreddits[]; analytics/moderator may omit voice). When a
-  similar job exists, mirror it via `get-agent-job` instead of guessing.
-- **Agents:** `create-agent` needs `name` + `type`. Free workspaces are capped at 1 agent —
+- **Jobs:** `get-agent` first — the agent's type dictates the config shape
+  (`content_creator`/`content_repurposer` = scheduled + voice + accounts; `engagement` =
+  on_new_mention/on_new_comment; `acquisition` = keyword_match + keywords[]/subreddits[];
+  `analytics`/`moderator` may omit voice). When a similar job exists, mirror it via
+  `get-agent-job` instead of guessing.
+- **Agents:** `create-agent` needs `name` + `type` (valid types: `content_creator`,
+  `engagement`, `acquisition`, `reviewer`, `analytics`, `moderator`, `content_repurposer`,
+  `custom` — "content" alone is not a valid enum). Free workspaces are capped at 1 agent —
   a 402 means an upgrade is required; explain it, don't retry. Prefer `bolta-hire-agent`
   (presets) unless the user explicitly wants a custom agent.
 
-## Deleting — confirm, and offer the soft option
-Both deletes are irreversible and cascade (job → its Hunter/Engager campaign; agent → jobs
-paused, its service-account API keys purged, campaigns removed). ALWAYS confirm with the
-user first and offer `status=paused` as the reversible alternative. Never delete as a
-side effect of any other request.
+## Deleting — confirm, and know which delete is which
+The two deletes are NOT equally destructive:
+- **`delete-agent-job` is a SOFT delete** — the job is hidden but restorable for **7 days**
+  via `list-recently-deleted` → `restore-deleted`. Its Hunter/Engager campaign still
+  cascades, so confirm anyway — but if the user says "undo", the job itself comes back.
+- **`delete-agent` is irreversible** and cascades hard: jobs paused, its service-account
+  API keys purged, campaigns removed. No restore window.
+
+ALWAYS confirm before either delete and offer `status=paused` as the reversible
+alternative. Never delete as a side effect of any other request. If a user regrets a
+job delete within 7 days, restore it instead of recreating it.
 
 ## Failure handling
 - 403 naming `agents:manage` or a role error → the caller can't manage agents; say who can

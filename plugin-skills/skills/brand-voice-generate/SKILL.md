@@ -25,7 +25,7 @@ report exists in the session, run discovery first (or gather at least DNA + publ
 |-|-|
 | `get-voice-context` | Anchor the guideline to Bolta's existing compiled voice, if any. |
 | `list-business-dna` / `get-business-dna` | Confirm industry / audience / positioning for the mapping. |
-| `extract-business-dna` | Optional — seed Business DNA by scraping the brand's website (needs a `url`; reaches the internet + uses credits). |
+| `extract-business-dna` | Optional — seed Business DNA by scraping the brand's website (needs a `url`; reaches the internet + uses credits). **Pass `set_as_default=false`** — it defaults to true and silently demotes the workspace's existing default DNA. |
 | `update-business-dna` | **Edit** an existing DNA record — safe partial merge: pass only the changed keys in `fields`; omitted fields are preserved server-side. Covers tagline, colors/fonts/aesthetics, overview, local identity (city, service area, owner/staff), story, and image settings (logo placement, custom image instructions). |
 | `list-voice-profiles` | Check whether a profile already exists (create new vs. evolve existing). |
 | `create-voice-profile` | **Persist** the guideline as a native Bolta Voice Profile every agent then consumes. |
@@ -77,7 +77,9 @@ specific list of gaps and revise on them — never ship a partial guideline.
 ### 6. Express as `voice-generate` parameters — the operational half
 Map the guideline onto Bolta's writer params so it drives generation immediately (see the
 "voice-generate parameter mapping" section of `references/guideline-template.md`):
-- `tone` ← the dominant register from the We-Are attributes + default tone-matrix row.
+- `tone` ← the dominant register from the We-Are attributes + default tone-matrix row, as a
+  short **string** (e.g. `"professional, direct"`) — `voice-generate` takes a string here;
+  the 0-100 dials object belongs to `create-voice-profile`/`update-voice-profile` only.
 - `dos[]` ← the "We Are" attributes and must-use / preferred terminology, as imperative rules.
 - `donts[]` ← the "We Are Not" boundaries and avoid / never terminology.
 - `custom_rules` ← nuanced rules that don't fit dos/donts (structural, formatting, tone flexes).
@@ -100,8 +102,18 @@ just this session. Confirm with the user before creating/overwriting, then:
   server extracts tone from the sample. Map the guideline's We-Are/We-Are-Not into `dos`/`donts`.
 - **Evolving brand:** `update-voice-profile(workspace_id, profile_id, …only changed fields…)`.
   This is a partial update — omitted fields are preserved, so voice refines safely over time.
-- Optional: `extract-business-dna(workspace_id, url=<brand site>)` first to seed Business DNA,
-  then reference it when generating.
+  Know its limits: it accepts only the structured fields (`name`, `tone` dials,
+  `tone_of_voice`, `target_audience`, `dos`, `donts`, `content_size`, `pacing`,
+  `speaker_mode`, `default_post_intent`, `business_dna_id`, `is_default`). The profile's
+  prose fields (brand persona, custom rules, description) also drive the writer prompt but
+  are NOT editable through this tool — if the drift you're correcting lives in that prose,
+  say so honestly and point the user at the Bolta app to edit it; don't imply the evolve
+  call fixed it.
+- Optional: `extract-business-dna(workspace_id, url=<brand site>, set_as_default=false)`
+  first to seed Business DNA, then reference it when generating. `set_as_default` defaults
+  to **true** and silently demotes the existing default Business DNA — only omit it (or set
+  true) when the user explicitly wants the new record as the workspace default; confirm
+  first if a default already exists.
 - If the guideline surfaced corrections to the brand identity itself — a sharper tagline,
   updated positioning/overview, brand colors, local identity details, or image styling — apply
   them with `update-business-dna(workspace_id, dna_id, fields={…only the changed keys…})`.
@@ -135,9 +147,9 @@ User: "Turn our discovery report into brand guidelines."
 3. Score: aggregate High (published-post evidence strong); email row Medium (thin evidence).
 4. Open Qs: "Is dry humor OK in cold email? Recommend: keep it minimal, default off."
 5. QA pass → passes after adding evidence to one attribute.
-6. Mapping: `tone={"professional":80,"direct":75,"playful":20}`, `dos=["lead with a number",
+6. Mapping: `tone="professional, direct"`, `dos=["lead with a number",
    "say platform not tool"]`, `donts=["no 'thrilled to announce'","no hype adjectives"]`.
-7. `voice-generate(max_posts=1, topic="feature launch", ...)` → on-brand.
+7. `voice-generate(max_posts=1, topics=["feature launch"], ...)` → on-brand.
 8. Persist: `create-voice-profile(workspace_id, name="Brand Voice", tone={…}, tone_of_voice=
    ["confident","proof-driven"], dos=[…], donts=[…], target_audience="DevOps leads")` → save
    guideline doc → "Created the 'Brand Voice' profile; every agent now writes in it."

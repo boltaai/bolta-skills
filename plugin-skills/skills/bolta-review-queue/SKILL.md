@@ -8,8 +8,10 @@ description: >
   that reply", or wants to triage, approve, reject, edit-and-send, or push content
   into review. Handles ALL inbox sources: the standard review queue, the
   agent-produced recurring queue, hunter reply drafts (edit + send), and agent
-  reports. Not for writing new content (use brand-voice-enforce) or reading
-  analytics (use bolta-analytics-report).
+  reports. This skill is the standing inbox — triage whatever is already waiting.
+  To trigger an agent run and then review its output in one loop, use
+  bolta-agent-run-and-review. Not for writing new content (use bolta-draft-post)
+  or reading analytics (use bolta-analytics-report).
 ---
 
 # Bolta Review Queue
@@ -28,15 +30,17 @@ learning.
 
 ## When to use
 Any time the user wants to see, triage, or clear pending approvals — or to push their own
-drafts into review for someone else to approve.
+drafts into review for someone else to approve. If the user wants to *trigger an agent run
+first* and then review what it produced, use bolta-agent-run-and-review instead — this skill
+works the queue as it stands.
 
 ## Tools this skill uses
 | Tool | Why |
 |-|-|
 | `list-workspaces` | Resolve `workspace_id` if unknown. |
 | `list-inbox-items` | **Preferred**: unified inbox of everything pending (team + recurring + hunter + report), filterable by `source`/`status`, scopable to one agent via `agent_id`. |
-| `list-reviews` | Standard review queue only (posts routed to review). |
-| `list-recurring-reviews` | Agent-produced pending drafts (the agent → human queue). |
+| `list-reviews` | Review queue — **defaults to BOTH workflows** (team + recurring). Pass `workflow_type="team"` for the standard queue in isolation. |
+| `list-recurring-reviews` | Agent-produced pending drafts (the agent → human queue); scope to one agent via `agent_creator_id`. |
 | `get-post` | Optional — pull full detail for a queued item before deciding. |
 | `approve-post` | Approve a standard-queue post (optionally schedule at approval). |
 | `approve-recurring-review` | Approve an agent draft (optionally schedule at suggested time). |
@@ -49,7 +53,8 @@ drafts into review for someone else to approve.
 - `workspace_id` — resolve once via `list-workspaces`, reuse for every call. Auth is automatic
   via the Bolta connector's OAuth grant — never ask for an API key. Default new content to
   Draft; confirm before publish/delete.
-- Approving/rejecting requires **editor** or above. If a call returns a permission error,
+- Approving/rejecting requires an **owner/admin/creator** role (viewers are read-only;
+  workspace roles are owner/admin/creator/viewer). If a call returns a permission error,
   run `get-my-capabilities` and explain the missing role plainly rather than retrying.
 
 ## Workflow
@@ -63,8 +68,12 @@ Prefer one call: `list-inbox-items(workspace_id)` — the unified inbox. Each it
 for one slice, and pass `agent_id` when the user asks about ONE agent's output ("what did
 Hunter produce that needs me?"). Fall back to the per-queue tools only when you need
 queue-specific filters:
-- `list-reviews(workspace_id)` — standard queue (`reviewer_id`, `workflow_type` filters).
-- `list-recurring-reviews(workspace_id)` — agent drafts (`status`, `template_id` filters).
+- `list-reviews(workspace_id, workflow_type="team")` — standard queue (`reviewer_id` filter
+  also available). **Without `workflow_type`, list-reviews returns BOTH workflows** (team +
+  recurring), so calling it bare alongside `list-recurring-reviews` double-counts the agent
+  drafts. Always pass `workflow_type="team"` when segmenting the two queues.
+- `list-recurring-reviews(workspace_id)` — agent drafts (`status`, `template_id` filters;
+  pass `agent_creator_id` — an agent id from `list-agents` — to triage one agent's drafts).
 Present a single combined summary: how many from each source, and a one-line preview per item
 (content snippet, target account/platform, for agent items the suggested schedule time, and
 for hunter items the mention/lead being replied to). For `report` items, surface the report

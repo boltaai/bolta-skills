@@ -1,13 +1,15 @@
 ---
 name: brand-voice-enforce
 description: >
-  Apply the brand's voice and tone to any content the user asks to write. Use this skill
-  when the user asks to "write a post", "draft a LinkedIn post", "write an email", "draft a
-  proposal", "write a blog intro", "make this on-brand", "rewrite this in our voice", "apply
-  our brand voice", "does this sound like us", or requests any content that should match an
-  established brand voice. Works for social media and beyond (email, proposals, decks, blog).
-  Not for creating the guideline itself (use brand-voice-generate) or discovering brand
-  materials (use brand-voice-discover).
+  Transform and produce content in the brand's established voice. Use this skill when the
+  user asks to "rewrite this in our voice", "make this on-brand", "apply our brand voice",
+  "adapt this post for email/blog/proposal", "write an email in our voice", "draft a
+  proposal", "write a blog intro", or wants one piece of content re-expressed across
+  formats against a full guideline. Works for social media and beyond (email, proposals,
+  decks, blog). For plain "write/draft a post" saved to Bolta use bolta-draft-post (the
+  canonical drafting skill); for scoring existing content use brand-voice-validate; not for
+  creating the guideline itself (use brand-voice-generate) or discovering brand materials
+  (use brand-voice-discover).
 ---
 
 # Brand Voice Enforcement
@@ -17,8 +19,10 @@ attributes and the context-appropriate tone, produce the content, validate it ag
 guideline, and briefly explain the brand choices made.
 
 ## When to use
-Any content-creation request where the output should be on-brand — a social post, an email,
-a proposal, a blog section, ad copy, a caption. This is the everyday writing skill.
+Voice-heavy content work — rewriting existing copy in-brand, enforcing a full guideline,
+or producing non-social formats (email, proposal, blog section, ad copy, deck). For a plain
+"draft a post" saved to Bolta, bolta-draft-post is the canonical owner; for scoring content
+that already exists, use brand-voice-validate.
 
 ## Tools this skill uses
 | Tool | Why |
@@ -55,7 +59,12 @@ content type to a row of the tone matrix (formality, energy, technical depth). S
 
 ### 3. Generate
 - **Social post:** call `voice-generate`, passing the guideline through its params —
-  `tone`, `dos`, `donts`, `custom_rules`, `context`, `business_name`, `niche`, and `topics`.
+  `tone` (a string, e.g. "professional, direct"), `dos`, `donts`, `custom_rules`, `context`,
+  `business_name`, `niche`, and `topics`. Always pass `max_posts` explicitly — the server
+  defaults to 7 posts per call, so a single-draft request without it burns credits on 6
+  unwanted variants. Always pass `platform` (linkedin, x, threads, bluesky, facebook,
+  instagram, reddit) when the target is known — without it, example selection is
+  non-deterministic and biased toward the most-recently-analyzed account.
   This runs Bolta's own writer so the output matches everything else Bolta produces.
 - **Non-social content (email, proposal, blog, deck):** write it directly, applying the same
   voice constants and tone flexes. For long-form or high-stakes content, write from the
@@ -98,8 +107,9 @@ guideline strictly, adapt for context, or override. Default to adapting with a o
 User: "Write a LinkedIn post announcing our Series A."
 1. `get-voice-context(workspace_id)` → We Are: Confident, Data-driven, Direct; not Hype-driven.
 2. Content type = social/LinkedIn → tone: formality medium, energy high, depth low.
-3. `voice-generate(workspace_id, topics=["Series A announcement"], tone=..., dos=[...],
-   donts=["no buzzwords","no 'thrilled to announce'"], context="Series A, $X, lead investor Y")`.
+3. `voice-generate(workspace_id, topics=["Series A announcement"], tone="confident, direct",
+   dos=[...], donts=["no buzzwords","no 'thrilled to announce'"],
+   context="Series A, $X, lead investor Y", max_posts=1, platform="linkedin")`.
 4. Validate: leads with a number, no hype clichés, direct → passes.
 5. Present the post + "Led with Confident + Data-driven; kept energy high for LinkedIn; avoided
    'thrilled to announce' per your We-Are-Not. Save as a Draft?"

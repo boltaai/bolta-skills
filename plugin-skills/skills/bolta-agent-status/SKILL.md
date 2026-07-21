@@ -4,8 +4,10 @@ description: >
   Report on the Bolta agent workforce — who's active or paused, what they've been producing,
   and what it's costing. Use this skill when the user asks "how are my agents doing", "show my
   agents", "agent activity", "what have my agents been doing", "agent run history", "is my
-  agent working", or wants a status roll-up of their hired agents. Read-only. Not for hiring
-  (use bolta-hire-agent) or triggering/reviewing a run (use bolta-agent-run-and-review).
+  agent working", or wants a status roll-up of their hired agents. Read-only — it never
+  changes anything; to pause/resume, reschedule, edit, or delete an agent or job, use
+  bolta-agent-manage. Not for hiring (use bolta-hire-agent) or triggering/reviewing a run
+  (use bolta-agent-run-and-review).
 ---
 
 # Bolta Agent Status Report
@@ -87,7 +89,10 @@ instructions, or remove an agent/job — hand off to **bolta-agent-manage** (nev
   rest rather than aborting the whole report.
 - A run shows failed → drill in with `get-agent-run(workspace_id, run_id)` and report the
   failure stage/code plainly instead of guessing.
-- A job with zero runs → report it as "no runs yet (likely paused for preview)", not a failure.
+- A job with zero runs → not a failure, and NOT "likely paused" — stable-preset jobs hire
+  **active**. Diagnose from the job's actual `status` + `next_run_at`: active with a future
+  `next_run_at` = "hasn't reached its first scheduled run yet (next run: …)"; paused = report
+  the `paused_by` reason; `needs_attention` = quarantined at hire (report `error_message`).
 - Long lists → cap `list-agent-job-runs` with `limit` and summarize rather than dumping every
   run.
 

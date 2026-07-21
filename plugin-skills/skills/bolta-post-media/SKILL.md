@@ -3,7 +3,7 @@ name: bolta-post-media
 description: >
   Attach images or video to a Bolta post. Use this skill when the user asks to "add this image
   to the post", "attach the video", "post with the picture I uploaded", "use the image you
-  generated", "put this photo on the draft", "swap the media on this post", "make an image for
+  generated", "put this photo on the draft", "make an image for
   this post", or "create a branded visual". Handles both ChatGPT-generated images and
   user-attached files (image or video) on new and existing posts, and covers generating
   on-brand images grounded in the workspace's Business DNA.
@@ -25,8 +25,8 @@ either a brand-new post or one that already exists.
 | `list-workspaces` | Resolve `workspace_id` if unknown. |
 | `list-accounts` | Get `account_ids` when creating a new post with media. |
 | `create-post` | New post with `media` attached. |
-| `update-post` | Add or swap `media` on an existing post. |
-| `get-post` | Read the current post to see existing media before swapping. |
+| `update-post` | Add `media` to an existing post (append-only). |
+| `get-post` | Read the current post to see what media is already attached. |
 | `list-business-dna` / `get-business-dna` | Brand identity (colors, fonts, visual aesthetics, logo) — ground image generation in it. |
 
 ## Generating an image for a post — ground it in Business DNA
@@ -70,23 +70,35 @@ fields. This applies identically to images ChatGPT just generated and files the 
 3. `create-post(workspace_id, content, account_ids, media)`. Omit `requested_action` → Draft.
 4. Confirm the Draft is saved with media attached.
 
-### Existing post — add or swap media
+### Existing post — add media (append-only)
 1. Resolve `post_id` (ask, or `list-workspace-posts` to find it).
 2. Optional: `get-post(post_id)` to see what media is currently attached.
-3. `update-post(post_id, media=[...])`. **Note:** `update-post` swaps the media set — the array
-   you pass replaces the existing media, it does not append. If the user wants to keep existing
-   files plus new ones, include both in the array.
-4. Confirm the swap.
+3. `update-post(post_id, media=[...])` with **only the NEW file object(s)**. **Note:**
+   `update-post` **appends** — the array is added to whatever is already attached; it never
+   replaces or removes anything, and there is no way to delete media through this tool.
+   Do NOT re-send items that are already on the post: they get re-downloaded and attached
+   again as duplicates.
+4. Confirm the media was added. If the user wants media *removed* or *swapped*, say that has
+   to be done in the Bolta app — this tool can only add.
 
-### Large files
-Video and large images may take a moment to re-host after the call returns. Tell the user the
-attach succeeded and the file is being stored; it will be ready in Bolta shortly.
+### Re-hosting — what actually happens
+Re-hosting is **synchronous**: Bolta downloads the file and stores a durable copy before the
+call returns, so a successful response means the copy exists — no "still processing" wait.
+Two silent caveats:
+- If the download or upload fails, Bolta attaches the **original URL** instead and still
+  reports success — the failure is never surfaced in the response. Since ChatGPT file URLs
+  are short-lived, that attachment can be dead by publish time.
+- Files over **100MB** are never re-hosted; the original URL is attached as-is. For large
+  video, prefer a durable source URL the user controls.
 
 ## Failure handling
 - Missing `download_url` or `file_id` → cannot attach; ask the user to re-share/re-upload the file.
-- Re-host failure (bad/expired URL) → report it; ask for a fresh file object.
+- Re-host failure (bad/expired URL) → the call still succeeds with the original URL attached
+  (see above) — you cannot detect this from the response. If the source URL was short-lived,
+  warn the user the attachment may not survive to publish and offer to re-attach a fresh file.
 - Unsupported mime type for the target platform → flag the platform's media limits, don't force it.
-- Permission error → report the missing role/scope; the text content still saves.
+- Permission error → the whole update fails; **nothing** is saved, media or text. Report the
+  missing role/scope and don't claim any part of the edit went through.
 
 ## Example
 User (after generating an image): "Add this to a Threads draft."

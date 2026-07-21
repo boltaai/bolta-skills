@@ -6,9 +6,9 @@ description: >
   connected", "which accounts do I have", "show my social accounts", "create a bucket",
   "make a Launch Team bucket with my LinkedIn and X", "add my Instagram to the launch
   bucket", "rename that bucket", or says "post to my <bucket> bucket" and you need to
-  resolve the bucket's member accounts. Not for connecting new accounts (done in the
-  Bolta app), drafting content (use bolta-draft-post), or analytics (use
-  bolta-analytics-report).
+  resolve the bucket's member accounts. Connecting a new account happens in the user's
+  browser — hand them a link via get-connect-link. Not for drafting content (use
+  bolta-draft-post) or analytics (use bolta-analytics-report).
 ---
 
 # Bolta Accounts & Buckets
@@ -30,6 +30,7 @@ re-membering buckets — or resolving a bucket name into account ids for another
 | `list-workspaces` | Resolve `workspace_id` if unknown. |
 | `list-accounts` | Connected accounts + their UUIDs — the ONLY source of `account_ids`. Optional `platform` filter. Renders the accounts card (Socials tab). |
 | `list-buckets` | The workspace's buckets with member accounts (id, platform, username). Renders the accounts card (Buckets tab). |
+| `get-connect-link` | URL to Bolta's connect page for when nothing (or the wrong platform) is connected. Optional `platform` preselects it on the page. |
 | `create-social-bucket` | Create a bucket: `name` (unique per workspace) + `account_ids`. |
 | `update-social-bucket` | Rename a bucket and/or replace its members (`account_ids` is a FULL replacement list). |
 | `get-my-capabilities` | Diagnose permission errors on bucket writes (needs accounts:write). |
@@ -37,8 +38,9 @@ re-membering buckets — or resolving a bucket name into account ids for another
 ## Prerequisites
 - `workspace_id` — resolve once via `list-workspaces`, reuse for every call. Auth is automatic
   via the Bolta connector's OAuth grant — never ask for an API key.
-- Reads need any role; creating/updating buckets needs **accounts:write** (editor+).
-  (Elsewhere, default new content to Draft; confirm before publish/delete.)
+- Reads need any role; creating/updating buckets needs **accounts:write** — granted to
+  owner, admin, and creator. Viewers are read-only. (Elsewhere, default new content to
+  Draft; confirm before publish/delete.)
 
 ## Workflow
 
@@ -49,8 +51,10 @@ Call `list-workspaces` and use the active workspace's `id`. Never guess a UUID.
 Call `list-accounts(workspace_id)` (add `platform` if the user named one) and, in parallel,
 `list-buckets(workspace_id)`. Present both halves the way the card does — Socials: each
 account's platform + username + status; Buckets: each bucket's name and members. If nothing
-is connected, say so and point the user to the Bolta app to connect accounts (there is no
-connect tool here).
+is connected (or the platform the user wants is missing), call
+`get-connect-link(workspace_id)` — pass `platform` if the user named one — and share the
+URL. OAuth can't complete in chat, so the user finishes the connection in their browser;
+afterwards re-check with `list-accounts`.
 
 ### 3. Create a bucket
 "Create a bucket called Launch Team with my LinkedIn and X":
@@ -60,6 +64,8 @@ connect tool here).
 2. Confirm the resolved members with the user ("Launch Team = LinkedIn @acme + X @acme — 
    create it?").
 3. `create-social-bucket(workspace_id, name="Launch Team", account_ids=[…])`.
+4. Verify: re-read with `list-buckets(workspace_id)` and confirm the new bucket and its
+   members are what the user asked for before reporting success.
 Bucket names are unique per workspace — an exact duplicate 409s (see failures).
 
 ### 4. Update a bucket
@@ -69,6 +75,12 @@ Bucket names are unique per workspace — an exact duplicate 409s (see failures)
    `account_ids` is a **full replacement** — sending only the new account would drop the rest.
 3. `update-social-bucket(workspace_id, bucket_id, account_ids=[…full new list…])`; pass
    `name` for renames. Repeating the same update is safe (idempotent).
+4. Verify: re-read with `list-buckets(workspace_id)` and confirm the final name/membership
+   before reporting success.
+
+Note: there is **no delete-bucket tool** on this surface. If the user asks to delete a
+bucket, say so and point them to the Bolta app; you can offer to empty or rename it via
+`update-social-bucket` instead.
 
 ### 5. "Post to my <bucket> bucket"
 This skill resolves; drafting skills act. Call `list-buckets`, find the bucket by name, and

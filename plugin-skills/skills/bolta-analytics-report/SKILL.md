@@ -7,7 +7,7 @@ description: >
   "engagement over the last 30 days", "what's my best-performing account/post", or wants
   any rollup, comparison, or trend of reach/engagement across their posts or connected
   accounts. Not for reading the review queue
-  (use bolta-review-queue) or writing content (use brand-voice-enforce).
+  (use bolta-review-queue) or writing content (use bolta-draft-post).
 ---
 
 # Bolta Analytics Report
@@ -28,7 +28,7 @@ Any request to see, compare, or explain how content or accounts are performing.
 | `cross-platform-analytics` | Workspace-wide rollup across all platforms. |
 | `list-account-insights` | Per-account snapshot for every connected account in one call. |
 | `get-account-analytics` | Time series for one specific account. |
-| `list-workspace-posts` | **Post-level performance**: `status=published` + a date window + `include_metrics=true` attaches per-platform engagement (views, likes, comments, reposts) and `published_at` to each post. `metrics_platforms` narrows the breakdown. |
+| `list-workspace-posts` | **Post-level performance**: `status=published` + a date window + `include_metrics=true` attaches per-platform engagement (views, likes, comments, reposts) and `published_at` to each post. `metrics_platforms` narrows the breakdown. Paginated — default `limit` is 50 (max 200). |
 
 ## Prerequisites
 - `workspace_id` — resolve once via `list-workspaces`, reuse for every call. Auth is automatic
@@ -65,9 +65,19 @@ number is never ambiguous.
   `get-account-analytics(workspace_id, account_id, days)`.
 - **Post-level performance:** `list-workspace-posts(workspace_id, status="published",
   start_date, end_date, include_metrics=true)` — rank posts by engagement, name the winners,
-  and quote the actual content that performed.
+  and quote the actual content that performed. **Pass an explicit `limit`** (default is 50,
+  max 200) and check the pagination fields in the response — a "best posts" ranking built
+  on the default silently covers only the first page. If the window holds more posts than
+  one page, page through (`page=2, 3, …`) before declaring winners.
 For a full report you may combine these — a rollup for the headline, per-account insights for
 the breakdown, and post metrics for "which posts drove it".
+
+**Growth-field caveat:** the `growth` / `growth_rate` number on account insights is currently
+**unreliable** — live testing returned 0.0% on all 8 connected accounts while followers and
+engagement varied (suspected broken calculation, under investigation). Do not rank accounts
+by it or build "which account is growing" conclusions on it; if asked about growth, lean on
+follower/engagement deltas over the window instead, and flag any `growth` figure you do quote
+as possibly wrong.
 
 **Freshness honesty:** post metrics sync **nightly**. For posts published less than ~24h ago,
 say metrics may not have synced yet — zeros there mean "not synced", not poor performance.

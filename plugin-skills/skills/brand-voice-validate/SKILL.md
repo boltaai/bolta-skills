@@ -21,7 +21,7 @@ paragraph, ad copy, a caption — or to spot-check content an agent produced.
 ## Tools this skill uses
 | Tool | Why |
 |-|-|
-| `get-voice-context` | Load Bolta's compiled voice (tone, dos/donts, exemplars) when no session guideline exists. |
+| `get-voice-context` | Load Bolta's compiled voice when no session guideline exists. Returns tone dials, `tone_of_voice`, `dos`/`donts`, persona, custom rules, target audience, business identity, and per-platform adaptations — it does NOT carry exemplar posts, terminology lists, or a We-Are/We-Are-Not table. |
 | `list-voice-profiles` | Confirm which Voice Profile applies if the workspace has several. |
 
 Scoring is done inline using the grading behavior in Step 2.
@@ -44,25 +44,37 @@ Prefer the session guideline (freshest). Otherwise `get-voice-context`; if multi
 exist, `list-voice-profiles` and confirm which one governs this content.
 
 ### 2. Score against each dimension
-Evaluate the content on:
-- **We Are attributes** — is each active attribute present? (matched / partial / missing)
-- **We Are Not boundaries** — any crossed? (each crossing is a hard deduction)
+Score only dimensions the loaded voice source actually carries — never grade against a
+dimension the standard doesn't define.
+
+Always available (both sources):
+- **Dos** — is each `do` honored? (matched / partial / missing)
+- **Don'ts** — any violated? (each violation is a hard deduction)
+- **Tone** — does the register match the stated tone (`tone` dials + `tone_of_voice`
+  descriptors), pacing, and content size?
+- **Audience & persona** — does it speak to the stated `target_audience` in the stated
+  persona / speaker mode, and honor any `custom_rules`?
+
+Session-guideline only (skip when grading from `get-voice-context` alone — the compiled
+context does not carry these):
+- **We Are / We Are Not attributes** — each active attribute present? any boundary crossed?
 - **Terminology** — must-use present, avoid/never words absent.
-- **Tone-by-context** — does the register match the correct matrix row for this content type?
-Grade against the brand's OWN persisted Voice Profile (`get-voice-context`), not generic "good
-writing" — a blunt, no-emoji brand should score high for being blunt and emoji-free. Note which
-"We Are" attributes are present/missing, any "We Are Not" boundary crossed (quote the line),
-terminology compliance, tone match for the context, and — where engagement data exists — whether
-the format historically works for this brand. Then compose the 0-100 score (weight boundary
-crossings and never-words heaviest).
+- **Tone-by-context matrix** — register matches the matrix row for this content type. On the
+  `get-voice-context` path, use the `platforms` adaptations block (if present for this
+  platform) as the context check instead.
+
+Grade against the brand's OWN standard, not generic "good writing" — a blunt, no-emoji brand
+should score high for being blunt and emoji-free. Quote the line for every violation. Then
+compose the 0-100 score from the dimensions actually evaluated (weight don't-violations and
+boundary crossings heaviest), and say which dimensions were skipped and why.
 
 ### 3. Build the deviation report
-List, specifically:
-- Attributes matched (with the phrase that earned it).
-- Attributes missing or weak.
-- Boundaries crossed (quote the offending text).
-- Terminology issues (found → should be).
-- Tone mismatch (observed register vs. expected row).
+List, specifically (covering only the dimensions scored in Step 2):
+- Dos/attributes matched (with the phrase that earned it).
+- Dos/attributes missing or weak.
+- Don'ts or boundaries crossed (quote the offending text).
+- Terminology issues (found → should be) — session guideline only.
+- Tone mismatch (observed register vs. the expected tone or matrix row).
 
 ### 4. Return score + fixes
 Give the score, a one-line verdict (on-brand / needs work / off-brand), and a numbered list of

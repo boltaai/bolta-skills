@@ -1,3 +1,8 @@
+> **Historical (2026-07-21):** This document describes the pre-v1 38-skill `schema.json` pack,
+> including LoRA voice-training tooling that was deprecated 2026-07-18. It is superseded by
+> `plugin-skills/skills/*` (see `plugin-skills/README.md` and
+> `plugin-skills/references/bolta-tools.md`). Kept for reference only — do not build on it.
+
 # V2 Skills Review - Status Report
 
 **Last Updated:** 2026-04-05  

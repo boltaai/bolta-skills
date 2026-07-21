@@ -2,7 +2,7 @@
 
 The single source of truth for every tool the Bolta plugin exposes. Skills MUST use
 these exact tool ids and parameter names. The server is **mcp.bolta.ai/mcp** (StreamableHTTP,
-stateless). 58 tools are exposed. Any tool name not on this list does not exist — do not call it.
+stateless). 60 tools are exposed. Any tool name not on this list does not exist — do not call it.
 
 ## Universal rules
 
@@ -25,6 +25,7 @@ stateless). 58 tools are exposed. Any tool name not on this list does not exist 
 | `get-workspace` | GET · RO | `workspace_id`* | Settings, safe-mode, autonomy. |
 | `get-my-capabilities` | GET · RO | `workspace_id`* | Caller's role/scopes — check before writes. |
 | `list-accounts` | GET · RO | `workspace_id`*, `platform` | Connected social accounts + their UUIDs (`account_ids`). |
+| `get-connect-link` | GET · RO | `workspace_id`*, `platform` | URL to Bolta's social-account connect page. Use when the workspace has no connected account for the target platform — OAuth can't run in chat; share the link, then re-check with `list-accounts`. `platform` preselects it on the page. |
 | `list-buckets` | GET · RO | `workspace_id`* | Social buckets — named groups of accounts for one-shot multi-account publishing — with member accounts (id, platform, username). Renders the accounts card's Buckets tab. |
 | `create-social-bucket` | POST | `workspace_id`*, `name`*, `account_ids` | Create a bucket (name unique per workspace). `account_ids` = base account UUIDs from `list-accounts` (not virtual `linkedin_org_`/`facebook_page_` ids). |
 | `update-social-bucket` | PATCH | `workspace_id`*, `bucket_id`*, `name`, `account_ids` | Rename and/or replace members. `account_ids` is a **full replacement list** — fetch current members via `list-buckets`, adjust, resend the whole list. |
@@ -44,13 +45,20 @@ stateless). 58 tools are exposed. Any tool name not on this list does not exist 
 |-|-|-|-|
 | `create-post` | POST | `workspace_id`*, `content`*, `account_ids`, `social_buckets`, `media`, `scheduled_time`, `requested_action`, `poll`, `idempotency_key` | Primary creation tool. `account_ids` optional for plain drafts, required to schedule/publish — or pass `social_buckets` (bucket IDs from `list-buckets`) to target a whole named account group. See `requested_action` + `media` + `poll` below. |
 | `update-post` | PATCH | `post_id`*, `content`, `media`, `poll`, `scheduled_time`, `accounts` | Edit an existing post (incl. swapping media). `accounts` retargets the post — it is a FULL replacement list; resend every account the post should keep. |
-| `delete-post` | DELETE · **DES** | `post_id`* | Irreversible — confirm first. |
+| `delete-post` | DELETE · **DES** | `post_id`* | **Soft delete** — hidden immediately, recoverable for 7 days via `list-recently-deleted` → `restore-deleted`, then permanently purged. Still confirm first. |
 | `update-post-platform-details` | PATCH | `post_id`*, `platform`*, `fields`* | Set per-platform options (poll, flair, title, privacy…). `fields` is an object. |
-| `bulk-create-posts` | POST | `workspace_id`*, `posts`* | NOT available from ChatGPT/Claude (assistant sessions get 403 — create posts individually with `create-post` so the approval flow applies). For raw API keys: `posts` items use the NESTED shape `{contents:[{content,index,media}], accounts:[…], status, scheduled_time, social_buckets}` — flat `content`/`account_ids` keys are silently ignored. Returns a `task_id`. |
+| `bulk-create-posts` | POST | `workspace_id`*, `posts`*, `timezone` | ALWAYS use this for multiple posts — looping `create-post` renders one card per call and the user only sees one; the server forbids that pattern. Available to assistant sessions: per-item authorization routes assistant-created posts through the approval inbox (no 403). Each `posts` item takes the same FLAT keys as `create-post`: `{content, account_ids, social_buckets, status: "Draft"\|"Scheduled", scheduled_time (required when Scheduled; naive wall-clock, no offset), media}` — the nested `{contents:[…]}` shape is also accepted. Either `account_ids` or `social_buckets` required per item. `timezone` (IANA) only when the user names a zone. Returns a `task_id`; the card polls status itself — do NOT re-poll. |
 | `bulk-create-status` | GET · RO | `task_id`* | Poll the bulk job; returns per-item progress + previews. |
 | `schedule-post` | POST | `workspace_id`*, `post_id`*, `time`* | Schedule an existing Draft (`time` = ISO8601). |
 | `publish-post` | POST · **DES · OW** | `workspace_id`*, `post_id`* | Publishes NOW to the live platform. Irreversible + public — always confirm. |
 | `submit-for-review` | POST | `workspace_id`*, `post_ids`*, `note` | Route drafts into the review queue. |
+
+## Undo (soft-delete window)
+
+| Tool | Method | Params | Notes |
+|-|-|-|-|
+| `list-recently-deleted` | GET · RO | `workspace_id`* | Posts and agent jobs deleted in the last 7 days that can still be restored. Each item: type (`post`\|`job`), label, deleted-at, days remaining before permanent purge. |
+| `restore-deleted` | POST | `workspace_id`*, `item_type`* (`post`\|`job`), `item_id`* | Undo a delete (ids from `list-recently-deleted`). 404 if the item is live, already purged, or in another workspace. Restoring a job does NOT bring back its Hunter/Engager campaign — that cascade is permanent. |
 
 ### `create-post` — `requested_action` values
 - omitted / `draft` → creates a **Draft** (default).
@@ -118,7 +126,7 @@ per-platform options use `update-post-platform-details`.
 | Tool | Method | Params | Notes |
 |-|-|-|-|
 | `list-agent-presets` | GET · RO | `workspace_id`* | Marketplace presets (Hype Man, Deep Diver, Hunter, Engager, …) + their `preset_id`s. |
-| `hire-agent-preset` | POST | `workspace_id`*, `preset_id`*, `name`, `job_name`, `voice_profile_id`, `account_ids` | Hire a preset → creates the agent + its job (starts paused for preview). |
+| `hire-agent-preset` | POST | `workspace_id`*, `preset_id`*, `name`, `job_name`, `voice_profile_id`, `account_ids` | Hire a preset → creates the agent + its job. **Only beta presets start paused** (assisted autonomy); stable presets (e.g. Hype Man, Analyst) hire ACTIVE with autonomy=auto and `next_run_at` set — the job will run on schedule. Read back the actual job status after hiring; offer an explicit pause if the user wants to preview first. |
 | `list-agents` | GET · RO | `workspace_id`* | Hired agents + ids. |
 | `create-agent` | POST | `workspace_id`*, `name`*, `type`*, `role`, `description`, `avatar`, `config` | Create a custom agent from scratch (types: content_creator \| engagement \| acquisition \| reviewer \| analytics \| moderator \| custom). Free workspaces are capped at 1 agent (402 → explain the upgrade honestly). Prefer `hire-agent-preset` when a preset fits. |
 | `get-agent` | GET · RO | `workspace_id`*, `agent_id`* | One agent's config/persona/status. |
@@ -128,7 +136,7 @@ per-platform options use `update-post-platform-details`.
 | `get-agent-job` | GET · RO | `workspace_id`*, `agent_id`*, `job_id`* | One job's full detail: schedule, status, voice, accounts, trigger_config, and `paused_by` (see below). Fetch this BEFORE any job edit. |
 | `create-agent-job` | POST | `workspace_id`*, `agent_id`*, `name`*, `trigger`, `schedule`, `voice_profile_id`, `account_ids`, `trigger_config`, `run_instructions`, `max_retries`, `status`, `intended_platform` | Add a job to an agent. `status=paused` creates it dormant for config review; `intended_platform` steers platform-native style. Call `get-agent` first — config differs by type: content agents = `trigger=scheduled` + schedule + voice + accounts; engagement = on_new_mention/on_new_comment; acquisition (Hunter) = keyword_match + trigger_config keywords[]/subreddits[]; analytics/moderator may omit voice. Mirror a sibling job (`get-agent-job`) instead of guessing shapes. |
 | `update-agent-job` | PATCH | `workspace_id`*, `agent_id`*, `job_id`*, `name`, `status`, `schedule`, `trigger`, `trigger_config`, `voice_profile_id`, `account_ids`, `run_instructions`, `max_retries` | Edit a job. `status=paused` = the **job-level pause** (agent + other jobs keep running); `status=active` resumes and `next_run_at` recalculates on schedule changes. **`trigger_config` and `schedule` are FULL-REPLACE:** to add one keyword, `get-agent-job` → modify the returned object → resend the WHOLE thing. A partial send silently wipes sibling keys. |
-| `delete-agent-job` | DELETE · **DES** | `workspace_id`*, `agent_id`*, `job_id`* | Irreversible — confirm first; cascades the job's own Hunter/Engager campaign. Offer `status=paused` as the soft alternative. |
+| `delete-agent-job` | DELETE · **DES** | `workspace_id`*, `agent_id`*, `job_id`* | **Soft delete** — the job is recoverable for 7 days via `list-recently-deleted` → `restore-deleted`, BUT its linked Hunter/Engager campaign is destroyed immediately and cannot be restored. Confirm first; offer `status=paused` as the soft alternative. |
 | `run-agent-job-now` | POST | `workspace_id`*, `agent_id`*, `job_id`*, `run_instructions`, `account_id` | Trigger a job immediately (optional one-off instructions). |
 | `list-agent-job-runs` | GET · RO | `workspace_id`*, `agent_id`*, `job_id`*, `limit` | Run history: status, tools used, tokens, cost, output. |
 | `list-agent-runs` | GET · RO | `workspace_id`*, `agent_id`, `status`, `since`, `limit` | **Workspace-wide** run history across all agents (agent/job attribution per run), newest first, default last 7 days (`since` widens the window). Prefer this for "what did my agents do". |
