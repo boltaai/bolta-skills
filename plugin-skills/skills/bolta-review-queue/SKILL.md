@@ -42,7 +42,7 @@ works the queue as it stands.
 | `list-reviews` | Review queue — **defaults to BOTH workflows** (team + recurring). Pass `workflow_type="team"` for the standard queue in isolation. |
 | `list-recurring-reviews` | Agent-produced pending drafts (the agent → human queue); scope to one agent via `agent_creator_id`. |
 | `get-post` | Optional — pull full detail for a queued item before deciding. |
-| `approve-post` | Approve a standard-queue post (optionally schedule at approval). |
+| `approve-post` | Approve a standard-queue post (optionally schedule at approval). Echo the row's `content_fingerprint` as `expected_fingerprint`. |
 | `approve-recurring-review` | Approve an agent draft (optionally schedule at suggested time). |
 | `reject-recurring-review` | Reject an agent draft with a reason (feeds voice learning). |
 | `update-hunter-reply` | Edit a hunter reply draft without sending it (already-sent replies 409). |
@@ -79,14 +79,24 @@ Present a single combined summary: how many from each source, and a one-line pre
 for hunter items the mention/lead being replied to). For `report` items, surface the report
 summary and its download link — reports are read-and-download, not approve/reject. Make clear
 which source each item belongs to, since they're actioned through different tools.
+Two extra fields on team rows matter:
+- **`workflow_run_id`** — items sharing one came from the same workflow run; group them as a
+  batch ("3 drafts from your launch workflow") and, where the flag-gated `get-workflow-run`
+  tool is available, offer the run's overall status (see bolta-workflow-run).
+- **Status `autonomous`** — the post was **scheduled by the autonomy policy, not approved by
+  a human**. Never describe an autonomous row as human-approved; say it was auto-scheduled
+  under the workspace's autonomy settings.
 
 ### 3. Inspect (optional)
 For any item the user wants to see in full before deciding, call `get-post(post_id)` for the
 complete content, media, and target accounts. Do this when a snippet isn't enough to judge.
 
 ### 4. Act on each item
-- **Standard-queue item** → `approve-post(workspace_id, post_id)`. Optionally pass
-  `schedule_mode` / `fixed_time` to schedule it on approval, and `comments` for approver notes.
+- **Standard-queue item** → `approve-post(workspace_id, post_id)`. **Always pass the item's
+  `content_fingerprint` (from the inbox/workflow-run read) as `expected_fingerprint`** — it
+  guarantees you approve exactly the revision the user just saw, not whatever the post
+  contains now. Optionally pass `schedule_mode` / `fixed_time` to schedule it on approval,
+  and `comments` for approver notes.
 - **Agent (recurring) item, approve** → `approve-recurring-review(review_id)`. Pass
   `approveWithSchedule` + `useSuggestedTime` to schedule at the agent's suggested time, and
   `approvalComments` for notes.
@@ -117,6 +127,13 @@ Summarize what was approved, scheduled, rejected (with reasons), and what remain
 queue. Note that rejection reasons feed the voice-learning loop.
 
 ## Failure handling
+- `approve-post` returns **409 `stale_review`** → the post changed (content, media,
+  destination, or scheduled time) after the user last saw it. **NEVER blindly retry** — the
+  409 deliberately carries no fingerprint, so a blind retry cannot succeed. Recovery flow:
+  re-read the item (`list-inbox-items` or `get-post`; `get-workflow-run` for workflow
+  drafts), SHOW the user the current content, get a fresh explicit decision, then approve
+  again passing the fresh `content_fingerprint` as `expected_fingerprint`. (Alternative:
+  `submit-for-review` re-stamps the reviewed revision.)
 - Empty queues → say both are clear; offer to push drafts in via `submit-for-review`.
 - Permission error on approve/reject → run `get-my-capabilities`, report the missing role,
   do not retry.

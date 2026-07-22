@@ -2,7 +2,9 @@
 
 The single source of truth for every tool the Bolta plugin exposes. Skills MUST use
 these exact tool ids and parameter names. The server is **mcp.bolta.ai/mcp** (StreamableHTTP,
-stateless). 60 tools are exposed. Any tool name not on this list does not exist — do not call it.
+stateless). 60 baseline tools are exposed, plus 2 flag-gated Workflow Runtime tools
+(`start-workflow`, `get-workflow-run`) when `WORKFLOW_RUNTIME_V1` is on — 62 total. Any tool
+name not on this list does not exist — do not call it.
 
 ## Universal rules
 
@@ -81,14 +83,25 @@ per-platform options use `update-post-platform-details`.
 
 | Tool | Method | Params | Notes |
 |-|-|-|-|
-| `approve-post` | POST | `workspace_id`*, `post_id`*, `schedule_mode`, `fixed_time`, `comments` | Approve a post in review. |
+| `approve-post` | POST | `workspace_id`*, `post_id`*, `schedule_mode`, `expected_fingerprint`, `fixed_time`, `timezone`, `comments` | Approve a post in review. **Pass `expected_fingerprint`** — the `content_fingerprint` from your most recent read of the item (`list-inbox-items` / `get-workflow-run`) — to guarantee you approve exactly the revision reviewed. A **409 `stale_review`** means the post changed since review; the 409 deliberately carries no fingerprint, so NEVER blindly retry — re-read the item, show the user the current content, get a fresh decision, then retry with the fresh fingerprint. Review rows with status `autonomous` were scheduled by autonomy policy, not human-approved. |
 | `list-reviews` | GET · RO | `workspace_id`*, `reviewer_id`, `workflow_type`, `limit`, `page` | Standard review queue. |
 | `list-recurring-reviews` | GET · RO | `workspace_id`*, `status`, `template_id`, `agent_creator_id`, `limit`, `page` | **Pending drafts produced by agents** (recurring/agent runs). This is the agent → human queue. |
-| `list-inbox-items` | GET · RO | `workspace_id`*, `source` (team\|recurring\|hunter\|report), `status`, `agent_id`, `limit`, `offset` | **Unified inbox** of everything pending review — team posts, recurring/agent drafts, hunter reply drafts (with the mention/lead context they respond to), and agent reports (with download links). Pass `agent_id` to answer "what did <agent> produce that needs me?". Prefer this for "what's waiting for me". |
+| `list-inbox-items` | GET · RO | `workspace_id`*, `source` (team\|recurring\|hunter\|report), `status`, `agent_id`, `limit`, `offset` | **Unified inbox** of everything pending review — team posts, recurring/agent drafts, hunter reply drafts (with the mention/lead context they respond to), and agent reports (with download links). Pass `agent_id` to answer "what did <agent> produce that needs me?". Prefer this for "what's waiting for me". Team rows carry `content_fingerprint` (echo as `expected_fingerprint` on `approve-post`) and, for workflow-produced drafts, `workflow_run_id` (group them as one batch). |
 | `approve-recurring-review` | POST | `review_id`*, `approvalComments`, `approveWithSchedule`, `useSuggestedTime`, `newScheduleTime`, `account_ids` | Approve an agent-produced draft. `newScheduleTime` (ISO8601) = "approve it but post Friday 9am" in one call; `account_ids` retargets at approval time. |
 | `reject-recurring-review` | POST | `review_id`*, `rejectionReason`, `rejectionCategories` | Reject an agent-produced draft (feeds voice learning). ALWAYS pass `rejectionCategories` when the objection fits a code — structured categories train the voice far better than free text. Valid codes: too_casual, too_formal, wrong_tone, off_brand, too_long, too_short, wrong_format, factual_error, spelling_grammar, missing_cta, wrong_cta, wrong_emoji, wrong_hashtag, not_engaging, platform_mismatch, too_salesy, off_topic, repetitive, other (invalid codes are silently dropped). |
 | `send-hunter-reply` | POST | `workspace_id`*, `reply_id`*, `content` | Approve + send a hunter reply draft (from `list-inbox-items`, `source=hunter`). Optional `content` overrides the draft text in the same call. Double-send is prevented server-side. |
 | `update-hunter-reply` | PATCH | `workspace_id`*, `reply_id`*, `content`* | Edit a hunter reply draft **without sending** (already-sent replies 409). Send later via `send-hunter-reply`. |
+
+## Workflows (flag-gated: Workflow Runtime V1)
+
+Registered ONLY when the deployment's `WORKFLOW_RUNTIME_V1` flag is on (surface = 62 tools).
+If `start-workflow` is not in the tool list, the feature is off — fall back to
+`create-post` / `bulk-create-posts` and say so; never call an unexposed name.
+
+| Tool | Method | Params | Notes |
+|-|-|-|-|
+| `start-workflow` | POST | `workspace_id`*, `objective`*, `workflow_key`, `post_count`, `platforms`, `account_ids`, `time_window`, `notes`, `execution_mode`, `idempotency_key` | Start a durable workflow for a multi-step OUTCOME ("keep our launch active this week") — for a single explicit post use `create-post` instead. `objective` = the user's own goal; NEVER invent it. `workflow_key` defaults `weekly_content_prepare`; `post_count` 1–10 (default 4). `execution_mode`: `inherit` (default — follow workspace/agent autonomy: assisted→review, eligible auto→automatic SCHEDULING), `require_review` (always pause for approval — use whenever the user says anything like "let me review first"), `auto_schedule` (honored only when existing autonomy allows; otherwise falls back to review with `fallback_reason` = `safe_mode` \| `autonomy_insufficient`). A request can tighten but never loosen workspace safety, and nothing EVER publishes immediately via workflows (that stays `publish-post`). Returns a durable `workflow_run_id` immediately — reuse it for all follow-ups. Retries are safe: same `idempotency_key` (or identical objective within 30 min) returns the SAME run. Consumes agent credits where applicable. |
+| `get-workflow-run` | GET · RO | `workspace_id`*, `workflow_run_id`* | Poll a run (side-effect free). Returns `status` (`running` \| `awaiting_approval` \| `scheduled` \| `completed` \| `partial` \| `failed` \| `cancelled`), `draft_count`/`scheduled_count`/`review_count`/`failed_count`, the policy applied (`requested_execution_mode`, `effective_autonomy`, `approval_required`, `fallback_reason`), `next_scheduled_time`, `artifacts[]` (`post_id`, `platforms`, `review_status`, `content_fingerprint` — echo as `expected_fingerprint` on `approve-post` — `scheduled_time`, `content_preview`), error info, and `next_actions`. `partial` = some scheduled + some awaiting review — a normal mixed outcome, NEVER a failure; offer the review queue (`list-inbox-items`). |
 
 ## Analytics (read-only)
 

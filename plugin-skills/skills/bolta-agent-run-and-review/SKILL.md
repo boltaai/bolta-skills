@@ -95,6 +95,10 @@ with `update-hunter-reply` and send with `send-hunter-reply`. For content drafts
 - **Reject:** `reject-recurring-review(review_id, rejectionReason, rejectionCategories)`. Pass `rejectionCategories` codes whenever the objection fits one (too_casual, too_formal, wrong_tone, off_brand, too_long, too_short, wrong_format, factual_error, spelling_grammar, missing_cta, wrong_cta, wrong_emoji, wrong_hashtag, not_engaging, platform_mismatch, too_salesy, off_topic, repetitive, other; invalid codes are silently dropped) — they feed voice learning better than prose. Always pass a concrete
   `rejectionReason` — explain to the user that the reason is what teaches Bolta's voice, so
   specific feedback ("too salesy", "wrong CTA") makes the next run better.
+- If a draft instead lands in the **standard** queue and you approve it via `approve-post`,
+  echo the row's `content_fingerprint` as `expected_fingerprint` so you approve exactly the
+  revision reviewed; on a 409 `stale_review`, re-read and re-confirm with the user (see
+  bolta-review-queue for the full recovery flow).
 
 ### 7. Close the loop
 Report what was approved (and whether scheduled) vs. rejected, and note that the feedback has

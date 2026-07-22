@@ -7,9 +7,11 @@ Reusable skills for the **Bolta** plugin. Two layers:
    on any content — social posts, emails, proposals, blog posts, decks. Modeled on the
    discover → generate → enforce → validate loop, wired into Bolta's Voice Profile / Business
    DNA model.
-2. **Tool orchestration.** Workflow skills that drive the live curated Bolta MCP surface (60 tools) and
+2. **Tool orchestration.** Workflow skills that drive the live curated Bolta MCP surface (60
+   baseline tools, plus 2 flag-gated Workflow Runtime tools — 62 when enabled) and
    its autonomous agents to their fullest — drafting, scheduling, batching, media, per-platform
-   tailoring, the full hire → run → review agent loop, the review queue, and analytics.
+   tailoring, the full hire → run → review agent loop, durable workflow runs, the review
+   queue, and analytics.
 
 Brand voice is the foundation: the guideline it produces feeds `voice-generate`, ad-hoc
 drafts, and every autonomous agent, so quality styling is consistent everywhere.
@@ -40,6 +42,11 @@ drafts, and every autonomous agent, so quality styling is consistent everywhere.
 | `bolta-agent-run-and-review` | Run a job now, watch the run, then approve/reject the drafts it produced. |
 | `bolta-agent-status` | Report on hired agents, their jobs, and recent run history (incl. why a job is paused). |
 | `bolta-agent-manage` | Pause/resume at the right scope, reschedule, edit instructions & trigger config, add jobs, create custom agents, delete with confirmation. |
+
+### Workflows (flag-gated)
+| Skill | Does |
+|-|-|
+| `bolta-workflow-run` | Start and track a durable multi-post workflow (`start-workflow` / `get-workflow-run` — present only when the Workflow Runtime flag is on): mode selection from user language (inherit / require_review / auto_schedule), autonomy fallbacks, partial handling, stale-proof approvals. |
 
 ### Review & Analytics
 | Skill | Does |
