@@ -22,6 +22,17 @@ automatically for future publication. Nothing EVER publishes immediately through
 workflow; immediate publication stays with `publish-post`. Start the run, poll it, read
 the result back honestly, and route pending drafts into the review flow.
 
+## Availability gate — check before anything else
+`start-workflow` and `get-workflow-run` are flag-gated. Never assume they exist because
+documentation mentions them — check the CURRENT tool list first:
+- **Both `start-workflow` AND `get-workflow-run` available** → use the workflow flow below.
+- **Either one missing** → do NOT attempt those tools — no speculative calls, no retries.
+  If the user's request is genuinely atomic (one explicit post, one schedule, one approval),
+  use the matching existing atomic tool (`create-post`, `schedule-post`, `approve-post`).
+  Otherwise tell the user plainly that workflow execution is not enabled for this workspace
+  yet and offer the atomic alternative — **never fake a workflow with a burst of atomic
+  calls**.
+
 ## When to use
 Route by intent — this steering matters more than anything else in this skill:
 - **One explicit post** ("draft a post about X") → `create-post` via **bolta-draft-post**. NOT a workflow.
@@ -42,11 +53,9 @@ Route by intent — this steering matters more than anything else in this skill:
 ## Prerequisites
 - `workspace_id` — resolve once via `list-workspaces`, reuse for every call. Auth is automatic
   via the Bolta connector's OAuth grant — never ask for an API key.
-- **The Workflow Runtime is flag-gated.** `start-workflow` and `get-workflow-run` exist only
-  when it's enabled for the deployment (the tool surface is then 62 tools instead of the
-  60-tool baseline). If `start-workflow` is not in your tool list, the feature is off — say
-  so plainly and fall back to bolta-draft-post / bolta-schedule-and-batch. Never call a tool
-  name that isn't exposed.
+- **The Workflow Runtime is flag-gated** (the tool surface is 62 tools instead of the
+  60-tool baseline when it's on). The availability gate above governs everything — never
+  call a tool name that isn't exposed.
 - An `objective` in the user's own words. **Never invent the objective** — if the user hasn't
   stated a goal, ask for one before starting anything.
 
@@ -57,16 +66,21 @@ Call `list-workspaces`; use the active workspace's `id`. Never guess a UUID.
 
 ### 2. Pick the execution mode from the user's language
 `execution_mode` requests can **tighten but never loosen** workspace safety — the workflow
-never overrides the workspace's autonomy settings.
+never overrides the workspace's autonomy settings. Map conservatively:
 
 | User says | Mode |
 |-|-|
-| Nothing about review/autonomy (default) | `inherit` — follow the workspace/agent autonomy policy: assisted workspaces get review-gated drafts; workspaces with auto-eligible autonomy may get posts scheduled automatically. |
-| Anything like "let me review first", "I want to approve them", "show me before anything goes out" | `require_review` — ALWAYS pauses for human approval. When in doubt, this is the safe choice. |
-| Explicitly hands-off: "just schedule them", "don't ask me", "fully automatic" | `auto_schedule` — honored only when the existing autonomy policy already allows it; otherwise the run falls back to review with a typed `fallback_reason` (`safe_mode` or `autonomy_insufficient`). |
+| "let me review", "show me first", "before it goes out" | `require_review` |
+| "schedule automatically", "handle the schedule for me", "just schedule it" | `auto_schedule` |
+| "keep our launch active", "run this campaign this week" | `inherit` |
+| No explicit preference | `inherit` (default — it respects what the user already configured) |
 
-Even `auto_schedule` only ever **schedules for future publication** via the normal
-scheduler — it never publishes on the spot.
+**Vague delegation language ("take care of this", "handle it", "you decide") is NOT explicit
+authorization to increase autonomy — it maps to `inherit`, never `auto_schedule`.** Only an
+explicit scheduling request selects `auto_schedule`, and even then the server may fall back
+to review with a typed `fallback_reason` (`safe_mode` or `autonomy_insufficient`) — read it
+back to the user. Even `auto_schedule` only ever **schedules for future publication** via
+the normal scheduler — it never publishes on the spot.
 
 ### 3. Start the run
 Call `start-workflow(workspace_id, objective, …)`:
@@ -127,8 +141,10 @@ answer a status question. Summarize deltas since the last check (newly scheduled
 approved, still pending).
 
 ## Failure handling
-- `start-workflow` not in the tool list → the Workflow Runtime flag is off. Say so and fall
-  back to bolta-draft-post / bolta-schedule-and-batch — don't call nonexistent tools.
+- `start-workflow` or `get-workflow-run` missing from the tool list → the Workflow Runtime
+  flag is off. Follow the availability gate: no speculative calls, no retries; atomic request
+  → matching atomic tool; otherwise say workflow execution isn't enabled yet and offer the
+  atomic alternative. Never simulate a workflow with a burst of atomic calls.
 - `fallback_reason` set (`safe_mode` / `autonomy_insufficient`) → not an error. Explain that
   workspace safety required review, and route to the review queue. Never re-request
   `auto_schedule` hoping for a different answer.
@@ -138,6 +154,8 @@ approved, still pending).
   (same `idempotency_key`, or same objective within 30 minutes). Report the existing run's
   status instead of treating it as a new run.
 - Permission error → run `get-my-capabilities` and explain the missing role; don't retry.
+- On `setup_required` or plan errors (`plan_required` / `trial_runs_exhausted`), switch to
+  the **bolta-setup** flow — don't retry.
 
 ## Example
 User: "Keep our product launch active on LinkedIn and Threads this week — I want to approve

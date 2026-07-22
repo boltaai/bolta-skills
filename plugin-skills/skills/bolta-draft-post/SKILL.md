@@ -83,6 +83,8 @@ Safe Mode blocks it — the fallback is `submit-for-review`).
 - Permission error on `create-post` → report the missing role/scope (creator+ needed); still show
   the written content so nothing is lost.
 - No voice context → draft anyway, flag that it was written without stored voice, offer voice setup.
+- On `setup_required` or plan errors (`plan_required` / `trial_runs_exhausted`), switch to
+  the **bolta-setup** flow — don't retry.
 
 ## Example
 User: "Draft a post about our new changelog for LinkedIn."

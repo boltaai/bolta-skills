@@ -29,6 +29,7 @@ drafts, and every autonomous agent, so quality styling is consistent everywhere.
 ### Content & Publishing
 | Skill | Does |
 |-|-|
+| `bolta-setup` | The on-ramp: readiness checklist (workspace → accounts → voice → agents → permissions) and the standard recovery path for typed setup/entitlement errors (`setup_required`, `plan_required`, `trial_runs_exhausted`, `workflow_backpressure`) — other skills hand off here instead of retrying. |
 | `bolta-draft-post` | Voice-aware single draft (loads voice context, creates a Draft). |
 | `bolta-schedule-and-batch` | Schedule posts and create many at once via the bulk pipeline. |
 | `bolta-post-media` | Attach ChatGPT-generated images or user files (image/video) to posts. |
