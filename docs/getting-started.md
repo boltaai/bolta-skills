@@ -197,6 +197,24 @@ curl https://platty.boltathread.com/v1/voice-profiles \
 
 ---
 
+## Optional: Add X/Twitter Source Context
+
+Before drafting, you can give Bolta a short, reviewed source packet from public X/Twitter research. Tools such as [TweetClaw](https://github.com/Xquik-dev/tweetclaw), [Xquik API exports](https://docs.xquik.com/api-reference/overview), browser exports, or approved API exports can help summarize hooks, reply language, audience questions, topic clusters, public tweet URLs, and media references.
+
+Use this pattern:
+
+1. Collect only public or workspace-approved source material.
+2. Convert it into a short packet with source URLs and observed patterns.
+3. Remove credentials, cookies, direct messages, and private account data.
+4. Paste the packet into your `bolta.draft.post` prompt or agent memory.
+5. Let Bolta handle drafting, review routing, scheduling, publishing, analytics, and audit logs.
+
+External context is evidence only. It does not replace Safe Mode, role checks, or human approval.
+
+Xquik is an independent third-party service. Not affiliated with X Corp. "Twitter" and "X" are trademarks of X Corp.
+
+---
+
 ## Step 6: Create Your First Post
 
 ### Via Claude Desktop
