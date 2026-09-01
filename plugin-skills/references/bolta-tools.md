@@ -2,9 +2,12 @@
 
 The single source of truth for every tool the Bolta plugin exposes. Skills MUST use
 these exact tool ids and parameter names. The server is **mcp.bolta.ai/mcp** (StreamableHTTP,
-stateless). 60 baseline tools are exposed, plus 2 flag-gated Workflow Runtime tools
-(`start-workflow`, `get-workflow-run`) when `WORKFLOW_RUNTIME_V1` is on — 62 total. Any tool
-name not on this list does not exist — do not call it.
+stateless). **68 tools** are exposed. Any tool name not on this list does not exist — do not
+call it. In particular the Agent / Job / Run / Preset tools and `start-workflow` /
+`get-workflow-run` were **removed from the MCP surface** (SERVER:
+`resources/architecture/SKILLS_FIRST_ARCHITECTURE_AUDIT_2026-08.md`): their REST endpoints
+still exist for the Bolta dashboard, but they are not tools any more. Automation is
+Routines, and only Routines.
 
 ## Universal rules
 
@@ -83,28 +86,14 @@ per-platform options use `update-post-platform-details`.
 
 | Tool | Method | Params | Notes |
 |-|-|-|-|
-| `approve-post` | POST | `workspace_id`*, `post_id`*, `schedule_mode`, `expected_fingerprint`, `fixed_time`, `timezone`, `comments` | Approve a post in review. **Pass `expected_fingerprint`** — the `content_fingerprint` from your most recent read of the item (`list-inbox-items` / `get-workflow-run`) — to guarantee you approve exactly the revision reviewed. A **409 `stale_review`** means the post changed since review; the 409 deliberately carries no fingerprint, so NEVER blindly retry — re-read the item, show the user the current content, get a fresh decision, then retry with the fresh fingerprint. Review rows with status `autonomous` were scheduled by autonomy policy, not human-approved. |
+| `approve-post` | POST | `workspace_id`*, `post_id`*, `schedule_mode`, `expected_fingerprint`, `fixed_time`, `timezone`, `comments` | Approve a post in review. **Pass `expected_fingerprint`** — the `content_fingerprint` from your most recent read of the item (`list-inbox-items` / `list-reviews`) — to guarantee you approve exactly the revision reviewed. A **409 `stale_review`** means the post changed since review; the 409 deliberately carries no fingerprint, so NEVER blindly retry — re-read the item, show the user the current content, get a fresh decision, then retry with the fresh fingerprint. Review rows with status `autonomous` were scheduled by autonomy policy, not human-approved. |
 | `list-reviews` | GET · RO | `workspace_id`*, `reviewer_id`, `workflow_type`, `limit`, `page` | Standard review queue. |
-| `list-recurring-reviews` | GET · RO | `workspace_id`*, `status`, `template_id`, `agent_creator_id`, `limit`, `page` | **Pending drafts produced by agents** (recurring/agent runs). This is the agent → human queue. |
-| `list-inbox-items` | GET · RO | `workspace_id`*, `source` (team\|recurring\|hunter\|report), `status`, `agent_id`, `limit`, `offset` | **Unified inbox** of everything pending review — team posts, recurring/agent drafts, hunter reply drafts (with the mention/lead context they respond to), and agent reports (with download links). Pass `agent_id` to answer "what did <agent> produce that needs me?". Prefer this for "what's waiting for me". Team rows carry `content_fingerprint` (echo as `expected_fingerprint` on `approve-post`) and, for workflow-produced drafts, `workflow_run_id` (group them as one batch). |
+| `list-recurring-reviews` | GET · RO | `workspace_id`*, `status`, `template_id`, `agent_creator_id`, `limit`, `page` | **Pending drafts produced by automation** (routine runs). This is the routine → human queue; `agent_creator_id` is the producer id echoed on inbox rows. |
+| `list-inbox-items` | GET · RO | `workspace_id`*, `source` (team\|recurring\|hunter\|report), `status`, `agent_id`, `limit`, `offset` | **Unified inbox** of everything pending review — team posts, recurring drafts, hunter reply drafts (with the mention/lead context they respond to), and reports (with download links). Pass `agent_id` (the producer id echoed on rows) to answer "what did that routine produce that needs me?". Prefer this for "what's waiting for me". Team rows carry `content_fingerprint` (echo as `expected_fingerprint` on `approve-post`) and, for run-produced drafts, `workflow_run_id` (group them as one batch). |
 | `approve-recurring-review` | POST | `review_id`*, `approvalComments`, `approveWithSchedule`, `useSuggestedTime`, `newScheduleTime`, `account_ids` | Approve an agent-produced draft. `newScheduleTime` (ISO8601) = "approve it but post Friday 9am" in one call; `account_ids` retargets at approval time. |
 | `reject-recurring-review` | POST | `review_id`*, `rejectionReason`, `rejectionCategories` | Reject an agent-produced draft (feeds voice learning). ALWAYS pass `rejectionCategories` when the objection fits a code — structured categories train the voice far better than free text. Valid codes: too_casual, too_formal, wrong_tone, off_brand, too_long, too_short, wrong_format, factual_error, spelling_grammar, missing_cta, wrong_cta, wrong_emoji, wrong_hashtag, not_engaging, platform_mismatch, too_salesy, off_topic, repetitive, other (invalid codes are silently dropped). |
 | `send-hunter-reply` | POST | `workspace_id`*, `reply_id`*, `content` | Approve + send a hunter reply draft (from `list-inbox-items`, `source=hunter`). Optional `content` overrides the draft text in the same call. Double-send is prevented server-side. |
 | `update-hunter-reply` | PATCH | `workspace_id`*, `reply_id`*, `content`* | Edit a hunter reply draft **without sending** (already-sent replies 409). Send later via `send-hunter-reply`. |
-
-## Workflows (flag-gated: Workflow Runtime V1)
-
-**Check availability before use — flag-gated.** Registered ONLY when the deployment's
-`WORKFLOW_RUNTIME_V1` flag is on (surface = 62 tools); never assume these exist because this
-doc lists them. Confirm BOTH tools appear in the current tool list before use. If either is
-missing: no speculative calls, no retries — use the matching atomic tool for a genuinely
-atomic request, otherwise say workflow execution isn't enabled yet and offer the atomic
-alternative. Never fake a workflow with a burst of atomic calls.
-
-| Tool | Method | Params | Notes |
-|-|-|-|-|
-| `start-workflow` | POST | `workspace_id`*, `objective`*, `workflow_key`, `post_count`, `platforms`, `account_ids`, `time_window`, `notes`, `execution_mode`, `idempotency_key` | Start a durable workflow for a multi-step OUTCOME ("keep our launch active this week") — for a single explicit post use `create-post` instead. `objective` = the user's own goal; NEVER invent it. `workflow_key` defaults `weekly_content_prepare`; `post_count` 1–10 (default 4). `execution_mode`: `inherit` (default — follow workspace/agent autonomy: assisted→review, eligible auto→automatic SCHEDULING), `require_review` (always pause for approval — use whenever the user says anything like "let me review first"), `auto_schedule` (ONLY on an explicit scheduling request like "just schedule it" — vague delegation like "handle it"/"you decide" maps to `inherit`; honored only when existing autonomy allows, otherwise falls back to review with `fallback_reason` = `safe_mode` \| `autonomy_insufficient`). A request can tighten but never loosen workspace safety, and nothing EVER publishes immediately via workflows (that stays `publish-post`). Returns a durable `workflow_run_id` immediately — reuse it for all follow-ups. Retries are safe: same `idempotency_key` (or identical objective within 30 min) returns the SAME run. Consumes agent credits where applicable. |
-| `get-workflow-run` | GET · RO | `workspace_id`*, `workflow_run_id`* | Poll a run (side-effect free). Returns `status` (`running` \| `awaiting_approval` \| `scheduled` \| `completed` \| `partial` \| `failed` \| `cancelled`), `draft_count`/`scheduled_count`/`review_count`/`failed_count`, the policy applied (`requested_execution_mode`, `effective_autonomy`, `approval_required`, `fallback_reason`), `next_scheduled_time`, `artifacts[]` (`post_id`, `platforms`, `review_status`, `content_fingerprint` — echo as `expected_fingerprint` on `approve-post` — `scheduled_time`, `content_preview`), error info, and `next_actions`. `partial` = some scheduled + some awaiting review — a normal mixed outcome, NEVER a failure; offer the review queue (`list-inbox-items`). |
 
 ## Analytics (read-only)
 
@@ -137,47 +126,55 @@ alternative. Never fake a workflow with a burst of atomic calls.
 > wipes). `extract-business-dna` seeds the Business DNA from the brand's website. For a one-off
 > draft without persisting, the guideline can still be passed inline to `voice-generate`.
 
-## Agents (the autonomous workforce)
+## Routines (the automation surface)
+
+A **Routine** is what a customer configures: a repeatable outcome + a trigger + an execution
+policy. It binds to a **WorkflowDefinition** (the server-enforced runtime contract — objective
+schema, execution modes, and a hard tool allowlist that is never exposed over MCP) and is
+usually created from a **RoutineTemplate** (the user-facing behavior description and its
+compatibility matrix). The execution principal a run borrows is provisioned server-side;
+there is nothing for the user to hire and no lower level to drop to.
 
 | Tool | Method | Params | Notes |
 |-|-|-|-|
-| `list-agent-presets` | GET · RO | `workspace_id`* | Marketplace presets (Hype Man, Deep Diver, Hunter, Engager, …) + their `preset_id`s. |
-| `hire-agent-preset` | POST | `workspace_id`*, `preset_id`*, `name`, `job_name`, `voice_profile_id`, `account_ids` | Hire a preset → creates the agent + its job. **Only beta presets start paused** (assisted autonomy); stable presets (e.g. Hype Man, Analyst) hire ACTIVE with autonomy=auto and `next_run_at` set — the job will run on schedule. Read back the actual job status after hiring; offer an explicit pause if the user wants to preview first. |
-| `list-agents` | GET · RO | `workspace_id`* | Hired agents + ids. |
-| `create-agent` | POST | `workspace_id`*, `name`*, `type`*, `role`, `description`, `avatar`, `config` | Create a custom agent from scratch (types: content_creator \| engagement \| acquisition \| reviewer \| analytics \| moderator \| custom). Free workspaces are capped at 1 agent (402 → explain the upgrade honestly). Prefer `hire-agent-preset` when a preset fits. |
-| `get-agent` | GET · RO | `workspace_id`*, `agent_id`* | One agent's config/persona/status. |
-| `update-agent` | PATCH | `workspace_id`*, `agent_id`*, `name`, `type`, `role`, `status`, `description`, `avatar`, `config` | Edit an agent. **Pause scope warning:** `status=paused` pauses the WHOLE agent and cascade-pauses ALL its active jobs (resume reverses exactly that cascade). If the user means one job/schedule, use `update-agent-job` instead; when ambiguous, list the jobs and ask. |
-| `delete-agent` | DELETE · **DES** | `workspace_id`*, `agent_id`* | Irreversible — confirm first. Pauses its jobs, purges its service-account API keys, cascades its campaigns. Offer `update-agent status=paused` as the soft alternative. |
-| `list-agent-jobs` | GET · RO | `workspace_id`*, `agent_id`* | An agent's jobs (schedule, status, `paused_by`). |
-| `get-agent-job` | GET · RO | `workspace_id`*, `agent_id`*, `job_id`* | One job's full detail: schedule, status, voice, accounts, trigger_config, and `paused_by` (see below). Fetch this BEFORE any job edit. |
-| `create-agent-job` | POST | `workspace_id`*, `agent_id`*, `name`*, `trigger`, `schedule`, `voice_profile_id`, `account_ids`, `trigger_config`, `run_instructions`, `max_retries`, `status`, `intended_platform` | Add a job to an agent. `status=paused` creates it dormant for config review; `intended_platform` steers platform-native style. Call `get-agent` first — config differs by type: content agents = `trigger=scheduled` + schedule + voice + accounts; engagement = on_new_mention/on_new_comment; acquisition (Hunter) = keyword_match + trigger_config keywords[]/subreddits[]; analytics/moderator may omit voice. Mirror a sibling job (`get-agent-job`) instead of guessing shapes. |
-| `update-agent-job` | PATCH | `workspace_id`*, `agent_id`*, `job_id`*, `name`, `status`, `schedule`, `trigger`, `trigger_config`, `voice_profile_id`, `account_ids`, `run_instructions`, `max_retries` | Edit a job. `status=paused` = the **job-level pause** (agent + other jobs keep running); `status=active` resumes and `next_run_at` recalculates on schedule changes. **`trigger_config` and `schedule` are FULL-REPLACE:** to add one keyword, `get-agent-job` → modify the returned object → resend the WHOLE thing. A partial send silently wipes sibling keys. |
-| `delete-agent-job` | DELETE · **DES** | `workspace_id`*, `agent_id`*, `job_id`* | **Soft delete** — the job is recoverable for 7 days via `list-recently-deleted` → `restore-deleted`, BUT its linked Hunter/Engager campaign is destroyed immediately and cannot be restored. Confirm first; offer `status=paused` as the soft alternative. |
-| `run-agent-job-now` | POST | `workspace_id`*, `agent_id`*, `job_id`*, `run_instructions`, `account_id` | Trigger a job immediately (optional one-off instructions). |
-| `list-agent-job-runs` | GET · RO | `workspace_id`*, `agent_id`*, `job_id`*, `limit` | Run history: status, tools used, tokens, cost, output. |
-| `list-agent-runs` | GET · RO | `workspace_id`*, `agent_id`, `status`, `since`, `limit` | **Workspace-wide** run history across all agents (agent/job attribution per run), newest first, default last 7 days (`since` widens the window). Prefer this for "what did my agents do". |
-| `get-agent-run` | GET · RO | `workspace_id`*, `run_id`* | Full detail for one run: status, timing, cost, tokens, tool calls, final output, and error (stage/code) on failure. Drill-down after `list-agent-runs`. |
+| `list-routine-templates` | GET · RO | `workspace_id`*, `outcome_goal`, `source` | The first-party template library: what outcome each produces, which triggers/sources/approval policies are legal, and the instructions it seeds. **Start here** when the user describes something they want happening repeatedly. Templates with `available_in_workspace: false` cannot be created yet — say so rather than trying. |
+| `list-workflow-definitions` | GET · RO | `workspace_id`* | The runtime contracts a routine can bind to. Use it to discover valid `workflow_definition_key` values instead of guessing. |
+| `list-routines` | GET · RO | `workspace_id`*, `status`, `template_key`, `limit` | The workspace's routines and their state. |
+| `get-routine` | GET · RO | `workspace_id`*, `routine_id`* | One routine in full: trigger, schedule, timezone, instructions, approval policy, sources. Read this BEFORE any edit. |
+| `create-routine` | POST | `workspace_id`*, `name`*, `goal`*, `template_key`, `workflow_definition_key`, `outcome_category`, `trigger_type`, `schedule`, `timezone`, `instructions`, `approval_policy` | Save a repeatable outcome. Pass a `template_key` from `list-routine-templates` (recommended) or a `workflow_definition_key`. **The routine is created as a DRAFT and never fires until `activate-routine`** — creating is not arming. `approval_policy` may only ever TIGHTEN the workspace policy: `review_every_artifact` always forces human approval, `auto` is honoured only where the workspace already allows it. Ask whether posts need approval; don't assume. |
+| `update-routine` | PATCH | `workspace_id`*, `routine_id`*, `name`, `goal`, `trigger_type`, `schedule`, `timezone`, `instructions`, `approval_policy`, `capability_keys`, `output_config`, `source_bindings` | Edit a routine. `get-routine` first — nested objects (`schedule`, `source_bindings`, `output_config`) replace wholesale, so resend the whole object rather than one key. |
+| `activate-routine` | POST · **OW** | `workspace_id`*, `routine_id`* | Arm it. The server re-validates the whole definition against current workspace state here, so activation can fail with a typed reason (missing source, disconnected account, plan gate) even though saving succeeded. Tell the user what will now happen and when the first run is due. |
+| `pause-routine` | POST | `workspace_id`*, `routine_id`* | Stop the trigger firing; the routine keeps its config. |
+| `resume-routine` | POST · **OW** | `workspace_id`*, `routine_id`* | Re-arm a paused routine. Never resume one the user paused themselves without an explicit ask. |
+| `archive-routine` | POST · **DES** | `workspace_id`*, `routine_id`* | **Terminal** — an archived routine can only be duplicated, not revived. Confirm first; offer `pause-routine` as the soft alternative. |
+| `run-routine-now` | POST · **OW** | `workspace_id`*, `routine_id`* | Fire it once, immediately, outside its schedule. Idempotent: an in-flight run is returned rather than a second one started (`started: false`). |
+| `list-routine-runs` | GET · RO | `workspace_id`*, `routine_id`*, `limit` | One routine's run history: status, timing, and what each run produced. |
 
-### The full agent loop
-`list-agent-presets` → `hire-agent-preset` → (verify) `list-agent-jobs` →
-`run-agent-job-now` → `list-agent-job-runs` (watch it work) →
-`list-recurring-reviews` (its drafts land here) → `approve-recurring-review` /
-`reject-recurring-review`. This closes the loop: the agent proposes, the human approves,
-and rejections/edits feed Bolta's voice learning so it gets better.
+### The full routine loop
+`list-routine-templates` → `create-routine` → `activate-routine` → (`run-routine-now` to see
+it work immediately) → `list-routine-runs` → `list-inbox-items` (its drafts land here) →
+`approve-post` / `approve-recurring-review` / `reject-recurring-review`. This closes the
+loop: the routine proposes, the human approves, and rejections/edits feed Bolta's voice
+learning so it gets better.
 
-### `paused_by` — explaining WHY something is paused
-Jobs expose a read-only `paused_by` when `status=paused`. Use it to explain honestly and
-to decide whether resuming is even possible:
+### Three things worth saying every time
+- **A new routine is a draft.** It does not fire until `activate-routine`.
+- **Schedule times are wall clock** in the routine's timezone. Never send a UTC offset and
+  never convert the user's stated time yourself.
+- **Approval policy can tighten but never loosen** the workspace's own safety posture.
 
-| Value | Meaning | Resume rule |
-|-|-|-|
-| `user` | The user paused it themselves | Only resume on the user's explicit ask |
-| `agent` | Cascade from an agent-level pause | Resume the agent (`update-agent status=active`) or the job directly |
-| `trial_quota` / `plan_gate` | Plan or credit limit hit | A status flip comes right back — an upgrade is required; say so |
-| `backpressure` | Too many undecided drafts piled up | Clear the review queue first, then resume |
-| `system` | Bolta paused it (e.g. errors) | Investigate the runs before resuming |
+### Explaining WHY something is paused
+A paused routine may have been paused by the user or by Bolta. Read `get-routine` before
+resuming and explain honestly:
 
-**Never blind-resume.** Read `paused_by` (via `get-agent-job`) before setting
-`status=active`, and never resume a `user`-paused job as a side effect of another task.
+| Cause | Resume rule |
+|-|-|
+| The user paused it | Only resume on the user's explicit ask |
+| Plan or credit limit hit | A status flip comes right back — an upgrade is required; say so |
+| Backpressure (too many undecided drafts) | Clear the review queue first, then `resume-routine` |
+| Bolta paused it after errors | Read `list-routine-runs` before resuming |
+
+**Never blind-resume,** and never resume a user-paused routine as a side effect of another
+task.
 
 \* = required parameter.

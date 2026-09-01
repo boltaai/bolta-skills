@@ -9,9 +9,9 @@ description: >
   into review. Handles ALL inbox sources: the standard review queue, the
   agent-produced recurring queue, hunter reply drafts (edit + send), and agent
   reports. This skill is the standing inbox — triage whatever is already waiting.
-  To trigger an agent run and then review its output in one loop, use
-  bolta-agent-run-and-review. Not for writing new content (use bolta-draft-post)
-  or reading analytics (use bolta-analytics-report).
+  To trigger a run and then review its output in one loop, run the routine first
+  with bolta-setup's routine flow. Not for writing new content (use
+  bolta-draft-post) or reading analytics (use bolta-analytics-report).
 ---
 
 # Bolta Review Queue
@@ -30,9 +30,9 @@ learning.
 
 ## When to use
 Any time the user wants to see, triage, or clear pending approvals — or to push their own
-drafts into review for someone else to approve. If the user wants to *trigger an agent run
-first* and then review what it produced, use bolta-agent-run-and-review instead — this skill
-works the queue as it stands.
+drafts into review for someone else to approve. If the user wants to *trigger a run first*
+and then review what it produced, kick the routine off with `run-routine-now` and come back
+here — this skill works the queue as it stands.
 
 ## Tools this skill uses
 | Tool | Why |
@@ -40,7 +40,7 @@ works the queue as it stands.
 | `list-workspaces` | Resolve `workspace_id` if unknown. |
 | `list-inbox-items` | **Preferred**: unified inbox of everything pending (team + recurring + hunter + report), filterable by `source`/`status`, scopable to one agent via `agent_id`. |
 | `list-reviews` | Review queue — **defaults to BOTH workflows** (team + recurring). Pass `workflow_type="team"` for the standard queue in isolation. |
-| `list-recurring-reviews` | Agent-produced pending drafts (the agent → human queue); scope to one agent via `agent_creator_id`. |
+| `list-recurring-reviews` | Automation-produced pending drafts (the routine → human queue); scope to one producer via `agent_creator_id` (the id is echoed on inbox rows). |
 | `get-post` | Optional — pull full detail for a queued item before deciding. |
 | `approve-post` | Approve a standard-queue post (optionally schedule at approval). Echo the row's `content_fingerprint` as `expected_fingerprint`. |
 | `approve-recurring-review` | Approve an agent draft (optionally schedule at suggested time). |
@@ -73,16 +73,17 @@ queue-specific filters:
   recurring), so calling it bare alongside `list-recurring-reviews` double-counts the agent
   drafts. Always pass `workflow_type="team"` when segmenting the two queues.
 - `list-recurring-reviews(workspace_id)` — agent drafts (`status`, `template_id` filters;
-  pass `agent_creator_id` — an agent id from `list-agents` — to triage one agent's drafts).
+  pass `agent_creator_id` — the producer id echoed on the inbox row — to triage one
+  producer's drafts).
 Present a single combined summary: how many from each source, and a one-line preview per item
 (content snippet, target account/platform, for agent items the suggested schedule time, and
 for hunter items the mention/lead being replied to). For `report` items, surface the report
 summary and its download link — reports are read-and-download, not approve/reject. Make clear
 which source each item belongs to, since they're actioned through different tools.
 Two extra fields on team rows matter:
-- **`workflow_run_id`** — items sharing one came from the same workflow run; group them as a
-  batch ("3 drafts from your launch workflow") and, where the flag-gated `get-workflow-run`
-  tool is available, offer the run's overall status (see bolta-workflow-run).
+- **`workflow_run_id`** — items sharing one came from the same run; group them as a batch
+  ("3 drafts from your launch routine"). For the run's overall status, use
+  `list-routine-runs` on the routine that produced them.
 - **Status `autonomous`** — the post was **scheduled by the autonomy policy, not approved by
   a human**. Never describe an autonomous row as human-approved; say it was auto-scheduled
   under the workspace's autonomy settings.
@@ -130,8 +131,8 @@ queue. Note that rejection reasons feed the voice-learning loop.
 - `approve-post` returns **409 `stale_review`** → the post changed (content, media,
   destination, or scheduled time) after the user last saw it. **NEVER blindly retry** — the
   409 deliberately carries no fingerprint, so a blind retry cannot succeed. Recovery flow:
-  re-read the item (`list-inbox-items` or `get-post`; `get-workflow-run` for workflow
-  drafts), SHOW the user the current content, get a fresh explicit decision, then approve
+  re-read the item (`list-inbox-items` or `get-post`), SHOW the user the current content,
+  get a fresh explicit decision, then approve
   again passing the fresh `content_fingerprint` as `expected_fingerprint`. (Alternative:
   `submit-for-review` re-stamps the reviewed revision.)
 - Empty queues → say both are clear; offer to push drafts in via `submit-for-review`.

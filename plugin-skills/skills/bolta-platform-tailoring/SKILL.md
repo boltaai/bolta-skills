@@ -25,7 +25,8 @@ media (bolta-post-media).
 |-|-|
 | `list-workspaces` | Resolve `workspace_id` if unknown. |
 | `get-post` | Read the current post before editing per-platform details. |
-| `create-post` | Create a post; supports a `poll` object at creation (Threads only). |
+| `create-post` | Create ONE post; supports a `poll` object at creation (Threads only). |
+| `bulk-create-posts` | Create MORE THAN ONE post in a single call — see below. |
 | `get-post-platform-details` | Read current per-platform fields for a post + platform. |
 | `update-post-platform-details` | Set per-platform `fields` (poll, flair, title, privacy…). |
 
@@ -33,7 +34,13 @@ media (bolta-post-media).
 - `workspace_id` — resolve once via `list-workspaces`, reuse. Auth is automatic via the Bolta
   connector's OAuth grant — never ask for an API key. Default new content to Draft; confirm
   before publish/delete.
-- The `post_id` for an existing post (or create one first with `create-post`).
+- The `post_id` for an existing post (or create one first).
+- **One post → `create-post`. Two or more → `bulk-create-posts`.** Adapting an idea for
+  several platforms is the two-or-more case, so it starts with one `bulk-create-posts`
+  call and not a loop: looping `create-post` renders a separate card per post and the
+  user only ever sees one of them. Apply per-platform `fields` afterwards, per post.
+  (This skill is about the per-platform details; it is not a reason to create posts
+  one at a time.)
 - The exact platform slug: one of `x`, `threads`, `linkedin`, `facebook`, `instagram`,
   `bluesky`, `mastodon`, `discord`, `reddit`, `tiktok`, `pinterest`, `youtube`, `wordpress`.
 
