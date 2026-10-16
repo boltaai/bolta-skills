@@ -1,4 +1,4 @@
-# Bolta
+# BOLTA
 
 Plan, draft, schedule, review and measure social content in your Bolta workspace, from a conversation. The plugin drafts first and moves a post forward only when you say so for that exact post. It works with the social accounts, voice and approval rules already set up in Bolta; it does not replace them.
 
