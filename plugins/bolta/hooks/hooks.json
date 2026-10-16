@@ -3,7 +3,7 @@
   "hooks": {
     "PreToolUse": [
       {
-        "matcher": "^mcp__[A-Za-z0-9_-]*[Bb]olta[A-Za-z0-9_-]*__(publish-post|schedule-post|approve-post|approve-recurring-review|send-outreach-reply|publish-engagement-reply|reply-to-social-content|react-to-social-content|activate-routine|resume-routine|run-routine-now|delete-post|archive-routine|set-content-campaign-status|update-post|update-business-dna|update-voice-profile|create-routine|update-routine|create-post|bulk-create-posts|create-wordpress-blog-post)$",
+        "matcher": "^mcp__[A-Za-z0-9_-]*[Bb]olta[A-Za-z0-9_-]*__(publish-post|schedule-post|approve-post|approve-recurring-review|send-outreach-reply|publish-engagement-reply|reply-to-social-content|react-to-social-content|activate-routine|resume-routine|run-routine-now|delete-post|archive-routine|set-content-campaign-status|update-post|update-post-platform-details|update-social-bucket|restore-deleted|update-business-dna|update-voice-profile|create-routine|update-routine|create-post|bulk-create-posts|create-wordpress-blog-post)$",
         "hooks": [
           {
             "type": "command",

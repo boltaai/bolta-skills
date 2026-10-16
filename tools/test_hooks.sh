@@ -82,7 +82,7 @@ run_guard "update-post status=Scheduled"      ask    "" "$(mk ${P}update-post '{
 run_guard "update-post status=Draft (pause)"  silent "" "$(mk ${P}update-post '{"post_id":"p","status":"Draft"}')"
 
 # false positives: post text that merely looks like a JSON field must not trigger
-run_guard "draft text that looks like status JSON asks (fail closed, costs one click)" ask "" "$(mk ${P}create-post '{"content":"We will \"publish\" the {\"status\": \"publish\"} field today"}')"
+run_guard "post text that looks like status JSON is just text (parsed structurally)" silent "" "$(mk ${P}create-post '{"content":"We will \"publish\" the {\"status\": \"publish\"} field today"}')"
 run_guard "draft text with the plain word publish" silent "" "$(mk ${P}create-post '{"content":"We will publish the new dark mode and schedule a webinar for Tuesday"}')"
 run_guard "multi-line input still parsed"     ask    "" "$(printf '{\n"hook_event_name":"PreToolUse",\n"tool_name":"%spublish-post",\n"tool_input":{"post_id":"p"}\n}' "$P")"
 
@@ -99,7 +99,7 @@ run_guard "create-post requested_action=Publish (case)" ask "" "$(mk ${P}create-
 run_guard "create-post scheduled_time only"   ask    "" "$(mk ${P}create-post '{"content":"Hi","scheduled_time":"2026-10-20T09:00:00"}')"
 run_guard "bulk item scheduled_time only"     ask    "" "$(mk ${P}bulk-create-posts '{"posts":[{"content":"a","scheduled_time":"2026-10-20T09:00:00"}]}')"
 run_guard "create-post scheduled_time null"   silent "" "$(mk ${P}create-post '{"content":"Hi","scheduled_time":null}')"
-run_guard "draft text containing scheduled_time json asks (fail closed)" ask "" "$(mk ${P}create-post '{"content":"set {\"scheduled_time\": \"tomorrow\"} please"}')"
+run_guard "post text containing scheduled_time json is just text"   silent "" "$(mk ${P}create-post '{"content":"set {\"scheduled_time\": \"tomorrow\"} please"}')"
 
 # --- Regression: the real shape Claude Code sends for bulk-create-posts (captured 2026-10-16).
 # Items are JSON-ENCODED STRINGS, so their keys are backslash-escaped in the hook payload.
@@ -130,10 +130,36 @@ run_guard "update-post content, fake status in text" ask    "" "$(mk ${P}update-
 run_guard "update-post content (publish-only scope)" ask    publish-only "$(mk ${P}update-post '{"post_id":"p","content":"new"}')"
 run_guard "update-post status Draft only (pause)"    silent "" "$(mk ${P}update-post '{"post_id":"p","status":"Draft"}')"
 
+# --- Regression: a status nested inside media or poll is NOT a top-level status (parser differential).
+run_guard "nested status in media does not reset to Draft" ask "" "$(mk ${P}update-post '{"post_id":"p","content":"evil","media":[{"url":"https://x/y.png","status":"Draft"}]}')"
+run_guard "nested status in poll does not reset to Draft"  ask "" "$(mk ${P}update-post '{"post_id":"p","content":"evil","poll":{"options":["a","b"],"status":"Draft"}}')"
+run_guard "top-level Approved beats a nested Draft"        ask "" "$(mk ${P}update-post '{"post_id":"p","content":"x","status":"Approved","media":[{"status":"Draft"}]}')"
+run_guard "genuine top-level Draft with nested media is fine" silent "" "$(mk ${P}update-post '{"post_id":"p","content":"x","status":"Draft","media":[{"url":"https://x/y.png"}]}')"
+run_guard "unicode-escaped Draft is not accepted as Draft" ask "" "$(mk ${P}update-post '{"post_id":"p","content":"x","status":"\u0044raft"}')"
+run_guard "non-string status is not Draft"                 ask "" "$(mk ${P}update-post '{"post_id":"p","content":"x","status":{"v":"Draft"}}')"
+run_guard "nested requested_action does not count as top-level" silent "" "$(mk ${P}create-post '{"content":"Hi","media":[{"url":"https://x/y.png","requested_action":"publish"}]}')"
+run_guard "top-level publish still caught beside nested noise" ask "" "$(mk ${P}create-post '{"content":"Hi","requested_action":"publish","media":[{"requested_action":"draft"}]}')"
+
+# --- Regression: sibling tools that change what an existing post publishes, or where it goes.
+run_guard "update-post-platform-details"             ask "" "$(mk ${P}update-post-platform-details '{"post_id":"p","platform":"reddit","fields":{"selected_subreddit_id":"s"}}')"
+run_guard "update-post-platform-details (publish-only)" ask publish-only "$(mk ${P}update-post-platform-details '{"post_id":"p","platform":"tiktok","fields":{"privacy_level":"PUBLIC"}}')"
+run_guard "update-social-bucket"                     ask "" "$(mk ${P}update-social-bucket '{"bucket_id":"b","account_ids":["a"]}')"
+run_guard "update-social-bucket (publish-only)"      ask publish-only "$(mk ${P}update-social-bucket '{"bucket_id":"b","account_ids":["a"]}')"
+run_guard "restore-deleted"                          ask "" "$(mk ${P}restore-deleted '{"item_type":"post","item_id":"i"}')"
+run_guard "restore-deleted (publish-only)"           ask publish-only "$(mk ${P}restore-deleted '{"item_type":"post","item_id":"i"}')"
+run_guard "create-social-bucket stays silent (no existing post affected)" silent "" "$(mk ${P}create-social-bucket '{"name":"n"}')"
+
+# --- Regression: unreadable or odd payloads fail closed; layout must not matter.
+run_guard "unterminated string fails closed"         ask "" '{"hook_event_name":"PreToolUse","tool_name":"mcp__bolta__create-post","tool_input":{"content":"abc'
+run_guard "no tool_input fails closed"               ask "" '{"hook_event_name":"PreToolUse","tool_name":"mcp__bolta__create-post"}'
+run_guard "tool_input before tool_name still parsed" ask "" '{"tool_input":{"post_id":"p"},"hook_event_name":"PreToolUse","tool_name":"mcp__bolta__publish-post"}'
+run_guard "pretty-printed payload with draft create" silent "" "$(printf '{\n  "hook_event_name": "PreToolUse",\n  "tool_name": "mcp__bolta__create-post",\n  "tool_input": {\n    "content": "Hello",\n    "requested_action": "draft"\n  }\n}')"
+run_guard "post text mimicking a whole payload is just text" silent "" "$(mk ${P}create-post '{"content":"{\"tool_name\":\"x\",\"tool_input\":{\"status\":\"publish\"}} please"}')"
+
 # reads and unrelated tools stay silent
 run_guard "list-workspace-posts"              silent "" "$(mk ${P}list-workspace-posts '{"status":"Draft"}')"
 run_guard "get-my-capabilities"               silent "" "$(mk ${P}get-my-capabilities '{}')"
-run_guard "empty stdin"                       silent "" ""
+run_guard "empty stdin fails closed"          ask    "" ""
 
 # auth notice (PostToolUse)
 run_notice() { # <label> <expect: context|silent> <json>

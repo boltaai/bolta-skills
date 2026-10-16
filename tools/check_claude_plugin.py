@@ -493,6 +493,34 @@ def check_hooks(plugin):
                     err(script.relative_to(plugin), "scripts must not use network tools, python, node or jq")
 
 
+def check_guard_matches_matcher(plugin, tools_by_name):
+    """Every tool the guard script decides on must be in the hook matcher (or the guard never runs
+    for it), and every tool in the matcher must be a real tool the guard handles."""
+    script = plugin / "scripts" / "guard-bolta-writes.sh"
+    hj = plugin / "hooks" / "hooks.json"
+    if not script.is_file() or not hj.is_file():
+        return
+    src = script.read_text()
+    case_body = src[src.index('case "$tool" in'):]
+    in_script = set()
+    for m in re.finditer(r"^  ([a-z][a-z0-9|-]*)\)\s*$", case_body, re.M):
+        in_script.update(m.group(1).split("|"))
+    try:
+        matcher = json.loads(hj.read_text())["hooks"]["PreToolUse"][0]["matcher"]
+    except (KeyError, IndexError, json.JSONDecodeError):
+        err("hooks/hooks.json", "no PreToolUse matcher found")
+        return
+    alt = re.search(r"__\(([^)]*)\)\$", matcher)
+    in_matcher = set(alt.group(1).split("|")) if alt else set()
+    for t in sorted(in_script - in_matcher):
+        err("hooks/hooks.json", f"guard script decides on {t!r} but the matcher does not list it, so the guard never runs for it")
+    for t in sorted(in_matcher - in_script):
+        err("scripts/guard-bolta-writes.sh", f"matcher lists {t!r} but the guard script has no case for it")
+    for t in sorted(in_script | in_matcher):
+        if t not in tools_by_name:
+            err("scripts/guard-bolta-writes.sh", f"guards {t!r}, which is not an exposed Bolta tool")
+
+
 def check_server_gaps(tools_by_name):
     for t in PUBLISH_CAPABLE_CREATE_TOOLS:
         a = (tools_by_name.get(t) or {}).get("annotations") or {}
@@ -532,6 +560,7 @@ def main(argv=None):
     referenced = check_tool_ids_and_args(plugin, skills, commands, agents, tools_by_name)
     check_lint(plugin)
     check_hooks(plugin)
+    check_guard_matches_matcher(plugin, tools_by_name)
     check_server_gaps(tools_by_name)
 
     unreferenced = sorted(set(tools_by_name) - referenced)

@@ -70,7 +70,7 @@ If the create call times out or errors ambiguously, the outcome is unknown: `lis
 1. `list-buckets` and `list-accounts`. Find the bucket and note its `id` (this is `bucket_id`) and its current members.
 2. Build the new list yourself: current member ids, plus or minus the change. For a rename only, do not send `account_ids` at all (leaving it out keeps the members; sending `[]` empties the bucket).
 3. Show before and after and wait for a yes: "In Acme Co: Launch Team now has LinkedIn @acme, X @acme. After: LinkedIn @acme, X @acme, Instagram @acme.shop. Go ahead?" Removing a member or emptying the bucket needs that same explicit yes.
-4. `update-social-bucket(workspace_id, bucket_id, account_ids=[...full list...])`, plus `name` for a rename.
+4. `update-social-bucket(workspace_id, bucket_id, account_ids=[...full list...])`, plus `name` for a rename. On Claude Code the plugin asks the user to confirm this call, because it changes where posts already attached to the bucket will publish.
 5. Read back with `list-buckets` and compare with what you promised.
 
 Say this out loud when the bucket is already attached to posts that have not gone out yet: a post uses the bucket's membership at publish time, not at the time it was scheduled. Changing members changes where those posts go, and an invalid member is skipped. If the user did not intend that, tell them before you write.
