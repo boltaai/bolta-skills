@@ -1,0 +1,30 @@
+{
+  "name": "bolta",
+  "displayName": "Bolta",
+  "version": "0.1.0",
+  "description": "Plan, draft, schedule, review and measure social content in a Bolta workspace. Drafts first; publishes only when you say so.",
+  "author": {
+    "name": "Bolta Platforms, Inc.",
+    "email": "support@bolta.ai",
+    "url": "https://bolta.ai"
+  },
+  "homepage": "https://bolta.ai/mcp",
+  "repository": "https://github.com/boltaai/bolta-skills",
+  "license": "MIT",
+  "keywords": ["social-media", "content-operations", "scheduling", "approvals", "analytics"],
+  "icon": "./assets/icon.png",
+  "documentationUrl": "https://bolta.ai/docs/mcp",
+  "supportUrl": "https://bolta.ai/support",
+  "privacyPolicyUrl": "https://bolta.ai/privacy-policy",
+  "termsOfServiceUrl": "https://bolta.ai/tos",
+  "defaultEnabled": true,
+  "userConfig": {
+    "confirm_scope": {
+      "type": "string",
+      "title": "Confirmation level",
+      "description": "Which Bolta actions ask you to confirm in Claude Code and Cowork. all-external-effects also confirms routines, deletes and campaign status changes; publish-only confirms only actions that go public or approve a post.",
+      "options": ["all-external-effects", "publish-only"],
+      "default": "all-external-effects"
+    }
+  }
+}

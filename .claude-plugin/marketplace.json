@@ -1,0 +1,15 @@
+{
+  "name": "bolta-marketplace",
+  "description": "Bolta plugins for Claude Code and Cowork",
+  "owner": {
+    "name": "Bolta Platforms, Inc.",
+    "email": "support@bolta.ai"
+  },
+  "plugins": [
+    {
+      "name": "bolta",
+      "source": "./plugins/bolta",
+      "description": "Content operations in a Bolta workspace: plan, draft, review, schedule, engage and measure. Drafts first; publishes only when you say so."
+    }
+  ]
+}

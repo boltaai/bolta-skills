@@ -1,0 +1,8 @@
+{
+  "mcpServers": {
+    "bolta": {
+      "type": "http",
+      "url": "https://mcp.bolta.ai/mcp"
+    }
+  }
+}

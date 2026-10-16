@@ -1,0 +1,32 @@
+{
+  "ok": true,
+  "data": {
+    "engagement_id": "c5000000-0000-4000-8000-000000000001",
+    "opportunity_id": "c4000000-0000-4000-8000-000000000002",
+    "campaign_id": "ca000000-0000-4000-8000-000000000001",
+    "workspace_id": "7c0b2f6e-3a41-4d5e-9b8a-1e2f3a4b5c6d",
+    "platform": "threads",
+    "target_id": "C9xyz123",
+    "target_type": "post",
+    "content": "Thanks for asking. Yes, we ship to Canada, and shipping is calculated at checkout.",
+    "status": "published",
+    "needs_approval": false,
+    "reviewer_approved": true,
+    "platform_reply_id": "C9reply1",
+    "canonical_url": "https://www.threads.net/@northwindcoffee/post/C9reply1",
+    "error": "",
+    "retry_count": 0,
+    "created_at": "2026-10-16T08:40:00+00:00",
+    "sent_at": "2026-10-16T08:40:03+00:00",
+    "engagement_type": "reply",
+    "action": "reply",
+    "external_engagement_id": "C9reply1",
+    "published_at": "2026-10-16T08:40:03+00:00",
+    "verified": false,
+    "verification_status": "not_checked"
+  },
+  "error": null,
+  "error_kind": null,
+  "meta": null,
+  "next_step": null
+}
