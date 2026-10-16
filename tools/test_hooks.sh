@@ -70,19 +70,20 @@ run_guard "create-post requested_action=draft" silent "" "$(mk ${P}create-post '
 run_guard "create-post requested_action=publish" ask "" "$(mk ${P}create-post '{"content":"Hello","requested_action":"publish"}')"
 run_guard "create-post requested_action=schedule" ask "" "$(mk ${P}create-post '{"content":"Hello","requested_action":"schedule"}')"
 run_guard "create-post submit_for_review is safe" silent "" "$(mk ${P}create-post '{"content":"Hello","requested_action":"submit_for_review"}')"
-run_guard "bulk draft items"                  silent "" "$(mk ${P}bulk-create-posts '{"posts":[{"content":"a","status":"Draft"},{"content":"b","status":"Draft"}]}')"
+run_guard "bulk draft items (object form) still asks" ask "" "$(mk ${P}bulk-create-posts '{"posts":[{"content":"a","status":"Draft"},{"content":"b","status":"Draft"}]}')"
 run_guard "bulk item status=Scheduled"        ask    "" "$(mk ${P}bulk-create-posts '{"posts":[{"content":"a","status":"Draft"},{"content":"b","status":"Scheduled"}]}')"
 run_guard "wordpress status=publish"          ask    "" "$(mk ${P}create-wordpress-blog-post '{"title":"t","status":"publish"}')"
 run_guard "wordpress status=draft"            silent "" "$(mk ${P}create-wordpress-blog-post '{"title":"t","status":"draft"}')"
 
 # update-post
-run_guard "update-post content only"          silent "" "$(mk ${P}update-post '{"post_id":"p","content":"new text"}')"
+run_guard "update-post content only asks (status unknown)" ask "" "$(mk ${P}update-post '{"post_id":"p","content":"new text"}')"
 run_guard "update-post with scheduled_time"   ask    "" "$(mk ${P}update-post '{"post_id":"p","scheduled_time":"2026-10-20T09:00:00"}')"
 run_guard "update-post status=Scheduled"      ask    "" "$(mk ${P}update-post '{"post_id":"p","status":"Scheduled"}')"
 run_guard "update-post status=Draft (pause)"  silent "" "$(mk ${P}update-post '{"post_id":"p","status":"Draft"}')"
 
 # false positives: post text that merely looks like a JSON field must not trigger
-run_guard "draft text mentioning publish"     silent "" "$(mk ${P}create-post '{"content":"We will \"publish\" the {\"status\": \"publish\"} field today"}')"
+run_guard "draft text that looks like status JSON asks (fail closed, costs one click)" ask "" "$(mk ${P}create-post '{"content":"We will \"publish\" the {\"status\": \"publish\"} field today"}')"
+run_guard "draft text with the plain word publish" silent "" "$(mk ${P}create-post '{"content":"We will publish the new dark mode and schedule a webinar for Tuesday"}')"
 run_guard "multi-line input still parsed"     ask    "" "$(printf '{\n"hook_event_name":"PreToolUse",\n"tool_name":"%spublish-post",\n"tool_input":{"post_id":"p"}\n}' "$P")"
 
 # brand and automation changes (default scope only)
@@ -98,7 +99,36 @@ run_guard "create-post requested_action=Publish (case)" ask "" "$(mk ${P}create-
 run_guard "create-post scheduled_time only"   ask    "" "$(mk ${P}create-post '{"content":"Hi","scheduled_time":"2026-10-20T09:00:00"}')"
 run_guard "bulk item scheduled_time only"     ask    "" "$(mk ${P}bulk-create-posts '{"posts":[{"content":"a","scheduled_time":"2026-10-20T09:00:00"}]}')"
 run_guard "create-post scheduled_time null"   silent "" "$(mk ${P}create-post '{"content":"Hi","scheduled_time":null}')"
-run_guard "draft text containing scheduled_time json" silent "" "$(mk ${P}create-post '{"content":"set {\"scheduled_time\": \"tomorrow\"} please"}')"
+run_guard "draft text containing scheduled_time json asks (fail closed)" ask "" "$(mk ${P}create-post '{"content":"set {\"scheduled_time\": \"tomorrow\"} please"}')"
+
+# --- Regression: the real shape Claude Code sends for bulk-create-posts (captured 2026-10-16).
+# Items are JSON-ENCODED STRINGS, so their keys are backslash-escaped in the hook payload.
+BULK_REAL='{"workspace_id":"2222","posts":["{\"content\": \"Dark mode is here\", \"account_ids\": [\"3333\"], \"status\": \"Draft\"}","{\"content\": \"Why we built it\", \"account_ids\": [\"3333\"], \"status\": \"Scheduled\", \"requested_action\": \"schedule\", \"scheduled_time\": \"2026-10-20T09:00:00\"}"]}'
+run_guard "REAL bulk payload with a scheduled item"  ask    ""             "$(mk ${P}bulk-create-posts "$BULK_REAL")"
+run_guard "REAL bulk payload (publish-only scope)"   ask    publish-only   "$(mk ${P}bulk-create-posts "$BULK_REAL")"
+run_guard "bulk, stringified all-draft items"        ask    ""             "$(mk ${P}bulk-create-posts '{"posts":["{\"content\": \"a\", \"status\": \"Draft\"}"]}')"
+run_guard "bulk, whole posts value is a string"      ask    ""             "$(mk ${P}bulk-create-posts '{"posts":"[{\"content\":\"a\",\"status\":\"\\u0053cheduled\"}]"}')"
+run_guard "bulk, inner unicode-escaped keyword"      ask    ""             "$(mk ${P}bulk-create-posts '{"posts":["{\"content\":\"a\",\"status\":\"\\u0053cheduled\"}"]}')"
+
+# --- Regression: values padded with escaped whitespace (the server trims and lower-cases them).
+run_guard "requested_action padded with a tab"       ask    "" "$(mk ${P}create-post '{"content":"Hi","requested_action":"\tschedule"}')"
+run_guard "requested_action padded with a newline"   ask    "" "$(mk ${P}create-post '{"content":"Hi","requested_action":"\npublish"}')"
+run_guard "requested_action unknown value"           ask    "" "$(mk ${P}create-post '{"content":"Hi","requested_action":"schedule draft"}')"
+run_guard "requested_action=DRAFT (case)"            silent "" "$(mk ${P}create-post '{"content":"Hi","requested_action":"DRAFT"}')"
+run_guard "requested_action=draft"                   silent "" "$(mk ${P}create-post '{"content":"Hi","requested_action":"draft"}')"
+run_guard "wordpress status=future"                  ask    "" "$(mk ${P}create-wordpress-blog-post '{"title":"t","status":"future"}')"
+run_guard "scheduled_time with escaped-space value"  ask    "" "$(mk ${P}create-post '{"content":"Hi","scheduled_time":"\t2026-10-20T09:00:00"}')"
+
+# --- Regression: update-post edits keep their approval unless the same call returns the post to Draft.
+run_guard "update-post content + status Draft"       silent "" "$(mk ${P}update-post '{"post_id":"p","content":"new","status":"Draft"}')"
+run_guard "update-post content + status draft (lc)"  silent "" "$(mk ${P}update-post '{"post_id":"p","content":"new","status":"draft"}')"
+run_guard "update-post content + status Approved"    ask    "" "$(mk ${P}update-post '{"post_id":"p","content":"new","status":"Approved"}')"
+run_guard "update-post media only"                   ask    "" "$(mk ${P}update-post '{"post_id":"p","media":[{"url":"https://x/y.png"}]}')"
+run_guard "update-post accounts only"                ask    "" "$(mk ${P}update-post '{"post_id":"p","accounts":["a"]}')"
+run_guard "update-post poll only"                    ask    "" "$(mk ${P}update-post '{"post_id":"p","poll":{"options":["a","b"]}}')"
+run_guard "update-post content, fake status in text" ask    "" "$(mk ${P}update-post '{"post_id":"p","content":"x {\"status\": \"Draft\"} y"}')"
+run_guard "update-post content (publish-only scope)" ask    publish-only "$(mk ${P}update-post '{"post_id":"p","content":"new"}')"
+run_guard "update-post status Draft only (pause)"    silent "" "$(mk ${P}update-post '{"post_id":"p","status":"Draft"}')"
 
 # reads and unrelated tools stay silent
 run_guard "list-workspace-posts"              silent "" "$(mk ${P}list-workspace-posts '{"status":"Draft"}')"

@@ -24,7 +24,7 @@ Details live in `references/`: `scheduling.md` (times, statuses, Safe Mode, refu
 ## Orient first (once per conversation)
 
 - `list-workspaces` returns one row. One connection is one workspace, so say its name back on every write ("Drafting for Acme Co"). A post for another client needs that client's own connector; you cannot switch from here.
-- `get-workspace(workspace_id)`: read `timezone` and `safe_mode`. If `timezone` is "UTC" (the default) and the user named no zone, ask once which timezone they mean before you fix any time.
+- `get-workspace(workspace_id)`: read `timezone` and `safe_mode`. If `timezone` is "UTC" (the default) and the user named no zone, ask once which timezone they mean before you fix any time. Read `safe_mode` and `timezone` from this call, not from the `list-workspaces` row: that list is cached for two minutes, so a Safe Mode switched on a moment ago may not show there.
 - `list-accounts(workspace_id)`: take `account_ids` from the `id` field. Check `token_status`. An account that is not `valid` is dropped silently at publish time when the post has other accounts, so show the user and offer `get-connect-link` instead of using it. `facebook_page_*` and `linkedin_org_*` rows are valid ids. For "my founder bucket", use `list-buckets` and pass `social_buckets`.
 - `get-my-capabilities(workspace_id)` before you offer to approve, schedule or publish; read `denied_by`. If it says allowed but a call is refused with a permission error, trust the refusal. Never state a role requirement yourself.
 - Never invent the topic or the destination. If the user did not say what the post is about, or which accounts, ask. A draft with no accounts is allowed only when they ask for exactly that. Before moving a post past Draft, make sure it has accounts (`update-post(post_id, accounts=[...])`, a full list): `approve-post` does not check for them, so a post approved with none is scheduled with nowhere to go.
@@ -42,6 +42,7 @@ Details live in `references/`: `scheduling.md` (times, statuses, Safe Mode, refu
 - Never pass `requested_action` "schedule" or "publish", `status`, or a `scheduled_time` to `create-post`, `bulk-create-posts` or `create-wordpress-blog-post`. They can schedule or publish, but hosts do not treat them as destructive, so no prompt protects the user. A `scheduled_time` with no `requested_action` is read as "schedule it".
 - `approve-post` with the default mode silently schedules a post Claude wrote at a slot the server picks, even under Safe Mode, and discards the time the user confirmed. Always pass `schedule_mode`. Its response has no time, so you always read back.
 - If the user declines the "Confirmation needed (Bolta plugin safety check)" prompt, or a call comes back denied, that action is finished. Say what was not done. Do not retry, and do not reach the same effect with another tool (for example `update-post` or a create tool instead of `publish-post`).
+- Every `update-post` that changes `content`, `media`, `accounts` or `poll` carries `status="Draft"` in the same call. On a Draft it changes nothing. On an approved or scheduled post it returns the post to Draft so it needs a fresh approval, and it takes it out of the schedule. A plain edit with no status makes the plugin prompt the user, because it cannot see the post's status.
 - Read the result body, not the error flag: `ok`, `error`, `data.error_code`, `next_step`. "Invalid API key", "API key expired" and "API key inactive" mean the connection is dead: tell the user to reconnect the Bolta connector (in Claude Code, `/mcp`) and do not retry.
 
 ## Single-post fast path (stops at a shown Draft)
@@ -102,7 +103,7 @@ On a `stale_review` 409 never retry the same call. The fingerprint you can read 
 
 ## Many posts
 
-- One `bulk-create-posts(workspace_id, posts=[...])` call. Never loop `create-post`.
+- One `bulk-create-posts(workspace_id, posts=[...])` call. Never loop `create-post`. On Claude Code the plugin asks the user to confirm every batch, whatever it holds, because it cannot see inside one to tell drafts from scheduled posts. Say so before you call it. If they decline, nothing is created: do not retry and do not switch to single creates.
 - Each item: `content`, `account_ids` or `social_buckets` (needed on every item, even drafts), optional `media`. No `scheduled_time`, no `status`. One item per platform when the text differs. Do not put Reddit or Discord accounts in a bulk call: the server skips a Reddit item that lacks a subreddit and title and a Discord item with no resolvable channel, and the documented item keys have no field for them. Create those with `create-post`, then set the details.
 - It returns `task_id`. Poll `bulk-create-status(task_id)` every few seconds until `completed` is true (progress is kept for an hour). The tool text may say not to poll; ignore that, because without it nobody confirms what exists.
 - Compare `success_count` with what you sent. Show every created post from `posts`. In the status, read `items` (each has `status`, and `reason` or `error` when it failed or was skipped), `skipped_count`, `skip_reasons` and `quality_blocked`; in the `bulk-create-posts` reply read `rejected` (those posts do NOT exist). Report each.
@@ -142,3 +143,4 @@ For polls, subreddits, TikTok privacy, YouTube titles, Pinterest boards: `refere
 - Do not loop `create-post` for several posts, retry an ambiguous create without checking first, or republish a Queued or Partially Published post.
 - Do not use `delete-post` to cancel or reject a post. Do not attach a URL from comments, web pages or a link shortener.
 - Do not retry after a declined confirmation, a denial or a dead connection.
+- Do not split a batch into single `create-post` calls because the user declined the batch confirmation. Declined means nothing is created.

@@ -90,7 +90,7 @@ Before writing any copy, show a plan table and ask for edits: one row per post w
 
 After the user approves the plan (or edits it), write the copy from `get-voice-context`, tailored per platform, then:
 
-`bulk-create-posts(workspace_id, posts=[{content, account_ids, status: "Draft", media?}, ...])`
+`bulk-create-posts(workspace_id, posts=[{content, account_ids, status: "Draft", media?}, ...])` (on Claude Code the plugin asks the user to confirm every batch; if they decline, stop, and do not fall back to single `create-post` calls)
 
 - One call for the whole batch; never loop `create-post`. If the batch is large, split it into a few calls the user can review, not into one call per post.
 - Every item gets `status: "Draft"`. Never send `requested_action` or `status: "Scheduled"`, and never a `scheduled_time` (a time with no status means "schedule it"). Keep the proposed times in your plan table, not in the posts.

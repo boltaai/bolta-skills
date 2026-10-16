@@ -7,4 +7,4 @@ max_turns: 20
 timeout_seconds: 300
 allowed_tools: [Skill]
 ---
-Draft a LinkedIn post announcing our Fitzroy roastery opening this spring. I want to see it before anything goes out.
+Draft a LinkedIn post in Bolta announcing our Fitzroy roastery opening this spring. I want to see it before anything goes out.

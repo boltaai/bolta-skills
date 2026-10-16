@@ -35,7 +35,7 @@ If the user declines the "Confirmation needed (Bolta plugin safety check)" promp
 ## 1. Orient
 
 1. `list-workspaces`, then say the workspace name. For another client's queue the user needs that client's own connector.
-2. `get-workspace(workspace_id)`: read `timezone` and `safe_mode`. Times you show or send are wall-clock in that timezone; if it is "UTC" (the default) and the user named none, ask once.
+2. `get-workspace(workspace_id)`: read `timezone` and `safe_mode`. Times you show or send are wall-clock in that timezone; if it is "UTC" (the default) and the user named none, ask once. Read `safe_mode` and `timezone` from this call, not from the `list-workspaces` row: that list is cached for two minutes, so a Safe Mode switched on a moment ago may not show there.
 3. `get-my-capabilities(workspace_id)` before you offer to approve: read `permissions.approve_posts` and `denied_by`. Never state a role requirement yourself. It can say approving is allowed while `approve-post` still refuses with a permission error; trust the refusal. If approving is denied, you can still show the queue and `submit-for-review` the user's own drafts; say who has to decide.
 
 ## 2. Read the queue

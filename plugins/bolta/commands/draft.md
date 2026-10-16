@@ -27,7 +27,7 @@ If the topic or text above is empty, ask what the post should be about and stop.
 7. Read the result and confirm the post came back as a Draft with the accounts you chose. If it is anything else, say what it is and stop.
 8. If the call times out or fails in a way you cannot read, the outcome is unknown: check `list-workspace-posts(workspace_id, status="draft")` before trying again.
 
-For several platforms with different copy, make ONE `bulk-create-posts` call with every item a Draft (`status` "Draft", no `scheduled_time`), never a loop of `create-post`. Every item needs `account_ids` or `social_buckets`, so ask for the destinations first. The call returns a `task_id` and a `rejected` array: posts listed in `rejected` do not exist, so tell the user. Then poll `bulk-create-status(task_id)` until it finishes, even if the tool text says you need not, compare what was created with what you asked for, and repair anything in its `quality_blocked` array with `update-post(post_id, content=...)`.
+For several platforms with different copy, make ONE `bulk-create-posts` call with every item a Draft (`status` "Draft", no `scheduled_time`), never a loop of `create-post`. Every item needs `account_ids` or `social_buckets`, so ask for the destinations first. The call returns a `task_id` and a `rejected` array: posts listed in `rejected` do not exist, so tell the user. Then poll `bulk-create-status(task_id)` until it finishes, even if the tool text says you need not, compare what was created with what you asked for, and repair anything in its `quality_blocked` array with `update-post(post_id, content=..., status="Draft")`.
 
 ## Show the draft and stop
 

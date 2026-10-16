@@ -1,14 +1,15 @@
 ---
 name: undo-and-recovery
 description: >
-  Take something back in Bolta. Load it before calling delete-post, or setting a post back to Draft
-  to stop it. Use for "take it down", "remove that tweet", "unpublish it", "that post went out
-  wrong", "I deleted the wrong post", "restore that draft", "pause everything scheduled", "stop all
-  posts going out", "cancel that scheduled post". Restores posts deleted through the connector (7
-  days), pulls scheduled posts back to Draft, pauses routines, and says honestly what cannot be
-  undone from here, because delete-post does not remove a post that is already live on a platform.
-  Not for editing a post that is still safe to change (social-publishing), declining a queued draft
-  (approvals), or everyday routine changes (routines).
+  Take something back or remove it in Bolta. Load it before calling delete-post, or setting a post
+  back to Draft to stop it. Use for "delete these drafts", "delete all my drafts", "clean up my
+  drafts", "take it down", "remove that tweet", "unpublish it", "that post went out wrong", "I
+  deleted the wrong post", "restore that draft", "pause everything scheduled", "stop all posts going
+  out", "cancel that scheduled post". Restores posts deleted through the connector (7 days), pulls
+  scheduled posts back to Draft, pauses routines, and says honestly what cannot be undone from here,
+  because delete-post does not remove a post that is already live on a platform. Not for editing a
+  post that is still safe to change (social-publishing), declining a queued draft (approvals), or
+  everyday routine changes (routines).
 ---
 
 # Undo and recovery
@@ -116,6 +117,15 @@ Bolta has no tool to unpublish. `delete-post` hides the Bolta record only; it do
 3. Offer to draft a correction or replacement as a Draft (social-publishing). Do not publish it without the usual go-ahead.
 4. Keep the Bolta post. It is the record of what was sent, and deleting a Published post hides it from Bolta and, after 7 days, destroys it along with its analytics. Delete only if the user asks, after you say that.
 5. If many posts went wrong, run Pause everything now so no more go out.
+
+## Deleting posts on request
+
+Deleting is the user's decision, one post at a time, and only for posts they have just seen.
+
+1. Never delete from a bulk or vague request ("delete all my drafts", "clean up", "remove the old ones"), and do not call `delete-post` for it. Read first: `list-workspace-posts(workspace_id, status="draft", limit=100)`, show a numbered list (the first line of each text, its accounts and created date), and ask which ones to delete.
+2. Delete only the posts the user names after seeing that list. If they name several, repeat exactly which ones and ask once for the group, then make one `delete-post(post_id)` call per post and read each result.
+3. Say that a post deleted through the connector is hidden and can be restored for 7 days, and that a post already published is not removed from the platform.
+4. If the plugin's confirmation is declined or a call comes back denied, stop, say what was and was not deleted, and do not retry.
 
 ## Do not
 

@@ -1,7 +1,7 @@
 ---
-# Never says the inbox is clear of comments.
+# Never AFFIRMS that the inbox is clear of comments. Saying "I can't say you have no new comments" is the correct hedge and must not match, so the claim patterns exclude a preceding "say / tell you / claim / confirm".
 type: regex
-pattern: '\b(no|zero|0) (new )?comments\b|inbox is (all )?clear|nothing (new )?in (your|the) inbox'
+pattern: '(?<!(?:say|tell you|claim|confirm|promise|sure) )(?:you have|there are|there is|there''s) (?:no|zero|0) (?:new )?comments|inbox is (?:all )?clear|(?:^|[.!?]\s+)no (?:new )?comments\b'
 flags: i
 match: not_contains
 ---

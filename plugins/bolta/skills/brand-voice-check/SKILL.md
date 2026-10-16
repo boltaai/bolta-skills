@@ -148,7 +148,7 @@ Do not present it as a Bolta score.
 
 Only on request, only to a post whose `status` is Draft, and only after the user has seen the exact new text and said yes
 for that post:
-1. `update-post(post_id, content=...)`, then `get-post(post_id)` and confirm the text matches. Name the workspace in your
+1. `update-post(post_id, content=..., status="Draft")` (the status keeps the post a Draft, and means the plugin does not need to ask again), then `get-post(post_id)` and confirm the text matches. Name the workspace in your
    confirmation.
 2. `update-post` changes only the first part of a multi-part (thread) post and leaves the other parts as they are. For a
    thread, give the user fixes for the other parts to apply in Bolta, and say which part you changed.
