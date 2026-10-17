@@ -300,12 +300,36 @@ function bulk_verdict(ti,   i, k, n, p, item) {
       if (!jparse(item, "b" i)) return "other"
       item = "b" i
     } else item = p SUBSEP i
-    if (JT[item] != "o") return "other"
-    if (has_time(item)) return "other"
-    if (!intent_ok(item, "requested_action") || !intent_ok(item, "action")) return "other"
-    if (jhas(item, "status") && !(jtype(item, "status") == "s" && jstr(item, "status") == "Draft")) return "other"
+    if (!bulk_item_ok(item)) return "other"
   }
   return "drafts"
+}
+
+# One bulk item is a plain draft only if EVERY key is one we know and each is
+# harmless. An allow-list, not a deny-list: the server reads more item keys than
+# it documents, so any key not listed here makes the guard ask. The nested
+# `contents` shape is allow-listed the same way, one level down.
+function bulk_item_ok(item,   i, k, c, n, j, el, m) {
+  if (JT[item] != "o") return 0
+  for (i = 1; i <= JC[item]; i++) {
+    k = JK[item SUBSEP i]
+    if (k !~ /^(content|account_ids|accounts|account_id|social_buckets|media|poll|status|requested_action|action|scheduled_time|contents)$/) return 0
+  }
+  if (has_time(item)) return 0
+  if (!intent_ok(item, "requested_action") || !intent_ok(item, "action")) return 0
+  if (jhas(item, "status") && !(jtype(item, "status") == "s" && jstr(item, "status") == "Draft")) return 0
+  if (jhas(item, "contents")) {
+    if (jtype(item, "contents") != "a") return 0
+    c = item SUBSEP "contents"
+    n = JC[c]
+    for (j = 0; j < n; j++) {
+      el = c SUBSEP j
+      if (JT[el] != "o") return 0
+      for (m = 1; m <= JC[el]; m++)
+        if (JK[el SUBSEP m] !~ /^(content|index|media|poll)$/) return 0
+    }
+  }
+  return 1
 }
 
 function campaign_action(ti,   v) {
