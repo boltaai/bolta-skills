@@ -1,8 +1,8 @@
 ---
 name: route-content-planning
-description: 'One natural phrasing for content-planning.'
+description: 'A dated launch phrased as a plan request. v0.2 routes it to campaign; the user asks to see the plan before anything is saved.'
 tags: [smoke, routing]
-expected_outcome: 'content-planning fires; grounds itself in the workspace; presents or asks for the plan; saves nothing (no campaign, no drafts) and moves nothing.'
+expected_outcome: 'campaign fires; grounds itself in the workspace; shows the plan around Nov 3 for LinkedIn and X with the size math; saves nothing (no campaign, no drafts) and moves nothing.'
 max_turns: 20
 timeout_seconds: 300
 allowed_tools: [Skill]

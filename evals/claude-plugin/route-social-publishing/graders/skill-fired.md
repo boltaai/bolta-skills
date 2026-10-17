@@ -1,7 +1,7 @@
 ---
-# The plugin fired for this job: the social-publishing skill or its /draft command (the command defers to the skill).
+# v0.2 routing: the post skill fires (there are no commands any more).
 type: tool_used
 tool: Skill
-input_match: '"skill"\s*:\s*"(?:[\w-]+:)?(social-publishing|draft)"'
+input_match: '"skill"\s*:\s*"(?:[\w-]+:)?(post)"'
 min: 1
 ---

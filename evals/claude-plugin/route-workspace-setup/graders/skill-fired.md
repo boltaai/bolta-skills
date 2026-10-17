@@ -1,7 +1,7 @@
 ---
-# The plugin fired for this job: the workspace-setup skill or its /setup command (the command defers to the skill).
+# v0.2 routing: the connect, today or start skill fires (there are no commands any more).
 type: tool_used
 tool: Skill
-input_match: '"skill"\s*:\s*"(?:[\w-]+:)?(workspace-setup|setup)"'
+input_match: '"skill"\s*:\s*"(?:[\w-]+:)?(connect|today|start)"'
 min: 1
 ---

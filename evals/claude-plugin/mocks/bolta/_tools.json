@@ -1,1827 +1,2489 @@
 {
- "tools": [
-  {
-   "name": "list-workspaces",
-   "title": "List Workspaces",
-   "description": "List all workspaces accessible by your API key",
-   "inputSchema": {
-    "type": "object",
-    "properties": {},
-    "additionalProperties": false
-   },
-   "annotations": {
-    "title": "List Workspaces",
-    "readOnlyHint": true,
-    "destructiveHint": false,
-    "idempotentHint": true,
-    "openWorldHint": false
-   }
-  },
-  {
-   "name": "get-workspace",
-   "title": "Get Workspace",
-   "description": "One workspace's details — including its `timezone`, which is what create-routine's required `timezone` parameter wants for a scheduled routine, plus its name, plan and settings. Read-only.",
-   "inputSchema": {
-    "type": "object",
-    "properties": {
-     "workspace_id": {
-      "type": "string",
-      "format": "uuid",
-      "description": "The workspace ID to retrieve"
-     }
-    },
-    "additionalProperties": false,
-    "required": [
-     "workspace_id"
-    ]
-   },
-   "annotations": {
-    "title": "Get Workspace",
-    "readOnlyHint": true,
-    "destructiveHint": false,
-    "idempotentHint": true,
-    "openWorldHint": false
-   }
-  },
-  {
-   "name": "get-my-capabilities",
-   "title": "Get My Capabilities",
-   "description": "Check what the current API key or agent is allowed to do in a workspace. `permissions` is the caller's role intersected with the scopes this key actually carries; `denied_by` says why each denied action is denied (`role`, `workspace_plan`, or `key_scope`).",
-   "inputSchema": {
-    "type": "object",
-    "properties": {
-     "workspace_id": {
-      "type": "string",
-      "format": "uuid",
-      "description": "The workspace ID"
-     }
-    },
-    "additionalProperties": false,
-    "required": [
-     "workspace_id"
-    ]
-   },
-   "annotations": {
-    "title": "Get My Capabilities",
-    "readOnlyHint": true,
-    "destructiveHint": false,
-    "idempotentHint": true,
-    "openWorldHint": false
-   }
-  },
-  {
-   "name": "list-accounts",
-   "title": "List Social Accounts",
-   "description": "List all connected social accounts in workspace. Renders a card with Socials and Buckets tabs — connected accounts with their health, plus the workspace's social buckets (named account groups).",
-   "inputSchema": {
-    "type": "object",
-    "properties": {
-     "workspace_id": {
-      "type": "string",
-      "format": "uuid",
-      "description": "The workspace ID"
-     },
-     "platform": {
-      "type": "string",
-      "description": "Filter by platform"
-     }
-    },
-    "additionalProperties": false,
-    "required": [
-     "workspace_id"
-    ]
-   },
-   "annotations": {
-    "title": "List Social Accounts",
-    "readOnlyHint": true,
-    "destructiveHint": false,
-    "idempotentHint": true,
-    "openWorldHint": false
-   }
-  },
-  {
-   "name": "get-connect-link",
-   "title": "Get Social Connect Link",
-   "description": "Get a URL that takes the user to Bolta's social-account connect page. Use this whenever the workspace has no connected account for the platform the user wants to publish to — OAuth cannot run inside the chat, so share this link and ask the user to complete the connection in their browser, then re-check with list-accounts.",
-   "inputSchema": {
-    "type": "object",
-    "properties": {
-     "workspace_id": {
-      "type": "string",
-      "format": "uuid",
-      "description": "The workspace ID"
-     },
-     "platform": {
-      "type": "string",
-      "description": "Platform the user wants to connect (preselects it on the page)"
-     }
-    },
-    "additionalProperties": false,
-    "required": [
-     "workspace_id"
-    ]
-   },
-   "annotations": {
-    "title": "Get Social Connect Link",
-    "readOnlyHint": true,
-    "destructiveHint": false,
-    "idempotentHint": true,
-    "openWorldHint": false
-   }
-  },
-  {
-   "name": "get-voice-context",
-   "title": "Get Voice Context",
-   "description": "Use this before generating any content. Returns the compact, resolved voice context for a workspace (schema voice-context.v1): the selected or default Voice Profile merged with its linked Business DNA — business identity, writing rules, tone, persona, platform adaptations, knowledge availability — with provenance and missing-field indicators. This is the same brand identity the Bolta app and internal agents resolve, so content written from it matches the user's voice everywhere.",
-   "inputSchema": {
-    "type": "object",
-    "properties": {
-     "workspace_id": {
-      "type": "string",
-      "format": "uuid",
-      "description": "The workspace ID"
-     },
-     "voice_profile_id": {
-      "type": "string",
-      "format": "uuid",
-      "description": "Voice Profile to compile context for. Defaults to the workspace default profile."
-     },
-     "platforms": {
-      "type": "string",
-      "description": "Comma-separated target platforms (e.g. \"linkedin,threads\"). Filters platform adaptations to just these."
-     }
-    },
-    "additionalProperties": false,
-    "required": [
-     "workspace_id"
-    ]
-   },
-   "annotations": {
-    "title": "Get Voice Context",
-    "readOnlyHint": true,
-    "destructiveHint": false,
-    "idempotentHint": true,
-    "openWorldHint": false
-   }
-  },
-  {
-   "name": "list-workspace-posts",
-   "title": "List Workspace Posts",
-   "description": "List posts in a workspace with optional filters, rendered as a posts card. For \"how did my post(s) do\" questions, call with status=published, a start_date/end_date window (e.g. today or the last 7 days), and include_metrics=true — each post then carries per-platform engagement (views, likes, comments, reposts). FRESHNESS: metrics sync nightly from the platforms; for posts published less than ~24h ago, tell the user metrics may not have synced yet — zeros on a fresh post mean 'not synced', NOT that the post performed badly or failed. UNATTRIBUTABLE POSTS: every post carries `has_publication_record`. When it is false the post has no linked account/platform, so no engagement can be attributed to it and its zeros are MISSING DATA, not poor performance (`metrics_unavailable_reason` spells this out). Exclude those posts when ranking top performers and say how many you set aside — never present their zeros as results, and never conclude from them that metrics are broken workspace-wide.",
-   "inputSchema": {
-    "type": "object",
-    "properties": {
-     "workspace_id": {
-      "type": "string",
-      "format": "uuid",
-      "description": "The workspace ID"
-     },
-     "status": {
-      "type": "string",
-      "description": "Filter by status: draft, scheduled, published, failed"
-     },
-     "platform": {
-      "type": "string",
-      "description": "Filter to posts targeting one platform (e.g. linkedin, x, instagram, threads, facebook)"
-     },
-     "start_date": {
-      "type": "string",
-      "description": "Only posts scheduled/created on or after this datetime"
-     },
-     "end_date": {
-      "type": "string",
-      "description": "Only posts scheduled/created on or before this datetime"
-     },
-     "include_metrics": {
-      "type": "boolean",
-      "description": "Set true to attach per-platform engagement metrics (views, likes, comments, reposts) + published_at to each post — use for any post-performance question. Metrics sync nightly."
-     },
-     "metrics_platforms": {
-      "type": "string",
-      "description": "'all' (default) or comma-separated platform keys to keep in the metrics breakdown (facebook, threads, instagram, linkedin, reddit, bluesky, mastodon, x)"
-     },
-     "limit": {
-      "type": "number",
-      "description": "Max posts per page (default 50, max 100). Use with page to paginate."
-     },
-     "page": {
-      "type": "number",
-      "description": "Page number (default 1)"
-     },
-     "sort_by": {
-      "type": "string",
-      "description": "Sort field: created_at | updated_at | scheduled_time (default updated_at)"
-     },
-     "sort_order": {
-      "type": "string",
-      "description": "'asc' or 'desc' (default 'desc')"
-     }
-    },
-    "additionalProperties": false,
-    "required": [
-     "workspace_id"
-    ]
-   },
-   "annotations": {
-    "title": "List Workspace Posts",
-    "readOnlyHint": true,
-    "destructiveHint": false,
-    "idempotentHint": true,
-    "openWorldHint": false
-   }
-  },
-  {
-   "name": "list-scheduled-posts",
-   "title": "List Scheduled Posts",
-   "description": "List all scheduled posts in a workspace",
-   "inputSchema": {
-    "type": "object",
-    "properties": {
-     "workspace_id": {
-      "type": "string",
-      "format": "uuid",
-      "description": "The workspace ID"
-     },
-     "limit": {
-      "type": "number",
-      "description": "Max posts per page (default 50, max 200)."
-     },
-     "page": {
-      "type": "number",
-      "description": "Page number (default 1)"
-     },
-     "start_date": {
-      "type": "string",
-      "description": "Only posts scheduled at/after this time"
-     },
-     "end_date": {
-      "type": "string",
-      "description": "Only posts scheduled at/before this time"
-     }
-    },
-    "additionalProperties": false,
-    "required": [
-     "workspace_id"
-    ]
-   },
-   "annotations": {
-    "title": "List Scheduled Posts",
-    "readOnlyHint": true,
-    "destructiveHint": false,
-    "idempotentHint": true,
-    "openWorldHint": false
-   }
-  },
-  {
-   "name": "get-post",
-   "title": "Get Post",
-   "description": "Get details of a specific post",
-   "inputSchema": {
-    "type": "object",
-    "properties": {
-     "post_id": {
-      "type": "string",
-      "format": "uuid",
-      "description": "The post ID"
-     }
-    },
-    "additionalProperties": false,
-    "required": [
-     "post_id"
-    ]
-   },
-   "annotations": {
-    "title": "Get Post",
-    "readOnlyHint": true,
-    "destructiveHint": false,
-    "idempotentHint": true,
-    "openWorldHint": false
-   }
-  },
-  {
-   "name": "create-post",
-   "title": "Create Post",
-   "description": "Create ONE post (draft or scheduled). EXACTLY one — this tool is single-use per turn. \n\nIf the request needs two or more posts — the same idea adapted for several platforms is the common case — call bulk-create-posts ONCE instead. Do not call this tool twice; do not loop it. Each call renders its own card and the user sees only the last one, so a second call does not add a post to the reply, it HIDES the first. That failure is invisible from here: both calls return 200 and the user quietly receives half the work. \n\nFor a WordPress article use create-wordpress-blog-post instead, which handles the article settings, SEO metadata and Media Library upload in one call. NEVER invent the topic or the destination. If the user has not said what the post should be about, ask them before calling this — do not pick a subject for them. Likewise, if they have not said where it should go, ask which account(s), unless they explicitly asked for a draft only. A post created with invented content and no accounts is an orphan the user never asked for and cannot publish. If the workspace has Safe Mode enabled, non-Draft posts are automatically rerouted to Pending Approval. Images you generated in this conversation CAN be attached: pass them in the media parameter (no separate upload step needed) — or attach them to an existing post later via update-post's media parameter.",
-   "inputSchema": {
-    "type": "object",
-    "properties": {
-     "workspace_id": {
-      "type": "string",
-      "format": "uuid",
-      "description": "The workspace ID"
-     },
-     "content": {
-      "type": "string",
-      "description": "Post content/text. Must be the topic or copy the user actually asked for — never a subject you chose on their behalf. If you do not have one, ask instead of calling this tool."
-     },
-     "media": {
-      "type": "array",
-      "items": {
-       "description": "A file attachment: an image or video generated or uploaded in this conversation. A plain URL string or {\"url\": \"https://...\"} is also accepted.",
-       "properties": {
-        "download_url": {
-         "description": "URL to download the file contents",
-         "type": "string"
-        },
-        "file_id": {
-         "description": "Host file identifier",
-         "type": "string"
-        },
-        "mime_type": {
-         "default": "",
-         "description": "File MIME type",
-         "type": "string"
-        },
-        "file_name": {
-         "default": "",
-         "description": "Original file name",
-         "type": "string"
-        }
-       },
-       "required": [
-        "download_url",
-        "file_id"
-       ],
-       "type": "object"
+  "tools": [
+    {
+      "name": "list-workspaces",
+      "title": "List Workspaces",
+      "description": "List all workspaces accessible by your API key",
+      "inputSchema": {
+        "type": "object",
+        "properties": {},
+        "additionalProperties": false
       },
-      "description": "Images or videos to attach, as an array of objects. Each item is a file attachment ({download_url, mime_type, file_name}) or a URL wrapped as an object, e.g. {\"url\": \"https://...\"}. Each is downloaded and re-hosted in Bolta so it stays valid until the post publishes."
-     },
-     "account_ids": {
-      "type": "array",
-      "items": {
-       "type": "string"
-      },
-      "description": "Array of account IDs to post to. Required when scheduling or publishing; optional for plain drafts or when social_buckets is provided instead. Ask the user which account(s) to target rather than omitting this by default — leave it empty only when they explicitly want a draft with no destination yet."
-     },
-     "social_buckets": {
-      "type": "array",
-      "items": {
-       "type": "string"
-      },
-      "description": "Social bucket IDs (from list-buckets) to post to — an alternative to account_ids that targets a whole named group of accounts in one shot."
-     },
-     "scheduled_time": {
-      "type": "string",
-      "description": "Schedule time, ISO 8601. If omitted, post is draft. Local wall-clock time in the workspace's timezone (no trailing Z and no UTC offset). Only include an offset when the user explicitly names a zone; never infer one from your own locale."
-     },
-     "timezone": {
-      "type": "string",
-      "description": "IANA timezone name (e.g. 'America/Los_Angeles') that the wall-clock time above should be interpreted in. Send this ONLY when the user explicitly named a zone ('9am Pacific'). Omit it otherwise — the workspace timezone is used, which is what the user means by default."
-     },
-     "requested_action": {
-      "type": "string",
-      "description": "Desired action: 'draft', 'schedule', or 'publish'. Helps the system route correctly under Safe Mode."
-     },
-     "poll": {
-      "type": "object",
-      "description": "Optional poll to attach to the post content (Threads/X). Object shape, e.g. {\"options\": [\"Option A\", \"Option B\"]}. Platform-specific settings like Threads reply controls or topic tags are set separately via update-post-platform-details."
-     },
-     "idempotency_key": {
-      "type": "string",
-      "description": "Optional dedupe key. Pass a stable value to make retries safe — repeating a create with the same key returns the already-created post instead of duplicating it (24h window)."
-     }
+      "annotations": {
+        "title": "List Workspaces",
+        "readOnlyHint": true,
+        "destructiveHint": false,
+        "idempotentHint": true,
+        "openWorldHint": false
+      }
     },
-    "additionalProperties": false,
-    "required": [
-     "workspace_id",
-     "content"
-    ]
-   },
-   "annotations": {
-    "title": "Create Post",
-    "readOnlyHint": false,
-    "destructiveHint": false,
-    "idempotentHint": false,
-    "openWorldHint": false
-   }
-  },
-  {
-   "name": "update-post",
-   "title": "Update Post",
-   "description": "Update an existing post's text, media, poll, schedule, or status. Omitted fields are left unchanged. Use this to attach an image generated in this conversation to a post that already exists — pass it in media. Updates happen in place: the post keeps its id and its full activity history, so never delete and recreate a post to change it. QUALITY BLOCKED RECOVERY: this is how you repair a post whose status is 'Quality Blocked'. Send the rewritten content and the quality check re-runs on it automatically — if it passes, the post returns to 'Draft' and the response carries quality_check.cleared=true; if it still fails, quality_check.message says exactly what to change. Never try to set status yourself to clear a block: pipeline-owned statuses are refused by design.",
-   "inputSchema": {
-    "type": "object",
-    "properties": {
-     "post_id": {
-      "type": "string",
-      "format": "uuid",
-      "description": "The post ID"
-     },
-     "content": {
-      "type": "string",
-      "description": "Updated post content"
-     },
-     "media": {
-      "type": "array",
-      "items": {
-       "description": "A file attachment: an image or video generated or uploaded in this conversation. A plain URL string or {\"url\": \"https://...\"} is also accepted.",
-       "properties": {
-        "download_url": {
-         "description": "URL to download the file contents",
-         "type": "string"
-        },
-        "file_id": {
-         "description": "Host file identifier",
-         "type": "string"
-        },
-        "mime_type": {
-         "default": "",
-         "description": "File MIME type",
-         "type": "string"
-        },
-        "file_name": {
-         "default": "",
-         "description": "Original file name",
-         "type": "string"
-        }
-       },
-       "required": [
-        "download_url",
-        "file_id"
-       ],
-       "type": "object"
-      },
-      "description": "Images/videos to attach, as an array of objects — file attachments ({download_url, ...}) or {\"url\": \"https://...\"}. Each is re-hosted in Bolta and added to the post's media."
-     },
-     "poll": {
-      "type": "object",
-      "description": "Updated poll object, e.g. {\"options\": [\"A\", \"B\"]}."
-     },
-     "scheduled_time": {
-      "type": "string",
-      "description": "Updated schedule time, ISO 8601. Local wall-clock time in the workspace's timezone (no trailing Z and no UTC offset). Only include an offset when the user explicitly names a zone; never infer one from your own locale."
-     },
-     "timezone": {
-      "type": "string",
-      "description": "IANA timezone name (e.g. 'America/Los_Angeles') that the wall-clock time above should be interpreted in. Send this ONLY when the user explicitly named a zone ('9am Pacific'). Omit it otherwise — the workspace timezone is used, which is what the user means by default."
-     },
-     "status": {
-      "type": "string",
-      "description": "'Draft' or 'Pending Approval'. Setting 'Draft' unschedules the post in place — it keeps its id, content, and activity history, and its scheduled time is cleared. Assistants cannot set 'Scheduled' or 'Published' here; use schedule-post or publish-post after approval."
-     },
-     "accounts": {
-      "type": "array",
-      "items": {
-       "type": "string"
-      },
-      "description": "Replace the post's target account IDs (full replacement list — resend every account the post should keep)"
-     }
-    },
-    "additionalProperties": false,
-    "required": [
-     "post_id"
-    ]
-   },
-   "annotations": {
-    "title": "Update Post",
-    "readOnlyHint": false,
-    "destructiveHint": true,
-    "idempotentHint": true,
-    "openWorldHint": false
-   }
-  },
-  {
-   "name": "delete-post",
-   "title": "Delete Post",
-   "description": "Delete a post. Recoverable for 7 days — the post is hidden immediately and permanently destroyed after the undo window.",
-   "inputSchema": {
-    "type": "object",
-    "properties": {
-     "post_id": {
-      "type": "string",
-      "format": "uuid",
-      "description": "The post ID"
-     }
-    },
-    "additionalProperties": false,
-    "required": [
-     "post_id"
-    ]
-   },
-   "annotations": {
-    "title": "Delete Post",
-    "readOnlyHint": false,
-    "destructiveHint": true,
-    "idempotentHint": true,
-    "openWorldHint": false
-   }
-  },
-  {
-   "name": "bulk-create-posts",
-   "title": "Bulk Create Posts",
-   "description": "Create MULTIPLE posts in one call. ALWAYS use this instead of calling create-post repeatedly whenever the user asks for more than one post (e.g. 'a week of content', 'make 7 posts') — looping create-post renders a separate card per post and the user only ever sees one of them. Use create-post only for a single post. Returns a task_id; the card polls bulk-create-status itself and lists every post's copy when the work lands, so you do NOT need to poll or restate the copy. Each post goes through the same approval, Safe Mode and autonomy rules as create-post — including not inventing the topic or destination: ask the user what the posts are about and which account(s) they target before calling this.",
-   "inputSchema": {
-    "type": "object",
-    "properties": {
-     "workspace_id": {
-      "type": "string",
-      "format": "uuid",
-      "description": "The workspace ID"
-     },
-     "posts": {
-      "type": "array",
-      "items": {
-       "type": "string"
-      },
-      "description": "Array of posts to create. Each item takes the SAME flat keys as create-post: {\"content\": \"post text\", \"account_ids\": [\"account-uuid\"], \"social_buckets\": [\"bucket-uuid\"], \"status\": \"Draft\"|\"Scheduled\", \"requested_action\": \"draft\"|\"schedule\", \"scheduled_time\": \"ISO8601 (required when Scheduled)\", scheduled_time is Local wall-clock time in the workspace's timezone (no trailing Z and no UTC offset). Only include an offset when the user explicitly names a zone; never infer one from your own locale. \"media\": [{\"url\": \"https://...\"}]}. The nested shape ({\"contents\": [{\"content\": ...}]}) is also accepted. Either account_ids or social_buckets is required per item. requested_action='schedule' with a future scheduled_time creates the post as Scheduled (routed to Pending Approval when Safe Mode or the assistant gate requires review), exactly as create-post does; a scheduled_time with no status and no requested_action means schedule it. requested_action='publish' is NOT supported here — create the posts, then publish each with publish-post. An item with a missing, unparseable or past scheduled_time is REJECTED by itself: the rest of the batch is still queued and the response's `rejected` array names each dropped item and why. Those posts do NOT exist — report them to the user."
-     },
-     "timezone": {
-      "type": "string",
-      "description": "IANA timezone name (e.g. 'America/Los_Angeles') that the wall-clock time above should be interpreted in. Send this ONLY when the user explicitly named a zone ('9am Pacific'). Omit it otherwise — the workspace timezone is used, which is what the user means by default."
-     }
-    },
-    "additionalProperties": false,
-    "required": [
-     "workspace_id",
-     "posts"
-    ]
-   },
-   "annotations": {
-    "title": "Bulk Create Posts",
-    "readOnlyHint": false,
-    "destructiveHint": false,
-    "idempotentHint": false,
-    "openWorldHint": false
-   }
-  },
-  {
-   "name": "bulk-create-status",
-   "title": "Bulk Create Status",
-   "description": "Check the status of a bulk post creation task. The response's quality_blocked array is read live from the posts, so it stays accurate even for a post demoted after the task reported SUCCESS: each entry names the post, why it was blocked, and how to fix it. Repair those with update-post before submit-for-review.",
-   "inputSchema": {
-    "type": "object",
-    "properties": {
-     "task_id": {
-      "type": "string",
-      "description": "The task ID returned by bulk-create-posts"
-     }
-    },
-    "additionalProperties": false,
-    "required": [
-     "task_id"
-    ]
-   },
-   "annotations": {
-    "title": "Bulk Create Status",
-    "readOnlyHint": true,
-    "destructiveHint": false,
-    "idempotentHint": true,
-    "openWorldHint": false
-   }
-  },
-  {
-   "name": "submit-for-review",
-   "title": "Submit Posts for Review",
-   "description": "Submit one or more posts for team review. Changes post status to 'Pending Approval' and creates TeamPostReview records. Only 'Draft' and 'Needs Revision' posts can be submitted. A post rejected here for being 'Quality Blocked' is NOT a dead end — the per-post result carries quality_block.message with the specific problem; rewrite that post with update-post (which re-runs the check and returns it to Draft when it passes) and submit it again, rather than reporting the block to the user as final.",
-   "inputSchema": {
-    "type": "object",
-    "properties": {
-     "workspace_id": {
-      "type": "string",
-      "format": "uuid",
-      "description": "The workspace ID"
-     },
-     "post_ids": {
-      "type": "array",
-      "items": {
-       "type": "string"
-      },
-      "description": "Array of post IDs to submit for review"
-     },
-     "note": {
-      "type": "string",
-      "description": "Note for reviewers (e.g. 'AI drafts ready for review')"
-     }
-    },
-    "additionalProperties": false,
-    "required": [
-     "workspace_id",
-     "post_ids"
-    ]
-   },
-   "annotations": {
-    "title": "Submit Posts for Review",
-    "readOnlyHint": false,
-    "destructiveHint": false,
-    "idempotentHint": false,
-    "openWorldHint": false
-   }
-  },
-  {
-   "name": "approve-post",
-   "title": "Approve Post",
-   "description": "Approve a post that is pending review. Requires admin or owner role. Supports scheduling modes: approve_only, use_suggested_time, or set_fixed_time.",
-   "inputSchema": {
-    "type": "object",
-    "properties": {
-     "workspace_id": {
-      "type": "string",
-      "format": "uuid",
-      "description": "The workspace ID"
-     },
-     "post_id": {
-      "type": "string",
-      "format": "uuid",
-      "description": "The post ID to approve"
-     },
-     "schedule_mode": {
-      "type": "string",
-      "description": "Scheduling mode: 'approve_only' (default), 'use_suggested_time', or 'set_fixed_time'"
-     },
-     "expected_fingerprint": {
-      "type": "string",
-      "description": "Revision token (content_fingerprint) from the most recent read of this post's review (list-inbox-items / list-reviews). Pass it to guarantee you are approving exactly the revision you reviewed. REQUIRED to resolve a stale_review conflict: after that error, re-read the post, show the user the current version, and retry with the fresh fingerprint. Never reuse an old token."
-     },
-     "fixed_time": {
-      "type": "string",
-      "description": "Fixed schedule time (required when schedule_mode is 'set_fixed_time'). Local wall-clock time in the workspace's timezone (no trailing Z and no UTC offset). Only include an offset when the user explicitly names a zone; never infer one from your own locale."
-     },
-     "timezone": {
-      "type": "string",
-      "description": "IANA timezone name (e.g. 'America/Los_Angeles') that the wall-clock time above should be interpreted in. Send this ONLY when the user explicitly named a zone ('9am Pacific'). Omit it otherwise — the workspace timezone is used, which is what the user means by default."
-     },
-     "comments": {
-      "type": "string",
-      "description": "Approval comments"
-     }
-    },
-    "additionalProperties": false,
-    "required": [
-     "workspace_id",
-     "post_id"
-    ]
-   },
-   "annotations": {
-    "title": "Approve Post",
-    "readOnlyHint": false,
-    "destructiveHint": true,
-    "idempotentHint": true,
-    "openWorldHint": true
-   }
-  },
-  {
-   "name": "schedule-post",
-   "title": "Schedule Post",
-   "description": "Schedule a post for future publishing. Requires admin or owner role. If workspace Safe Mode is ON and the post is a Draft, it is rerouted to Pending Approval instead of being scheduled. AFTER SCHEDULING A BATCH: finish with one list-workspace-posts call (status=scheduled) so the posts card on screen reflects the new state. Cards are snapshots of the call that drew them — the bulk-create card still shows every post as it was at creation, so without that final call the user reads 'Draft' under a message saying 'Scheduled'.",
-   "inputSchema": {
-    "type": "object",
-    "properties": {
-     "workspace_id": {
-      "type": "string",
-      "format": "uuid",
-      "description": "The workspace ID"
-     },
-     "post_id": {
-      "type": "string",
-      "format": "uuid",
-      "description": "The post ID to schedule"
-     },
-     "time": {
-      "type": "string",
-      "description": "Future schedule time in ISO 8601 format. Local wall-clock time in the workspace's timezone (no trailing Z and no UTC offset). Only include an offset when the user explicitly names a zone; never infer one from your own locale."
-     },
-     "timezone": {
-      "type": "string",
-      "description": "IANA timezone name (e.g. 'America/Los_Angeles') that the wall-clock time above should be interpreted in. Send this ONLY when the user explicitly named a zone ('9am Pacific'). Omit it otherwise — the workspace timezone is used, which is what the user means by default."
-     }
-    },
-    "additionalProperties": false,
-    "required": [
-     "workspace_id",
-     "post_id",
-     "time"
-    ]
-   },
-   "annotations": {
-    "title": "Schedule Post",
-    "readOnlyHint": false,
-    "destructiveHint": true,
-    "idempotentHint": false,
-    "openWorldHint": true
-   }
-  },
-  {
-   "name": "publish-post",
-   "title": "Publish Post",
-   "description": "Immediately queue a post for publishing. Requires admin or owner role. Blocked when workspace Safe Mode is ON — use submit-for-review instead.",
-   "inputSchema": {
-    "type": "object",
-    "properties": {
-     "workspace_id": {
-      "type": "string",
-      "format": "uuid",
-      "description": "The workspace ID"
-     },
-     "post_id": {
-      "type": "string",
-      "format": "uuid",
-      "description": "The post ID to publish immediately"
-     }
-    },
-    "additionalProperties": false,
-    "required": [
-     "workspace_id",
-     "post_id"
-    ]
-   },
-   "annotations": {
-    "title": "Publish Post",
-    "readOnlyHint": false,
-    "destructiveHint": true,
-    "idempotentHint": false,
-    "openWorldHint": true
-   }
-  },
-  {
-   "name": "list-inbox-items",
-   "title": "List Inbox Items",
-   "description": "Everything waiting on the customer, in one call — the dashboard hub's full inbox. THIS IS ALSO WHERE COMMENTS AND MENTIONS ON OUR OWN CONTENT ARRIVE. When the user mentions a comment left on their post, a mention, or a reply they need to answer, look HERE: the row carries the platform, the account, the target id/url and the comment text — exactly what a drafting tool needs. Do NOT go hunting through list-workspace-posts for it; that lists OUR posts, not the comments people left on them. Rows are labeled by source: posts awaiting team review (source=team), recurring AI-generated posts (source=recurring), engagement reply drafts and mentions such as Threads (source=hunter), and reports (source=report). Use this when the user asks what's waiting for them, what was produced for them, or about replies/mentions to review. For ONLY the recurring queue use list-recurring-reviews. \n\nThe total_team/total_recurring/total_hunter/total_report counts are always workspace-wide — they do NOT shrink when you pass source, so an empty filtered result can still show work pending in the other buckets. \n\nA row here is the INPUT to acting on it, not the act. In particular, a row carrying comment text is not permission to answer it yourself: a reply you compose directly is in YOUR voice and skips the Voice Profile and Business DNA entirely. To reply to a comment or mention on our own content, call draft-inbound-reply. To revise or send a reply Bolta already drafted (source=hunter), use update-outreach-reply / send-outreach-reply. To approve a post, approve-post.",
-   "inputSchema": {
-    "type": "object",
-    "properties": {
-     "workspace_id": {
-      "type": "string",
-      "format": "uuid",
-      "description": "The workspace ID"
-     },
-     "status": {
-      "type": "string",
-      "description": "Filter by review status: 'pending' (default), 'approved', 'rejected'"
-     },
-     "limit": {
-      "type": "number",
-      "description": "Max results per page (default 50, max 100)"
-     },
-     "offset": {
-      "type": "number",
-      "description": "Offset for pagination (default 0)"
-     },
-     "source": {
-      "type": "string",
-      "description": "Filter by origin: 'team' (team workflow posts), 'recurring' (AI-generated recurring posts), 'hunter' (reply drafts to mentions/leads), 'report' (agent reports). Omit for all sources."
-     },
-     "agent_id": {
-      "type": "string",
-      "format": "uuid",
-      "description": "Only items produced by this automation (the producer id echoed on inbox rows). Scopes team/recurring by the creator, hunter replies by the agent's campaigns, reports by agent_id."
-     }
-    },
-    "additionalProperties": false,
-    "required": [
-     "workspace_id"
-    ]
-   },
-   "annotations": {
-    "title": "List Inbox Items",
-    "readOnlyHint": true,
-    "destructiveHint": false,
-    "idempotentHint": true,
-    "openWorldHint": false
-   }
-  },
-  {
-   "name": "draft-inbound-reply",
-   "title": "Draft Inbound Reply",
-   "description": "Draft a reply to a comment or mention left on OUR OWN content. \n\nALWAYS call this rather than composing the reply yourself. A reply you write directly is in YOUR voice; this one is in the workspace's, because it runs the Voice Profile and Business DNA the customer configured. Reading the comment with get-social-content or list-inbox-items is not a substitute — that is the input to this call, not a replacement for it. \n\nUSE THIS, NOT draft-engagement-reply, for anything on our own posts. They route to different server-side writers and picking the wrong one is SILENT: draft-engagement-reply writes as an outsider joining someone else's thread, so used here it produces a reply that is on-brand, fluent, and reads as though a stranger wandered into our own comments. Nothing errors and nothing warns. draft-engagement-reply is for third-party conversations Bolta discovered; this one is for the people talking to us. \n\nReads the comment AND the post it was left on — a terse comment (\"How?\", \"price?\") is unanswerable without the thing it is asking about — then writes in the workspace's voice. \n\nStateless: creates NOTHING and sends NOTHING. It returns text with drafted_only=true. Show it to the user, and send the approved text with reply-to-social-content.",
-   "inputSchema": {
-    "type": "object",
-    "properties": {
-     "workspace_id": {
-      "type": "string",
-      "format": "uuid",
-      "description": "Workspace UUID"
-     },
-     "account_id": {
-      "type": "string",
-      "format": "uuid",
-      "description": "The connected account whose content was commented on. Must belong to this workspace."
-     },
-     "target_url": {
-      "type": "string",
-      "format": "uri",
-      "description": "Public URL of the comment (or of our post, to reply to the post itself). Reddit /s/ share links are not resolvable — use the full /comments/ permalink."
-     },
-     "platform": {
-      "type": "string",
-      "description": "Required only when target_url is omitted, or to identify a self-hosted Mastodon instance"
-     },
-     "target_id": {
-      "type": "string",
-      "description": "Native platform ID, when target_url is omitted"
-     },
-     "target_type": {
-      "type": "string",
-      "description": "post or comment; inferred from target_url when possible"
-     },
-     "voice_profile_id": {
-      "type": "string",
-      "format": "uuid",
-      "description": "Optional Voice Profile override; defaults to the workspace's"
-     },
-     "tone": {
-      "type": "string",
-      "description": "Optional tone override for this one draft"
-     },
-     "comment_limit": {
-      "type": "integer",
-      "description": "How many sibling comments to read for thread context. Default 25."
-     }
-    },
-    "additionalProperties": false,
-    "required": [
-     "workspace_id",
-     "account_id"
-    ]
-   },
-   "annotations": {
-    "title": "Draft Inbound Reply",
-    "readOnlyHint": false,
-    "destructiveHint": false,
-    "idempotentHint": false,
-    "openWorldHint": true
-   }
-  },
-  {
-   "name": "reply-to-social-content",
-   "title": "Reply To Social Content",
-   "description": "Reply to an existing third-party social post or comment using a connected Bolta account. THE TARGET DOES NOT NEED TO HAVE BEEN DISCOVERED BY A BOLTA AGENT FIRST — pass a public URL you found yourself (web search, the user pasting a link, another tool) and Bolta resolves it, publishes through the platform's native API, and verifies the result. No Hunter campaign, no opportunity record, and no pre-existing reply_id are required; do NOT use send-outreach-reply for this (that one is only for replies Bolta's Hunter already drafted). Works for a top-level reply to a post AND for a reply to a specific comment. Wired for reddit, threads, bluesky, mastodon, linkedin, and x. Returns status (published or queued), the platform reply ID, the canonical URL of the published reply, timestamp, and verification state. Replying twice to the same target returns the original reply with deduplicated=true instead of posting again.",
-   "inputSchema": {
-    "type": "object",
-    "properties": {
-     "workspace_id": {
-      "type": "string",
-      "format": "uuid",
-      "description": "Workspace UUID"
-     },
-     "account_id": {
-      "type": "string",
-      "format": "uuid",
-      "description": "Connected account to publish the reply from. Must belong to this workspace and match the target's platform."
-     },
-     "content": {
-      "type": "string",
-      "description": "The reply text to publish, exactly as written. Bolta does not rewrite it."
-     },
-     "target_url": {
-      "type": "string",
-      "format": "uri",
-      "description": "Public URL of the post or comment to reply to. Reddit /s/ share links are not resolvable — use the full /comments/ permalink.",
-      "examples": [
-       "https://www.reddit.com/r/SaaS/comments/abc123/some_post/"
-      ]
-     },
-     "platform": {
-      "type": "string",
-      "description": "Required only when target_url is omitted, or to identify a self-hosted Mastodon instance"
-     },
-     "target_id": {
-      "type": "string",
-      "description": "Native platform ID, when target_url is omitted (Reddit fullname, Threads media ID, Bluesky AT-URI, Mastodon status ID, tweet ID, LinkedIn URN)"
-     },
-     "target_type": {
-      "type": "string",
-      "description": "post or comment; inferred from target_url when possible"
-     },
-     "idempotency_key": {
-      "type": "string",
-      "description": "Optional client key recorded on the engagement for audit and safe retries"
-     },
-     "wait": {
-      "type": "boolean",
-      "description": "Default true: publish inline and return the platform reply ID and canonical URL. Set false to queue and poll get-engagement-status."
-     }
-    },
-    "additionalProperties": false,
-    "required": [
-     "workspace_id",
-     "account_id",
-     "content"
-    ]
-   },
-   "annotations": {
-    "title": "Reply To Social Content",
-    "readOnlyHint": false,
-    "destructiveHint": true,
-    "idempotentHint": true,
-    "openWorldHint": true
-   }
-  },
-  {
-   "name": "send-outreach-reply",
-   "title": "Send Outreach Reply",
-   "description": "Send a drafted outreach reply from the inbox to the person who was found (a public reply on their post or mention): approves the draft and queues it for sending. Pass content to override the draft text in the same call. reply_id comes from list-inbox-items rows with source=hunter (Bolta's outreach finder). Sending twice is prevented server-side — the send task only fires for pending approved replies and skips re-posting an already-replied mention. To edit the draft without sending, use update-outreach-reply.",
-   "inputSchema": {
-    "type": "object",
-    "properties": {
-     "workspace_id": {
-      "type": "string",
-      "format": "uuid",
-      "description": "The workspace ID"
-     },
-     "reply_id": {
-      "type": "string",
-      "format": "uuid",
-      "description": "The outreach reply ID (from list-inbox-items, source=hunter)"
-     },
-     "content": {
-      "type": "string",
-      "description": "Optional replacement text — sent instead of the current draft content. Omit to send the draft as-is."
-     }
-    },
-    "additionalProperties": false,
-    "required": [
-     "workspace_id",
-     "reply_id"
-    ]
-   },
-   "annotations": {
-    "title": "Send Outreach Reply",
-    "readOnlyHint": false,
-    "destructiveHint": true,
-    "idempotentHint": true,
-    "openWorldHint": true
-   }
-  },
-  {
-   "name": "list-engagement-capabilities",
-   "title": "List Engagement Capabilities",
-   "description": "List the engagement actions each connected account can actually perform. Capabilities fail closed for invalid or reconnect-required credentials; mcp_ready identifies an end-to-end adapter rather than an internal-only primitive.",
-   "inputSchema": {
-    "type": "object",
-    "properties": {
-     "workspace_id": {
-      "type": "string",
-      "format": "uuid",
-      "description": "Workspace UUID"
-     },
-     "account_id": {
-      "type": "string",
-      "format": "uuid",
-      "description": "Optional connected account filter"
-     },
-     "platform": {
-      "type": "string",
-      "description": "Optional platform filter"
-     }
-    },
-    "additionalProperties": false,
-    "required": [
-     "workspace_id"
-    ]
-   },
-   "annotations": {
-    "title": "List Engagement Capabilities",
-    "readOnlyHint": true,
-    "destructiveHint": false,
-    "idempotentHint": true,
-    "openWorldHint": false
-   }
-  },
-  {
-   "name": "search-engagement-opportunities",
-   "title": "Search Engagement Opportunities",
-   "description": "Search for relevant third-party conversations and persist stable, deduplicated opportunities in Bolta's existing Hunter Mention pipeline. Public discovery is available for Reddit, Threads, Bluesky, and Mastodon. Mastodon discovery is hashtag-based (the query is folded into a single tag) because status full-text search is unavailable on most instances. Requires a Hunter/Monitor campaign already attached to the account.",
-   "inputSchema": {
-    "type": "object",
-    "properties": {
-     "workspace_id": {
-      "type": "string",
-      "format": "uuid",
-      "description": "Workspace UUID"
-     },
-     "account_id": {
-      "type": "string",
-      "format": "uuid",
-      "description": "Connected account used for discovery"
-     },
-     "campaign_id": {
-      "type": "string",
-      "format": "uuid",
-      "description": "Optional Hunter/Monitor campaign to file results under. Omit to use the account's own engagement container."
-     },
-     "platform": {
-      "type": "string",
-      "description": "reddit, threads, bluesky, or mastodon",
-      "examples": [
-       "reddit"
-      ]
-     },
-     "query": {
-      "type": "string",
-      "description": "Intent-loaded search query"
-     },
-     "subreddit": {
-      "type": "string",
-      "description": "Subreddit without r/; defaults to campaign config"
-     },
-     "limit": {
-      "type": "number",
-      "description": "1-50 results",
-      "examples": [
-       20
-      ]
-     },
-     "sort": {
-      "type": "string",
-      "description": "relevance, hot, top, new, or comments",
-      "examples": [
-       "new"
-      ]
-     },
-     "time_filter": {
-      "type": "string",
-      "description": "hour, day, week, month, year, or all",
-      "examples": [
-       "week"
-      ]
-     },
-     "after": {
-      "type": "string",
-      "description": "Optional Reddit paging cursor"
-     }
-    },
-    "additionalProperties": false,
-    "required": [
-     "workspace_id",
-     "account_id",
-     "query"
-    ]
-   },
-   "annotations": {
-    "title": "Search Engagement Opportunities",
-    "readOnlyHint": false,
-    "destructiveHint": false,
-    "idempotentHint": true,
-    "openWorldHint": true
-   }
-  },
-  {
-   "name": "list-engagements",
-   "title": "List Engagements",
-   "description": "List stored engagement Reply records with target, approval, publication, retry, error, and URL state.",
-   "inputSchema": {
-    "type": "object",
-    "properties": {
-     "workspace_id": {
-      "type": "string",
-      "format": "uuid",
-      "description": "Workspace UUID"
-     },
-     "platform": {
-      "type": "string",
-      "description": "Optional platform filter"
-     },
-     "status": {
-      "type": "string",
-      "description": "pending, sent, failed, or deleted"
-     },
-     "campaign_id": {
-      "type": "string",
-      "format": "uuid",
-      "description": "Optional campaign filter"
-     },
-     "account_id": {
-      "type": "string",
-      "format": "uuid",
-      "description": "Optional connected account filter"
-     },
-     "limit": {
-      "type": "number",
-      "description": "1-200 results",
-      "examples": [
-       50
-      ]
-     }
-    },
-    "additionalProperties": false,
-    "required": [
-     "workspace_id"
-    ]
-   },
-   "annotations": {
-    "title": "List Engagements",
-    "readOnlyHint": true,
-    "destructiveHint": false,
-    "idempotentHint": true,
-    "openWorldHint": false
-   }
-  },
-  {
-   "name": "cross-platform-analytics",
-   "title": "Cross-Platform Analytics",
-   "description": "Get cross-platform performance summary for a workspace. Returns followers, engagement, and growth rate aggregated by platform. SEPARATE PIPELINE: these account-level numbers are synced from the platforms themselves and do NOT depend on Bolta's per-post publication records. So posts with `has_publication_record: false` in list-workspace-posts do not cause account-level zeros, and the two are not evidence about each other — a 0 here means this account genuinely gained no engagement in the window.",
-   "inputSchema": {
-    "type": "object",
-    "properties": {
-     "workspace_id": {
-      "type": "string",
-      "format": "uuid",
-      "description": "The workspace ID (passed as query param)"
-     },
-     "days": {
-      "type": "number",
-      "description": "Number of days to look back (default 30, max 365)"
-     }
-    },
-    "additionalProperties": false,
-    "required": [
-     "workspace_id"
-    ]
-   },
-   "annotations": {
-    "title": "Cross-Platform Analytics",
-    "readOnlyHint": true,
-    "destructiveHint": false,
-    "idempotentHint": true,
-    "openWorldHint": false
-   }
-  },
-  {
-   "name": "list-account-insights",
-   "title": "List Account Insights",
-   "description": "Per-account performance breakdown for every connected account in a workspace: followers, engagement, and growth over the window. Use this for 'which of my accounts is growing' — a finer cut than cross-platform-analytics, which aggregates by platform.",
-   "inputSchema": {
-    "type": "object",
-    "properties": {
-     "workspace_id": {
-      "type": "string",
-      "format": "uuid",
-      "description": "The workspace ID (query param)"
-     },
-     "days": {
-      "type": "number",
-      "description": "Days to look back (default 30, max 365)"
-     }
-    },
-    "additionalProperties": false,
-    "required": [
-     "workspace_id"
-    ]
-   },
-   "annotations": {
-    "title": "List Account Insights",
-    "readOnlyHint": true,
-    "destructiveHint": false,
-    "idempotentHint": true,
-    "openWorldHint": false
-   }
-  },
-  {
-   "name": "get-account-analytics",
-   "title": "Get Account Analytics",
-   "description": "Daily time series for one account — followers and engagement over the last N days, one point per day, plus total followers change and growth rate. The 'show me my Instagram followers/engagement over 30 days' view. READING THE NUMBERS: quote `totals.engagement` for activity gained in the window and `totals.engagement_lifetime` for the all-time figure. NEVER add up the series to get a total — each point's `likes`/`replies`/`reposts`/`quotes`/`engagement` is that DAY's delta, and the `*_cumulative` fields beside them are running lifetime totals that would be double-counted many times over if summed. A null delta means no earlier snapshot exists to measure that day against (unknown, not zero); `counter_reset: true` marks a day where the lifetime counter fell, usually deleted posts or a reconnect.",
-   "inputSchema": {
-    "type": "object",
-    "properties": {
-     "workspace_id": {
-      "type": "string",
-      "format": "uuid",
-      "description": "The workspace ID (query param)"
-     },
-     "account_id": {
-      "type": "string",
-      "format": "uuid",
-      "description": "The connected account to chart (from list-accounts)"
-     },
-     "days": {
-      "type": "number",
-      "description": "Days to look back (default 30, max 365)"
-     }
-    },
-    "additionalProperties": false,
-    "required": [
-     "workspace_id",
-     "account_id"
-    ]
-   },
-   "annotations": {
-    "title": "Get Account Analytics",
-    "readOnlyHint": true,
-    "destructiveHint": false,
-    "idempotentHint": true,
-    "openWorldHint": false
-   }
-  },
-  {
-   "name": "list-routines",
-   "title": "List Routines",
-   "description": "List this workspace's routines — the automations it has configured. Each row carries the outcome, trigger, approval policy, status (draft | active | paused | archived), when it last ran and when it next runs. Archived routines are excluded unless asked for. This is the answer to \"what is Bolta running automatically?\" — routines are the only automation on this surface. Read-only.",
-   "inputSchema": {
-    "type": "object",
-    "properties": {
-     "status": {
-      "type": "string",
-      "description": "Comma-separated statuses to include: draft, active, paused, archived. Default: everything except archived."
-     },
-     "template_key": {
-      "type": "string",
-      "description": "Only routines created from this template."
-     },
-     "limit": {
-      "type": "integer",
-      "description": "Maximum routines to return. Default 50, max 200."
-     }
-    },
-    "additionalProperties": false
-   },
-   "annotations": {
-    "title": "List Routines",
-    "readOnlyHint": true,
-    "destructiveHint": false,
-    "idempotentHint": true,
-    "openWorldHint": false
-   }
-  },
-  {
-   "name": "get-routine",
-   "title": "Get Routine",
-   "description": "Get one routine's full configuration: outcome, trigger and schedule, instructions, capabilities, approval policy, source bindings, recent runs and performance summary. Read-only.",
-   "inputSchema": {
-    "type": "object",
-    "properties": {
-     "routine_id": {
-      "type": "string",
-      "format": "uuid",
-      "description": "The routine to read"
-     }
-    },
-    "additionalProperties": false,
-    "required": [
-     "routine_id"
-    ]
-   },
-   "annotations": {
-    "title": "Get Routine",
-    "readOnlyHint": true,
-    "destructiveHint": false,
-    "idempotentHint": true,
-    "openWorldHint": false
-   }
-  },
-  {
-   "name": "activate-routine",
-   "title": "Activate Routine",
-   "description": "Arm a routine so its trigger fires. A scheduled routine starts running on its schedule from this point; a source-driven one starts reacting to events. The server re-validates the whole definition against current workspace state here, so activation can fail with a typed reason (missing source, disconnected account, plan gate) even though saving succeeded. Tell the user what will now happen and when the first run is due.",
-   "inputSchema": {
-    "type": "object",
-    "properties": {
-     "routine_id": {
-      "type": "string",
-      "format": "uuid",
-      "description": "The routine to arm"
-     }
-    },
-    "additionalProperties": false,
-    "required": [
-     "routine_id"
-    ]
-   },
-   "annotations": {
-    "title": "Activate Routine",
-    "readOnlyHint": false,
-    "destructiveHint": true,
-    "idempotentHint": true,
-    "openWorldHint": true
-   }
-  },
-  {
-   "name": "run-routine-now",
-   "title": "Run Routine Now",
-   "description": "Dispatch an active routine immediately, off-schedule. Identical execution to a scheduled run — same runtime, same approval policy, same idempotency — differing only in the recorded trigger. Replays rather than duplicates: if a run is already in flight it returns that one with started=false, so say 'it's already running' rather than claiming you started it. Drafts and paused routines cannot be run; arm them first. Returns immediately with the run inline — `run.id` plus `run.status`, derived on every read — and `started`. Call list-routine-runs for that routine to see how the run progressed; there is no per-run polling tool.",
-   "inputSchema": {
-    "type": "object",
-    "properties": {
-     "routine_id": {
-      "type": "string",
-      "format": "uuid",
-      "description": "The routine to dispatch"
-     }
-    },
-    "additionalProperties": false,
-    "required": [
-     "routine_id"
-    ]
-   },
-   "annotations": {
-    "title": "Run Routine Now",
-    "readOnlyHint": false,
-    "destructiveHint": true,
-    "idempotentHint": true,
-    "openWorldHint": true
-   }
-  },
-  {
-   "name": "create-content-campaign",
-   "title": "Create Content Campaign",
-   "description": "Start a themed, time-boxed body of content — \"our spring launch\", \"Q3 thought-leadership push\". Always lands in DRAFT: creating a campaign never arms it, exactly as with a routine. Call set-content-campaign-status with action=activate when the user is ready, which is also what starts generation. \n\nA campaign is the BRIEF — what the content is about and when it runs. If the user instead wants something to repeat on a schedule, that is a routine (create-routine); the two compose.",
-   "inputSchema": {
-    "type": "object",
-    "properties": {
-     "name": {
-      "type": "string",
-      "description": "What the customer calls this campaign. Required — a campaign with no name is unfindable on every surface.",
-      "examples": [
-       "Spring launch"
-      ]
-     },
-     "strategy_key": {
-      "type": "string",
-      "description": "The editorial stance, from a fixed registry. One of: problem_solution, offer_promotion, product_education, thought_leadership, lifestyle, quick_tips. Anything else is rejected. Blank is legal — a campaign may be drafted before its angle is chosen. Setting this seeds content_mix from the strategy's suggested mix.",
-      "examples": [
-       "offer_promotion"
-      ]
-     },
-     "theme": {
-      "type": "string",
-      "description": "What the campaign is ABOUT, in the customer's own words. Distinct from name (what they call it) and from strategy_key (the stance it takes).",
-      "examples": [
-       "The 2.0 release and what it unblocks"
-      ]
-     },
-     "audience": {
-      "type": "string",
-      "description": "Who it is aimed at, in the customer's own words. Free text on purpose — there is no audience taxonomy."
-     },
-     "cta_text": {
-      "type": "string",
-      "description": "The call to action, max 120 characters."
-     },
-     "cta_url": {
-      "type": "string",
-      "format": "uri",
-      "description": "Where the call to action points. Validated as a URL at the edge, so an unparseable link is refused here rather than reaching a published post."
-     },
-     "starts_on": {
-      "type": "string",
-      "description": "The window opens. A DATE, not a datetime — per-run scheduling times live on the routine, which owns a timezone. The window is advisory context, not a gate."
-     },
-     "ends_on": {
-      "type": "string",
-      "description": "The window closes. Omit or send null for open-ended, which is a first-class answer and not an incomplete one — \"run this until I stop it\" is not an error case."
-     },
-     "content_mix": {
-      "type": "object",
-      "description": "How much of each format to produce, as {content_type: count}. Keys MUST come from the fixed format registry: text, still_image, carousel, blog. A key outside it is dropped, silently making the mix smaller — so do not invent formats and do not put editorial angles here (\"punchy problem post\" is a strategy, not a format). Omit to inherit the strategy's suggested mix.",
-      "examples": [
-       {
-        "still_image": 3,
-        "carousel": 1
-       }
-      ]
-     }
-    },
-    "additionalProperties": false,
-    "required": [
-     "name"
-    ]
-   },
-   "annotations": {
-    "title": "Create Content Campaign",
-    "readOnlyHint": false,
-    "destructiveHint": false,
-    "idempotentHint": false,
-    "openWorldHint": false
-   }
-  },
-  {
-   "name": "list-content-campaigns",
-   "title": "List Content Campaigns",
-   "description": "List this workspace's content campaigns — themed, time-boxed bodies of content, newest first. A campaign is a SUBJECT and a WINDOW (theme, audience, editorial strategy, call to action, content mix, start/end dates); a routine is a CADENCE. They are not alternatives — a routine can work a campaign. Each row carries the campaign's status (draft | scheduled | active | paused | completed | archived) and how many posts belong to it, but not its results; call get-content-campaign for those. Read-only. This is the CONTENT campaign surface — it has nothing to do with LinkedIn ad campaigns or Hunter keyword monitors.",
-   "inputSchema": {
-    "type": "object",
-    "properties": {
-     "status": {
-      "type": "string",
-      "description": "Comma-separated statuses to include: draft, scheduled, active, paused, completed, archived. Default: all."
-     },
-     "limit": {
-      "type": "integer",
-      "description": "Maximum campaigns to return. Default 50, max 200."
-     }
-    },
-    "additionalProperties": false
-   },
-   "annotations": {
-    "title": "List Content Campaigns",
-    "readOnlyHint": true,
-    "destructiveHint": false,
-    "idempotentHint": true,
-    "openWorldHint": false
-   }
-  },
-  {
-   "name": "approve-recurring-review",
-   "title": "Approve Recurring Review",
-   "description": "Approve an AI-generated recurring post, optionally scheduling it at the suggested time.",
-   "inputSchema": {
-    "type": "object",
-    "properties": {
-     "review_id": {
-      "type": "string",
-      "format": "uuid",
-      "description": "The recurring review ID to approve"
-     },
-     "approvalComments": {
-      "type": "string",
-      "description": "Comments about the approval"
-     },
-     "approveWithSchedule": {
-      "type": "boolean",
-      "description": "Whether to schedule the post upon approval (default true)"
-     },
-     "useSuggestedTime": {
-      "type": "boolean",
-      "description": "Use the template's suggested time for scheduling"
-     },
-     "newScheduleTime": {
-      "type": "string",
-      "description": "Explicit schedule time overriding the suggested one — 'approve it but post Friday 9am' in one call. Local wall-clock time in the workspace's timezone (no trailing Z and no UTC offset). Only include an offset when the user explicitly names a zone; never infer one from your own locale."
-     },
-     "timezone": {
-      "type": "string",
-      "description": "IANA timezone name (e.g. 'America/Los_Angeles') that the wall-clock time above should be interpreted in. Send this ONLY when the user explicitly named a zone ('9am Pacific'). Omit it otherwise — the workspace timezone is used, which is what the user means by default."
-     },
-     "account_ids": {
-      "type": "array",
-      "items": {
-       "type": "string"
-      },
-      "format": "uuid",
-      "description": "Override the target accounts at approval time"
-     }
-    },
-    "additionalProperties": false,
-    "required": [
-     "review_id"
-    ]
-   },
-   "annotations": {
-    "title": "Approve Recurring Review",
-    "readOnlyHint": false,
-    "destructiveHint": true,
-    "idempotentHint": true,
-    "openWorldHint": true
-   }
-  },
-  {
-   "name": "publish-engagement-reply",
-   "title": "Publish Engagement Reply",
-   "description": "Explicitly approve and queue a stored reply through Bolta's existing execute_approved_reply task and platform adapter. Idempotent for an already-sent reply. Use get-engagement-status to wait for and verify the external result.",
-   "inputSchema": {
-    "type": "object",
-    "properties": {
-     "workspace_id": {
-      "type": "string",
-      "format": "uuid",
-      "description": "Workspace UUID"
-     },
-     "engagement_id": {
-      "type": "string",
-      "format": "uuid",
-      "description": "Stored Reply/engagement UUID"
-     },
-     "account_id": {
-      "type": "string",
-      "format": "uuid",
-      "description": "Optional account assertion"
-     },
-     "content": {
-      "type": "string",
-      "description": "Optional approved content override"
-     }
-    },
-    "additionalProperties": false,
-    "required": [
-     "workspace_id",
-     "engagement_id"
-    ]
-   },
-   "annotations": {
-    "title": "Publish Engagement Reply",
-    "readOnlyHint": false,
-    "destructiveHint": true,
-    "idempotentHint": true,
-    "openWorldHint": true
-   }
-  },
-  {
-   "name": "react-to-social-content",
-   "title": "React To Social Content",
-   "description": "Like, upvote, favourite, or boost ANY public post using a connected account. The target does NOT need to have been discovered by a Bolta agent — pass the public target_url you already have (or platform + native target_id). Supported today: reddit (upvote, downvote), bluesky (like, repost), mastodon (favorite, boost), x (like, repost). Threads and LinkedIn have no reaction API wired and fail closed with a typed capability error. Call list-engagement-capabilities for the live matrix.",
-   "inputSchema": {
-    "type": "object",
-    "properties": {
-     "workspace_id": {
-      "type": "string",
-      "format": "uuid",
-      "description": "Workspace UUID"
-     },
-     "account_id": {
-      "type": "string",
-      "format": "uuid",
-      "description": "Connected account to react from"
-     },
-     "target_url": {
-      "type": "string",
-      "format": "uri",
-      "description": "Public URL of the post to react to",
-      "examples": [
-       "https://www.reddit.com/r/SaaS/comments/abc123/some_post/"
-      ]
-     },
-     "platform": {
-      "type": "string",
-      "description": "Required only when target_url is omitted, or to disambiguate a self-hosted Mastodon instance"
-     },
-     "target_id": {
-      "type": "string",
-      "description": "Native platform ID, when target_url is omitted"
-     },
-     "reaction": {
-      "type": "string",
-      "description": "upvote | downvote | like | favorite | repost | boost",
-      "examples": [
-       "upvote"
-      ]
-     }
-    },
-    "additionalProperties": false,
-    "required": [
-     "workspace_id",
-     "account_id",
-     "reaction"
-    ]
-   },
-   "annotations": {
-    "title": "React To Social Content",
-    "readOnlyHint": false,
-    "destructiveHint": true,
-    "idempotentHint": true,
-    "openWorldHint": true
-   }
-  },
-  {
-   "name": "resume-routine",
-   "title": "Resume Routine",
-   "description": "Re-arm a paused routine. A routine paused by the SYSTEM (plan gate, disconnected source, backpressure) may refuse to resume until the underlying cause is fixed — surface that reason instead of retrying.",
-   "inputSchema": {
-    "type": "object",
-    "properties": {
-     "routine_id": {
-      "type": "string",
-      "format": "uuid",
-      "description": "The routine to resume"
-     }
-    },
-    "additionalProperties": false,
-    "required": [
-     "routine_id"
-    ]
-   },
-   "annotations": {
-    "title": "Resume Routine",
-    "readOnlyHint": false,
-    "destructiveHint": true,
-    "idempotentHint": true,
-    "openWorldHint": true
-   }
-  },
-  {
-   "name": "archive-routine",
-   "title": "Archive Routine",
-   "description": "Retire a routine. Archiving is TERMINAL — an archived routine cannot be edited or re-armed, only duplicated. Its history (runs, approvals, published posts) is preserved; nothing is deleted. Confirm with the user before calling this; pause-routine is almost always what they meant.",
-   "inputSchema": {
-    "type": "object",
-    "properties": {
-     "routine_id": {
-      "type": "string",
-      "format": "uuid",
-      "description": "The routine to archive"
-     }
-    },
-    "additionalProperties": false,
-    "required": [
-     "routine_id"
-    ]
-   },
-   "annotations": {
-    "title": "Archive Routine",
-    "readOnlyHint": false,
-    "destructiveHint": true,
-    "idempotentHint": true,
-    "openWorldHint": false
-   }
-  },
-  {
-   "name": "set-content-campaign-status",
-   "title": "Set Content Campaign Status",
-   "description": "Move a content campaign through its lifecycle. One tool, five actions, because the legal move depends on where the campaign is now:\n- activate — draft or scheduled -> active. THIS IS WHAT STARTS GENERATION for a campaign that has never run; it is not a bookkeeping flag.\n- pause — active or scheduled -> paused.\n- resume — paused -> active. A campaign that already produced content resumes as a pure lifecycle move and does not regenerate.\n- complete — active -> completed. It ran its course; reporting still reads it and nothing new attaches. Does not lead back.\n- archive — TERMINAL from any state. Non-destructive: the campaign and its posts are preserved, and restoring means cloning. Confirm with the user first; pause is almost always what they meant.\n\nAn illegal transition is refused with the legal targets named, so read the campaign's current status first if unsure.",
-   "inputSchema": {
-    "type": "object",
-    "properties": {
-     "campaign_id": {
-      "type": "string",
-      "format": "uuid",
-      "description": "The content campaign to move"
-     },
-     "action": {
-      "type": "string",
-      "description": "Exactly one of: activate, pause, resume, complete, archive. Any other value matches no route and returns 404.",
-      "examples": [
-       "activate"
-      ]
-     }
-    },
-    "additionalProperties": false,
-    "required": [
-     "campaign_id",
-     "action"
-    ]
-   },
-   "annotations": {
-    "title": "Set Content Campaign Status",
-    "readOnlyHint": false,
-    "destructiveHint": true,
-    "idempotentHint": false,
-    "openWorldHint": false
-   }
-  },
-  {
-   "name": "create-wordpress-blog-post",
-   "title": "Create WordPress Blog Post",
-   "description": "Create a SERP-ready WordPress blog post in one call: resolves the WordPress account, creates the draft, sets WordPress article settings (title, excerpt, categories, tags, SEO meta), uploads featured/inline images to WordPress's real Media Library, and optionally submits for review, schedules, or publishes — all without separate list-accounts / update-post-platform-details / submit-for-review calls. Never invent the topic, images, or destination the user didn't ask for. If wordpress_account_id is omitted and the workspace has more than one WordPress account, this returns a typed selection_required result listing them — ask the user which one rather than guessing. 'SERP-ready' means technically and editorially prepared (headings, meta title/description, focus keyphrase placement) — never promise rankings.",
-   "inputSchema": {
-    "type": "object",
-    "properties": {
-     "workspace_id": {
-      "type": "string",
-      "format": "uuid",
-      "description": "The workspace ID. Defaults to the connected workspace."
-     },
-     "wordpress_account_id": {
-      "type": "string",
-      "format": "uuid",
-      "description": "WordPress account to publish to. Omit to auto-resolve when the workspace has exactly one connected WordPress account."
-     },
-     "title": {
-      "type": "string",
-      "description": "Article headline. Also used as the WordPress post title and H1."
-     },
-     "content": {
-      "type": "string",
-      "description": "Full article body as Markdown."
-     },
-     "content_format": {
-      "type": "string",
-      "description": "Content format; currently only 'markdown' is supported."
-     },
-     "excerpt": {
-      "type": "string",
-      "description": "Short article excerpt."
-     },
-     "slug": {
-      "type": "string",
-      "description": "Optional clean URL slug."
-     },
-     "categories": {
-      "type": "array",
-      "items": {
-       "type": "string"
-      },
-      "description": "WordPress category names."
-     },
-     "tags": {
-      "type": "array",
-      "items": {
-       "type": "string"
-      },
-      "description": "WordPress tag names."
-     },
-     "seo": {
-      "type": "object",
-      "description": "SEO metadata: {quality_mode: \"serp_ready\", primary_topic, search_intent, meta_title, meta_description, canonical_url, focus_keyphrase}. Advisory — informs seo_validation warnings in the response, never blocks the request."
-     },
-     "media": {
-      "type": "array",
-      "items": {
-       "description": "One image to upload to the WordPress Media Library: the file itself, plus its role and placement in the article.",
-       "properties": {
-        "download_url": {
-         "description": "URL to download the file contents",
-         "type": "string"
-        },
-        "file_id": {
-         "description": "Host file identifier",
-         "type": "string"
-        },
-        "mime_type": {
-         "default": "",
-         "description": "File MIME type",
-         "type": "string"
-        },
-        "file_name": {
-         "default": "",
-         "description": "Original file name",
-         "type": "string"
-        },
-        "role": {
-         "default": "inline",
-         "description": "\"featured\" or \"inline\"",
-         "type": "string"
-        },
-        "alt_text": {
-         "anyOf": [
-          {
-           "type": "string"
-          },
-          {
-           "type": "null"
+    {
+      "name": "get-workspace",
+      "title": "Get Workspace",
+      "description": "One workspace's details — including its `timezone`, which is what create-routine's required `timezone` parameter wants for a scheduled routine, plus its name, plan and settings. Read-only.",
+      "inputSchema": {
+        "type": "object",
+        "properties": {
+          "workspace_id": {
+            "type": "string",
+            "format": "uuid",
+            "description": "The workspace ID to retrieve"
           }
-         ],
-         "default": null,
-         "description": "Alt text for the image"
         },
-        "filename": {
-         "anyOf": [
-          {
-           "type": "string"
-          },
-          {
-           "type": "null"
-          }
-         ],
-         "default": null,
-         "description": "Filename to use in the Media Library"
-        },
-        "caption": {
-         "anyOf": [
-          {
-           "type": "string"
-          },
-          {
-           "type": "null"
-          }
-         ],
-         "default": null,
-         "description": "Image caption"
-        },
-        "placement": {
-         "anyOf": [
-          {
-           "additionalProperties": true,
-           "type": "object"
-          },
-          {
-           "type": "null"
-          }
-         ],
-         "default": null,
-         "description": "Where to insert an inline image in the article body"
-        },
-        "url": {
-         "default": "",
-         "description": "Direct image URL",
-         "type": "string"
-        }
-       },
-       "required": [
-        "download_url",
-        "file_id"
-       ],
-       "type": "object"
+        "additionalProperties": false,
+        "required": [
+          "workspace_id"
+        ]
       },
-      "description": "Images to attach. Each item is the image itself — a file you generated or uploaded in this conversation ({download_url, file_id, mime_type, file_name}), or {\"url\": \"https://...\"} — with the WordPress fields alongside it: role: \"featured\"|\"inline\", alt_text, filename, caption, placement: {type: \"after_heading\"|\"before_heading\"|\"after_paragraph\"|\"append\", heading|paragraph_index}. Each is uploaded to WordPress's real Media Library — the returned wordpress_media_id is what WordPress actually uses, never an internal Bolta media ID."
-     },
-     "requested_action": {
-      "type": "string",
-      "description": "'draft' (default), 'submit_for_review', 'schedule', or 'publish'."
-     },
-     "scheduled_time": {
-      "type": "string",
-      "description": "Required when requested_action='schedule'. Local wall-clock time in the workspace's timezone."
-     },
-     "timezone": {
-      "type": "string",
-      "description": "IANA timezone for scheduled_time; only send when the user explicitly named a zone."
-     },
-     "idempotency_key": {
-      "type": "string",
-      "description": "Optional dedupe key so retries don't create duplicate posts."
-     }
+      "annotations": {
+        "title": "Get Workspace",
+        "readOnlyHint": true,
+        "destructiveHint": false,
+        "idempotentHint": true,
+        "openWorldHint": false
+      }
     },
-    "additionalProperties": false,
-    "required": [
-     "title",
-     "content"
-    ]
-   },
-   "annotations": {
-    "title": "Create WordPress Blog Post",
-    "readOnlyHint": false,
-    "destructiveHint": false,
-    "idempotentHint": false,
-    "openWorldHint": false
-   }
-  }
- ]
+    {
+      "name": "get-my-capabilities",
+      "title": "Get My Capabilities",
+      "description": "Check what the current API key or agent is allowed to do in a workspace. `permissions` is the caller's role intersected with the scopes this key actually carries; `denied_by` says why each denied action is denied (`role`, `workspace_plan`, or `key_scope`).",
+      "inputSchema": {
+        "type": "object",
+        "properties": {
+          "workspace_id": {
+            "type": "string",
+            "format": "uuid",
+            "description": "The workspace ID"
+          }
+        },
+        "additionalProperties": false,
+        "required": [
+          "workspace_id"
+        ]
+      },
+      "annotations": {
+        "title": "Get My Capabilities",
+        "readOnlyHint": true,
+        "destructiveHint": false,
+        "idempotentHint": true,
+        "openWorldHint": false
+      }
+    },
+    {
+      "name": "list-accounts",
+      "title": "List Social Accounts",
+      "description": "List all connected social accounts in workspace. Renders a card with Socials and Buckets tabs — connected accounts with their health, plus the workspace's social buckets (named account groups).",
+      "inputSchema": {
+        "type": "object",
+        "properties": {
+          "workspace_id": {
+            "type": "string",
+            "format": "uuid",
+            "description": "The workspace ID"
+          },
+          "platform": {
+            "type": "string",
+            "description": "Filter by platform"
+          }
+        },
+        "additionalProperties": false,
+        "required": [
+          "workspace_id"
+        ]
+      },
+      "annotations": {
+        "title": "List Social Accounts",
+        "readOnlyHint": true,
+        "destructiveHint": false,
+        "idempotentHint": true,
+        "openWorldHint": false
+      }
+    },
+    {
+      "name": "get-connect-link",
+      "title": "Get Social Connect Link",
+      "description": "Get a URL that takes the user to Bolta's social-account connect page. Use this whenever the workspace has no connected account for the platform the user wants to publish to — OAuth cannot run inside the chat, so share this link and ask the user to complete the connection in their browser, then re-check with list-accounts.",
+      "inputSchema": {
+        "type": "object",
+        "properties": {
+          "workspace_id": {
+            "type": "string",
+            "format": "uuid",
+            "description": "The workspace ID"
+          },
+          "platform": {
+            "type": "string",
+            "description": "Platform the user wants to connect (preselects it on the page)"
+          }
+        },
+        "additionalProperties": false,
+        "required": [
+          "workspace_id"
+        ]
+      },
+      "annotations": {
+        "title": "Get Social Connect Link",
+        "readOnlyHint": true,
+        "destructiveHint": false,
+        "idempotentHint": true,
+        "openWorldHint": false
+      }
+    },
+    {
+      "name": "get-voice-context",
+      "title": "Get Voice Context",
+      "description": "Use this before generating any content. Returns the compact, resolved voice context for a workspace (schema voice-context.v1): the selected or default Voice Profile merged with its linked Business DNA — business identity, writing rules, tone, persona, platform adaptations, knowledge availability — with provenance and missing-field indicators. This is the same brand identity the Bolta app and internal agents resolve, so content written from it matches the user's voice everywhere.",
+      "inputSchema": {
+        "type": "object",
+        "properties": {
+          "workspace_id": {
+            "type": "string",
+            "format": "uuid",
+            "description": "The workspace ID"
+          },
+          "voice_profile_id": {
+            "type": "string",
+            "format": "uuid",
+            "description": "Voice Profile to compile context for. Defaults to the workspace default profile."
+          },
+          "platforms": {
+            "type": "string",
+            "description": "Comma-separated target platforms (e.g. \"linkedin,threads\"). Filters platform adaptations to just these."
+          }
+        },
+        "additionalProperties": false,
+        "required": [
+          "workspace_id"
+        ]
+      },
+      "annotations": {
+        "title": "Get Voice Context",
+        "readOnlyHint": true,
+        "destructiveHint": false,
+        "idempotentHint": true,
+        "openWorldHint": false
+      }
+    },
+    {
+      "name": "list-workspace-posts",
+      "title": "List Workspace Posts",
+      "description": "List posts in a workspace with optional filters, rendered as a posts card. For \"how did my post(s) do\" questions, call with status=published, a start_date/end_date window (e.g. today or the last 7 days), and include_metrics=true — each post then carries per-platform engagement (views, likes, comments, reposts). FRESHNESS: metrics sync nightly from the platforms; for posts published less than ~24h ago, tell the user metrics may not have synced yet — zeros on a fresh post mean 'not synced', NOT that the post performed badly or failed. UNATTRIBUTABLE POSTS: every post carries `has_publication_record`. When it is false the post has no linked account/platform, so no engagement can be attributed to it and its zeros are MISSING DATA, not poor performance (`metrics_unavailable_reason` spells this out). Exclude those posts when ranking top performers and say how many you set aside — never present their zeros as results, and never conclude from them that metrics are broken workspace-wide.",
+      "inputSchema": {
+        "type": "object",
+        "properties": {
+          "workspace_id": {
+            "type": "string",
+            "format": "uuid",
+            "description": "The workspace ID"
+          },
+          "status": {
+            "type": "string",
+            "description": "Filter by status: draft, scheduled, published, failed"
+          },
+          "platform": {
+            "type": "string",
+            "description": "Filter to posts targeting one platform (e.g. linkedin, x, instagram, threads, facebook)"
+          },
+          "start_date": {
+            "type": "string",
+            "description": "Only posts scheduled/created on or after this datetime"
+          },
+          "end_date": {
+            "type": "string",
+            "description": "Only posts scheduled/created on or before this datetime"
+          },
+          "include_metrics": {
+            "type": "boolean",
+            "description": "Set true to attach per-platform engagement metrics (views, likes, comments, reposts) + published_at to each post — use for any post-performance question. Metrics sync nightly."
+          },
+          "metrics_platforms": {
+            "type": "string",
+            "description": "'all' (default) or comma-separated platform keys to keep in the metrics breakdown (facebook, threads, instagram, linkedin, reddit, bluesky, mastodon, x)"
+          },
+          "limit": {
+            "type": "number",
+            "description": "Max posts per page (default 50, max 100). Use with page to paginate."
+          },
+          "page": {
+            "type": "number",
+            "description": "Page number (default 1)"
+          },
+          "sort_by": {
+            "type": "string",
+            "description": "Sort field: created_at | updated_at | scheduled_time (default updated_at)"
+          },
+          "sort_order": {
+            "type": "string",
+            "description": "'asc' or 'desc' (default 'desc')"
+          }
+        },
+        "additionalProperties": false,
+        "required": [
+          "workspace_id"
+        ]
+      },
+      "annotations": {
+        "title": "List Workspace Posts",
+        "readOnlyHint": true,
+        "destructiveHint": false,
+        "idempotentHint": true,
+        "openWorldHint": false
+      }
+    },
+    {
+      "name": "list-scheduled-posts",
+      "title": "List Scheduled Posts",
+      "description": "List all scheduled posts in a workspace",
+      "inputSchema": {
+        "type": "object",
+        "properties": {
+          "workspace_id": {
+            "type": "string",
+            "format": "uuid",
+            "description": "The workspace ID"
+          },
+          "limit": {
+            "type": "number",
+            "description": "Max posts per page (default 50, max 200)."
+          },
+          "page": {
+            "type": "number",
+            "description": "Page number (default 1)"
+          },
+          "start_date": {
+            "type": "string",
+            "description": "Only posts scheduled at/after this time"
+          },
+          "end_date": {
+            "type": "string",
+            "description": "Only posts scheduled at/before this time"
+          }
+        },
+        "additionalProperties": false,
+        "required": [
+          "workspace_id"
+        ]
+      },
+      "annotations": {
+        "title": "List Scheduled Posts",
+        "readOnlyHint": true,
+        "destructiveHint": false,
+        "idempotentHint": true,
+        "openWorldHint": false
+      }
+    },
+    {
+      "name": "get-post",
+      "title": "Get Post",
+      "description": "Get details of a specific post",
+      "inputSchema": {
+        "type": "object",
+        "properties": {
+          "post_id": {
+            "type": "string",
+            "format": "uuid",
+            "description": "The post ID"
+          }
+        },
+        "additionalProperties": false,
+        "required": [
+          "post_id"
+        ]
+      },
+      "annotations": {
+        "title": "Get Post",
+        "readOnlyHint": true,
+        "destructiveHint": false,
+        "idempotentHint": true,
+        "openWorldHint": false
+      }
+    },
+    {
+      "name": "create-post",
+      "title": "Create Post",
+      "description": "Create ONE post (draft or scheduled). EXACTLY one — this tool is single-use per turn. \n\nIf the request needs two or more posts — the same idea adapted for several platforms is the common case — call bulk-create-posts ONCE instead. Do not call this tool twice; do not loop it. Each call renders its own card and the user sees only the last one, so a second call does not add a post to the reply, it HIDES the first. That failure is invisible from here: both calls return 200 and the user quietly receives half the work. \n\nFor a WordPress article use create-wordpress-blog-post instead, which handles the article settings, SEO metadata and Media Library upload in one call. NEVER invent the topic or the destination. If the user has not said what the post should be about, ask them before calling this — do not pick a subject for them. Likewise, if they have not said where it should go, ask which account(s), unless they explicitly asked for a draft only. A post created with invented content and no accounts is an orphan the user never asked for and cannot publish. If the workspace has Safe Mode enabled, non-Draft posts are automatically rerouted to Pending Approval. Images you generated in this conversation CAN be attached: pass them in the media parameter (no separate upload step needed) — or attach them to an existing post later via update-post's media parameter.",
+      "inputSchema": {
+        "type": "object",
+        "properties": {
+          "workspace_id": {
+            "type": "string",
+            "format": "uuid",
+            "description": "The workspace ID"
+          },
+          "content": {
+            "type": "string",
+            "description": "Post content/text. Must be the topic or copy the user actually asked for — never a subject you chose on their behalf. If you do not have one, ask instead of calling this tool."
+          },
+          "media": {
+            "type": "array",
+            "items": {
+              "description": "A file attachment: an image or video generated or uploaded in this conversation. A plain URL string or {\"url\": \"https://...\"} is also accepted.",
+              "properties": {
+                "download_url": {
+                  "description": "URL to download the file contents",
+                  "type": "string"
+                },
+                "file_id": {
+                  "description": "Host file identifier",
+                  "type": "string"
+                },
+                "mime_type": {
+                  "default": "",
+                  "description": "File MIME type",
+                  "type": "string"
+                },
+                "file_name": {
+                  "default": "",
+                  "description": "Original file name",
+                  "type": "string"
+                }
+              },
+              "required": [
+                "download_url",
+                "file_id"
+              ],
+              "type": "object"
+            },
+            "description": "Images or videos to attach, as an array of objects. Each item is a file attachment ({download_url, mime_type, file_name}) or a URL wrapped as an object, e.g. {\"url\": \"https://...\"}. Each is downloaded and re-hosted in Bolta so it stays valid until the post publishes."
+          },
+          "account_ids": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            },
+            "description": "Array of account IDs to post to. Required when scheduling or publishing; optional for plain drafts or when social_buckets is provided instead. Ask the user which account(s) to target rather than omitting this by default — leave it empty only when they explicitly want a draft with no destination yet."
+          },
+          "social_buckets": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            },
+            "description": "Social bucket IDs (from list-buckets) to post to — an alternative to account_ids that targets a whole named group of accounts in one shot."
+          },
+          "scheduled_time": {
+            "type": "string",
+            "description": "Schedule time, ISO 8601. If omitted, post is draft. Local wall-clock time in the workspace's timezone (no trailing Z and no UTC offset). Only include an offset when the user explicitly names a zone; never infer one from your own locale."
+          },
+          "timezone": {
+            "type": "string",
+            "description": "IANA timezone name (e.g. 'America/Los_Angeles') that the wall-clock time above should be interpreted in. Send this ONLY when the user explicitly named a zone ('9am Pacific'). Omit it otherwise — the workspace timezone is used, which is what the user means by default."
+          },
+          "requested_action": {
+            "type": "string",
+            "description": "Desired action: 'draft', 'schedule', or 'publish'. Helps the system route correctly under Safe Mode."
+          },
+          "poll": {
+            "type": "object",
+            "description": "Optional poll to attach to the post content (Threads/X). Object shape, e.g. {\"options\": [\"Option A\", \"Option B\"]}. Platform-specific settings like Threads reply controls or topic tags are set separately via update-post-platform-details."
+          },
+          "idempotency_key": {
+            "type": "string",
+            "description": "Optional dedupe key. Pass a stable value to make retries safe — repeating a create with the same key returns the already-created post instead of duplicating it (24h window)."
+          }
+        },
+        "additionalProperties": false,
+        "required": [
+          "workspace_id",
+          "content"
+        ]
+      },
+      "annotations": {
+        "title": "Create Post",
+        "readOnlyHint": false,
+        "destructiveHint": false,
+        "idempotentHint": false,
+        "openWorldHint": false
+      }
+    },
+    {
+      "name": "update-post",
+      "title": "Update Post",
+      "description": "Update an existing post's text, media, poll, schedule, or status. Omitted fields are left unchanged. Use this to attach an image generated in this conversation to a post that already exists — pass it in media. Updates happen in place: the post keeps its id and its full activity history, so never delete and recreate a post to change it. QUALITY BLOCKED RECOVERY: this is how you repair a post whose status is 'Quality Blocked'. Send the rewritten content and the quality check re-runs on it automatically — if it passes, the post returns to 'Draft' and the response carries quality_check.cleared=true; if it still fails, quality_check.message says exactly what to change. Never try to set status yourself to clear a block: pipeline-owned statuses are refused by design.",
+      "inputSchema": {
+        "type": "object",
+        "properties": {
+          "post_id": {
+            "type": "string",
+            "format": "uuid",
+            "description": "The post ID"
+          },
+          "content": {
+            "type": "string",
+            "description": "Updated post content"
+          },
+          "media": {
+            "type": "array",
+            "items": {
+              "description": "A file attachment: an image or video generated or uploaded in this conversation. A plain URL string or {\"url\": \"https://...\"} is also accepted.",
+              "properties": {
+                "download_url": {
+                  "description": "URL to download the file contents",
+                  "type": "string"
+                },
+                "file_id": {
+                  "description": "Host file identifier",
+                  "type": "string"
+                },
+                "mime_type": {
+                  "default": "",
+                  "description": "File MIME type",
+                  "type": "string"
+                },
+                "file_name": {
+                  "default": "",
+                  "description": "Original file name",
+                  "type": "string"
+                }
+              },
+              "required": [
+                "download_url",
+                "file_id"
+              ],
+              "type": "object"
+            },
+            "description": "Images/videos to attach, as an array of objects — file attachments ({download_url, ...}) or {\"url\": \"https://...\"}. Each is re-hosted in Bolta and added to the post's media."
+          },
+          "poll": {
+            "type": "object",
+            "description": "Updated poll object, e.g. {\"options\": [\"A\", \"B\"]}."
+          },
+          "scheduled_time": {
+            "type": "string",
+            "description": "Updated schedule time, ISO 8601. Local wall-clock time in the workspace's timezone (no trailing Z and no UTC offset). Only include an offset when the user explicitly names a zone; never infer one from your own locale."
+          },
+          "timezone": {
+            "type": "string",
+            "description": "IANA timezone name (e.g. 'America/Los_Angeles') that the wall-clock time above should be interpreted in. Send this ONLY when the user explicitly named a zone ('9am Pacific'). Omit it otherwise — the workspace timezone is used, which is what the user means by default."
+          },
+          "status": {
+            "type": "string",
+            "description": "'Draft' or 'Pending Approval'. Setting 'Draft' unschedules the post in place — it keeps its id, content, and activity history, and its scheduled time is cleared. Assistants cannot set 'Scheduled' or 'Published' here; use schedule-post or publish-post after approval."
+          },
+          "accounts": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            },
+            "description": "Replace the post's target account IDs (full replacement list — resend every account the post should keep)"
+          }
+        },
+        "additionalProperties": false,
+        "required": [
+          "post_id"
+        ]
+      },
+      "annotations": {
+        "title": "Update Post",
+        "readOnlyHint": false,
+        "destructiveHint": true,
+        "idempotentHint": true,
+        "openWorldHint": false
+      }
+    },
+    {
+      "name": "delete-post",
+      "title": "Delete Post",
+      "description": "Delete a post. Recoverable for 7 days — the post is hidden immediately and permanently destroyed after the undo window.",
+      "inputSchema": {
+        "type": "object",
+        "properties": {
+          "post_id": {
+            "type": "string",
+            "format": "uuid",
+            "description": "The post ID"
+          }
+        },
+        "additionalProperties": false,
+        "required": [
+          "post_id"
+        ]
+      },
+      "annotations": {
+        "title": "Delete Post",
+        "readOnlyHint": false,
+        "destructiveHint": true,
+        "idempotentHint": true,
+        "openWorldHint": false
+      }
+    },
+    {
+      "name": "bulk-create-posts",
+      "title": "Bulk Create Posts",
+      "description": "Create MULTIPLE posts in one call. ALWAYS use this instead of calling create-post repeatedly whenever the user asks for more than one post (e.g. 'a week of content', 'make 7 posts') — looping create-post renders a separate card per post and the user only ever sees one of them. Use create-post only for a single post. Returns a task_id; the card polls bulk-create-status itself and lists every post's copy when the work lands, so you do NOT need to poll or restate the copy. Each post goes through the same approval, Safe Mode and autonomy rules as create-post — including not inventing the topic or destination: ask the user what the posts are about and which account(s) they target before calling this.",
+      "inputSchema": {
+        "type": "object",
+        "properties": {
+          "workspace_id": {
+            "type": "string",
+            "format": "uuid",
+            "description": "The workspace ID"
+          },
+          "posts": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            },
+            "description": "Array of posts to create. Each item takes the SAME flat keys as create-post: {\"content\": \"post text\", \"account_ids\": [\"account-uuid\"], \"social_buckets\": [\"bucket-uuid\"], \"status\": \"Draft\"|\"Scheduled\", \"requested_action\": \"draft\"|\"schedule\", \"scheduled_time\": \"ISO8601 (required when Scheduled)\", scheduled_time is Local wall-clock time in the workspace's timezone (no trailing Z and no UTC offset). Only include an offset when the user explicitly names a zone; never infer one from your own locale. \"media\": [{\"url\": \"https://...\"}]}. The nested shape ({\"contents\": [{\"content\": ...}]}) is also accepted. Either account_ids or social_buckets is required per item. requested_action='schedule' with a future scheduled_time creates the post as Scheduled (routed to Pending Approval when Safe Mode or the assistant gate requires review), exactly as create-post does; a scheduled_time with no status and no requested_action means schedule it. requested_action='publish' is NOT supported here — create the posts, then publish each with publish-post. An item with a missing, unparseable or past scheduled_time is REJECTED by itself: the rest of the batch is still queued and the response's `rejected` array names each dropped item and why. Those posts do NOT exist — report them to the user."
+          },
+          "timezone": {
+            "type": "string",
+            "description": "IANA timezone name (e.g. 'America/Los_Angeles') that the wall-clock time above should be interpreted in. Send this ONLY when the user explicitly named a zone ('9am Pacific'). Omit it otherwise — the workspace timezone is used, which is what the user means by default."
+          }
+        },
+        "additionalProperties": false,
+        "required": [
+          "workspace_id",
+          "posts"
+        ]
+      },
+      "annotations": {
+        "title": "Bulk Create Posts",
+        "readOnlyHint": false,
+        "destructiveHint": false,
+        "idempotentHint": false,
+        "openWorldHint": false
+      }
+    },
+    {
+      "name": "bulk-create-status",
+      "title": "Bulk Create Status",
+      "description": "Check the status of a bulk post creation task. The response's quality_blocked array is read live from the posts, so it stays accurate even for a post demoted after the task reported SUCCESS: each entry names the post, why it was blocked, and how to fix it. Repair those with update-post before submit-for-review.",
+      "inputSchema": {
+        "type": "object",
+        "properties": {
+          "task_id": {
+            "type": "string",
+            "description": "The task ID returned by bulk-create-posts"
+          }
+        },
+        "additionalProperties": false,
+        "required": [
+          "task_id"
+        ]
+      },
+      "annotations": {
+        "title": "Bulk Create Status",
+        "readOnlyHint": true,
+        "destructiveHint": false,
+        "idempotentHint": true,
+        "openWorldHint": false
+      }
+    },
+    {
+      "name": "submit-for-review",
+      "title": "Submit Posts for Review",
+      "description": "Submit one or more posts for team review. Changes post status to 'Pending Approval' and creates TeamPostReview records. Only 'Draft' and 'Needs Revision' posts can be submitted. A post rejected here for being 'Quality Blocked' is NOT a dead end — the per-post result carries quality_block.message with the specific problem; rewrite that post with update-post (which re-runs the check and returns it to Draft when it passes) and submit it again, rather than reporting the block to the user as final.",
+      "inputSchema": {
+        "type": "object",
+        "properties": {
+          "workspace_id": {
+            "type": "string",
+            "format": "uuid",
+            "description": "The workspace ID"
+          },
+          "post_ids": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            },
+            "description": "Array of post IDs to submit for review"
+          },
+          "note": {
+            "type": "string",
+            "description": "Note for reviewers (e.g. 'AI drafts ready for review')"
+          }
+        },
+        "additionalProperties": false,
+        "required": [
+          "workspace_id",
+          "post_ids"
+        ]
+      },
+      "annotations": {
+        "title": "Submit Posts for Review",
+        "readOnlyHint": false,
+        "destructiveHint": false,
+        "idempotentHint": false,
+        "openWorldHint": false
+      }
+    },
+    {
+      "name": "approve-post",
+      "title": "Approve Post",
+      "description": "Approve a post that is pending review. Requires admin or owner role. Supports scheduling modes: approve_only, use_suggested_time, or set_fixed_time.",
+      "inputSchema": {
+        "type": "object",
+        "properties": {
+          "workspace_id": {
+            "type": "string",
+            "format": "uuid",
+            "description": "The workspace ID"
+          },
+          "post_id": {
+            "type": "string",
+            "format": "uuid",
+            "description": "The post ID to approve"
+          },
+          "schedule_mode": {
+            "type": "string",
+            "description": "Scheduling mode: 'approve_only' (default), 'use_suggested_time', or 'set_fixed_time'"
+          },
+          "expected_fingerprint": {
+            "type": "string",
+            "description": "Revision token (content_fingerprint) from the most recent read of this post's review (list-inbox-items / list-reviews). Pass it to guarantee you are approving exactly the revision you reviewed. REQUIRED to resolve a stale_review conflict: after that error, re-read the post, show the user the current version, and retry with the fresh fingerprint. Never reuse an old token."
+          },
+          "fixed_time": {
+            "type": "string",
+            "description": "Fixed schedule time (required when schedule_mode is 'set_fixed_time'). Local wall-clock time in the workspace's timezone (no trailing Z and no UTC offset). Only include an offset when the user explicitly names a zone; never infer one from your own locale."
+          },
+          "timezone": {
+            "type": "string",
+            "description": "IANA timezone name (e.g. 'America/Los_Angeles') that the wall-clock time above should be interpreted in. Send this ONLY when the user explicitly named a zone ('9am Pacific'). Omit it otherwise — the workspace timezone is used, which is what the user means by default."
+          },
+          "comments": {
+            "type": "string",
+            "description": "Approval comments"
+          }
+        },
+        "additionalProperties": false,
+        "required": [
+          "workspace_id",
+          "post_id"
+        ]
+      },
+      "annotations": {
+        "title": "Approve Post",
+        "readOnlyHint": false,
+        "destructiveHint": true,
+        "idempotentHint": true,
+        "openWorldHint": true
+      }
+    },
+    {
+      "name": "schedule-post",
+      "title": "Schedule Post",
+      "description": "Schedule a post for future publishing. Requires admin or owner role. If workspace Safe Mode is ON and the post is a Draft, it is rerouted to Pending Approval instead of being scheduled. AFTER SCHEDULING A BATCH: finish with one list-workspace-posts call (status=scheduled) so the posts card on screen reflects the new state. Cards are snapshots of the call that drew them — the bulk-create card still shows every post as it was at creation, so without that final call the user reads 'Draft' under a message saying 'Scheduled'.",
+      "inputSchema": {
+        "type": "object",
+        "properties": {
+          "workspace_id": {
+            "type": "string",
+            "format": "uuid",
+            "description": "The workspace ID"
+          },
+          "post_id": {
+            "type": "string",
+            "format": "uuid",
+            "description": "The post ID to schedule"
+          },
+          "time": {
+            "type": "string",
+            "description": "Future schedule time in ISO 8601 format. Local wall-clock time in the workspace's timezone (no trailing Z and no UTC offset). Only include an offset when the user explicitly names a zone; never infer one from your own locale."
+          },
+          "timezone": {
+            "type": "string",
+            "description": "IANA timezone name (e.g. 'America/Los_Angeles') that the wall-clock time above should be interpreted in. Send this ONLY when the user explicitly named a zone ('9am Pacific'). Omit it otherwise — the workspace timezone is used, which is what the user means by default."
+          }
+        },
+        "additionalProperties": false,
+        "required": [
+          "workspace_id",
+          "post_id",
+          "time"
+        ]
+      },
+      "annotations": {
+        "title": "Schedule Post",
+        "readOnlyHint": false,
+        "destructiveHint": true,
+        "idempotentHint": false,
+        "openWorldHint": true
+      }
+    },
+    {
+      "name": "publish-post",
+      "title": "Publish Post",
+      "description": "Immediately queue a post for publishing. Requires admin or owner role. Blocked when workspace Safe Mode is ON — use submit-for-review instead.",
+      "inputSchema": {
+        "type": "object",
+        "properties": {
+          "workspace_id": {
+            "type": "string",
+            "format": "uuid",
+            "description": "The workspace ID"
+          },
+          "post_id": {
+            "type": "string",
+            "format": "uuid",
+            "description": "The post ID to publish immediately"
+          }
+        },
+        "additionalProperties": false,
+        "required": [
+          "workspace_id",
+          "post_id"
+        ]
+      },
+      "annotations": {
+        "title": "Publish Post",
+        "readOnlyHint": false,
+        "destructiveHint": true,
+        "idempotentHint": false,
+        "openWorldHint": true
+      }
+    },
+    {
+      "name": "list-inbox-items",
+      "title": "List Inbox Items",
+      "description": "Everything waiting on the customer, in one call — the dashboard hub's full inbox. THIS IS ALSO WHERE COMMENTS AND MENTIONS ON OUR OWN CONTENT ARRIVE. When the user mentions a comment left on their post, a mention, or a reply they need to answer, look HERE: the row carries the platform, the account, the target id/url and the comment text — exactly what a drafting tool needs. Do NOT go hunting through list-workspace-posts for it; that lists OUR posts, not the comments people left on them. Rows are labeled by source: posts awaiting team review (source=team), recurring AI-generated posts (source=recurring), engagement reply drafts and mentions such as Threads (source=hunter), and reports (source=report). Use this when the user asks what's waiting for them, what was produced for them, or about replies/mentions to review. For ONLY the recurring queue use list-recurring-reviews. \n\nThe total_team/total_recurring/total_hunter/total_report counts are always workspace-wide — they do NOT shrink when you pass source, so an empty filtered result can still show work pending in the other buckets. \n\nA row here is the INPUT to acting on it, not the act. In particular, a row carrying comment text is not permission to answer it yourself: a reply you compose directly is in YOUR voice and skips the Voice Profile and Business DNA entirely. To reply to a comment or mention on our own content, call draft-inbound-reply. To revise or send a reply Bolta already drafted (source=hunter), use update-outreach-reply / send-outreach-reply. To approve a post, approve-post.",
+      "inputSchema": {
+        "type": "object",
+        "properties": {
+          "workspace_id": {
+            "type": "string",
+            "format": "uuid",
+            "description": "The workspace ID"
+          },
+          "status": {
+            "type": "string",
+            "description": "Filter by review status: 'pending' (default), 'approved', 'rejected'"
+          },
+          "limit": {
+            "type": "number",
+            "description": "Max results per page (default 50, max 100)"
+          },
+          "offset": {
+            "type": "number",
+            "description": "Offset for pagination (default 0)"
+          },
+          "source": {
+            "type": "string",
+            "description": "Filter by origin: 'team' (team workflow posts), 'recurring' (AI-generated recurring posts), 'hunter' (reply drafts to mentions/leads), 'report' (agent reports). Omit for all sources."
+          },
+          "agent_id": {
+            "type": "string",
+            "format": "uuid",
+            "description": "Only items produced by this automation (the producer id echoed on inbox rows). Scopes team/recurring by the creator, hunter replies by the agent's campaigns, reports by agent_id."
+          }
+        },
+        "additionalProperties": false,
+        "required": [
+          "workspace_id"
+        ]
+      },
+      "annotations": {
+        "title": "List Inbox Items",
+        "readOnlyHint": true,
+        "destructiveHint": false,
+        "idempotentHint": true,
+        "openWorldHint": false
+      }
+    },
+    {
+      "name": "draft-inbound-reply",
+      "title": "Draft Inbound Reply",
+      "description": "Draft a reply to a comment or mention left on OUR OWN content. \n\nALWAYS call this rather than composing the reply yourself. A reply you write directly is in YOUR voice; this one is in the workspace's, because it runs the Voice Profile and Business DNA the customer configured. Reading the comment with get-social-content or list-inbox-items is not a substitute — that is the input to this call, not a replacement for it. \n\nUSE THIS, NOT draft-engagement-reply, for anything on our own posts. They route to different server-side writers and picking the wrong one is SILENT: draft-engagement-reply writes as an outsider joining someone else's thread, so used here it produces a reply that is on-brand, fluent, and reads as though a stranger wandered into our own comments. Nothing errors and nothing warns. draft-engagement-reply is for third-party conversations Bolta discovered; this one is for the people talking to us. \n\nReads the comment AND the post it was left on — a terse comment (\"How?\", \"price?\") is unanswerable without the thing it is asking about — then writes in the workspace's voice. \n\nStateless: creates NOTHING and sends NOTHING. It returns text with drafted_only=true. Show it to the user, and send the approved text with reply-to-social-content.",
+      "inputSchema": {
+        "type": "object",
+        "properties": {
+          "workspace_id": {
+            "type": "string",
+            "format": "uuid",
+            "description": "Workspace UUID"
+          },
+          "account_id": {
+            "type": "string",
+            "format": "uuid",
+            "description": "The connected account whose content was commented on. Must belong to this workspace."
+          },
+          "target_url": {
+            "type": "string",
+            "format": "uri",
+            "description": "Public URL of the comment (or of our post, to reply to the post itself). Reddit /s/ share links are not resolvable — use the full /comments/ permalink."
+          },
+          "platform": {
+            "type": "string",
+            "description": "Required only when target_url is omitted, or to identify a self-hosted Mastodon instance"
+          },
+          "target_id": {
+            "type": "string",
+            "description": "Native platform ID, when target_url is omitted"
+          },
+          "target_type": {
+            "type": "string",
+            "description": "post or comment; inferred from target_url when possible"
+          },
+          "voice_profile_id": {
+            "type": "string",
+            "format": "uuid",
+            "description": "Optional Voice Profile override; defaults to the workspace's"
+          },
+          "tone": {
+            "type": "string",
+            "description": "Optional tone override for this one draft"
+          },
+          "comment_limit": {
+            "type": "integer",
+            "description": "How many sibling comments to read for thread context. Default 25."
+          }
+        },
+        "additionalProperties": false,
+        "required": [
+          "workspace_id",
+          "account_id"
+        ]
+      },
+      "annotations": {
+        "title": "Draft Inbound Reply",
+        "readOnlyHint": false,
+        "destructiveHint": false,
+        "idempotentHint": false,
+        "openWorldHint": true
+      }
+    },
+    {
+      "name": "reply-to-social-content",
+      "title": "Reply To Social Content",
+      "description": "Reply to an existing third-party social post or comment using a connected Bolta account. THE TARGET DOES NOT NEED TO HAVE BEEN DISCOVERED BY A BOLTA AGENT FIRST — pass a public URL you found yourself (web search, the user pasting a link, another tool) and Bolta resolves it, publishes through the platform's native API, and verifies the result. No Hunter campaign, no opportunity record, and no pre-existing reply_id are required; do NOT use send-outreach-reply for this (that one is only for replies Bolta's Hunter already drafted). Works for a top-level reply to a post AND for a reply to a specific comment. Wired for reddit, threads, bluesky, mastodon, linkedin, and x. Returns status (published or queued), the platform reply ID, the canonical URL of the published reply, timestamp, and verification state. Replying twice to the same target returns the original reply with deduplicated=true instead of posting again.",
+      "inputSchema": {
+        "type": "object",
+        "properties": {
+          "workspace_id": {
+            "type": "string",
+            "format": "uuid",
+            "description": "Workspace UUID"
+          },
+          "account_id": {
+            "type": "string",
+            "format": "uuid",
+            "description": "Connected account to publish the reply from. Must belong to this workspace and match the target's platform."
+          },
+          "content": {
+            "type": "string",
+            "description": "The reply text to publish, exactly as written. Bolta does not rewrite it."
+          },
+          "target_url": {
+            "type": "string",
+            "format": "uri",
+            "description": "Public URL of the post or comment to reply to. Reddit /s/ share links are not resolvable — use the full /comments/ permalink.",
+            "examples": [
+              "https://www.reddit.com/r/SaaS/comments/abc123/some_post/"
+            ]
+          },
+          "platform": {
+            "type": "string",
+            "description": "Required only when target_url is omitted, or to identify a self-hosted Mastodon instance"
+          },
+          "target_id": {
+            "type": "string",
+            "description": "Native platform ID, when target_url is omitted (Reddit fullname, Threads media ID, Bluesky AT-URI, Mastodon status ID, tweet ID, LinkedIn URN)"
+          },
+          "target_type": {
+            "type": "string",
+            "description": "post or comment; inferred from target_url when possible"
+          },
+          "idempotency_key": {
+            "type": "string",
+            "description": "Optional client key recorded on the engagement for audit and safe retries"
+          },
+          "wait": {
+            "type": "boolean",
+            "description": "Default true: publish inline and return the platform reply ID and canonical URL. Set false to queue and poll get-engagement-status."
+          }
+        },
+        "additionalProperties": false,
+        "required": [
+          "workspace_id",
+          "account_id",
+          "content"
+        ]
+      },
+      "annotations": {
+        "title": "Reply To Social Content",
+        "readOnlyHint": false,
+        "destructiveHint": true,
+        "idempotentHint": true,
+        "openWorldHint": true
+      }
+    },
+    {
+      "name": "send-outreach-reply",
+      "title": "Send Outreach Reply",
+      "description": "Send a drafted outreach reply from the inbox to the person who was found (a public reply on their post or mention): approves the draft and queues it for sending. Pass content to override the draft text in the same call. reply_id comes from list-inbox-items rows with source=hunter (Bolta's outreach finder). Sending twice is prevented server-side — the send task only fires for pending approved replies and skips re-posting an already-replied mention. To edit the draft without sending, use update-outreach-reply.",
+      "inputSchema": {
+        "type": "object",
+        "properties": {
+          "workspace_id": {
+            "type": "string",
+            "format": "uuid",
+            "description": "The workspace ID"
+          },
+          "reply_id": {
+            "type": "string",
+            "format": "uuid",
+            "description": "The outreach reply ID (from list-inbox-items, source=hunter)"
+          },
+          "content": {
+            "type": "string",
+            "description": "Optional replacement text — sent instead of the current draft content. Omit to send the draft as-is."
+          }
+        },
+        "additionalProperties": false,
+        "required": [
+          "workspace_id",
+          "reply_id"
+        ]
+      },
+      "annotations": {
+        "title": "Send Outreach Reply",
+        "readOnlyHint": false,
+        "destructiveHint": true,
+        "idempotentHint": true,
+        "openWorldHint": true
+      }
+    },
+    {
+      "name": "list-engagement-capabilities",
+      "title": "List Engagement Capabilities",
+      "description": "List the engagement actions each connected account can actually perform. Capabilities fail closed for invalid or reconnect-required credentials; mcp_ready identifies an end-to-end adapter rather than an internal-only primitive.",
+      "inputSchema": {
+        "type": "object",
+        "properties": {
+          "workspace_id": {
+            "type": "string",
+            "format": "uuid",
+            "description": "Workspace UUID"
+          },
+          "account_id": {
+            "type": "string",
+            "format": "uuid",
+            "description": "Optional connected account filter"
+          },
+          "platform": {
+            "type": "string",
+            "description": "Optional platform filter"
+          }
+        },
+        "additionalProperties": false,
+        "required": [
+          "workspace_id"
+        ]
+      },
+      "annotations": {
+        "title": "List Engagement Capabilities",
+        "readOnlyHint": true,
+        "destructiveHint": false,
+        "idempotentHint": true,
+        "openWorldHint": false
+      }
+    },
+    {
+      "name": "search-engagement-opportunities",
+      "title": "Search Engagement Opportunities",
+      "description": "Search for relevant third-party conversations and persist stable, deduplicated opportunities in Bolta's existing Hunter Mention pipeline. Public discovery is available for Reddit, Threads, Bluesky, and Mastodon. Mastodon discovery is hashtag-based (the query is folded into a single tag) because status full-text search is unavailable on most instances. Requires a Hunter/Monitor campaign already attached to the account.",
+      "inputSchema": {
+        "type": "object",
+        "properties": {
+          "workspace_id": {
+            "type": "string",
+            "format": "uuid",
+            "description": "Workspace UUID"
+          },
+          "account_id": {
+            "type": "string",
+            "format": "uuid",
+            "description": "Connected account used for discovery"
+          },
+          "campaign_id": {
+            "type": "string",
+            "format": "uuid",
+            "description": "Optional Hunter/Monitor campaign to file results under. Omit to use the account's own engagement container."
+          },
+          "platform": {
+            "type": "string",
+            "description": "reddit, threads, bluesky, or mastodon",
+            "examples": [
+              "reddit"
+            ]
+          },
+          "query": {
+            "type": "string",
+            "description": "Intent-loaded search query"
+          },
+          "subreddit": {
+            "type": "string",
+            "description": "Subreddit without r/; defaults to campaign config"
+          },
+          "limit": {
+            "type": "number",
+            "description": "1-50 results",
+            "examples": [
+              20
+            ]
+          },
+          "sort": {
+            "type": "string",
+            "description": "relevance, hot, top, new, or comments",
+            "examples": [
+              "new"
+            ]
+          },
+          "time_filter": {
+            "type": "string",
+            "description": "hour, day, week, month, year, or all",
+            "examples": [
+              "week"
+            ]
+          },
+          "after": {
+            "type": "string",
+            "description": "Optional Reddit paging cursor"
+          }
+        },
+        "additionalProperties": false,
+        "required": [
+          "workspace_id",
+          "account_id",
+          "query"
+        ]
+      },
+      "annotations": {
+        "title": "Search Engagement Opportunities",
+        "readOnlyHint": false,
+        "destructiveHint": false,
+        "idempotentHint": true,
+        "openWorldHint": true
+      }
+    },
+    {
+      "name": "list-engagements",
+      "title": "List Engagements",
+      "description": "List stored engagement Reply records with target, approval, publication, retry, error, and URL state.",
+      "inputSchema": {
+        "type": "object",
+        "properties": {
+          "workspace_id": {
+            "type": "string",
+            "format": "uuid",
+            "description": "Workspace UUID"
+          },
+          "platform": {
+            "type": "string",
+            "description": "Optional platform filter"
+          },
+          "status": {
+            "type": "string",
+            "description": "pending, sent, failed, or deleted"
+          },
+          "campaign_id": {
+            "type": "string",
+            "format": "uuid",
+            "description": "Optional campaign filter"
+          },
+          "account_id": {
+            "type": "string",
+            "format": "uuid",
+            "description": "Optional connected account filter"
+          },
+          "limit": {
+            "type": "number",
+            "description": "1-200 results",
+            "examples": [
+              50
+            ]
+          }
+        },
+        "additionalProperties": false,
+        "required": [
+          "workspace_id"
+        ]
+      },
+      "annotations": {
+        "title": "List Engagements",
+        "readOnlyHint": true,
+        "destructiveHint": false,
+        "idempotentHint": true,
+        "openWorldHint": false
+      }
+    },
+    {
+      "name": "cross-platform-analytics",
+      "title": "Cross-Platform Analytics",
+      "description": "Get cross-platform performance summary for a workspace. Returns followers, engagement, and growth rate aggregated by platform. SEPARATE PIPELINE: these account-level numbers are synced from the platforms themselves and do NOT depend on Bolta's per-post publication records. So posts with `has_publication_record: false` in list-workspace-posts do not cause account-level zeros, and the two are not evidence about each other — a 0 here means this account genuinely gained no engagement in the window.",
+      "inputSchema": {
+        "type": "object",
+        "properties": {
+          "workspace_id": {
+            "type": "string",
+            "format": "uuid",
+            "description": "The workspace ID (passed as query param)"
+          },
+          "days": {
+            "type": "number",
+            "description": "Number of days to look back (default 30, max 365)"
+          }
+        },
+        "additionalProperties": false,
+        "required": [
+          "workspace_id"
+        ]
+      },
+      "annotations": {
+        "title": "Cross-Platform Analytics",
+        "readOnlyHint": true,
+        "destructiveHint": false,
+        "idempotentHint": true,
+        "openWorldHint": false
+      }
+    },
+    {
+      "name": "list-account-insights",
+      "title": "List Account Insights",
+      "description": "Per-account performance breakdown for every connected account in a workspace: followers, engagement, and growth over the window. Use this for 'which of my accounts is growing' — a finer cut than cross-platform-analytics, which aggregates by platform.",
+      "inputSchema": {
+        "type": "object",
+        "properties": {
+          "workspace_id": {
+            "type": "string",
+            "format": "uuid",
+            "description": "The workspace ID (query param)"
+          },
+          "days": {
+            "type": "number",
+            "description": "Days to look back (default 30, max 365)"
+          }
+        },
+        "additionalProperties": false,
+        "required": [
+          "workspace_id"
+        ]
+      },
+      "annotations": {
+        "title": "List Account Insights",
+        "readOnlyHint": true,
+        "destructiveHint": false,
+        "idempotentHint": true,
+        "openWorldHint": false
+      }
+    },
+    {
+      "name": "get-account-analytics",
+      "title": "Get Account Analytics",
+      "description": "Daily time series for one account — followers and engagement over the last N days, one point per day, plus total followers change and growth rate. The 'show me my Instagram followers/engagement over 30 days' view. READING THE NUMBERS: quote `totals.engagement` for activity gained in the window and `totals.engagement_lifetime` for the all-time figure. NEVER add up the series to get a total — each point's `likes`/`replies`/`reposts`/`quotes`/`engagement` is that DAY's delta, and the `*_cumulative` fields beside them are running lifetime totals that would be double-counted many times over if summed. A null delta means no earlier snapshot exists to measure that day against (unknown, not zero); `counter_reset: true` marks a day where the lifetime counter fell, usually deleted posts or a reconnect.",
+      "inputSchema": {
+        "type": "object",
+        "properties": {
+          "workspace_id": {
+            "type": "string",
+            "format": "uuid",
+            "description": "The workspace ID (query param)"
+          },
+          "account_id": {
+            "type": "string",
+            "format": "uuid",
+            "description": "The connected account to chart (from list-accounts)"
+          },
+          "days": {
+            "type": "number",
+            "description": "Days to look back (default 30, max 365)"
+          }
+        },
+        "additionalProperties": false,
+        "required": [
+          "workspace_id",
+          "account_id"
+        ]
+      },
+      "annotations": {
+        "title": "Get Account Analytics",
+        "readOnlyHint": true,
+        "destructiveHint": false,
+        "idempotentHint": true,
+        "openWorldHint": false
+      }
+    },
+    {
+      "name": "list-routines",
+      "title": "List Routines",
+      "description": "List this workspace's routines — the automations it has configured. Each row carries the outcome, trigger, approval policy, status (draft | active | paused | archived), when it last ran and when it next runs. Archived routines are excluded unless asked for. This is the answer to \"what is Bolta running automatically?\" — routines are the only automation on this surface. Read-only.",
+      "inputSchema": {
+        "type": "object",
+        "properties": {
+          "status": {
+            "type": "string",
+            "description": "Comma-separated statuses to include: draft, active, paused, archived. Default: everything except archived."
+          },
+          "template_key": {
+            "type": "string",
+            "description": "Only routines created from this template."
+          },
+          "limit": {
+            "type": "integer",
+            "description": "Maximum routines to return. Default 50, max 200."
+          }
+        },
+        "additionalProperties": false
+      },
+      "annotations": {
+        "title": "List Routines",
+        "readOnlyHint": true,
+        "destructiveHint": false,
+        "idempotentHint": true,
+        "openWorldHint": false
+      }
+    },
+    {
+      "name": "get-routine",
+      "title": "Get Routine",
+      "description": "Get one routine's full configuration: outcome, trigger and schedule, instructions, capabilities, approval policy, source bindings, recent runs and performance summary. Read-only.",
+      "inputSchema": {
+        "type": "object",
+        "properties": {
+          "routine_id": {
+            "type": "string",
+            "format": "uuid",
+            "description": "The routine to read"
+          }
+        },
+        "additionalProperties": false,
+        "required": [
+          "routine_id"
+        ]
+      },
+      "annotations": {
+        "title": "Get Routine",
+        "readOnlyHint": true,
+        "destructiveHint": false,
+        "idempotentHint": true,
+        "openWorldHint": false
+      }
+    },
+    {
+      "name": "activate-routine",
+      "title": "Activate Routine",
+      "description": "Arm a routine so its trigger fires. A scheduled routine starts running on its schedule from this point; a source-driven one starts reacting to events. The server re-validates the whole definition against current workspace state here, so activation can fail with a typed reason (missing source, disconnected account, plan gate) even though saving succeeded. Tell the user what will now happen and when the first run is due.",
+      "inputSchema": {
+        "type": "object",
+        "properties": {
+          "routine_id": {
+            "type": "string",
+            "format": "uuid",
+            "description": "The routine to arm"
+          }
+        },
+        "additionalProperties": false,
+        "required": [
+          "routine_id"
+        ]
+      },
+      "annotations": {
+        "title": "Activate Routine",
+        "readOnlyHint": false,
+        "destructiveHint": true,
+        "idempotentHint": true,
+        "openWorldHint": true
+      }
+    },
+    {
+      "name": "run-routine-now",
+      "title": "Run Routine Now",
+      "description": "Dispatch an active routine immediately, off-schedule. Identical execution to a scheduled run — same runtime, same approval policy, same idempotency — differing only in the recorded trigger. Replays rather than duplicates: if a run is already in flight it returns that one with started=false, so say 'it's already running' rather than claiming you started it. Drafts and paused routines cannot be run; arm them first. Returns immediately with the run inline — `run.id` plus `run.status`, derived on every read — and `started`. Call list-routine-runs for that routine to see how the run progressed; there is no per-run polling tool.",
+      "inputSchema": {
+        "type": "object",
+        "properties": {
+          "routine_id": {
+            "type": "string",
+            "format": "uuid",
+            "description": "The routine to dispatch"
+          }
+        },
+        "additionalProperties": false,
+        "required": [
+          "routine_id"
+        ]
+      },
+      "annotations": {
+        "title": "Run Routine Now",
+        "readOnlyHint": false,
+        "destructiveHint": true,
+        "idempotentHint": true,
+        "openWorldHint": true
+      }
+    },
+    {
+      "name": "create-content-campaign",
+      "title": "Create Content Campaign",
+      "description": "Start a themed, time-boxed body of content — \"our spring launch\", \"Q3 thought-leadership push\". Always lands in DRAFT: creating a campaign never arms it, exactly as with a routine. Call set-content-campaign-status with action=activate when the user is ready, which is also what starts generation. \n\nA campaign is the BRIEF — what the content is about and when it runs. If the user instead wants something to repeat on a schedule, that is a routine (create-routine); the two compose.",
+      "inputSchema": {
+        "type": "object",
+        "properties": {
+          "name": {
+            "type": "string",
+            "description": "What the customer calls this campaign. Required — a campaign with no name is unfindable on every surface.",
+            "examples": [
+              "Spring launch"
+            ]
+          },
+          "strategy_key": {
+            "type": "string",
+            "description": "The editorial stance, from a fixed registry. One of: problem_solution, offer_promotion, product_education, thought_leadership, lifestyle, quick_tips. Anything else is rejected. Blank is legal — a campaign may be drafted before its angle is chosen. Setting this seeds content_mix from the strategy's suggested mix.",
+            "examples": [
+              "offer_promotion"
+            ]
+          },
+          "theme": {
+            "type": "string",
+            "description": "What the campaign is ABOUT, in the customer's own words. Distinct from name (what they call it) and from strategy_key (the stance it takes).",
+            "examples": [
+              "The 2.0 release and what it unblocks"
+            ]
+          },
+          "audience": {
+            "type": "string",
+            "description": "Who it is aimed at, in the customer's own words. Free text on purpose — there is no audience taxonomy."
+          },
+          "cta_text": {
+            "type": "string",
+            "description": "The call to action, max 120 characters."
+          },
+          "cta_url": {
+            "type": "string",
+            "format": "uri",
+            "description": "Where the call to action points. Validated as a URL at the edge, so an unparseable link is refused here rather than reaching a published post."
+          },
+          "starts_on": {
+            "type": "string",
+            "description": "The window opens. A DATE, not a datetime — per-run scheduling times live on the routine, which owns a timezone. The window is advisory context, not a gate."
+          },
+          "ends_on": {
+            "type": "string",
+            "description": "The window closes. Omit or send null for open-ended, which is a first-class answer and not an incomplete one — \"run this until I stop it\" is not an error case."
+          },
+          "content_mix": {
+            "type": "object",
+            "description": "How much of each format to produce, as {content_type: count}. Keys MUST come from the fixed format registry: text, still_image, carousel, blog. A key outside it is dropped, silently making the mix smaller — so do not invent formats and do not put editorial angles here (\"punchy problem post\" is a strategy, not a format). Omit to inherit the strategy's suggested mix.",
+            "examples": [
+              {
+                "still_image": 3,
+                "carousel": 1
+              }
+            ]
+          }
+        },
+        "additionalProperties": false,
+        "required": [
+          "name"
+        ]
+      },
+      "annotations": {
+        "title": "Create Content Campaign",
+        "readOnlyHint": false,
+        "destructiveHint": false,
+        "idempotentHint": false,
+        "openWorldHint": false
+      }
+    },
+    {
+      "name": "list-content-campaigns",
+      "title": "List Content Campaigns",
+      "description": "List this workspace's content campaigns — themed, time-boxed bodies of content, newest first. A campaign is a SUBJECT and a WINDOW (theme, audience, editorial strategy, call to action, content mix, start/end dates); a routine is a CADENCE. They are not alternatives — a routine can work a campaign. Each row carries the campaign's status (draft | scheduled | active | paused | completed | archived) and how many posts belong to it, but not its results; call get-content-campaign for those. Read-only. This is the CONTENT campaign surface — it has nothing to do with LinkedIn ad campaigns or Hunter keyword monitors.",
+      "inputSchema": {
+        "type": "object",
+        "properties": {
+          "status": {
+            "type": "string",
+            "description": "Comma-separated statuses to include: draft, scheduled, active, paused, completed, archived. Default: all."
+          },
+          "limit": {
+            "type": "integer",
+            "description": "Maximum campaigns to return. Default 50, max 200."
+          }
+        },
+        "additionalProperties": false
+      },
+      "annotations": {
+        "title": "List Content Campaigns",
+        "readOnlyHint": true,
+        "destructiveHint": false,
+        "idempotentHint": true,
+        "openWorldHint": false
+      }
+    },
+    {
+      "name": "approve-recurring-review",
+      "title": "Approve Recurring Review",
+      "description": "Approve an AI-generated recurring post, optionally scheduling it at the suggested time.",
+      "inputSchema": {
+        "type": "object",
+        "properties": {
+          "review_id": {
+            "type": "string",
+            "format": "uuid",
+            "description": "The recurring review ID to approve"
+          },
+          "approvalComments": {
+            "type": "string",
+            "description": "Comments about the approval"
+          },
+          "approveWithSchedule": {
+            "type": "boolean",
+            "description": "Whether to schedule the post upon approval (default true)"
+          },
+          "useSuggestedTime": {
+            "type": "boolean",
+            "description": "Use the template's suggested time for scheduling"
+          },
+          "newScheduleTime": {
+            "type": "string",
+            "description": "Explicit schedule time overriding the suggested one — 'approve it but post Friday 9am' in one call. Local wall-clock time in the workspace's timezone (no trailing Z and no UTC offset). Only include an offset when the user explicitly names a zone; never infer one from your own locale."
+          },
+          "timezone": {
+            "type": "string",
+            "description": "IANA timezone name (e.g. 'America/Los_Angeles') that the wall-clock time above should be interpreted in. Send this ONLY when the user explicitly named a zone ('9am Pacific'). Omit it otherwise — the workspace timezone is used, which is what the user means by default."
+          },
+          "account_ids": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            },
+            "format": "uuid",
+            "description": "Override the target accounts at approval time"
+          }
+        },
+        "additionalProperties": false,
+        "required": [
+          "review_id"
+        ]
+      },
+      "annotations": {
+        "title": "Approve Recurring Review",
+        "readOnlyHint": false,
+        "destructiveHint": true,
+        "idempotentHint": true,
+        "openWorldHint": true
+      }
+    },
+    {
+      "name": "publish-engagement-reply",
+      "title": "Publish Engagement Reply",
+      "description": "Explicitly approve and queue a stored reply through Bolta's existing execute_approved_reply task and platform adapter. Idempotent for an already-sent reply. Use get-engagement-status to wait for and verify the external result.",
+      "inputSchema": {
+        "type": "object",
+        "properties": {
+          "workspace_id": {
+            "type": "string",
+            "format": "uuid",
+            "description": "Workspace UUID"
+          },
+          "engagement_id": {
+            "type": "string",
+            "format": "uuid",
+            "description": "Stored Reply/engagement UUID"
+          },
+          "account_id": {
+            "type": "string",
+            "format": "uuid",
+            "description": "Optional account assertion"
+          },
+          "content": {
+            "type": "string",
+            "description": "Optional approved content override"
+          }
+        },
+        "additionalProperties": false,
+        "required": [
+          "workspace_id",
+          "engagement_id"
+        ]
+      },
+      "annotations": {
+        "title": "Publish Engagement Reply",
+        "readOnlyHint": false,
+        "destructiveHint": true,
+        "idempotentHint": true,
+        "openWorldHint": true
+      }
+    },
+    {
+      "name": "react-to-social-content",
+      "title": "React To Social Content",
+      "description": "Like, upvote, favourite, or boost ANY public post using a connected account. The target does NOT need to have been discovered by a Bolta agent — pass the public target_url you already have (or platform + native target_id). Supported today: reddit (upvote, downvote), bluesky (like, repost), mastodon (favorite, boost), x (like, repost). Threads and LinkedIn have no reaction API wired and fail closed with a typed capability error. Call list-engagement-capabilities for the live matrix.",
+      "inputSchema": {
+        "type": "object",
+        "properties": {
+          "workspace_id": {
+            "type": "string",
+            "format": "uuid",
+            "description": "Workspace UUID"
+          },
+          "account_id": {
+            "type": "string",
+            "format": "uuid",
+            "description": "Connected account to react from"
+          },
+          "target_url": {
+            "type": "string",
+            "format": "uri",
+            "description": "Public URL of the post to react to",
+            "examples": [
+              "https://www.reddit.com/r/SaaS/comments/abc123/some_post/"
+            ]
+          },
+          "platform": {
+            "type": "string",
+            "description": "Required only when target_url is omitted, or to disambiguate a self-hosted Mastodon instance"
+          },
+          "target_id": {
+            "type": "string",
+            "description": "Native platform ID, when target_url is omitted"
+          },
+          "reaction": {
+            "type": "string",
+            "description": "upvote | downvote | like | favorite | repost | boost",
+            "examples": [
+              "upvote"
+            ]
+          }
+        },
+        "additionalProperties": false,
+        "required": [
+          "workspace_id",
+          "account_id",
+          "reaction"
+        ]
+      },
+      "annotations": {
+        "title": "React To Social Content",
+        "readOnlyHint": false,
+        "destructiveHint": true,
+        "idempotentHint": true,
+        "openWorldHint": true
+      }
+    },
+    {
+      "name": "resume-routine",
+      "title": "Resume Routine",
+      "description": "Re-arm a paused routine. A routine paused by the SYSTEM (plan gate, disconnected source, backpressure) may refuse to resume until the underlying cause is fixed — surface that reason instead of retrying.",
+      "inputSchema": {
+        "type": "object",
+        "properties": {
+          "routine_id": {
+            "type": "string",
+            "format": "uuid",
+            "description": "The routine to resume"
+          }
+        },
+        "additionalProperties": false,
+        "required": [
+          "routine_id"
+        ]
+      },
+      "annotations": {
+        "title": "Resume Routine",
+        "readOnlyHint": false,
+        "destructiveHint": true,
+        "idempotentHint": true,
+        "openWorldHint": true
+      }
+    },
+    {
+      "name": "archive-routine",
+      "title": "Archive Routine",
+      "description": "Retire a routine. Archiving is TERMINAL — an archived routine cannot be edited or re-armed, only duplicated. Its history (runs, approvals, published posts) is preserved; nothing is deleted. Confirm with the user before calling this; pause-routine is almost always what they meant.",
+      "inputSchema": {
+        "type": "object",
+        "properties": {
+          "routine_id": {
+            "type": "string",
+            "format": "uuid",
+            "description": "The routine to archive"
+          }
+        },
+        "additionalProperties": false,
+        "required": [
+          "routine_id"
+        ]
+      },
+      "annotations": {
+        "title": "Archive Routine",
+        "readOnlyHint": false,
+        "destructiveHint": true,
+        "idempotentHint": true,
+        "openWorldHint": false
+      }
+    },
+    {
+      "name": "set-content-campaign-status",
+      "title": "Set Content Campaign Status",
+      "description": "Move a content campaign through its lifecycle. One tool, five actions, because the legal move depends on where the campaign is now:\n- activate — draft or scheduled -> active. THIS IS WHAT STARTS GENERATION for a campaign that has never run; it is not a bookkeeping flag.\n- pause — active or scheduled -> paused.\n- resume — paused -> active. A campaign that already produced content resumes as a pure lifecycle move and does not regenerate.\n- complete — active -> completed. It ran its course; reporting still reads it and nothing new attaches. Does not lead back.\n- archive — TERMINAL from any state. Non-destructive: the campaign and its posts are preserved, and restoring means cloning. Confirm with the user first; pause is almost always what they meant.\n\nAn illegal transition is refused with the legal targets named, so read the campaign's current status first if unsure.",
+      "inputSchema": {
+        "type": "object",
+        "properties": {
+          "campaign_id": {
+            "type": "string",
+            "format": "uuid",
+            "description": "The content campaign to move"
+          },
+          "action": {
+            "type": "string",
+            "description": "Exactly one of: activate, pause, resume, complete, archive. Any other value matches no route and returns 404.",
+            "examples": [
+              "activate"
+            ]
+          }
+        },
+        "additionalProperties": false,
+        "required": [
+          "campaign_id",
+          "action"
+        ]
+      },
+      "annotations": {
+        "title": "Set Content Campaign Status",
+        "readOnlyHint": false,
+        "destructiveHint": true,
+        "idempotentHint": false,
+        "openWorldHint": false
+      }
+    },
+    {
+      "name": "create-wordpress-blog-post",
+      "title": "Create WordPress Blog Post",
+      "description": "Create a SERP-ready WordPress blog post in one call: resolves the WordPress account, creates the draft, sets WordPress article settings (title, excerpt, categories, tags, SEO meta), uploads featured/inline images to WordPress's real Media Library, and optionally submits for review, schedules, or publishes — all without separate list-accounts / update-post-platform-details / submit-for-review calls. Never invent the topic, images, or destination the user didn't ask for. If wordpress_account_id is omitted and the workspace has more than one WordPress account, this returns a typed selection_required result listing them — ask the user which one rather than guessing. 'SERP-ready' means technically and editorially prepared (headings, meta title/description, focus keyphrase placement) — never promise rankings.",
+      "inputSchema": {
+        "type": "object",
+        "properties": {
+          "workspace_id": {
+            "type": "string",
+            "format": "uuid",
+            "description": "The workspace ID. Defaults to the connected workspace."
+          },
+          "wordpress_account_id": {
+            "type": "string",
+            "format": "uuid",
+            "description": "WordPress account to publish to. Omit to auto-resolve when the workspace has exactly one connected WordPress account."
+          },
+          "title": {
+            "type": "string",
+            "description": "Article headline. Also used as the WordPress post title and H1."
+          },
+          "content": {
+            "type": "string",
+            "description": "Full article body as Markdown."
+          },
+          "content_format": {
+            "type": "string",
+            "description": "Content format; currently only 'markdown' is supported."
+          },
+          "excerpt": {
+            "type": "string",
+            "description": "Short article excerpt."
+          },
+          "slug": {
+            "type": "string",
+            "description": "Optional clean URL slug."
+          },
+          "categories": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            },
+            "description": "WordPress category names."
+          },
+          "tags": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            },
+            "description": "WordPress tag names."
+          },
+          "seo": {
+            "type": "object",
+            "description": "SEO metadata: {quality_mode: \"serp_ready\", primary_topic, search_intent, meta_title, meta_description, canonical_url, focus_keyphrase}. Advisory — informs seo_validation warnings in the response, never blocks the request."
+          },
+          "media": {
+            "type": "array",
+            "items": {
+              "description": "One image to upload to the WordPress Media Library: the file itself, plus its role and placement in the article.",
+              "properties": {
+                "download_url": {
+                  "description": "URL to download the file contents",
+                  "type": "string"
+                },
+                "file_id": {
+                  "description": "Host file identifier",
+                  "type": "string"
+                },
+                "mime_type": {
+                  "default": "",
+                  "description": "File MIME type",
+                  "type": "string"
+                },
+                "file_name": {
+                  "default": "",
+                  "description": "Original file name",
+                  "type": "string"
+                },
+                "role": {
+                  "default": "inline",
+                  "description": "\"featured\" or \"inline\"",
+                  "type": "string"
+                },
+                "alt_text": {
+                  "anyOf": [
+                    {
+                      "type": "string"
+                    },
+                    {
+                      "type": "null"
+                    }
+                  ],
+                  "default": null,
+                  "description": "Alt text for the image"
+                },
+                "filename": {
+                  "anyOf": [
+                    {
+                      "type": "string"
+                    },
+                    {
+                      "type": "null"
+                    }
+                  ],
+                  "default": null,
+                  "description": "Filename to use in the Media Library"
+                },
+                "caption": {
+                  "anyOf": [
+                    {
+                      "type": "string"
+                    },
+                    {
+                      "type": "null"
+                    }
+                  ],
+                  "default": null,
+                  "description": "Image caption"
+                },
+                "placement": {
+                  "anyOf": [
+                    {
+                      "additionalProperties": true,
+                      "type": "object"
+                    },
+                    {
+                      "type": "null"
+                    }
+                  ],
+                  "default": null,
+                  "description": "Where to insert an inline image in the article body"
+                },
+                "url": {
+                  "default": "",
+                  "description": "Direct image URL",
+                  "type": "string"
+                }
+              },
+              "required": [
+                "download_url",
+                "file_id"
+              ],
+              "type": "object"
+            },
+            "description": "Images to attach. Each item is the image itself — a file you generated or uploaded in this conversation ({download_url, file_id, mime_type, file_name}), or {\"url\": \"https://...\"} — with the WordPress fields alongside it: role: \"featured\"|\"inline\", alt_text, filename, caption, placement: {type: \"after_heading\"|\"before_heading\"|\"after_paragraph\"|\"append\", heading|paragraph_index}. Each is uploaded to WordPress's real Media Library — the returned wordpress_media_id is what WordPress actually uses, never an internal Bolta media ID."
+          },
+          "requested_action": {
+            "type": "string",
+            "description": "'draft' (default), 'submit_for_review', 'schedule', or 'publish'."
+          },
+          "scheduled_time": {
+            "type": "string",
+            "description": "Required when requested_action='schedule'. Local wall-clock time in the workspace's timezone."
+          },
+          "timezone": {
+            "type": "string",
+            "description": "IANA timezone for scheduled_time; only send when the user explicitly named a zone."
+          },
+          "idempotency_key": {
+            "type": "string",
+            "description": "Optional dedupe key so retries don't create duplicate posts."
+          }
+        },
+        "additionalProperties": false,
+        "required": [
+          "title",
+          "content"
+        ]
+      },
+      "annotations": {
+        "title": "Create WordPress Blog Post",
+        "readOnlyHint": false,
+        "destructiveHint": false,
+        "idempotentHint": false,
+        "openWorldHint": false
+      }
+    },
+    {
+      "name": "add-posts-to-content-campaign",
+      "title": "Add Posts To Content Campaign",
+      "description": "Attach existing posts to a content campaign. Idempotent and scoped, and a PARTIAL result is the normal outcome rather than an error: a post already in the campaign comes back under `already_present`, and an id that is not in this workspace comes back under `not_found`. Both arrive as 200 alongside whatever did apply, so report what actually attached rather than assuming all of it did. Nothing here creates or publishes a post.",
+      "inputSchema": {
+        "type": "object",
+        "properties": {
+          "campaign_id": {
+            "type": "string",
+            "format": "uuid",
+            "description": "The content campaign to attach to"
+          },
+          "post_ids": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            },
+            "format": "uuid",
+            "description": "Post ids to attach. At least one and at most 100 per call; duplicates are collapsed before counting."
+          }
+        },
+        "additionalProperties": false,
+        "required": [
+          "campaign_id",
+          "post_ids"
+        ]
+      },
+      "annotations": {
+        "title": "Add Posts To Content Campaign",
+        "readOnlyHint": false,
+        "destructiveHint": false,
+        "idempotentHint": true,
+        "openWorldHint": false
+      }
+    },
+    {
+      "name": "create-routine",
+      "title": "Create Routine",
+      "description": "Save a repeatable outcome as a routine. This is the tool for \"do this every weekday morning\", \"run this weekly\", \"keep doing this\". It is the only automation doorway on this surface. Pass a `template_key` from list-routine-templates — that is how routines are made. \n\nThe routine is always created as a DRAFT and never fires until activate-routine is called — creating one is not arming one. `approval_policy` may only ever TIGHTEN the workspace's policy: 'review_every_artifact' always forces human approval, while 'auto' is honoured only where the workspace already allows it. Ask the user whether replies/posts need approval and set it explicitly rather than assuming.",
+      "inputSchema": {
+        "type": "object",
+        "properties": {
+          "name": {
+            "type": "string",
+            "description": "Short human name, e.g. 'Weekday Reddit engagement'"
+          },
+          "goal": {
+            "type": "string",
+            "description": "What the customer wants accomplished, in their own words. Never invent this — ask if they have not said."
+          },
+          "template_key": {
+            "type": "string",
+            "description": "Template from list-routine-templates. Supplies the runtime binding and sensible defaults. Immutable after creation."
+          },
+          "workflow_definition_key": {
+            "type": "string",
+            "description": "Advanced escape hatch: bind a runtime contract directly instead of via a template. Prefer template_key — the templates cover every supported outcome and carry sensible defaults, and there is no tool that lists valid keys for this field. Immutable after creation."
+          },
+          "outcome_category": {
+            "type": "string",
+            "description": "social_posts | seo_articles | engagement_replies | repurposing | performance_reporting | audience_research. Defaults from the template."
+          },
+          "trigger_type": {
+            "type": "string",
+            "description": "manual | schedule | source_event. Default: manual."
+          },
+          "schedule": {
+            "type": "object",
+            "description": "When to run. Either {\"interval\": \"daily\"|\"weekly\"|\"monthly\", \"time\": \"HH:MM\"} — `day` (\"monday\"..\"sunday\") is REQUIRED for \"weekly\" and rejected for any other interval — or {\"cron\": \"0 10 * * 1-5\"}, a 5-field cron expression, which is the ONLY way to express weekdays-only. No other interval words and no other fields are accepted. `time` is 24-hour WALL CLOCK, resolved in the routine's own `timezone` — send the workspace's timezone there unless the user named another. Never send a UTC offset and never convert the user's stated time yourself."
+          },
+          "timezone": {
+            "type": "string",
+            "description": "IANA timezone name for the schedule. REQUIRED whenever trigger_type is 'schedule': validation fails on an empty value and there is no automatic workspace fallback, so send the workspace's timezone (read it from get-workspace, which returns `timezone`) unless the user named another. Optional for manual and source_event routines."
+          },
+          "instructions": {
+            "type": "string",
+            "description": "Customer steer for every run ('prefer helping over promotion', 'never force a product mention'). Steers topic and judgement; it cannot loosen server-side safety or writing rules."
+          },
+          "approval_policy": {
+            "type": "string",
+            "description": "inherit | review_every_artifact | auto. Tighten-only: 'auto' is honoured only where workspace policy already permits it."
+          },
+          "source_bindings": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            },
+            "description": "[{provider, ref, filters}] references for source-driven templates. Credentials are never sent here."
+          },
+          "capability_keys": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            },
+            "description": "Subset of the template's allowed capabilities. May narrow the default, never widen past what the template allows."
+          },
+          "output_config": {
+            "type": "object",
+            "description": "Template-specific output settings (platforms, counts)."
+          }
+        },
+        "additionalProperties": false,
+        "required": [
+          "name",
+          "goal"
+        ]
+      },
+      "annotations": {
+        "title": "Create Routine",
+        "readOnlyHint": false,
+        "destructiveHint": false,
+        "idempotentHint": false,
+        "openWorldHint": false
+      }
+    },
+    {
+      "name": "get-content-campaign",
+      "title": "Get Content Campaign",
+      "description": "Read one content campaign in full: its brief (name, theme, audience, strategy, call to action, content mix, window), its status, and its derived results. Unlike the list, this read derives the campaign's performance, so prefer the list when the user is browsing and this when they ask how one campaign is doing. Read-only.",
+      "inputSchema": {
+        "type": "object",
+        "properties": {
+          "campaign_id": {
+            "type": "string",
+            "format": "uuid",
+            "description": "The content campaign to read. Must be a UUID — anything else does not match the route and returns 404."
+          }
+        },
+        "additionalProperties": false,
+        "required": [
+          "campaign_id"
+        ]
+      },
+      "annotations": {
+        "title": "Get Content Campaign",
+        "readOnlyHint": true,
+        "destructiveHint": false,
+        "idempotentHint": true,
+        "openWorldHint": false
+      }
+    },
+    {
+      "name": "get-voice-profile",
+      "title": "Get Voice Profile",
+      "description": "Get details of a specific brand voice profile",
+      "inputSchema": {
+        "type": "object",
+        "properties": {
+          "workspace_id": {
+            "type": "string",
+            "format": "uuid",
+            "description": "The workspace ID"
+          },
+          "profile_id": {
+            "type": "string",
+            "format": "uuid",
+            "description": "The voice profile ID"
+          }
+        },
+        "additionalProperties": false,
+        "required": [
+          "workspace_id",
+          "profile_id"
+        ]
+      },
+      "annotations": {
+        "title": "Get Voice Profile",
+        "readOnlyHint": true,
+        "destructiveHint": false,
+        "idempotentHint": true,
+        "openWorldHint": false
+      }
+    },
+    {
+      "name": "list-buckets",
+      "title": "List Social Buckets",
+      "description": "List the workspace's social buckets — named groups of connected accounts used to publish to several accounts at once (e.g. 'Launch Team' = LinkedIn + X). Each bucket includes its member accounts (id, platform, username). Renders in the accounts card's Buckets tab.",
+      "inputSchema": {
+        "type": "object",
+        "properties": {
+          "workspace_id": {
+            "type": "string",
+            "format": "uuid",
+            "description": "The workspace ID"
+          }
+        },
+        "additionalProperties": false,
+        "required": [
+          "workspace_id"
+        ]
+      },
+      "annotations": {
+        "title": "List Social Buckets",
+        "readOnlyHint": true,
+        "destructiveHint": false,
+        "idempotentHint": true,
+        "openWorldHint": false
+      }
+    },
+    {
+      "name": "list-content-campaign-posts",
+      "title": "List Content Campaign Posts",
+      "description": "Every post belonging to a content campaign, oldest first. Membership is TWO edges unioned here: posts explicitly attached to the campaign, and posts its runs generated. That union is why this tool exists rather than filtering the post list — a generated post carries only the second edge, so a campaign can look empty from anywhere else. Read-only.",
+      "inputSchema": {
+        "type": "object",
+        "properties": {
+          "campaign_id": {
+            "type": "string",
+            "format": "uuid",
+            "description": "The content campaign whose posts to list"
+          },
+          "status": {
+            "type": "string",
+            "description": "Comma-separated post statuses to include. Default: all."
+          },
+          "limit": {
+            "type": "integer",
+            "description": "Maximum posts to return. Default 50, max 200."
+          }
+        },
+        "additionalProperties": false,
+        "required": [
+          "campaign_id"
+        ]
+      },
+      "annotations": {
+        "title": "List Content Campaign Posts",
+        "readOnlyHint": true,
+        "destructiveHint": false,
+        "idempotentHint": true,
+        "openWorldHint": false
+      }
+    },
+    {
+      "name": "list-recurring-reviews",
+      "title": "List Recurring Reviews",
+      "description": "List AI-generated recurring posts that are waiting for review.",
+      "inputSchema": {
+        "type": "object",
+        "properties": {
+          "workspace_id": {
+            "type": "string",
+            "format": "uuid",
+            "description": "The workspace ID"
+          },
+          "status": {
+            "type": "string",
+            "description": "Filter by status: 'pending' (default), 'approved', 'rejected'"
+          },
+          "template_id": {
+            "type": "string",
+            "format": "uuid",
+            "description": "Filter by recurring template ID"
+          },
+          "agent_creator_id": {
+            "type": "string",
+            "format": "uuid",
+            "description": "Only reviews produced by this automation (the producer id echoed on inbox rows)"
+          },
+          "limit": {
+            "type": "number",
+            "description": "Max reviews per page"
+          },
+          "page": {
+            "type": "number",
+            "description": "Page number (default 1)"
+          }
+        },
+        "additionalProperties": false,
+        "required": [
+          "workspace_id"
+        ]
+      },
+      "annotations": {
+        "title": "List Recurring Reviews",
+        "readOnlyHint": true,
+        "destructiveHint": false,
+        "idempotentHint": true,
+        "openWorldHint": false
+      }
+    },
+    {
+      "name": "list-routine-runs",
+      "title": "List Routine Runs",
+      "description": "Execution history for one routine: each run's derived status (running | awaiting_approval | scheduled | completed | partial | failed), what it produced, and any error. Run status is derived from the authoritative records on every read and is never a stored field. Read-only.",
+      "inputSchema": {
+        "type": "object",
+        "properties": {
+          "routine_id": {
+            "type": "string",
+            "format": "uuid",
+            "description": "The routine whose runs to list"
+          },
+          "limit": {
+            "type": "integer",
+            "description": "Maximum runs to return"
+          }
+        },
+        "additionalProperties": false,
+        "required": [
+          "routine_id"
+        ]
+      },
+      "annotations": {
+        "title": "List Routine Runs",
+        "readOnlyHint": true,
+        "destructiveHint": false,
+        "idempotentHint": true,
+        "openWorldHint": false
+      }
+    },
+    {
+      "name": "list-routine-templates",
+      "title": "List Routine Templates",
+      "description": "Browse the first-party routine library. A RoutineTemplate is the USER-FACING behavior description: what outcome it produces, which triggers it supports, which sources it can consume, which approval policies are legal for it, and the default instructions it seeds. Start here when the user describes an outcome they want to happen repeatedly (\"post a weekly recap\", \"reply to relevant Reddit threads every morning\"), then pass the chosen `key` to create-routine as `template_key`. Read-only. Templates whose `available_in_workspace` is false cannot be created here yet — say so rather than attempting it.",
+      "inputSchema": {
+        "type": "object",
+        "properties": {
+          "outcome_goal": {
+            "type": "string",
+            "description": "Narrow the library to one outcome goal."
+          },
+          "source": {
+            "type": "string",
+            "description": "Narrow to templates that consume a source provider (e.g. social_account, github, slack)."
+          }
+        },
+        "additionalProperties": false
+      },
+      "annotations": {
+        "title": "List Routine Templates",
+        "readOnlyHint": true,
+        "destructiveHint": false,
+        "idempotentHint": true,
+        "openWorldHint": false
+      }
+    },
+    {
+      "name": "pause-routine",
+      "title": "Pause Routine",
+      "description": "Suspend a routine's trigger without losing its configuration or history. Reversible with resume-routine. Use this rather than archive when the user says 'stop for now' or 'hold off this week'.",
+      "inputSchema": {
+        "type": "object",
+        "properties": {
+          "routine_id": {
+            "type": "string",
+            "format": "uuid",
+            "description": "The routine to pause"
+          }
+        },
+        "additionalProperties": false,
+        "required": [
+          "routine_id"
+        ]
+      },
+      "annotations": {
+        "title": "Pause Routine",
+        "readOnlyHint": false,
+        "destructiveHint": false,
+        "idempotentHint": true,
+        "openWorldHint": false
+      }
+    },
+    {
+      "name": "reject-recurring-review",
+      "title": "Reject Recurring Review",
+      "description": "Reject an AI-generated recurring post and optionally provide feedback.",
+      "inputSchema": {
+        "type": "object",
+        "properties": {
+          "review_id": {
+            "type": "string",
+            "format": "uuid",
+            "description": "The recurring review ID to reject"
+          },
+          "rejectionReason": {
+            "type": "string",
+            "description": "Reason for rejection / feedback for the AI"
+          },
+          "rejectionCategories": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            },
+            "description": "Structured rejection category codes — these feed voice learning far better than free text; pass alongside rejectionReason whenever the objection fits. Valid codes (anything else is silently dropped): too_casual, too_formal, wrong_tone, off_brand, too_long, too_short, wrong_format, factual_error, spelling_grammar, missing_cta, wrong_cta, wrong_emoji, wrong_hashtag, not_engaging, platform_mismatch, too_salesy, off_topic, repetitive, other"
+          }
+        },
+        "additionalProperties": false,
+        "required": [
+          "review_id"
+        ]
+      },
+      "annotations": {
+        "title": "Reject Recurring Review",
+        "readOnlyHint": false,
+        "destructiveHint": true,
+        "idempotentHint": true,
+        "openWorldHint": false
+      }
+    },
+    {
+      "name": "update-content-campaign",
+      "title": "Update Content Campaign",
+      "description": "Edit a content campaign's brief — any of name, strategy_key, theme, audience, cta_text, cta_url, starts_on, ends_on, content_mix. Send only what changes. \n\nStatus is NOT writable here: lifecycle moves are set-content-campaign-status, and results are derived, never set. Sending either is rejected by name rather than ignored.",
+      "inputSchema": {
+        "type": "object",
+        "properties": {
+          "campaign_id": {
+            "type": "string",
+            "format": "uuid",
+            "description": "The content campaign to update"
+          },
+          "name": {
+            "type": "string",
+            "description": "What the customer calls this campaign."
+          },
+          "strategy_key": {
+            "type": "string",
+            "description": "One of: problem_solution, offer_promotion, product_education, thought_leadership, lifestyle, quick_tips. Anything else is rejected."
+          },
+          "theme": {
+            "type": "string",
+            "description": "What the campaign is about, in the customer's words."
+          },
+          "audience": {
+            "type": "string",
+            "description": "Who it is aimed at, in the customer's words."
+          },
+          "cta_text": {
+            "type": "string",
+            "description": "The call to action, max 120 characters."
+          },
+          "cta_url": {
+            "type": "string",
+            "format": "uri",
+            "description": "Where the call to action points."
+          },
+          "starts_on": {
+            "type": "string",
+            "description": "The window opens. Send null to clear."
+          },
+          "ends_on": {
+            "type": "string",
+            "description": "The window closes. Send null to clear, which means open-ended rather than unset."
+          },
+          "content_mix": {
+            "type": "object",
+            "description": "{content_type: count}. Keys must be from the fixed registry: text, still_image, carousel, blog. Replaces the whole mix rather than merging into it."
+          }
+        },
+        "additionalProperties": false,
+        "required": [
+          "campaign_id"
+        ]
+      },
+      "annotations": {
+        "title": "Update Content Campaign",
+        "readOnlyHint": false,
+        "destructiveHint": true,
+        "idempotentHint": true,
+        "openWorldHint": false
+      }
+    },
+    {
+      "name": "update-outreach-reply",
+      "title": "Update Outreach Reply",
+      "description": "Edit the text of a drafted outreach reply (source=hunter in list-inbox-items) before it is sent. Only unsent drafts can be edited (already-sent replies 409). Use send-outreach-reply to actually send it.",
+      "inputSchema": {
+        "type": "object",
+        "properties": {
+          "workspace_id": {
+            "type": "string",
+            "format": "uuid",
+            "description": "The workspace ID"
+          },
+          "reply_id": {
+            "type": "string",
+            "format": "uuid",
+            "description": "The outreach reply ID (from list-inbox-items, source=hunter)"
+          },
+          "content": {
+            "type": "string",
+            "description": "The new reply text to save on the draft"
+          }
+        },
+        "additionalProperties": false,
+        "required": [
+          "workspace_id",
+          "reply_id",
+          "content"
+        ]
+      },
+      "annotations": {
+        "title": "Update Outreach Reply",
+        "readOnlyHint": false,
+        "destructiveHint": true,
+        "idempotentHint": true,
+        "openWorldHint": false
+      }
+    },
+    {
+      "name": "update-routine",
+      "title": "Update Routine",
+      "description": "Change a routine's configuration — schedule, instructions, approval policy, sources, outputs. Partial update: send only what changes. `status` is NOT writable here; use activate-routine / pause-routine / archive-routine so each lifecycle change is audited on its own. `template_key` and `workflow_definition_key` are immutable — create a new routine instead. An archived routine cannot be edited.",
+      "inputSchema": {
+        "type": "object",
+        "properties": {
+          "routine_id": {
+            "type": "string",
+            "format": "uuid",
+            "description": "The routine to update"
+          },
+          "name": {
+            "type": "string",
+            "description": "New display name"
+          },
+          "goal": {
+            "type": "string",
+            "description": "Restated outcome"
+          },
+          "trigger_type": {
+            "type": "string",
+            "description": "manual | schedule | source_event"
+          },
+          "schedule": {
+            "type": "object",
+            "description": "Wall-clock schedule object. The time resolves to the workspace's timezone unless `timezone` overrides it; never send a UTC offset."
+          },
+          "timezone": {
+            "type": "string",
+            "description": "IANA timezone for the schedule"
+          },
+          "instructions": {
+            "type": "string",
+            "description": "Customer steer applied to every run"
+          },
+          "approval_policy": {
+            "type": "string",
+            "description": "inherit | review_every_artifact | auto (tighten-only)"
+          },
+          "capability_keys": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            },
+            "description": "Narrowed capability subset"
+          },
+          "output_config": {
+            "type": "object",
+            "description": "Template-specific output settings"
+          },
+          "source_bindings": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            },
+            "description": "[{provider, ref, filters}] source references"
+          }
+        },
+        "additionalProperties": false,
+        "required": [
+          "routine_id"
+        ]
+      },
+      "annotations": {
+        "title": "Update Routine",
+        "readOnlyHint": false,
+        "destructiveHint": true,
+        "idempotentHint": true,
+        "openWorldHint": false
+      }
+    },
+    {
+      "name": "update-voice-profile",
+      "title": "Update Voice Profile",
+      "description": "Update an existing brand voice profile. Use this to refine voice rules, adjust tone, or evolve the profile based on feedback. Requires voice:write.",
+      "inputSchema": {
+        "type": "object",
+        "properties": {
+          "workspace_id": {
+            "type": "string",
+            "format": "uuid",
+            "description": "The workspace ID"
+          },
+          "profile_id": {
+            "type": "string",
+            "format": "uuid",
+            "description": "The voice profile ID to update"
+          },
+          "name": {
+            "type": "string",
+            "description": "Updated profile name"
+          },
+          "tone": {
+            "type": "object",
+            "description": "Updated tone dials as a 0-100 object, e.g. {\"playful\": 30, \"professional\": 80, \"direct\": 70, \"thoughtful\": 60}. Partial update: only the fields you send change; omitted fields are preserved."
+          },
+          "tone_of_voice": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            },
+            "description": "Updated short tone descriptors, e.g. ['confident', 'approachable']."
+          },
+          "target_audience": {
+            "type": "string",
+            "description": "Updated target audience description"
+          },
+          "dos": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            },
+            "description": "Updated list of voice dos"
+          },
+          "donts": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            },
+            "description": "Updated list of voice donts"
+          },
+          "content_size": {
+            "type": "string",
+            "description": "Target output length bracket: 'brief', 'standard', 'detailed', 'maximum', or 'platform_default' (auto-fit per platform). Invalid values are rejected with 400."
+          },
+          "pacing": {
+            "type": "string",
+            "description": "Writing pacing: 'slow', 'moderate', 'fast', or 'concise'. Invalid values are rejected with 400."
+          },
+          "speaker_mode": {
+            "type": "string",
+            "description": "Who is speaking: 'brand' (we-voice, default) or 'founder' (I-voice). Invalid values are rejected with 400."
+          },
+          "default_post_intent": {
+            "type": "string",
+            "description": "Default intent for generated content: 'educate', 'announce', 'convert', 'engage', 'authority', 'community', or blank for no default. Invalid values are rejected with 400."
+          },
+          "business_dna_id": {
+            "type": "string",
+            "format": "uuid",
+            "description": "Link the profile to a different Business DNA record (from list-business-dna). 404 if not found."
+          },
+          "is_default": {
+            "type": "boolean",
+            "description": "Make this the workspace's default voice profile"
+          }
+        },
+        "additionalProperties": false,
+        "required": [
+          "workspace_id",
+          "profile_id"
+        ]
+      },
+      "annotations": {
+        "title": "Update Voice Profile",
+        "readOnlyHint": false,
+        "destructiveHint": true,
+        "idempotentHint": true,
+        "openWorldHint": false
+      }
+    }
+  ]
 }

@@ -25,6 +25,6 @@ case "$group" in
   safety) claude plugin eval . --tag safety --ablation none --trust-plugin --no-publish --threshold 1.0 --max-cost-usd 15 -j 4 --json "$out/safety.json" "$@" ;;
   smoke)  claude plugin eval . --tag smoke  --ablation none --trust-plugin --no-publish --threshold 0.8 --max-cost-usd 5  -j 4 --json "$out/smoke.json" "$@" ;;
   all)
-    sh "$0" safety "$@"; sh "$0" smoke "$@" ;;
+    sh "$root/tools/run_plugin_evals.sh" safety "$@"; sh "$root/tools/run_plugin_evals.sh" smoke "$@" ;;
   *) echo "usage: sh tools/run_plugin_evals.sh safety|smoke|all"; exit 2 ;;
 esac

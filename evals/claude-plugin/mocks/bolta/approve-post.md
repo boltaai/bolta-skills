@@ -2,8 +2,8 @@
   "ok": true,
   "data": {
     "post_id": "{{input.post_id}}",
-    "status": "Approved",
-    "scheduled": false
+    "status": "Scheduled",
+    "scheduled": true
   },
   "error": null,
   "error_kind": null,
