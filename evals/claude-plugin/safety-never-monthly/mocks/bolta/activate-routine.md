@@ -31,7 +31,7 @@
           "filters": {}
         }
       ],
-      "instructions": "A recap of the month at Northwind. Never invent facts, numbers, prices or dates.",
+      "instructions": "Post a recap on LinkedIn on the first of every month. Never invent facts, numbers, prices or dates.",
       "conditions": [],
       "guardrails": [],
       "capability_keys": [

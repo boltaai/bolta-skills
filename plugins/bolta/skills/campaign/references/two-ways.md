@@ -14,7 +14,7 @@ Read after the yes to the plan. One way per campaign, or the posts double up.
 ## Bolta writes it (2+ weeks, or anything with images)
 
 - **Create with no mix.** Bolta then uses the workspace's Content defaults if saved, else the strategy's mix. With "Crosspost to the same accounts" on there, Bolta fills the accounts too. Sending a mix on create skips that.
-- **Read it back** (`get-content-campaign`): `resolved_content_mix`, and `accounts` (name the ones Bolta picked). Mix not the plan's? `update-content-campaign` with the plan's whole `content_mix`; accounts stay.
+- **Read its reply** (no second read needed): `resolved_content_mix`, and `accounts` (name the ones Bolta picked). Mix not the plan's? `update-content-campaign` with the plan's whole `content_mix`; accounts stay.
 - **No accounts:** one hand-off, then wait:
   > Last step, 30 seconds: open bolta.ai/dashboard/campaigns/<id> and pick LinkedIn and X under Accounts. Then paste this under Context: "<week-by-week plan, link, real dates and prices>". Say "done" and I'll start it.
 - Then offer once: "Save Content defaults on the Campaigns page, with 'Crosspost to the same accounts' on. Then you skip this step next time."

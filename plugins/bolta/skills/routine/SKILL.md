@@ -1,15 +1,16 @@
 ---
 name: routine
 description: >-
-  Set up, check, change, pause or stop a Bolta routine: work Bolta repeats for
-  you, like 3 LinkedIn drafts every Monday, running even when Claude is
-  closed. Use when someone says every week, keep me posting, each new blog
-  post, run it now, pause my routine, or why didn't my routine run.
+  Set up, switch on, check, change, pause or stop a Bolta routine: work Bolta
+  repeats for you, like 3 LinkedIn drafts every Monday, even with Claude
+  closed. Use when someone says every week or month, keep me posting, turn it
+  on, try my routine, each new blog post, run it now, pause my routine, or why
+  didn't my routine run.
 ---
 
 ## Done when
 
-It's on, changed, paused or stopped, and they know when drafts land: "On. First drafts Mon Oct 19, 8:00 am (New York)."
+It's on, changed, paused or stopped, and they know when drafts land: "Bolta routine on. First drafts Mon Oct 19, 8:00 am (New York)."
 
 ## Know this
 
@@ -23,11 +24,10 @@ It's on, changed, paused or stopped, and they know when drafts land: "On. First 
 - **Accounts:** one per network named (none named: those used this week); ask only if two on one network fit. `source_bindings: [{"provider":"social_account","ref":"<account id>"}, ...]`, objects, not strings; unbound, Bolta uses any connected account. `count` is per run, across networks.
 - `timezone` is required (no fallback). `next_run_at` is UTC; say it in the workspace clock.
 - `"monthly"` is accepted but never fires: use `{"cron":"0 9 1 * *"}`. Spread out: `{"cron":"0 9 * * 1,3,5"}`, count 1.
-- **Switching on is not running.** Run now does, and uses credits.
+- **Switching on is not running.** Run now does; it uses credits and needs it on. Asked to try one that's off: "Switch it on and run it once now?"
 - **"From my blog":** `output_config.source_urls`, exactly one URL. An unchanged page skips that week silently: say so first.
 - **"Post without asking"** only on those words: two Bolta checks; review mode may refuse it.
 - Change, pause, stop, Monday's drafts, "why didn't it run?": [references/looking-after.md](references/looking-after.md).
-- **Bolta routine or Claude weekly job?** Gmail, Notion, Drive or Slack in the chain: a Claude weekly job. Unsure: "Should Bolta run this alone, or should I run it weekly with your other apps?"
 
 ## Tools
 
@@ -40,11 +40,11 @@ It's on, changed, paused or stopped, and they know when drafts land: "On. First 
 
 ## Hand off
 
-`review`: deciding drafts. `post`: posts now. `campaign`: anything that ends. `results`: how it did. `fix`: stop everything. `connect`: disconnected accounts. `my-workflow`: a Claude weekly job.
+`review`: deciding drafts. `post`: posts now. `campaign`: anything that ends. `results`: how it did. `fix`: stop everything. `connect`: disconnected accounts. `my-workflow`: a Claude weekly job (Gmail, Notion, Drive or Slack in the chain).
 
 ## Always
 
 - Follow the house rules in the `today` skill.
 - Bind every post routine to its accounts, one per network; ask me first unless they said "post without asking".
 - Say it's on only after `next_run_at` is read back.
-- Say "Bolta routine" wherever Claude's own scheduling could be meant.
+- Say "Bolta routine", never a bare "routine".

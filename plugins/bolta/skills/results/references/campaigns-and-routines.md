@@ -1,6 +1,6 @@
 # Campaign and Bolta routine results
 
-Read for comparing campaigns, or for a Bolta routine. One campaign's verdict, or finishing it: hand to `campaign`. Bolta works these numbers out on every read, so read again each time; never reuse earlier numbers.
+Read for one campaign's results, comparing campaigns, or a Bolta routine. Finishing a campaign: hand to `campaign`. Bolta works these numbers out on every read, so read again each time; never reuse earlier numbers.
 
 ## A campaign: `get-content-campaign`
 

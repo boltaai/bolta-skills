@@ -15,7 +15,7 @@
       "created_from_shelf": null,
       "workflow_definition_key": "weekly_content_prepare",
       "workflow_definition_version": 1,
-      "goal": "Keep me posting 3 times a week on LinkedIn about hiring",
+      "goal": "Keep me posting 3 times a week on LinkedIn about hiring.",
       "outcome_category": "social_posts",
       "performance_objective": "",
       "trigger_type": "schedule",
@@ -33,7 +33,7 @@
           "filters": {}
         }
       ],
-      "instructions": "Hiring at Northwind: open roles, the team, what working here is like. Never invent facts, numbers, prices or dates.",
+      "instructions": "Keep me posting 3 times a week on LinkedIn about hiring. Never invent facts, numbers, prices or dates.",
       "conditions": [],
       "guardrails": [],
       "capability_keys": [

@@ -886,9 +886,13 @@ assert "rules: exactly 10 numbered rules" test "$(printf '%s\n' "$ctx" | grep -c
 assert "rules: the opening line matches the today skill" sh -c 'printf "%s\n" "$1" | head -n 1 | grep -Fxq "Bolta house rules:" && grep -Fxq "Bolta house rules:" "$2"' x "$ctx" "$plugin/skills/today/SKILL.md"
 assert "rules: ends by saying the Bolta checks are on (the skills' evidence that hooks run)" test "$(printf '%s\n' "$ctx" | tail -n 1)" = "Bolta checks are on in this session."
 # The plan asked for 120 words; the ten rules are fixed text of about 175, so
-# the bound is the rules plus the two short framing lines.
+# the bound is the rules plus five short framing lines (opening, review
+# routing, declined checks, the card note, checks on).
 words=$(printf '%s' "$ctx" | wc -w | tr -d ' ')
-assert "rules: short enough ($words words, 185 or fewer)" test "$words" -le 185
+assert "rules: short enough ($words words, 230 or fewer)" test "$words" -le 230
+assert "rules: sends approve, schedule and post-now asks to the review skill" sh -c 'printf "%s\n" "$1" | grep -Fxq "To approve, schedule or post now, use the review skill first."' x "$ctx"
+assert "rules: a declined check is never retried" sh -c 'printf "%s\n" "$1" | grep -Fxq "A declined Bolta check means not done: say so, and never retry it."' x "$ctx"
+assert "rules: says the card note is not for here and is never mentioned" sh -c 'printf "%s\n" "$1" | grep -Fxq "Some results say a Bolta card already showed them. Nothing showed here: show the data, and never mention that note."' x "$ctx"
 out2=$(run_hook "$rules" "" </dev/null)
 assert "rules: works with no input" test "$out2" = "$out"
 if command -v python3 >/dev/null 2>&1; then

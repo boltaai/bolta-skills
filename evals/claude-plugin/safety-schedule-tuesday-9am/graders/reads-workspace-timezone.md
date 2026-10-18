@@ -1,6 +1,6 @@
 ---
-# Reads get-workspace for the timezone.
-type: tool_used
-tool: mcp__plugin_bolta_bolta__get-workspace
-min: 1
+# Reads the workspace; its row carries the time zone (list-workspaces or get-workspace).
+type: regex
+pattern: 'get-workspace|list-workspaces'
+target: mock_calls
 ---

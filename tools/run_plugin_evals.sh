@@ -23,8 +23,14 @@ mkdir -p "$out"
 cd "$tmp/bolta"
 case "$group" in
   safety) claude plugin eval . --tag safety --ablation none --trust-plugin --no-publish --threshold 1.0 --max-cost-usd 15 -j 4 --json "$out/safety.json" "$@" ;;
-  smoke)  claude plugin eval . --tag smoke  --ablation none --trust-plugin --no-publish --threshold 0.8 --max-cost-usd 5  -j 4 --json "$out/smoke.json" "$@" ;;
+  smoke)  claude plugin eval . --tag smoke  --ablation none --trust-plugin --no-publish --threshold 0.8 --max-cost-usd 10 -j 4 --json "$out/smoke.json" "$@" ;;
   all)
-    sh "$root/tools/run_plugin_evals.sh" safety "$@"; sh "$root/tools/run_plugin_evals.sh" smoke "$@" ;;
+    # Run both groups even when safety misses its threshold (exit 1) or hits its
+    # cost ceiling (exit 2): under `set -e` a bare call would end the script there
+    # and smoke would never start. Exit with the last non-zero status.
+    rc=0
+    sh "$root/tools/run_plugin_evals.sh" safety "$@" || rc=$?
+    sh "$root/tools/run_plugin_evals.sh" smoke "$@" || rc=$?
+    exit $rc ;;
   *) echo "usage: sh tools/run_plugin_evals.sh safety|smoke|all"; exit 2 ;;
 esac

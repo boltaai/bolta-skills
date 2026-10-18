@@ -74,7 +74,7 @@ structuredContent:
         "contents": [
           {
             "id": 9700,
-            "content": "New pricing at Northwind starts next month. Here is what changes for you, one post a day this week, starting with the simplest part: the plans now match how often you actually drink coffee.",
+            "content": "Our pricing is changing.\n\nOver the next few posts we will walk through what is new and what it means for your usual order. One idea per post, kept short.\n\nIf something is unclear along the way, ask in the comments. A plain question deserves a plain answer.",
             "index": 0,
             "media": []
           }
@@ -135,7 +135,7 @@ structuredContent:
         "contents": [
           {
             "id": 9701,
-            "content": "Most people who order from us buy the same bag every few weeks. The new plans are built around that rhythm instead of around one-off orders.",
+            "content": "Pricing should be easy to explain.\n\nIf you cannot tell a friend what your coffee costs without opening a website, the pricing is not doing its job.\n\nThat is the test we hold the new pricing to. Tell us whether it passes.",
             "index": 0,
             "media": []
           }
@@ -196,7 +196,7 @@ structuredContent:
         "contents": [
           {
             "id": 9702,
-            "content": "What stays the same with the new pricing: the beans, the roast dates on every bag, and free local delivery in Sydney.",
+            "content": "A small tip for comparing coffee prices.\n\nDo not compare bag to bag. Compare cup to cup.\n\nDivide the price of a bag by the number of brews it gives you, and you will know what a coffee really costs. It works for ours and for everyone else's.",
             "index": 0,
             "media": []
           }
@@ -257,7 +257,7 @@ structuredContent:
         "contents": [
           {
             "id": 9703,
-            "content": "A question we keep hearing: will a subscription lock me in? No. You can pause or skip any week from your account.",
+            "content": "What does the new pricing mean for your usual order?\n\nThat is the question worth asking, and it is the one we would ask too.\n\nIf you are not sure of the answer, put your order in the comments. Specific questions get specific answers.",
             "index": 0,
             "media": []
           }
@@ -318,7 +318,7 @@ structuredContent:
         "contents": [
           {
             "id": 9704,
-            "content": "That is the new pricing in one week. If something is unclear, ask in the comments and the roastery team will answer.",
+            "content": "That is the new pricing, one idea at a time.\n\nIf something still feels unclear, say so in the comments. We would rather explain it twice than have you guess.\n\nThanks for reading along this week.",
             "index": 0,
             "media": []
           }

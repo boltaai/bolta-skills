@@ -28,8 +28,8 @@
           "\"Three tools, four tabs, and nobody knows which caption is final.\""
         ]
       },
-      "theme": "Paying for coffee you don't drink",
-      "audience": "Regular buyers and subscribers",
+      "theme": "New pricing launches Nov 3",
+      "audience": "",
       "cta_text": "Join the waitlist",
       "cta_url": "https://bolta.ai/waitlist",
       "cover_image_url": "",

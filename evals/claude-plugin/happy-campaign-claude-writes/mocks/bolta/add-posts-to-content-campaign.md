@@ -4,7 +4,7 @@
     "attached": {{input.post_ids}},
     "already_present": [],
     "not_found": [],
-    "posts_count": 4
+    "posts_count": 5
   },
   "error": null,
   "error_kind": null,

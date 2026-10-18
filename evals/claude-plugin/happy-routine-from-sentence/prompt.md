@@ -2,7 +2,7 @@
 name: happy-routine-from-sentence
 description: 'R1: a Bolta routine from one sentence, then a yes to its one summary (pasted as the earlier turn). The routine is created as ask me first in this session, so switching it on passes guard v2 silently and the mock answers.'
 tags: [smoke, happy]
-expected_outcome: 'routine fires; create-routine with weekly_social_posts, an object binding to the LinkedIn account, ask me first, the workspace time zone and no monthly interval; activate-routine reaches Bolta (not denied); get-routine after; no run now; the reply reads back the first drafts: Mon Oct 19, 8:00 am (Sydney).'
+expected_outcome: 'routine fires; create-routine with weekly_social_posts, an object binding to the LinkedIn account, ask me first, the workspace time zone and no monthly interval; activate-routine reaches Bolta (not denied) and its reply carries next_run_at (get-routine after is optional); no run now; the reply says Bolta routine and reads back the first drafts: Mon Oct 19, 8:00 am (Sydney), never the UTC time.'
 max_turns: 25
 timeout_seconds: 300
 allowed_tools: [Skill]

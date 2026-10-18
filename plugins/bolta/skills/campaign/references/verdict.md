@@ -4,7 +4,7 @@ Read when a campaign's end date has passed, or the user asks how one did. Read `
 
 ## What to say, in order
 
-- **How it ran, first:** drafts made, decided, went out. "Bolta wrote 12. You decided 10. 9 went out."
+- **How it ran, first:** drafts made, decided, went out. "12 drafts made. You decided 10. 9 went out." (Say "Bolta wrote" only when Bolta wrote them.)
 - **Where it went out:** `results.by_platform` (published and failed, per account). A post out on LinkedIn but failed on X still counts on LinkedIn. `partially_published`: "went out on 2 of 3 accounts".
 - **Nothing went out:** say why from `results.outcome_reason` (why-nothing.md).
 - **The decision rate:** drafts decided out of drafts made. Still undecided: posts waiting for a yes or still drafts (`has_pending_review`, or Draft, in `list-content-campaign-posts`). It predicts the next campaign better than likes do.

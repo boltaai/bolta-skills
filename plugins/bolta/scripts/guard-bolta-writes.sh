@@ -169,7 +169,7 @@ batch_ask() {
   fi
   case $tool in
     schedule-post) ask "Check before it goes out ($conn): you are scheduling posts from the list above. $go" ;;
-    delete-post) ask "Check before deleting ($conn): you are deleting posts from the list above. A deleted post can be restored for 7 days. $del" ;;
+    delete-post) ask "Check before deleting ($conn): you are deleting posts from the list above. A deleted post can be restored for 7 days. Bolta keeps no reason for a delete; a DON'T rule in your voice does. $del" ;;
     *) ask "Check before it goes out ($conn): you are approving posts from the list above. $go" ;;
   esac
 }

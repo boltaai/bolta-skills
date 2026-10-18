@@ -1,6 +1,6 @@
 ---
-# Reads the campaign back for its accounts and mix.
-type: tool_order
-before: mcp__plugin_bolta_bolta__create-content-campaign
-after: mcp__plugin_bolta_bolta__get-content-campaign
+# Reads the created campaign's accounts (the create reply carries them) and says none are picked.
+type: regex
+pattern: '\bno accounts\b|\bnone (?:are |is )?(?:picked|chosen|selected)\b|\baccounts? (?:aren''t|are not|isn''t|is not) (?:picked|chosen|selected)|\bpick (?:the |its )?(?:accounts|them) at\b'
+flags: i
 ---

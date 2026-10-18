@@ -25,26 +25,12 @@
       "ends_on": "{{input.ends_on}}",
       "duration_weeks": 1,
       "content_mix": {
-        "still_image": 3,
-        "carousel": 1,
-        "text": 1
+        "text": 5
       },
       "content_plan": [
         {
-          "type": "still_image",
-          "count": 3,
-          "account_ids": [],
-          "days": []
-        },
-        {
-          "type": "carousel",
-          "count": 1,
-          "account_ids": [],
-          "days": []
-        },
-        {
           "type": "text",
-          "count": 1,
+          "count": 5,
           "account_ids": [],
           "days": []
         }
@@ -59,9 +45,7 @@
       "voice_profile": null,
       "content_types": [],
       "resolved_content_mix": {
-        "still_image": 3,
-        "carousel": 1,
-        "text": 1
+        "text": 5
       },
       "status": "draft",
       "status_reason": "",
