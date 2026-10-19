@@ -1,6 +1,6 @@
 ---
-# Says the post was saved as a Bolta Draft. A chat draft that says "I have not saved it" must not pass.
+# Says the post was saved as a Bolta draft ("Saved to Northwind Coffee as a draft"). A chat draft that says it was not saved must not pass.
 type: regex
-pattern: '((saved|created|stored)\s+(it\s+|this\s+)?(in\s+bolta\s+)?(as\s+)?(a\s+|your\s+)?(bolta\s+|new\s+)?draft|draft\s+(is\s+|was\s+|has\s+been\s+)?(now\s+)?(saved|created|waiting)|draft\s+(in|on)\s+bolta)'
+pattern: '(?<!not |n.t |never )\b(saved|created|stored)\b[^.\n]{0,40}\bdrafts?\b|\bdrafts?\s+(is\s+|was\s+|has\s+been\s+)?(now\s+)?(saved|created|waiting)'
 flags: i
 ---

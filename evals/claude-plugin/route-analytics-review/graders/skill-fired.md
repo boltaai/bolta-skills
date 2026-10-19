@@ -1,7 +1,7 @@
 ---
-# The plugin fired for this job: the analytics-review skill or its /report command (the command defers to the skill).
+# v0.2 routing: the results skill fires (there are no commands any more).
 type: tool_used
 tool: Skill
-input_match: '"skill"\s*:\s*"(?:[\w-]+:)?(analytics-review|report)"'
+input_match: '"skill"\s*:\s*"(?:[\w-]+:)?(results)"'
 min: 1
 ---

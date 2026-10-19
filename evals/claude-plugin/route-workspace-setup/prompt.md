@@ -1,8 +1,8 @@
 ---
 name: route-workspace-setup
-description: 'One natural phrasing for workspace-setup.'
+description: 'One natural phrasing for a set-up check. v0.2 routes it to connect (or today, or start for a first session).'
 tags: [smoke, routing]
-expected_outcome: 'workspace-setup fires; runs the read-only checklist; reports timezone, the invalid Instagram token and a reconnect path; changes nothing.'
+expected_outcome: 'connect, today or start fires; reads the workspace and accounts; reports the time zone, the disconnected Instagram account and a reconnect link; changes nothing.'
 max_turns: 15
 timeout_seconds: 300
 allowed_tools: [Skill]

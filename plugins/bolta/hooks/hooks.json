@@ -1,25 +1,70 @@
 {
-  "description": "Bolta safety gates: confirm any public, irreversible or approving Bolta action, and tell the user when the connection has expired",
+  "description": "Bolta checks: ask before anything public, approved, turned down, final, credit-spending right now, or changing what drafts are written from; one check per batch of approvals, reset on every message.",
   "hooks": {
     "PreToolUse": [
       {
-        "matcher": "^mcp__[A-Za-z0-9_-]*[Bb]olta[A-Za-z0-9_-]*__(publish-post|schedule-post|approve-post|approve-recurring-review|send-outreach-reply|publish-engagement-reply|reply-to-social-content|react-to-social-content|activate-routine|resume-routine|run-routine-now|delete-post|archive-routine|set-content-campaign-status|update-post|update-post-platform-details|update-social-bucket|restore-deleted|update-business-dna|update-voice-profile|create-routine|update-routine|create-post|bulk-create-posts|create-wordpress-blog-post)$",
+        "matcher": "^mcp__[A-Za-z0-9_-]+__(publish-post|schedule-post|approve-post|approve-many-posts|reject-post|approve-recurring-review|reject-recurring-review|send-outreach-reply|publish-engagement-reply|reply-to-social-content|react-to-social-content|activate-routine|resume-routine|run-routine-now|delete-post|archive-routine|set-content-campaign-status|set-content-campaign-targets|update-post|update-post-platform-details|update-social-bucket|restore-deleted|update-business-dna|extract-business-dna|update-voice-profile|create-routine|update-routine|create-post|bulk-create-posts|create-wordpress-blog-post|voice-generate)$",
         "hooks": [
           {
             "type": "command",
             "command": "sh \"${CLAUDE_PLUGIN_ROOT}/scripts/guard-bolta-writes.sh\"",
-            "timeout": 10
+            "timeout": 30,
+            "onFailure": "block"
           }
         ]
       }
     ],
     "PostToolUse": [
       {
-        "matcher": "^mcp__[A-Za-z0-9_-]*[Bb]olta[A-Za-z0-9_-]*__.*$",
+        "matcher": "^mcp__[A-Za-z0-9_-]+__(activate-routine|add-posts-to-content-campaign|analyze-content-campaign-source|approve-many-posts|approve-post|approve-recurring-review|archive-routine|bulk-create-posts|bulk-create-status|create-content-campaign|create-engagement-opportunity|create-post|create-routine|create-social-bucket|create-voice-profile|create-wordpress-blog-post|cross-platform-analytics|delete-post|draft-engagement-reply|draft-inbound-reply|extract-business-dna|get-account-analytics|get-business-dna|get-connect-link|get-content-campaign|get-engagement-conversation|get-engagement-status|get-my-capabilities|get-post|get-post-platform-details|get-routine|get-social-content|get-voice-context|get-voice-profile|get-workspace|list-account-insights|list-accounts|list-buckets|list-business-dna|list-content-campaign-posts|list-content-campaigns|list-engagement-capabilities|list-engagements|list-inbox-items|list-recently-deleted|list-recurring-reviews|list-routine-runs|list-routine-templates|list-routines|list-scheduled-posts|list-voice-profiles|list-workspace-posts|list-workspaces|pause-routine|publish-engagement-reply|publish-post|react-to-social-content|reject-post|reject-recurring-review|reply-to-social-content|restore-deleted|resume-routine|run-routine-now|schedule-post|search-engagement-opportunities|send-outreach-reply|set-content-campaign-status|set-content-campaign-targets|submit-for-review|update-business-dna|update-content-campaign|update-outreach-reply|update-post|update-post-platform-details|update-routine|update-social-bucket|update-voice-profile|voice-generate)$",
         "hooks": [
           {
             "type": "command",
             "command": "sh \"${CLAUDE_PLUGIN_ROOT}/scripts/bolta-auth-notice.sh\"",
+            "timeout": 10
+          }
+        ]
+      },
+      {
+        "matcher": "^mcp__[A-Za-z0-9_-]+__(approve-post|approve-many-posts|approve-recurring-review|schedule-post|delete-post|reject-post|create-routine|update-routine|create-content-campaign|set-content-campaign-status)$",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "sh \"${CLAUDE_PLUGIN_ROOT}/scripts/bolta-mark.sh\"",
+            "timeout": 10
+          }
+        ]
+      }
+    ],
+    "PostToolUseFailure": [
+      {
+        "matcher": "^mcp__[A-Za-z0-9_-]+__(activate-routine|add-posts-to-content-campaign|analyze-content-campaign-source|approve-many-posts|approve-post|approve-recurring-review|archive-routine|bulk-create-posts|bulk-create-status|create-content-campaign|create-engagement-opportunity|create-post|create-routine|create-social-bucket|create-voice-profile|create-wordpress-blog-post|cross-platform-analytics|delete-post|draft-engagement-reply|draft-inbound-reply|extract-business-dna|get-account-analytics|get-business-dna|get-connect-link|get-content-campaign|get-engagement-conversation|get-engagement-status|get-my-capabilities|get-post|get-post-platform-details|get-routine|get-social-content|get-voice-context|get-voice-profile|get-workspace|list-account-insights|list-accounts|list-buckets|list-business-dna|list-content-campaign-posts|list-content-campaigns|list-engagement-capabilities|list-engagements|list-inbox-items|list-recently-deleted|list-recurring-reviews|list-routine-runs|list-routine-templates|list-routines|list-scheduled-posts|list-voice-profiles|list-workspace-posts|list-workspaces|pause-routine|publish-engagement-reply|publish-post|react-to-social-content|reject-post|reject-recurring-review|reply-to-social-content|restore-deleted|resume-routine|run-routine-now|schedule-post|search-engagement-opportunities|send-outreach-reply|set-content-campaign-status|set-content-campaign-targets|submit-for-review|update-business-dna|update-content-campaign|update-outreach-reply|update-post|update-post-platform-details|update-routine|update-social-bucket|update-voice-profile|voice-generate)$",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "sh \"${CLAUDE_PLUGIN_ROOT}/scripts/bolta-auth-notice.sh\"",
+            "timeout": 10
+          }
+        ]
+      }
+    ],
+    "UserPromptSubmit": [
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "sh \"${CLAUDE_PLUGIN_ROOT}/scripts/bolta-new-turn.sh\"",
+            "timeout": 10
+          }
+        ]
+      }
+    ],
+    "SessionStart": [
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "sh \"${CLAUDE_PLUGIN_ROOT}/scripts/bolta-house-rules.sh\"",
             "timeout": 10
           }
         ]

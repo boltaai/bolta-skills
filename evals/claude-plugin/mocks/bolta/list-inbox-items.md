@@ -1,10 +1,112 @@
-Done (5 items). The result is already rendered for the user in the Bolta card, which is the single source of truth; full data is in structuredContent. STRICT: do not repeat, quote, or excerpt the card's content in your reply; do not restate it as a list; do not mirror it into a canvas, editable document, or code block. Reply with ONE short sentence (e.g. "Saved as a draft — want me to schedule it?") and nothing else.
+Done (9 items). The result is already rendered for the user in the Bolta card, which is the single source of truth; full data is in structuredContent. STRICT: do not repeat, quote, or excerpt the card's content in your reply; do not restate it as a list; do not mirror it into a canvas, editable document, or code block. Reply with ONE short sentence (e.g. "Saved as a draft — want me to schedule it?") and nothing else.
 
 structuredContent:
 {
   "ok": true,
   "data": {
     "items": [
+      {
+        "id": "ee000000-0000-4000-8000-000000000022",
+        "expires_at": null,
+        "post_id": "d1000000-0000-4000-8000-000000000063",
+        "workspace_id": "7c0b2f6e-3a41-4d5e-9b8a-1e2f3a4b5c6d",
+        "reviewer": null,
+        "assigned_reviewers": [],
+        "assigned_by": null,
+        "post_creator": {
+          "id": "ab000000-0000-4000-8000-000000000001",
+          "agent_id": "ab000000-0000-4000-8000-000000000001",
+          "principal_id": "ac000000-0000-4000-8000-000000000001",
+          "name": "Hype Man",
+          "type": "content_creator",
+          "avatar": null,
+          "email": "",
+          "principal_type": "agent"
+        },
+        "status": "pending",
+        "_reviewType": "team",
+        "content_preview": "Same farm, two ways of drying the cherry. Washed tastes like black tea. Natural tastes like blueberries.",
+        "content_full": "Same farm, two ways of drying the cherry. Washed tastes like black tea. Natural tastes like blueberries.",
+        "article": null,
+        "email": null,
+        "video": null,
+        "scheduled_time": null,
+        "platform_info": [
+          {
+            "platform": "x",
+            "username": "northwindcoffee"
+          }
+        ],
+        "media_urls": [],
+        "video_urls": [],
+        "carousel_slides": [],
+        "run_id": "8c000000-0000-4000-8000-000000000002",
+        "image_pending_since": null,
+        "video_error": null,
+        "video_pending": false,
+        "post_status": "Draft",
+        "failure_reason": null,
+        "content_fingerprint": "5d0c7e21a9f34b68",
+        "workflow_run_id": "7c000000-0000-4000-8000-000000000002",
+        "priority": "medium",
+        "reviewed_at": null,
+        "review_notes": null,
+        "notes_for_reviewer": "",
+        "created_at": "2026-10-17T00:02:41+00:00",
+        "updated_at": "2026-10-17T00:02:41+00:00",
+        "source": "team"
+      },
+      {
+        "id": "ee000000-0000-4000-8000-000000000021",
+        "expires_at": null,
+        "post_id": "d1000000-0000-4000-8000-000000000062",
+        "workspace_id": "7c0b2f6e-3a41-4d5e-9b8a-1e2f3a4b5c6d",
+        "reviewer": null,
+        "assigned_reviewers": [],
+        "assigned_by": null,
+        "post_creator": {
+          "id": "ab000000-0000-4000-8000-000000000001",
+          "agent_id": "ab000000-0000-4000-8000-000000000001",
+          "principal_id": "ac000000-0000-4000-8000-000000000001",
+          "name": "Hype Man",
+          "type": "content_creator",
+          "avatar": null,
+          "email": "",
+          "principal_type": "agent"
+        },
+        "status": "pending",
+        "_reviewType": "team",
+        "content_preview": "Why does our Guji taste like blueberries? The coffee cherry dries whole on raised beds before the bean comes out. That is the natural process, and it is most of the flavour story.",
+        "content_full": "Why does our Guji taste like blueberries? The coffee cherry dries whole on raised beds before the bean comes out. That is the natural process, and it is most of the flavour story.",
+        "article": null,
+        "email": null,
+        "video": null,
+        "scheduled_time": null,
+        "platform_info": [
+          {
+            "platform": "linkedin",
+            "username": "Northwind Coffee"
+          }
+        ],
+        "media_urls": [],
+        "video_urls": [],
+        "carousel_slides": [],
+        "run_id": "8c000000-0000-4000-8000-000000000002",
+        "image_pending_since": null,
+        "video_error": null,
+        "video_pending": false,
+        "post_status": "Draft",
+        "failure_reason": null,
+        "content_fingerprint": "0e93b6d1c47a28f5",
+        "workflow_run_id": "7c000000-0000-4000-8000-000000000002",
+        "priority": "medium",
+        "reviewed_at": null,
+        "review_notes": null,
+        "notes_for_reviewer": "",
+        "created_at": "2026-10-17T00:02:30+00:00",
+        "updated_at": "2026-10-17T00:02:30+00:00",
+        "source": "team"
+      },
       {
         "id": "f6000000-0000-4000-8000-000000000001",
         "expires_at": "2026-10-26T21:30:00+00:00",
@@ -213,11 +315,113 @@ structuredContent:
         "created_at": "2026-10-14T03:12:08+00:00",
         "updated_at": "2026-10-14T03:12:08+00:00",
         "source": "team"
+      },
+      {
+        "id": "ee000000-0000-4000-8000-000000000012",
+        "expires_at": null,
+        "post_id": "d1000000-0000-4000-8000-000000000072",
+        "workspace_id": "7c0b2f6e-3a41-4d5e-9b8a-1e2f3a4b5c6d",
+        "reviewer": null,
+        "assigned_reviewers": [],
+        "assigned_by": null,
+        "post_creator": {
+          "id": "ab000000-0000-4000-8000-000000000001",
+          "agent_id": "ab000000-0000-4000-8000-000000000001",
+          "principal_id": "ac000000-0000-4000-8000-000000000001",
+          "name": "Hype Man",
+          "type": "content_creator",
+          "avatar": null,
+          "email": "",
+          "principal_type": "agent"
+        },
+        "status": "pending",
+        "_reviewType": "team",
+        "content_preview": "Our Huila single origin is the best coffee you will taste this year. Order a bag today before this harvest sells out.",
+        "content_full": "Our Huila single origin is the best coffee you will taste this year. Order a bag today before this harvest sells out.",
+        "article": null,
+        "email": null,
+        "video": null,
+        "scheduled_time": null,
+        "platform_info": [
+          {
+            "platform": "linkedin",
+            "username": "Northwind Coffee"
+          }
+        ],
+        "media_urls": [],
+        "video_urls": [],
+        "carousel_slides": [],
+        "run_id": "8b000000-0000-4000-8000-000000000002",
+        "image_pending_since": null,
+        "video_error": null,
+        "video_pending": false,
+        "post_status": "Draft",
+        "failure_reason": null,
+        "content_fingerprint": "a27f4c19e85b0d63",
+        "workflow_run_id": "7a000000-0000-4000-8000-000000000002",
+        "priority": "medium",
+        "reviewed_at": null,
+        "review_notes": null,
+        "notes_for_reviewer": "",
+        "created_at": "2026-10-11T22:03:11+00:00",
+        "updated_at": "2026-10-11T22:03:11+00:00",
+        "source": "team"
+      },
+      {
+        "id": "ee000000-0000-4000-8000-000000000011",
+        "expires_at": null,
+        "post_id": "d1000000-0000-4000-8000-000000000071",
+        "workspace_id": "7c0b2f6e-3a41-4d5e-9b8a-1e2f3a4b5c6d",
+        "reviewer": null,
+        "assigned_reviewers": [],
+        "assigned_by": null,
+        "post_creator": {
+          "id": "ab000000-0000-4000-8000-000000000001",
+          "agent_id": "ab000000-0000-4000-8000-000000000001",
+          "principal_id": "ac000000-0000-4000-8000-000000000001",
+          "name": "Hype Man",
+          "type": "content_creator",
+          "avatar": null,
+          "email": "",
+          "principal_type": "agent"
+        },
+        "status": "pending",
+        "_reviewType": "team",
+        "content_preview": "Home brewing tip: weigh your coffee instead of scooping it. A scoop of light roast and a scoop of dark roast are not the same dose.",
+        "content_full": "Home brewing tip: weigh your coffee instead of scooping it. A scoop of light roast and a scoop of dark roast are not the same dose.",
+        "article": null,
+        "email": null,
+        "video": null,
+        "scheduled_time": null,
+        "platform_info": [
+          {
+            "platform": "linkedin",
+            "username": "Northwind Coffee"
+          }
+        ],
+        "media_urls": [],
+        "video_urls": [],
+        "carousel_slides": [],
+        "run_id": "8b000000-0000-4000-8000-000000000002",
+        "image_pending_since": null,
+        "video_error": null,
+        "video_pending": false,
+        "post_status": "Draft",
+        "failure_reason": null,
+        "content_fingerprint": "61c9e0a4b7d2f358",
+        "workflow_run_id": "7a000000-0000-4000-8000-000000000002",
+        "priority": "medium",
+        "reviewed_at": null,
+        "review_notes": null,
+        "notes_for_reviewer": "",
+        "created_at": "2026-10-11T22:03:10+00:00",
+        "updated_at": "2026-10-11T22:03:10+00:00",
+        "source": "team"
       }
     ],
     "has_more": false,
     "workspace_id": "7c0b2f6e-3a41-4d5e-9b8a-1e2f3a4b5c6d",
-    "total_team": 3,
+    "total_team": 7,
     "total_recurring": 1,
     "total_hunter": 1,
     "total_report": 0

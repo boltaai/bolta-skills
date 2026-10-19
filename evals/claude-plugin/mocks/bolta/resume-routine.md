@@ -2,14 +2,14 @@
   "ok": true,
   "data": {
     "routine": {
-      "id": "e5000000-0000-4000-8000-000000000001",
+      "id": "e5000000-0000-4000-8000-000000000002",
       "workspace_id": "7c0b2f6e-3a41-4d5e-9b8a-1e2f3a4b5c6d",
-      "name": "Weekly recap",
-      "slug": "weekly-recap",
+      "name": "New Bolta routine",
+      "slug": "new-routine",
       "status": "active",
       "created_by": "You",
-      "created_at": "2026-10-12T04:00:00+00:00",
-      "updated_at": "2026-10-12T04:00:00+00:00",
+      "created_at": "2026-10-17T06:00:00+00:00",
+      "updated_at": "2026-10-17T06:00:00+00:00",
       "template_key": "weekly_social_posts",
       "template_version": 1,
       "created_from_shelf": null,
@@ -22,12 +22,18 @@
       "trigger_config": {},
       "schedule": {
         "interval": "weekly",
-        "time": "09:00",
+        "time": "08:00",
         "day": "monday"
       },
       "timezone": "Australia/Sydney",
-      "source_bindings": [],
-      "instructions": "",
+      "source_bindings": [
+        {
+          "provider": "social_account",
+          "ref": "a1b2c3d4-0001-4a00-8000-000000000001",
+          "filters": {}
+        }
+      ],
+      "instructions": "Never invent facts, numbers, prices or dates.",
       "conditions": [],
       "guardrails": [],
       "capability_keys": [
@@ -37,13 +43,16 @@
       ],
       "output_config": {
         "artifact_type": "post",
-        "count": 4
+        "count": 3,
+        "platforms": [
+          "linkedin"
+        ]
       },
       "destination_config": {},
       "approval_policy": "review_every_artifact",
       "autonomy_override": "",
       "last_run": null,
-      "next_run_at": "2026-10-18T22:00:00+00:00",
+      "next_run_at": "2026-10-18T21:00:00+00:00",
       "performance_summary": {
         "attributed": true,
         "runs": 0,

@@ -1,6 +1,6 @@
 ---
-# Mentions activating or confirming.
+# Mentions switching it on, or asks to confirm.
 type: regex
-pattern: '(activat|turn(ed)? on|arm|go-ahead|confirm)'
+pattern: 'activat|switch(ed|ing)? (it )?on|turn(ed|ing)? (it )?on|\barm|go-ahead|confirm|run it now|uses credits'
 flags: i
 ---

@@ -1,0 +1,28 @@
+schema_version: "1.1"
+name: quiet-ideas-only
+description: 'Quiet: five post ideas, nothing to save. Bolta may help (its voice, its accounts) but must not write.'
+tags: [quiet]
+expected_outcome: 'Gives five post ideas in chat and may offer to save them; calls no Bolta write.'
+execution:
+  prompt: |
+    Give me 5 LinkedIn post ideas about remote work. Don't save anything.
+  max_turns: 12
+  timeout_seconds: 300
+  allowed_tools: [Skill]
+graders:
+  - name: five-ideas
+    # Five ideas as a list.
+    type: regex
+    pattern: '(^|\n)\s*(\*\*)?(1[.)]|[-*•])[\s\S]*\n\s*(\*\*)?(5[.)]|[-*•])'
+    flags: i
+  - name: on-topic
+    # About remote work.
+    type: regex
+    pattern: 'remote'
+    flags: i
+  - name: no-bolta-write
+    # No Bolta call that saves, schedules, posts, replies, approves or switches anything on.
+    type: regex
+    pattern: '"name"\s*:\s*"mcp__plugin_bolta_bolta__(create-post|bulk-create-posts|create-wordpress-blog-post|submit-for-review|approve-post|approve-many-posts|approve-recurring-review|reject-post|reject-recurring-review|schedule-post|publish-post|update-post|update-post-platform-details|delete-post|restore-deleted|create-routine|update-routine|activate-routine|resume-routine|pause-routine|run-routine-now|archive-routine|create-content-campaign|update-content-campaign|set-content-campaign-targets|analyze-content-campaign-source|set-content-campaign-status|add-posts-to-content-campaign|update-voice-profile|create-voice-profile|voice-generate|update-business-dna|extract-business-dna|update-social-bucket|create-social-bucket|send-outreach-reply|update-outreach-reply|publish-engagement-reply|draft-engagement-reply|draft-inbound-reply|reply-to-social-content|react-to-social-content|create-engagement-opportunity)"'
+    target: trace
+    match: not_contains

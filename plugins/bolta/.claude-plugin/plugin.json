@@ -1,8 +1,8 @@
 {
   "name": "bolta",
   "displayName": "BOLTA",
-  "version": "0.1.0",
-  "description": "Plan, draft, schedule, review and measure social content in a Bolta workspace. Drafts first; publishes only when you say so.",
+  "version": "0.2.0",
+  "description": "Plan, write and schedule posts in your voice, keep posting every week with Bolta routines, and run campaigns for launches. Nothing goes out until you say yes.",
   "author": {
     "name": "BOLTA",
     "email": "support@bolta.ai",
@@ -11,7 +11,7 @@
   "homepage": "https://bolta.ai/mcp",
   "repository": "https://github.com/boltaai/bolta-skills",
   "license": "MIT",
-  "keywords": ["social-media", "content-operations", "scheduling", "approvals", "analytics"],
+  "keywords": ["social-media", "content-operations", "scheduling", "approvals", "analytics", "routines", "campaigns"],
   "icon": "./assets/icon.png",
   "documentationUrl": "https://bolta.ai/docs/mcp",
   "supportUrl": "https://bolta.ai/support",
@@ -19,12 +19,12 @@
   "termsOfServiceUrl": "https://bolta.ai/tos",
   "defaultEnabled": true,
   "userConfig": {
-    "confirm_scope": {
+    "confirm_level": {
       "type": "string",
-      "title": "Confirmation level",
-      "description": "Which Bolta actions ask you to confirm in Claude Code and Cowork. all-external-effects also confirms routines, deletes and campaign status changes; publish-only confirms only actions that go public or approve a post.",
-      "options": ["all-external-effects", "publish-only"],
-      "default": "all-external-effects"
+      "title": "Bolta checks",
+      "description": "standard: drafts save without a check, and a batch of approvals or turning posts down asks once per message. careful: every approval, turning a post down, schedule and delete asks, and so do saving several posts at once, setting up, changing or switching on a Bolta routine, and setting a campaign's accounts or notes. Either way, posting, replying, running a Bolta routine now, starting, resuming or finishing a campaign, changing a running campaign's accounts or notes, voice and business changes, and anything final always ask. Pausing never does. Set in Claude Code; Cowork and chat use standard.",
+      "options": ["standard", "careful"],
+      "default": "standard"
     }
   }
 }

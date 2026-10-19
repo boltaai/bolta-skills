@@ -1,0 +1,38 @@
+name: plugin checks
+
+# The three checks that need no Claude login and no network: the plugin checker
+# (against the saved Claude tool list, see tools/fixtures), the hook tests, and
+# the skills-only bundle staying in step with the full plugin. The behavioural
+# evals and `claude plugin validate` need the Claude CLI and run by hand (see the
+# README).
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+
+permissions:
+  contents: read
+
+jobs:
+  checks:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      # The hook tests run the scripts under every awk they find.
+      - name: Install gawk
+        run: sudo apt-get update && sudo apt-get install -y gawk
+
+      - name: Bundle is in step with the full plugin
+        run: python3 -I tools/build_skills_bundle.py --check
+
+      - name: Plugin checker
+        run: python3 -I tools/check_claude_plugin.py --tools-json tools/fixtures/claude_tools_list.json --strict
+
+      - name: Hook tests
+        run: sh tools/test_hooks.sh

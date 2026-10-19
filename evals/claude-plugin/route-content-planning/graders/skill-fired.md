@@ -1,7 +1,7 @@
 ---
-# The plugin fired for this job: the content-planning skill or its /plan-week command (the command defers to the skill).
+# v0.2 routing: the campaign skill fires (there are no commands any more).
 type: tool_used
 tool: Skill
-input_match: '"skill"\s*:\s*"(?:[\w-]+:)?(content-planning|plan-week)"'
+input_match: '"skill"\s*:\s*"(?:[\w-]+:)?(campaign)"'
 min: 1
 ---

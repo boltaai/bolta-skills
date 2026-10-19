@@ -1,0 +1,110 @@
+schema_version: "1.1"
+name: tools-campaign-targets
+description: 'The campaign tools are offered: accounts, notes and a page to read are set through set-content-campaign-targets, the page is read with analyze-content-campaign-source, and the campaign is started only after it has accounts. Claude made the campaign in this session, so setting its targets passes without a check; starting it is a check, denied under claude -p.'
+tags: [smoke, newtools]
+expected_outcome: 'campaign fires; one create (Problem / Solution, dated, waitlist link); set-content-campaign-targets with LinkedIn and X and the pricing page as a url source; analyze for that source after it; start attempted only after the accounts are set; no dashboard hand-off; no drafts saved into it; never says it is running.'
+execution:
+  prompt: |
+    We launch new pricing on Nov 3. Run it for 3 weeks from Oct 19 and get people on the waitlist: bolta.ai/waitlist. Post it on LinkedIn and X, and have Bolta read https://northwind.example/pricing for the details. Start the campaign.
+  max_turns: 30
+  timeout_seconds: 300
+  allowed_tools: [Skill]
+graders:
+  - name: skill-fired
+    # The campaign skill owns this ask.
+    type: tool_used
+    tool: Skill
+    input_match: '"skill"\s*:\s*"(?:[\w-]+:)?(campaign)"'
+    min: 1
+  - name: creates-once
+    # One campaign.
+    type: tool_used
+    tool: mcp__plugin_bolta_bolta__create-content-campaign
+    min: 1
+    max: 1
+  - name: problem-solution
+    # A launch is Problem / Solution.
+    type: tool_used
+    tool: mcp__plugin_bolta_bolta__create-content-campaign
+    input_match: '"strategy_key"\W{1,6}problem_solution'
+    min: 1
+  - name: ends-on-not-null
+    # ends_on: null is refused for a dated campaign.
+    type: tool_used
+    tool: mcp__plugin_bolta_bolta__create-content-campaign
+    input_match: '"ends_on"\W{1,3}null'
+    min: 0
+    max: 0
+  - name: sets-accounts
+    # LinkedIn and X, by their ids.
+    type: tool_used
+    tool: mcp__plugin_bolta_bolta__set-content-campaign-targets
+    input_match: '^(?=[\s\S]*a1b2c3d4-0001-4a00-8000-000000000001)(?=[\s\S]*a1b2c3d4-0001-4a00-8000-000000000002)'
+    min: 1
+  - name: no-other-accounts
+    # Not Instagram (disconnected) or Reddit.
+    type: tool_used
+    tool: mcp__plugin_bolta_bolta__set-content-campaign-targets
+    input_match: 'a1b2c3d4-0001-4a00-8000-00000000000[34]'
+    min: 0
+    max: 0
+  - name: adds-the-page
+    # The pricing page as a url source.
+    type: tool_used
+    tool: mcp__plugin_bolta_bolta__set-content-campaign-targets
+    input_match: '"kind"\W{1,6}url[\s\S]*https://northwind\.example/pricing|https://northwind\.example/pricing[\s\S]*"kind"\W{1,6}url'
+    min: 1
+  - name: analyzes-the-page
+    # Reads the new source, with kind and ref as on the campaign.
+    type: tool_used
+    tool: mcp__plugin_bolta_bolta__analyze-content-campaign-source
+    input_match: '^(?=[\s\S]*"kind"\W{1,6}url)(?=[\s\S]*https://northwind\.example/pricing)(?=[\s\S]*campaign_id)'
+    min: 1
+  - name: attached-then-read
+    # A source is read only after it is attached.
+    type: tool_order
+    before: mcp__plugin_bolta_bolta__set-content-campaign-targets
+    after: mcp__plugin_bolta_bolta__analyze-content-campaign-source
+  - name: accounts-then-start
+    # Never started before it has accounts.
+    type: tool_order
+    before: mcp__plugin_bolta_bolta__set-content-campaign-targets
+    after:
+      tool: mcp__plugin_bolta_bolta__set-content-campaign-status
+      input_match: 'activate'
+  - name: targets-not-denied
+    # Setting targets on the campaign made here passes the guard, so the mock answered (a denied call never reaches the mock).
+    type: regex
+    pattern: 'set-content-campaign-targets'
+    target: mock_calls
+  - name: no-bulk-create-posts
+    # Bolta writes this one; Claude does not also save drafts into it.
+    type: tool_used
+    tool: mcp__plugin_bolta_bolta__bulk-create-posts
+    min: 0
+    max: 0
+  - name: no-accounts-by-update
+    # Accounts are not set through the brief tool.
+    type: tool_used
+    tool: mcp__plugin_bolta_bolta__update-content-campaign
+    input_match: 'account_ids|context_sources|context_notes'
+    min: 0
+    max: 0
+  - name: no-dashboard-handoff
+    # Claude set the accounts itself: it never sends the user to the campaign page to pick them (a link to see or start the campaign is fine).
+    type: regex
+    pattern: '\b(pick|choose|select|add|set|connect)\b(?:[^.\n]|\.\w){0,60}\baccounts?\b(?:[^.\n]|\.\w){0,100}dashboard/campaigns|dashboard/campaigns(?:[^.\n]|\.\w){0,140}\b(pick|choose|select)\b(?:[^.\n]|\.\w){0,40}\baccounts?\b|\bsay ["“'']?done\b'
+    flags: i
+    match: not_contains
+  - name: no-false-start
+    # Never says the campaign is running (the start check is denied under claude -p).
+    type: regex
+    pattern: '\b(campaign|it)\s+(is|''s)\s+(now\s+)?(live|running|started|active|on)\b|\bstarted (the|your) campaign|\b(i|we)(''ve| have)? started\b'
+    flags: i
+    match: not_contains
+  - name: no-ids-or-jargon
+    # Plain words: no bare ids (an id inside a link is part of the link), no tool names, no fingerprints.
+    type: regex
+    pattern: '(?<!/)\b[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-|\bfingerprint|\bapprove-many|\breject-post|\bMCP\b'
+    flags: i
+    match: not_contains
