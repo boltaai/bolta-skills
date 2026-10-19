@@ -12,6 +12,7 @@ Use these in everything the user reads. Before the colon: what Bolta's data says
 - use_suggested_time: best time.
 - Published / Partially Published / Failed: went out / went out on 2 of 3 accounts / didn't go out, because...
 - Quality Blocked: held back, needs a human edit.
+- Rejected: turned down.
 - Routine: Bolta routine on first mention, "work Bolta repeats for you". Never a bare "routine" where Claude's own scheduling could be meant.
 - Claude scheduled task: Claude weekly job.
 - Content Campaign: campaign. The only name; never "push".

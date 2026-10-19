@@ -7,7 +7,7 @@
 
 ## Agencies: one connection per client
 
-Name each client's connection after the client, with "bolta" in the name: Bolta's checks only watch names containing it. Each connection asks its own first approval.
+Name each connection after its client, like "bolta-acme". Checks go by tool name, so any name works. Each connection asks its own first approval.
 
 - **Claude Code:** `claude mcp add --transport http bolta-acme https://mcp.bolta.ai/mcp`, then `/mcp`, pick bolta-acme, sign in and choose Acme's workspace.
 - **claude.ai or Cowork:** Customize > Connectors > Add custom connector, address https://mcp.bolta.ai/mcp, a name like "Bolta Acme". Sign in and choose Acme's workspace. Team and Enterprise: only an Owner can add it. Free plan: one custom connector in all.
@@ -18,7 +18,7 @@ Name each client's connection after the client, with "bolta" in the name: Bolta'
 - No client named: ask once. "Acme, like before?"
 - Never carry an account, group or post across connections; read again there.
 - "Switch to Beta": use Beta's connection if present, else explain how to add it.
-- Two Bolta entries on one workspace (the plugin's plus one added by hand): keep one.
+- Two Bolta entries on one workspace (the plugin's and your own): keep your own and install `bolta-skills` instead.
 
 ## Reconnecting Bolta itself
 

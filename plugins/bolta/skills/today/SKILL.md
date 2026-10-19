@@ -4,20 +4,20 @@ description: >-
   Show a five-line summary of what needs you in Bolta: how many posts wait
   for your yes, what goes out this week, Bolta routines and campaigns running,
   anything ended or broken. Use when someone says what needs me, catch me up,
-  or is vague about Bolta. Not for what's waiting: that's review.
+  or is vague about Bolta. Not for "what's waiting for me": that's review.
 ---
 
 ## Done when
 
-Five lines or fewer on what needs the user, then one next step. Other Bolta asks land in the skill that owns them.
+Five lines or fewer on what needs the user, then one next step.
 
 ## Know this
 
-- **Look once.** On the first Bolta ask, read workspace, settings, accounts and voice together; every skill reuses them. Re-read only after an error, a change, or "I reconnected it".
+- **Look once.** On the first Bolta ask, read workspace, settings, accounts and voice together; every skill reuses them. Re-read only after an error or a change.
 - "No voice profile" is an answer, not an error. No accounts or no voice: hand to `start`.
-- **The summary** ([references/what-needs-me.md](references/what-needs-me.md)): read fresh, all at once. At most 5 lines, no empty ones, then the most urgent next step: one question only. Waiting = `total_team` + `total_recurring`; reply drafts (`total_hunter`) count apart. Never name Bolta's writer (`post_creator`).
+- **The summary** ([references/what-needs-me.md](references/what-needs-me.md)): read fresh, all at once. At most 5 lines, no empty ones; Running: each Bolta routine's next drafts (day, time), each campaign's week. Then the most urgent next step: one question only. Waiting = `total_team` + `total_recurring`; reply drafts (`total_hunter`) count apart. Never name Bolta's writer (`post_creator`), whatever its name.
 - **Choose quietly.** One thing now: `post`. "Every", "weekly", "keep posting", "each time X": `routine`. "Launch", "sale", "event", "for 3 weeks", "by Nov 3": `campaign`. Unsure? Can they name the subject, the end, and want a verdict? Any no: `routine`. Still unclear? Ask once: "Should this keep going with no end, or is it about one thing that ends?"
-- Before the first reply, read [references/plain-words.md](references/plain-words.md): words to use, words never to say, how to show results.
+- Before the first reply, read [references/plain-words.md](references/plain-words.md): words to use and never say, how to show results.
 
 ## Tools
 

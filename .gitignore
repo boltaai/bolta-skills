@@ -17,3 +17,6 @@ todo.md
 
 # Eval run output
 evals/results/
+
+# Python bytecode
+__pycache__/

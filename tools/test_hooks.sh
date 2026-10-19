@@ -1,6 +1,11 @@
 #!/bin/sh
 # Tests for the Bolta hook scripts (guard v2, the batch-window markers, the
-# new-message reset, the house rules and the auth notice). Plain POSIX shell.
+# new-message reset, the house rules and the auth notice), including the tools
+# made for Claude (approve-many-posts, reject-post, set-content-campaign-targets,
+# analyze-content-campaign-source) and the skills-only bundle in
+# plugins/bolta-skills (generated from the full plugin: same hooks and scripts,
+# one house-rules line aside). The matchers of both fit any server name.
+# Plain POSIX shell.
 #
 #   sh tools/test_hooks.sh                 every awk found: the default awk,
 #                                          mawk, gawk, gawk --posix, BWK awk
@@ -104,6 +109,9 @@ PID2=55555555-5555-4555-8555-555555555555
 RID1=0f8e5a4c-9b2d-4e61-a3c7-1d2e3f4a5b6c
 RID2=1a9f6b5d-0c3e-4f72-b4d8-2e3f4a5b6c7d
 RID1UP=0F8E5A4C-9B2D-4E61-A3C7-1D2E3F4A5B6C
+CID1=6b0a7c3d-1e2f-4a50-8b9c-3d4e5f6a7b8c
+CID2=7c1b8d4e-2f3a-4b61-9cad-4e5f6a7b8c9d
+CID1UP=6B0A7C3D-1E2F-4A50-8B9C-3D4E5F6A7B8C
 
 P=mcp__plugin_bolta_bolta__
 SP=mcp__plugin_bolta_bolta
@@ -143,6 +151,9 @@ envelope() { # <ok true|false> <data json> <error json>
 as_string() { printf '"%s"' "$(jesc "$1")"; }
 OK_APPROVE=$(as_string "{\"ok\":true,\"data\":{\"id\":\"$PID\",\"status\":\"Scheduled\"},\"error\":null,\"error_kind\":null,\"meta\":null,\"next_step\":null}")
 OK_APPROVE_BLOCKS=$(as_text "$(envelope true "{\"id\": \"$PID\", \"status\": \"Scheduled\", \"scheduled_time\": \"2026-10-20T09:00:00\"}" null)")
+OK_MANY=$(as_string "{\"ok\":true,\"data\":{\"results\":[{\"post_id\":\"$PID\",\"ok\":true,\"status\":\"Scheduled\",\"scheduled\":true},{\"post_id\":\"$PID2\",\"ok\":false,\"error\":\"stale_review\"}]},\"error\":null,\"error_kind\":null,\"meta\":null,\"next_step\":null}")
+FAIL_MANY=$(as_string "{\"ok\":false,\"data\":{\"results\":[{\"post_id\":\"$PID\",\"ok\":false,\"error\":\"stale_review\"}]},\"error\":\"None of these posts could be approved.\",\"error_kind\":\"invalid\",\"meta\":null,\"next_step\":null}")
+OK_REJECT=$(as_string "{\"ok\":true,\"data\":{\"post_id\":\"$PID\",\"status\":\"Rejected\"},\"error\":null,\"error_kind\":null,\"meta\":null,\"next_step\":null}")
 OK_DELETE=$(as_text "$(envelope true "{\"deleted\": true, \"id\": \"$PID\", \"restorable_until\": \"2026-10-24T09:00:00Z\"}" null)")
 FAIL_STALE=$(as_text "$(envelope false "{\"code\": \"stale_review\"}" '"This post changed since it was read. Re-read it and approve again."')")
 
@@ -224,6 +235,9 @@ input_for() {
     run-routine-now|archive-routine|activate-routine|resume-routine|pause-routine) echo "{\"routine_id\":\"$RID1\"}" ;;
     voice-generate) echo "{\"workspace_id\":\"$WS\",\"topics\":[\"pricing\"],\"platform\":\"linkedin\"}" ;;
     approve-post) echo "{\"workspace_id\":\"$WS\",\"post_id\":\"$PID\",\"schedule_mode\":\"approve_only\"}" ;;
+    approve-many-posts) echo "{\"items\":[{\"post_id\":\"$PID\",\"expected_fingerprint\":\"5d0c7e21a9f34b68\",\"schedule_mode\":\"approve_only\"},{\"post_id\":\"$PID2\",\"expected_fingerprint\":\"0e93b6d1c47a28f5\",\"schedule_mode\":\"use_suggested_time\"},{\"post_id\":\"$PID\",\"expected_fingerprint\":\"a1\",\"schedule_mode\":\"set_fixed_time\",\"fixed_time\":\"2026-10-21T09:00:00\"}]}" ;;
+    reject-post) echo "{\"post_id\":\"$PID\",\"reason\":\"Too salesy for our readers\",\"categories\":[\"too_salesy\"]}" ;;
+    set-content-campaign-targets) echo "{\"campaign_id\":\"$CID1\",\"account_ids\":[\"$ACC\"],\"context_notes\":\"Launch on Nov 3\"}" ;;
     approve-recurring-review) echo "{\"review_id\":\"$PID\",\"approveWithSchedule\":true,\"useSuggestedTime\":true}" ;;
     schedule-post) echo "{\"workspace_id\":\"$WS\",\"post_id\":\"$PID\",\"time\":\"2026-10-21T09:00:00\"}" ;;
     delete-post) echo "{\"post_id\":\"$PID\"}" ;;
@@ -231,7 +245,7 @@ input_for() {
 }
 
 ALWAYS="publish-post send-outreach-reply publish-engagement-reply reply-to-social-content react-to-social-content update-post-platform-details update-social-bucket restore-deleted update-voice-profile update-business-dna extract-business-dna run-routine-now voice-generate archive-routine reject-recurring-review"
-BATCH="approve-post approve-recurring-review schedule-post delete-post"
+BATCH="approve-post approve-many-posts approve-recurring-review schedule-post delete-post reject-post"
 
 for lvl in standard careful; do
   fresh
@@ -290,6 +304,9 @@ for lvl in standard careful; do
     check_guard "table: campaign $act asks ($lvl)" ask "$lvl" "$(pre "${P}set-content-campaign-status" "{\"campaign_id\":\"$PID\",\"action\":\"$act\"}")"
   done
   check_guard "table: pause-routine is never gated ($lvl)" silent "$lvl" "$(pre "${P}pause-routine" "$(input_for pause-routine)")"
+  check_guard "table: set-content-campaign-targets on a campaign not made here asks ($lvl)" ask "$lvl" "$(pre "${P}set-content-campaign-targets" "$(input_for set-content-campaign-targets)")"
+  check_guard "table: analyze-content-campaign-source only reads ($lvl)" silent "$lvl" "$(pre "${P}analyze-content-campaign-source" "{\"campaign_id\":\"$CID1\",\"kind\":\"url\",\"ref\":\"https://acme.example/pricing\"}")"
+  check_guard "table: update-content-campaign (the brief) stays silent ($lvl)" silent "$lvl" "$(pre "${P}update-content-campaign" "{\"campaign_id\":\"$CID1\",\"theme\":\"New pricing\"}")"
 done
 check_guard "campaign activate says it uses credits" ask standard "$(pre "${P}set-content-campaign-status" "{\"campaign_id\":\"$PID\",\"action\":\"activate\"}")" "Uses credits now"
 check_guard "campaign complete says it can't be undone" ask standard "$(pre "${P}set-content-campaign-status" "{\"campaign_id\":\"$PID\",\"action\":\"complete\"}")" "can't be undone"
@@ -301,11 +318,20 @@ check_guard "voice-generate says it uses credits" ask standard "$(pre "${P}voice
 check_guard "archive-routine says it can't be undone" ask standard "$(pre "${P}archive-routine" "$(input_for archive-routine)")" "can't be undone"
 check_guard "the reason names the connection (agency)" ask standard "$(pre "${A}approve-post" "$(input_for approve-post)")" "(bolta-acme)"
 check_guard "the reason names the connection (plugin)" ask standard "$(pre "${P}publish-post" "$(input_for publish-post)")" "(bolta)"
-check_guard "first approve explains the batch" ask standard "$(pre "${P}approve-post" "$(input_for approve-post)" "$SID2")" "other approvals, schedules and deletes skip this check"
-check_guard "first delete explains its batch covers deletes only" ask standard "$(pre "${P}delete-post" "$(input_for delete-post)" "$SID2")" "other deletes skip this check"
+check_guard "first approve explains the batch" ask standard "$(pre "${P}approve-post" "$(input_for approve-post)" "$SID2")" "other approvals, no's, schedules and deletes skip this check"
+check_guard "first delete explains its batch covers deletes only" ask standard "$(pre "${P}delete-post" "$(input_for delete-post)" "$SID2")" "other no's and deletes skip this check"
 check_guard "update-routine not made here says it may post without asking" ask standard "$(pre "${P}update-routine" "{\"routine_id\":\"$RID2\",\"instructions\":\"x\"}")" "may post without asking you"
 check_guard "the site read says it can replace about your business" ask standard "$(pre "${P}extract-business-dna" "$(input_for extract-business-dna)")" "replace what Bolta knows about your business"
 check_guard "a final no on a repeating post says it can't be undone" ask standard "$(pre "${P}reject-recurring-review" "$(input_for reject-recurring-review)")" "can't be undone"
+check_guard "approve-many-posts says how many posts" ask standard "$(pre "${P}approve-many-posts" "$(input_for approve-many-posts)")" "approving 3 posts"
+check_guard "approve-many-posts with one item does not say 1 posts" ask standard "$(pre "${P}approve-many-posts" "{\"items\":[{\"post_id\":\"$PID\",\"expected_fingerprint\":\"a1\"}]}")" "approving posts from the list above"
+check_guard "approve-many-posts with no items still asks" ask standard "$(pre "${P}approve-many-posts" '{"items":[]}')" "approving posts"
+check_guard "approve-many-posts with items that are not a list still asks" ask standard "$(pre "${P}approve-many-posts" '{"items":"all"}')"
+check_guard "approve-many-posts explains the batch" ask standard "$(pre "${P}approve-many-posts" "$(input_for approve-many-posts)")" "other approvals, no's, schedules and deletes skip this check"
+check_guard "reject-post says it keeps the post as Rejected" ask standard "$(pre "${P}reject-post" "$(input_for reject-post)")" "Rejected"
+check_guard "reject-post explains its batch covers no's and deletes only" ask standard "$(pre "${P}reject-post" "$(input_for reject-post)")" "other no's and deletes skip this check"
+check_guard "set-content-campaign-targets says it can change a running campaign" ask standard "$(pre "${P}set-content-campaign-targets" "$(input_for set-content-campaign-targets)")" "A running campaign writes its next weeks"
+check_guard "set-content-campaign-targets in careful mode says so" ask careful "$(pre "${P}set-content-campaign-targets" "$(input_for set-content-campaign-targets)")" "careful mode"
 
 # =====================================================================================
 # 2. The batch window
@@ -372,6 +398,91 @@ forge_window "$SP" 601 "" del
 check_guard "kinds: a delete window 601 seconds old asks" ask standard "$(pre "${P}delete-post" "$(input_for delete-post)")"
 printf '%s %s %s\n' "$(turn_token)" "$(nowsec)" "$PROMPT_ID" > "$(mdir)/win-$SP"
 check_guard "kinds: a window file with no kind is never used" ask standard "$(pre "${P}approve-post" "$(input_for approve-post)")"
+
+# approve-many-posts: one check for the whole batch, then the reply's other
+# approvals, no's, schedules and deletes pass.
+fresh
+new_turn "1 and 3 yes, 2 too salesy, 5 drop"
+check_guard "many: the first batch asks" ask standard "$(pre "${P}approve-many-posts" "$(input_for approve-many-posts)")"
+mark "${P}approve-many-posts" "$(input_for approve-many-posts)" "$OK_MANY"
+assert "many: a successful batch (some items stale) opens an approval window" test -f "$(mdir)/win-go-$SP"
+assert "many: it opens no delete-only window" no_file "$(mdir)/win-del-$SP"
+check_guard "many: a second batch in the same reply is silent" silent standard "$(pre "${P}approve-many-posts" "$(input_for approve-many-posts)")"
+check_guard "many: an approve in the same reply is silent" silent standard "$(pre "${P}approve-post" "$(input_for approve-post)")"
+check_guard "many: a no in the same reply is silent" silent standard "$(pre "${P}reject-post" "$(input_for reject-post)")"
+check_guard "many: a delete in the same reply is silent" silent standard "$(pre "${P}delete-post" "$(input_for delete-post)")"
+check_guard "many: publish-post is never covered" ask standard "$(pre "${P}publish-post" "$(input_for publish-post)")"
+check_guard "many: careful ignores the window" ask careful "$(pre "${P}approve-many-posts" "$(input_for approve-many-posts)")" "Careful mode"
+check_guard "many: careful asks for a no too" ask careful "$(pre "${P}reject-post" "$(input_for reject-post)")" "Careful mode"
+check_guard "many: another connection still asks" ask standard "$(pre "${A}approve-many-posts" "$(input_for approve-many-posts)")"
+check_guard "many: a user-added connection still asks" ask standard "$(pre "${U}approve-many-posts" "$(input_for approve-many-posts)")"
+check_guard "many: a claude.ai connector still asks" ask standard "$(pre "${C}approve-many-posts" "$(input_for approve-many-posts)")"
+check_guard "many: another session still asks" ask standard "$(pre "${P}approve-many-posts" "$(input_for approve-many-posts)" "$SID2")"
+new_turn "next message"
+check_guard "many: after a new message the next batch asks again" ask standard "$(pre "${P}approve-many-posts" "$(input_for approve-many-posts)")"
+check_guard "many: and so does a no" ask standard "$(pre "${P}reject-post" "$(input_for reject-post)")"
+# An approve opens the window for a batch too.
+fresh
+new_turn
+mark "${P}approve-post" "$(input_for approve-post)" "$OK_APPROVE"
+check_guard "many: an approve OK covers the next batch" silent standard "$(pre "${P}approve-many-posts" "$(input_for approve-many-posts)")"
+# A batch that fails (none approved) opens nothing.
+fresh
+new_turn
+mark "${P}approve-many-posts" "$(input_for approve-many-posts)" "$FAIL_MANY"
+check_guard "many: a batch where none was approved opens no window" ask standard "$(pre "${P}approve-many-posts" "$(input_for approve-many-posts)")"
+fresh
+new_turn
+mark "${P}approve-many-posts" "$(input_for approve-many-posts)" '[{"type":"text","text":"Error: Something broke"}]'
+check_guard "many: an error text opens no window" ask standard "$(pre "${P}approve-many-posts" "$(input_for approve-many-posts)")"
+
+# reject-post: a no is a decision on the user's behalf. Its OK covers more
+# no's and deletes, never an approval, a schedule or a post.
+fresh
+new_turn "2 and 4 too salesy, 1 yes"
+check_guard "reject: the first no asks" ask standard "$(pre "${P}reject-post" "$(input_for reject-post)")"
+mark "${P}reject-post" "$(input_for reject-post)" "$OK_REJECT"
+assert "reject: a successful no opens a no-and-delete window" test -f "$(mdir)/win-del-$SP"
+assert "reject: it opens no approval window" no_file "$(mdir)/win-go-$SP"
+check_guard "reject: a second no in the same reply is silent" silent standard "$(pre "${P}reject-post" "{\"post_id\":\"$PID2\",\"reason\":\"Too long\",\"categories\":[\"too_long\"]}")"
+check_guard "reject: a delete in the same reply is silent" silent standard "$(pre "${P}delete-post" "$(input_for delete-post)")"
+check_guard "reject: an approve after a no OK asks" ask standard "$(pre "${P}approve-post" "$(input_for approve-post)")"
+check_guard "reject: a batch approve after a no OK asks" ask standard "$(pre "${P}approve-many-posts" "$(input_for approve-many-posts)")"
+check_guard "reject: a schedule after a no OK asks" ask standard "$(pre "${P}schedule-post" "$(input_for schedule-post)")"
+check_guard "reject: careful ignores the no window" ask careful "$(pre "${P}reject-post" "$(input_for reject-post)")"
+check_guard "reject: another connection's no still asks" ask standard "$(pre "${A}reject-post" "$(input_for reject-post)")"
+new_turn "again"
+assert "reject: a new message closes the no window" no_file "$(mdir)/win-del-$SP"
+check_guard "reject: after a new message a no asks again" ask standard "$(pre "${P}reject-post" "$(input_for reject-post)")"
+# A delete OK covers a no.
+fresh
+new_turn
+mark "${P}delete-post" "$(input_for delete-post)" "$OK_DELETE"
+check_guard "reject: a delete OK covers a no" silent standard "$(pre "${P}reject-post" "$(input_for reject-post)")"
+check_guard "reject: a delete OK never covers a batch approve" ask standard "$(pre "${P}approve-many-posts" "$(input_for approve-many-posts)")"
+fresh
+new_turn
+mark "${P}reject-post" "$(input_for reject-post)" "$(as_string '{"ok":false,"data":null,"error":"reason is required","error_kind":"invalid","meta":null,"next_step":null}')"
+check_guard "reject: a failed no opens no window" ask standard "$(pre "${P}reject-post" "$(input_for reject-post)")"
+fresh
+new_turn
+forge_window "$SP" 30 "" del
+check_guard "reject: a fresh delete-only window passes a no" silent standard "$(pre "${P}reject-post" "$(input_for reject-post)")"
+forge_window "$SP" 601 "" del
+check_guard "reject: a no window 601 seconds old asks" ask standard "$(pre "${P}reject-post" "$(input_for reject-post)")"
+fresh
+new_turn
+forge_window "$SP" 30
+check_guard "reject: a fresh approval window passes a no" silent standard "$(pre "${P}reject-post" "$(input_for reject-post)")"
+check_guard "reject: a fresh approval window passes a batch" silent standard "$(pre "${P}approve-many-posts" "$(input_for approve-many-posts)")"
+# No prompt_id, no window.
+fresh
+PROMPT_ID=""
+quiet "many: new message with no prompt_id prints nothing" "$newturn" "$(prompt "yes")"
+mark "${P}approve-many-posts" "$(input_for approve-many-posts)" "$OK_MANY"
+assert "many: no prompt_id, no window written" no_file "$(mdir)/win-go-$SP"
+check_guard "many: hosts with no prompt_id ask on every batch" ask standard "$(pre "${P}approve-many-posts" "$(input_for approve-many-posts)")"
+next_prompt
 
 # Age limits (600 seconds from the first OK).
 fresh
@@ -657,6 +768,110 @@ mark "${P}create-routine" "$CR_IN" "$(as_text "$(envelope true "{\"routine\": {\
 check_guard "routine: a reply as text blocks also counts" silent standard "$(pre "${P}activate-routine" "{\"routine_id\":\"$RID1\"}")"
 
 # =====================================================================================
+# 3b. Campaigns made in this session
+# =====================================================================================
+campaign_resp() { # <id> <status>: the real string shape
+  as_string "{\"ok\":true,\"data\":{\"campaign\":{\"id\":\"$1\",\"name\":\"New pricing\",\"status\":\"$2\",\"strategy_key\":\"problem_solution\",\"account_ids\":[]}},\"error\":null,\"error_kind\":null,\"meta\":null,\"next_step\":null}"
+}
+CC_IN='{"name":"New pricing","strategy_key":"problem_solution","theme":"The new pricing","starts_on":"2026-10-19","ends_on":"2026-11-08"}'
+T1="{\"campaign_id\":\"$CID1\",\"account_ids\":[\"$ACC\"],\"context_notes\":\"Launch on Nov 3\"}"
+T2="{\"campaign_id\":\"$CID2\",\"account_ids\":[\"$ACC\"]}"
+fresh
+new_turn
+check_guard "campaign: creating one is not gated" silent standard "$(pre "${P}create-content-campaign" "$CC_IN")"
+check_guard "campaign: before it exists, setting targets asks" ask standard "$(pre "${P}set-content-campaign-targets" "$T1")"
+mark "${P}create-content-campaign" "$CC_IN" "$(campaign_resp "$CID1" draft)"
+assert "campaign: the marker is written" test -f "$(mdir)/campaign-$SP-$CID1"
+check_guard "campaign: setting targets on the draft made here is silent" silent standard "$(pre "${P}set-content-campaign-targets" "$T1")"
+check_guard "campaign: same id in capitals is the same campaign" silent standard "$(pre "${P}set-content-campaign-targets" "{\"campaign_id\":\"$CID1UP\",\"duration_weeks\":2}")"
+check_guard "campaign: careful asks even for the draft made here" ask careful "$(pre "${P}set-content-campaign-targets" "$T1")"
+check_guard "campaign: another campaign asks" ask standard "$(pre "${P}set-content-campaign-targets" "$T2")"
+check_guard "campaign: same id on another connection asks" ask standard "$(pre "${A}set-content-campaign-targets" "$T1")"
+check_guard "campaign: same id in another session asks" ask standard "$(pre "${P}set-content-campaign-targets" "$T1" "$SID2")"
+check_guard "campaign: a malformed id asks" ask standard "$(pre "${P}set-content-campaign-targets" '{"campaign_id":"../../etc","account_ids":[]}')"
+check_guard "campaign: a missing id asks" ask standard "$(pre "${P}set-content-campaign-targets" '{"account_ids":[]}')"
+check_guard "campaign: starting it still asks (credits)" ask standard "$(pre "${P}set-content-campaign-status" "{\"campaign_id\":\"$CID1\",\"action\":\"activate\"}")" "Uses credits now"
+check_guard "campaign: no approval window from a campaign marker" ask standard "$(pre "${P}approve-post" "$(input_for approve-post)")"
+new_turn "next message"
+check_guard "campaign: the marker lasts past a new message" silent standard "$(pre "${P}set-content-campaign-targets" "{\"campaign_id\":\"$CID1\",\"context_sources\":[{\"kind\":\"url\",\"ref\":\"https://acme.example/pricing\"}]}")"
+mark "${P}set-content-campaign-status" "{\"campaign_id\":\"$CID1\",\"action\":\"pause\"}" "$(as_text "$(envelope true '{}' null)")"
+check_guard "campaign: pausing keeps the marker" silent standard "$(pre "${P}set-content-campaign-targets" "$T1")"
+mark "${P}set-content-campaign-status" "{\"campaign_id\":\"$CID2\",\"action\":\"activate\"}" "$(as_text "$(envelope true '{}' null)")"
+check_guard "campaign: starting another campaign keeps this marker" silent standard "$(pre "${P}set-content-campaign-targets" "$T1")"
+mark "${P}set-content-campaign-status" "{\"campaign_id\":\"$CID1\",\"action\":\"activate\"}" "$FAIL_STALE"
+assert "campaign: starting it drops the marker (even if the call failed)" no_file "$(mdir)/campaign-$SP-$CID1"
+check_guard "campaign: after that, setting targets asks" ask standard "$(pre "${P}set-content-campaign-targets" "$T1")"
+
+for act in resume complete archive; do
+  fresh
+  new_turn
+  mark "${P}create-content-campaign" "$CC_IN" "$(campaign_resp "$CID1" draft)"
+  mark "${P}set-content-campaign-status" "{\"campaign_id\":\"$CID1\",\"action\":\"$act\"}" "$(as_text "$(envelope true '{}' null)")"
+  check_guard "campaign: $act drops the marker" ask standard "$(pre "${P}set-content-campaign-targets" "$T1")"
+done
+fresh
+new_turn
+mark "${P}create-content-campaign" "$CC_IN" "$(campaign_resp "$CID1" draft)"
+mark "${P}create-content-campaign" "$CC_IN" "$(campaign_resp "$CID2" draft)"
+mark "${P}set-content-campaign-status" '{"campaign_id":"not-a-uuid","action":"activate"}' "$(as_text "$(envelope true '{}' null)")"
+assert "campaign: a status change with an unreadable id drops every marker on that connection" sh -c '! ls "$1"/campaign-* >/dev/null 2>&1' x "$(mdir)"
+fresh
+new_turn
+mark "${P}create-content-campaign" "$CC_IN" "$(campaign_resp "$CID1" draft)"
+mark "${P}set-content-campaign-status" '{"campaign_id":"not-a-uuid","action":"pause"}' "$(as_text "$(envelope true '{}' null)")"
+assert "campaign: a pause with an unreadable id keeps the markers" test -f "$(mdir)/campaign-$SP-$CID1"
+
+# Campaign markers must read cleanly and be under 24 hours old.
+fresh
+new_turn
+: > "$(mdir)/campaign-$SP-$CID2"
+check_guard "campaign: an empty (forged) marker asks" ask standard "$(pre "${P}set-content-campaign-targets" "$T2")"
+printf 'not a marker!\n' > "$(mdir)/campaign-$SP-$CID2"
+check_guard "campaign: an unreadable marker asks" ask standard "$(pre "${P}set-content-campaign-targets" "$T2")"
+printf 'tok-1 %s\n' "$(( $(nowsec) - 86500 ))" > "$(mdir)/campaign-$SP-$CID2"
+check_guard "campaign: a marker over 24 hours old asks" ask standard "$(pre "${P}set-content-campaign-targets" "$T2")"
+printf 'tok-1 %s\n' "$(( $(nowsec) - 3700 ))" > "$(mdir)/campaign-$SP-$CID2"
+check_guard "campaign: a marker over an hour old asks (it may have been started on the dashboard since)" ask standard "$(pre "${P}set-content-campaign-targets" "$T2")"
+printf 'tok-1 %s\n' "$(( $(nowsec) + 600 ))" > "$(mdir)/campaign-$SP-$CID2"
+check_guard "campaign: a marker stamped in the future asks" ask standard "$(pre "${P}set-content-campaign-targets" "$T2")"
+printf 'tok-1 %s\n' "$(( $(nowsec) - 3000 ))" > "$(mdir)/campaign-$SP-$CID2"
+check_guard "campaign: a well-formed marker under an hour old is silent" silent standard "$(pre "${P}set-content-campaign-targets" "$T2")"
+rm -f "$(mdir)/campaign-$SP-$CID2"
+ln -s "$(mdir)/turn" "$(mdir)/campaign-$SP-$CID2"
+check_guard "campaign: a marker that is a symlink asks" ask standard "$(pre "${P}set-content-campaign-targets" "$T2")"
+
+campaign_case() { # <label> <create input> <response> [skip new_turn]
+  fresh
+  [ -n "${4:-}" ] || new_turn
+  mark "${P}create-content-campaign" "$2" "$3" "" "after-call marker ($1)"
+  check_guard "campaign: no marker after $1" ask standard "$(pre "${P}set-content-campaign-targets" "$T1")"
+}
+campaign_case "a campaign that is already active" "$CC_IN" "$(campaign_resp "$CID1" active)"
+campaign_case "a campaign that is scheduled" "$CC_IN" "$(campaign_resp "$CID1" scheduled)"
+campaign_case "a failed create" "$CC_IN" "$(as_text "$(envelope false '{"code": "invalid"}' '"A campaign needs a name."')")"
+campaign_case "a create with no id in the reply" "$CC_IN" "$(as_text "$(envelope true '{"campaign": {"status": "draft"}}' null)")"
+campaign_case "a create with a malformed id" "$CC_IN" "$(as_text "$(envelope true '{"campaign": {"id": "../../x", "status": "draft"}}' null)")"
+campaign_case "a create with no status in the reply" "$CC_IN" "$(as_text "$(envelope true "{\"campaign\": {\"id\": \"$CID1\"}}" null)")"
+campaign_case "a create with no turn marker" "$CC_IN" "$(campaign_resp "$CID1" draft)" skip
+fresh
+new_turn
+mark "${P}create-content-campaign" "$CC_IN" "$(as_text "$(envelope true "{\"id\": \"$CID1\", \"status\": \"draft\"}" null)")"
+check_guard "campaign: an unwrapped reply (data.id) also counts" silent standard "$(pre "${P}set-content-campaign-targets" "$T1")"
+fresh
+new_turn
+mark "${P}create-content-campaign" "$CC_IN" "$(as_text "$(envelope true "{\"campaign\": {\"id\": \"$CID1\", \"status\": \"draft\"}}" null)")"
+check_guard "campaign: a reply as text blocks also counts" silent standard "$(pre "${P}set-content-campaign-targets" "$T1")"
+# A routine marker is not a campaign marker, and the other way round.
+fresh
+new_turn
+mark "${P}create-routine" "$CR_IN" "$(routine_resp "$CID1" review_every_artifact)"
+check_guard "campaign: a routine marker does not open a campaign" ask standard "$(pre "${P}set-content-campaign-targets" "$T1")"
+fresh
+new_turn
+mark "${P}create-content-campaign" "$CC_IN" "$(campaign_resp "$RID1" draft)"
+check_guard "campaign: a campaign marker does not switch on a routine" ask standard "$(pre "${P}activate-routine" "{\"routine_id\":\"$RID1\"}")"
+
+# =====================================================================================
 # 4. bulk-create-posts
 # =====================================================================================
 bulk() { printf '{"workspace_id":"%s","posts":[%s]}' "$WS" "$1"; }
@@ -916,28 +1131,47 @@ assert "wiring: PostToolUseFailure runs the auth notice" sh -c 'case "$1" in *sc
 assert "wiring: UserPromptSubmit runs the new-message reset" sh -c 'case "$1" in *scripts/bolta-new-turn.sh*) exit 0;; esac; exit 1' x "$(jfield hooks.UserPromptSubmit.0.hooks.0.command < "$hj")"
 assert "wiring: SessionStart runs the house rules" sh -c 'case "$1" in *scripts/bolta-house-rules.sh*) exit 0;; esac; exit 1' x "$(jfield hooks.SessionStart.0.hooks.0.command < "$hj")"
 assert "wiring: UserPromptSubmit does not block on failure" sh -c '[ "$1" != block ]' x "$(jfield hooks.UserPromptSubmit.0.hooks.0.onFailure < "$hj" 2>/dev/null)"
-GATED="publish-post schedule-post approve-post approve-recurring-review reject-recurring-review send-outreach-reply publish-engagement-reply reply-to-social-content react-to-social-content activate-routine resume-routine run-routine-now delete-post archive-routine set-content-campaign-status update-post update-post-platform-details update-social-bucket restore-deleted update-business-dna extract-business-dna update-voice-profile create-routine update-routine create-post bulk-create-posts create-wordpress-blog-post voice-generate"
+GATED="publish-post schedule-post approve-post approve-many-posts reject-post approve-recurring-review reject-recurring-review send-outreach-reply publish-engagement-reply reply-to-social-content react-to-social-content activate-routine resume-routine run-routine-now delete-post archive-routine set-content-campaign-status set-content-campaign-targets update-post update-post-platform-details update-social-bucket restore-deleted update-business-dna extract-business-dna update-voice-profile create-routine update-routine create-post bulk-create-posts create-wordpress-blog-post voice-generate"
 ngated=$(printf '%s\n' $GATED | wc -l | tr -d ' ')
 miss=""
-for pfx in "$P" "$U" "$C" "$CB" "$A" mcp__plugin_bolta_bolta-acme__; do
+for pfx in "$P" "$U" "$C" "$CB" "$A" mcp__plugin_bolta_bolta-acme__ mcp__social__ mcp__my-posts__ mcp__claude_ai_Social_posts__ mcp__0a1b2c3d-4e5f-4a6b-8c7d-9e0f1a2b3c4d__; do
   for t in $GATED; do
     printf '%s\n' "$pfx$t" | grep -Eq -- "$pre_m" || miss="$miss $pfx$t"
   done
 done
-assert "wiring: the guard matcher covers all $ngated gated tools on every connection name${miss:+ (missing:$miss)}" test -z "$miss"
+assert "wiring: the guard matcher covers all $ngated gated tools under any server name, so a Bolta added as 'social' is checked too${miss:+ (missing:$miss)}" test -z "$miss"
 extra=""
-for name in "${P}pause-routine" "${P}submit-for-review" "${P}list-workspace-posts" "${P}create-content-campaign" "${P}list-business-dna" "${P}update-outreach-reply" mcp__github__create-post "${P}publish-post-x" "x${P}publish-post"; do
+# Another server's tool that shares a Bolta tool's name (mcp__github__create-post) gets the check too, by design:
+# the guard can only ask, and the plugin cannot know which server is Bolta.
+for name in "${P}pause-routine" "${P}submit-for-review" "${P}list-workspace-posts" "${P}create-content-campaign" "${P}analyze-content-campaign-source" "${P}update-content-campaign" "${P}approve-many-posts-x" "${P}reject-post-x" "${P}list-business-dna" "${P}update-outreach-reply" mcp__github__search_repositories mcp__social__list-nothing "${P}publish-post-x" "x${P}publish-post" mcp____publish-post; do
   printf '%s\n' "$name" | grep -Eq -- "$pre_m" && extra="$extra $name"
 done
 assert "wiring: the guard matcher leaves other tools alone${extra:+ (matched:$extra)}" test -z "$extra"
 labels=$(awk '/^case "\$tool" in/ { a = 1; next } a && /^  [a-z][a-z0-9|-]*\)[ \t]*$/ { sub(/^  /, ""); sub(/\)[ \t]*$/, ""); gsub(/\|/, "\n"); print }' "$guard" | sort)
 alt=$(printf '%s\n' "$pre_m" | sed -e 's/.*__(//' -e 's/)\$$//' | tr '|' '\n' | sort)
 assert "wiring: the guard has a case for exactly the tools its matcher lists" test "$labels" = "$alt"
-mwant="approve-post approve-recurring-review schedule-post delete-post create-routine update-routine"
+mwant="approve-post approve-many-posts approve-recurring-review schedule-post delete-post reject-post create-routine update-routine create-content-campaign set-content-campaign-status"
 mbad=""
 for t in $mwant; do printf '%s\n' "$P$t" | grep -Eq -- "$mark_m" || mbad="$mbad -$t"; done
-for t in publish-post activate-routine bulk-create-posts list-routines; do printf '%s\n' "$P$t" | grep -Eq -- "$mark_m" && mbad="$mbad +$t"; done
+for t in publish-post activate-routine bulk-create-posts list-routines set-content-campaign-targets analyze-content-campaign-source update-content-campaign; do printf '%s\n' "$P$t" | grep -Eq -- "$mark_m" && mbad="$mbad +$t"; done
 assert "wiring: the marker runs after exactly the window and routine tools${mbad:+ ($mbad)}" test -z "$mbad"
+full_notice=$(jfield hooks.PostToolUse.0.matcher < "$hj")
+full_fail=$(jfield hooks.PostToolUseFailure.0.matcher < "$hj")
+miss=""
+for pfx in "$P" "$U" "$C" mcp__social__ mcp__claude_ai_Social_posts__; do
+  for tool in $GATED list-inbox-items get-workspace list-accounts; do
+    for m in "$full_notice" "$full_fail"; do
+      printf '%s\n' "$pfx$tool" | grep -Eq -- "$m" || miss="$miss $pfx$tool"
+    done
+  done
+done
+assert "wiring: the reconnect notice covers Bolta's tools under any server name${miss:+ (missing:$miss)}" test -z "$miss"
+mbad=""
+for pfx in mcp__social__ mcp__claude_ai_Social_posts__; do
+  for tool in $mwant; do printf '%s\n' "$pfx$tool" | grep -Eq -- "$mark_m" || mbad="$mbad -$pfx$tool"; done
+done
+assert "wiring: the marker runs after the window and routine tools under any server name${mbad:+ ($mbad)}" test -z "$mbad"
+assert "wiring: no matcher wants a server named bolta" sh -c '! printf "%s\n" "$1" | grep -Fq "Bb"' x "$pre_m$mark_m$full_notice$full_fail"
 for s in guard-bolta-writes.sh bolta-mark.sh bolta-new-turn.sh bolta-house-rules.sh bolta-auth-notice.sh; do
   assert "wiring: $s is executable" test -x "$scripts/$s"
   assert "wiring: $s is plain POSIX shell" test "$(head -n 1 "$scripts/$s")" = "#!/bin/sh"
@@ -961,6 +1195,115 @@ assert "wiring: the old confirm_scope setting is gone" sh -c '! sh "$1" field us
 assert "wiring: the reader is executable shell" test -x "$reader" -a "$(head -n 1 "$reader")" = "#!/bin/sh"
 odd=$(ls "$scripts" | grep -Ev '[.]sh$')
 assert "wiring: the scripts folder holds only .sh files${odd:+ (found: $odd)}" test -z "$odd"
+
+# =====================================================================================
+# 9. The skills-only bundle (plugins/bolta-skills): same scripts, matchers for any name
+# =====================================================================================
+# A connector or a server someone added can carry any name. Claude Code calls a
+# claude.ai connector's tools mcp__claude_ai_<name>__<tool> and a server added by
+# hand mcp__<name>__<tool>. The bundle has no server of its own.
+bplugin="$here/../plugins/bolta-skills"
+bscripts="$bplugin/scripts"
+bhj="$bplugin/hooks/hooks.json"
+if [ -d "$bplugin" ]; then
+  for s in guard-bolta-writes.sh bolta-mark.sh bolta-new-turn.sh bolta-auth-notice.sh bolta-json.sh; do
+    assert "bundle: $s is byte for byte the full plugin's" cmp -s "$scripts/$s" "$bscripts/$s"
+  done
+  for s in guard-bolta-writes.sh bolta-mark.sh bolta-new-turn.sh bolta-house-rules.sh bolta-auth-notice.sh bolta-json.sh; do
+    assert "bundle: $s is executable" test -x "$bscripts/$s"
+  done
+  assert "bundle: hooks.json is byte for byte the full plugin's" cmp -s "$hj" "$bhj"
+  # SessionStart: the full plugin says its checks are on (they run on its own server and on one added under any
+  # name, proven in a real session). The bundle cannot say that: nobody has run its checks on a real claude.ai
+  # connector, and chat runs no hooks. Its last line says they may not run; everything else is the same.
+  full_line="Bolta checks are on in this session."
+  bundle_line="Bolta checks may not run for this connection. Before anything public, a reply or a voice change, get a yes in words first."
+  bout=$(printf '{"session_id":"%s","hook_event_name":"SessionStart","source":"startup"}' "$SID" | sh "$bscripts/bolta-house-rules.sh")
+  bctx=$(printf '%s' "$bout" | jfield hookSpecificOutput.additionalContext)
+  assert "bundle: the house rules end by saying the checks may not run" test "$(printf '%s\n' "$bctx" | tail -n 1)" = "$bundle_line"
+  assert "bundle: the house rules never say the checks are on" sh -c '! printf "%s\n" "$1" | grep -Fq "checks are on"' x "$bctx"
+  assert "bundle: the house rules are otherwise the full plugin's, line for line" test "$(printf '%s\n' "$bctx" | grep -vFx "$bundle_line")" = "$(printf '%s\n' "$ctx" | grep -vFx "$full_line")"
+  assert "bundle: bolta-house-rules.sh differs from the full plugin's by that one line only" test "$(grep -vFx "$bundle_line" "$bscripts/bolta-house-rules.sh")" = "$(grep -vFx "$full_line" "$scripts/bolta-house-rules.sh")"
+  assert "bundle: it starts no connection of its own (no .mcp.json)" no_file "$bplugin/.mcp.json"
+  assert "bundle: plugin.json is named bolta-skills" test "$(jfield name < "$bplugin/.claude-plugin/plugin.json")" = bolta-skills
+  assert "bundle: confirm_level is kept (the guard reads it)" test "$(jfield userConfig.confirm_level.default < "$bplugin/.claude-plugin/plugin.json")" = standard
+  bpre=$(jfield hooks.PreToolUse.0.matcher < "$bhj")
+  bnotice=$(jfield hooks.PostToolUse.0.matcher < "$bhj")
+  bmark=$(jfield hooks.PostToolUse.1.matcher < "$bhj")
+  bfail=$(jfield hooks.PostToolUseFailure.0.matcher < "$bhj")
+  assert "bundle: the guard blocks the call if it ever fails to run" test "$(jfield hooks.PreToolUse.0.hooks.0.onFailure < "$bhj")" = block
+  assert "bundle: the guard matcher names the same tools as the full plugin's" test "$(printf '%s' "$bpre" | sed -e 's/.*__(//')" = "$(printf '%s' "$pre_m" | sed -e 's/.*__(//')"
+  assert "bundle: the marker matcher names the same tools as the full plugin's" test "$(printf '%s' "$bmark" | sed -e 's/.*__(//')" = "$(printf '%s' "$mark_m" | sed -e 's/.*__(//')"
+  miss=""
+  for pfx in "$P" "$U" "$C" "$CB" "$A" mcp__claude_ai_Social_posts__ mcp__claude_ai_Bolta_Acme__ mcp__social__ mcp__my-posts__ mcp__0a1b2c3d-4e5f-4a6b-8c7d-9e0f1a2b3c4d__; do
+    for tool in $GATED; do
+      printf '%s\n' "$pfx$tool" | grep -Eq -- "$bpre" || miss="$miss $pfx$tool"
+    done
+  done
+  assert "bundle: the guard matcher covers every gated tool under every connection name${miss:+ (missing:$miss)}" test -z "$miss"
+  miss=""
+  for pfx in "$P" "$C" mcp__claude_ai_Social_posts__ mcp__social__; do
+    for tool in approve-post approve-many-posts reject-post create-content-campaign set-content-campaign-status; do
+      printf '%s\n' "$pfx$tool" | grep -Eq -- "$bmark" || miss="$miss $pfx$tool"
+    done
+  done
+  assert "bundle: the marker matcher covers its tools under every connection name${miss:+ (missing:$miss)}" test -z "$miss"
+  miss=""
+  for pfx in "$C" mcp__claude_ai_Social_posts__ mcp__social__; do
+    for tool in $GATED list-inbox-items get-workspace list-accounts; do
+      for m in "$bnotice" "$bfail"; do
+        printf '%s\n' "$pfx$tool" | grep -Eq -- "$m" || miss="$miss $pfx$tool"
+      done
+    done
+  done
+  assert "bundle: the reconnect notice covers Bolta's tools under every connection name${miss:+ (missing:$miss)}" test -z "$miss"
+  extra=""
+  for name in mcp__github__search_repositories mcp__social__list-nothing mcp__social__approve-post-x "xmcp__social__approve-post" "mcp____approve-post" "mcp__social_approve-post" Bash; do
+    for m in "$bpre" "$bmark" "$bnotice"; do
+      printf '%s\n' "$name" | grep -Eq -- "$m" && extra="$extra $name"
+    done
+  done
+  assert "bundle: the matchers leave unrelated tools alone${extra:+ (matched:$extra)}" test -z "$extra"
+  extra=""
+  for name in "${P}pause-routine" "${P}submit-for-review" "${P}list-workspace-posts" "${P}create-content-campaign" "${P}analyze-content-campaign-source" "${P}update-content-campaign"; do
+    printf '%s\n' "$name" | grep -Eq -- "$bpre" && extra="$extra $name"
+  done
+  assert "bundle: the guard matcher still leaves Bolta's other tools alone${extra:+ (matched:$extra)}" test -z "$extra"
+  assert "bundle: no matcher wants a server named bolta" sh -c '! printf "%s\n" "$1" | grep -Fq "Bb"' x "$bpre$bmark$bnotice$bfail"
+
+  # Run the bundle's own scripts on a connector with a name that has no "bolta" in it.
+  save_guard=$guard save_mark=$markh save_new=$newturn
+  guard="$bscripts/guard-bolta-writes.sh" markh="$bscripts/bolta-mark.sh" newturn="$bscripts/bolta-new-turn.sh"
+  S=mcp__claude_ai_Social_posts__
+  fresh
+  new_turn "yes to 1 and 3, no to 2"
+  check_guard "bundle: a batch approve on a connector named Social posts asks" ask standard "$(pre "${S}approve-many-posts" "$(input_for approve-many-posts)")" "(Social_posts)"
+  check_guard "bundle: a post now on that connector asks" ask standard "$(pre "${S}publish-post" "$(input_for publish-post)")"
+  check_guard "bundle: a no on that connector asks" ask standard "$(pre "${S}reject-post" "$(input_for reject-post)")"
+  check_guard "bundle: a campaign change on that connector asks" ask standard "$(pre "${S}set-content-campaign-targets" "$(input_for set-content-campaign-targets)")"
+  check_guard "bundle: a plain draft on that connector is silent" silent standard "$(pre "${S}create-post" "{\"content\":\"Hello\",\"account_ids\":[\"$ACC\"]}")"
+  mark "${S}approve-many-posts" "$(input_for approve-many-posts)" "$OK_MANY"
+  assert "bundle: the batch window opens for that connection" test -f "$(mdir)/win-go-mcp__claude_ai_Social_posts"
+  check_guard "bundle: a second approval on that connector is silent" silent standard "$(pre "${S}approve-post" "$(input_for approve-post)")"
+  check_guard "bundle: a no on that connector is silent" silent standard "$(pre "${S}reject-post" "$(input_for reject-post)")"
+  check_guard "bundle: post now is never covered" ask standard "$(pre "${S}publish-post" "$(input_for publish-post)")"
+  check_guard "bundle: another connection still asks" ask standard "$(pre "mcp__social__approve-post" "$(input_for approve-post)")"
+  check_guard "bundle: careful mode asks on every batch" ask careful "$(pre "${S}approve-many-posts" "$(input_for approve-many-posts)")" "Careful mode"
+  fresh
+  new_turn
+  check_guard "bundle: a server added by hand under a plain name asks" ask standard "$(pre "mcp__social__schedule-post" "$(input_for schedule-post)")" "(social)"
+  check_guard "bundle: a connector named by its id asks, and the check just says Bolta" ask standard "$(pre "mcp__0a1b2c3d-4e5f-4a6b-8c7d-9e0f1a2b3c4d__publish-post" "$(input_for publish-post)")" "(Bolta)"
+  mark "mcp__social__create-content-campaign" "$CC_IN" "$(campaign_resp "$CID1" draft)"
+  assert "bundle: a campaign made through a hand-added server leaves its marker" test -f "$(mdir)/campaign-mcp__social-$CID1"
+  check_guard "bundle: filling that campaign in is silent" silent standard "$(pre "mcp__social__set-content-campaign-targets" "$T1")"
+  check_guard "bundle: another campaign on that server asks" ask standard "$(pre "mcp__social__set-content-campaign-targets" "$T2")"
+  guard=$save_guard markh=$save_mark newturn=$save_new
+  # The reconnect notice also fires for a connector under any name.
+  out=$(printf '%s' '{"hook_event_name":"PostToolUse","tool_name":"mcp__claude_ai_Social_posts__list-accounts","tool_response":[{"type":"text","text":"{\"ok\": false, \"data\": null, \"error\": \"Invalid API key\", \"error_kind\": \"denied\", \"meta\": {}, \"next_step\": null}"}]}' | sh "$bscripts/bolta-auth-notice.sh")
+  case $out in *"Do not retry the call"*) pass "bundle: the reconnect notice works for any connection name" ;; *) bad "bundle: the reconnect notice works for any connection name" "output: $out" ;; esac
+else
+  bad "bundle: plugins/bolta-skills exists" "run python3 -I tools/build_skills_bundle.py"
+fi
 
 printf '\n%s: %s cases, %s\n' "$awkname" "$n" "$([ "$fail" -eq 0 ] && echo 'all passed' || echo 'FAILURES')"
 exit "$fail"

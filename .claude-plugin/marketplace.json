@@ -9,7 +9,12 @@
     {
       "name": "bolta",
       "source": "./plugins/bolta",
-      "description": "Plan, write and schedule posts in your voice, keep posting every week with Bolta routines, and run campaigns for launches. Nothing goes out until you say yes."
+      "description": "Plan, write and schedule posts in your voice, keep posting every week with Bolta routines, and run campaigns for launches. Nothing goes out until you say yes. Brings its own Bolta connection."
+    },
+    {
+      "name": "bolta-skills",
+      "source": "./plugins/bolta-skills",
+      "description": "The same Bolta skills and checks, with no connection of its own. For people who already added Bolta as a connector or an MCP server. Install bolta or bolta-skills, not both."
     }
   ]
 }

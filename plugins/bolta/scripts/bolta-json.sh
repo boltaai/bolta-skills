@@ -228,6 +228,9 @@ function hook_common(   tn, i, j, c) {
   else { TOOL = substr(tn, j + 2); SERVER = sane(substr(tn, 1, j - 1)) }
   c = SERVER
   sub(/^mcp__/, "", c); sub(/^plugin_bolta_/, "", c); sub(/^claude_ai_/, "", c)
+  # A connection that is only an id (some hosts name a connector by its id) has
+  # no name worth showing.
+  if (length(c) >= 32 && c !~ /[^0-9A-Fa-f-]/) c = ""
   if (c != "") CONN = substr(c, 1, 60)
   return 1
 }
@@ -244,6 +247,21 @@ function routine_id(ti,   v) {
   if (jtype(ti, "routine_id") != "s") return ""
   v = tolower(jstr(ti, "routine_id"))
   return is_uuid(v) ? v : ""
+}
+
+# campaign_id in a tool input: a well-formed id, else "".
+function campaign_id(ti,   v) {
+  if (jtype(ti, "campaign_id") != "s") return ""
+  v = tolower(jstr(ti, "campaign_id"))
+  return is_uuid(v) ? v : ""
+}
+
+# How many posts an approve-many-posts call carries (digits only, 0 when the
+# items are missing or not a list).
+function item_count(ti,   n) {
+  if (jtype(ti, "items") != "a") return 0
+  n = JC[ti SUBSEP "items"]
+  return (n > 99) ? 99 : n
 }
 
 # --- guard: what the tool input asks for ---------------------------------------
@@ -351,6 +369,8 @@ function guard_main(   ok, ti) {
   emit("POLICY", policy(ti))
   emit("RID", routine_id(ti))
   emit("ACTION", campaign_action(ti))
+  emit("CID", campaign_id(ti))
+  if (TOOL == "approve-many-posts") emit("ITEMS", item_count(ti))
   if (TOOL == "bulk-create-posts") emit("BULK", bulk_verdict(ti))
 }
 
@@ -422,6 +442,26 @@ function created_routine(   i, p, id, found) {
   return found
 }
 
+# The campaign a successful create-content-campaign made, if every envelope
+# agrees on one well-formed id and says it is a draft. Only a draft that was
+# made here may be filled in with no check.
+function created_campaign(   i, p, id, found) {
+  found = ""
+  if (NENV < 1) return ""
+  for (i = 1; i <= NENV; i++) {
+    if (jtype(ENV[i], "data") != "o") return ""
+    p = ENV[i] SUBSEP "data"
+    if (jtype(p, "campaign") == "o") p = p SUBSEP "campaign"
+    if (jtype(p, "id") != "s") return ""
+    id = tolower(jstr(p, "id"))
+    if (!is_uuid(id)) return ""
+    if (!(jtype(p, "status") == "s" && jstr(p, "status") == "draft")) return ""
+    if (found != "" && found != id) return ""
+    found = id
+  }
+  return found
+}
+
 function mark_main(   ok, ti, success) {
   ok = hook_common()
   emit("OK", ok ? 1 : 0)
@@ -431,14 +471,16 @@ function mark_main(   ok, ti, success) {
   if (jtype("r", "tool_input") == "o") {
     ti = "r" SUBSEP "tool_input"
     emit("POLICY", policy(ti)); emit("RID", routine_id(ti))
+    emit("CID", campaign_id(ti)); emit("ACTION", campaign_action(ti))
   } else {
-    emit("POLICY", "other"); emit("RID", "")
+    emit("POLICY", "other"); emit("RID", ""); emit("CID", ""); emit("ACTION", "other")
   }
   NENV = 0; BADENV = 0; ISERR = 0; DONE = 0; NROOT = 0
   if (jhas("r", "tool_response")) resp_scan("r" SUBSEP "tool_response", 0)
   success = !ISERR && !BADENV && (NENV > 0 || (DONE && TOOL == "schedule-post"))
   emit("SUCCESS", success ? 1 : 0)
-  emit("NEWRID", success ? created_routine() : "")
+  emit("NEWRID", (success && TOOL == "create-routine") ? created_routine() : "")
+  emit("NEWCID", (success && TOOL == "create-content-campaign") ? created_campaign() : "")
 }
 
 # --- sid: the session id, for the new-message hook -------------------------------

@@ -3,8 +3,8 @@ name: post
 description: >-
   Write social posts now and save them to Bolta as drafts: one post, a week of
   posts, one idea for several networks, or a WordPress article. Use when
-  someone says write a post about X, a week of LinkedIn posts, turn this into
-  posts, or write a blog article.
+  someone says write or draft a post about X, a week of LinkedIn posts, turn
+  this into posts, or write a blog article.
 ---
 
 ## Done when

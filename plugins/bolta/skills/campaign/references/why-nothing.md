@@ -8,7 +8,7 @@ Read when a campaign seems stuck, or nothing went out. One fresh `get-content-ca
 - `paused`: paused. Resume it (one Bolta check).
 - `scheduled`: next drafts on `next_generation_at`, in the workspace clock. Wait.
 - `generating`: writing this week's drafts. Wait a few minutes.
-- `needs_accounts`: needs accounts. Pick them on the campaign page; it restarts by itself.
+- `needs_accounts`: needs accounts. Set them ([targets.md](targets.md)) or pick them on the campaign page; it restarts by itself.
 - `needs_review`: waiting for you (`posts_to_review`). Hand to `review`.
 - `posting`: posting. Nothing to do.
 - `done`: finished. Give the verdict (verdict.md).
@@ -18,7 +18,7 @@ Read when a campaign seems stuck, or nothing went out. One fresh `get-content-ca
 
 - **On?** Only an on campaign writes. Not started or paused: start or resume it.
 - **A start date?** No `starts_on`: there are no weeks to count, so it sits.
-- **Usable accounts?** None picked, or all disconnected: needs accounts. Adding one on the campaign page restarts it; no second start.
+- **Usable accounts?** None picked, or all disconnected: needs accounts. Adding one (targets.md, or the campaign page) restarts it; no second start.
 - **Bolta's writer paused?** `blocked` is set: Bolta won't write until its writer is resumed on the dashboard.
 - **This week already written?** `last_generated_on` is this week: look at the drafts it made.
 - **Window closed?** `window_closed` true: nothing more comes. Start a new campaign.

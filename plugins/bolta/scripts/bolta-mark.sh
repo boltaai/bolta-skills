@@ -4,12 +4,15 @@
 # After a Bolta call finishes, this keeps small facts for the write guard:
 #   win-go-<connection>              the batch window for approvals. Written
 #                                    after a successful approve-post,
+#                                    approve-many-posts,
 #                                    approve-recurring-review or schedule-post.
-#                                    Covers approvals, schedules and deletes.
-#   win-del-<connection>             the batch window for deletes. Written
-#                                    after a successful delete-post. Covers
-#                                    deletes only, so an OK on a delete never
-#                                    lets a post go public.
+#                                    Covers approvals, schedules, no's
+#                                    (reject-post) and deletes.
+#   win-del-<connection>             the batch window for deletes and no's.
+#                                    Written after a successful delete-post or
+#                                    reject-post. Covers those two only, so an
+#                                    OK on a delete or a no never lets a post
+#                                    go public.
 #                                    Both hold "<turn token> <epoch seconds>
 #                                    <prompt_id>". A window is written only
 #                                    when the call carries a prompt_id. An
@@ -24,6 +27,13 @@
 #                                    "<turn token> <epoch seconds>". Removed
 #                                    again when update-routine sends any other
 #                                    policy.
+#   campaign-<connection>-<id>       a campaign this session created, still a
+#                                    draft (Bolta's reply says status draft):
+#                                    "<turn token> <epoch seconds>". Only such a
+#                                    campaign may have its accounts, notes,
+#                                    sources or voice set with no check, for one
+#                                    hour (the guard checks the age). Removed
+#                                    again by any status change except pause.
 # Files live in ${TMPDIR:-/tmp}/bolta-plugin/<session>/ and only there. Nothing
 # is written unless that directory already exists, is a real directory owned by
 # this user and closed to others, and holds a readable turn marker (written by
@@ -77,6 +87,7 @@ put() {
 
 main() {
   ok=0 tool="" server="" sid="" prompt="" policy="" rid="" success=0 newrid=""
+  cid="" newcid="" action=""
   parsed=$(sh "$reader" mark) || return 0
   while IFS='=' read -r k v; do
     case $k in
@@ -89,6 +100,9 @@ main() {
       RID) rid=$v ;;
       SUCCESS) success=$v ;;
       NEWRID) newrid=$v ;;
+      CID) cid=$v ;;
+      NEWCID) newcid=$v ;;
+      ACTION) action=$v ;;
     esac
   done <<EOF
 $parsed
@@ -100,10 +114,10 @@ EOF
   dir_ok "$base" && dir_ok "$dir" || return 0
 
   case $tool in
-    approve-post|approve-recurring-review|schedule-post|delete-post)
+    approve-post|approve-many-posts|approve-recurring-review|schedule-post|delete-post|reject-post)
       [ "$success" = 1 ] && [ -n "$prompt" ] || return 0
       kind=go
-      [ "$tool" = delete-post ] && kind=del
+      case $tool in delete-post|reject-post) kind=del ;; esac
       file_ok "$dir/turn" && read_marker "$dir/turn" || return 0
       token=$m_tok
       win="$dir/win-$kind-$server"
@@ -127,6 +141,24 @@ EOF
           rm -f "$dir/routine-$server-$rid"
         else
           rm -f "$dir/routine-$server-"*
+        fi
+      fi
+      ;;
+    create-content-campaign)
+      [ "$success" = 1 ] && [ -n "$newcid" ] || return 0
+      file_ok "$dir/turn" && read_marker "$dir/turn" || return 0
+      t=$(now) || return 0
+      put "$dir/campaign-$server-$newcid" "$m_tok $t"
+      ;;
+    set-content-campaign-status)
+      # Anything but a pause can switch the campaign on or end it: forget that
+      # it was a draft made here. Removing is the safe direction, so the call
+      # does not need to have succeeded.
+      if [ "$action" != pause ]; then
+        if [ -n "$cid" ]; then
+          rm -f "$dir/campaign-$server-$cid"
+        else
+          rm -f "$dir/campaign-$server-"*
         fi
       fi
       ;;

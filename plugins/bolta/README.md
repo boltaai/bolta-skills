@@ -8,7 +8,7 @@ Tell Claude what you want to post about. Bolta writes it in your voice every wee
 - "Keep me posting every week." A **Bolta routine** writes drafts every Monday, even with Claude closed.
 - "We launch on Nov 3." A **campaign**: 1 to 4 weeks, a strategy, a verdict.
 
-Start with `/bolta:start` or "set me up". Later, ask "what needs me?"
+Start with `/bolta:start` or "set me up".
 
 ## Install
 
@@ -19,32 +19,33 @@ Claude Code 2.1.295 or later:
 /plugin install bolta@bolta-marketplace
 ```
 
-Then `/mcp`, pick `bolta`, sign in and pick the workspace.
+Then `/mcp`, pick `bolta`, sign in, pick the workspace.
 
-- **Windows:** install [Git for Windows](https://git-scm.com/downloads/win) first. Without Git Bash, every Bolta save is blocked.
-- **Fewer prompts:** in `/permissions`, allow `mcp__plugin_bolta_bolta` under User settings (agencies: each `mcp__bolta-<client>` too). Bolta's own checks still ask.
+- **Windows:** install [Git for Windows](https://git-scm.com/downloads/win) first, or every Bolta save is blocked.
+- **Fewer prompts:** in `/permissions`, allow `mcp__plugin_bolta_bolta` under User settings (agencies: each `mcp__bolta-<client>`). Bolta's own checks still ask.
 
-claude.ai and Cowork (untested end to end): add this repository as a marketplace, install BOLTA, connect Bolta in Customize > Connectors. In chat, keep Bolta's approve, schedule and publish tools on "Needs approval".
+claude.ai and Cowork (untested): add this repository as a marketplace, install BOLTA, connect Bolta under Customize > Connectors. In chat, keep approve, schedule, publish and reject on "Needs approval".
+
+Added Bolta yourself (connector, or `claude mcp add`)? Install `bolta-skills` instead: same skills and checks, no second connection.
 
 ## What Bolta checks
 
-In Claude Code and Cowork, Bolta asks before:
+Claude Code and Cowork ask before:
 
 - anything public: a post, a reply, a reaction;
-- approving or scheduling (once per batch per message);
+- approving, turning down or scheduling (once per batch per message);
 - running a Bolta routine now; starting or finishing a campaign;
-- changing your voice, business details or account groups;
+- changing your voice, business details, account groups or a running campaign's accounts;
 - anything that can't be undone.
 
-Drafts need none. Claude Code only: **Bolta checks** `careful` in `/config` checks every approval. Chat runs no hooks: Bolta keeps Claude's posts on your review list until approved, and Claude approves only after your yes in words.
+Drafts need none. Claude Code only: **Bolta checks** `careful` in `/config` checks every approval. Chat runs no hooks: posts stay on your review list until approved, and Claude approves only after your yes in words.
 
 ## Limits
 
-- No media upload: Instagram, TikTok, YouTube and Pinterest need a public file link.
-- A "no" with a reason, and a Bolta-written campaign's accounts, are set in Bolta for now.
-- One connection is one workspace. Agencies add one per client, with "bolta" in its name.
-- Hooks need `sh` and `awk` (tested: mawk, gawk, BWK awk 20180827 to 20251225, around macOS's 20200816).
-- The checks trust their marker files. If Claude may run shell commands unasked, it could forge one.
+- No media upload: Instagram, TikTok, YouTube and Pinterest need a public link.
+- Until Bolta's newer tools reach your server, a "no" with a reason and a campaign's accounts are set in Bolta.
+- One connection is one workspace; agencies add one per client. Another server's tool named like a Bolta one gets the same check.
+- Hooks need `sh` and `awk`, and trust their marker files: Claude, if it may run shell commands unasked, could forge one.
 
 ## Sent and stored
 

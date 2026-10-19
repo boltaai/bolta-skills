@@ -2,9 +2,9 @@
 # Bolta write guard v2 (PreToolUse hook).
 #
 # Reads the hook JSON on stdin. For a Bolta call that goes public, approves,
-# schedules, deletes, says a final no, spends credits right now, can't be
-# undone, changes what drafts are written from, or switches on something that
-# could post without the user, it prints an "ask" decision. Everything else
+# schedules, deletes, says no on the user's behalf, spends credits right now,
+# can't be undone, changes what drafts are written from, or switches on
+# something that could post without the user, it prints an "ask" decision. Everything else
 # exits silently, so Claude Code's own permission setting applies. It never
 # allows and never denies: the only decision it can print is "ask". It never
 # touches the network and never writes a file; it only reads the small marker
@@ -28,11 +28,12 @@
 # successful call and opens a window for that connection only, stamped with
 # the current turn's token, the time it opened and the message's prompt_id
 # (Claude Code puts the same prompt_id on every hook of one user message).
-# There are two kinds, so an OK on a delete never lets a post go public:
-#   win-go-<connection>    opened by approve-post, approve-recurring-review or
-#                          schedule-post. Covers approvals, schedules and
-#                          deletes.
-#   win-del-<connection>   opened by delete-post. Covers deletes only.
+# There are two kinds, so an OK on a delete or a no never lets a post go public:
+#   win-go-<connection>    opened by approve-post, approve-many-posts,
+#                          approve-recurring-review or schedule-post. Covers
+#                          approvals, schedules, no's (reject-post) and deletes.
+#   win-del-<connection>   opened by delete-post or reject-post. Covers those
+#                          two only.
 # Markers live in ${TMPDIR:-/tmp}/bolta-plugin/<session>/.
 # A call passes silently on a window only when all of this holds; anything
 # else asks:
@@ -48,7 +49,14 @@
 # A Bolta routine created in this session as "ask me first" leaves a
 # routine-<connection>-<id> marker ("<turn token> <epoch seconds>"). Only that
 # routine may be switched on, or changed without a policy, with no check, and
-# only for 24 hours after it was made.
+# only for 24 hours after it was made. A campaign created in this session and
+# still a draft leaves a campaign-<connection>-<id> marker of the same kind.
+# Only that campaign may have its accounts, notes, sources or voice set with no
+# check, and only for one hour, and only until it is switched on or ended
+# through Bolta's tools. The hour is short on purpose: the person can also
+# start the campaign on the dashboard, which no hook sees, and setting accounts
+# on a running campaign can restart it and spend credits. Setting them on any
+# other campaign may change a running one, so it asks.
 #
 # These checks trust their marker files. A process that can write files as
 # this user (including Claude, if it may run shell commands without asking)
@@ -58,7 +66,7 @@ here=$(dirname "$0")
 reader="$here/bolta-json.sh"
 
 ok=0 tool="" server="" sid="" prompt="" conn="Bolta"
-create="" update="" policy="" rid="" action="" bulk=""
+create="" update="" policy="" rid="" action="" bulk="" cid="" items=""
 parsed=$(sh "$reader" guard 2>/dev/null) || parsed=""
 while IFS='=' read -r k v; do
   case $k in
@@ -74,6 +82,8 @@ while IFS='=' read -r k v; do
     RID) rid=$v ;;
     ACTION) action=$v ;;
     BULK) bulk=$v ;;
+    CID) cid=$v ;;
+    ITEMS) items=$v ;;
   esac
 done <<EOF
 $parsed
@@ -160,16 +170,33 @@ routine_marked() {
   [ "$age" -ge 0 ] && [ "$age" -le 86400 ]
 }
 
+# The campaign in this call was created in this session, within the last hour,
+# and has not been switched on or ended through Bolta's tools since.
+campaign_marked() {
+  [ -n "$sid" ] && [ -n "$server" ] && [ -n "$cid" ] || return 1
+  dir_ok "$base" && dir_ok "$dir" || return 1
+  f="$dir/campaign-$server-$cid"
+  file_ok "$f" && read_marker "$f" || return 1
+  n=$(now) || return 1
+  age=$((n - m_time))
+  [ "$age" -ge 0 ] && [ "$age" -le 3600 ]
+}
+
 batch_ask() {
   if [ "$careful" = 1 ]; then
     go="Careful mode asks every time." del=$go
   else
-    go="After you OK it, this reply's other approvals, schedules and deletes skip this check."
-    del="After you OK it, this reply's other deletes skip this check."
+    go="After you OK it, this reply's other approvals, no's, schedules and deletes skip this check."
+    del="After you OK it, this reply's other no's and deletes skip this check."
   fi
+  # "4 posts" when the batch call says how many, else "posts".
+  many=""
+  case $items in ''|*[!0-9]*) ;; *) [ "$items" -ge 2 ] && many="$items " ;; esac
   case $tool in
     schedule-post) ask "Check before it goes out ($conn): you are scheduling posts from the list above. $go" ;;
     delete-post) ask "Check before deleting ($conn): you are deleting posts from the list above. A deleted post can be restored for 7 days. Bolta keeps no reason for a delete; a DON'T rule in your voice does. $del" ;;
+    reject-post) ask "Check before turning down ($conn): you are saying no to posts from the list above. They stay in your list as Rejected, with your reason. $del" ;;
+    approve-many-posts) ask "Check before it goes out ($conn): you are approving ${many}posts from the list above, in one go. $go" ;;
     *) ask "Check before it goes out ($conn): you are approving posts from the list above. $go" ;;
   esac
 }
@@ -195,10 +222,10 @@ case "$tool" in
     ask "Check before it goes out ($conn): this reply goes public right now, under your account. OK only if you have seen this exact text and where it goes." ;;
   react-to-social-content)
     ask "Check before it goes out ($conn): this reaction is public, under your account. OK only if the post and the account are right." ;;
-  approve-post|approve-recurring-review|schedule-post)
+  approve-post|approve-many-posts|approve-recurring-review|schedule-post)
     if [ "$careful" = 0 ] && window_open go; then exit 0; fi
     batch_ask ;;
-  delete-post)
+  delete-post|reject-post)
     if [ "$careful" = 0 ] && window_open go del; then exit 0; fi
     batch_ask ;;
   reject-recurring-review)
@@ -262,6 +289,12 @@ case "$tool" in
   set-content-campaign-status)
     if [ "$action" = pause ]; then exit 0; fi
     campaign_ask ;;
+  set-content-campaign-targets)
+    if [ "$careful" = 1 ]; then
+      ask "Bolta check, careful mode ($conn): this sets a campaign's accounts, weeks, notes, sources or voice."
+    fi
+    if campaign_marked; then exit 0; fi
+    ask "Check before it changes ($conn): this sets who a campaign posts from and what Bolta reads for it. A running campaign writes its next weeks from it." ;;
 esac
 
 exit 0

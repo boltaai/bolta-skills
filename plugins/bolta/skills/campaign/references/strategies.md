@@ -25,7 +25,7 @@ Picking:
 - **Thought leadership:** 4 weeks × (2 images + 1 carousel) = 12. About your business filled in, a source page, real positions in Context. Mistake: an empty workspace.
 - **Consistency test (new):** Quick Tips or Product Education, 2 weeks × 3 images = 6, one network if unsure. Mistake: 4 weeks × 5 kinds × 3 networks.
 
-**Context** is what the user pastes into the campaign page's notes box (two-ways.md), not a question first. Size the plan on the mix it will run: a playbook's mix is sent as `content_mix`; otherwise Bolta uses the mix above.
+**Context** is the campaign's notes (`context_notes`, see targets.md), not a question first. Size the plan on the mix it will run: a playbook's mix is sent as `content_mix`; otherwise Bolta uses the mix above.
 
 ## Week 1: wrong strategy or thin context?
 

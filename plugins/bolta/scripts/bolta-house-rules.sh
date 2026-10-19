@@ -17,7 +17,10 @@
 # The last line is evidence for the skills: a session that shows it runs the
 # plugin's hooks, so a Bolta check stands in for asking in words. A session
 # with hooks off (claude.ai chat, disableAllHooks, managed hooks only) never
-# sees it, and the skills then ask in words first.
+# sees it, and the skills then ask in words first. The skills-only bundle
+# prints a different last line (its generator swaps it): its checks are
+# untested on a real claude.ai connector, so it says they may not run and the
+# skills ask in words first.
 #
 # Plain POSIX shell plus sed and awk. It ignores its input, writes no file and
 # never touches the network. Always exits 0.

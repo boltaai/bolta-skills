@@ -1,0 +1,36 @@
+schema_version: "1.1"
+name: quiet-calendar-add-event
+description: 'Quiet: adding an event to the user''s calendar. Bolta has a content calendar, which can pull a model the wrong way.'
+tags: [quiet]
+expected_outcome: 'Says it can''t add calendar events from here (or offers what it can do); Bolta stays out of it. Nothing is saved or scheduled in Bolta.'
+execution:
+  prompt: |
+    Add a team lunch to my calendar for Thursday at noon.
+  max_turns: 8
+  timeout_seconds: 300
+  allowed_tools: [Skill]
+graders:
+  - name: answers-the-ask
+    # Deals with the calendar question.
+    type: regex
+    pattern: 'calendar'
+    flags: i
+  - name: no-bolta-skill
+    # No Bolta skill fires for an ask that is not about Bolta.
+    type: tool_used
+    tool: Skill
+    input_match: '"skill"\s*:\s*"(?:[\w-]+:)?(today|start|post|review|routine|campaign|results|voice|replies|connect|fix|my-workflow)"'
+    min: 0
+    max: 0
+  - name: no-bolta-tool
+    # No Bolta tool at all for an ask that is not about Bolta.
+    type: regex
+    pattern: '"name"\s*:\s*"mcp__plugin_bolta_bolta__'
+    target: trace
+    match: not_contains
+  - name: no-bolta-write
+    # No Bolta call that saves, schedules, posts, replies, approves or switches anything on.
+    type: regex
+    pattern: '"name"\s*:\s*"mcp__plugin_bolta_bolta__(create-post|bulk-create-posts|create-wordpress-blog-post|submit-for-review|approve-post|approve-many-posts|approve-recurring-review|reject-post|reject-recurring-review|schedule-post|publish-post|update-post|update-post-platform-details|delete-post|restore-deleted|create-routine|update-routine|activate-routine|resume-routine|pause-routine|run-routine-now|archive-routine|create-content-campaign|update-content-campaign|set-content-campaign-targets|analyze-content-campaign-source|set-content-campaign-status|add-posts-to-content-campaign|update-voice-profile|create-voice-profile|voice-generate|update-business-dna|extract-business-dna|update-social-bucket|create-social-bucket|send-outreach-reply|update-outreach-reply|publish-engagement-reply|draft-engagement-reply|draft-inbound-reply|reply-to-social-content|react-to-social-content|create-engagement-opportunity)"'
+    target: trace
+    match: not_contains

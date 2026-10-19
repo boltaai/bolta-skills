@@ -2484,6 +2484,252 @@
         "idempotentHint": true,
         "openWorldHint": false
       }
+    },
+    {
+      "name": "approve-many-posts",
+      "title": "Approve Many Posts",
+      "description": "Approve several posts the user said yes to, in one call (up to 25). Each item is exactly one approve-post: same role check, same review rules, same stale-revision check, same scheduling. Every item must carry expected_fingerprint: the content_fingerprint of that post's row in list-inbox-items, so only the version the user saw is approved. Items are handled one by one and do not depend on each other: the result lists every post with ok, its new status and whether it is scheduled, or why it was not approved (stale_review, review_conflict, schedule_time_too_soon, not waiting for review, permission). If none was approved the call fails, with the same per-post list. Tell the user about every failure, and never retry a stale one without re-reading it and showing them the new text. Repeating the call is safe: posts already approved come back with already_decided=true.",
+      "inputSchema": {
+        "type": "object",
+        "properties": {
+          "items": {
+            "type": "array",
+            "minItems": 1,
+            "maxItems": 25,
+            "items": {
+              "type": "object",
+              "properties": {
+                "post_id": {
+                  "type": "string",
+                  "format": "uuid"
+                },
+                "schedule_mode": {
+                  "type": "string",
+                  "enum": [
+                    "approve_only",
+                    "use_suggested_time",
+                    "set_fixed_time"
+                  ]
+                },
+                "fixed_time": {
+                  "type": "string"
+                },
+                "expected_fingerprint": {
+                  "type": "string",
+                  "minLength": 1
+                },
+                "comments": {
+                  "type": "string"
+                }
+              },
+              "required": [
+                "post_id",
+                "expected_fingerprint"
+              ],
+              "additionalProperties": false
+            },
+            "description": "One entry per post: {post_id, schedule_mode, fixed_time, expected_fingerprint, comments}. post_id and expected_fingerprint (the row's content_fingerprint) are required. schedule_mode: approve_only (default; Bolta still gives AI drafts a time from the saved posting schedule), use_suggested_time, or set_fixed_time with fixed_time as local wall-clock time in the workspace's timezone (no Z, no UTC offset). 1 to 25 items, each post once."
+          },
+          "timezone": {
+            "type": "string",
+            "description": "IANA time zone for every fixed_time in this call. Send it only when the user named a zone ('9am Pacific'); otherwise omit it and the workspace's timezone is used."
+          }
+        },
+        "additionalProperties": false,
+        "required": [
+          "items"
+        ]
+      },
+      "annotations": {
+        "title": "Approve Many Posts",
+        "readOnlyHint": false,
+        "destructiveHint": true,
+        "idempotentHint": true,
+        "openWorldHint": true
+      }
+    },
+    {
+      "name": "reject-post",
+      "title": "Reject Post",
+      "description": "Turn down a post that is waiting for review, with the user's reason, so Bolta learns what not to write. Works for drafts a Bolta routine or campaign wrote and for posts sent for review (list-inbox-items source=team rows). The post is kept and marked Rejected: never deleted, scheduled or published. In a campaign it stays in the campaign and counts as rejected. Use the user's own words as the reason and add the categories that fit. source=recurring rows use reject-recurring-review instead. Needs an admin or owner. Repeating the call is safe.",
+      "inputSchema": {
+        "type": "object",
+        "properties": {
+          "post_id": {
+            "type": "string",
+            "format": "uuid",
+            "description": "The post to turn down."
+          },
+          "reason": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 2000,
+            "description": "Why the user said no, in their own words: what is wrong, not what to do instead. Bolta's voice learning reads it. Up to 2000 characters."
+          },
+          "categories": {
+            "type": "array",
+            "uniqueItems": true,
+            "items": {
+              "type": "string",
+              "enum": [
+                "too_casual",
+                "too_formal",
+                "wrong_tone",
+                "off_brand",
+                "too_long",
+                "too_short",
+                "wrong_format",
+                "factual_error",
+                "spelling_grammar",
+                "missing_cta",
+                "wrong_cta",
+                "wrong_emoji",
+                "wrong_hashtag",
+                "not_engaging",
+                "platform_mismatch",
+                "too_salesy",
+                "off_topic",
+                "repetitive",
+                "no_substance",
+                "other"
+              ]
+            },
+            "description": "Codes that fit the reason: too_casual, too_formal, wrong_tone, off_brand, too_long, too_short, wrong_format, factual_error, spelling_grammar, missing_cta, wrong_cta, wrong_emoji, wrong_hashtag, not_engaging, platform_mismatch, too_salesy, off_topic, repetitive, no_substance, other. Unknown codes are refused."
+          }
+        },
+        "additionalProperties": false,
+        "required": [
+          "post_id",
+          "reason"
+        ]
+      },
+      "annotations": {
+        "title": "Reject Post",
+        "readOnlyHint": false,
+        "destructiveHint": true,
+        "idempotentHint": true,
+        "openWorldHint": false
+      }
+    },
+    {
+      "name": "set-content-campaign-targets",
+      "title": "Set Content Campaign Targets",
+      "description": "Give a content campaign what Bolta needs to write it: the accounts to post from, how many weeks it runs, the user's notes, the pages or files to read, and the voice. Send only what you are setting; each field you send replaces what is there, and a list replaces the whole list. Works on a draft or a running campaign. On an active campaign stuck on 'needs accounts', setting accounts re-arms it and Bolta writes the owed week on its next pass. This call itself generates, schedules and publishes nothing. Check the response: account_ids, duration_weeks, ends_on and context_sources. New sources start as pending, and the writer does not use them until analyze-content-campaign-source has read each one.",
+      "inputSchema": {
+        "type": "object",
+        "properties": {
+          "campaign_id": {
+            "type": "string",
+            "format": "uuid",
+            "description": "The content campaign to set up."
+          },
+          "account_ids": {
+            "type": "array",
+            "maxItems": 50,
+            "items": {
+              "type": "string"
+            },
+            "description": "Accounts to post from: `id` values from list-accounts (or a Facebook Page or LinkedIn organization ref). Replaces the whole list; at most 50. An empty list removes every account. If the workspace has connected accounts, a campaign that names none can refuse with no_accounts and make nothing until accounts are set, so set them; a workspace with nothing connected yet drafts without them."
+          },
+          "duration_weeks": {
+            "type": "integer",
+            "minimum": 1,
+            "maximum": 4,
+            "description": "How many weeks the campaign runs, 1 to 4, counted from starts_on. Sets the end date. Do not also send an end date."
+          },
+          "context_notes": {
+            "type": "string",
+            "maxLength": 8000,
+            "description": "Notes for Bolta's writer, used word for word in every week's brief: what the campaign is for, real facts, prices, dates, links, things to avoid. Replaces the existing notes. Send \"\" to clear. Up to 8000 characters; put longer material in context_sources."
+          },
+          "context_sources": {
+            "type": "array",
+            "maxItems": 20,
+            "items": {
+              "type": "object",
+              "properties": {
+                "kind": {
+                  "type": "string",
+                  "enum": [
+                    "url",
+                    "file",
+                    "brand_kit"
+                  ]
+                },
+                "ref": {
+                  "type": "string"
+                },
+                "title": {
+                  "type": "string",
+                  "maxLength": 255
+                }
+              },
+              "required": [
+                "kind",
+                "ref"
+              ],
+              "additionalProperties": false
+            },
+            "description": "What Bolta should read for this campaign: [{\"kind\": \"url\", \"ref\": \"https://...\"}, {\"kind\": \"file\", \"ref\": \"<knowledge base file id>\"}, {\"kind\": \"brand_kit\", \"ref\": \"business_overview\"}], each with an optional title. Brand-kit sections: tagline, business_overview, origin_story, community_involvement, customer_testimonials, brand_values, dos, donts, tone_of_voice, custom_image_instructions. At most 20. Replaces the whole list, so include the sources to keep. Send only kind, ref and title."
+          },
+          "voice_profile_id": {
+            "type": "string",
+            "description": "A voice profile id from list-voice-profiles. Send \"\" to use the workspace's default voice."
+          }
+        },
+        "additionalProperties": false,
+        "required": [
+          "campaign_id"
+        ]
+      },
+      "annotations": {
+        "title": "Set Content Campaign Targets",
+        "readOnlyHint": false,
+        "destructiveHint": true,
+        "idempotentHint": true,
+        "openWorldHint": false
+      }
+    },
+    {
+      "name": "analyze-content-campaign-source",
+      "title": "Analyze Content Campaign Source",
+      "description": "Have Bolta read one source attached to a content campaign so its weekly writer can use it. Call it once for each source left pending by set-content-campaign-targets. A web page is read now (up to about 25 seconds) and comes back ready, or failed with the reason. A file comes back ready, failed, or still pending while Bolta extracts it; call again later to check. A brand-kit section is ready when the brand kit has text there. Only ready sources reach the writer. Changes nothing else on the campaign.",
+      "inputSchema": {
+        "type": "object",
+        "properties": {
+          "campaign_id": {
+            "type": "string",
+            "format": "uuid",
+            "description": "The content campaign the source is attached to."
+          },
+          "kind": {
+            "type": "string",
+            "enum": [
+              "url",
+              "file",
+              "brand_kit"
+            ],
+            "description": "url, file or brand_kit, as on the campaign's source row."
+          },
+          "ref": {
+            "type": "string",
+            "description": "The source's ref exactly as on the campaign: the page URL, the file id, or the brand-kit section."
+          }
+        },
+        "additionalProperties": false,
+        "required": [
+          "campaign_id",
+          "kind",
+          "ref"
+        ]
+      },
+      "annotations": {
+        "title": "Analyze Content Campaign Source",
+        "readOnlyHint": false,
+        "destructiveHint": false,
+        "idempotentHint": true,
+        "openWorldHint": true
+      }
     }
   ]
 }

@@ -37,7 +37,7 @@ if [ "$event" = PostToolUseFailure ] && printf '%s' "$input" | grep -Eq '"error"
 fi
 
 if [ "$hit" = 1 ]; then
-  printf '{"hookSpecificOutput":{"hookEventName":"%s","additionalContext":"Bolta rejected the connection (invalid, expired or inactive). Do not retry the call. Tell the user, in plain words, to reconnect Bolta: in Claude Code run /mcp and sign in to bolta again; in Cowork or claude.ai open Customize, then Connectors, and press Reconnect on Bolta."}}\n' "$event"
+  printf '{"hookSpecificOutput":{"hookEventName":"%s","additionalContext":"Bolta rejected the connection (invalid, expired or inactive). Do not retry the call. Tell the user, in plain words, to reconnect Bolta: in Claude Code run /mcp and sign in to your Bolta connection again; in Cowork or claude.ai open Customize, then Connectors, and press Reconnect on Bolta."}}\n' "$event"
 fi
 
 exit 0
