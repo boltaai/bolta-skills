@@ -41,11 +41,16 @@ now() {
 main() {
   sid=""
   parsed=$(sh "$reader" sid) || parsed=""
-  while IFS='=' read -r k v; do
+  oldifs=$IFS
+  IFS='
+'
+  set -f
+  for kv in $parsed; do
+    k=${kv%%=*} v=${kv#*=}
     case $k in SID) sid=$v ;; esac
-  done <<EOF
-$parsed
-EOF
+  done
+  IFS=$oldifs
+  set +f
 
   umask 077
   [ -e "$base" ] || [ -L "$base" ] || mkdir "$base" || return 0

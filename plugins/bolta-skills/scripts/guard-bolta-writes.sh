@@ -15,7 +15,7 @@
 # allow-lists: a value is safe only if it is exactly a safe word. If the call
 # cannot be read, the guard asks (fail closed).
 #
-# CLAUDE_PLUGIN_OPTION_CONFIRM_LEVEL:
+# First argument (the confirm_level setting, passed in hooks.json):
 #   standard (default)  drafts and sending for review pass; the first approval,
 #                       schedule or delete in a reply asks, and later ones in
 #                       the same reply on the same connection pass (see the
@@ -68,7 +68,12 @@ reader="$here/bolta-json.sh"
 ok=0 tool="" server="" sid="" prompt="" conn="Bolta"
 create="" update="" policy="" rid="" action="" bulk="" cid="" items=""
 parsed=$(sh "$reader" guard 2>/dev/null) || parsed=""
-while IFS='=' read -r k v; do
+oldifs=$IFS
+IFS='
+'
+set -f
+for kv in $parsed; do
+  k=${kv%%=*} v=${kv#*=}
   case $k in
     OK) ok=$v ;;
     TOOL) tool=$v ;;
@@ -85,12 +90,12 @@ while IFS='=' read -r k v; do
     CID) cid=$v ;;
     ITEMS) items=$v ;;
   esac
-done <<EOF
-$parsed
-EOF
+done
+IFS=$oldifs
+set +f
 
 careful=1
-if [ "${CLAUDE_PLUGIN_OPTION_CONFIRM_LEVEL:-standard}" = standard ]; then careful=0; fi
+if [ "${1:-standard}" = standard ]; then careful=0; fi
 
 base="${TMPDIR:-/tmp}/bolta-plugin"
 dir="$base/$sid"

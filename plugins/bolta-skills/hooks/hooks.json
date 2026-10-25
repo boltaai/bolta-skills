@@ -7,7 +7,7 @@
         "hooks": [
           {
             "type": "command",
-            "command": "sh \"${CLAUDE_PLUGIN_ROOT}/scripts/guard-bolta-writes.sh\"",
+            "command": "sh \"${CLAUDE_PLUGIN_ROOT}/scripts/guard-bolta-writes.sh\" \"${user_config.confirm_level}\"",
             "timeout": 30,
             "onFailure": "block"
           }

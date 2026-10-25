@@ -84,12 +84,11 @@ fresh() { nenv=$((nenv + 1)); T="$root/t$nenv"; mkdir "$T"; }
 # run_hook <script> <confirm level; "" leaves it unset, EMPTY sets it to "">; stdin is the payload.
 run_hook() {
   (
-    unset CLAUDE_PLUGIN_OPTION_CONFIRM_LEVEL
-    if [ "$2" = EMPTY ]; then CLAUDE_PLUGIN_OPTION_CONFIRM_LEVEL=""; export CLAUDE_PLUGIN_OPTION_CONFIRM_LEVEL
-    elif [ -n "$2" ]; then CLAUDE_PLUGIN_OPTION_CONFIRM_LEVEL=$2; export CLAUDE_PLUGIN_OPTION_CONFIRM_LEVEL; fi
     TMPDIR=$T PATH=$TPATH
     export TMPDIR PATH
-    exec $HOOK_SH "$1"
+    if [ "$2" = EMPTY ]; then exec $HOOK_SH "$1" ""
+    elif [ -n "$2" ]; then exec $HOOK_SH "$1" "$2"
+    else exec $HOOK_SH "$1"; fi
   )
 }
 

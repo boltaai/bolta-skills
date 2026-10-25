@@ -89,7 +89,12 @@ main() {
   ok=0 tool="" server="" sid="" prompt="" policy="" rid="" success=0 newrid=""
   cid="" newcid="" action=""
   parsed=$(sh "$reader" mark) || return 0
-  while IFS='=' read -r k v; do
+  oldifs=$IFS
+  IFS='
+'
+  set -f
+  for kv in $parsed; do
+    k=${kv%%=*} v=${kv#*=}
     case $k in
       OK) ok=$v ;;
       TOOL) tool=$v ;;
@@ -104,9 +109,9 @@ main() {
       NEWCID) newcid=$v ;;
       ACTION) action=$v ;;
     esac
-  done <<EOF
-$parsed
-EOF
+  done
+  IFS=$oldifs
+  set +f
 
   [ "$ok" = 1 ] && [ -n "$sid" ] && [ -n "$server" ] || return 0
   umask 077

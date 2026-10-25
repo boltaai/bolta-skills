@@ -31,8 +31,7 @@
 # fixed word, so the shell can read it without quoting surprises. No network,
 # no files.
 
-prog=$(cat <<'AWK'
-BEGIN { RS = "\001"; jinit() }
+prog='BEGIN { RS = "\001"; jinit() }
 { BUF = (NR == 1) ? $0 : BUF RS $0 }
 END {
   if (MODE == "guard") guard_main()
@@ -97,7 +96,7 @@ function jstring(   i, ch, start, w, k, n) {
     } else if (ch != "" && index("\"\\/bfnrt", ch)) {
       n = k + 1
     } else return jerr("bad escape")
-    # n is the escape's last character in w; the window moves just past it.
+    # n is the escape'\''s last character in w; the window moves just past it.
     i += n
     w = substr(w, n + 1)
   }
@@ -288,7 +287,7 @@ function create_verdict(ti) {
 
 # update-post (unchanged from v0.1): timing = a time, or a status other than
 # Draft; edit = new content, media, accounts or poll without the same call
-# returning the post to Draft (an edit keeps the post's approval).
+# returning the post to Draft (an edit keeps the post'\''s approval).
 function update_verdict(ti) {
   if (has_time(ti)) return "timing"
   if (jhas(ti, "status") && !is_draft_status(ti)) return "timing"
@@ -376,13 +375,13 @@ function guard_main(   ok, ti) {
 
 # --- mark: did the call succeed? -------------------------------------------------
 #
-# Claude Code sends tool_response as a string holding Bolta's JSON envelope
+# Claude Code sends tool_response as a string holding Bolta'\''s JSON envelope
 # {"ok": true, "data": ..., "error": null} when the result carries
 # structuredContent (every Bolta tool does). Older or other hosts may send a
 # list of content blocks whose text is the envelope, an object with content and
 # structuredContent, or the envelope itself; all of these are read.
 # Success means: at least one envelope, every envelope says ok true with no
-# error, and nothing says isError. Bolta's card-backed tools send a short
+# error, and nothing says isError. Bolta'\''s card-backed tools send a short
 # "Done (...)" summary instead of the envelope on success ("Error: ..." on
 # failure); for schedule-post that summary also counts.
 
@@ -520,8 +519,6 @@ function field_main(   n, parts, i, p, v) {
   } else if (JT[p] == "d") print JV[p]
   else print JT[p]
   return 0
-}
-AWK
-)
+}'
 
 LC_ALL=C exec awk -v MODE="${1:-}" -v FIELD="${2:-}" "$prog"
