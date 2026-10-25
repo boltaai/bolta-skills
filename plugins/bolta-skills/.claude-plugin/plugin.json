@@ -32,10 +32,6 @@
       "type": "string",
       "title": "Bolta checks",
       "description": "standard: drafts save without a check, and a batch of approvals or turning posts down asks once per message. careful: every approval, turning a post down, schedule and delete asks, and so do saving several posts at once, setting up, changing or switching on a Bolta routine, and setting a campaign's accounts or notes. Either way, posting, replying, running a Bolta routine now, starting, resuming or finishing a campaign, changing a running campaign's accounts or notes, voice and business changes, and anything final always ask. Pausing never does. Set in Claude Code; Cowork and chat use standard.",
-      "options": [
-        "standard",
-        "careful"
-      ],
       "default": "standard"
     }
   }

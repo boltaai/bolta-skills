@@ -564,7 +564,7 @@ def house_rules_from_script(plugin):
     p = plugin / "scripts" / "bolta-house-rules.sh"
     if not p.is_file():
         return None
-    return re.findall(r"^(\d{1,2}\. .+)$", p.read_text(), re.M)
+    return re.findall(r"^(\d{1,2}\. .+)$", p.read_text().replace("'\\''", "'"), re.M)
 
 
 def check_skills(plugin, skills, tools_by_name):
