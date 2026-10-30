@@ -7,6 +7,7 @@ Tell Claude what you want to post about. Bolta writes it in your voice every wee
 - "Plan a week of LinkedIn posts about our new pricing." Drafts in your voice; "yes to 1, 3 and 4" schedules them.
 - "Keep me posting every week." A **Bolta routine** writes drafts every Monday, even with Claude closed.
 - "We launch on Nov 3." A **campaign**: 1 to 4 weeks, a strategy, a verdict.
+- "What's waiting?" With 8 or more drafts, a read-only **clearing-house** helper (Claude Code and Cowork) suggests approve, edit or drop for each. You decide.
 
 Start with `/bolta:start` or "set me up".
 
@@ -51,4 +52,4 @@ Drafts need none. Claude Code only: **Bolta checks** `careful` in `/config` chec
 
 Bolta (mcp.bolta.ai) gets your requests and decisions. Sign-in is Claude's: the plugin never sees a password. Hooks keep marker files in `${TMPDIR:-/tmp}/bolta-plugin/` and make no network calls.
 
-v0.2.0 (beta). [Privacy](https://bolta.ai/privacy-policy) · [Terms](https://bolta.ai/tos) · [Support](https://bolta.ai/support) · MIT licence
+v0.3.0 (beta). [Privacy](https://bolta.ai/privacy-policy) · [Terms](https://bolta.ai/tos) · [Support](https://bolta.ai/support) · MIT licence

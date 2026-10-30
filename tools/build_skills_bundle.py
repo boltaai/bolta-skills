@@ -17,7 +17,7 @@ Everything else is derived from plugins/bolta, so the two cannot drift:
   rewritten         .claude-plugin/plugin.json (name, display name, description)
                     README.md (this file's BUNDLE_README)
                     scripts/bolta-house-rules.sh: its last line (see below)
-  left out          .mcp.json
+  left out          .mcp.json, agents/
 
 The hook matchers are the same in both plugins: they match any server name
 followed by one of Bolta's own tool names. A claude.ai connector's tools are
@@ -66,8 +66,11 @@ FULL_NAME = "bolta"
 #: How every matcher begins: any server name, then a tool name.
 PREFIX = "^mcp__[A-Za-z0-9_-]+__"
 
-#: Files of the full plugin that the bundle does not copy.
+#: Files of the full plugin that the bundle does not copy: its own connection, and the subagents
+#: (an agent's tool list names the server, and this bundle's connection can have any name; chat
+#: ignores agents too, so the skills do that work themselves).
 LEFT_OUT = {".mcp.json"}
+LEFT_OUT_DIRS = ("agents/",)
 #: Files the bundle writes itself.
 REWRITTEN = {".claude-plugin/plugin.json", "README.md"}
 
@@ -200,7 +203,7 @@ def generate(src: pathlib.Path = SRC) -> dict[str, tuple[bytes, bool]]:
         if not path.is_file():
             continue
         rel = path.relative_to(src).as_posix()
-        if rel in LEFT_OUT or rel in REWRITTEN:
+        if rel in LEFT_OUT or rel in REWRITTEN or rel.startswith(LEFT_OUT_DIRS):
             continue
         data = _read(path)
         if path.suffix == ".md":

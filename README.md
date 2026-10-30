@@ -17,7 +17,7 @@ What users need to know (install per host, what Bolta checks, the limits, what i
 
 | Path | What it is |
 |-|-|
-| `plugins/bolta/` | The Claude plugin (v0.2): 12 skills, the hooks behind the Bolta checks (a write guard, a batch-window marker, a per-message reset, the house rules at session start, a reconnect notice), and the Bolta connection (`.mcp.json`). No commands or subagents. This is the source of truth. |
+| `plugins/bolta/` | The Claude plugin (v0.3): 12 skills, one read-only subagent (`clearing-house`, a first pass over a long review list), the hooks behind the Bolta checks (a write guard, a batch-window marker, a per-message reset, the house rules at session start, a reconnect notice), and the Bolta connection (`.mcp.json`). No commands. This is the source of truth. |
 | `plugins/bolta-skills/` | The skills-only bundle for people who already connected Bolta themselves: the same skills, hooks and scripts, no `.mcp.json`, and one session-start line that says its checks may not run. **Generated** from `plugins/bolta` by `tools/build_skills_bundle.py`; never edit it by hand. |
 | `.claude-plugin/marketplace.json` | Makes this repository a Claude marketplace that lists both plugins. |
 | `plugin-skills/` | The skills pack for the ChatGPT app. Host-specific; kept separate on purpose. |

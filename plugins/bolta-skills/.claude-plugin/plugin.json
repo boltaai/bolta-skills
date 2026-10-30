@@ -1,7 +1,7 @@
 {
   "name": "bolta-skills",
   "displayName": "BOLTA skills",
-  "version": "0.2.0",
+  "version": "0.3.0",
   "description": "Bolta's skills and checks for people who already connected Bolta themselves, as a connector or an MCP server they added. No second connection. Nothing goes out until you say yes.",
   "author": {
     "name": "BOLTA",

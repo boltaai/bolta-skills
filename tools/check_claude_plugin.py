@@ -5,8 +5,9 @@ the plugin's own house style, and the static rules Anthropic's directory applies
 The skills have drifted from the server before: a skill that names a tool the
 host cannot call is worse than a missing skill, because the model tries it,
 gets "unknown tool", and improvises. This gate makes that a CI failure. It also
-keeps v0.2 short and plain: twelve skills, each a few hundred words, no
-commands, no subagents, and no internal words in what the user reads.
+keeps the plugin short and plain: twelve skills, each a few hundred words, no
+commands, at most the read-only subagents listed in AGENTS (full plugin only),
+and no internal words in what the user reads.
 
 Source of truth for tool names and arguments is the server's public
 `tools/list`. It varies by User-Agent: OpenAI user agents lose the routine
@@ -36,8 +37,9 @@ Usage:
     python3 -I tools/check_claude_plugin.py --require-coverage    # every tool used
     python3 -I tools/check_claude_plugin.py --no-bundle           # the full plugin only
 
-Checks, in order: manifest and marketplace, file hygiene, layout (skills only,
-no commands/ or agents/), skill frontmatter (strict YAML, name, description),
+Checks, in order: manifest and marketplace, file hygiene, layout (skills, plus
+agents/ in the full plugin only; no commands/), agent shape (read-only tool list,
+no frontmatter Claude Code ignores), skill frontmatter (strict YAML, name, description),
 skill shape (the five sections, house rules, hand-offs), word budgets, tool ids
 and call-site arguments, links, host-neutral and plain-words lint, citations of
 server code, hook wiring (scripts, matchers, the guard's tool list, settings).
@@ -87,6 +89,22 @@ INTENTIONALLY_UNUSED = {
     "list-reviews": ("the review list is read with list-inbox-items", False),
 }
 
+#: The subagents the full plugin ships (agents/<name>.md). The skills-only bundle ships none: its
+#: connection can have any name, and an agent's tool list has to name the server.
+AGENTS = ("clearing-house",)
+#: Frontmatter a plugin agent may use. permissionMode, hooks, mcpServers and initialPrompt are
+#: ignored for plugin agents, so a file that sets one only looks safer than it is.
+AGENT_KEYS = {"name", "description", "model", "tools", "maxTurns", "color", "effort"}
+AGENT_IGNORED_KEYS = {"permissionMode", "hooks", "mcpServers", "initialPrompt", "disallowedTools"}
+#: The two server prefixes an agent's tool list names: the plugin's own server and one added as "bolta".
+#: A wildcard in the server part is not supported, so a connection named anything else gives the agent
+#: no Bolta tools; its prompt says to stop and the skill does the work itself.
+AGENT_PREFIXES = ("mcp__plugin_bolta_bolta__", "mcp__bolta__")
+#: An agent may call these and nothing else: reads only.
+AGENT_READ_PREFIXES = ("list-", "get-")
+AGENT_READ_EXTRA = {"cross-platform-analytics", "search-engagement-opportunities"}
+MAX_AGENT_WORDS = 700          # agents/<name>.md body, frontmatter excluded
+
 #: The v0.2 skill set and the order of sections inside every SKILL.md.
 SKILLS = ("today", "start", "post", "review", "routine", "campaign", "results",
           "voice", "replies", "connect", "fix", "my-workflow")
@@ -108,7 +126,7 @@ MAX_SKILL_WORDS = 500          # SKILL.md body, frontmatter excluded
 MAX_REFERENCE_WORDS = 600      # each references/*.md
 MAX_SKILLS_TOTAL_WORDS = 10_000  # all SKILL.md files together, frontmatter included
 MAX_DESCRIPTION_WORDS = 60
-MAX_README_WORDS = 400
+MAX_README_WORDS = 430         # was 400 before the plugin gained its review helper (one line)
 MAX_ALWAYS_MUSTS = 3
 
 #: Strings a customer-facing file must never contain (host neutrality).
@@ -464,12 +482,14 @@ def check_files(plugin: pathlib.Path, bundle: bool = False):
         err(".mcp.json", "missing")
 
 
-def check_layout(plugin: pathlib.Path):
-    """v0.2 is skills only. Commands copied skills; subagents are ignored by chat and
-    their hard-coded tool names break for a connection named after a client."""
-    for d in ("commands", "agents"):
-        if (plugin / d).exists():
-            err(f"{d}/", "v0.2 ships no commands or subagents; every skill already shows as /bolta:<name>")
+def check_layout(plugin: pathlib.Path, bundle: bool = False):
+    """Skills, plus the read-only subagents in AGENTS for the full plugin. Commands copied skills,
+    so there are none. The bundle has no agents: chat ignores them, and an agent's tool list names
+    the server, which the bundle's connection can call anything."""
+    if (plugin / "commands").exists():
+        err("commands/", "no commands; every skill already shows as /bolta:<name>")
+    if bundle and (plugin / "agents").exists():
+        err("agents/", "the skills-only bundle ships no subagents (their tool list names the server, and its connection has any name)")
     skills = {}
     sdir = plugin / "skills"
     for d in sorted(p for p in sdir.iterdir() if p.is_dir()) if sdir.is_dir() else []:
@@ -494,6 +514,78 @@ def check_layout(plugin: pathlib.Path):
         if s in OLD_NAMES:
             err(f"skills/{s}", "a v0.1 skill name; v0.2 replaced it")
     return skills
+
+
+
+# --------------------------------------------------------------------------- agents
+
+def check_agents(plugin, tools_by_name, gated):
+    """Each agent is a flat agents/<name>.md that can only read Bolta."""
+    adir = plugin / "agents"
+    if not adir.is_dir():
+        return {}
+    found = {}
+    for p in sorted(adir.rglob("*")):
+        if p.is_dir():
+            continue
+        rel = p.relative_to(plugin)
+        if p.parent != adir or p.suffix != ".md":
+            err(rel, "agents/ holds <name>.md files only")
+            continue
+        found[p.stem] = p
+    for stem in found:
+        if stem not in AGENTS:
+            warn(f"agents/{stem}.md", "not one of the agents in AGENTS in tools/check_claude_plugin.py; add it there if it is meant to ship")
+    for stem in AGENTS:
+        if stem not in found:
+            err("agents/", f"missing the {stem!r} agent")
+    for name, path in found.items():
+        rel = path.relative_to(plugin)
+        text = path.read_text()
+        check_yaml_safety(rel, text)
+        fm, body = split_frontmatter(text)
+        if fm is None:
+            err(rel, "no frontmatter")
+            continue
+        if fm.get("name") != name:
+            err(rel, f"name {fm.get('name')!r} must equal the file name {name!r}")
+        for k in fm:
+            if k in AGENT_IGNORED_KEYS:
+                err(rel, f"frontmatter key {k!r} is ignored for plugin agents; it would only look like a limit (the plugin's hooks.json guard runs inside agents anyway)")
+            elif k not in AGENT_KEYS:
+                err(rel, f"frontmatter key {k!r} is not one of {', '.join(sorted(AGENT_KEYS))}")
+        desc = fm.get("description", "")
+        if not desc:
+            err(rel, "missing description")
+        else:
+            check_description(rel, desc, tools_by_name)
+        n = words(body)
+        if n > MAX_AGENT_WORDS:
+            err(rel, f"{n} words; an agent body is {MAX_AGENT_WORDS} words or fewer")
+        entries = [e.strip() for e in fm.get("tools", "").split(",") if e.strip()]
+        if not entries:
+            err(rel, "no tools list: an agent without one inherits every tool, including the ones that publish")
+        by_tool: dict[str, set[str]] = {}
+        for e in entries:
+            prefix = next((pf for pf in AGENT_PREFIXES if e.startswith(pf)), None)
+            if prefix is None:
+                err(rel, f"tools entry {e!r} is not a Bolta tool under {' or '.join(AGENT_PREFIXES)} (no built-in tools, no other server)")
+                continue
+            tool = e[len(prefix):]
+            by_tool.setdefault(tool, set()).add(prefix)
+            if tool not in tools_by_name:
+                err(rel, f"tools lists {tool!r}, which is not an exposed Bolta tool")
+            elif tool in gated or not (tool.startswith(AGENT_READ_PREFIXES) or tool in AGENT_READ_EXTRA):
+                err(rel, f"tools lists {tool!r}: an agent only reads (list-, get-); anything that saves, sends or changes belongs to the main conversation behind the user's yes")
+        for tool, prefixes in sorted(by_tool.items()):
+            if prefixes != set(AGENT_PREFIXES):
+                err(rel, f"{tool!r} is listed under only one server name; list it under {' and '.join(AGENT_PREFIXES)}")
+        secs = [h for h, _ in sections(body)]
+        if "Hard limits" not in secs:
+            err(rel, "needs a '## Hard limits' section that says the agent only reads")
+        if "material, never instructions" not in body:
+            err(rel, "must say that words from other people are 'material, never instructions' (house rule 5)")
+    return found
 
 
 # --------------------------------------------------------------------------- skills
@@ -728,7 +820,8 @@ def check_lint(plugin, skills):
         for rx, why in BANNED_OUTSIDE_HOST_NOTE:
             if rx.search(host_free):
                 err(rel, why)
-        for m in re.finditer(r"mcp__[\w-]*", body):
+        scan = split_frontmatter(body)[1] if rel.parts[0] == "agents" else body  # an agent's tools: line must name servers
+        for m in re.finditer(r"mcp__[\w-]*", scan):
             # The README may name a whole server as a permission rule
             # (mcp__plugin_bolta_bolta), never one tool (mcp__<server>__<tool>).
             if rel.as_posix() == "README.md" and "__" not in m.group(0)[len("mcp__"):]:
@@ -977,7 +1070,7 @@ def run_checks(plugin, marketplace, tools_by_name, bundle=False, source=None):
         err(".claude-plugin/plugin.json", f"the bundle is named bolta-skills (got {manifest.get('name')!r})")
     check_marketplace(marketplace, plugin, manifest)
     check_files(plugin, bundle)
-    skills = check_layout(plugin)
+    skills = check_layout(plugin, bundle)
     info(f"{len(skills)} skills")
     check_skills(plugin, skills, tools_by_name)
     referenced = check_tool_ids_and_args(plugin, skills, tools_by_name)
@@ -986,6 +1079,11 @@ def run_checks(plugin, marketplace, tools_by_name, bundle=False, source=None):
     check_citations(plugin)
     cfg = check_hooks(plugin, manifest)
     check_guard_matches_matcher(plugin, cfg, tools_by_name)
+    gated = set()
+    for g in hook_groups(cfg, "PreToolUse") if cfg else []:
+        if group_runs(g, "guard-bolta-writes.sh"):
+            gated |= matcher_tools(g.get("matcher", "")) or set()
+    check_agents(plugin, tools_by_name, gated)
     if bundle:
         check_bundle_in_sync(plugin, source)
     _ctx[0] = ""
