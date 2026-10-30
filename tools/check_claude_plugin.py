@@ -91,7 +91,7 @@ INTENTIONALLY_UNUSED = {
 
 #: The subagents the full plugin ships (agents/<name>.md). The skills-only bundle ships none: its
 #: connection can have any name, and an agent's tool list has to name the server.
-AGENTS = ("clearing-house",)
+AGENTS = ("clearing-house", "community-triage")
 #: Frontmatter a plugin agent may use. permissionMode, hooks, mcpServers and initialPrompt are
 #: ignored for plugin agents, so a file that sets one only looks safer than it is.
 AGENT_KEYS = {"name", "description", "model", "tools", "maxTurns", "color", "effort"}
@@ -117,7 +117,7 @@ OLD_NAMES = {
     "workspace-setup", "social-publishing", "content-planning", "routines", "approvals",
     "social-inbox", "outbound-engagement", "analytics-review", "brand-voice-setup",
     "brand-voice-check", "accounts-and-buckets", "wordpress-blog", "undo-and-recovery",
-    "approval-batch-reviewer", "community-triage", "content-calendar-planner",
+    "approval-batch-reviewer", "content-calendar-planner",
     "performance-analyst", "plan-week",
 }
 
