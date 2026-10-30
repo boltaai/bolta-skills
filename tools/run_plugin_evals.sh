@@ -38,7 +38,7 @@ case "$group" in
   smoke)  claude plugin eval . --tag smoke  --ablation none --trust-plugin --no-publish --threshold 0.8 --max-cost-usd 10 -j 4 --json "$out/smoke.json" "$@" ;;
   quiet)  claude plugin eval . --tag quiet  --ablation none --trust-plugin --no-publish --threshold 1.0 --max-cost-usd 8 -j 4 --json "$out/quiet.json" "$@" ;;
   newtools) claude plugin eval . --tag newtools --ablation none --trust-plugin --no-publish --threshold 0.8 --max-cost-usd 10 -j 4 --json "$out/newtools.json" "$@" ;;
-  agents) claude plugin eval . --tag agents --ablation none --trust-plugin --no-publish --threshold 0.8 --max-cost-usd 6 -j 1 --json "$out/agents.json" "$@" ;;
+  agents) claude plugin eval . --tag agents --ablation none --trust-plugin --no-publish --threshold 0.8 --max-cost-usd 10 -j 1 --json "$out/agents.json" "$@" ;;
   all)
     # Run every group even when one misses its threshold (exit 1) or hits its
     # cost ceiling (exit 2): under `set -e` a bare call would end the script there

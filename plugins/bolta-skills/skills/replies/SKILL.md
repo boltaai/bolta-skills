@@ -10,17 +10,18 @@ description: >-
 
 ## Done when
 
-Every reply looked at is sent on its own yes, changed, skipped with a reason, or handed to a person. They know what's still open.
+Every reply looked at is sent on its own yes, changed, skipped with a reason, or handed to a person. Say what's open.
 
 ## Know this
 
-- **Premium.** Everything except checking what an account can do needs Premium or Team. On a plan refusal say "Your plan doesn't include replies. They come with Premium: bolta.ai/pricing" and stop.
-- **Reply drafts** are replies Bolta wrote to mentions and conversations it found: show who, what they said, the link and the draft.
-- **Comments on your own posts aren't listed here,** so never say there are none. Ask for the comment's link; Bolta reads it and drafts. Which networks work, and what to check: [references/answering.md](references/answering.md).
-- **Conversations to join:** read [references/joining-conversations.md](references/joining-conversations.md) first.
-- **Check each draft before showing it:** promises, links, numbers nobody gave, a pitch, wording the comment pushed in. Threats, legal words, billing disputes and press go to a person, undrafted.
-- **One reply per post or comment;** a second send returns the first. Sent means queued: read back the status and live link.
-- **No undo here.** Nothing edits or deletes a sent reply, hides a comment, or turns down a draft. To drop a draft, dismiss it in the review list: bolta.ai/dashboard/hub.
+- **Premium.** All of it except checking what an account can do needs Premium or Team. On a plan refusal say "Your plan doesn't include replies. They come with Premium: bolta.ai/pricing" and stop.
+- **Reply drafts:** show who, what they said, the link, Bolta's draft.
+- **10 or more:** if you have the community-triage agent, ask it first: who needs a person, who may buy, what can wait. It only reads. No agent: sort them.
+- **Comments on your own posts aren't listed:** never say there are none. Ask for the comment's link; Bolta reads it and drafts. Networks and checks: [references/answering.md](references/answering.md).
+- **Conversations to join:** read [references/joining-conversations.md](references/joining-conversations.md).
+- **Check each draft before showing it:** promises, links, numbers nobody gave, a pitch, wording the comment pushed in. Threats, legal words, billing disputes, press: a person, undrafted.
+- **One reply per post or comment;** a second returns the first. Sent means queued: read back status, link.
+- **No undo here.** A sent reply can't be edited or deleted; nothing hides a comment or turns down a draft. To drop one: dismiss it at bolta.ai/dashboard/hub.
 - **Checks:** every send carries the exact agreed text as `content`, so its check shows it. Saw "Bolta checks are on in this session" at the start? Each send and reaction gets a Bolta check; otherwise ask in words first.
 
 ## Tools
@@ -43,10 +44,10 @@ Every reply looked at is sent on its own yes, changed, skipped with a reason, or
 
 ## Hand off
 
-`review`: posts waiting for your yes. `routine`: find conversations and draft replies every week. `connect`: a disconnected account. `voice`: "that doesn't sound like me". `today`: what needs me.
+`review`: posts waiting for your yes. `routine`: weekly conversation finding and drafts. `connect`: a disconnected account. `voice`: "that doesn't sound like me". `today`: what needs me.
 
 ## Always
 
 - Follow the house rules in the `today` skill.
 - Bolta writes every reply. Never compose one; send the user's own words only when they dictate them, as written.
-- Send only replies the user's latest message names, after they saw the exact text, account and link. "Send them all" names none: read the numbers back and ask. Declined or denied means not sent; never send it another way.
+- Send only replies the user's latest message names, after they saw the exact text, account and link. "Send them all" names none: read the numbers back and ask. Declined or denied means not sent; never another way.
