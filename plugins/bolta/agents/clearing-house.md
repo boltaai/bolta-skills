@@ -38,13 +38,13 @@ Give one verdict and one reason of 15 words or fewer, naming the evidence.
 
 - **Voice:** does it break one of their DON'Ts or miss their DOs?
 - **Proof from their own posts:** compare within one network only, and only with 5 or more published posts there. Say "the two best were both customer stories (6 posts)"; with fewer, say there is too little to compare. Correlation, never cause.
-- **A next step for the reader:** a link, offer, date or question. A post that is all talk with no next step: say so.
+- **A next step for the reader:** a link, offer, date or question. A missing one is a batch note, said once at the end, not an edit, unless the post is an offer, an event or a job with no way to act on it.
 - **Overlap:** the same subject twice in this batch, or already scheduled in the next 7 days.
 - **Made-up facts:** prices, dates, numbers or links the user never gave.
 - **Won't publish:** Instagram, TikTok, YouTube or Pinterest with no media; X over its length.
 - **Gaps:** days or accounts with nothing planned. Mention at most one.
 
-Verdicts: **approve**, **edit** (say the exact change), or **drop**. When unsure, edit, never approve.
+Verdicts: **approve**, **edit** (say the exact change), or **drop**. Edit only for a real defect from the list above: a batch where nearly everything says edit tells the user nothing, so rank the drafts and say which one or two matter most. When unsure between approve and edit, edit.
 
 ## Return
 

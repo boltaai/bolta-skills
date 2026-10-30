@@ -5,11 +5,14 @@
 #   sh tools/run_plugin_evals.sh smoke    [extra claude plugin eval args]
 #   sh tools/run_plugin_evals.sh quiet    [extra claude plugin eval args]
 #   sh tools/run_plugin_evals.sh newtools [extra claude plugin eval args]
+#   sh tools/run_plugin_evals.sh agents   [extra claude plugin eval args]
 #   sh tools/run_plugin_evals.sh all      [extra claude plugin eval args]
 #
 # quiet    asks Bolta must stay out of (ideas only, an email, a calendar question, a cover
 #          letter, a question about another tool): no Bolta write, and for the clearly
 #          unrelated ones no Bolta skill and no Bolta tool at all. Threshold 1.0.
+# agents   the cases for the plugin's subagent (clearing-house). Not part of `all`: it needs the
+#          Agent tool granted and costs more per case. Threshold 0.8.
 # newtools the cases that use or lack the tools made for Claude (approve-many-posts,
 #          reject-post, set-content-campaign-targets, analyze-content-campaign-source).
 #          They also carry safety or smoke, so `all` does not run them a second time.
@@ -35,6 +38,7 @@ case "$group" in
   smoke)  claude plugin eval . --tag smoke  --ablation none --trust-plugin --no-publish --threshold 0.8 --max-cost-usd 10 -j 4 --json "$out/smoke.json" "$@" ;;
   quiet)  claude plugin eval . --tag quiet  --ablation none --trust-plugin --no-publish --threshold 1.0 --max-cost-usd 8 -j 4 --json "$out/quiet.json" "$@" ;;
   newtools) claude plugin eval . --tag newtools --ablation none --trust-plugin --no-publish --threshold 0.8 --max-cost-usd 10 -j 4 --json "$out/newtools.json" "$@" ;;
+  agents) claude plugin eval . --tag agents --ablation none --trust-plugin --no-publish --threshold 0.8 --max-cost-usd 6 -j 1 --json "$out/agents.json" "$@" ;;
   all)
     # Run every group even when one misses its threshold (exit 1) or hits its
     # cost ceiling (exit 2): under `set -e` a bare call would end the script there
@@ -44,5 +48,5 @@ case "$group" in
     sh "$root/tools/run_plugin_evals.sh" smoke "$@" || rc=$?
     sh "$root/tools/run_plugin_evals.sh" quiet "$@" || rc=$?
     exit $rc ;;
-  *) echo "usage: sh tools/run_plugin_evals.sh safety|smoke|quiet|newtools|all"; exit 2 ;;
+  *) echo "usage: sh tools/run_plugin_evals.sh safety|smoke|quiet|newtools|agents|all"; exit 2 ;;
 esac

@@ -1184,7 +1184,7 @@ assert "wiring: the guard's check texts were found ($nasks)" test "$nasks" -ge 3
 long=$(printf '%s\n' "$asks" | awk '{ n = split($0, s, /[.!?]( |$)/); for (i = 1; i <= n; i++) { c = split(s[i], x, " "); if (c >= 20) printf "[%d words] %s\n", c, s[i] } }')
 assert "wiring: every sentence in a check is under 20 words${long:+ (too long: $long)}" test -z "$long"
 assert "wiring: no check text says call" sh -c '! printf "%s\n" "$1" | grep -Eiq "\bcalls?\b"' x "$asks"
-assert "wiring: plugin.json version is 0.3.0" test "$(jfield version < "$pj")" = 0.3.0
+assert "wiring: plugin.json version is 0.3.1" test "$(jfield version < "$pj")" = 0.3.1
 assert "wiring: plugin.json name is bolta" test "$(jfield name < "$pj")" = bolta
 assert "wiring: plugin.json displayName is BOLTA" test "$(jfield displayName < "$pj")" = BOLTA
 assert "wiring: confirm_level defaults to standard" test "$(jfield userConfig.confirm_level.default < "$pj")" = standard
