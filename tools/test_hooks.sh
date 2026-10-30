@@ -1188,7 +1188,7 @@ assert "wiring: plugin.json version is 0.3.2" test "$(jfield version < "$pj")" =
 assert "wiring: plugin.json name is bolta" test "$(jfield name < "$pj")" = bolta
 assert "wiring: plugin.json displayName is BOLTA" test "$(jfield displayName < "$pj")" = BOLTA
 assert "wiring: confirm_level defaults to standard" test "$(jfield userConfig.confirm_level.default < "$pj")" = standard
-assert "wiring: confirm_level options are standard and careful" test "$(jfield userConfig.confirm_level.options.0 < "$pj") $(jfield userConfig.confirm_level.options.1 < "$pj")" = "standard careful"
+assert "wiring: confirm_level describes both levels, standard and careful" sh -c 'printf "%s\n" "$1" | grep -Fq "standard:" && printf "%s\n" "$1" | grep -Fq "careful:"' x "$(jfield userConfig.confirm_level.description < "$pj")"
 assert "wiring: confirm_level has no third option" sh -c '! sh "$1" field userConfig.confirm_level.options.2 < "$2" >/dev/null' x "$reader" "$pj"
 assert "wiring: the old confirm_scope setting is gone" sh -c '! sh "$1" field userConfig.confirm_scope < "$2" >/dev/null' x "$reader" "$pj"
 assert "wiring: the reader is executable shell" test -x "$reader" -a "$(head -n 1 "$reader")" = "#!/bin/sh"
@@ -1222,7 +1222,7 @@ if [ -d "$bplugin" ]; then
   assert "bundle: the house rules end by saying the checks may not run" test "$(printf '%s\n' "$bctx" | tail -n 1)" = "$bundle_line"
   assert "bundle: the house rules never say the checks are on" sh -c '! printf "%s\n" "$1" | grep -Fq "checks are on"' x "$bctx"
   assert "bundle: the house rules are otherwise the full plugin's, line for line" test "$(printf '%s\n' "$bctx" | grep -vFx "$bundle_line")" = "$(printf '%s\n' "$ctx" | grep -vFx "$full_line")"
-  assert "bundle: bolta-house-rules.sh differs from the full plugin's by that one line only" test "$(grep -vFx "$bundle_line" "$bscripts/bolta-house-rules.sh")" = "$(grep -vFx "$full_line" "$scripts/bolta-house-rules.sh")"
+  assert "bundle: bolta-house-rules.sh differs from the full plugin's by that one line only" test "$(grep -vFx "$bundle_line'" "$bscripts/bolta-house-rules.sh")" = "$(grep -vFx "$full_line'" "$scripts/bolta-house-rules.sh")"
   assert "bundle: it starts no connection of its own (no .mcp.json)" no_file "$bplugin/.mcp.json"
   assert "bundle: plugin.json is named bolta-skills" test "$(jfield name < "$bplugin/.claude-plugin/plugin.json")" = bolta-skills
   assert "bundle: confirm_level is kept (the guard reads it)" test "$(jfield userConfig.confirm_level.default < "$bplugin/.claude-plugin/plugin.json")" = standard
