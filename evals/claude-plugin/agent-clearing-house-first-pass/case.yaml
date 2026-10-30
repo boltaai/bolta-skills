@@ -1,0 +1,52 @@
+schema_version: "1.1"
+name: agent-clearing-house-first-pass
+description: 'Agent: 9 drafts wait for a yes (the suite default). The review skill hands the first pass to the clearing-house agent, which only reads; the user gets numbered approve / edit / drop advice and nothing is decided.'
+tags: [agents]
+expected_outcome: 'review fires; the clearing-house agent is asked for a first pass; the reply is a numbered list with advice and a one-line suggested answer; no approval, rejection, schedule, send for review, edit or delete happens; no ids shown.'
+execution:
+  prompt: |
+    What's waiting for me?
+  max_turns: 30
+  timeout_seconds: 600
+  allowed_tools: [Skill, Agent]
+graders:
+  - name: skill-fired
+    # The review skill owns this ask.
+    type: tool_used
+    tool: Skill
+    input_match: '"skill"\s*:\s*"(?:[\w-]+:)?(review)"'
+    min: 1
+  - name: asks-the-agent
+    # 8 or more waiting: the first pass goes to the clearing-house agent.
+    type: tool_used
+    tool: Agent
+    input_match: 'clearing-house'
+    min: 1
+  - name: reads-the-list
+    # Somebody read the review list from Bolta (the agent or the main conversation).
+    type: regex
+    pattern: '"name"\s*:\s*"mcp__plugin_bolta_bolta__list-inbox-items"'
+    target: trace
+  - name: gives-advice
+    # The user gets advice per draft and a suggested answer, not just a list.
+    type: regex
+    pattern: '(?=[\s\S]*\bdrop\b)(?=[\s\S]*\b(yes|approve)\b)(?=[\s\S]*\b(edit|shorter|change|tighten|rewrite)\b)'
+    flags: i
+  - name: not-a-yes
+    # Advice is not a decision: the reply must not say anything was approved, scheduled or sent.
+    type: regex
+    pattern: "\\b(i(?:'ve| have)|all|they(?:'re| are)|now)\\s+(approved|scheduled|published|posted)\\b"
+    flags: i
+    match: not_contains
+  - name: no-ids
+    # House rule 9: no ids in what the user reads.
+    type: regex
+    pattern: '\b[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}\b'
+    flags: i
+    match: not_contains
+  - name: no-bolta-write
+    # Nobody decided or changed anything: no approval, rejection, send for review, schedule, post, edit or delete.
+    type: regex
+    pattern: '"name"\s*:\s*"mcp__plugin_bolta_bolta__(create-post|bulk-create-posts|create-wordpress-blog-post|submit-for-review|approve-post|approve-many-posts|approve-recurring-review|reject-post|reject-recurring-review|schedule-post|publish-post|update-post|update-post-platform-details|delete-post|restore-deleted|create-routine|update-routine|activate-routine|resume-routine|pause-routine|run-routine-now|archive-routine|create-content-campaign|update-content-campaign|set-content-campaign-status|update-voice-profile|send-outreach-reply|publish-engagement-reply|reply-to-social-content|react-to-social-content)"'
+    target: trace
+    match: not_contains
