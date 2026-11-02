@@ -76,7 +76,8 @@ PENDING_TOOLS = ("approve-many-posts", "reject-post", "set-content-campaign-targ
 CLAUDE_USER_AGENT = "claude-code/2.1.302 (cli; bolta-plugin-check)"
 
 #: Accepted on every Bolta tool regardless of its declared schema: the MCP layer
-#: prepends an optional workspace_id and defaults it to the connection's workspace.
+#: prepends workspace_id. It may be left out only when the connection reaches one
+#: brand (workspace); with several, every brand call must pass it.
 UNIVERSAL_PARAMS = {"workspace_id"}
 
 #: Hyphenated words that legitimately appear in backticks and are not tool ids.

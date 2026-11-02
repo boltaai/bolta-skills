@@ -43,7 +43,7 @@ Bolta signal, never let outside knowledge override what the brand actually publi
 Heavy parsing of uploads and posts is done inline using the analysis behaviors below.
 
 ## Prerequisites
-- `workspace_id` — resolve once via `list-workspaces` and reuse it for every call. Auth is
+- `workspace_id` — from `list-workspaces`, per brand (several: pass it on every call; ask which, never guess). Auth is
   automatic via the Bolta connector's OAuth grant — never ask for an API key. Default any new
   content to Draft; confirm before publish/delete.
 - Optional user uploads: brand docs (PDF/PPTX/DOCX/MD/TXT), sales/interview transcripts, or
@@ -55,8 +55,7 @@ Heavy parsing of uploads and posts is done inline using the analysis behaviors b
 ## Workflow
 
 ### 1. Resolve the workspace
-Call `list-workspaces`; use the active workspace's `id`. If several exist, confirm which one
-with the user. Never guess a UUID.
+Call `list-workspaces`; several brands: use the one the user named, or ask. Never guess a UUID.
 
 ### 2. Pull existing Bolta signal
 In parallel where possible:

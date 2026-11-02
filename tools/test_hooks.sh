@@ -200,7 +200,7 @@ forge_window() {
   ft=$(turn_token)
   fw=$(( $(nowsec) - $2 ))
   printf '%s %s\n' "$ft" "$((fw - 1))" > "$(mdir)/turn"
-  printf '%s %s %s\n' "${3:-$ft}" "$fw" "${PROMPT_ID:--}" > "$(mdir)/win-${4:-go}-$1"
+  printf '%s %s %s %s\n' "${3:-$ft}" "$fw" "${PROMPT_ID:--}" "w$WS" > "$(mdir)/win-${4:-go}-$1"
 }
 assert() { # <label> <shell test...>
   label=$1; shift
@@ -234,12 +234,12 @@ input_for() {
     run-routine-now|archive-routine|activate-routine|resume-routine|pause-routine) echo "{\"routine_id\":\"$RID1\"}" ;;
     voice-generate) echo "{\"workspace_id\":\"$WS\",\"topics\":[\"pricing\"],\"platform\":\"linkedin\"}" ;;
     approve-post) echo "{\"workspace_id\":\"$WS\",\"post_id\":\"$PID\",\"schedule_mode\":\"approve_only\"}" ;;
-    approve-many-posts) echo "{\"items\":[{\"post_id\":\"$PID\",\"expected_fingerprint\":\"5d0c7e21a9f34b68\",\"schedule_mode\":\"approve_only\"},{\"post_id\":\"$PID2\",\"expected_fingerprint\":\"0e93b6d1c47a28f5\",\"schedule_mode\":\"use_suggested_time\"},{\"post_id\":\"$PID\",\"expected_fingerprint\":\"a1\",\"schedule_mode\":\"set_fixed_time\",\"fixed_time\":\"2026-10-21T09:00:00\"}]}" ;;
-    reject-post) echo "{\"post_id\":\"$PID\",\"reason\":\"Too salesy for our readers\",\"categories\":[\"too_salesy\"]}" ;;
+    approve-many-posts) echo "{\"workspace_id\":\"$WS\",\"items\":[{\"post_id\":\"$PID\",\"expected_fingerprint\":\"5d0c7e21a9f34b68\",\"schedule_mode\":\"approve_only\"},{\"post_id\":\"$PID2\",\"expected_fingerprint\":\"0e93b6d1c47a28f5\",\"schedule_mode\":\"use_suggested_time\"},{\"post_id\":\"$PID\",\"expected_fingerprint\":\"a1\",\"schedule_mode\":\"set_fixed_time\",\"fixed_time\":\"2026-10-21T09:00:00\"}]}" ;;
+    reject-post) echo "{\"workspace_id\":\"$WS\",\"post_id\":\"$PID\",\"reason\":\"Too salesy for our readers\",\"categories\":[\"too_salesy\"]}" ;;
     set-content-campaign-targets) echo "{\"campaign_id\":\"$CID1\",\"account_ids\":[\"$ACC\"],\"context_notes\":\"Launch on Nov 3\"}" ;;
-    approve-recurring-review) echo "{\"review_id\":\"$PID\",\"approveWithSchedule\":true,\"useSuggestedTime\":true}" ;;
+    approve-recurring-review) echo "{\"workspace_id\":\"$WS\",\"review_id\":\"$PID\",\"approveWithSchedule\":true,\"useSuggestedTime\":true}" ;;
     schedule-post) echo "{\"workspace_id\":\"$WS\",\"post_id\":\"$PID\",\"time\":\"2026-10-21T09:00:00\"}" ;;
-    delete-post) echo "{\"post_id\":\"$PID\"}" ;;
+    delete-post) echo "{\"workspace_id\":\"$WS\",\"post_id\":\"$PID\"}" ;;
   esac
 }
 
@@ -376,7 +376,7 @@ check_guard "kinds: the first delete asks" ask standard "$(pre "${P}delete-post"
 mark "${P}delete-post" "$(input_for delete-post)" "$OK_DELETE"
 assert "kinds: a successful delete opens a delete-only window" test -f "$(mdir)/win-del-$SP"
 assert "kinds: a delete opens no approval window" no_file "$(mdir)/win-go-$SP"
-check_guard "kinds: a second delete in the same reply is silent" silent standard "$(pre "${P}delete-post" "{\"post_id\":\"$PID2\"}")"
+check_guard "kinds: a second delete in the same reply is silent" silent standard "$(pre "${P}delete-post" "{\"workspace_id\":\"$WS\",\"post_id\":\"$PID2\"}")"
 check_guard "kinds: an approve after a delete OK asks" ask standard "$(pre "${P}approve-post" "{\"workspace_id\":\"$WS\",\"post_id\":\"$PID2\",\"schedule_mode\":\"next_slot\"}")"
 check_guard "kinds: a schedule after a delete OK asks" ask standard "$(pre "${P}schedule-post" "$(input_for schedule-post)")"
 check_guard "kinds: a repeating-post approve after a delete OK asks" ask standard "$(pre "${P}approve-recurring-review" "$(input_for approve-recurring-review)")"
@@ -443,7 +443,7 @@ check_guard "reject: the first no asks" ask standard "$(pre "${P}reject-post" "$
 mark "${P}reject-post" "$(input_for reject-post)" "$OK_REJECT"
 assert "reject: a successful no opens a no-and-delete window" test -f "$(mdir)/win-del-$SP"
 assert "reject: it opens no approval window" no_file "$(mdir)/win-go-$SP"
-check_guard "reject: a second no in the same reply is silent" silent standard "$(pre "${P}reject-post" "{\"post_id\":\"$PID2\",\"reason\":\"Too long\",\"categories\":[\"too_long\"]}")"
+check_guard "reject: a second no in the same reply is silent" silent standard "$(pre "${P}reject-post" "{\"workspace_id\":\"$WS\",\"post_id\":\"$PID2\",\"reason\":\"Too long\",\"categories\":[\"too_long\"]}")"
 check_guard "reject: a delete in the same reply is silent" silent standard "$(pre "${P}delete-post" "$(input_for delete-post)")"
 check_guard "reject: an approve after a no OK asks" ask standard "$(pre "${P}approve-post" "$(input_for approve-post)")"
 check_guard "reject: a batch approve after a no OK asks" ask standard "$(pre "${P}approve-many-posts" "$(input_for approve-many-posts)")"
@@ -596,6 +596,42 @@ fi
 ln -sf "$(mdir)/turn" "$(mdir)/win-go-$SP.link" && mv -f "$(mdir)/win-go-$SP.link" "$(mdir)/win-go-$SP"
 check_guard "window: window file that is a symlink asks" ask standard "$(pre "${P}approve-post" "$(input_for approve-post)")"
 
+# The window is per brand: an OK for one brand never covers another, nor a
+# call without workspace_id (its own bucket).
+WS2=99999999-9999-4999-8999-999999999999
+in_ws2() { input_for "$1" | sed "s/$WS/$WS2/"; }
+NOWS_APPROVE="{\"post_id\":\"$PID\",\"schedule_mode\":\"approve_only\"}"
+fresh
+new_turn
+mark "${P}approve-post" "$(input_for approve-post)" "$OK_APPROVE"
+check_guard "brand: same brand passes in the batch" silent standard "$(pre "${P}approve-post" "$(input_for approve-post)")"
+check_guard "brand: same brand passes a schedule too" silent standard "$(pre "${P}schedule-post" "$(input_for schedule-post)")"
+check_guard "brand: another brand is checked" ask standard "$(pre "${P}approve-post" "$(in_ws2 approve-post)")"
+check_guard "brand: another brand's schedule is checked" ask standard "$(pre "${P}schedule-post" "$(in_ws2 schedule-post)")"
+check_guard "brand: another brand's delete is checked" ask standard "$(pre "${P}delete-post" "$(in_ws2 delete-post)")"
+check_guard "brand: missing workspace_id is checked" ask standard "$(pre "${P}approve-post" "$NOWS_APPROVE")"
+check_guard "brand: null workspace_id is checked" ask standard "$(pre "${P}approve-post" "{\"workspace_id\":null,\"post_id\":\"$PID\"}")"
+check_guard "brand: unreadable workspace_id is checked" ask standard "$(pre "${P}approve-post" "{\"workspace_id\":\"$WS x\",\"post_id\":\"$PID\"}")"
+check_guard "brand: a number workspace_id is checked" ask standard "$(pre "${P}approve-post" "{\"workspace_id\":7,\"post_id\":\"$PID\"}")"
+first=$(cut -d' ' -f1-3 "$(mdir)/win-go-$SP")
+mark "${P}approve-post" "$(in_ws2 approve-post)" "$OK_APPROVE"
+check_guard "brand: after its own OK, the second brand passes" silent standard "$(pre "${P}approve-post" "$(in_ws2 approve-post)")"
+check_guard "brand: the first brand still passes" silent standard "$(pre "${P}approve-post" "$(input_for approve-post)")"
+assert "brand: adding a brand keeps the opening time" test "$(cut -d' ' -f1-3 "$(mdir)/win-go-$SP")" = "$first"
+check_guard "brand: missing workspace_id is still checked" ask standard "$(pre "${P}approve-post" "$NOWS_APPROVE")"
+mark "${P}approve-post" "{\"workspace_id\":\"$WS x\",\"post_id\":\"$PID\"}" "$OK_APPROVE"
+assert "brand: an unreadable workspace_id adds nothing" test "$(cut -d' ' -f4- "$(mdir)/win-go-$SP")" = "w$WS w$WS2"
+fresh
+new_turn
+mark "${P}approve-post" "$NOWS_APPROVE" "$OK_APPROVE"
+check_guard "brand: no workspace_id OK covers only calls without one" silent standard "$(pre "${P}approve-post" "$NOWS_APPROVE")"
+check_guard "brand: no workspace_id OK never covers a brand" ask standard "$(pre "${P}approve-post" "$(input_for approve-post)")"
+fresh
+new_turn
+forge_window "$SP" 10
+printf '%s %s %s\n' "$(turn_token)" "$(cut -d' ' -f2 "$(mdir)/win-go-$SP")" "$PROMPT_ID" > "$(mdir)/win-go-$SP"
+check_guard "brand: a window with no brands is never used" ask standard "$(pre "${P}approve-post" "$(input_for approve-post)")"
+
 # Failed calls open nothing.
 fail_case() { # <label> <tool> <response>
   fresh
@@ -681,7 +717,7 @@ quiet "after-call marker with garbage prints nothing" "$markh" "{{{"
 fresh
 new_turn
 mark "${P}approve-post" "$(input_for approve-post)" "$OK_APPROVE"
-check_guard "window: pretty-printed approve is silent" silent standard "$(printf '{\n  "session_id": "%s",\n  "prompt_id": "%s",\n  "hook_event_name": "PreToolUse",\n  "tool_name": "%sapprove-post",\n  "tool_input": {\n    "post_id": "%s"\n  }\n}' "$SID" "$PROMPT_ID" "$P" "$PID2")"
+check_guard "window: pretty-printed approve is silent" silent standard "$(printf '{\n  "session_id": "%s",\n  "prompt_id": "%s",\n  "hook_event_name": "PreToolUse",\n  "tool_name": "%sapprove-post",\n  "tool_input": {\n    "workspace_id": "%s",\n    "post_id": "%s"\n  }\n}' "$SID" "$PROMPT_ID" "$P" "$WS" "$PID2")"
 
 # =====================================================================================
 # 3. Bolta routines made in this session
@@ -1074,7 +1110,7 @@ if [ -f "$plugin/skills/today/SKILL.md" ]; then
 fi
 if [ "$(printf '%s\n' "$expected" | grep -c .)" -ne 10 ]; then
   expected=$(cat <<'RULES'
-1. One Bolta connection is one workspace. Say its name on every save: "Saving to Acme."
+1. Name the brand on every save: "Saving to Acme." Several brands: workspace_id on every call. Unsure? Ask.
 2. Times are in the workspace's clock. Send a time zone only when the user names a place.
 3. Look once per conversation (workspace, accounts, voice). Reuse it.
 4. Drafts are free. Nothing gets approved, scheduled, published or switched on without a yes in the user's latest message that covers those items, after they have seen the exact text.

@@ -61,7 +61,7 @@ then report the error plainly. Never pitch the other product on an error.
 ## Workflow — full loop
 
 ### 1. Resolve workspace and window
-`list-workspaces` → active `workspace_id`. Window: last **30 days** unless the user names one;
+`list-workspaces` → the brand's `workspace_id` (several: ask which). Window: last **30 days** unless the user names one;
 state the window in the output.
 
 ### 2. Rank the organic winners (Bolta)

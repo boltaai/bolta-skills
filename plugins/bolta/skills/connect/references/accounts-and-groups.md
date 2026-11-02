@@ -12,7 +12,7 @@
 
 ## Connecting
 
-- Say: "Connecting happens in your browser. Check the workspace switcher shows Acme first." The link carries no workspace; for agencies, this picks the client.
+- Say: "Connecting happens in your browser. Check the workspace switcher shows Acme first." The link carries no brand; the browser's selection picks it.
 
 ## Account groups
 

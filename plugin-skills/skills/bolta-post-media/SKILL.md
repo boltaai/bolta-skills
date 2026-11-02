@@ -55,7 +55,7 @@ fields. This applies identically to images ChatGPT just generated and files the 
 (image or video). Bolta downloads from `download_url` and stores a durable copy.
 
 ## Prerequisites
-- `workspace_id` — resolve once via `list-workspaces`, reuse. Auth is automatic via the Bolta
+- `workspace_id` — from `list-workspaces`, per brand (several: pass it on every call; ask which, never guess). Auth is automatic via the Bolta
   connector's OAuth grant — never ask for an API key. Default new content to Draft; confirm
   before publish/delete.
 - The media file object(s) — from a ChatGPT image generation or a user upload.

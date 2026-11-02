@@ -50,7 +50,7 @@ here — this skill works the queue as it stands.
 | `submit-for-review` | Push the user's own drafts into the review queue. |
 
 ## Prerequisites
-- `workspace_id` — resolve once via `list-workspaces`, reuse for every call. Auth is automatic
+- `workspace_id` — from `list-workspaces`, per brand (several: pass it on every call; ask which, never guess). Auth is automatic
   via the Bolta connector's OAuth grant — never ask for an API key. Default new content to
   Draft; confirm before publish/delete.
 - Approving/rejecting requires an **owner/admin/creator** role (viewers are read-only;
@@ -60,7 +60,7 @@ here — this skill works the queue as it stands.
 ## Workflow
 
 ### 1. Resolve the workspace
-Call `list-workspaces` and use the active workspace's `id`. Never guess a UUID.
+Call `list-workspaces`; several brands: use the one the user named, or ask. Never guess a UUID.
 
 ### 2. Pull the inbox
 Prefer one call: `list-inbox-items(workspace_id)` — the unified inbox. Each item carries a

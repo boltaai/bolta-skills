@@ -31,7 +31,7 @@ media (bolta-post-media).
 | `update-post-platform-details` | Set per-platform `fields` (poll, flair, title, privacy…). |
 
 ## Prerequisites
-- `workspace_id` — resolve once via `list-workspaces`, reuse. Auth is automatic via the Bolta
+- `workspace_id` — from `list-workspaces`, per brand (several: pass it on every call; ask which, never guess). Auth is automatic via the Bolta
   connector's OAuth grant — never ask for an API key. Default new content to Draft; confirm
   before publish/delete.
 - The `post_id` for an existing post (or create one first).

@@ -35,7 +35,7 @@ that already exists, use brand-voice-validate.
 For the voice-vs-tone model see `references/voice-constant-tone-flexes.md`.
 
 ## Prerequisites
-- `workspace_id` — resolve once via `list-workspaces` and reuse it. Auth is automatic via the
+- `workspace_id` — from `list-workspaces`, per brand (several: pass it on every call; ask which, never guess). Auth is automatic via the
   Bolta connector's OAuth grant — never ask for an API key. Default new content to Draft;
   confirm before publish/delete.
 - A brand voice source, found in this order (stop at first hit):

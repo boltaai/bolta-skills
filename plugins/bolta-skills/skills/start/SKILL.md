@@ -13,10 +13,11 @@ Their voice is shown, a week of posts is scheduled or waiting for their yes, and
 
 ## Know this
 
-- Read [references/first-session.md](references/first-session.md) before the first reply: the words for each step.
-- **One read, all at once:** workspace, settings, accounts, voice, about-your-business records, published posts (last 60 days, with metrics), Bolta routines, campaigns. Skip what's done. Voice, accounts and a Bolta routine all in place: hand to `today`.
+- Read [references/first-session.md](references/first-session.md) first: the words for each step.
+- **Several brands:** ask which to set up first.
+- **One read, all at once:** workspace, settings, accounts, voice, about-your-business records, published posts (last 60 days, with metrics), Bolta routines, campaigns. Skip what's done. Voice, accounts and a Bolta routine in place: `today`.
 - **One question, only for what's missing**, in one message:
-  - No accounts: a connect link; it can't be skipped. It opens whichever workspace the browser has selected. On "done", read accounts again.
+  - No accounts: a connect link, never skipped; it opens the brand the browser has selected. On "done", read accounts again.
   - No voice: their website and one thing to post about this week. The answer is the go-ahead.
   - No topic: what to post about this week. Never invent one.
   - UTC time zone: their city, sent as the time zone; Bolta Settings makes it stick.

@@ -2,17 +2,17 @@
 
 ## Look once (first Bolta ask in a conversation)
 
-- `list-workspaces`: one row (a connection can't switch). Keep its id and name.
+- `list-workspaces`: every brand on the connection; keep each id and name. Several: do the reads below per brand, with its `workspace_id`, one section each.
 - `get-workspace`: `name`, `timezone`, `safe_mode` (review mode: everything waits for a yes). `UTC` is often unset: if a time matters, ask their city once.
 - `list-accounts`: platform, name, `token_status`. Not `valid`: disconnected; posts skip it until reconnected.
 - `get-voice-context`: `writing.feedback_count`, `knowledge.available`, `missing_fields`. "No voice profile" means none yet.
 
 ## The reads (fresh every time, all at once)
 
-- **Waiting for your yes:** `list-inbox-items(status="pending", limit=20)`. Count the workspace-wide totals: `total_team` plus `total_recurring`. Drafts from Bolta routines and campaigns arrive as team rows. `total_hunter` is reply drafts (`replies`); `total_report` is reports, mention only. Drafts never sent for review aren't counted; mention them only if this conversation saved some.
+- **Waiting for your yes:** `list-inbox-items(status="pending", limit=20)`. Count the workspace-wide totals: `total_team` plus `total_recurring`. Drafts from Bolta routines and campaigns arrive as team rows. `total_hunter` is reply drafts (`replies`); `total_report` is reports, mention only. Unsent drafts aren't counted; mention only ones this conversation saved.
 - **Going out this week:** `list-scheduled-posts(start_date="<now>", end_date="<now + 7 days>")`, as UTC times ending in `Z`. Count `total_count`; show the next one.
 - **Didn't go out:** `list-workspace-posts(status="failed", start_date="<7 days ago>")`.
-- **Bolta routines:** `list-routines(status="active,paused")`. Per row: `name`, `status`, `next_run_at`, `attention_count` (its drafts waiting), `blocked`, `last_run.status`.
+- **Bolta routines:** `list-routines(status="active,paused")`. Per row: `name`, `status`, `next_run_at`, `attention_count` (drafts waiting), `blocked`, `last_run.status`.
 - **Campaigns:** `list-content-campaigns(status="draft,scheduled,active,paused,completed")`. Per row: `status`, `starts_on`, `ends_on`, `window_closed`, and `schedule_status` (`state`, `week.index` of `week.total`, `posts_to_review`, `last_error`).
 
 ## Reading it
@@ -25,13 +25,13 @@
   - Routine `blocked`: "Bolta routine 'X' can't run: its writer is paused. Resume it at bolta.ai/dashboard/agents."
   - Routine `last_run.status` is `failed`: its explanation, in plain words (`routine`).
   - Campaign `state` is `needs_accounts`: "Campaign 'X' is on but has no accounts, so nothing gets written." Campaign `last_error`: say it plainly (`campaign`).
-- Show every time in the workspace clock: "Mon Oct 19, 9:00 am (New York)".
+- Times in the workspace clock: "Mon Oct 19, 9:00 am (New York)".
 - One read failed: show the rest, say which line is missing, never "all clear".
-- Nothing anywhere: "Nothing needs you right now." Then one next step.
+- Nothing anywhere: "Nothing needs you right now." Then the next step.
 
 ## The one next step
 
-Pick the first that applies. It is the only question.
+The first that applies; the only question.
 
 1. Something broke: fix that.
 2. Posts waiting: "Want to go through the 6 waiting?" (`review`)

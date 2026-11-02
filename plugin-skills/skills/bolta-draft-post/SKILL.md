@@ -30,7 +30,7 @@ blocked when workspace Safe Mode is ON — use `submit-for-review` instead).
 | `list-workspace-posts` | Verify whether a create actually landed before any retry (see failure handling). |
 
 ## Prerequisites
-- `workspace_id` — resolve once via `list-workspaces`, reuse for the whole flow. Auth is
+- `workspace_id` — from `list-workspaces`, per brand (several: pass it on every call; ask which, never guess). Auth is
   automatic via the Bolta connector's OAuth grant — never ask for an API key. Default new
   content to Draft; confirm before publish/delete.
 - At least one connected social account (from `list-accounts`). If none, call
@@ -42,7 +42,7 @@ blocked when workspace Safe Mode is ON — use `submit-for-review` instead).
 ## Workflow
 
 ### 1. Resolve the workspace
-Call `list-workspaces`; use the active workspace's `id`. Never guess a UUID.
+Call `list-workspaces`; several brands: use the one the user named, or ask. Never guess a UUID.
 
 ### 2. Pick the target account(s)
 Call `list-accounts(workspace_id)` (optionally filter by `platform`). Match the user's intent

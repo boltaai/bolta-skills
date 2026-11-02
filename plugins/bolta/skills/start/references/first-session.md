@@ -6,7 +6,7 @@ Use real names, counts and times. Skip what's done. At most one question per mom
 
 > You're in **Acme** (New York time). Connected: LinkedIn (Jane), X (@acme). Instagram is disconnected: reconnect here <link>.
 
-- No accounts: "Connect an account here: <link>. Check that Acme is the workspace selected in Bolta first. Say 'done' when finished."
+- No accounts: "Connect an account here: <link>. Check that Acme is the brand selected in Bolta first. Say 'done' when finished."
 - UTC: "Which city are you in? I'll use it for times. Set it in Bolta Settings to make it stick."
 
 ## 2. It already knows me

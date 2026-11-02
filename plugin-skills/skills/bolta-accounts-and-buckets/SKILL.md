@@ -36,7 +36,7 @@ re-membering buckets — or resolving a bucket name into account ids for another
 | `get-my-capabilities` | Diagnose permission errors on bucket writes (needs accounts:write). |
 
 ## Prerequisites
-- `workspace_id` — resolve once via `list-workspaces`, reuse for every call. Auth is automatic
+- `workspace_id` — from `list-workspaces`, per brand (several: pass it on every call; ask which, never guess). Auth is automatic
   via the Bolta connector's OAuth grant — never ask for an API key.
 - Reads need any role; creating/updating buckets needs **accounts:write** — granted to
   owner, admin, and creator. Viewers are read-only. (Elsewhere, default new content to
@@ -45,7 +45,7 @@ re-membering buckets — or resolving a bucket name into account ids for another
 ## Workflow
 
 ### 1. Resolve the workspace
-Call `list-workspaces` and use the active workspace's `id`. Never guess a UUID.
+Call `list-workspaces`; several brands: use the one the user named, or ask. Never guess a UUID.
 
 ### 2. "What's connected?"
 Call `list-accounts(workspace_id)` (add `platform` if the user named one) and, in parallel,

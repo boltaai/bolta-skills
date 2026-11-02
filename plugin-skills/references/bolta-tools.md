@@ -11,8 +11,11 @@ Routines, and only Routines.
 
 ## Universal rules
 
-- **`workspace_id` is required by almost every tool.** If you don't have it, call
-  `list-workspaces` first and use the active workspace's `id`. Never guess a workspace UUID.
+- **`workspace_id` picks the brand.** A connection belongs to one organization and reaches
+  the brands (workspaces) ticked when connecting. `list-workspaces` returns them all. One
+  brand: `workspace_id` may be left out. More than one: pass it on every call that touches
+  brand data, chosen per action from the user's words. A call without it gets an error
+  listing the brands: ask the user which one. Never guess a workspace UUID or pick one.
 - **Auth is automatic in ChatGPT.** The Bolta connector's OAuth grant mints a scoped
   `bolta_sk_` API key; you never pass an API key as a tool argument.
 - **Annotations** below drive ChatGPT's confirmation behavior:
@@ -26,7 +29,7 @@ Routines, and only Routines.
 
 | Tool | Method | Params | Notes |
 |-|-|-|-|
-| `list-workspaces` | GET · RO | — | Start here to resolve `workspace_id`. |
+| `list-workspaces` | GET · RO | — | Every brand the connection reaches, each with `user_role` and `organization`. Start here; with several, ask which brand when the user hasn't said. |
 | `get-workspace` | GET · RO | `workspace_id`* | Settings, safe-mode, autonomy. |
 | `get-my-capabilities` | GET · RO | `workspace_id`* | Caller's role/scopes — check before writes. |
 | `list-accounts` | GET · RO | `workspace_id`*, `platform` | Connected social accounts + their UUIDs (`account_ids`). |

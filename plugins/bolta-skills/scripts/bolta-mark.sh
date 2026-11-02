@@ -14,7 +14,13 @@
 #                                    OK on a delete or a no never lets a post
 #                                    go public.
 #                                    Both hold "<turn token> <epoch seconds>
-#                                    <prompt_id>". A window is written only
+#                                    <prompt_id> <brand>...": the brands are
+#                                    "w<workspace_id>", or "none" for a call
+#                                    without one. A later OK for another brand
+#                                    in the same message adds that brand and
+#                                    keeps the opening time. A call whose
+#                                    workspace_id can't be read adds nothing.
+#                                    A window is written only
 #                                    when the call carries a prompt_id. An
 #                                    existing window of the same kind from the
 #                                    same message is left alone, so it never
@@ -86,7 +92,7 @@ put() {
 }
 
 main() {
-  ok=0 tool="" server="" sid="" prompt="" policy="" rid="" success=0 newrid=""
+  ok=0 tool="" server="" sid="" prompt="" policy="" rid="" success=0 newrid="" brand=""
   cid="" newcid="" action=""
   parsed=$(sh "$reader" mark) || return 0
   oldifs=$IFS
@@ -108,6 +114,7 @@ main() {
       CID) cid=$v ;;
       NEWCID) newcid=$v ;;
       ACTION) action=$v ;;
+      BRAND) brand=$v ;;
     esac
   done
   IFS=$oldifs
@@ -120,16 +127,25 @@ main() {
 
   case $tool in
     approve-post|approve-many-posts|approve-recurring-review|schedule-post|delete-post|reject-post)
-      [ "$success" = 1 ] && [ -n "$prompt" ] || return 0
+      [ "$success" = 1 ] && [ -n "$prompt" ] && [ -n "$brand" ] || return 0
+      case $brand in none|w*) ;; *) return 0 ;; esac
+      case $brand in *[!A-Za-z0-9-]*) return 0 ;; esac
       kind=go
       case $tool in delete-post|reject-post) kind=del ;; esac
       file_ok "$dir/turn" && read_marker "$dir/turn" || return 0
       token=$m_tok
       win="$dir/win-$kind-$server"
-      # A window already open for this message keeps the time it first opened.
-      if file_ok "$win" && read_marker "$win" && [ "$m_tok" = "$token" ] && [ "$m_prompt" = "$prompt" ]; then return 0; fi
+      # A window already open for this message keeps the time it first opened;
+      # a new brand is added to it.
+      if file_ok "$win" && read_marker "$win" && [ "$m_tok" = "$token" ] && [ "$m_prompt" = "$prompt" ]; then
+        case " $m_rest " in *" $brand "*) return 0 ;; esac
+        case $m_rest in *[!A-Za-z0-9\ -]*) return 0 ;; esac
+        [ "${#m_rest}" -le 4000 ] || return 0
+        put "$win" "$m_tok $m_time $m_prompt $m_rest $brand"
+        return 0
+      fi
       t=$(now) || return 0
-      put "$win" "$token $t $prompt"
+      put "$win" "$token $t $prompt $brand"
       ;;
     create-routine)
       [ "$success" = 1 ] && [ "$policy" = review ] && [ -n "$newrid" ] || return 0

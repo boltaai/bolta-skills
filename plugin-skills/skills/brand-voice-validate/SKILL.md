@@ -28,7 +28,7 @@ Scoring is done inline using the grading behavior in Step 2.
 
 ## Prerequisites
 - The content to score (pasted or referenced).
-- `workspace_id` — resolve once via `list-workspaces` and reuse it. Auth is automatic via the
+- `workspace_id` — from `list-workspaces`, per brand (several: pass it on every call; ask which, never guess). Auth is automatic via the
   Bolta connector's OAuth grant — never ask for an API key. Default new content to Draft;
   confirm before publish/delete.
 - A voice source, in this order (stop at first hit):

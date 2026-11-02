@@ -120,7 +120,7 @@ The checks go by each tool's name, so any connection name works. Call yours "Bol
 
 - Hooks need `sh` and `awk`. On Windows, install [Git for Windows](https://git-scm.com/downloads/win) first.
 - The checks trust their marker files. Claude, if it may run shell commands unasked, could forge one.
-- One connection is one workspace.
+- One connection is one organization and reaches the brands you ticked. A new brand needs a reconnect.
 - Another server's tool named like a Bolta one gets the same check, and a call the checks can't read gets one too.
 
 ## Sent and stored

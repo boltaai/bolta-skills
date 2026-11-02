@@ -355,6 +355,20 @@ function campaign_action(ti,   v) {
   return (v ~ /^(pause|activate|resume|complete|archive)$/) ? v : "other"
 }
 
+# The brand a call is for, so a batch window opened for one brand never covers
+# another: "none" when workspace_id is missing or null (its own bucket), "w"
+# plus the id when it is a plain string of letters, digits and hyphens (64 at
+# most), else "" (unreadable: no window is ever opened or used for it).
+function brand_key(ti,   t, v) {
+  if (!jhas(ti, "workspace_id")) return "none"
+  t = jtype(ti, "workspace_id")
+  if (t == "n") return "none"
+  if (t != "s") return ""
+  v = jstr(ti, "workspace_id")
+  if (v == "" || length(v) > 64 || v ~ /[^A-Za-z0-9-]/) return ""
+  return "w" v
+}
+
 function guard_main(   ok, ti) {
   ok = hook_common()
   if (ok && jtype("r", "tool_input") != "o") ok = 0
@@ -363,6 +377,7 @@ function guard_main(   ok, ti) {
   emit("PROMPT", PROMPT)
   if (!ok) return
   ti = "r" SUBSEP "tool_input"
+  emit("BRAND", brand_key(ti))
   emit("CREATE", create_verdict(ti))
   emit("UPDATE", update_verdict(ti))
   emit("POLICY", policy(ti))
@@ -471,8 +486,10 @@ function mark_main(   ok, ti, success) {
     ti = "r" SUBSEP "tool_input"
     emit("POLICY", policy(ti)); emit("RID", routine_id(ti))
     emit("CID", campaign_id(ti)); emit("ACTION", campaign_action(ti))
+    emit("BRAND", brand_key(ti))
   } else {
     emit("POLICY", "other"); emit("RID", ""); emit("CID", ""); emit("ACTION", "other")
+    emit("BRAND", "")
   }
   NENV = 0; BADENV = 0; ISERR = 0; DONE = 0; NROOT = 0
   if (jhas("r", "tool_response")) resp_scan("r" SUBSEP "tool_response", 0)

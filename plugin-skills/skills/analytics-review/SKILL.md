@@ -22,7 +22,7 @@ Any performance question. Also the natural follow-up after a week of publishing:
 ## Tools this skill uses
 | Tool | Why |
 |-|-|
-| `list-workspaces` | Resolve `workspace_id` once. |
+| `list-workspaces` | Resolve `workspace_id` per brand; several: ask which. |
 | `list-accounts` | Which accounts exist and are connected. |
 | `cross-platform-analytics` | The headline: totals and per-platform comparison. |
 | `get-account-analytics` | One account in depth, including the daily series. |

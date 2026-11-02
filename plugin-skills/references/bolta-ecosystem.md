@@ -14,11 +14,13 @@ draft is written through a compiled voice context so output sounds like the bran
 
 - **MCP endpoint:** `https://mcp.bolta.ai/mcp` (StreamableHTTP, stateless).
 - **Auth in ChatGPT:** the user authorizes the Bolta connector once (OAuth 2.1). That grant
-  mints a workspace-scoped `bolta_sk_` API key behind the scenes. Skills never handle a key
+  mints a scoped `bolta_sk_` API key behind the scenes. Skills never handle a key
   directly and never ask the user to paste one.
-- **Tenancy:** every key is scoped to a single workspace. `workspace_id` is required by
-  nearly every tool — resolve it with `list-workspaces` at the start of a session and reuse
-  it. Never operate across workspaces in one flow.
+- **Tenancy:** a sign-in connection
+  belongs to one organization and reaches the brands (workspaces) ticked when connecting.
+  `list-workspaces` returns them all; with more than one, pass `workspace_id` on every call
+  that touches brand data, and ask the user which brand when unclear. Never mix brands in
+  one action.
 
 ## Roles & permissions
 
@@ -43,7 +45,8 @@ retrying — this is `get-my-capabilities`'s job to pre-empt.
    confirm with the user before calling them.
 3. **Voice first.** Load `get-voice-context` (or an active brand-voice guideline) before
    writing, so content is on-brand from the first draft.
-4. **One workspace per flow.** Resolve `workspace_id` once and reuse it.
+4. **One brand per action.** Pick `workspace_id` per action from `list-workspaces` and the
+   user's words; ask when unclear, never guess. Name the brand on every save.
 5. **Attribute agent work.** Content produced by agents flows into `list-recurring-reviews`;
    approving/rejecting there is what teaches Bolta the brand's voice over time.
 

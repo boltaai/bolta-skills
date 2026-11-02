@@ -42,7 +42,7 @@ each fix by re-reading, and close by confirming the workspace is ready.
 ## Workflow — the readiness checklist (run in order, read-only first)
 
 ### 1. Workspace
-`list-workspaces` → active workspace's `id` (never guess a UUID), then `get-workspace` for
+`list-workspaces` → the brand's `id` (several: the one the user named, or ask) (never guess a UUID), then `get-workspace` for
 settings, safe-mode, and autonomy posture. No workspace at all → the connector isn't
 authorized; explain and stop.
 
