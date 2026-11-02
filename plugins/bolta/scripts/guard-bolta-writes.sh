@@ -34,6 +34,11 @@
 #                          approvals, schedules, no's (reject-post) and deletes.
 #   win-del-<connection>   opened by delete-post or reject-post. Covers those
 #                          two only.
+# A window also lists the brands it was opened for (the workspace_id of each
+# OK'd call, or "none" when a call had none). It covers only those brands, so
+# an OK for brand A never lets a brand B call, or one without workspace_id,
+# pass in the same message. A call whose workspace_id can't be read never
+# passes on a window.
 # Markers live in ${TMPDIR:-/tmp}/bolta-plugin/<session>/.
 # A call passes silently on a window only when all of this holds; anything
 # else asks:
@@ -65,7 +70,7 @@
 here=$(dirname "$0")
 reader="$here/bolta-json.sh"
 
-ok=0 tool="" server="" sid="" prompt="" conn="Bolta"
+ok=0 tool="" server="" sid="" prompt="" conn="Bolta" brand=""
 create="" update="" policy="" rid="" action="" bulk="" cid="" items=""
 parsed=$(sh "$reader" guard 2>/dev/null) || parsed=""
 oldifs=$IFS
@@ -81,6 +86,7 @@ for kv in $parsed; do
     SID) sid=$v ;;
     PROMPT) prompt=$v ;;
     CONN) conn=$v ;;
+    BRAND) brand=$v ;;
     CREATE) create=$v ;;
     UPDATE) update=$v ;;
     POLICY) policy=$v ;;
@@ -142,7 +148,7 @@ now() {
 # window_open <kind...>: true if a window of one of these kinds is open for
 # this connection, this message and this prompt_id.
 window_open() {
-  [ -n "$sid" ] && [ -n "$server" ] && [ -n "$prompt" ] || return 1
+  [ -n "$sid" ] && [ -n "$server" ] && [ -n "$prompt" ] && [ -n "$brand" ] || return 1
   dir_ok "$base" && dir_ok "$dir" || return 1
   turn="$dir/turn"
   file_ok "$turn" || return 1
@@ -154,6 +160,7 @@ window_open() {
     read_marker "$win" || continue
     [ "$m_tok" = "$t_tok" ] || continue
     [ "$m_prompt" = "$prompt" ] || continue
+    case " $m_rest " in *" $brand "*) ;; *) continue ;; esac
     [ "$m_time" -ge "$t_time" ] || continue
     if [ "$turn" -nt "$win" ] 2>/dev/null; then continue; fi
     n=$(now) || continue
