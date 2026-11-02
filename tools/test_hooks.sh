@@ -1074,7 +1074,7 @@ if [ -f "$plugin/skills/today/SKILL.md" ]; then
 fi
 if [ "$(printf '%s\n' "$expected" | grep -c .)" -ne 10 ]; then
   expected=$(cat <<'RULES'
-1. One Bolta connection is one workspace. Say its name on every save: "Saving to Acme."
+1. Name the brand on every save: "Saving to Acme." Several brands: workspace_id on every call. Unsure? Ask.
 2. Times are in the workspace's clock. Send a time zone only when the user names a place.
 3. Look once per conversation (workspace, accounts, voice). Reuse it.
 4. Drafts are free. Nothing gets approved, scheduled, published or switched on without a yes in the user's latest message that covers those items, after they have seen the exact text.

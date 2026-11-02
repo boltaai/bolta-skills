@@ -20,10 +20,10 @@ Claude Code 2.1.295 or later:
 /plugin install bolta@bolta-marketplace
 ```
 
-Then `/mcp`, pick `bolta`, sign in, pick the workspace.
+Then `/mcp`, pick `bolta`, sign in, tick the brands.
 
 - **Windows:** install [Git for Windows](https://git-scm.com/downloads/win) first, or every Bolta save is blocked.
-- **Fewer prompts:** in `/permissions`, allow `mcp__plugin_bolta_bolta` under User settings (agencies: each `mcp__bolta-<client>`). Bolta's own checks still ask.
+- **Fewer prompts:** in `/permissions`, allow `mcp__plugin_bolta_bolta` under User settings. Bolta's own checks still ask.
 
 claude.ai and Cowork (untested): add this repository as a marketplace, install BOLTA, connect Bolta under Customize > Connectors. In chat, keep approve, schedule, publish and reject on "Needs approval".
 
@@ -45,7 +45,7 @@ Drafts need none. Claude Code only: **Bolta checks** `careful` in `/config` chec
 
 - No media upload: Instagram, TikTok, YouTube and Pinterest need a public link.
 - Until Bolta's newer tools reach your server, a "no" with a reason and a campaign's accounts are set in Bolta.
-- One connection is one workspace; agencies add one per client. Another server's tool named like a Bolta one gets the same check.
+- One connection reaches the brands you tick; agencies tick their clients. New brand: reconnect. Another server's tool named like a Bolta one gets the same check.
 - Hooks need `sh` and `awk`, and trust their marker files: Claude, if it may run shell commands unasked, could forge one.
 
 ## Sent and stored

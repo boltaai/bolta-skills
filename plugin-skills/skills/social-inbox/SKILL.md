@@ -24,7 +24,7 @@ reply. The user wants to see it and respond.
 ## Tools this skill uses
 | Tool | Why |
 |-|-|
-| `list-workspaces` | Resolve `workspace_id` once. |
+| `list-workspaces` | Resolve `workspace_id` per brand; several: ask which. |
 | `list-inbox-items` | The unified inbox. Every source in one call; filter with `source`. |
 | `get-social-content` | Pull the full item and its thread when a preview is not enough. |
 | `reply-to-social-content` | Reply to a comment or mention on a target you have. |

@@ -31,7 +31,7 @@ Any request to see, compare, or explain how content or accounts are performing.
 | `list-workspace-posts` | **Post-level performance**: `status=published` + a date window + `include_metrics=true` attaches per-platform engagement (views, likes, comments, reposts) and `published_at` to each post. `metrics_platforms` narrows the breakdown. Paginated — default `limit` is 50 (max 200). |
 
 ## Prerequisites
-- `workspace_id` — resolve once via `list-workspaces`, reuse for every call. Auth is automatic
+- `workspace_id` — from `list-workspaces`, per brand (several: pass it on every call; ask which, never guess). Auth is automatic
   via the Bolta connector's OAuth grant — never ask for an API key.
 - These are all read-only tools — no confirmation or write permission needed. (Elsewhere,
   default new content to Draft; confirm before publish/delete.)
@@ -50,7 +50,7 @@ Map the question to the tool before calling anything:
 ## Workflow
 
 ### 1. Resolve the workspace
-Call `list-workspaces` and use the active workspace's `id`.
+Call `list-workspaces`; several brands: use the one the user named, or ask.
 
 ### 2. Set the window
 Every analytics tool takes `days`. If the user names a period ("this month", "last 30 days",

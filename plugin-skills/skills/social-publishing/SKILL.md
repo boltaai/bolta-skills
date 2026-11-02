@@ -23,7 +23,7 @@ publish or schedule unless the user asked for it.
 ## Tools this skill uses
 | Tool | Why |
 |-|-|
-| `list-workspaces` | Resolve `workspace_id` once. |
+| `list-workspaces` | Resolve `workspace_id` per brand; several: ask which. |
 | `list-accounts` | Account UUIDs for `account_ids`. |
 | `list-buckets` | Named account groups — "post to my founder bucket". |
 | `get-voice-context` | Load tone, do/don't rules and exemplars before writing. |

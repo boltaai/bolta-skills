@@ -20,8 +20,8 @@ description: >-
   sent for review. Use when Jane says run my newsletter posts.
 ---
 
-Workspace: Acme. Account: LinkedIn (Jane Doe). Bolta on another
-workspace? Save nothing; say so.
+Brand: Acme. Account: LinkedIn (Jane Doe). Bolta doesn't reach
+Acme? Save nothing; say so.
 
 1. In Gmail, find the newest Friday Note sent by Jane. No new issue, or
    no Gmail? Save nothing; say why.
@@ -55,8 +55,8 @@ description: >-
   Use when Jane says Monday catch-up.
 ---
 
-Workspace: Acme. Accounts: LinkedIn (Jane Doe), X (@acme). Bolta on
-another workspace? Save nothing; say so.
+Brand: Acme. Accounts: LinkedIn (Jane Doe), X (@acme). Bolta doesn't
+reach Acme? Save nothing; say so.
 
 1. From Bolta: how many posts wait for a yes (list-inbox-items) and what
    goes out in the next 7 days (list-scheduled-posts).

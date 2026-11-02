@@ -26,7 +26,7 @@ a different thread, each adding something specific.
 ## Tools this skill uses
 | Tool | Why |
 |-|-|
-| `list-workspaces` | Resolve `workspace_id` once and reuse it. |
+| `list-workspaces` | Resolve `workspace_id` per brand; several: ask which. |
 | `list-accounts` | Find the connected Reddit account and its UUID. |
 | `list-engagement-capabilities` | Confirm Reddit discovery/reply are actually available for that account before trying. |
 | `get-voice-context` | Load the brand's voice and what it actually does — you cannot judge relevance without it. |
@@ -41,7 +41,7 @@ a different thread, each adding something specific.
 | `create-engagement-opportunity` | Only when the user supplies a specific Reddit URL instead of asking you to search. No `campaign_id` needed. |
 
 ## Prerequisites
-- `workspace_id` — resolve once via `list-workspaces`. Auth is automatic through
+- `workspace_id` — from `list-workspaces`, per brand (several: pass it on every call; ask which, never guess). Auth is automatic through
   the Bolta connector's OAuth grant; never ask for an API key.
 - A connected Reddit account. If none exists, use `get-connect-link` with
   `platform="reddit"` and stop — you cannot engage without an identity.

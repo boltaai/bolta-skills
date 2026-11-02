@@ -1,31 +1,31 @@
 # Connections, clients and access
 
-## One connection, one workspace
+## One connection, one organization
 
-- The workspace is picked on Bolta's sign-in page, whose list starts on the first one, not always the one meant.
-- `list-workspaces` returns only that one. There is no switch and no all-clients view.
+- At sign-in you pick the organization and tick the brands (workspaces) it may reach. `list-workspaces` returns them, each with your role.
+- A brand added later isn't included. To add it: reconnect and tick it.
 
-## Agencies: one connection per client
+## Several brands
 
-Name each connection after its client, like "bolta-acme". Checks go by tool name, so any name works. Each connection asks its own first approval.
+- Pass the brand's `workspace_id` on every call. One brand only: it may be left out.
+- A call without it errors with the list of brands. Ask which; never pick one or retry with a guess.
+- Pick per action; unsure: "Acme or Beta?" Never carry an account, group, voice or post across brands.
 
-- **Claude Code:** `claude mcp add --transport http bolta-acme https://mcp.bolta.ai/mcp`, then `/mcp`, pick bolta-acme, sign in and choose Acme's workspace.
-- **claude.ai or Cowork:** Customize > Connectors > Add custom connector, address https://mcp.bolta.ai/mcp, a name like "Bolta Acme". Sign in and choose Acme's workspace. Team and Enterprise: only an Owner can add it. Free plan: one custom connector in all.
-- Then confirm its workspace name: "This one is Acme."
+## Agencies
 
-**Several connections in one chat:**
-- Use the one whose workspace the user named.
-- No client named: ask once. "Acme, like before?"
-- Never carry an account, group or post across connections; read again there.
-- "Switch to Beta": use Beta's connection if present, else explain how to add it.
-- Two Bolta entries on one workspace (the plugin's and your own): keep your own and install `bolta-skills` instead.
+One connection for the agency's organization; tick the client brands.
+
+- **Claude Code:** `/mcp`, pick bolta, sign in, tick the brands.
+- **claude.ai or Cowork:** Customize > Connectors > Add custom connector, address https://mcp.bolta.ai/mcp, name "Bolta". Sign in, tick the brands. Team and Enterprise: only an Owner can add it. Free plan: one custom connector in all.
+- Then say what it reaches: "This connection reaches Acme and Beta."
+- Several organizations: one connection each, with "bolta" in its name. Use the one reaching the named brand. Two Bolta entries on one organization (the plugin's and your own): keep your own and install `bolta-skills` instead.
 
 ## Reconnecting Bolta itself
 
 "Invalid API key", "API key expired", "API key inactive" or "Not authenticated": this connection lapsed. Don't retry.
 - Claude Code: `/mcp`, pick the Bolta entry, sign in again.
 - Cowork or claude.ai: Customize > Connectors, then Reconnect on Bolta.
-- Then read the workspace and say its name.
+- Then read the brands and say their names.
 - Sign-ins last 60 days and normally renew themselves.
 
 ## Sign-in versus a pasted API key
@@ -57,4 +57,4 @@ Read it after a refusal, or when asked. For each "no" it gives a reason:
 
 ## "Is everything set up?"
 
-One read, then four lines: workspace and clock; review mode; accounts, connected or disconnected, with links; account groups. Voice: hand to `voice`, or `start` if there is none. A Bolta save blocked by a hook error naming Git Bash: "Install Git for Windows (git-scm.com/downloads/win), then restart Claude."
+One read, then four lines per brand: brand and clock; review mode; accounts, connected or disconnected, with links; account groups. Voice: hand to `voice`, or `start` if there is none. A Bolta save blocked by a hook error naming Git Bash: "Install Git for Windows (git-scm.com/downloads/win), then restart Claude."

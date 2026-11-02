@@ -2,7 +2,7 @@
 
 ## Look once (first Bolta ask in a conversation)
 
-- `list-workspaces`: one row (a connection can't switch). Keep its id and name.
+- `list-workspaces`: every brand on the connection; keep each id and name. Several: do the reads below per brand, with its `workspace_id`, one section each.
 - `get-workspace`: `name`, `timezone`, `safe_mode` (review mode: everything waits for a yes). `UTC` is often unset: if a time matters, ask their city once.
 - `list-accounts`: platform, name, `token_status`. Not `valid`: disconnected; posts skip it until reconnected.
 - `get-voice-context`: `writing.feedback_count`, `knowledge.available`, `missing_fields`. "No voice profile" means none yet.
@@ -25,13 +25,13 @@
   - Routine `blocked`: "Bolta routine 'X' can't run: its writer is paused. Resume it at bolta.ai/dashboard/agents."
   - Routine `last_run.status` is `failed`: its explanation, in plain words (`routine`).
   - Campaign `state` is `needs_accounts`: "Campaign 'X' is on but has no accounts, so nothing gets written." Campaign `last_error`: say it plainly (`campaign`).
-- Show every time in the workspace clock: "Mon Oct 19, 9:00 am (New York)".
+- Times in the workspace clock: "Mon Oct 19, 9:00 am (New York)".
 - One read failed: show the rest, say which line is missing, never "all clear".
 - Nothing anywhere: "Nothing needs you right now." Then one next step.
 
 ## The one next step
 
-Pick the first that applies. It is the only question.
+The first that applies; the only question.
 
 1. Something broke: fix that.
 2. Posts waiting: "Want to go through the 6 waiting?" (`review`)
@@ -47,6 +47,5 @@ In a scheduled run, the summary is the whole job; the next step is a suggestion.
 > Waiting for your yes: 6 (4 from Bolta routine "Weekly LinkedIn") · 2 reply drafts
 > Going out this week: 3. Next: Mon Oct 19, 9:00 am, LinkedIn (Jane)
 > Running: Bolta routine "Weekly LinkedIn" (next drafts Mon Oct 19, 8:00 am) · campaign "New pricing" (week 2 of 3, 2 waiting)
-> Ended: campaign "Spring sale" ended Oct 12.
 >
 > Want to go through the 6 waiting?

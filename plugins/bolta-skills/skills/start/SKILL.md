@@ -14,9 +14,10 @@ Their voice is shown, a week of posts is scheduled or waiting for their yes, and
 ## Know this
 
 - Read [references/first-session.md](references/first-session.md) before the first reply: the words for each step.
-- **One read, all at once:** workspace, settings, accounts, voice, about-your-business records, published posts (last 60 days, with metrics), Bolta routines, campaigns. Skip what's done. Voice, accounts and a Bolta routine all in place: hand to `today`.
+- **Several brands:** ask which to set up first.
+- **One read, all at once:** workspace, settings, accounts, voice, about-your-business records, published posts (last 60 days, with metrics), Bolta routines, campaigns. Skip what's done. Voice, accounts and a Bolta routine in place: `today`.
 - **One question, only for what's missing**, in one message:
-  - No accounts: a connect link; it can't be skipped. It opens whichever workspace the browser has selected. On "done", read accounts again.
+  - No accounts: a connect link, never skipped; it opens the brand the browser has selected. On "done", read accounts again.
   - No voice: their website and one thing to post about this week. The answer is the go-ahead.
   - No topic: what to post about this week. Never invent one.
   - UTC time zone: their city, sent as the time zone; Bolta Settings makes it stick.
@@ -26,7 +27,7 @@ Their voice is shown, a week of posts is scheduled or waiting for their yes, and
   - A writing sample of 50+ characters (their best post they wrote, or pasted text) plus the four tone dials. An unreadable sample with no tone is refused.
   - 3-5 DOs and DON'Ts from their posts or words, each a checkable sentence under 200 characters. Nothing to draw on: leave them out; Bolta fills them from about your business.
   - It becomes the default and takes every account not in another voice. Say what Bolta filled in.
-- **Showing it:** recent posts come from the published read (the voice holds none). End with "learned from N of your decisions".
+- **Showing it:** recent posts come from the published read. End with "learned from N of your decisions".
 - No documents: one line (see the reference). Never promise a PDF gets read.
 - **A DON'T after a drop:** send the current DON'Ts plus the new one (the list is replaced whole).
 - Bolta checks here (Claude Code, Cowork): the first approval, a voice edit, a campaign start. Not drafts, the new voice, or an "ask me first" Bolta routine.

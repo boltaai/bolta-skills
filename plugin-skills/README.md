@@ -140,12 +140,14 @@ The reply text is written server-side in both cases. A skill's job is choosing t
 and getting approval — not writing the words in a prompt.
 
 ## Ground rules (all skills)
-- **`workspace_id` is optional on every tool.** The connector's OAuth grant already
-  scopes the call, and the MCP layer defaults it to the key's workspace. The Routine
-  tools take no `workspace_id` in their schema at all — write `list-routine-templates()`,
-  `activate-routine(routine_id)`. Pass it explicitly only when a key spans several
-  workspaces and the user named one.
-- Resolve `workspace_id` once via `list-workspaces`; reuse it.
+- **`workspace_id` picks the brand.** A connection belongs to one organization and reaches
+  the brands ticked when connecting (new brands need a reconnect). One brand: it may be
+  left out, and the MCP layer fills it in. More than one: pass it on every call that
+  touches brand data, including the Routine tools (the MCP layer accepts it on every
+  tool). A call without it gets an error listing the brands: ask the user which one,
+  never guess.
+- Resolve `workspace_id` per action from `list-workspaces` and the user's words. Name the
+  brand on every save: "Saving to Acme."
 - Auth is automatic via the Bolta connector's OAuth grant — never ask for an API key.
 - Default to Draft; confirm before `publish-post` / `delete-post`.
 - Load voice context (or an active brand-voice guideline) before writing.

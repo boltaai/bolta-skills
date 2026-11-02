@@ -37,7 +37,7 @@ Synthesis structure comes from `references/guideline-template.md`; scoring from
 
 ## Prerequisites
 - A discovery report (from `brand-voice-discover`) or equivalent gathered signal.
-- `workspace_id` — reuse from discovery (resolve once via `list-workspaces`). Auth is automatic
+- `workspace_id` — reuse the brand from discovery (from `list-workspaces`, per brand (several: pass it on every call; ask which, never guess)). Auth is automatic
   via the Bolta connector's OAuth grant — never ask for an API key. Default new content to
   Draft; confirm before persisting/overwriting a profile.
 - `references/guideline-template.md` — output structure.
