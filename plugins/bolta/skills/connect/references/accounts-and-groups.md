@@ -31,7 +31,7 @@ A post sent to a group goes to every member that is connected when it goes out, 
 - The members you send become the whole group. Send current members plus or minus the change. Sending only the new one removes everyone else.
 - Rename only: leave members out. An empty list empties the group.
 - Show before and after: "Launch Team now: LinkedIn, X. After: LinkedIn, X, Instagram. Posts already scheduled to it go to Instagram too."
-- Saw "Bolta checks are on in this session" at the start? The Bolta check is the ask; otherwise get a yes in words.
+- Get a yes in words before any group write.
 - Read the groups back and compare with what you promised.
 
 **Limits:**

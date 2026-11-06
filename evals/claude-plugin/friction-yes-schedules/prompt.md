@@ -1,6 +1,6 @@
 ---
 name: friction-yes-schedules
-description: 'Job 2 friction: one yes to five drafts shown earlier. v0.2 target: 1 message, 1 Bolta check, no times typed. Under claude -p that one check is denied, so the batch window itself is tested in tools/test_hooks.sh.'
+description: 'Job 2 friction: one yes to five drafts shown earlier. v0.2 target: 1 message, 1 Bolta check, no times typed.'
 tags: [smoke, friction]
 expected_outcome: 'Sends all five for review in one call, then attempts approve-post with schedule_mode approve_only (no invented time), never retries a declined approval, and says honestly that nothing was scheduled yet.'
 max_turns: 20

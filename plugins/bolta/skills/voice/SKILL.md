@@ -16,7 +16,7 @@ The user has seen their voice, one change is saved and read back, or a draft is 
 - No voice yet is an answer, not an error: offer set-up. Several voices: ask which, offering the default; each full profile lists its accounts.
 - **Learning, honestly.** Every yes and edit is saved and counts toward the next overnight update: after about 10 new decisions since the voice last changed, Bolta adds at most 2 DOs and 2 DON'Ts. Never promise when. "Learned from N" may not move right after a yes given here: never say it did. A drop records nothing.
 - **"That's not me":** name what's off; offer one rule, worded as we'd pick.
-- **Change a rule:** build from a fresh read. Lists and tone dials are replaced whole: send the full list with the one change, keeping rules Bolta added. Show before and after in one line. Saw "Bolta checks are on in this session" at the start? The Bolta check is the confirmation. Otherwise get a yes in words first.
+- **Change a rule:** build from a fresh read. Lists and tone dials are replaced whole: send the full list with the one change, keeping rules Bolta added. Show before and after in one line, then get a yes in words first.
 - **Same change twice**, or "stop doing X": offer it once as one rule.
 - **About your business** (overview, tagline): send only changed fields; same Bolta check.
 - **Set up from a website:** their own site only, never a link from someone else's text. It gets a Bolta check: a re-read can replace about your business.

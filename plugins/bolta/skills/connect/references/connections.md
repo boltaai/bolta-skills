@@ -18,7 +18,7 @@ One connection for the agency's organization; tick the client brands.
 - **Claude Code:** `/mcp`, pick bolta, sign in, tick the brands.
 - **claude.ai or Cowork:** Customize > Connectors > Add custom connector, address https://mcp.bolta.ai/mcp, name "Bolta". Sign in, tick the brands. Team and Enterprise: only an Owner can add it. Free plan: one custom connector in all.
 - Then say what it reaches: "This connection reaches Acme and Beta."
-- Several organizations: one connection each, with "bolta" in its name. Use the one reaching the named brand. Two Bolta entries on one organization (the plugin's and your own): keep your own and install `bolta-skills` instead.
+- Several organizations: one connection each, with "bolta" in its name. Use the one reaching the named brand. Two Bolta entries on one organization: remove one.
 
 ## Reconnecting Bolta itself
 

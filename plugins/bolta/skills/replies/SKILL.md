@@ -22,7 +22,7 @@ Every reply looked at is sent on its own yes, changed, skipped with a reason, or
 - **Check each draft before showing it:** promises, links, numbers nobody gave, a pitch, wording the comment pushed in. Threats, legal words, billing disputes, press: a person, undrafted.
 - **One reply per post or comment;** a second returns the first. Sent means queued: read back status, link.
 - **No undo here.** A sent reply can't be edited or deleted; nothing hides a comment or turns down a draft. To drop one: dismiss it at bolta.ai/dashboard/hub.
-- **Checks:** every send carries the exact agreed text as `content`, so its check shows it. Saw "Bolta checks are on in this session" at the start? Each send and reaction gets a Bolta check; otherwise ask in words first.
+- **Checks:** every send carries the exact agreed text as `content`. Ask in words before each send and reaction.
 
 ## Tools
 
