@@ -22,34 +22,32 @@ Claude Code 2.1.295 or later:
 
 Then `/mcp`, pick `bolta`, sign in, tick the brands.
 
-- **Bolta checks:** `/plugin install bolta-checks@bolta-marketplace` adds a check you answer before anything public or final (Claude Code only; see below).
-- **Fewer prompts:** in `/permissions`, allow `mcp__plugin_bolta_bolta` under User settings. Bolta's own checks still ask.
+- **Permissions:** keep Bolta's tools on "ask" in `/permissions`. Allowing the whole `mcp__plugin_bolta_bolta` server would let a post, approval or delete go out on text Claude read somewhere, with no prompt. Allow only the `list-*` and `get-*` tools by name if the prompts get in the way.
 
 claude.ai and Cowork (untested): add this repository as a marketplace, install BOLTA, connect Bolta under Customize > Connectors. In chat, keep approve, schedule, publish and reject on "Needs approval".
 
-Added Bolta yourself (connector, or `claude mcp add`)? Install `bolta-skills` instead: same skills, no second connection.
+Added Bolta yourself already (a connector, or `claude mcp add`)? Claude Code keeps one connection per address; if two show in `/mcp`, remove one.
 
-## What Bolta checks
+## What Bolta asks first
 
-Nothing is approved, scheduled, published or switched on until your yes in words. With `bolta-checks` installed, Claude Code also shows a Bolta check before:
+Drafts save freely. Claude asks for your yes in words, after showing the exact text, before:
 
 - anything public: a post, a reply, a reaction;
-- approving, turning down or scheduling (once per batch per message);
+- approving, turning down or scheduling;
 - running a Bolta routine now; starting or finishing a campaign;
 - changing your voice, business details, account groups or a running campaign's accounts;
 - anything that can't be undone.
 
-Drafts need none. **Bolta checks** `careful` in `/config` checks every approval. Chat and Cowork run no plugin hooks.
+Bolta's server enforces the same on its side. In chat, keep approve, schedule, publish and reject on "Needs approval" in the connector's settings.
 
 ## Limits
 
 - No media upload: Instagram, TikTok, YouTube and Pinterest need a public link.
 - Until Bolta's newer tools reach your server, a "no" with a reason and a campaign's accounts are set in Bolta.
 - One connection reaches the brands you tick; agencies tick their clients. New brand: reconnect.
-- The checks need `sh` and `awk` (Windows: [Git for Windows](https://git-scm.com/downloads/win) first); their README has the rest.
 
 ## Sent and stored
 
 Bolta (mcp.bolta.ai) gets your requests and decisions. Sign-in is Claude's: the plugin never sees a password and makes no network calls of its own.
 
-v0.4.0 (beta). [Privacy](https://bolta.ai/privacy-policy) · [Terms](https://bolta.ai/tos) · [Support](https://bolta.ai/support) · MIT licence
+v0.5.0 (beta). [Privacy](https://bolta.ai/privacy-policy) · [Terms](https://bolta.ai/tos) · [Support](https://bolta.ai/support) · MIT licence
