@@ -22,16 +22,16 @@ Claude Code 2.1.295 or later:
 
 Then `/mcp`, pick `bolta`, sign in, tick the brands.
 
-- **Windows:** install [Git for Windows](https://git-scm.com/downloads/win) first, or every Bolta save is blocked.
+- **Bolta checks:** `/plugin install bolta-checks@bolta-marketplace` adds a check you answer before anything public or final (Claude Code only; see below).
 - **Fewer prompts:** in `/permissions`, allow `mcp__plugin_bolta_bolta` under User settings. Bolta's own checks still ask.
 
 claude.ai and Cowork (untested): add this repository as a marketplace, install BOLTA, connect Bolta under Customize > Connectors. In chat, keep approve, schedule, publish and reject on "Needs approval".
 
-Added Bolta yourself (connector, or `claude mcp add`)? Install `bolta-skills` instead: same skills and checks, no second connection.
+Added Bolta yourself (connector, or `claude mcp add`)? Install `bolta-skills` instead: same skills, no second connection.
 
 ## What Bolta checks
 
-Claude Code and Cowork ask before:
+Nothing is approved, scheduled, published or switched on until your yes in words. With `bolta-checks` installed, Claude Code also shows a Bolta check before:
 
 - anything public: a post, a reply, a reaction;
 - approving, turning down or scheduling (once per batch per message);
@@ -39,17 +39,17 @@ Claude Code and Cowork ask before:
 - changing your voice, business details, account groups or a running campaign's accounts;
 - anything that can't be undone.
 
-Drafts need none. Claude Code only: **Bolta checks** `careful` in `/config` checks every approval. Chat runs no hooks: posts stay on your review list until approved, and Claude approves only after your yes in words.
+Drafts need none. **Bolta checks** `careful` in `/config` checks every approval. Chat and Cowork run no plugin hooks.
 
 ## Limits
 
 - No media upload: Instagram, TikTok, YouTube and Pinterest need a public link.
 - Until Bolta's newer tools reach your server, a "no" with a reason and a campaign's accounts are set in Bolta.
-- One connection reaches the brands you tick; agencies tick their clients. New brand: reconnect. Another server's tool named like a Bolta one gets the same check.
-- Hooks need `sh` and `awk`, and trust their marker files: Claude, if it may run shell commands unasked, could forge one.
+- One connection reaches the brands you tick; agencies tick their clients. New brand: reconnect.
+- The checks need `sh` and `awk` (Windows: [Git for Windows](https://git-scm.com/downloads/win) first); their README has the rest.
 
 ## Sent and stored
 
-Bolta (mcp.bolta.ai) gets your requests and decisions. Sign-in is Claude's: the plugin never sees a password. Hooks keep marker files in `${TMPDIR:-/tmp}/bolta-plugin/` and make no network calls.
+Bolta (mcp.bolta.ai) gets your requests and decisions. Sign-in is Claude's: the plugin never sees a password and makes no network calls of its own.
 
-v0.3.2 (beta). [Privacy](https://bolta.ai/privacy-policy) · [Terms](https://bolta.ai/tos) · [Support](https://bolta.ai/support) · MIT licence
+v0.4.0 (beta). [Privacy](https://bolta.ai/privacy-policy) · [Terms](https://bolta.ai/tos) · [Support](https://bolta.ai/support) · MIT licence

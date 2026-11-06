@@ -4,8 +4,8 @@
 # Gives Claude the Bolta house rules at the start of every session (new,
 # resumed, cleared or compacted) in Claude Code and Cowork, as additional
 # context in the JSON shape Claude Code reads for SessionStart hooks. The rules
-# are the same ten, word for word, that the today skill holds; keep the two in
-# step (tools/test_hooks.sh checks it).
+# are the same ten, word for word, that the today skill (plugins/bolta) holds;
+# keep the two in step (tools/test_hooks.sh checks it).
 #
 # Three framing lines follow the rules. The first sends every approve, schedule
 # or post-now ask to the review skill (skill descriptions alone did not fire
@@ -14,13 +14,10 @@
 # draw cards: nothing is drawn here, and repeating the note to the user is
 # noise.
 #
-# The last line is evidence for the skills: a session that shows it runs the
+# The last line is evidence for the skills: a session that shows it runs this
 # plugin's hooks, so a Bolta check stands in for asking in words. A session
-# with hooks off (claude.ai chat, disableAllHooks, managed hooks only) never
-# sees it, and the skills then ask in words first. The skills-only bundle
-# prints a different last line (its generator swaps it): its checks are
-# untested on a real claude.ai connector, so it says they may not run and the
-# skills ask in words first.
+# without this plugin, or with hooks off (claude.ai chat, disableAllHooks,
+# managed hooks only), never sees it, and the skills then ask in words first.
 #
 # Plain POSIX shell plus sed and awk. It ignores its input, writes no file and
 # never touches the network. Always exits 0.
