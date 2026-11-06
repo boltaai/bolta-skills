@@ -22,7 +22,7 @@ Claude Code 2.1.295 or later:
 
 Then `/mcp`, pick `bolta`, sign in, tick the brands.
 
-- **Fewer prompts:** in `/permissions`, allow `mcp__plugin_bolta_bolta` under User settings. Bolta's own checks still ask.
+- **Permissions:** keep Bolta's tools on "ask" in `/permissions`. Allowing the whole `mcp__plugin_bolta_bolta` server would let a post, approval or delete go out on text Claude read somewhere, with no prompt. Allow only the `list-*` and `get-*` tools by name if the prompts get in the way.
 
 claude.ai and Cowork (untested): add this repository as a marketplace, install BOLTA, connect Bolta under Customize > Connectors. In chat, keep approve, schedule, publish and reject on "Needs approval".
 
