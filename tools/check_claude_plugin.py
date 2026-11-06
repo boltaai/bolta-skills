@@ -21,13 +21,16 @@ line, so this check passes for anyone, not just whoever has the list saved. Once
 the server change is deployed, the live list wins, a changed schema is a warning,
 and `--no-pending` makes a missing tool an error again.
 
-It checks two plugins: plugins/bolta (the full plugin, with its own Bolta
-connection) and plugins/bolta-skills (the skills-only bundle for people who
+It checks three plugins: plugins/bolta (the full plugin, with its own Bolta
+connection), plugins/bolta-skills (the skills-only bundle for people who
 already connected Bolta themselves, generated from the full plugin by
-tools/build_skills_bundle.py). The bundle must have no .mcp.json and must match
-what the generator would write byte for byte. In both plugins the hook matchers
-must fit Bolta under any server name (the plugin's own, a connector, or a server
-added by hand), because a call a matcher misses gets no check.
+tools/build_skills_bundle.py) and plugins/bolta-checks (the hooks and scripts
+behind the Bolta checks). The bundle must have no .mcp.json and must match what
+the generator would write byte for byte. The two listed plugins carry no hooks
+and no shell scripts, and only the file types Anthropic's directory accepts from
+an unverified organization; the checks plugin carries nothing else. Its hook
+matchers must fit Bolta under any server name (the plugin's own, a connector, or
+a server added by hand), because a call a matcher misses gets no check.
 
 Usage:
     python3 -I tools/check_claude_plugin.py                       # fetch live
@@ -35,7 +38,7 @@ Usage:
     python3 -I tools/check_claude_plugin.py --no-pending          # live list only
     python3 -I tools/check_claude_plugin.py --strict              # warnings fail
     python3 -I tools/check_claude_plugin.py --require-coverage    # every tool used
-    python3 -I tools/check_claude_plugin.py --no-bundle           # the full plugin only
+    python3 -I tools/check_claude_plugin.py --no-bundle           # the full plugin and the checks only
 
 Checks, in order: manifest and marketplace, file hygiene, layout (skills, plus
 agents/ in the full plugin only; no commands/), agent shape (read-only tool list,
@@ -61,6 +64,7 @@ import importlib.util
 REPO = pathlib.Path(__file__).resolve().parent.parent
 DEFAULT_PLUGIN = REPO / "plugins" / "bolta"
 DEFAULT_BUNDLE = REPO / "plugins" / "bolta-skills"
+DEFAULT_CHECKS = REPO / "plugins" / "bolta-checks"
 DEFAULT_MARKETPLACE = REPO / ".claude-plugin" / "marketplace.json"
 DEFAULT_URL = "https://mcp.bolta.ai/mcp"
 #: The Claude tool list of the server change that adds PENDING_TOOLS: name, title,
@@ -81,7 +85,7 @@ CLAUDE_USER_AGENT = "claude-code/2.1.302 (cli; bolta-plugin-check)"
 UNIVERSAL_PARAMS = {"workspace_id"}
 
 #: Hyphenated words that legitimately appear in backticks and are not tool ids.
-NON_TOOL_TOKENS = {"read-only", "draft-only", "mcp-app", "claude-code", "bolta-skills"}
+NON_TOOL_TOKENS = {"read-only", "draft-only", "mcp-app", "claude-code", "bolta-skills", "bolta-checks"}
 
 #: Exposed tools the skills deliberately never use. Naming one in a skill is an
 #: error only where the reason says so (`forbid`).
@@ -188,8 +192,12 @@ CITATIONS = [
 
 PUBLISH_CAPABLE_CREATE_TOOLS = ("create-post", "bulk-create-posts", "create-wordpress-blog-post")
 
-ALLOWED_EXT = {".md", ".json", ".sh", ".svg", ".png", ".yaml", ".yml", ".txt"}
-IMAGE_EXT = {".png", ".svg", ".jpg", ".jpeg", ".gif", ".webp"}
+#: What Anthropic's directory accepts from an unverified organization: Markdown, text, JSON, YAML
+#: and these image types. Anything else (a shell script, an SVG) makes it refuse the version.
+#: The checks plugin is not listed there, so it may carry .sh as well.
+DIRECTORY_EXT = {".md", ".txt", ".json", ".yaml", ".yml", ".png", ".jpg", ".jpeg", ".gif", ".webp", ".ico"}
+CHECKS_EXT = DIRECTORY_EXT | {".sh"}
+IMAGE_EXT = {".png", ".jpg", ".jpeg", ".gif", ".webp", ".ico"}
 MAX_TEXT_BYTES = 256 * 1024
 MAX_FILES = 512
 RESERVED_NAME = re.compile(r"^(claude|anthropic|anthropics|cc-plugin)([-_]|$)|official", re.I)
@@ -208,7 +216,7 @@ SAMPLES_MISS = ("mcp__social__{t}-x", "xmcp__social__{t}", "mcp____{t}", "mcp__s
 #: Tools the marker hook watches that the guard does not decide on (it only reads their result).
 MARK_ONLY_TOOLS = {"create-content-campaign"}
 
-#: Which plugin is being checked. Messages carry it for the bundle so the two never blur.
+#: Which plugin is being checked. Messages carry it for the bundle and the checks so the three never blur.
 _ctx = [""]
 #: The plugin's name, which is also its slash-command namespace (/bolta:today, /bolta-skills:today).
 _ns = ["bolta"]
@@ -431,7 +439,8 @@ def check_marketplace(marketplace: pathlib.Path, plugin: pathlib.Path, manifest:
             err("marketplace.json", f"version {e['version']} differs from plugin.json {manifest.get('version')}")
 
 
-def check_files(plugin: pathlib.Path, bundle: bool = False):
+def check_files(plugin: pathlib.Path, bundle: bool = False, checks: bool = False):
+    allowed = CHECKS_EXT if checks else DIRECTORY_EXT
     files = [p for p in plugin.rglob("*") if p.is_file() or p.is_symlink()]
     if len(files) > MAX_FILES:
         err(plugin, f"{len(files)} files exceeds {MAX_FILES}")
@@ -442,8 +451,8 @@ def check_files(plugin: pathlib.Path, bundle: bool = False):
             continue
         if p.name == ".DS_Store":
             err(rel, ".DS_Store")
-        if p.suffix.lower() not in ALLOWED_EXT and p.name not in ("LICENSE", "NOTICE"):
-            err(rel, f"file type {p.suffix or '(none)'} not allowed")
+        if p.suffix.lower() not in allowed and p.name not in ("LICENSE", "NOTICE"):
+            err(rel, f"file type {p.suffix or '(none)'} not allowed" + ("" if checks else " in a listed plugin (the directory refuses it from an unverified organization)"))
         if p.suffix.lower() not in IMAGE_EXT and p.stat().st_size > MAX_TEXT_BYTES:
             err(rel, f"{p.stat().st_size} bytes exceeds 256 KiB")
     if (plugin / "bin").exists():
@@ -461,6 +470,14 @@ def check_files(plugin: pathlib.Path, bundle: bool = False):
             err("README.md", f"{n} words outside code blocks; need >= 40")
         elif n > MAX_README_WORDS:
             err("README.md", f"{n} words outside code blocks; keep it to {MAX_README_WORDS} or fewer")
+    if checks:
+        if (plugin / ".mcp.json").exists():
+            err(".mcp.json", "the checks plugin starts no connection; the connection comes from bolta or the person's own")
+        return
+    for d in ("hooks", "scripts"):
+        if (plugin / d).exists():
+            err(f"{d}/", "a listed plugin carries no hooks and no scripts (the directory accepts command hooks only from "
+                        "Verified organizations); the Bolta checks live in plugins/bolta-checks")
     mcp = plugin / ".mcp.json"
     if bundle:
         # The whole point of the bundle: the person's own connector or server is the only one.
@@ -653,16 +670,16 @@ def check_description(rel, desc, tools_by_name):
     lint_words(rel, "description", desc, INTERNAL_WORDS)
 
 
-def house_rules_from_script(plugin):
-    p = plugin / "scripts" / "bolta-house-rules.sh"
+def house_rules_from_script(checks):
+    p = checks / "scripts" / "bolta-house-rules.sh"
     if not p.is_file():
         return None
     return re.findall(r"^(\d{1,2}\. .+)$", p.read_text().replace("'\\''", "'"), re.M)
 
 
-def check_skills(plugin, skills, tools_by_name):
+def check_skills(plugin, skills, tools_by_name, checks):
     total = 0
-    script_rules = house_rules_from_script(plugin)
+    script_rules = house_rules_from_script(checks)
     for name, path in skills.items():
         rel = path.relative_to(plugin)
         text = path.read_text()
@@ -706,7 +723,7 @@ def check_skills(plugin, skills, tools_by_name):
             if len(rules) != 10:
                 err(rel, f"Always must hold the 10 house rules; found {len(rules)}")
             if script_rules is not None and rules != script_rules:
-                err(rel, "the house rules differ from scripts/bolta-house-rules.sh; keep them word for word")
+                err(rel, "the house rules differ from plugins/bolta-checks/scripts/bolta-house-rules.sh; keep them word for word")
         else:
             if HOUSE_RULES_LINE not in always:
                 err(rel, f"Always must say: {HOUSE_RULES_LINE}")
@@ -966,10 +983,12 @@ def load_generator():
     return mod
 
 
-def check_guard_matches_matcher(plugin, cfg, tools_by_name):
+def check_guard_matches_matcher(plugin, cfg, tools_by_name, skills_src):
     """Every tool the guard decides on must be in the hook matcher (or the guard never runs
     for it), and every tool in the matcher must be a real tool the guard handles. The marker
-    hook may only watch gated tools, and every Bolta matcher must catch every Bolta server name."""
+    hook may only watch gated tools, and every Bolta matcher must catch every Bolta server name.
+    plugin is the checks plugin; skills_src is the full plugin, whose skills name the tools the
+    reconnect notice must cover."""
     script = plugin / "scripts" / "guard-bolta-writes.sh"
     if not script.is_file() or cfg is None:
         if cfg is not None:
@@ -1026,7 +1045,7 @@ def check_guard_matches_matcher(plugin, cfg, tools_by_name):
                     err("hooks/hooks.json", f"{event} matcher does not list the gated tool {t!r}")
                 if gen is not None:
                     try:
-                        want = set(gen.notice_tools(cfg, plugin))
+                        want = set(gen.notice_tools(cfg, skills_src))
                     except SystemExit as e:
                         err("hooks/hooks.json", f"cannot work out the notice matcher: {e}")
                         continue
@@ -1062,28 +1081,49 @@ def check_bundle_in_sync(bundle: pathlib.Path, source: pathlib.Path):
         err("bundle", f"{d}; it is generated from plugins/bolta: run python3 -I tools/build_skills_bundle.py")
 
 
-def run_checks(plugin, marketplace, tools_by_name, bundle=False, source=None):
-    """Every check for one plugin. Returns the tool ids its files reference."""
+def run_checks_plugin(checks, marketplace, tools_by_name, skills_src):
+    """Every check for the checks plugin (hooks and scripts only). Returns the gated tools."""
+    _ctx[0] = "[bolta-checks] "
+    manifest = check_manifest(checks)
+    if manifest.get("name") != "bolta-checks":
+        err(".claude-plugin/plugin.json", f"the checks plugin is named bolta-checks (got {manifest.get('name')!r})")
+    check_marketplace(marketplace, checks, manifest)
+    check_files(checks, checks=True)
+    for d in ("skills", "agents", "commands"):
+        if (checks / d).exists():
+            err(f"{d}/", "the checks plugin holds hooks/ and scripts/ only; skills and agents live in plugins/bolta")
+    if "confirm_level" not in (manifest.get("userConfig") or {}):
+        err(".claude-plugin/plugin.json", "userConfig.confirm_level is missing (the guard reads it)")
+    check_links(checks)
+    check_citations(checks)
+    cfg = check_hooks(checks, manifest)
+    check_guard_matches_matcher(checks, cfg, tools_by_name, skills_src)
+    gated = set()
+    for g in hook_groups(cfg, "PreToolUse") if cfg else []:
+        if group_runs(g, "guard-bolta-writes.sh"):
+            gated |= matcher_tools(g.get("matcher", "")) or set()
+    _ctx[0] = ""
+    return gated
+
+
+def run_checks(plugin, marketplace, tools_by_name, checks, gated, bundle=False, source=None):
+    """Every check for one listed plugin. Returns the tool ids its files reference."""
     _ctx[0] = "[bolta-skills] " if bundle else ""
     manifest = check_manifest(plugin)
     _ns[0] = manifest.get("name") or ("bolta-skills" if bundle else "bolta")
     if bundle and manifest.get("name") != "bolta-skills":
         err(".claude-plugin/plugin.json", f"the bundle is named bolta-skills (got {manifest.get('name')!r})")
+    if manifest.get("userConfig"):
+        err(".claude-plugin/plugin.json", "userConfig belongs to plugins/bolta-checks (no hook here reads it)")
     check_marketplace(marketplace, plugin, manifest)
     check_files(plugin, bundle)
     skills = check_layout(plugin, bundle)
     info(f"{len(skills)} skills")
-    check_skills(plugin, skills, tools_by_name)
+    check_skills(plugin, skills, tools_by_name, checks)
     referenced = check_tool_ids_and_args(plugin, skills, tools_by_name)
     check_links(plugin)
     check_lint(plugin, skills)
     check_citations(plugin)
-    cfg = check_hooks(plugin, manifest)
-    check_guard_matches_matcher(plugin, cfg, tools_by_name)
-    gated = set()
-    for g in hook_groups(cfg, "PreToolUse") if cfg else []:
-        if group_runs(g, "guard-bolta-writes.sh"):
-            gated |= matcher_tools(g.get("matcher", "")) or set()
     check_agents(plugin, tools_by_name, gated)
     if bundle:
         check_bundle_in_sync(plugin, source)
@@ -1095,7 +1135,8 @@ def main(argv=None):
     ap = argparse.ArgumentParser(description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
     ap.add_argument("--plugin", type=pathlib.Path, default=DEFAULT_PLUGIN)
     ap.add_argument("--bundle", type=pathlib.Path, default=DEFAULT_BUNDLE, help="the skills-only bundle (generated by tools/build_skills_bundle.py)")
-    ap.add_argument("--no-bundle", action="store_true", help="check the full plugin only")
+    ap.add_argument("--checks", type=pathlib.Path, default=DEFAULT_CHECKS, help="the checks plugin (hooks and scripts)")
+    ap.add_argument("--no-bundle", action="store_true", help="check the full plugin and the checks only")
     ap.add_argument("--marketplace", type=pathlib.Path, default=DEFAULT_MARKETPLACE)
     ap.add_argument("--tools-json", type=pathlib.Path, help="saved tools/list response instead of fetching")
     ap.add_argument("--tools-url", default=DEFAULT_URL)
@@ -1121,7 +1162,12 @@ def main(argv=None):
         tools_by_name = with_pending(tools_by_name, args.fixture.resolve(), from_server=not args.tools_json)
 
     marketplace = args.marketplace.resolve()
-    referenced = run_checks(plugin, marketplace, tools_by_name)
+    checks = args.checks.resolve()
+    if not checks.is_dir():
+        print(f"ERROR no such checks plugin dir: {checks}")
+        return 2
+    gated = run_checks_plugin(checks, marketplace, tools_by_name, plugin)
+    referenced = run_checks(plugin, marketplace, tools_by_name, checks, gated)
     check_server_gaps(tools_by_name)
 
     if not args.no_bundle:
@@ -1129,7 +1175,7 @@ def main(argv=None):
         if not bundle.is_dir():
             err("bundle", f"{args.bundle} does not exist; generate it with python3 -I tools/build_skills_bundle.py")
         else:
-            run_checks(bundle, marketplace, tools_by_name, bundle=True, source=plugin)
+            run_checks(bundle, marketplace, tools_by_name, checks, gated, bundle=True, source=plugin)
 
     unreferenced = sorted(set(tools_by_name) - referenced - set(INTENTIONALLY_UNUSED))
     if unreferenced:

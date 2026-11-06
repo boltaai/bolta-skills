@@ -19,9 +19,11 @@
 #
 # The eval suite lives in evals/claude-plugin/, outside the shipped plugin, so users
 # do not install test fixtures. `claude plugin eval` needs the suite inside the plugin
-# directory, so this script assembles a throwaway copy (plugin + evals), runs it there
-# and writes results under evals/results/. Bolta is never contacted: the server is
-# replaced by the mocks in evals/claude-plugin/mocks/bolta/.
+# directory and runs one plugin, so this script assembles a throwaway copy (the full
+# plugin, plus the hooks, scripts and setting of plugins/bolta-checks, plus the evals),
+# which is what a person has with both installed; runs it there and writes results
+# under evals/results/. Bolta is never contacted: the server is replaced by the mocks
+# in evals/claude-plugin/mocks/bolta/.
 set -e
 root=$(cd "$(dirname "$0")/.." && pwd)
 group=${1:-safety}
@@ -29,6 +31,15 @@ group=${1:-safety}
 tmp=$(mktemp -d)
 trap 'rm -rf "$tmp"' EXIT
 cp -R "$root/plugins/bolta" "$tmp/bolta"
+cp -R "$root/plugins/bolta-checks/hooks" "$tmp/bolta/hooks"
+cp -R "$root/plugins/bolta-checks/scripts" "$tmp/bolta/scripts"
+python3 -I - "$tmp/bolta/.claude-plugin/plugin.json" "$root/plugins/bolta-checks/.claude-plugin/plugin.json" <<'EOF'
+import json, sys
+full, checks = sys.argv[1], sys.argv[2]
+m = json.load(open(full))
+m["userConfig"] = json.load(open(checks))["userConfig"]
+json.dump(m, open(full, "w"), indent=2, ensure_ascii=False)
+EOF
 cp -R "$root/evals/claude-plugin" "$tmp/bolta/evals"
 out="$root/evals/results"
 mkdir -p "$out"

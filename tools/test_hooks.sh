@@ -2,10 +2,10 @@
 # Tests for the Bolta hook scripts (guard v2, the batch-window markers, the
 # new-message reset, the house rules and the auth notice), including the tools
 # made for Claude (approve-many-posts, reject-post, set-content-campaign-targets,
-# analyze-content-campaign-source) and the skills-only bundle in
-# plugins/bolta-skills (generated from the full plugin: same hooks and scripts,
-# one house-rules line aside). The matchers of both fit any server name.
-# Plain POSIX shell.
+# analyze-content-campaign-source). The hooks live in plugins/bolta-checks, a
+# plugin of their own; the two listed plugins (plugins/bolta and the generated
+# plugins/bolta-skills) carry none, and section 9 checks that. The matchers fit
+# any server name. Plain POSIX shell.
 #
 #   sh tools/test_hooks.sh                 every awk found: the default awk,
 #                                          mawk, gawk, gawk --posix, BWK awk
@@ -25,7 +25,8 @@
 # Exits non-zero if any case fails.
 
 here=$(cd "$(dirname "$0")" && pwd)
-plugin="$here/../plugins/bolta"
+plugin="$here/../plugins/bolta-checks"
+full="$here/../plugins/bolta"
 scripts="$plugin/scripts"
 guard="$scripts/guard-bolta-writes.sh"
 markh="$scripts/bolta-mark.sh"
@@ -1105,8 +1106,8 @@ assert "rules: one line of output" test "$(printf '%s\n' "$out" | wc -l | tr -d 
 assert "rules: valid JSON with hookEventName SessionStart" test "$(printf '%s' "$out" | jfield hookSpecificOutput.hookEventName)" = SessionStart
 ctx=$(printf '%s' "$out" | jfield hookSpecificOutput.additionalContext)
 expected=""
-if [ -f "$plugin/skills/today/SKILL.md" ]; then
-  expected=$(awk '/^## Always/ { a = 1; next } /^## / { a = 0 } a && /^[0-9]+\. /' "$plugin/skills/today/SKILL.md")
+if [ -f "$full/skills/today/SKILL.md" ]; then
+  expected=$(awk '/^## Always/ { a = 1; next } /^## / { a = 0 } a && /^[0-9]+\. /' "$full/skills/today/SKILL.md")
 fi
 if [ "$(printf '%s\n' "$expected" | grep -c .)" -ne 10 ]; then
   expected=$(cat <<'RULES'
@@ -1133,7 +1134,7 @@ $expected
 EOF
 assert "rules: all 10 house rules printed word for word (as in the today skill)" test "$missing" -eq 0
 assert "rules: exactly 10 numbered rules" test "$(printf '%s\n' "$ctx" | grep -c '^[0-9][0-9]*\. ')" -eq 10
-assert "rules: the opening line matches the today skill" sh -c 'printf "%s\n" "$1" | head -n 1 | grep -Fxq "Bolta house rules:" && grep -Fxq "Bolta house rules:" "$2"' x "$ctx" "$plugin/skills/today/SKILL.md"
+assert "rules: the opening line matches the today skill" sh -c 'printf "%s\n" "$1" | head -n 1 | grep -Fxq "Bolta house rules:" && grep -Fxq "Bolta house rules:" "$2"' x "$ctx" "$full/skills/today/SKILL.md"
 assert "rules: ends by saying the Bolta checks are on (the skills' evidence that hooks run)" test "$(printf '%s\n' "$ctx" | tail -n 1)" = "Bolta checks are on in this session."
 # The plan asked for 120 words; the ten rules are fixed text of about 175, so
 # the bound is the rules plus five short framing lines (opening, review
@@ -1220,9 +1221,10 @@ assert "wiring: the guard's check texts were found ($nasks)" test "$nasks" -ge 3
 long=$(printf '%s\n' "$asks" | awk '{ n = split($0, s, /[.!?]( |$)/); for (i = 1; i <= n; i++) { c = split(s[i], x, " "); if (c >= 20) printf "[%d words] %s\n", c, s[i] } }')
 assert "wiring: every sentence in a check is under 20 words${long:+ (too long: $long)}" test -z "$long"
 assert "wiring: no check text says call" sh -c '! printf "%s\n" "$1" | grep -Eiq "\bcalls?\b"' x "$asks"
-assert "wiring: plugin.json version is 0.3.2" test "$(jfield version < "$pj")" = 0.3.2
-assert "wiring: plugin.json name is bolta" test "$(jfield name < "$pj")" = bolta
-assert "wiring: plugin.json displayName is BOLTA" test "$(jfield displayName < "$pj")" = BOLTA
+assert "wiring: plugin.json version is 0.4.0" test "$(jfield version < "$pj")" = 0.4.0
+assert "wiring: plugin.json name is bolta-checks" test "$(jfield name < "$pj")" = bolta-checks
+assert "wiring: plugin.json displayName is BOLTA checks" test "$(jfield displayName < "$pj")" = "BOLTA checks"
+assert "wiring: the full plugin is at the same version" test "$(jfield version < "$full/.claude-plugin/plugin.json")" = 0.4.0
 assert "wiring: confirm_level defaults to standard" test "$(jfield userConfig.confirm_level.default < "$pj")" = standard
 assert "wiring: confirm_level describes both levels, standard and careful" sh -c 'printf "%s\n" "$1" | grep -Fq "standard:" && printf "%s\n" "$1" | grep -Fq "careful:"' x "$(jfield userConfig.confirm_level.description < "$pj")"
 assert "wiring: confirm_level has no third option" sh -c '! sh "$1" field userConfig.confirm_level.options.2 < "$2" >/dev/null' x "$reader" "$pj"
@@ -1232,81 +1234,28 @@ odd=$(ls "$scripts" | grep -Ev '[.]sh$')
 assert "wiring: the scripts folder holds only .sh files${odd:+ (found: $odd)}" test -z "$odd"
 
 # =====================================================================================
-# 9. The skills-only bundle (plugins/bolta-skills): same scripts, matchers for any name
+# 9. The listed plugins carry no hooks; the checks fit any connection name
 # =====================================================================================
-# A connector or a server someone added can carry any name. Claude Code calls a
-# claude.ai connector's tools mcp__claude_ai_<name>__<tool> and a server added by
-# hand mcp__<name>__<tool>. The bundle has no server of its own.
+# Anthropic's directory accepts command hooks and shell scripts only from Verified
+# organizations, so plugins/bolta and the generated plugins/bolta-skills ship none:
+# the checks are this plugin, installed next to either. A connector or a server
+# someone added can carry any name. Claude Code calls a claude.ai connector's tools
+# mcp__claude_ai_<name>__<tool> and a server added by hand mcp__<name>__<tool>.
 bplugin="$here/../plugins/bolta-skills"
-bscripts="$bplugin/scripts"
-bhj="$bplugin/hooks/hooks.json"
+bscripts="$scripts"
+for lp in "$full" "$bplugin"; do
+  lname=$(basename "$lp")
+  assert "listed: $lname has no hooks/" no_file "$lp/hooks/hooks.json"
+  assert "listed: $lname has no scripts/" test ! -d "$lp/scripts"
+  odd=$(find "$lp" -type f ! -name LICENSE | grep -Ev '[.](md|txt|json|ya?ml|png|jpe?g|gif|webp|ico)$')
+  assert "listed: $lname holds only the file types the directory accepts${odd:+ (found: $odd)}" test -z "$odd"
+  assert "listed: $lname has no userConfig (the guard reads it from this plugin)" sh -c '! sh "$1" field userConfig < "$2" >/dev/null' x "$reader" "$lp/.claude-plugin/plugin.json"
+done
+assert "checks: this plugin has no skills, agents or .mcp.json" test ! -d "$plugin/skills" -a ! -d "$plugin/agents" -a ! -f "$plugin/.mcp.json"
 if [ -d "$bplugin" ]; then
-  for s in guard-bolta-writes.sh bolta-mark.sh bolta-new-turn.sh bolta-auth-notice.sh bolta-json.sh; do
-    assert "bundle: $s is byte for byte the full plugin's" cmp -s "$scripts/$s" "$bscripts/$s"
-  done
-  for s in guard-bolta-writes.sh bolta-mark.sh bolta-new-turn.sh bolta-house-rules.sh bolta-auth-notice.sh bolta-json.sh; do
-    assert "bundle: $s is executable" test -x "$bscripts/$s"
-  done
-  assert "bundle: hooks.json is byte for byte the full plugin's" cmp -s "$hj" "$bhj"
-  # SessionStart: the full plugin says its checks are on (they run on its own server and on one added under any
-  # name, proven in a real session). The bundle cannot say that: nobody has run its checks on a real claude.ai
-  # connector, and chat runs no hooks. Its last line says they may not run; everything else is the same.
-  full_line="Bolta checks are on in this session."
-  bundle_line="Bolta checks may not run for this connection. Before anything public, a reply or a voice change, get a yes in words first."
-  bout=$(printf '{"session_id":"%s","hook_event_name":"SessionStart","source":"startup"}' "$SID" | sh "$bscripts/bolta-house-rules.sh")
-  bctx=$(printf '%s' "$bout" | jfield hookSpecificOutput.additionalContext)
-  assert "bundle: the house rules end by saying the checks may not run" test "$(printf '%s\n' "$bctx" | tail -n 1)" = "$bundle_line"
-  assert "bundle: the house rules never say the checks are on" sh -c '! printf "%s\n" "$1" | grep -Fq "checks are on"' x "$bctx"
-  assert "bundle: the house rules are otherwise the full plugin's, line for line" test "$(printf '%s\n' "$bctx" | grep -vFx "$bundle_line")" = "$(printf '%s\n' "$ctx" | grep -vFx "$full_line")"
-  assert "bundle: bolta-house-rules.sh differs from the full plugin's by that one line only" test "$(grep -vFx "$bundle_line'" "$bscripts/bolta-house-rules.sh")" = "$(grep -vFx "$full_line'" "$scripts/bolta-house-rules.sh")"
   assert "bundle: it starts no connection of its own (no .mcp.json)" no_file "$bplugin/.mcp.json"
   assert "bundle: plugin.json is named bolta-skills" test "$(jfield name < "$bplugin/.claude-plugin/plugin.json")" = bolta-skills
-  assert "bundle: confirm_level is kept (the guard reads it)" test "$(jfield userConfig.confirm_level.default < "$bplugin/.claude-plugin/plugin.json")" = standard
-  bpre=$(jfield hooks.PreToolUse.0.matcher < "$bhj")
-  bnotice=$(jfield hooks.PostToolUse.0.matcher < "$bhj")
-  bmark=$(jfield hooks.PostToolUse.1.matcher < "$bhj")
-  bfail=$(jfield hooks.PostToolUseFailure.0.matcher < "$bhj")
-  assert "bundle: the guard blocks the call if it ever fails to run" test "$(jfield hooks.PreToolUse.0.hooks.0.onFailure < "$bhj")" = block
-  assert "bundle: the guard matcher names the same tools as the full plugin's" test "$(printf '%s' "$bpre" | sed -e 's/.*__(//')" = "$(printf '%s' "$pre_m" | sed -e 's/.*__(//')"
-  assert "bundle: the marker matcher names the same tools as the full plugin's" test "$(printf '%s' "$bmark" | sed -e 's/.*__(//')" = "$(printf '%s' "$mark_m" | sed -e 's/.*__(//')"
-  miss=""
-  for pfx in "$P" "$U" "$C" "$CB" "$A" mcp__claude_ai_Social_posts__ mcp__claude_ai_Bolta_Acme__ mcp__social__ mcp__my-posts__ mcp__0a1b2c3d-4e5f-4a6b-8c7d-9e0f1a2b3c4d__; do
-    for tool in $GATED; do
-      printf '%s\n' "$pfx$tool" | grep -Eq -- "$bpre" || miss="$miss $pfx$tool"
-    done
-  done
-  assert "bundle: the guard matcher covers every gated tool under every connection name${miss:+ (missing:$miss)}" test -z "$miss"
-  miss=""
-  for pfx in "$P" "$C" mcp__claude_ai_Social_posts__ mcp__social__; do
-    for tool in approve-post approve-many-posts reject-post create-content-campaign set-content-campaign-status; do
-      printf '%s\n' "$pfx$tool" | grep -Eq -- "$bmark" || miss="$miss $pfx$tool"
-    done
-  done
-  assert "bundle: the marker matcher covers its tools under every connection name${miss:+ (missing:$miss)}" test -z "$miss"
-  miss=""
-  for pfx in "$C" mcp__claude_ai_Social_posts__ mcp__social__; do
-    for tool in $GATED list-inbox-items get-workspace list-accounts; do
-      for m in "$bnotice" "$bfail"; do
-        printf '%s\n' "$pfx$tool" | grep -Eq -- "$m" || miss="$miss $pfx$tool"
-      done
-    done
-  done
-  assert "bundle: the reconnect notice covers Bolta's tools under every connection name${miss:+ (missing:$miss)}" test -z "$miss"
-  extra=""
-  for name in mcp__github__search_repositories mcp__social__list-nothing mcp__social__approve-post-x "xmcp__social__approve-post" "mcp____approve-post" "mcp__social_approve-post" Bash; do
-    for m in "$bpre" "$bmark" "$bnotice"; do
-      printf '%s\n' "$name" | grep -Eq -- "$m" && extra="$extra $name"
-    done
-  done
-  assert "bundle: the matchers leave unrelated tools alone${extra:+ (matched:$extra)}" test -z "$extra"
-  extra=""
-  for name in "${P}pause-routine" "${P}submit-for-review" "${P}list-workspace-posts" "${P}create-content-campaign" "${P}analyze-content-campaign-source" "${P}update-content-campaign"; do
-    printf '%s\n' "$name" | grep -Eq -- "$bpre" && extra="$extra $name"
-  done
-  assert "bundle: the guard matcher still leaves Bolta's other tools alone${extra:+ (matched:$extra)}" test -z "$extra"
-  assert "bundle: no matcher wants a server named bolta" sh -c '! printf "%s\n" "$1" | grep -Fq "Bb"' x "$bpre$bmark$bnotice$bfail"
-
-  # Run the bundle's own scripts on a connector with a name that has no "bolta" in it.
+  # Run the scripts on a connector with a name that has no "bolta" in it.
   save_guard=$guard save_mark=$markh save_new=$newturn
   guard="$bscripts/guard-bolta-writes.sh" markh="$bscripts/bolta-mark.sh" newturn="$bscripts/bolta-new-turn.sh"
   S=mcp__claude_ai_Social_posts__

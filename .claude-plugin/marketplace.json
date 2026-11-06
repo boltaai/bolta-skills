@@ -15,6 +15,11 @@
       "name": "bolta-skills",
       "source": "./plugins/bolta-skills",
       "description": "The same Bolta skills and checks, with no connection of its own. For people who already added Bolta as a connector or an MCP server. Install bolta or bolta-skills, not both."
+    },
+    {
+      "name": "bolta-checks",
+      "source": "./plugins/bolta-checks",
+      "description": "The Bolta checks: ask before anything public, approved, turned down or final. Install next to bolta or bolta-skills."
     }
   ]
 }
