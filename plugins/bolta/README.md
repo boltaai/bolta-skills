@@ -44,7 +44,6 @@ Drafts need none. **Bolta checks** `careful` in `/config` checks every approval.
 ## Limits
 
 - No media upload: Instagram, TikTok, YouTube and Pinterest need a public link.
-- Until Bolta's newer tools reach your server, a "no" with a reason and a campaign's accounts are set in Bolta.
 - One connection reaches the brands you tick; agencies tick their clients. New brand: reconnect.
 - The checks need `sh` and `awk` (Windows: [Git for Windows](https://git-scm.com/downloads/win) first).
 
