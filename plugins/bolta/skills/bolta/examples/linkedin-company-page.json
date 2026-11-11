@@ -3,41 +3,30 @@
   "playbook": "post",
   "steps": [
     {
+      "tool": "list-accounts",
+      "arguments": {
+        "workspace_id": "<brand's workspace id>"
+      },
+      "why": "The plain LinkedIn row is the person's profile. Each LinkedIn company page is its own row, id linkedin_org_<id> with is_organization. Pick the Acme page row; if none is listed, the page isn't connected, so say so instead of guessing an id."
+    },
+    {
       "tool": "create-post",
       "arguments": {
         "workspace_id": "<brand's workspace id>",
         "content": "We're hiring two engineers in Lisbon. Small team, real ownership, a product people use every day.",
         "account_ids": [
-          "<LinkedIn account id>"
+          "<linkedin_org_ id from list-accounts>"
         ],
         "idempotency_key": "hiring-li-page-1"
       },
-      "why": "The LinkedIn account is a person; posting as the page is a setting on the post."
-    },
-    {
-      "tool": "get-post-platform-details",
-      "arguments": {
-        "post_id": "<post id>",
-        "platform": "linkedin"
-      },
-      "why": "Shows the keys and allowed values, and any page already chosen on an earlier post."
-    },
-    {
-      "tool": "update-post-platform-details",
-      "arguments": {
-        "post_id": "<post id>",
-        "platform": "linkedin",
-        "fields": {
-          "post_as_organization": true,
-          "selected_organization": "<page id the user set or named>"
-        }
-      },
-      "why": "Only a page id the user gave or one from an earlier post. Never guess one."
+      "why": "The page id alone posts as the page, not the profile. Saved as a draft with no requested_action; scheduling is a second call after the yes."
     }
   ],
-  "say": "Saved to Acme as a LinkedIn draft for the Acme company page. Nothing goes out yet. Schedule it?",
+  "say": "Saved to Acme as a LinkedIn draft for the Acme company page, not your profile. Nothing goes out yet. Schedule it?",
   "never": [
-    "A guessed page id.",
+    "A guessed page id, or one that didn't come from list-accounts.",
+    "Scheduling in the same call that creates a page post.",
+    "Adding the personal account id when the user said not my profile.",
     "A link the user didn't give."
   ]
 }

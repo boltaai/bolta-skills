@@ -1,0 +1,58 @@
+{
+  "ask": "Yes, start it.",
+  "playbook": "campaign",
+  "before": "The user asked for 2 weeks of short vertical videos for the new candle line on TikTok and Instagram. The plan shown in the previous reply: Spring candles, Product Education, Nov 16 to Nov 29 (2 weeks), 2 short videos a week, 4 drafts to review, Bolta writes it. It also said: each video draft runs a paid video generation, so it costs more credits than an image post. Then: Start it?",
+  "steps": [
+    {
+      "tool": "create-content-campaign",
+      "arguments": {
+        "workspace_id": "<brand's workspace id>",
+        "name": "Spring candles",
+        "strategy_key": "product_education",
+        "theme": "How the spring candle line is poured and scented",
+        "audience": "People who buy candles as gifts",
+        "cta_text": "Shop the spring line",
+        "cta_url": "https://example.com/spring",
+        "starts_on": "2026-11-16",
+        "ends_on": "2026-11-29",
+        "content_mix": {
+          "short_video": 2
+        }
+      },
+      "why": "The user asked for videos, so the mix is sent explicitly: short_video is the 9:16 vertical format. The cost was said before this yes."
+    },
+    {
+      "tool": "set-content-campaign-targets",
+      "arguments": {
+        "campaign_id": "<campaign id>",
+        "account_ids": [
+          "<TikTok account id>",
+          "<Instagram account id>"
+        ],
+        "context_notes": "Week 1: how a candle is poured. Week 2: how the scents are chosen. Facts the user gave, nothing else."
+      },
+      "why": "The create reply named no accounts; these are the two networks the user named."
+    },
+    {
+      "tool": "set-content-campaign-status",
+      "arguments": {
+        "campaign_id": "<campaign id>",
+        "action": "activate"
+      },
+      "why": "Start on the yes. One Bolta check. Credits are spent when each week's drafts are written, not at this call."
+    },
+    {
+      "tool": "get-content-campaign",
+      "arguments": {
+        "campaign_id": "<campaign id>"
+      },
+      "why": "Read back resolved_content_mix and next_generation_at: when week 1's drafts are written (2 days before the week by default)."
+    }
+  ],
+  "say": "Campaign on for Acme: Spring candles, Nov 16 to Nov 29, 2 short videos a week on TikTok and Instagram. Week 1's drafts land Sat Nov 14 and wait for your yes.",
+  "never": [
+    "Starting a video campaign before saying each video draft costs more credits than an image.",
+    "Quoting a credit number for the videos.",
+    "Sending story or avatar_video: Bolta keeps them on the campaign but never makes them."
+  ]
+}

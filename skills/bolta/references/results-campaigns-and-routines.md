@@ -1,6 +1,6 @@
 # Campaign and Bolta routine results
 
-Read for one campaign's results, comparing campaigns, or a Bolta routine. Finishing a campaign: hand to [campaign](campaign.md). Bolta works these numbers out on every read, so read again each time; never reuse earlier numbers.
+For one campaign's results, comparing campaigns, or a Bolta routine. Finishing a campaign: [campaign](campaign.md). Bolta works these numbers out on every read, so read again each time; never reuse earlier numbers.
 
 ## A campaign: `get-content-campaign`
 
@@ -16,13 +16,13 @@ Say it in this order.
 4. **The decision rate:** undecided is `pending_review` plus `draft`; decided is the rest of `total_posts`. "You decided 10 of 12."
 5. **Engagement**, only from `results.engagement`. `measurable_posts` above `measured_posts` means some aren't measured yet. To name the best post, match the campaign's post ids against published posts read with metrics.
 
-**When nothing went out**, `results.outcome_reason` names the first thing that stopped it:
-- `no_accounts_connected`: nothing could go out.
+**When nothing went out**, `results.outcome_reason` names the first thing that stopped it, checked in this order:
+- `no_accounts_connected`: the brand has no social account.
 - `runs_failed`: every time Bolta tried to write, it failed. Say the last error.
 - `not_started`: it never started.
-- `nothing_generated`: Bolta ran but wrote no drafts.
+- `nothing_generated`: it ran but no drafts yet; one may still be writing.
+- `publishing_failed`: sends failed and none went out, usually a disconnected account.
 - `quality_blocked`: drafts were held back and need a human edit.
-- `publishing_failed`: every send failed, usually a disconnected account.
 - `awaiting_approval`: waiting for your yes. The usual answer.
 - `nothing_approved`: drafts were seen and none got a yes. Also shown for drafts I wrote that were never sent for review.
 - `not_sent_yet`: approved; their times haven't come.
@@ -32,18 +32,16 @@ Say it in this order.
 
 **A campaign I wrote** stays "not started" on the dashboard. Its results still count its posts. Give the read and leave the status alone.
 
-## Comparing campaigns
+## Comparing campaigns, and clicks
 
-- Few went out: say where it stopped, not that the strategy failed.
-- First run of a strategy: too early to drop it. The first run had the thinnest context.
-- Two campaigns teach something only if they differ in one thing, ideally the strategy.
+Comparing two campaigns, or clicks from a campaign's links: read [campaigns-and-routines-compare](results-campaigns-and-routines-compare.md).
 
 ## A Bolta routine: `get-routine`, `list-routine-runs`
 
 - `performance_summary` covers every run since it began, not the user's window: `runs`, `runs_failed`, `artifacts_created` (drafts made), `artifacts_approved` (got a yes), `artifacts_published` (went out), `artifacts_rejected` (got a no), `artifacts_awaiting_review` (waiting for your yes).
 - Decision rate: approved plus rejected, out of drafts made. Dropped drafts leave the count.
 - `list-routine-runs` gives up to 50 runs, newest first, each with a status and `artifacts`: `created`, `awaiting_you`, `scheduled`, `published`, `failed`.
-- In a run, `failed` drafts got a no, lapsed or were dropped: not errors. A run marked failed with "No drafts from this run were approved" means none got a yes. Say that, not "it broke".
-- Counts are per post. A post out on only some accounts may show as scheduled. If "went out" looks low, check the posts.
-- Engagement per Bolta routine isn't readable from here. One line, one link: its page at bolta.ai/dashboard/routines/<id> shows it.
+- In a run, `failed` drafts got a no, lapsed or were dropped: not errors. A failed run saying "No drafts from this run were approved" means none got a yes, not "it broke".
+- Counts are per post: one out on only some accounts, or approved then failed to send, may show as scheduled. If "went out" looks low, check the posts.
+- Engagement per Bolta routine isn't readable from here. One line, one link: Performance on its page, bolta.ai/dashboard/routines/<id>, which also shows Bolta's suggested changes.
 - No run when one was due: [routine](routine.md). Drafts waiting now: [review](review.md).

@@ -1,0 +1,35 @@
+{
+  "ask": "Yes, change it and run it now.",
+  "playbook": "routine",
+  "before": "list-routine-runs showed the last scheduled run cancelled with error_code run_skipped; its error_summary said Bolta doesn't know what the business does yet, and the routine has no topic of its own, so it skipped instead of writing generic posts. The reply explained that in two sentences and proposed one change: add 'Write about our spring workshops and what attendees learn' to the instructions, then run it once now, using credits.",
+  "steps": [
+    {
+      "tool": "get-routine",
+      "arguments": {
+        "routine_id": "<routine id>"
+      },
+      "why": "Read it again just before changing it: someone may have edited it since."
+    },
+    {
+      "tool": "update-routine",
+      "arguments": {
+        "routine_id": "<routine id>",
+        "instructions": "<the current instructions, unchanged> Write about our spring workshops and what attendees learn."
+      },
+      "why": "One change, and only to name, goal, instructions or schedule with timezone. instructions is sent whole: the current text from get-routine plus the new sentence."
+    },
+    {
+      "tool": "run-routine-now",
+      "arguments": {
+        "routine_id": "<routine id>"
+      },
+      "why": "The same yes covered running it now and its credits. started false means this press repeated one from the last 30 seconds and returned the same run; a 409 workflow_already_running means a run is still going. Either way say it's already running, don't press again."
+    }
+  ],
+  "say": "Changed: it now writes about your spring workshops, so its scheduled runs stop skipping. Running it now; the drafts land in a few minutes and wait for your yes.",
+  "never": [
+    "Changing more than the one thing the user said yes to.",
+    "Quoting a raw error to the user instead of saying it plainly.",
+    "Retrying run-routine-now in a loop."
+  ]
+}

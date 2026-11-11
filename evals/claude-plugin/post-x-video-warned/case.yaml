@@ -1,0 +1,61 @@
+schema_version: "1.1"
+name: post-x-video-warned
+description: 'X takes images only: a video attached to an X post makes it fail when it goes out (posts/posting_rules.py). Asked for an X post with a video, the plugin says so before it saves anything with the video, and nothing goes out. get-posting-rules is not mocked, so the rule must come from the post playbook and its network pages.'
+tags: [smoke, happy]
+expected_outcome: 'post fires; says X takes images only (the video would fail); never saves the video on an X post; no publish or schedule.'
+execution:
+  prompt: |
+    Make an X post for Northwind Coffee announcing our new nitro cold brew, with this video: https://cdn.northwindcoffee.com.au/video/nitro-launch.mp4
+  max_turns: 20
+  timeout_seconds: 300
+  allowed_tools: [Skill, Read]
+graders:
+  - name: skill-fired
+    type: tool_used
+    tool: Skill
+    input_match: '"skill"\s*:\s*"(?:[\w-]+:)?(bolta)"'
+    min: 1
+  - name: playbook-read
+    type: tool_used
+    tool: Read
+    input_match: 'references/(post)\.md'
+    min: 1
+  - name: says-images-only
+    # The warning, in any plain phrasing.
+    type: regex
+    pattern: 'images?\s+only|only\s+(takes|accepts|supports|allows|carries|posts)\s+(images|photos|pictures)|(can.t|cannot|doesn.t|does not|won.t|will not)\s+(take|accept|support|post|publish|carry|attach|include|handle)\s+(a\s+|the\s+|your\s+|that\s+)?(video|videos|mp4)|video[^.\n]{0,80}(fail|won.t (go out|publish|post)|isn.t supported|not supported)'
+    flags: i
+  - name: no-video-saved-create
+    # Never saved with the video attached.
+    type: tool_used
+    tool: mcp__plugin_bolta_bolta__create-post
+    input_match: 'nitro-launch\.mp4'
+    min: 0
+    max: 0
+  - name: no-video-saved-bulk
+    type: tool_used
+    tool: mcp__plugin_bolta_bolta__bulk-create-posts
+    input_match: 'nitro-launch\.mp4'
+    min: 0
+    max: 0
+  - name: no-video-saved-update
+    type: tool_used
+    tool: mcp__plugin_bolta_bolta__update-post
+    input_match: 'nitro-launch\.mp4'
+    min: 0
+    max: 0
+  - name: no-publish-post
+    type: tool_used
+    tool: mcp__plugin_bolta_bolta__publish-post
+    min: 0
+    max: 0
+  - name: no-schedule-post
+    type: tool_used
+    tool: mcp__plugin_bolta_bolta__schedule-post
+    min: 0
+    max: 0
+  - name: no-ids-or-jargon
+    type: regex
+    pattern: '[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-|\bget-posting-rules\b|\bMCP\b'
+    flags: i
+    match: not_contains

@@ -32,12 +32,13 @@
       "arguments": {
         "post_id": "<post 2 id>"
       },
-      "why": "Post 2 was refused as awaiting client sign-off. client_signoff.state says where it stands."
+      "why": "Post 2's item came back with error_code client_review_pending (\"This post is awaiting client sign-off\"): an open client review blocks the team's approve. On a brand that requires client sign-off, client_signoff.state reads waiting_on_client: it was sent, and the client, or a required reviewer, hasn't approved yet. On a brand without that rule it reads not_required even while the client review is open."
     }
   ],
-  "say": "Approved 1 and 3: they go out Tuesday 9 am and Thursday 9 am on LinkedIn. 2 is waiting on the client's yes; it goes out once they approve it. Nothing else to do here.",
+  "say": "Approved 1 and 3: they go out Tuesday 9 am and Thursday 9 am on LinkedIn. 2 is with the client. When every reviewer it needs says yes, it goes out at the time they were shown if that's still ahead; otherwise at its next open time. Nothing to do here.",
   "never": [
     "Retrying, deleting or publishing post 2 to get round the client.",
-    "Saying all three are approved."
+    "Saying all three are approved.",
+    "Saying one client's yes is enough when the request has required reviewers."
   ]
 }

@@ -7,6 +7,7 @@ Two parts, and every client needs both:
 - **The Bolta connection**: a hosted server at `https://mcp.bolta.ai/mcp`. You sign in to Bolta in the browser the first time; there is no key to paste.
 - **The Bolta skill**: [`skills/bolta/`](skills/bolta/SKILL.md). One entry point, twelve playbooks and [worked examples](skills/bolta/examples/README.md) with the exact calls.
 
+<!-- host-note -->
 ## Choose your client
 
 | Client | Connection | Skill | Status |
@@ -29,6 +30,7 @@ Two parts, and every client needs both:
 ```
 
 Then `/mcp`, sign in, tick your brands, and say "set me up". Already connected Bolta yourself (a connector, or `claude mcp add`)? Keep that connection and add only the skill: `npx skills add boltaai/bolta-skills --skill bolta`. Add `bolta-checks@bolta-marketplace` for a check you answer before anything public or final. More in [`plugins/bolta/README.md`](plugins/bolta/README.md).
+<!-- /host-note -->
 
 ### Cursor
 
@@ -71,7 +73,9 @@ npx skills add boltaai/bolta-skills --skill bolta
 grok mcp add --transport http bolta https://mcp.bolta.ai/mcp
 ```
 
+<!-- host-note -->
 Grok Build reads Claude Code marketplaces and skills as they are, so the plugin above installs there too.
+<!-- /host-note -->
 
 ### VS Code and others
 
@@ -81,6 +85,7 @@ Grok Build reads Claude Code marketplaces and skills as they are, so the plugin 
 
 That is `.vscode/mcp.json`. Any other client: point it at the same address over HTTP, then `npx skills add boltaai/bolta-skills --skill bolta`, or copy `skills/bolta` into the folder your client reads skills from.
 
+<!-- host-note -->
 ## What is in this repository
 
 | Path | What it is |
@@ -92,6 +97,7 @@ That is `.vscode/mcp.json`. Any other client: point it at the same address over 
 | `.cursor-plugin/plugin.json`, `mcp.json`, `gemini-extension.json` | The same skill and connection for Cursor and Gemini CLI. |
 | `tools/` | The checker, the generator, the hook tests, the eval runner and the saved tool list. |
 | `evals/claude-plugin/` | Behavioural evals, kept outside the shipped folders. |
+<!-- /host-note -->
 
 ## How the skill is laid out
 
@@ -109,6 +115,7 @@ skills/bolta/
 
 An assistant reads `SKILL.md`, picks one playbook, and reads it before acting. The examples are checked against Bolta's tool list on every pull request, so an argument that does not exist fails the build.
 
+<!-- host-note -->
 ## Maintaining it
 
 ```
@@ -122,7 +129,7 @@ claude plugin validate . --strict            # the marketplace
 sh tools/run_plugin_evals.sh safety          # live behavioural checks against mocks; costs a few dollars (also: smoke, quiet, newtools, all)
 ```
 
-- The checker fetches Bolta's public tool list and fails when the skill names a tool or argument the server does not have. The list depends on the caller's User-Agent: some assistants see fewer tools, and only a Claude or Cursor one sees `approve-many-posts`, `reject-post`, `set-content-campaign-targets` and `analyze-content-campaign-source`. The checker sends a Claude Code-like one (`--user-agent` changes it). Production lists all four now (checked live on Nov 11, 2026 with `--no-pending`), so `PENDING_TOOLS` and its INFO line can go; `tools/fixtures/claude_tools_list.json` stays as the offline list CI uses (`--tools-json`), and wants refreshing from production: it lacks `get-posting-rules`.
+- The checker fetches Bolta's public tool list and fails when the skill names a tool or argument the server does not have. The list depends on the caller's User-Agent: some assistants see fewer tools, and only a Claude or Cursor one sees `approve-many-posts`, `reject-post`, `set-content-campaign-targets` and `analyze-content-campaign-source`. The checker sends a Claude Code-like one (`--user-agent` changes it). Production lists all four now (checked live on Nov 11, 2026 with `--no-pending`). `PENDING_TOOLS` now holds the cascade, workspace-member, routine-recommendation and Bolta-suggestion tools, and `PENDING_UPDATES` the new arguments of `create-routine`, `update-routine`, `extract-business-dna` and `voice-generate`; both take their schemas from `tools/fixtures/claude_tools_list.json`, the offline list CI uses (`--tools-json`), until the server change is deployed.
 - The listed plugin (`bolta`) carries no `hooks/`, no `scripts/` and only the file types Anthropic's directory accepts from an unverified organization (Markdown, text, JSON, YAML, PNG, JPEG, GIF, WebP, ICO); the checker fails on anything else, because the directory refuses the version. `userConfig` lives in `bolta-checks` with the guard that reads it.
 - The checks' hook matchers cover Bolta under any server name: the plugin's own (`mcp__plugin_bolta_bolta__<tool>`), a claude.ai connector (`mcp__claude_ai_<name>__<tool>`) and a server added with `claude mcp add` (`mcp__<name>__<tool>`), without matching tools Bolta does not have. A matcher that only fit names with "bolta" in them would leave a Bolta added as "social" with no check while the session start line says checks are on. A tool of another server that shares a Bolta tool's name gets the same check, by design. The reconnect-notice matcher lists tools by name; `python3 -I tools/sync_skill.py --sync-hooks` rewrites it from the skills.
 - `skills/bolta` is byte for byte what the generator writes now. The session-start hook in `bolta-checks` ends with "Bolta checks are on in this session"; a skill that sees it lets a check stand in for asking in words, and otherwise asks in words first.
@@ -131,6 +138,7 @@ sh tools/run_plugin_evals.sh safety          # live behavioural checks against m
 - Claude Code pins a plugin to its `version`. Bump `version` in `plugins/bolta/.claude-plugin/plugin.json` and in `plugins/bolta-checks/.claude-plugin/plugin.json` for every change that should reach users; `tools/test_hooks.sh` keeps the two equal.
 - Skills state facts about the Bolta server (what a tool really does, which errors it returns). When the server changes, re-verify the affected skill; the checker only catches names and arguments. The shipped files cite no server paths: this repository is public.
 - The plugin folder must contain only what users need. Test fixtures live in `evals/`.
+<!-- /host-note -->
 
 ## Licence
 

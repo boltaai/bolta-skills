@@ -5,10 +5,10 @@ Read when a campaign's end date has passed, or the user asks how one did. Read `
 ## What to say, in order
 
 - **How it ran, first:** drafts made, decided, went out. "12 drafts made. You decided 10. 9 went out." (Say "Bolta wrote" only when Bolta wrote them.)
-- **Where it went out:** `results.by_platform` (published and failed, per account). A post out on LinkedIn but failed on X still counts on LinkedIn. `partially_published`: "went out on 2 of 3 accounts".
-- **Nothing went out:** say why from `results.outcome_reason` (why-nothing.md).
-- **The decision rate:** drafts decided out of drafts made. Still undecided: posts waiting for a yes or still drafts (`has_pending_review`, or Draft, in `list-content-campaign-posts`). It predicts the next campaign better than likes do.
-- **Engagement** only when measured (`results.engagement`). Metrics sync nightly: zeros on fresh posts mean "not synced yet".
+- **Where it went out:** `results.by_platform` (per platform: how many account sends were published, failed, pending). A post out on LinkedIn but failed on X still counts as published. `results.partially_published` is how many posts went out on some accounts and failed on others: "3 posts went out on only some accounts".
+- **Nothing went out:** say why from `results.outcome_reason` ([why-nothing.md](campaign-why-nothing.md)).
+- **The decision rate:** drafts decided out of drafts made. Still undecided: posts waiting for a yes or still drafts (`results.pending_review` and `results.draft`; per post, `has_pending_review` or Draft in `list-content-campaign-posts`). It predicts the next campaign better than likes do.
+- **Engagement** only when measured: `results.engagement.measured_posts` above 0. Fewer than `measurable_posts` means some posts are not measured yet; metrics update about once a day, so zeros on fresh posts mean "not measured yet".
 - Then the verdict, in one or two plain sentences, and one next step.
 
 ## How to judge
@@ -28,6 +28,6 @@ Read when a campaign's end date has passed, or the user asks how one did. Read `
 
 ## One next step
 
-- It worked: "Run it again with the same strategy?" That is a new campaign with the same brief; there is no copy. If Bolta writes it, the accounts and Context step comes back unless Content defaults fill the accounts.
-- It didn't: name one other strategy, using the week 1 signs in strategies.md: "Try Product Education next?"
+- It worked: "Run it again with the same strategy?" The fastest way is the copy icon ("Duplicate this campaign") on the cover at bolta.ai/dashboard/campaigns/<id>: it saves a draft with the same strategy, brief, accounts, weekly plan, voice and settings, dated from the day after this one ends (or today), not started. Or I make a new one with the same brief; then the accounts and Context step comes back unless Content defaults fill the accounts.
+- It didn't: name one other strategy, using the week 1 signs in [strategies.md](campaign-strategies.md): "Try Product Education next?"
 - Drafts are still waiting: hand to [review](review.md).

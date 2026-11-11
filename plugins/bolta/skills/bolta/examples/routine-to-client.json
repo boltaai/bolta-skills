@@ -1,0 +1,45 @@
+{
+  "ask": "Yes, send them straight to the client and keep 20 waiting.",
+  "playbook": "routine",
+  "before": "get-routine showed the weekly LinkedIn routine, ask me first, no story, and the brand has a client reviewer. The reply said: from now on each run's drafts go to the client without the team seeing them first; Bolta keeps up to 20 waiting, running extra times on its own to fill that (more credits) while the idea bank has ideas, and skips scheduled runs once that many wait; a client yes takes the next open slot.",
+  "steps": [
+    {
+      "tool": "get-routine",
+      "arguments": {
+        "routine_id": "<routine id>"
+      },
+      "why": "output_config is replaced whole on update, so read it first and resend every key."
+    },
+    {
+      "tool": "update-routine",
+      "arguments": {
+        "routine_id": "<routine id>",
+        "output_config": {
+          "artifact_type": "post",
+          "count": 3,
+          "platforms": [
+            "linkedin"
+          ],
+          "review": {
+            "to_client": true,
+            "bank_target": 20
+          }
+        }
+      },
+      "why": "recipient_ids left out means every client reviewer. approval_policy stays review_every_artifact: with auto, nothing goes to the client."
+    },
+    {
+      "tool": "get-routine",
+      "arguments": {
+        "routine_id": "<routine id>"
+      },
+      "why": "review.to_client should read true. After the next run, review.waiting counts what waits on the client; review.last_status no_reviewer means the drafts could not go to a client and stayed in the team's Approvals."
+    }
+  ],
+  "say": "Done. From the next run, drafts go straight to the client, up to 20 waiting. The client gets one notice each time it fills, and you get a daily summary of their decisions.",
+  "never": [
+    "Turning this on without a yes: drafts reach a client unseen by the team.",
+    "Promising reminders to the client: Bolta sends none.",
+    "Leaving story on: with a story on, nothing goes to the client this way."
+  ]
+}

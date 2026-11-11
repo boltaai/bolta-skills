@@ -7,7 +7,7 @@
       "arguments": {
         "workspace_id": "<brand's workspace id>"
       },
-      "why": "Deleted posts stay here for 7 days."
+      "why": "Posts and agent jobs deleted through this app (delete-post, delete-agent-job) in the last 7 days, newest first, each with days left before it is purged. Deletes made in the Bolta dashboard are permanent and never listed."
     },
     {
       "tool": "restore-deleted",
@@ -16,18 +16,20 @@
         "item_type": "post",
         "item_id": "<deleted post id>"
       },
-      "why": "It comes back as it was. Read it again before saying where it stands."
+      "why": "Clears the delete and nothing else: the post keeps its text and the status it had when deleted. The reply only says restored, so read it again before saying where it stands."
     },
     {
       "tool": "get-post",
       "arguments": {
         "post_id": "<post id>"
       },
-      "why": "Is it a draft again, or back on the review list?"
+      "why": "Draft, waiting for review, or Scheduled? A scheduled post comes back scheduled and goes out at its time."
     }
   ],
-  "say": "It's back in Acme as a draft. Nothing goes out. Schedule it again?",
+  "say": "It's back in Acme as a draft, so nothing goes out. Schedule it again?",
   "never": [
-    "Re-scheduling it without asking."
+    "Re-scheduling it without asking.",
+    "Calling it a draft before get-post shows its status.",
+    "Promising a delete made in the Bolta dashboard can come back."
   ]
 }

@@ -1,0 +1,36 @@
+{
+  "ask": "What was my best LinkedIn post this month?",
+  "playbook": "results",
+  "steps": [
+    {
+      "tool": "list-workspace-posts",
+      "arguments": {
+        "workspace_id": "<brand's workspace id>",
+        "status": "published",
+        "include_metrics": true,
+        "sort_by": "engagement",
+        "sort_order": "desc",
+        "platform": "linkedin",
+        "metrics_platforms": "linkedin",
+        "start_date": "2026-11-01",
+        "end_date": "<now>",
+        "limit": 10
+      },
+      "why": "Ranks the whole window, so 10 rows are enough. The order uses each post's total across all its networks: re-rank by the LinkedIn block before naming a winner. Posts with no numbers sort last; leave them out."
+    },
+    {
+      "tool": "get-post",
+      "arguments": {
+        "post_id": "<the winner's post id>"
+      },
+      "why": "A link to the live post from linkedin_metrics.permalink. If it is missing, say there is no link yet; never build one from an id."
+    }
+  ],
+  "say": "Acme, Nov 1 to today: your best LinkedIn post was \"We cut onboarding to one day...\" (Nov 4): 86 likes, 14 comments, 2,310 views. 2 posts from this week aren't synced yet. Want 3 more like it now, or a Bolta routine that reuses your best posts each week? Your best posts, working again somewhere else: 3 fresh drafts each run, waiting for your yes.",
+  "never": [
+    "Naming a best LinkedIn post from the all-network total.",
+    "Ranking a post whose numbers haven't synced yet.",
+    "Building a link from a post id.",
+    "Saying \"0 views\" on a network that doesn't report views."
+  ]
+}

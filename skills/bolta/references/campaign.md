@@ -18,11 +18,12 @@ The plan got a yes and the campaign is filled one way. At the end: a verdict, on
   > - Posts: 3 images + 1 carousel a week × 3 weeks = **12 drafts to review**
   > - Who writes: **Bolta, with images.** Or I write all 12 now, text only.
 - **Fill it one way, never both** ([references/two-ways.md](campaign-two-ways.md)):
-  - **Bolta writes it:** default for 2+ weeks or images. Its create reply lists accounts. None: `set-content-campaign-targets` ([references/targets.md](campaign-targets.md)) with `account_ids` (ask which only if several, none named); notes are the plan plus facts the user gave. Start on the yes (one Bolta check, uses credits). Tool missing: never ask which; `update-content-campaign` sets the brief and dates; accounts: "Pick them at bolta.ai/dashboard/campaigns/<id>, then say done." "Done" is the yes: read it again; accounts there, start it.
+  - **Bolta writes it:** default for 2+ weeks or images. Its create reply lists accounts. None: `set-content-campaign-targets` ([references/targets.md](campaign-targets.md)) with `account_ids` (ask which only if several, none named); `context_notes` are the plan plus facts the user gave. Start on the yes (one Bolta check, uses credits). Tool missing: never ask which; `update-content-campaign` sets the brief and dates; accounts: "Pick them at bolta.ai/dashboard/campaigns/<id>, then say done." "Done" is the yes: read it again; accounts there, start it.
   - **I write it now:** 1 week, text only, or "show me all": up to 12 Drafts in one batch; poll the status for the real post ids (not the batch's), attach those, show every post. Never start it: Bolta would write a second set.
 - **A page to read:** a `url` entry in `context_sources`, then `analyze-content-campaign-source` for each new source. Only read ones reach the writer: say which failed, and why.
-- **`ends_on` is never null**, whatever the tool text says.
-- **Resume, finish, retire** ask once; the last two are final.
+- **No open-ended campaign:** `ends_on: null` is ignored; send a date.
+- **Video, blog, email, a team version, the employee Library, per-campaign settings:** [references/formats-and-team.md](campaign-formats-and-team.md). Say a video draft costs more credits before the yes.
+- **Resume, finish (`complete`), retire (`archive`)** ask once; the last two are final.
 - **The verdict**, once the end date passes: [references/verdict.md](campaign-verdict.md). **Nothing happened:** [references/why-nothing.md](campaign-why-nothing.md); nearly always waiting for your yes.
 
 ## Tools
@@ -32,7 +33,7 @@ The plan got a yes and the campaign is filled one way. At the end: a verdict, on
 - `create-content-campaign`, `update-content-campaign`: the brief.
 - `set-content-campaign-targets`: accounts, weeks, notes, sources.
 - `analyze-content-campaign-source`: read a source.
-- `set-content-campaign-status`: start, pause, resume, finish, retire.
+- `set-content-campaign-status`: `action` is activate (start), pause, resume, complete (finish) or archive (retire).
 - `list-content-campaign-posts`, `add-posts-to-content-campaign`: its posts; adding mine.
 - `list-workspace-posts`, `bulk-create-posts`, `bulk-create-status`: best posts; my drafts.
 - `list-routines`, `update-routine`: load; steer.
@@ -44,4 +45,4 @@ The plan got a yes and the campaign is filled one way. At the end: a verdict, on
 ## Always
 
 - Follow the house rules in the Bolta skill.
-- Never start a campaign that has no accounts, or one I filled.
+- Never start a campaign with no accounts when the workspace has some, or one I filled.

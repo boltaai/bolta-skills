@@ -14,13 +14,9 @@
         "cta_text": "See the new pricing",
         "cta_url": "https://example.com/pricing",
         "starts_on": "2026-11-16",
-        "ends_on": "2026-12-06",
-        "content_mix": {
-          "still_image": 3,
-          "carousel": 1
-        }
+        "ends_on": "2026-12-06"
       },
-      "why": "A launch is problem_solution. ends_on is never null. Only known mix keys; others are dropped silently."
+      "why": "A launch is problem_solution. ends_on is never null: a null end with a start date is refused. No content_mix: the brand's saved Content defaults apply, else the strategy's own mix (3 images and 1 carousel). Check resolved_content_mix in the reply. If the user asks for a different mix, send only known mix keys; others are dropped silently."
     },
     {
       "tool": "set-content-campaign-targets",
@@ -39,7 +35,7 @@
           }
         ]
       },
-      "why": "A campaign with no accounts never starts. Missing here: the user picks accounts on the campaign's page, then says done."
+      "why": "The reply's account_ids was empty (the brand's Content defaults can fill it when crosspost is on). With accounts in the workspace and none on the campaign, activating would stall at needs accounts. Without this tool: the user picks accounts on the campaign's page, then says done."
     },
     {
       "tool": "analyze-content-campaign-source",
@@ -63,11 +59,12 @@
       "arguments": {
         "campaign_id": "<campaign id>"
       },
-      "why": "Read back when the first drafts land."
+      "why": "Read next_generation_at for when week 1's drafts land: the brand's review lead before the week starts, 2 days by default."
     }
   ],
   "say": "Campaign on for Acme: New pricing, Nov 16 to Dec 6. Week 1's drafts land Sat Nov 14 and wait for your yes.",
   "never": [
-    "Starting a campaign and also writing its posts by hand: Bolta would write a second set."
+    "Starting a campaign and also writing its posts by hand: Bolta would write a second set.",
+    "Sending content_mix when the plan uses the default mix: it skips the brand's saved Content defaults."
   ]
 }

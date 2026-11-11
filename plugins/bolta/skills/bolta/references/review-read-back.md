@@ -14,6 +14,7 @@ Read when reporting decisions, or when a legacy row is on the list.
 > Post 2, new version: "…" Schedule this version?
 
 - One line per scheduled post: day, time, city, network, first words.
+- Library posts never get a time: "Live on your Library link" or "Sent to your client".
 - Decision rate: decided out of shown. "You decided 4 of 6. 2 still waiting."
 - End with one question. A changed post comes first; otherwise the DON'T offer.
 
@@ -22,7 +23,7 @@ Read when reporting decisions, or when a legacy row is on the list.
 - Learn line, once per conversation: "Every yes and edit is saved. After about 10 new ones, Bolta updates your DOs and DON'Ts overnight."
 - Edits teach because Bolta keeps its first version next to the user's. A drop records nothing. A no sent with `reject-post` saves the user's reason; say "Bolta saved your reason", and promise nothing beyond the learn line.
 - A reason given ("drop 5, too salesy"), or the same change twice: offer once, "Add 'no hard sell' to your DON'Ts?" On yes: `get-voice-profile` (profile id from the voice read), then `update-voice-profile` with the full DON'T list plus the new rule. Saw "Bolta checks are on in this session" at the start? Its Bolta check is the confirmation. Otherwise get a yes in words first.
-- No `reject-post` here, and asked how to record why: "Tap the X (Dismiss) on that post at bolta.ai/dashboard/hub and give your reason. I can't do that from here."
+- No `reject-post` here, and asked how to record why: "Tap the X (Dismiss) on that post at bolta.ai/dashboard/approvals and give your reason. I can't do that from here."
 
 ## Legacy rows (`source` recurring)
 

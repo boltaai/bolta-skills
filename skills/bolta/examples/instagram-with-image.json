@@ -19,7 +19,7 @@
         ],
         "idempotency_key": "new-roast-1"
       },
-      "why": "Only a public https link to the file itself, given by the user. Instagram, TikTok, YouTube and Pinterest fail hours later without media."
+      "why": "Only a public http(s) link to the image file itself, given by the user. Alt text on every image (255 characters or fewer): Instagram reads it, LinkedIn ignores it. Instagram, TikTok, YouTube and Pinterest fail hours later without media."
     }
   ],
   "say": "Saved to Acme as a draft for Instagram and LinkedIn, with your photo. Nothing goes out yet. Post it now, or pick a time?",

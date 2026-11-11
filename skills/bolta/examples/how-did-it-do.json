@@ -1,29 +1,38 @@
 {
-  "ask": "How did my posts do last month?",
+  "ask": "How did my posts do over the last 30 days?",
   "playbook": "results",
   "steps": [
+    {
+      "tool": "get-workspace",
+      "arguments": {
+        "workspace_id": "<brand's workspace id>"
+      },
+      "why": "The brand's timezone, to work out today's date there, so the post window can end now, like the account numbers do."
+    },
     {
       "tool": "list-workspace-posts",
       "arguments": {
         "workspace_id": "<brand's workspace id>",
         "status": "published",
         "include_metrics": true,
-        "start_date": "2026-10-01",
-        "end_date": "2026-10-31",
+        "start_date": "<today minus 30 days>",
+        "end_date": "<now>",
         "limit": 100
       },
-      "why": "What went out, with numbers. Posts under a day old have not synced: leave them out of rankings."
+      "why": "What went out, with numbers, over the same 30 days counted back from now. Zeros on posts under about a week old mean not synced yet: leave them out of rankings."
     },
     {
       "tool": "cross-platform-analytics",
       "arguments": {
-        "workspace_id": "<brand's workspace id>"
+        "workspace_id": "<brand's workspace id>",
+        "days": 30
       },
-      "why": "Account-level numbers. Never mix them up with one post's results."
+      "why": "Account numbers by network over the same 30 days. engagement here is what posts published in the window earned; never mix it up with one post's results."
     }
   ],
-  "say": "Acme, Oct 1 to Oct 31: 14 posts went out, 12 on LinkedIn and 2 on X. Your two best on LinkedIn were both customer stories. Want next week's drafts to lean that way?",
+  "say": "Acme, last 30 days: 14 posts went out, 12 on LinkedIn and 2 on X. Your two best on LinkedIn were both customer stories. 3 posts from this week aren't synced yet, so they're left out. Want next week's drafts to lean that way?",
   "never": [
+    "Two reads over different windows, such as a calendar month for posts and 30 days to now for accounts, without saying they differ.",
     "A cause for a number.",
     "Sales or leads nobody tracked.",
     "Comparing networks with fewer than 5 posts."

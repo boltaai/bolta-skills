@@ -1,0 +1,66 @@
+{
+  "ask": "Turn our launch notes into a 3-part X thread, with the dashboard screenshot on the last part: https://cdn.example.com/dashboard.png",
+  "playbook": "post",
+  "steps": [
+    {
+      "tool": "get-posting-rules",
+      "arguments": {
+        "workspace_id": "<brand's workspace id>",
+        "platform": "x"
+      },
+      "why": "The account's character limit, once. Each part counts on its own."
+    },
+    {
+      "tool": "bulk-create-posts",
+      "arguments": {
+        "workspace_id": "<brand's workspace id>",
+        "posts": [
+          {
+            "account_ids": [
+              "<X account id>"
+            ],
+            "status": "Draft",
+            "contents": [
+              {
+                "content": "We shipped the new dashboard today. Three things changed.",
+                "index": 0
+              },
+              {
+                "content": "1. Every number now links to the posts behind it.",
+                "index": 1
+              },
+              {
+                "content": "2. Results load in under a second. 3. Exports work on mobile.",
+                "index": 2,
+                "media": [
+                  {
+                    "media_url": "https://cdn.example.com/dashboard.png",
+                    "alt_text": "The new dashboard showing weekly results"
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      },
+      "why": "Parts only go in through bulk-create-posts, as a nested contents list; each part is checked against the limit on its own. Media inside a part is media_url (a url key there is dropped). Poll bulk-create-status for the created_post_id."
+    },
+    {
+      "tool": "update-post-platform-details",
+      "arguments": {
+        "post_id": "<created_post_id from bulk-create-status>",
+        "platform": "x",
+        "fields": {
+          "reply_settings": "everyone"
+        }
+      },
+      "why": "A bulk-created post has no X settings, and without them Bolta posts parts 2 and 3 as separate posts, not replies. Saving any X setting creates them."
+    }
+  ],
+  "say": "Saved to Acme as a draft X thread: part 1 is the post, parts 2 and 3 go out as replies, with your screenshot on part 3. Nothing goes out yet. Schedule it, or change a part?",
+  "never": [
+    "create-post for a thread: it saves part 1 only.",
+    "update-post to change part 2 or 3: it edits part 1 only.",
+    "A video on X: it takes images only."
+  ]
+}

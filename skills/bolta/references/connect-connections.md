@@ -15,46 +15,44 @@
 
 One connection for the agency's organization; tick the client brands.
 
-- **Claude Code:** `/mcp`, pick bolta, sign in, tick the brands.
-- **claude.ai or Cowork:** Customize > Connectors > Add custom connector, address https://mcp.bolta.ai/mcp, name "Bolta". Sign in, tick the brands. Team and Enterprise: only an Owner can add it. Free plan: one custom connector in all.
+- Add https://mcp.bolta.ai/mcp as "Bolta", sign in, tick the brands.
+<!-- host-note -->
+- In apps that have `/mcp` (for example Claude Code): `/mcp`, pick bolta. With Customize > Connectors (for example claude.ai or Cowork): Add custom connector. Team and Enterprise: only an Owner can add it. Free plan: one custom connector in all.
+<!-- /host-note -->
 - Then say what it reaches: "This connection reaches Acme and Beta."
 - Several organizations: one connection each, with "bolta" in its name. Use the one reaching the named brand. Two Bolta entries on one organization (the plugin's and your own): keep one and remove the other.
 
 ## Reconnecting Bolta itself
 
 "Invalid API key", "API key expired", "API key inactive" or "Not authenticated": this connection lapsed. Don't retry.
-- Claude Code: `/mcp`, pick the Bolta entry, sign in again.
-- Cowork or claude.ai: Customize > Connectors, then Reconnect on Bolta.
+- Sign in again.
+<!-- host-note -->
+- In apps that have `/mcp` (for example Claude Code): pick Bolta. With Customize > Connectors (claude.ai or Cowork): Reconnect on Bolta.
+<!-- /host-note -->
 - Then read the brands and say their names.
 - Sign-ins last 60 days and normally renew themselves.
 
 ## Sign-in versus a pasted API key
 
-- Sign-in marks Claude's posts as AI drafts, keeping the first version, so edits teach the voice; Bolta keeps them on the review list until approved.
-- A pasted Bolta API key acts as the person directly: no AI-draft mark, so edits don't teach, and Bolta's own hold is off. Only the plugin's checks remain.
+- Sign-in marks posts from this app as AI drafts, keeping the first version, so edits teach the voice; Bolta keeps them on the review list until approved.
+- A pasted Bolta API key acts as the person directly: no AI-draft mark, so edits don't teach, and the sign-in hold is off: it can schedule or publish without an approval. Safe Mode and required client sign-off still apply, plus the plugin's checks.
 - Used a key, or asking? Say this once; recommend sign-in.
 
 ## What this connection may do
 
-Read it after a refusal, or when asked. For each "no" it gives a reason:
+`get-my-capabilities`: read it after a refusal, or when asked. For each "no", `denied_by` gives a reason:
 
 | Reason | Say |
 |-|-|
-| role | "Your role can't do this." |
-| workspace plan | "Your plan doesn't include this." |
-| key scope | "This connection wasn't given that access." |
+| `role` | "Your role can't do this." |
+| `workspace_plan` | "Your plan doesn't include this." |
+| `key_scope` | "This connection wasn't given that access." |
+| `override` | "An owner or admin turned this off for you. Ask a brand admin; a new connection won't fix it." |
 
-- Workspace settings always show as not given, by design (Bolta Settings only). Don't flag it.
-- Access follows the role of whoever signed in. A viewer's connection is read-only: no saves, nothing that uses credits. After a role change, sign in again.
+- On a sign-in connection, workspace settings always show as not given (`key_scope`), by design (Bolta Settings only). Don't flag it.
+- Access follows the role of whoever signed in. A viewer's connection is read-only: no saves, nothing that uses credits. A client reviewer can't connect at all. A role change applies when the sign-in next renews; sign in again to apply it now.
 - A role that can't connect accounts: a teammate whose role can does it.
 - The read can say yes and Bolta still refuse. Give Bolta's sentence; don't try another way.
-- Approving needs an owner or admin. Beyond that, never state who can do what from memory.
+- Owners, admins and creators approve by default, but per-member permissions can change that: trust this read, never memory.
 
-## Clock and review mode
-
-- The workspace clock changes only in Bolta Settings: bolta.ai/dashboard/settings/general.
-- Review mode ("Safe Mode" in settings, said once): everything beyond a draft waits for a yes, and nothing posts right away. Only Bolta Settings turns it off; never suggest that to get past a refusal.
-
-## "Is everything set up?"
-
-One read, then four lines per brand: brand and clock; review mode; accounts, connected or disconnected, with links; account groups. Voice: hand to [voice](voice.md), or [start](start.md) if there is none. A Bolta save blocked by a hook error naming Git Bash: "Install Git for Windows (git-scm.com/downloads/win), then restart Claude."
+Clock, review mode and "Is everything set up?": [team-and-integrations](connect-team-and-integrations.md).

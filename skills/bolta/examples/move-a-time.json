@@ -1,0 +1,29 @@
+{
+  "ask": "Move Tuesday's LinkedIn post to Thursday at 2pm.",
+  "playbook": "review",
+  "before": "list-scheduled-posts showed the post: Tue Nov 17, 9:07 am (New York), LinkedIn, \"Most hiring advice…\". The reply asked \"Move it to Thu Nov 19, 2:00 pm (New York)?\" and the user said yes.",
+  "steps": [
+    {
+      "tool": "update-post",
+      "arguments": {
+        "post_id": "<post id>",
+        "scheduled_time": "2026-11-19T14:00:00"
+      },
+      "why": "Only post_id and scheduled_time: update-post takes no workspace_id, and no status, text, media or accounts here. A time-only move keeps the post Scheduled with its approval and any client sign-off; the approval moves to the new slot. Wall clock in the brand's time zone, no Z, no offset; add timezone only if the user named a place. The new time must be in the future."
+    },
+    {
+      "tool": "get-post",
+      "arguments": {
+        "post_id": "<post id>"
+      },
+      "why": "Read back the status and time Bolta stored, if the update result didn't show them."
+    }
+  ],
+  "say": "Moved for Acme: LinkedIn \"Most hiring advice…\" now goes out Thu Nov 19, 2:00 pm (New York). It keeps its approval.",
+  "never": [
+    "Pulling the post back to Draft just to change its time: that sends it back for a new yes.",
+    "Changing the text in the same call: any edit to text, media or accounts needs a new yes.",
+    "Moving it before the user saw the new time and said yes.",
+    "Using schedule-post to move a post that is already Scheduled: with review mode on it sends the post back to the review list. update-post with only the time is the move."
+  ]
+}

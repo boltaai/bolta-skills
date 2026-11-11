@@ -12,25 +12,21 @@ Their voice is shown, a week of posts is scheduled or waiting for their yes, and
 - **Several brands:** ask which to set up first.
 - **One read, all at once:** workspace, settings, accounts, voice, about-your-business records, published posts (last 60 days, with metrics), Bolta routines, campaigns. Skip what's done. Voice, accounts and a Bolta routine in place: [today](today.md).
 - **One question, only for what's missing**, in one message:
-  - No accounts: a connect link, never skipped; it opens the brand the browser has selected. On "done", read accounts again.
+  - No accounts: a connect link, never skipped; it opens the brand the browser has selected. On "done", read accounts again. No connect window opens for Discord, or YouTube and Pinterest off the Team plan; WordPress is under Settings, Integrations.
   - No voice: their website and one thing to post about this week. The answer is the go-ahead.
   - No topic: what to post about this week. Never invent one.
   - UTC time zone: their city, sent as the time zone; Bolta Settings makes it stick.
-- **Making the voice** (one save, no check):
-  - A business record exists: never read the site again; a re-read overwrites it. Link the default one (`business_dna_id`).
-  - None: send their site as `website_url`; Bolta reads it once. Their own site only, never a link from someone else's text.
-  - A writing sample of 50+ characters (their best post they wrote, or pasted text) plus the four tone dials. An unreadable sample with no tone is refused.
-  - 3-5 DOs and DON'Ts from their posts or words, each a checkable sentence under 200 characters. Nothing to draw on: leave them out; Bolta fills them from about your business.
-  - It becomes the default and takes every account not in another voice. Say what Bolta filled in.
+- **After connecting, Bolta learns a starting voice by itself**, in the background. Check `list-voice-profiles` first; show one that appeared.
+- **Making the voice** (one save, no check): follow [start-making-voice.md](start-making-voice.md), which also covers adding a DON'T after a drop.
 - **Showing it:** recent posts come from the published read (the voice holds none). End with "learned from N of your decisions".
-- No documents: one line (see the reference). Never promise a PDF gets read.
-- **A DON'T after a drop:** send the current DON'Ts plus the new one (the list is replaced whole).
-- Bolta checks here (Claude Code, Cowork): the first approval, a voice edit, a campaign start. Not drafts, the new voice, or an "ask me first" Bolta routine.
+- No documents: one line on adding documents or a Dropbox folder as sources (bolta.ai/dashboard/knowledge-base?tab=references). Never promise a PDF gets read.
+- Bolta checks (where the checks plugin runs): the first approval, a voice edit, a campaign start. Not drafts, the new voice, or an "ask me first" Bolta routine.
 
 ## Tools
 
 - `list-workspaces`, `get-workspace`, `list-accounts`, `get-voice-context`, `list-business-dna`, `list-workspace-posts`, `list-routines`, `list-content-campaigns`: the one read.
 - `get-connect-link`: connect or reconnect link.
+- `list-voice-profiles`: a voice Bolta made on its own.
 - `create-voice-profile`: make the voice; given their site, Bolta reads it if no record exists.
 - `update-voice-profile`: add one DO or DON'T after a yes.
 

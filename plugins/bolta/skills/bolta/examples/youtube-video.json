@@ -28,16 +28,17 @@
         "fields": {
           "video_title": "Spring menu tour",
           "privacy_status": "unlisted",
-          "made_for_kids": false,
           "self_declared_made_for_kids": false
         }
       },
-      "why": "Always a title: an empty one is cut from the text. Privacy defaults to private, so set what the user said. YouTube needs a made-for-kids answer."
+      "why": "Always a title: an empty one is cut from the text. Privacy defaults to private, so set what the user said. self_declared_made_for_kids is the kids answer YouTube gets. Add thumbnail_url only if the user gave a public image link."
     }
   ],
   "say": "Saved to Acme as a YouTube draft: 'Spring menu tour', unlisted, not for kids. Nothing goes up yet. Schedule it?",
   "never": [
     "Leaving privacy unsaid: a video saved without it goes up private.",
-    "Choosing a category the user didn't agree to."
+    "Choosing a category the user didn't agree to.",
+    "Setting made_for_kids: only self_declared_made_for_kids is sent.",
+    "A thumbnail_url the user didn't give."
   ]
 }

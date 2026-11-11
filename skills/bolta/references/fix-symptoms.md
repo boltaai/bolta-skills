@@ -1,11 +1,11 @@
 # Why nothing went out
 
-Read when something didn't go out or get written. The first row that fits is the answer: one cause, one fix.
+Read when something didn't go out or get written. The first row that fits is the answer: one cause, one fix. Failed, partly out, back on the review list after a yes, late, waiting on an account, or out of credits: [fix-after-publish.md](fix-after-publish.md).
 
 ## Where the reason is
 
-- **Accounts:** `token_status` other than `valid` means disconnected, the cause of most failed sends.
-- **The review list:** `total_team` (drafts from you, Bolta routines and campaigns) and `total_recurring` (older repeating posts) are workspace-wide.
+- **Accounts:** `token_status` other than `valid` or `ghost` means disconnected, the cause of most failed sends. `ghost` means added without connecting: never a reconnect ([fix-after-publish.md](fix-after-publish.md)).
+- **The review list:** `total_team` (drafts from you, Bolta routines and campaigns) and `total_recurring` (AI-written recurring drafts, not repeated copies of one post) are workspace-wide.
 - **One post:** `status` first. `metadata.failure.errors` holds each network's reason (`friendly`) and fix (`action`). `metadata.partial` lists the accounts it missed (`unpublished`); `outcome: "unknown"` may have gone out, so check the network. `quality_block` says why it was held back. Otherwise a `failure_routed` entry in `activity_history`. Nothing saved: say so, then check the account.
 - **Scheduled times** are UTC: ask a day wider, dates ending in `Z`.
 
@@ -15,22 +15,16 @@ Read when something didn't go out or get written. The first row that fits is the
 |-|-|-|
 | Nothing went out, but drafts exist | Waiting for your yes, or never sent for review; Bolta posts neither. | Say how many; [review](review.md). |
 | Its time passed minutes ago | Sending, or waiting for a retry (up to 2 days). | Look in 15 minutes. |
-| Didn't go out, because... | Usually a disconnected account. The reason and fix are on the post, per network. | Say it. Reconnect ([connect](connect.md)), then a new yes ([review](review.md)). |
-| Went out on 2 of 3 accounts | One account failed, or can't be confirmed. | Name it and why. Never resend to all (it posts twice); a copy for that account: [post](post.md). |
-| Back on the review list after a yes | Review mode is on and the send failed; Bolta asks again. | Say the reason, fix it, then a new yes. |
+| Didn't go out, because... | Usually a disconnected account. The reason and fix are on the post, per network. | Say it. Reconnect ([connect](connect.md)); [fix-after-publish.md](fix-after-publish.md) says what comes back on its own. |
+| Went out on 2 of 3 accounts | One account failed, or can't be confirmed (`outcome: "unknown"`). | Name it and why; check the network if unconfirmed. Never resend to all (it posts twice): [fix-after-publish.md](fix-after-publish.md). |
 | Held back: needs a human edit | Bolta's quality check stopped it; the reasons are on the post. | New text only, never a status: [review](review.md). |
-| Approved, but no time | Usually no connected account, or typed by hand. | Give it a time: [review](review.md). |
-| Gone from the review list | Expired: 30 days past its time, or untouched, with no decision. It never posts. | Offer it as a new draft ([post](post.md)). |
-| A Bolta routine wrote nothing | Off, blocked, no schedule, an unchanged page, or a skipped slot with no reason saved. | Read it and its runs ([routine](routine.md)). |
-| A campaign wrote nothing | Not started, paused, needs accounts, writer paused, week done, window closed, or an error. | Read its phase, last error, outcome ([campaign](campaign.md)). |
-| Late, around 17:45-18:15 UTC | Bolta's servers are busy then. | Say it in the workspace clock. Nothing to fix. |
+| Approved, but no time | Typed by hand, or waiting for an account ([fix-after-publish.md](fix-after-publish.md)). | Give it a time: [review](review.md). |
+| Gone from the review list | Expired: 30 days past its time, or untouched, with no decision. It never posts on its own. Confirm with `list-workspace-posts` status `expired`. | It can be restored in Bolta at [bolta.ai/dashboard/approvals](https://bolta.ai/dashboard/approvals) ("Expired without a decision"); it gets a new time when approved. Or a new draft here ([post](post.md)). Never set it to Draft with `update-post`. |
+| A Bolta routine wrote nothing | Off, blocked, no schedule, an unchanged page, out of credits, or a skipped slot, whose reason can't be read from here. | Read it and its runs ([routine](routine.md)). |
+| A campaign wrote nothing | Not started, paused, needs accounts, out of credits, writer paused, week done, window closed, or an error. | Read its phase, last error, outcome ([campaign](campaign.md)). |
 | Not in the recently deleted list | Deleted in the Bolta dashboard (final), over 7 days ago, or in another workspace. | It can't come back. Have the text? [post](post.md) saves it again. |
-| Every save blocked; the hook error names Git Bash | Windows without Git Bash: the checks can't run. | "Install Git for Windows (git-scm.com/downloads/win), then restart Claude." |
+| Every save blocked; the hook error names Git Bash | Windows without Git Bash: the checks can't run. | "Install Git for Windows (git-scm.com/downloads/win), then restart this app." |
 
 ## Traps
 
-- A time sent while taking a post back stays on it: send the status alone.
-- Due now (`queued`) posts aren't among scheduled posts: look for them too. One already sending can't be stopped.
-- After taking posts back, list again and report each; never "all done" when one failed.
-- A deleted `job` is an older Bolta automation; it comes back without the conversations it watched.
-- A declined Bolta check means not done; never reach it another way.
+Taking posts back, queued posts, deleted jobs, declined checks: [fix-symptoms-traps.md](fix-symptoms-traps.md).

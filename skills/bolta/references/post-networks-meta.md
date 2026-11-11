@@ -1,12 +1,12 @@
 # Network settings: Threads, Instagram, Facebook
 
-Set with `update-post-platform-details` (network `threads`, `instagram` or `facebook`), only the keys that change; read back with `get-post-platform-details`. How settings work in general: [platforms](post-platforms.md).
+Set with `update-post-platform-details` (network `threads`, `instagram` or `facebook`), only the keys that change; read back with `get-post-platform-details`. How settings work in general: [platforms](post-platforms.md). Every network on one page: [at a glance](post-networks-at-a-glance.md).
 
 ## Threads
 
-- **Topic**: `topic_tag` (30 characters, no `#`, `.` or `&`, not only digits) together with `use_topic_tag: true`. Without the second, the topic is saved and not sent. One topic per post; it replaces hashtags.
+- **Topic**: `topic_tag` (up to 30 characters; letters, numbers, spaces and underscores only; not only digits; a leading `#` is dropped) together with `use_topic_tag: true`. Without the second, the topic is saved and not sent. A tag with any other character is silently left off at publish. One topic per post.
 - **Ghost post**: `is_ghost_post: true`. A text-only post that disappears after 24 hours. It applies only to one short text part with no image, video, poll or reply chain; with any of those the post goes out as a normal, lasting post. Say both things before saving: "This one disappears after a day."
-- **Spoiler**: `is_spoiler_media: true` blurs the post's images until tapped.
+- **Spoiler**: `is_spoiler_media: true` blurs the post's images and videos until tapped. No effect on a text-only post.
 - **Location**: `location_id`, an id from Threads. Only set one the user gave.
 - **Polls**: see [platforms](post-platforms.md), section 4.
 - Longer than 500 characters becomes a reply chain on its own; a ghost post can't be one.
@@ -15,24 +15,26 @@ Set with `update-post-platform-details` (network `threads`, `instagram` or `face
 ## Instagram
 
 - **Where it goes**: `content_type` `FEED` (the default), `REELS` or `STORY`.
-  - A reel needs one video.
+  - One video always goes out as a reel, even on `FEED`. `REELS` with one image posts a plain image.
   - A story takes no caption; the text is not shown.
-  - A story can't be a carousel. 2 to 10 images or videos on the feed make a carousel.
-- **Trial reel**: `trial_reel_enabled: true` shows a reel to non-followers first. `trial_graduation_strategy`: `MANUAL` (the user decides in Instagram) or `SS_PERFORMANCE` (Instagram shares it with followers if it does well). Video only.
-- **Reel cover**: `cover_url` (a public image link) or `thumbnail_offset` (milliseconds into the video).
-- **Tags and place**: `user_tags` (people in the image), `location_id`. Only ones the user gave.
+  - A story can't be a carousel (it fails). 2 to 10 images or videos make a carousel, whatever `content_type` says.
+- **Trial reel**: `trial_reel_enabled: true` shows a reel to non-followers first. `trial_graduation_strategy`: `MANUAL` (the default; the user decides in Instagram) or `SS_PERFORMANCE` (Instagram shares it with followers if it does well). Only with `content_type` `REELS` and one video; otherwise it goes out as a normal post.
+- **Reel cover**: `cover_url` (a public image link) or `thumbnail_offset` (milliseconds into the video). One video only, not a carousel.
+- **Tags and place**: `user_tags` (people in the image), `location_id`. Only ones the user gave. Not sent on a story.
 - **Alt text**: on each media item, not here.
 - Needs an image or video. A text-only Instagram post is refused.
 
 ## Facebook
 
-- **The page**: by default the post goes to the page the Facebook account is connected with. To pick another page that account manages: `primary_page_id`. No tool lists pages; the user picks it in Bolta or names an earlier post.
-- **More pages**: `cross_post_pages` (a list) with `cross_post_enabled: true` posts the same text to the account's other pages too.
-- **Feeling, activity, place**: `feeling`, `activity`, `location`, only when the user asked.
+- **The Page**: `list-accounts` lists each Page as its own row, id `facebook_page_<id>` with `is_page`, and `is_primary` on the default Page. Put that id in `create-post` `account_ids`, save it as a draft first, then schedule as a second call. Several Page ids post to several Pages: the first is the main Page, the rest get the same post as cross-posts.
+- Before the yes, name the Page it will go to: "This goes to the Acme Bakery Page."
+- `primary_page_id` and `cross_post_pages` (a list, with `cross_post_enabled: true`) take internal Page ids, not `facebook_page_` ids; only `get-post-platform-details` shows them, for Pages already on the post. Prefer `account_ids`.
+- **First comment**: see [post parts](post-parts.md).
 - Media: text, one video, or images. Never a video with images.
+- Feeling, activity, place, privacy, post type, comment, sharing and reaction settings and the cross-post delay are saved but never sent. Don't offer them.
 
 ## Always
 
 - Say every setting you changed in plain words, with the post it's on: "Threads post 2: topic set to Marketing; it disappears after 24 hours."
 - A setting on an approved or scheduled post sends it back for review. Say so before changing it.
-- Never invent an id (location, page, person).
+- Never invent an id (location, Page, person). Pages come from `list-accounts`.

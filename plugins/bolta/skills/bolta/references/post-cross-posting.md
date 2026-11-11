@@ -5,10 +5,11 @@ How a post reaches several networks, and when to write separate posts instead.
 ## How Bolta holds it
 
 - One post can go to many accounts: list them all in `account_ids` (or an account group in `social_buckets`). Every account gets the same text and media.
-- Each network's settings live once on the post and apply to all of that network's accounts on it ([platforms](post-platforms.md), section 3). Two Instagram accounts on one post share one Reel-or-feed choice.
-- Text that differs per network can't be set from here yet; Bolta's composer can. So:
+- Each network's settings live once on the post and apply to all of that network's accounts on it ([platforms](post-platforms.md), section 3). From here, two Instagram accounts on one post share one Reel-or-feed choice.
+- Text or settings that differ per network or per account on one post can't be set from here; Bolta's composer can. So:
   - **Same words fit everywhere** (an announcement, a short line): one post, all the accounts. Count against the shortest limit among them.
-  - **Each network wants its own shape** (the usual case): one post per network, each written fresh. Save them together with one `bulk-create-posts`, each item with its own `account_ids`.
+  - **Each network wants its own shape** (the usual case): one post per network, each written fresh. Save them together with one `bulk-create-posts`, each item with its own `account_ids`. A Reddit or Discord item carries its details inside it ([post parts](post-parts.md)).
+- Parts are shared by every account on a post. A Facebook first comment, or an X, Threads or Bluesky thread, needs its own post for that network ([post parts](post-parts.md)).
 
 ## Before writing
 
