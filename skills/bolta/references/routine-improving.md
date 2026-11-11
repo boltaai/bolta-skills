@@ -8,11 +8,11 @@ A routine only learns from yes and no. `get-routine` `performance_summary`: `art
 
 - Most still waiting: the problem is review time, not the writing. Say it: "It wrote 12; 2 were decided and 10 are waiting." Offer to go through them now ([review](review.md)) or make it smaller. Add no routine and raise no count.
 - Undecided drafts are the usual reason a routine seems not to work (advice): check this before changing the writing.
-- `recommend-routines` returns `review_load` for the whole brand; `list-inbox-items` (`source="team"`, `status="pending"`) counts what waits.
+- `plan` with `kind: "recommend"` returns `review_load` for the whole brand; `list-inbox-items` (`source="team"`, `status="pending"`) counts what waits.
 
 ## Bolta's recommendations for a routine
 
-Every Monday Bolta reviews each routine's last 28 days (at least 3 runs, and 5 decisions before it judges rates). `list-routine-recommendations` (`routine_id` for one) returns rows with `title`, `reason`, `proposed_change` (empty: advice only) and `status` (`proposed`, or `applied`, which can be undone); at most 3 open per routine:
+Every Monday Bolta reviews each routine's last 28 days (at least 3 runs, and 5 decisions before it judges rates). `list-suggestions` with `kind: "routine"` (`routine_id` for one) returns rows with `title`, `reason`, `proposed_change` (empty: advice only) and `status` (`proposed`, or `applied`, which can be undone); at most 3 open per routine:
 
 | Says | Changes |
 |-|-|
@@ -25,11 +25,11 @@ Every Monday Bolta reviews each routine's last 28 days (at least 3 runs, and 5 d
 | Approved 80%+ and published, none waiting | One more per run |
 | On but not run | Nothing: check the schedule |
 
-Show the reason and the exact change; on a yes `decide-routine-recommendation` with `decision: "apply"`. `dismiss` keeps the record; `undo` reverses an applied one.
+Show the reason and the exact change; on a yes `decide-suggestion` with the row's id as `suggestion_id` and `decision: "accept"`. `decline` keeps the record; `undo` reverses an applied one.
 
 ## Bolta's suggestions for the brand
 
-`list-bolta-suggestions`: one change each, made from approvals, edits and rejections (pause a routine that keeps missing, post less often, move its time). What they are and how to accept or undo one: [routine-improving-suggestions.md](routine-improving-suggestions.md).
+`list-suggestions` with `kind: "brand"`: one change each, made from approvals, edits and rejections (pause a routine that keeps missing, post less often, move its time). What they are and how to accept or undo one: [routine-improving-suggestions.md](routine-improving-suggestions.md).
 
 ## The rejection loop
 

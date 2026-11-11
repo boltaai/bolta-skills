@@ -1,13 +1,13 @@
 # Reddit and Discord settings
 
-How to set and which wins: [network settings](post-settings.md). Both show Markdown as written. No tool lists subreddits or channels: copy from an earlier post's `get-post-platform-details`, or the user picks in Bolta. Never guess.
+How to set and which wins: [network settings](post-settings.md). Both show Markdown as written. No tool lists subreddits or channels: copy from an earlier post's `get-post` with `platform`, or the user picks in Bolta. Never guess.
 
 ## Reddit
 
 Network `reddit`. Both required, or it can't be approved or posted:
 
-- **Subreddit**: `selected_subreddit_id`, Bolta's id for a subreddit already synced. Details only (or `reddit_post_details` in a batch item, where `subreddit_name` also works) ([post parts](post-parts.md)). The user names a subreddit: save a one-item batch with `subreddit_name`. They point at an earlier post: copy its id.
-- **Title**: `title`, up to 256 characters. Must be saved with the details (or the batch item); `platform_specific` `title` can then give one account a different title.
+- **Subreddit**: `selected_subreddit_id`, Bolta's id for a subreddit already synced. Details only: `save-post` `platform_details` `{"reddit": {...}}` (or `reddit_post_details` in a batch item, where `subreddit_name` also works) ([post parts](post-parts.md)). The user names a subreddit: save a one-item batch with `subreddit_name`. They point at an earlier post: copy its id.
+- **Title**: `title`, up to 256 characters. Must be saved with `platform_details` (or the batch item); `platform_specific` `title` can then give one account a different title.
 
 The rest, all both, per account:
 
@@ -28,7 +28,7 @@ Not possible here: video, link posts with a preview, crossposting to several sub
 
 Network `discord`. Only Discord accounts already connected can be used; new ones can't be connected.
 
-- **Channel (required)**: `update-post-platform-details` `selected_channel_id` takes Bolta's id for the channel; `platform_specific` `channel` (with `guild`) takes Discord's own ids and wins. `selected_guild_id` (or `selected_guild`) is the server, Bolta's id; `channel_name` and `guild_name` are labels only. In a batch item, `discord_post_details` with `selected_channel_id` or `channel_name`. Without a channel it schedules, then fails when it goes out: set it before the yes.
+- **Channel (required)**: `platform_details` `{"discord": {"selected_channel_id": ...}}` takes Bolta's id for the channel; `platform_specific` `channel` (with `guild`) takes Discord's own ids and wins. `selected_guild_id` (or `selected_guild`) is the server, Bolta's id; `channel_name` and `guild_name` are labels only. In a batch item, `discord_post_details` with `selected_channel_id` or `channel_name`. Without a channel it schedules, then fails when it goes out: set it before the yes.
 - **Own message**: `text`. Both, per account. Up to 2,000 characters; longer is cut.
 - **Embed**: a boxed message with a colored edge.
   - `embed_enabled: true`, `embed_title` (256), `embed_description`, `embed_color` (a hex color like `#7B23CB`; a malformed one fails the post): both, network only. `embed_footer` (256): details only. A batch item takes only the first three.

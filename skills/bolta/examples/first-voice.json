@@ -3,9 +3,10 @@
   "playbook": "start",
   "steps": [
     {
-      "tool": "list-voice-profiles",
+      "tool": "get-voice-context",
       "arguments": {
-        "workspace_id": "<brand's workspace id>"
+        "workspace_id": "<brand's workspace id>",
+        "all_profiles": true
       },
       "why": "Connecting an account makes Bolta learn a starting voice by itself. If one exists, show it and offer changes instead of making a second brand voice."
     },

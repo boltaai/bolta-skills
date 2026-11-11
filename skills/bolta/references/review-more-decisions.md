@@ -6,17 +6,17 @@ Read when a row is a Library post, a post came back for changes, an approval is 
 
 - A row with `is_library` true or a `library_topic` is a post for the employee Library link. Group these as "Library", never as "one idea, N versions".
 - A yes never schedules it. It goes live on the link, or to the client if "send to the client" was chosen when it was made.
-- Approve with `approve-post` or `approve-many-posts`, with no time. Never `schedule-post` or `publish-post`: both refuse them.
+- Approve with `approve-many-posts`, one item each, `approve_only`, with no time. Never `publish-post`: it refuses them, with any `when`.
 - `image_pending` (image still being made): wait, then approve again.
 - `client_review_pending` (already with the client): the client decides it. Stop.
-- `approve-post` shows `sent_to_client` true when it went to the client. In `approve-many-posts`, ok with `scheduled` false and a status other than Approved most likely means it went to the client.
+- In `approve-many-posts`, ok with `scheduled` false and a status other than Approved most likely means it went to the client.
 - Say "live on your Library link" or "sent to your client". Never "scheduled".
 
 ## Sent back for changes
 
 - Find them: `list-workspace-posts(status="needs revision")`.
 - `get-post` gives `rejection_comments` (what to fix) and `editable_fields` (what may change). Show both.
-- Edit only those fields with `update-post`, show the new text, then `submit-for-review` once the user says so.
+- Edit only those fields with `save-post` and `post_id`, show the new text, then `submit-for-review` once the user says so.
 - You can't send a post back for changes from here. `reject-post` is a hard no; never use it to ask for edits. What to offer instead: [saying no](review-saying-no.md).
 
 ## Approving your own post
@@ -39,8 +39,8 @@ Read when a row is a Library post, a post came back for changes, an approval is 
 ## Reviewers
 
 - Picking named reviewers, or reassigning them, happens in Bolta's "Send for review" picker. `submit-for-review` can't pick one.
-- Default reviewers are set in Settings > Rules > Approvals. `get-workspace` `default_reviewer_ids` are ids only: never show them.
-- Waiting on the user: `list-reviews(reviewer_id="me")`.
+- Default reviewers are set in Settings > Rules > Approvals. The `list-workspaces` row's `default_reviewer_ids` are ids only: never show them.
+- Waiting on the user: `list-inbox-items(source="review_status", reviewer_id="me")`.
 
 ## Always
 

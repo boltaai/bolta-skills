@@ -11,7 +11,7 @@ Read when building the numbered list. Run all reads at once; reuse the workspace
 - `total_recurring` above 0: also `list-inbox-items(source="recurring")`. These are legacy rows from older automations, decided with their own calls (see [read-back.md](review-read-back.md)). Never look here for Bolta routine drafts.
 - `total_hunter` above 0: one line, "Also 3 reply drafts", and leave them to [replies](replies.md). Reports: mention the count only.
 - Any team row with a `workflow_run_id`: in the same pass, the routine and campaign reads in [grouping](review-finding-drafts-grouping.md). They name the groups: never show such a row as just "written by Bolta".
-- "Waiting on me": `list-reviews(reviewer_id="me")`.
+- "Waiting on me": `list-inbox-items(source="review_status", reviewer_id="me")`.
 - `list-workspace-posts(status="draft", sort_by="updated_at")`: drafts never sent for review. Skip any whose id is already a team row (routine and campaign drafts are drafts too). List the ones saved in this conversation; give older ones as a count and offer them.
 
 ## Grouping
@@ -30,24 +30,7 @@ Group rows under **From Bolta routine "<name>"**, **From campaign "<name>"**, Li
 
 ## Example
 
-> **Acme** · 5 waiting for your yes
->
-> **From Bolta routine "Weekly LinkedIn"**
-> 1. LinkedIn (Jane): "Most hiring advice skips the first 90 days…" (full text)
-> 2. LinkedIn (Jane): "We stopped asking for cover letters…"
->
-> **From campaign "New pricing"**
-> 3. X (@acme): "Paying for seats nobody uses?…"
->
-> **Saved by you or me**
-> 4. LinkedIn (Jane), planned Thu Oct 22, 12:00 pm (New York): "…"
-> 5. X (@acme): "…"
->
-> Decide in one line, like "1, 3, 4 yes · 2 shorter · 5 drop". Bolta picks the times from your posting schedule unless you name one.
-
-That last line holds for drafts you, a Bolta routine, a campaign or Bolta's chat wrote. A post typed in Bolta's own composer with review mode on is approved without a time, and Library posts never get one: see [times Bolta picks](review-times-auto.md).
-
-Nothing waiting: say so in one line, add the next scheduled post if there is one, then one next step.
+The numbered list to show, and what to say when nothing waits: [the list to show](review-finding-drafts-example.md).
 
 ## Always
 

@@ -7,7 +7,7 @@
 - Show a numbered list: who, where, what they said, the draft, the link.
 - Change text only when asked: `update-outreach-reply` saves and sends nothing. A sent reply can't be changed.
 - Send: `send-outreach-reply(reply_id, content)`, always with the exact agreed text, so the check shows what goes out. It counts as the user's yes: call it only on their yes, never to get around a hold. For a target from a draft row, use this, not `reply-to-social-content`.
-- It queues: `pending` with `needs_approval` false means queued, not failed; the row still shows as waiting until it goes. Read back with `get-engagement-status(engagement_id, verify=true)` using the row's reply id. `list-engagements(status="failed")` gives a failure's reason.
+- It queues: `pending` with `needs_approval` false means queued, not failed; the row still shows as waiting until it goes. Read back with `list-engagements(engagement_id, verify=true)` using the row's reply id. `list-engagements(status="failed")` gives a failure's reason.
 - Sendable on Reddit, Threads, X, LinkedIn, Bluesky, Mastodon. A Facebook or Instagram draft fails here: give the link.
 
 ## A comment on your own post
@@ -16,7 +16,7 @@
 2. `get-social-content(account_id, target_url)`: the comment, its author, nearby replies. Sort it first ([sort and check](replies-answering-sort-and-check.md)).
 3. `draft-inbound-reply(account_id, target_url)` saves and sends nothing; it only returns text. Call again only for "another take".
 4. Check the draft ([sort and check](replies-answering-sort-and-check.md)). Show the comment, draft, account, link and brand. On that reply's yes: `reply-to-social-content(account_id, content, target_url)`. Bolta stops a repeat send per target and sending account, so always reply from the same account. `idempotency_key` is only an audit label.
-5. Read the result: published (show the link), queued or throttled (not confirmed, not a failure), failed (say why). With `wait` false, poll `get-engagement-status`. `deduplicated` true: a reply already existed and nothing new went out; show it. The web Inbox row stays open after replying here.
+5. Read the result: published (show the link), queued or throttled (not confirmed, not a failure), failed (say why). With `wait` false, poll `list-engagements` with `engagement_id`. `deduplicated` true: a reply already existed and nothing new went out; show it. The web Inbox row stays open after replying here.
 
 | Network | Draft and reply by link | React |
 |-|-|-|
@@ -30,7 +30,7 @@
 | Facebook | not here: Bolta's web Inbox (may fall back to copy and open) | no |
 | YouTube, TikTok, Pinterest | no: answer in the app | no |
 
-`list-engagement-capabilities` (live, per account) wins over this table.
+`list-accounts` with `capabilities: true` (live, per account) wins over this table.
 
 **A reaction** is public too: show which post and which reaction, get a yes, then `react-to-social-content(account_id, target_url, reaction)` with like, upvote, repost, favorite or boost as the table allows. A downvote only when the user named it. Worked, with a Reddit reply: [replies-triage](../examples/replies-triage.json). Reddit limits: [replies-reddit.md](replies-reddit.md).
 

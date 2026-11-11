@@ -16,7 +16,7 @@ Read with [review-times.md](review-times.md) when a yes names no time, or someon
 Steps 4 and 5 space posts about 4 hours apart, skip weekends and use odd minutes (9:07, 12:23). `audience_timezone`, when set, steers them.
 
 - Review mode doesn't stop those drafts getting a time.
-- A post typed in Bolta's own composer, or saved with `create-post` over a pasted Bolta API key (not a sign-in), is not Bolta's writing: with review mode on, or the approver's own setting to approve without scheduling, a yes leaves it "Ready for Scheduling" with no time. Ask for a time, then follow [review-times.md](review-times.md).
+- A post typed in Bolta's own composer, or saved with `save-post` over a pasted Bolta API key (not a sign-in), is not Bolta's writing: with review mode on, or the approver's own setting to approve without scheduling, a yes leaves it "Ready for Scheduling" with no time. Ask for a time, then follow [review-times.md](review-times.md).
 - A draft written before any account was connected, or bound only to unconnected accounts: approved, held as "Ready for Scheduling" until one is connected.
 - Never promise a day or office-hours rule: a saved schedule can use weekends, and some networks' usual hours are in the evening. Read the time back instead.
 - Library posts never get a time ([review-more-decisions.md](review-more-decisions.md)).

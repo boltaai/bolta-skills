@@ -11,7 +11,7 @@
       "why": "Limits once: 500 characters, and longer becomes a reply chain, which a ghost post can't be."
     },
     {
-      "tool": "create-post",
+      "tool": "save-post",
       "arguments": {
         "workspace_id": "<brand's workspace id>",
         "content": "Flash sale, today only: FLASH20 takes 20% off everything until midnight.",

@@ -3,34 +3,35 @@
   "playbook": "post",
   "steps": [
     {
-      "tool": "create-post",
+      "tool": "save-post",
       "arguments": {
         "workspace_id": "<brand's workspace id>",
         "content": "Our winter blend is back Friday. Tell us your favourite way to brew it.",
         "account_ids": [
           "<Threads account id>"
         ],
-        "platform_specific": {
+        "idempotency_key": "winter-blend-threads-1",
+        "platform_details": {
           "threads": {
             "reply_control": "accounts_you_follow"
           }
-        },
-        "idempotency_key": "winter-blend-threads-1"
+        }
       },
-      "why": "The decision: \"only accounts we follow\" is Threads' own accounts_you_follow, not followers (that means the brand's followers). It works only in platform_specific, and this save names only threads, so nothing else is lost. Bolta can't keep it as a saved Threads setting."
+      "why": "The decision: \"only accounts we follow\" is Threads' own accounts_you_follow, not followers (that means the brand's followers). Bolta keeps it as the Threads setting, so platform_details on the saving call takes it, and refuses a misspelling (the result's platform_details.threads says so) while the draft is still saved."
     },
     {
       "tool": "get-post",
       "arguments": {
-        "post_id": "<post id>"
+        "post_id": "<post id>",
+        "platform": "threads"
       },
-      "why": "Read back in metadata.platformSpecific: get-post-platform-details would still show everyone for this one."
+      "why": "Read back reply_control from the Threads settings before saying replies are limited."
     }
   ],
   "say": "Saved to Acme as a Threads draft: \"Our winter blend is back Friday. Tell us your favourite way to brew it.\" Only accounts you follow can reply. Nothing goes out yet. Schedule it?",
   "never": [
     "followers for \"accounts we follow\": that limits replies to the brand's followers.",
-    "accounts_you_follow in a call that also sets other networks: their settings are lost.",
+    "accounts_you_follow on X: X's word for accounts the brand follows is followers.",
     "Saying replies are limited before reading it back."
   ]
 }

@@ -5,13 +5,13 @@ Agencies and teams often need a client's yes before a post goes out. Two things 
 ## Who is who
 
 - **The organization** is the agency or company. Its owners and admins reach every brand in it; a member reaches only the brands they were given.
-- **On a brand:** owners and admins write, approve, turn down and post now; creators write, send for review and, with review mode off, schedule; a viewer only looks. A team yes is owners and admins only, whatever `get-my-capabilities` says for a creator.
+- **On a brand:** owners and admins write, approve, turn down and post now; creators write, send for review and, with review mode off, schedule; a viewer only looks. A team yes is owners and admins only; a refusal names the role: say it.
 - **A client reviewer** decides posts sent to them, takes no paid seat and can't connect an AI app. Invited from the brand's People & access. A brand creator can also be sent a client request, and their yes counts as the client's. More: [review-client-details.md](review-client-details.md).
 
 ## What reaches a client from here
 
 - **A Bolta routine set to send its drafts straight to the client** (`update-routine`, `output_config.review` with `to_client`): each run's drafts skip the team and go to the client ([routine-outputs.md](routine-outputs.md)).
-- **A Library post made with "send to the client" ticked**: `approve-post` sends it to the client instead of putting it live (`sent_to_client` true).
+- **A Library post made with "send to the client" ticked**: `approve-many-posts` sends it to the client instead of putting it live (its item: `scheduled` false, status not Approved).
 - Nothing else. A hand-picked request, a resend, a withdrawal and answering client comments happen in Approvals in Bolta. `submit-for-review` is the team's list, never a client's.
 
 ## The steps
@@ -27,7 +27,7 @@ Agencies and teams often need a client's yes before a post goes out. Two things 
 
 ## Where a post stands
 
-`get-post` returns `client_signoff`: `required` (the brand's sign-off setting; `get-workspace` doesn't show it) and `state`: `not_required`, `not_sent`, `waiting_on_client` or `signed_off`. `waiting_on_client` can also mean required reviewers haven't all answered; `not_required` only says the brand doesn't require sign-off, not that no client has the post. Review list rows don't say a post is with the client: on a sign-off brand, read `get-post` before a batch. Refusals and what to say: [review-client-howto.md](review-client-howto.md).
+`get-post` returns `client_signoff`: `required` (the brand's sign-off setting; the `list-workspaces` row doesn't show it) and `state`: `not_required`, `not_sent`, `waiting_on_client` or `signed_off`. `waiting_on_client` can also mean required reviewers haven't all answered; `not_required` only says the brand doesn't require sign-off, not that no client has the post. Review list rows don't say a post is with the client: on a sign-off brand, read `get-post` before a batch. Refusals and what to say: [review-client-howto.md](review-client-howto.md).
 
 ## Always
 

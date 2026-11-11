@@ -18,9 +18,9 @@ Who can do what in an organization and on a brand, and how to name a teammate. N
 | reviewer | a client: decides client requests sent to them, nothing else; no seat, no AI app |
 
 - There is no "editor": the writing role is creator.
-- Approving and turning down are owners and admins only; a per-person setting in People & access can take that away, never give it to a creator. `get-my-capabilities` may show `approve_posts` true for a creator and still be refused: trust the refusal.
+- Approving and turning down are owners and admins only; a per-person setting in People & access can take that away, never give it to a creator. A creator's approval is refused whatever else they can do: trust the refusal.
 - A creator can be sent a client request and decide it for the client ([client approval](review-client-approval.md)).
-- An owner or admin can grant or deny single permissions for one person on one brand. For what someone can do right now, read `get-my-capabilities`; never state it from the role alone.
+- An owner or admin can grant or deny single permissions for one person on one brand. So nothing here reads what someone can do right now: never state it from the role alone. A refusal names the role or access that's missing; say that.
 
 ## Client reviewers
 
@@ -36,5 +36,5 @@ Who can do what in an organization and on a brand, and how to name a teammate. N
 ## Always
 
 - Follow the house rules in the Bolta skill.
-- Read `get-my-capabilities` before saying what someone may do.
+- Never promise what someone may do from their role; a refusal names the reason.
 - Never claim a person was invited, removed or given a role from here.

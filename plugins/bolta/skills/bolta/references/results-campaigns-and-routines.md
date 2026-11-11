@@ -28,7 +28,7 @@ Say it in this order.
 - `not_sent_yet`: approved; their times haven't come.
 - `unknown`: Bolta can't tell. Look at the posts.
 
-**Its posts:** `list-content-campaign-posts` returns every post, oldest first. It ignores `status` and `limit`, so filter yourself. `has_pending_review: true` means waiting for a yes.
+**Its posts:** `list-workspace-posts` with `campaign_id` returns every post, oldest first. It ignores `status` and `limit`, so filter yourself. `has_pending_review: true` means waiting for a yes.
 
 **A campaign I wrote** stays "not started" on the dashboard. Its results still count its posts. Give the read and leave the status alone.
 

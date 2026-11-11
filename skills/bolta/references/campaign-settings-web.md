@@ -4,7 +4,7 @@ Read when the user wants something no call can set: a tone, image quality, video
 
 ## Set once at creation, through Bolta's planner
 
-Where `plan-campaign` is offered, it sets these from the user's words when the campaign is made; afterwards only the page changes them:
+Where `plan` (`kind: "campaign"`) is offered, it sets these from the user's words when the campaign is made; afterwards only the page changes them:
 
 - **Tone**: educational, bold, insightful or conversational, inside the voice.
 - **Carousel style**: 2 to 10 slides, a look (auto, bold, minimal, editorial, photographic), portrait or square, one consistent brand look or slides that chain.

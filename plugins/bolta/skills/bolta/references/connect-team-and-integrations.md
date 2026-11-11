@@ -40,5 +40,5 @@ Inviting approvers, choosing posting days and filling the Library from a deck ca
 
 - Follow the house rules in the Bolta skill.
 - Name the page and the role that can do it; never claim a change was made.
-- Read `get-my-capabilities` before saying what someone may do.
+- Never promise what someone may do from their role; a refusal names the reason.
 - Never send `get-connect-link` to a client.

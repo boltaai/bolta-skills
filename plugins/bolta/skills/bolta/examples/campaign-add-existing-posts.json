@@ -21,7 +21,7 @@
       "why": "Last week's LinkedIn posts. Show them (#, day, first line) so the user sees exactly what will be added; add only what they confirm."
     },
     {
-      "tool": "add-posts-to-content-campaign",
+      "tool": "update-content-campaign",
       "arguments": {
         "workspace_id": "<brand's workspace id>",
         "campaign_id": "<campaign id>",
@@ -31,10 +31,10 @@
           "<post id 3>"
         ]
       },
-      "why": "Up to 100 ids a call. Partial results are normal: already_present means it was in the campaign, not_found means not this brand's. Report what attached. Attaching writes, schedules and publishes nothing and doesn't start the campaign."
+      "why": "post_ids alone, with campaign_id and no other campaign field. Up to 100 ids a call. Partial results are normal: already_present means it was in the campaign, not_found means not this brand's. Report what attached. Attaching writes, schedules and publishes nothing and doesn't start the campaign."
     },
     {
-      "tool": "list-content-campaign-posts",
+      "tool": "list-workspace-posts",
       "arguments": {
         "workspace_id": "<brand's workspace id>",
         "campaign_id": "<campaign id>"

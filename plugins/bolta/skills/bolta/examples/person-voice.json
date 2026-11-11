@@ -3,9 +3,10 @@
   "playbook": "voice",
   "steps": [
     {
-      "tool": "list-voice-profiles",
+      "tool": "get-voice-context",
       "arguments": {
-        "workspace_id": "<brand's workspace id>"
+        "workspace_id": "<brand's workspace id>",
+        "all_profiles": true
       },
       "why": "Check for a voice already named for Dana and see which voice is the default. The list does not show accounts; get-voice-profile does."
     },

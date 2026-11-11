@@ -7,7 +7,7 @@ Read when a campaign's end date has passed, or the user asks how one did. Read `
 - **How it ran, first:** drafts made, decided, went out. "12 drafts made. You decided 10. 9 went out." (Say "Bolta wrote" only when Bolta wrote them.)
 - **Where it went out:** `results.by_platform` (per platform: how many account sends were published, failed, pending). A post out on LinkedIn but failed on X still counts as published. `results.partially_published` is how many posts went out on some accounts and failed on others: "3 posts went out on only some accounts".
 - **Nothing went out:** say why from `results.outcome_reason` ([why-nothing.md](campaign-why-nothing.md)).
-- **The decision rate:** drafts decided out of drafts made. Still undecided: posts waiting for a yes or still drafts (`results.pending_review` and `results.draft`; per post, `has_pending_review` or Draft in `list-content-campaign-posts`). It predicts the next campaign better than likes do.
+- **The decision rate:** drafts decided out of drafts made. Still undecided: posts waiting for a yes or still drafts (`results.pending_review` and `results.draft`; per post, `has_pending_review` or Draft in `list-workspace-posts` with `campaign_id`). It predicts the next campaign better than likes do.
 - **Engagement** only when measured: `results.engagement.measured_posts` above 0. Fewer than `measurable_posts` means some posts are not measured yet; metrics update about once a day, so zeros on fresh posts mean "not measured yet".
 - Then the verdict, in one or two plain sentences, and one next step.
 

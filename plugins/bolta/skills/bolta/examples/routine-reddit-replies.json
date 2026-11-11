@@ -14,7 +14,7 @@
         "schedule": {
           "cron": "0 9 * * 1,4"
         },
-        "timezone": "<timezone from get-workspace>",
+        "timezone": "<timezone from list-workspaces>",
         "approval_policy": "review_every_artifact",
         "source_bindings": [
           {

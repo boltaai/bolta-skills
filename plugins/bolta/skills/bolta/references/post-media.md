@@ -1,11 +1,11 @@
-# Media, alt text, formatting and links
+# Media and alt text
 
 Bolta facts for images, video and how text is shown. Which links work, file size and swapping media: [platforms](post-platforms.md), section 2. What each network needs: [network needs](post-platforms-needs.md).
 
 ## Attaching media
 
-- On `create-post` and `update-post`: `media: [{"url": "https://...", "alt_text": "..."}]`. Inside a multi-part post the key is `media_url` instead ([post parts](post-parts.md)).
-- `url` works although the listed schema names `download_url` and `file_id`. If a call is refused for lacking them, send the same link as `download_url` with `file_id: "url"`.
+- On `save-post`: `media: [{"url": "https://...", "alt_text": "..."}]`. A new multi-part post (`parts`) gets it on the first part only; media on a later part goes through a batch item, where the key is `media_url` ([post parts](post-parts.md)). On an edit (`post_id`) `media` only adds.
+- `url` works although the listed schema names a host file: `{download_url, file_id, mime_type, file_name}` (the last two optional). If a call is refused for lacking them, send the same link as `download_url` with `file_id: "url"`, and `mime_type` (`image/jpeg`) and `file_name` when known.
 - Media is attached per post, from a public link the user gave, at most 25 items per call; Bolta tries to copy each file into its own storage. The brand's Media Library (bolta.ai/dashboard/media) is browsed and filled in Bolta only.
 - No link yet? Say: "Instagram needs an image or video. Send me a public link to it, or add it to the post in Bolta."
 - Need an image made? Bolta's AI Studio (bolta.ai/dashboard/ai-studio) makes one; the user then attaches it to the post in Bolta. Bolta's post-writing tools make no images. A one-off video is made there too; for a run of videos, a campaign with `feed_video` (16:9) or `short_video` (9:16) ([campaign](campaign.md)).
@@ -25,21 +25,9 @@ Bolta facts for images, video and how text is shown. Which links work, file size
 - A Facebook comment carries one image.
 - Bolta doesn't check video length or file size, so a network may refuse them when it posts.
 
-## Formatting
+## Formatting and links
 
-- Reddit, Discord and WordPress show Markdown as written. On the other social networks Bolta turns it into plain text when it posts:
-  - bold, italic and headings become look-alike bold or italic letters,
-  - a link becomes "words (address)",
-  - `-`, `*` and `+` list items become • bullets; numbered lists stay as typed,
-  - quote markers and divider lines are removed; table rows keep their `|` pipes.
-- So write plain text with line breaks. Skip headings and tables; use bold rarely, since look-alike letters don't read well for everyone.
-- `get-posting-rules` has notes on formatting, links and extra parts for each network. Trust it over this page, except its link-tracking note (see Links).
-
-## Links
-
-- Use only links the user gave.
-- Links go out as written, with one exception: on Threads everything after a `?` or `#` in a link is removed, tracking tags included.
-- Bolta adds no tracking tags; never promise them. If the user wants clicks tracked, they give a link that already carries `utm_` tags; clicks then show in their own site analytics, never in Bolta.
+How Markdown is shown on each network, and which links go out as written: [formatting and links](post-media-formatting.md).
 
 ## Always
 

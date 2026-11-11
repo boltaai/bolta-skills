@@ -72,7 +72,7 @@ here=$(dirname "$0")
 reader="$here/bolta-json.sh"
 
 ok=0 tool="" server="" sid="" prompt="" conn="Bolta" brand=""
-create="" update="" policy="" rid="" action="" bulk="" cid="" items="" preview=0 switchon="" decision=""
+create="" update="" save="" targets="" policy="" rid="" action="" bulk="" cid="" items="" preview=0 switchon="" decision=""
 parsed=$(sh "$reader" guard 2>/dev/null) || parsed=""
 oldifs=$IFS
 IFS='
@@ -90,6 +90,8 @@ for kv in $parsed; do
     BRAND) brand=$v ;;
     CREATE) create=$v ;;
     UPDATE) update=$v ;;
+    SAVE) save=$v ;;
+    TARGETS) targets=$v ;;
     POLICY) policy=$v ;;
     RID) rid=$v ;;
     ACTION) action=$v ;;
@@ -268,6 +270,14 @@ case "$tool" in
     if [ "$update" != safe ]; then
       ask "Check before it changes ($conn): this edit changes when or whether a post goes out. An approved or scheduled post needs a fresh yes."
     fi ;;
+  save-post)
+    case $save in
+      # A new post is always a Draft (save-post refuses a time or an action), as a plain create-post was.
+      create) exit 0 ;;
+      edit) ask "Check before it changes ($conn): this edits a post, its text per network or its settings. An approved post goes back for a fresh yes. OK only if you have seen it." ;;
+      unschedule) ask "Check before it changes ($conn): this takes a scheduled post off the schedule. It goes back to draft and will not go out." ;;
+    esac
+    ask "Bolta check ($conn): the plugin can't tell what this save does. OK it only if you expected it." ;;
   update-post-platform-details)
     ask "Check before it changes ($conn): this changes a post's network settings, such as a subreddit, title, privacy or link. An approved post goes back for a fresh yes." ;;
   update-social-bucket)
@@ -328,7 +338,7 @@ case "$tool" in
       undo) ask "Check before it changes ($conn): this undoes a change to a Bolta routine. Every run after this uses the old settings." ;;
     esac
     ask "Bolta check ($conn): the plugin can't tell what this answer to Bolta does. OK it only if you expected it." ;;
-  decide-bolta-suggestion)
+  decide-bolta-suggestion|decide-suggestion)
     case $decision in
       decline)
         if [ "$careful" = 0 ]; then exit 0; fi
@@ -337,6 +347,15 @@ case "$tool" in
       undo) ask "Check before it changes ($conn): this reverses a suggestion you accepted. Everything it changed goes back." ;;
     esac
     ask "Bolta check ($conn): the plugin can't tell what this answer to Bolta does. OK it only if you expected it." ;;
+  update-content-campaign)
+    # Only the fields that decide who a campaign posts from and what Bolta reads
+    # for it are checked; the brief and attaching posts change nothing that runs.
+    if [ "$targets" != targets ]; then exit 0; fi
+    if [ "$careful" = 1 ]; then
+      ask "Bolta check, careful mode ($conn): this sets a campaign's accounts, weeks, notes, sources or voice."
+    fi
+    if campaign_marked; then exit 0; fi
+    ask "Check before it changes ($conn): this sets who a campaign posts from and what Bolta reads for it. A running campaign writes its next weeks from it." ;;
   set-content-campaign-targets)
     if [ "$careful" = 1 ]; then
       ask "Bolta check, careful mode ($conn): this sets a campaign's accounts, weeks, notes, sources or voice."

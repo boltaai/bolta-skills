@@ -2,6 +2,11 @@
 
 Read with [start](start.md) when the user answers the proposal. A yes to set up is a yes to save; switching on is its own yes.
 
+## In short
+
+- "Set up 1 and 2" is a yes to save, not to switch on. Save each now, switched off (`confirm-plan` with no `switch_on`, or `create-routine` with no `activate-routine`), then ask "Switch both on?" Never ask before saving.
+- On "switch them on": `activate-routine` each, then read `next_run_at` back. Never `switch_on: true`: it also runs at once and spends credits.
+
 ## The order on their yes
 
 1. **Brand:** they said the site read is right: `extract-business-dna` again with `preview: false`. Never before they saw it.

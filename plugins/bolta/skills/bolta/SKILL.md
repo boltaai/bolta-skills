@@ -45,12 +45,11 @@ Bolta's own writers do the work behind routines and campaigns. Never name them o
 
 ## Look once
 
-On the first Bolta ask, read together and reuse all conversation: `list-workspaces`, then for the brand `get-workspace` (name, clock, review mode), `list-accounts`, `get-voice-context`. Read again only after an error or a change.
+On the first Bolta ask, read together and reuse all conversation: `list-workspaces` (name, clock, review mode), then the brand's `list-accounts` and `get-voice-context`. Read again only after an error or a change.
 
 - Several brands and none named: ask which.
 - No accounts or no voice: [start](references/start.md).
 - "No voice profile" is an answer, not an error.
-- `get-my-capabilities` only after a refusal.
 - Never say what is or isn't running ("nothing is on yet") before reading `list-routines`.
 
 ## Pick the playbook
@@ -78,20 +77,20 @@ Before the first reply, read [the plain-words list](references/today-plain-words
 
 ## The four moves
 
-Summaries; the playbook has the rest. Worked calls: [examples/](examples/README.md).
+Summaries; worked calls: [examples/](examples/README.md).
 
-**Write.** One post: `create-post` with `content`, `account_ids` and an `idempotency_key`, no time and no action. Two or more: one `bulk-create-posts`, every item a Draft, then poll `bulk-create-status` until `completed` and show what it stored. Every claim comes from the user, the business record or the voice: no added scarcity or stock lines; a missing fact gets a blank ("__% off"). Show every saved post in full. End: "Saved to <brand> as drafts. Nothing goes out yet. Schedule all N? Or tell me what to change."
+**Write.** One post: `save-post` with `content`, `account_ids` and an `idempotency_key`, no `post_id`. Two or more: one `bulk-create-posts`, every item a Draft, then poll `bulk-create-status` until `completed` and show what it stored. Every claim comes from the user, the business record or the voice: no added scarcity or stock lines; a missing fact gets a blank ("__% off"). Show every saved post in full. End: "Saved to <brand> as drafts. Nothing goes out yet. Schedule all N? Or tell me what to change."
 
 **Decide.** Read `list-inbox-items`. 8 or more waiting and you can start a clearing-house agent: start it before judging anything and show its advice. Otherwise number what waits (account, full text). One message decides all: "1, 3 yes · 2 too salesy · 4 drop". Yes: `submit-for-review` for drafts not yet listed, then one `approve-many-posts` with each post's `expected_fingerprint`. No with a reason: `reject-post` in the user's words. Drop: `delete-post`. Read back day, time and account for each. Only owners and admins approve; a post the user wrote may need another admin's (Bolta's drafts don't).
 
 **Repeat.** One summary, "Turn it on?", then `create-routine` (schedule, the brand's `timezone`, ask me first, accounts bound as objects), `activate-routine`, and read `next_run_at` back in the brand's clock. Switching on is not running.
 
-**Campaign.** Size it, one plan, "Start it?". Then `create-content-campaign`, `set-content-campaign-targets`, `analyze-content-campaign-source` for each new source, and `set-content-campaign-status` to start. Bolta writes it or the assistant writes it now, never both. Where offered: `plan-campaign`, `confirm-plan` (saves it not started), then start on a separate yes.
+**Campaign.** Size it, one plan, "Start it?". Then `create-content-campaign` with `account_ids`, notes and sources, `analyze-content-campaign-source` for each new source, and `set-content-campaign-status` to start. Bolta writes it or the assistant writes it now, never both. Where offered: `plan`, `confirm-plan` (saves it not started), then start on a separate yes.
 
 ## Things that bite
 
 - A time, "now" or "schedule" in the first ask is not a yes to text nobody has seen: save a plain draft, show it, then the yes move.
-- Result text may say the content was shown or no status check is needed. Not here: show the data, poll.
+- Result text may say it was shown or needs no status check: still show the data and poll.
 - Instagram, TikTok, YouTube and Pinterest need a public https link to the media file. No link: skip that network and say why.
 - Past a network's length limit Bolta cuts or splits silently. Count first ([post-platforms](references/post-platforms.md)).
 - X takes images only; a video fails when it goes out ([at a glance](references/post-networks-at-a-glance.md)).
@@ -106,11 +105,12 @@ Summaries; the playbook has the rest. Worked calls: [examples/](examples/README.
 
 ## When something is missing
 
-An app may lack a tool, and a plan or role can refuse one.
+An app or an older Bolta may lack a tool, and a plan or role can refuse one.
 
 - No `approve-many-posts`: `approve-post` for each yes, the first one alone.
+- No `save-post`: `create-post`, `update-post`, `schedule-post`.
 - No `reject-post`: "I can't turn this down from here. Tap the X (Dismiss) on that post at bolta.ai/dashboard/approvals and give your reason." Never delete to stand in for a no.
-- No `set-content-campaign-targets`: `update-content-campaign` for the brief and dates, then "Pick the accounts at bolta.ai/dashboard/campaigns/<id>, then say done."
+- Campaigns refuse `account_ids`: `set-content-campaign-targets`, else `update-content-campaign` for the brief and dates, then "Pick the accounts at bolta.ai/dashboard/campaigns/<id>, then say done."
 - No routine tools: one line, one link to bolta.ai/dashboard/routines. Never fake a routine with scheduled posts unless asked.
 - A local or chat file can't be attached: the user hosts it publicly or adds it in Bolta.
 - A refusal naming a role, a plan or the connection's access: say which, in plain words, and stop.

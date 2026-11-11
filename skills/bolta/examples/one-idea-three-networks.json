@@ -56,26 +56,27 @@
       "why": "The Facebook first comment is a second part on one network only, and parts are shared by every account on a post, so this is one post per network, each written fresh, in one bulk call (without it, one post with a text per network in platform_specific would do). The Facebook item has two parts: part 2 goes out as a comment from the Page, so it is aimed at the Page alone. Then poll bulk-create-status: its posts list gives the Facebook and Threads post ids for the next steps."
     },
     {
-      "tool": "update-post",
+      "tool": "save-post",
       "arguments": {
         "post_id": "<Facebook post id from bulk-create-status>",
-        "accounts": [
+        "account_ids": [
           "<the same Facebook Page id>"
         ]
       },
-      "why": "bulk-create-posts keeps the Facebook account but not which Page, so a brand with several Pages would publish to its primary Page. update-post records the Page; leaving out content keeps both parts."
+      "why": "bulk-create-posts keeps the Facebook account but not which Page, so a brand with several Pages would publish to its primary Page. save-post with post_id and account_ids records the Page; leaving out content keeps both parts."
     },
     {
-      "tool": "update-post-platform-details",
+      "tool": "save-post",
       "arguments": {
         "post_id": "<Threads post id>",
-        "platform": "threads",
-        "fields": {
-          "topic_tag": "Coffee",
-          "use_topic_tag": true
+        "platform_details": {
+          "threads": {
+            "topic_tag": "Coffee",
+            "use_topic_tag": true
+          }
         }
       },
-      "why": "A setting only where it adds something: the topic people browse for this post. Name it in the reply so the user can drop it. With the details call the tag needs use_topic_tag too."
+      "why": "A setting only where it adds something: the topic people browse for this post. Name it in the reply so the user can drop it. In platform_details the tag needs use_topic_tag too."
     }
   ],
   "say": "Saved to Acme as 4 drafts: 1 LinkedIn, 2 X, 3 Threads (topic Coffee), 4 Facebook with the schedule as a comment under it. Nothing goes out yet. Schedule all 4? Once they're out, I'll check the live Facebook post for the comment.",

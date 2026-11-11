@@ -14,8 +14,8 @@ Read for "why didn't it run?", "it failed", a refused run now, credits, or Bolta
 | `trial_quota` | "Your trial's runs are used up." |
 | `disconnected_source` | "An account it uses got disconnected. Reconnect it, then it can go back on." ([connect](connect.md)) |
 | `user_requested`, `user` | "Someone paused it. Turn it back on?" |
-| `backpressure` | "Too many drafts are waiting." Decide those ([review](review.md)), then `resume-routine`. |
-| `system` | Bolta paused it; try `resume-routine` once, then say what came back. |
+| `backpressure` | "Too many drafts are waiting." Decide those ([review](review.md)), then `activate-routine` to resume. |
+| `system` | Bolta paused it; try `activate-routine` once, then say what came back. |
 
 - **Blocked**: Bolta's writer for it is paused. `blocked.paused_by` holding `billing` means the plan is paused or unpaid; otherwise "Bolta's writer for this is paused, so it can't run. Switch it back on at bolta.ai/dashboard/agents."
 

@@ -21,7 +21,7 @@
       "why": "The user's words are the yes for a pause. It stops new drafts only."
     },
     {
-      "tool": "list-content-campaign-posts",
+      "tool": "list-workspace-posts",
       "arguments": {
         "workspace_id": "<brand's workspace id>",
         "campaign_id": "<campaign id>"

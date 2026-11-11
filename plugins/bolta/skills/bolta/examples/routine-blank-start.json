@@ -1,13 +1,13 @@
 {
   "ask": "Tuesdays and Thursdays at 10, LinkedIn only, one post each time. Save it.",
   "playbook": "routine",
-  "before": "The user said 'set up something that keeps us posting, you pick'. plan-routine with an empty ask returned status shaping: a working plan (weekly posts about the studio's classes, Monday 9:00, LinkedIn and Instagram, 3 a run), filled saying where each choice came from (the brand's site and best posts), and one question: which days suit them. The reply showed it and asked that one question.",
+  "before": "The user said 'set up something that keeps us posting, you pick'. plan with kind routine and an empty ask returned status shaping: a working plan (weekly posts about the studio's classes, Monday 9:00, LinkedIn and Instagram, 3 a run), filled saying where each choice came from (the brand's site and best posts), and one question: which days suit them. The reply showed it and asked that one question.",
   "steps": [
     {
       "tool": "revise-plan",
       "arguments": {
         "workspace_id": "<brand's workspace id>",
-        "proposal_id": "<plan id from plan-routine>",
+        "proposal_id": "<plan id from plan>",
         "changes": {
           "schedule": {
             "interval": "weekly",

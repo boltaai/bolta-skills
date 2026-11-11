@@ -18,22 +18,14 @@
         "content_mix": {
           "still_image": 3,
           "carousel": 1
-        }
-      },
-      "why": "Offer & Promotion only because a real discount and end date were given. One week, Tue Nov 24 to Mon Nov 30: three days of build-up, then the sale, never past its end. The strategy's own mix has a text post, which Instagram can't take, so the mix is sent without it: images and one carousel both fit Instagram and Facebook."
-    },
-    {
-      "tool": "set-content-campaign-targets",
-      "arguments": {
-        "workspace_id": "<brand's workspace id>",
-        "campaign_id": "<campaign id>",
+        },
         "account_ids": [
           "<Instagram account id>",
           "<Facebook account id>"
         ],
         "context_notes": "The offer: 25% off everything at acme.com/sale. It runs Friday Nov 27 to Monday Nov 30 only. Before Nov 27, say it is coming and when; never say it is live. Nothing after Nov 30. No codes, stock limits or countdown claims: none were given."
       },
-      "why": "The notes reach the writer word for word in the week's brief, so the real offer, dates and limits go here. The strategy already tells it never to invent urgency; the notes add what this sale does not have. Bolta spreads a week's posts over weekdays (or the brand's posting days), so no call puts a post on Saturday or Sunday: the user pins one under Post prompts on the campaign page."
+      "why": "Offer & Promotion only because a real discount and end date were given. One week, Tue Nov 24 to Mon Nov 30: three days of build-up, then the sale, never past its end. The strategy's own mix has a text post, which Instagram can't take, so the mix is sent without it: images and one carousel both fit Instagram and Facebook. The accounts and notes go on the same create call, so the campaign is made with them. The notes reach the writer word for word in the week's brief, so the real offer, dates and limits go here. The strategy already tells it never to invent urgency; the notes add what this sale does not have. Bolta spreads a week's posts over weekdays (or the brand's posting days), so no call puts a post on Saturday or Sunday: the user pins one under Post prompts on the campaign page."
     },
     {
       "tool": "get-content-campaign",

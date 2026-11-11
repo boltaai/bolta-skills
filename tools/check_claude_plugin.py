@@ -84,16 +84,18 @@ DEFAULT_FIXTURE = REPO / "tools" / "fixtures" / "claude_tools_list.json"
 #: Tools the skills and the guard use that production does not list yet. While the
 #: live list lacks one, its schema comes from DEFAULT_FIXTURE. Delete a name here
 #: once the live list has it (the checker says when).
-PENDING_TOOLS = ("approve-many-posts", "reject-post", "set-content-campaign-targets",
-                 "analyze-content-campaign-source",
+PENDING_TOOLS = ("approve-many-posts", "reject-post", "analyze-content-campaign-source",
                  "propose-cascade", "update-cascade", "start-cascade", "get-cascade",
-                 "list-workspace-members", "list-routine-recommendations",
-                 "decide-routine-recommendation", "list-bolta-suggestions", "decide-bolta-suggestion",
-                 "recommend-routines", "plan-routine", "plan-campaign", "revise-plan", "confirm-plan")
+                 "list-workspace-members", "revise-plan", "confirm-plan",
+                 # Release 2: the folded catalog's new tools
+                 "save-post", "plan", "list-suggestions", "decide-suggestion")
 #: Live tools whose saved schema adds arguments production does not take yet. Until it does,
 #: the saved arguments are accepted too. Delete a name once the live list has them (the checker says when).
 PENDING_UPDATES = ("create-routine", "update-routine", "extract-business-dna", "voice-generate",
-                   "create-post", "update-post")  # platform_specific (server Release 1)
+                   # Release 2: tools that absorbed a folded tool's arguments
+                   "list-workspaces", "list-accounts", "list-workspace-posts", "get-post", "publish-post",
+                   "list-inbox-items", "draft-engagement-reply", "list-engagements", "list-account-insights",
+                   "get-voice-context", "list-business-dna", "create-content-campaign", "update-content-campaign")
 #: Claude Code sends "claude-code/<version> (<entrypoint>)" on its MCP requests,
 #: and the server matches "claude" in it. Without it the list lacks the tools made for Claude.
 CLAUDE_USER_AGENT = "claude-code/2.1.302 (cli; bolta-plugin-check)"
@@ -108,9 +110,23 @@ NON_TOOL_TOKENS = {"read-only", "draft-only", "mcp-app", "claude-code", "bolta-s
 
 #: Exposed tools the skills deliberately never use. Naming one in a skill is an
 #: error only where the reason says so (`forbid`).
-INTENTIONALLY_UNUSED = {
-    "list-reviews": ("the review list is read with list-inbox-items", False),
-}
+INTENTIONALLY_UNUSED: dict[str, tuple[str, bool]] = {}
+#: Release 1 tools the Release 2 server no longer lists but still answers by name (each folded
+#: into a listed tool). A model can still call one, so the guard keeps gating the ones that write,
+#: and SKILL.md's "When something is missing" may name one as the fallback for an older server.
+#: Nowhere else: a skill that teaches an unlisted name sends the model to a tool it cannot see.
+LEGACY_TOOLS = frozenset({
+    "get-workspace", "get-my-capabilities", "list-buckets", "create-social-bucket", "update-social-bucket",
+    "list-engagement-capabilities", "list-scheduled-posts", "list-content-campaign-posts",
+    "get-post-platform-details", "create-post", "update-post", "update-post-platform-details", "schedule-post",
+    "approve-post", "approve-recurring-review", "list-reviews", "list-recurring-reviews",
+    "reject-recurring-review", "get-engagement-conversation", "create-engagement-opportunity",
+    "get-engagement-status", "cross-platform-analytics", "list-voice-profiles", "get-business-dna",
+    "resume-routine", "set-content-campaign-targets", "add-posts-to-content-campaign", "plan-routine",
+    "plan-campaign", "recommend-routines", "list-routine-recommendations", "list-bolta-suggestions",
+    "decide-routine-recommendation", "decide-bolta-suggestion",
+})
+LEGACY_SECTION = "When something is missing"
 
 #: The subagents the full plugin ships (agents/<name>.md). The skills-only bundle ships none: its
 #: connection can have any name, and an agent's tool list has to name the server.
@@ -125,7 +141,7 @@ AGENT_IGNORED_KEYS = {"permissionMode", "hooks", "mcpServers", "initialPrompt", 
 AGENT_PREFIXES = ("mcp__plugin_bolta_bolta__", "mcp__bolta__")
 #: An agent may call these and nothing else: reads only.
 AGENT_READ_PREFIXES = ("list-", "get-")
-AGENT_READ_EXTRA = {"cross-platform-analytics", "search-engagement-opportunities"}
+AGENT_READ_EXTRA = {"search-engagement-opportunities"}
 MAX_AGENT_WORDS = 700          # agents/<name>.md body, frontmatter excluded
 
 #: One skill. Its SKILL.md is the entry point: the house rules, how Bolta is built, the look-once
@@ -221,7 +237,7 @@ CITATIONS = [
     (re.compile(r"\bPR\s*#\d+|\bpull/\d+\b"), "cites a pull request (say what is true for the user instead)"),
 ]
 
-PUBLISH_CAPABLE_CREATE_TOOLS = ("create-post", "bulk-create-posts", "create-wordpress-blog-post")
+PUBLISH_CAPABLE_CREATE_TOOLS = ("save-post", "bulk-create-posts", "create-wordpress-blog-post")
 
 #: What Anthropic's directory accepts from an unverified organization: Markdown, text, JSON, YAML
 #: and these image types. Anything else (a shell script, an SVG) makes it refuse the version.
@@ -900,6 +916,15 @@ def split_args(s: str):
     return [a.strip() for a in out]
 
 
+def legacy_span(text: str) -> tuple[int, int]:
+    """Where SKILL.md's fallback section starts and ends (the only place a legacy tool may be named)."""
+    m = re.search(rf"^## {re.escape(LEGACY_SECTION)}\s*$", text, re.M)
+    if not m:
+        return (0, 0)
+    nxt = re.search(r"^## ", text[m.end():], re.M)
+    return (m.start(), m.end() + nxt.start() if nxt else len(text))
+
+
 def check_tool_ids_and_args(plugin, skills, tools_by_name):
     siblings = set(skills) | set(PLAYBOOKS)
     referenced: set[str] = set()
@@ -909,12 +934,18 @@ def check_tool_ids_and_args(plugin, skills, tools_by_name):
         for m in re.finditer(r"`([^`\s]+)`", text):
             if m.group(1) in OLD_NAMES:
                 err(rel, f"`{m.group(1)}` is a v0.1 skill, command or subagent; v0.2 replaced it")
+        legacy_ok = legacy_span(text) if path.name == "SKILL.md" else (0, 0)
         for m in TOKEN.finditer(text):
             tok = m.group(1)
             if tok in tools_by_name:
                 referenced.add(tok)
             elif tok in siblings or tok in NON_TOOL_TOKENS:
                 continue
+            elif tok in LEGACY_TOOLS and legacy_ok[0] <= m.start() < legacy_ok[1]:
+                continue
+            elif tok in LEGACY_TOOLS:
+                err(rel, f"`{tok}` is a Release 1 tool the server no longer lists; name it only as an older server's "
+                         f"fallback in SKILL.md's {LEGACY_SECTION!r}")
             else:
                 err(rel, f"`{tok}` is not an exposed Bolta tool or skill")
         for m in CALL.finditer(text):
@@ -1140,17 +1171,17 @@ def check_guard_matches_matcher(plugin, cfg, tools_by_name, skills_src):
     for t in sorted(in_matcher - in_script):
         err("scripts/guard-bolta-writes.sh", f"matcher lists {t!r} but the guard script has no case for it")
     for t in sorted(in_script | in_matcher):
-        if t not in tools_by_name:
+        if t not in tools_by_name and t not in LEGACY_TOOLS:
             err("scripts/guard-bolta-writes.sh", f"guards {t!r}, which is not an exposed Bolta tool")
     if not any(h.get("onFailure") == "block" for h in guards[0].get("hooks", [])):
         warn("hooks/hooks.json", "the guard has no \"onFailure\": \"block\"; a crashed guard would let the call through")
-    check_matcher_samples("PreToolUse guard", matcher, "approve-post")
+    check_matcher_samples("PreToolUse guard", matcher, "publish-post")
     gen = load_generator()
     for event in ("PostToolUse", "PostToolUseFailure"):
         for g in hook_groups(cfg, event):
             m = g.get("matcher", "")
             tools = matcher_tools(m)
-            sample = sorted(tools)[0] if tools else "approve-post"
+            sample = sorted(tools)[0] if tools else "publish-post"
             if tools is None:
                 err("hooks/hooks.json", f"{event} matcher must name Bolta's tools (any server name is too wide for it)")
             check_matcher_samples(f"{event}", m, sample)
@@ -1329,7 +1360,8 @@ def _covered(key: dict, units) -> str | None:
 
 
 def _example_keys(exdir: pathlib.Path):
-    """Per network: field names set through update-post-platform-details, and platform_specific keys."""
+    """Per network: field names set through save-post platform_details (or Release 1's
+    update-post-platform-details platform + fields), and platform_specific keys."""
     fields: dict[str, set] = {}
     ps: dict[str, set] = {}
 
@@ -1337,6 +1369,11 @@ def _example_keys(exdir: pathlib.Path):
         if isinstance(node, dict):
             if isinstance(node.get("platform"), str) and isinstance(node.get("fields"), dict):
                 fields.setdefault(node["platform"], set()).update(node["fields"])
+            details = node.get("platform_details")
+            if isinstance(details, dict):
+                for net, data in details.items():
+                    if isinstance(data, dict):
+                        fields.setdefault(net, set()).update(data)
             spec = node.get("platform_specific")
             if isinstance(spec, dict):
                 for net, data in spec.items():

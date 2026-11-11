@@ -12,6 +12,7 @@ Five lines or fewer on what needs the user (per brand), then one next step.
 - `get-voice-context` failing with "No voice profile" is an answer (no voice yet), not a fault. No accounts or no voice: hand to [start](start.md).
 - **The summary** ([today-what-needs-me.md](today-what-needs-me.md)): read fresh, all at once. At most 5 lines (per brand), no empty ones; Running: each Bolta routine's next drafts (day, time), each campaign's week. Then the most urgent next step: one question only. Waiting = `total_team` + `total_recurring`; reply drafts (`total_hunter`) count apart. Never name Bolta's writer (`post_creator`).
 - **Choose quietly.** One thing now: [post](post.md). "Every", "weekly", "keep posting", "each time X": [routine](routine.md). "Launch", "sale", "event", "for 3 weeks", "by Nov 3": [campaign](campaign.md). Unsure? Can they name the subject, the end, and want a verdict? Any no: [routine](routine.md). Still unclear? Ask once: "Should this keep going with no end, or is it about one thing that ends?"
+- **A refusal** names the role or access that's missing: say it plainly ([connect](connect.md)).
 - **Read Bolta's own state.** A Bolta routine's `display_state` and `pause_reason`, a draft's `expires_at`, a post's `reconnect_accounts`: show them, never re-derive them.
 - Before the first reply, read [today-plain-words.md](today-plain-words.md): words to use and never say, how to show results.
 - **The one next step**: the first that applies; the only question. In a scheduled run, the summary is the whole job; the next step is a suggestion.
@@ -23,14 +24,13 @@ Five lines or fewer on what needs the user (per brand), then one next step.
 
 ## Tools
 
-- `list-workspaces`, `get-workspace`, `list-accounts`, `get-voice-context`: the look-once reads.
+- `list-workspaces` (each row is the brand's full settings), `list-accounts`, `get-voice-context`: the look-once reads.
 - `list-inbox-items`: what waits for a yes; finished reports (`source="report"`, `status="approved"`).
-- `list-scheduled-posts` with `start_date`/`end_date` for the next 7 days; each row's `reconnect_accounts` names a disconnected account holding it up.
+- `list-workspace-posts` with `account_ids` (every account from `list-accounts`) and `start_date`/`end_date` for the next 7 days; each row's `reconnect_accounts` names a disconnected account holding it up.
 - `list-workspace-posts` with `status="failed"`: what didn't go out.
 - `list-routines`: Bolta routines on, next drafts.
 - `list-content-campaigns`: each campaign's week or end.
 - `get-connect-link`: a reconnect link.
-- `get-my-capabilities`: only after a refusal.
 
 ## Hand off
 

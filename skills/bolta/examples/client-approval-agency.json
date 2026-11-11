@@ -3,11 +3,9 @@
   "playbook": "review",
   "steps": [
     {
-      "tool": "get-workspace",
-      "arguments": {
-        "workspace_id": "<Acme's workspace id>"
-      },
-      "why": "The brand's clock and review mode. It does not show whether client sign-off is required, so that is read from a post next."
+      "tool": "list-workspaces",
+      "arguments": {},
+      "why": "Acme's row gives the brand's clock and review mode. It does not show whether client sign-off is required, so that is read from a post next."
     },
     {
       "tool": "list-inbox-items",
@@ -37,7 +35,7 @@
   "never": [
     "Saying the drafts were sent to the client: a hand-picked request is sent in Bolta, not from here.",
     "Approving the drafts for the team to save the client a step.",
-    "Telling a creator they can approve for the team because get-my-capabilities shows approve_posts.",
+    "Telling a creator they can approve for the team: a team yes is owners and admins only, and a refusal names the role.",
     "Moving a post's time while the client hasn't answered without saying it voids the request."
   ]
 }

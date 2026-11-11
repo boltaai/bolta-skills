@@ -335,6 +335,30 @@ for lvl in standard careful; do
     check_guard "table: decide-bolta-suggestion $d asks ($lvl)" ask "$lvl" "$(pre "${P}decide-bolta-suggestion" "{\"workspace_id\":\"$WS\",\"suggestion_id\":\"s1\",\"decision\":$d}")"
   done
   check_guard "table: decide-bolta-suggestion with no decision asks ($lvl)" ask "$lvl" "$(pre "${P}decide-bolta-suggestion" "{\"workspace_id\":\"$WS\",\"suggestion_id\":\"s1\"}")"
+  # Release 2: decide-suggestion answers both kinds of suggestion.
+  check_guard "table: decide-suggestion decline is silent unless careful ($lvl)" "$e" "$lvl" "$(pre "${P}decide-suggestion" "{\"workspace_id\":\"$WS\",\"suggestion_id\":\"s1\",\"decision\":\"decline\"}")"
+  for d in '"accept"' '"undo"' '"Accept"' '"dismiss"' '["decline"]' null; do
+    check_guard "table: decide-suggestion $d asks ($lvl)" ask "$lvl" "$(pre "${P}decide-suggestion" "{\"workspace_id\":\"$WS\",\"suggestion_id\":\"s1\",\"decision\":$d}")"
+  done
+  # Release 2: save-post. A new post is always a plain draft (silent, as create-post was);
+  # an edit, taking a post off the schedule, or anything unreadable asks.
+  check_guard "table: save-post new draft is silent ($lvl)" silent "$lvl" "$(pre "${P}save-post" "{\"workspace_id\":\"$WS\",\"content\":\"Hello\",\"account_ids\":[\"$ACC\"],\"idempotency_key\":\"k1\"}")"
+  check_guard "table: save-post new thread with settings is silent ($lvl)" silent "$lvl" "$(pre "${P}save-post" "{\"workspace_id\":\"$WS\",\"parts\":[\"a\",\"b\"],\"platform_specific\":{\"x\":{\"text\":\"x\"}},\"platform_details\":{\"threads\":{\"topic_tag\":\"t\"}}}")"
+  check_guard "table: save-post edit asks ($lvl)" ask "$lvl" "$(pre "${P}save-post" "{\"workspace_id\":\"$WS\",\"post_id\":\"$PID\",\"content\":\"New text\"}")"
+  check_guard "table: save-post settings on a post asks ($lvl)" ask "$lvl" "$(pre "${P}save-post" "{\"workspace_id\":\"$WS\",\"post_id\":\"$PID\",\"platform_details\":{\"reddit\":{\"title\":\"t\"}}}")"
+  check_guard "table: save-post unschedule asks ($lvl)" ask "$lvl" "$(pre "${P}save-post" "{\"workspace_id\":\"$WS\",\"post_id\":\"$PID\",\"unschedule\":true}")"
+  for k in scheduled_time status requested_action surprise; do
+    check_guard "table: save-post with $k asks ($lvl)" ask "$lvl" "$(pre "${P}save-post" "{\"workspace_id\":\"$WS\",\"content\":\"Hi\",\"$k\":\"x\"}")"
+  done
+  check_guard "table: save-post unschedule with no post asks ($lvl)" ask "$lvl" "$(pre "${P}save-post" "{\"workspace_id\":\"$WS\",\"content\":\"Hi\",\"unschedule\":true}")"
+  # Release 2: publish-post schedules or posts now; it always asks, window or not.
+  check_guard "table: publish-post with a time asks ($lvl)" ask "$lvl" "$(pre "${P}publish-post" "{\"workspace_id\":\"$WS\",\"post_id\":\"$PID\",\"when\":\"2026-11-12T09:00:00\"}")"
+  # Release 2: update-content-campaign carries the campaign targets.
+  check_guard "table: update-content-campaign with accounts on a campaign not made here asks ($lvl)" ask "$lvl" "$(pre "${P}update-content-campaign" "{\"campaign_id\":\"$CID1\",\"account_ids\":[\"$ACC\"]}")"
+  for k in duration_weeks context_notes context_sources voice_profile_id; do
+    check_guard "table: update-content-campaign with $k asks ($lvl)" ask "$lvl" "$(pre "${P}update-content-campaign" "{\"campaign_id\":\"$CID1\",\"$k\":null}")"
+  done
+  check_guard "table: update-content-campaign attaching posts is silent ($lvl)" silent "$lvl" "$(pre "${P}update-content-campaign" "{\"campaign_id\":\"$CID1\",\"post_ids\":[\"$PID\"]}")"
 done
 check_guard "confirm-plan switched on says it uses credits" ask standard "$(pre "${P}confirm-plan" "{\"proposal_id\":\"p1\",\"switch_on\":true}")" "Uses credits now"
 check_guard "decide-bolta-suggestion accept names what it can change" ask standard "$(pre "${P}decide-bolta-suggestion" "{\"suggestion_id\":\"s1\",\"decision\":\"accept\"}")" "switch a Bolta routine on"
@@ -855,6 +879,8 @@ check_guard "campaign: before it exists, setting targets asks" ask standard "$(p
 mark "${P}create-content-campaign" "$CC_IN" "$(campaign_resp "$CID1" draft)"
 assert "campaign: the marker is written" test -f "$(mdir)/campaign-$SP-$CID1"
 check_guard "campaign: setting targets on the draft made here is silent" silent standard "$(pre "${P}set-content-campaign-targets" "$T1")"
+check_guard "campaign: Release 2 accounts on the draft made here are silent" silent standard "$(pre "${P}update-content-campaign" "$T1")"
+check_guard "campaign: Release 2 accounts on another campaign ask" ask standard "$(pre "${P}update-content-campaign" "$T2")"
 check_guard "campaign: same id in capitals is the same campaign" silent standard "$(pre "${P}set-content-campaign-targets" "{\"campaign_id\":\"$CID1UP\",\"duration_weeks\":2}")"
 check_guard "campaign: careful asks even for the draft made here" ask careful "$(pre "${P}set-content-campaign-targets" "$T1")"
 check_guard "campaign: another campaign asks" ask standard "$(pre "${P}set-content-campaign-targets" "$T2")"
@@ -1210,7 +1236,7 @@ assert "wiring: PostToolUseFailure runs the auth notice" sh -c 'case "$1" in *sc
 assert "wiring: UserPromptSubmit runs the new-message reset" sh -c 'case "$1" in *scripts/bolta-new-turn.sh*) exit 0;; esac; exit 1' x "$(jfield hooks.UserPromptSubmit.0.hooks.0.command < "$hj")"
 assert "wiring: SessionStart runs the house rules" sh -c 'case "$1" in *scripts/bolta-house-rules.sh*) exit 0;; esac; exit 1' x "$(jfield hooks.SessionStart.0.hooks.0.command < "$hj")"
 assert "wiring: UserPromptSubmit does not block on failure" sh -c '[ "$1" != block ]' x "$(jfield hooks.UserPromptSubmit.0.hooks.0.onFailure < "$hj" 2>/dev/null)"
-GATED="publish-post schedule-post approve-post approve-many-posts reject-post approve-recurring-review reject-recurring-review send-outreach-reply publish-engagement-reply reply-to-social-content react-to-social-content activate-routine resume-routine run-routine-now delete-post archive-routine set-content-campaign-status set-content-campaign-targets update-post update-post-platform-details update-social-bucket restore-deleted update-business-dna extract-business-dna update-voice-profile create-routine update-routine create-post bulk-create-posts create-wordpress-blog-post voice-generate confirm-plan decide-routine-recommendation decide-bolta-suggestion"
+GATED="publish-post schedule-post approve-post approve-many-posts reject-post approve-recurring-review reject-recurring-review send-outreach-reply publish-engagement-reply reply-to-social-content react-to-social-content activate-routine resume-routine run-routine-now delete-post archive-routine set-content-campaign-status set-content-campaign-targets update-post update-post-platform-details update-social-bucket restore-deleted update-business-dna extract-business-dna update-voice-profile create-routine update-routine create-post bulk-create-posts create-wordpress-blog-post voice-generate confirm-plan decide-routine-recommendation decide-bolta-suggestion save-post decide-suggestion update-content-campaign"
 ngated=$(printf '%s\n' $GATED | wc -l | tr -d ' ')
 miss=""
 for pfx in "$P" "$U" "$C" "$CB" "$A" mcp__plugin_bolta_bolta-acme__ mcp__social__ mcp__my-posts__ mcp__claude_ai_Social_posts__ mcp__0a1b2c3d-4e5f-4a6b-8c7d-9e0f1a2b3c4d__; do
@@ -1222,7 +1248,7 @@ assert "wiring: the guard matcher covers all $ngated gated tools under any serve
 extra=""
 # Another server's tool that shares a Bolta tool's name (mcp__github__create-post) gets the check too, by design:
 # the guard can only ask, and the plugin cannot know which server is Bolta.
-for name in "${P}pause-routine" "${P}submit-for-review" "${P}propose-cascade" "${P}update-cascade" "${P}start-cascade" "${P}plan-routine" "${P}plan-campaign" "${P}revise-plan" "${P}recommend-routines" "${P}list-workspace-members" "${P}confirm-plan-x" "${P}list-workspace-posts" "${P}create-content-campaign" "${P}analyze-content-campaign-source" "${P}update-content-campaign" "${P}approve-many-posts-x" "${P}reject-post-x" "${P}list-business-dna" "${P}update-outreach-reply" mcp__github__search_repositories mcp__social__list-nothing "${P}publish-post-x" "x${P}publish-post" mcp____publish-post; do
+for name in "${P}pause-routine" "${P}submit-for-review" "${P}propose-cascade" "${P}update-cascade" "${P}start-cascade" "${P}plan-routine" "${P}plan-campaign" "${P}revise-plan" "${P}recommend-routines" "${P}list-workspace-members" "${P}confirm-plan-x" "${P}list-workspace-posts" "${P}create-content-campaign" "${P}analyze-content-campaign-source" "${P}plan" "${P}list-suggestions" "${P}save-post-x" "${P}approve-many-posts-x" "${P}reject-post-x" "${P}list-business-dna" "${P}update-outreach-reply" mcp__github__search_repositories mcp__social__list-nothing "${P}publish-post-x" "x${P}publish-post" mcp____publish-post; do
   printf '%s\n' "$name" | grep -Eq -- "$pre_m" && extra="$extra $name"
 done
 assert "wiring: the guard matcher leaves other tools alone${extra:+ (matched:$extra)}" test -z "$extra"
@@ -1238,15 +1264,15 @@ full_notice=$(jfield hooks.PostToolUse.0.matcher < "$hj")
 full_fail=$(jfield hooks.PostToolUseFailure.0.matcher < "$hj")
 miss=""
 for pfx in "$P" "$U" "$C" mcp__social__ mcp__claude_ai_Social_posts__; do
-  for tool in $GATED list-inbox-items get-workspace list-accounts; do
+  for tool in $GATED list-inbox-items list-workspaces list-accounts; do
     for m in "$full_notice" "$full_fail"; do
       printf '%s\n' "$pfx$tool" | grep -Eq -- "$m" || miss="$miss $pfx$tool"
     done
   done
 done
 assert "wiring: the reconnect notice covers Bolta's tools under any server name${miss:+ (missing:$miss)}" test -z "$miss"
-# The server's tool list (tools/fixtures/claude_tools_list.json, the Release 1
-# golden): every tool in it is gated or deliberately not, and the reconnect notice
+# The server's tool list (tools/fixtures/claude_tools_list.json, the Release 2
+# golden: 64 listed tools): every tool in it is gated or deliberately not, and the reconnect notice
 # reaches every one, so a new or renamed tool on the server fails here until
 # someone decides about it.
 fixture="$here/fixtures/claude_tools_list.json"
@@ -1255,16 +1281,20 @@ i=0
 while ft=$(jfield "result.tools.$i.name" < "$fixture" 2>/dev/null) && [ -n "$ft" ]; do
   ftools="$ftools $ft"; i=$((i + 1))
 done
-assert "wiring: the server tool list was read ($i tools, 94 expected)" test "$i" -eq 94
+assert "wiring: the server tool list was read ($i tools, 64 expected)" test "$i" -eq 64
 # Not gated, on purpose: reads, drafts, review sends, planning without saving,
 # saving a team version's plan (start-cascade writes drafts only), campaign briefs.
-UNGATED="add-posts-to-content-campaign analyze-content-campaign-source bulk-create-status create-content-campaign create-engagement-opportunity create-social-bucket create-voice-profile cross-platform-analytics draft-engagement-reply draft-inbound-reply get-account-analytics get-business-dna get-cascade get-connect-link get-content-campaign get-engagement-conversation get-engagement-status get-my-capabilities get-post get-post-platform-details get-posting-rules get-routine get-social-content get-voice-context get-voice-profile get-workspace list-account-insights list-accounts list-bolta-suggestions list-buckets list-business-dna list-content-campaign-posts list-content-campaigns list-engagement-capabilities list-engagements list-inbox-items list-recently-deleted list-recurring-reviews list-reviews list-routine-recommendations list-routine-runs list-routine-templates list-routines list-scheduled-posts list-voice-profiles list-workspace-members list-workspace-posts list-workspaces pause-routine plan-campaign plan-routine propose-cascade recommend-routines revise-plan search-engagement-opportunities start-cascade submit-for-review update-cascade update-content-campaign update-outreach-reply"
+UNGATED="add-posts-to-content-campaign analyze-content-campaign-source bulk-create-status create-content-campaign create-engagement-opportunity create-social-bucket create-voice-profile cross-platform-analytics draft-engagement-reply draft-inbound-reply get-account-analytics get-business-dna get-cascade get-connect-link get-content-campaign get-engagement-conversation get-engagement-status get-my-capabilities get-post get-post-platform-details get-posting-rules get-routine get-social-content get-voice-context get-voice-profile get-workspace list-account-insights list-suggestions plan list-accounts list-bolta-suggestions list-buckets list-business-dna list-content-campaign-posts list-content-campaigns list-engagement-capabilities list-engagements list-inbox-items list-recently-deleted list-recurring-reviews list-reviews list-routine-recommendations list-routine-runs list-routine-templates list-routines list-scheduled-posts list-voice-profiles list-workspace-members list-workspace-posts list-workspaces pause-routine plan-campaign plan-routine propose-cascade recommend-routines revise-plan search-engagement-opportunities start-cascade submit-for-review update-cascade update-outreach-reply"
+# Release 1 names the Release 2 server no longer lists but still answers by name. The
+# ones that write stay gated (a model can still call them); a name listed here is allowed
+# in GATED or UNGATED without being in the fixture.
+LEGACY="get-workspace get-my-capabilities list-buckets create-social-bucket update-social-bucket list-engagement-capabilities list-scheduled-posts list-content-campaign-posts get-post-platform-details create-post update-post update-post-platform-details schedule-post approve-post approve-recurring-review list-reviews list-recurring-reviews reject-recurring-review get-engagement-conversation create-engagement-opportunity get-engagement-status cross-platform-analytics list-voice-profiles get-business-dna resume-routine set-content-campaign-targets add-posts-to-content-campaign plan-routine plan-campaign recommend-routines list-routine-recommendations list-bolta-suggestions decide-routine-recommendation decide-bolta-suggestion"
 undecided="" stale=""
 for t in $ftools; do
   case " $GATED $UNGATED " in *" $t "*) ;; *) undecided="$undecided $t" ;; esac
 done
 for t in $GATED $UNGATED; do
-  case " $ftools " in *" $t "*) ;; *) stale="$stale $t" ;; esac
+  case " $ftools $LEGACY " in *" $t "*) ;; *) stale="$stale $t" ;; esac
 done
 assert "wiring: every server tool is gated or listed as not gated${undecided:+ (undecided:$undecided)}" test -z "$undecided"
 assert "wiring: every gated or not-gated name is a server tool${stale:+ (not on the server:$stale)}" test -z "$stale"

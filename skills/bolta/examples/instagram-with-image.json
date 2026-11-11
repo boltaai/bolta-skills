@@ -3,7 +3,7 @@
   "playbook": "post",
   "steps": [
     {
-      "tool": "create-post",
+      "tool": "save-post",
       "arguments": {
         "workspace_id": "<brand's workspace id>",
         "content": "New roast, out today. Notes of plum and cocoa.",

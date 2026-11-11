@@ -19,7 +19,7 @@ Advice from how Bolta behaves; the user decides.
 2. Write the drafts ([post](post.md)) and show them in full.
 3. Send them: "Send these to the client from Approvals in Bolta: bolta.ai/dashboard/approvals. Pick the client, mark who must sign off." A straight-to-client routine or a Library post marked "send to the client" are the two ways from here ([client approval](review-client-approval.md)), each only on a yes naming the client.
 4. Follow up with `get-post` per post (`client_signoff`); review list rows don't show it.
-5. After the client's yes the post is scheduled; read the times back with `list-scheduled-posts`. If the sender's own setting approves without scheduling, a hand-made post with no time still needs one.
+5. After the client's yes the post is scheduled; read the times back with `list-workspace-posts` and their `account_ids`. If the sender's own setting approves without scheduling, a hand-made post with no time still needs one.
 
 Later drafts from the same Bolta routine or Library fill join its open request without a second email; nothing else can be added to a request already sent.
 

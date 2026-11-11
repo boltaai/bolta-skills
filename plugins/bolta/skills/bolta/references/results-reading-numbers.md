@@ -4,11 +4,11 @@ Read before quoting any account or post number. Best posts, fields per network, 
 
 ## Account numbers
 
-From `cross-platform-analytics`, `list-account-insights` and `get-account-analytics`. They take `days` (default 30, max 365), counted back from now. Account snapshots sync at least once a day (LinkedIn, Mastodon, Reddit and Bluesky only once), so the newest activity may not be in them yet.
+From `list-account-insights` (per account, or per network with `by_platform: true`) and `get-account-analytics`. They take `days` (default 30, max 365), counted back from now. Account snapshots sync at least once a day (LinkedIn, Mastodon, Reddit and Bluesky only once), so the newest activity may not be in them yet.
 
-- On `cross-platform-analytics` and `list-account-insights`, `engagement` is what the posts published in the window earned. `impressions` is on the same basis, for Instagram, X, Threads and LinkedIn only; `null` means not reported. `engagement_lifetime` is all-time: quote it only when asked.
-- On `cross-platform-analytics`, `likes`, `replies` and `reposts` per network are activity gained in the window, so they need not add up to `engagement`.
-- On `cross-platform-analytics`, Facebook's `accounts` counts Pages, not logins.
+- On `list-account-insights`, both views, `engagement` is what the posts published in the window earned. `impressions` is on the same basis, for Instagram, X, Threads and LinkedIn only; `null` means not reported. `engagement_lifetime` is all-time: quote it only when asked.
+- On the `by_platform` view, `likes`, `replies` and `reposts` per network are activity gained in the window, so they need not add up to `engagement`.
+- On the `by_platform` view, Facebook's `accounts` counts Pages, not logins.
 - An `engagement` of 0 where `impressions` is null may be unknown: check that account in `list-account-insights`, where unknown shows as `null`.
 - `null` means no earlier reading to compare with, or a network that reports none: unknown, not zero. The network summary leaves such accounts out of its window totals, so name the missing account.
 - `get-account-analytics` totals are still differences between snapshots. Quote `totals.engagement` and `followers_change`; never add up the daily series. Each day is that day's change, and the `*_cumulative` fields are running totals. `counter_reset: true` marks a day the lifetime count fell (deleted posts or a reconnect), not a slump.

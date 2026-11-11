@@ -29,7 +29,7 @@
       "why": "Started now, the weeks already over would be skipped, never written. Two full weeks from next Monday instead."
     },
     {
-      "tool": "set-content-campaign-targets",
+      "tool": "update-content-campaign",
       "arguments": {
         "workspace_id": "<brand's workspace id>",
         "campaign_id": "<campaign id>",

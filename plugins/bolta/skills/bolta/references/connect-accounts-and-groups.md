@@ -15,32 +15,31 @@ Connecting: [networks](connect-networks.md).
 
 ## Account groups
 
-A post sent to a group goes to every member connected when it goes out, not when scheduled. Read groups and accounts fresh before any write.
+Read them with `list-accounts` and `groups: true`. A post sent to a group goes to every member connected when it goes out, not when scheduled. Read groups and accounts fresh before talking about one.
 
-- **Members are real accounts.** Most rows: the row's own id. A Facebook Page or LinkedIn company page: its `base_account_id`. A Page or company-page id is refused, and nothing changes, not even a rename.
+- **Making, renaming or changing a group happens only in the Bolta web app:** bolta.ai/dashboard/account/socials (the Social Buckets tab). Say it in one line with that link, then on "done" read the groups back and compare with what they wanted.
+- **Members are real accounts.** A Facebook Page or LinkedIn company page is not a member; its `base_account_id` is.
 - **Several accounts match** ("my LinkedIn" with 2 company pages): ask which, offering the personal one.
 
 **Make a group** ("a group called Launch Team with LinkedIn and X"):
 - Compare the name with existing groups, ignoring case. Names match exactly, so "launch team" and "Launch Team" could both exist. Near match: offer to change that one instead.
-- No check. Read the groups back, then: "Saved to Acme: Launch Team = LinkedIn (Jane), X (@acme)."
+- Then: "Make it in Bolta at bolta.ai/dashboard/account/socials, then tell me." Read back: "Acme's Launch Team = LinkedIn (Jane), X (@acme)."
 - An empty group is allowed: confirm it.
 
 **Change a group** ("add Instagram", "take X out", "rename it"):
-- The members you send become the whole group. Send current members plus or minus the change. Sending only the new one removes everyone else.
-- Rename only: leave members out. An empty list empties the group.
-- Show before and after: "Launch Team now: LinkedIn, X. After: LinkedIn, X, Instagram. Posts already scheduled to it go to Instagram too."
-- Saw "Bolta checks are on in this session" at the start? The Bolta check is the ask; otherwise get a yes in words.
-- Read the groups back and compare with what you promised.
+- Show before and the after they want: "Launch Team now: LinkedIn, X. After: LinkedIn, X, Instagram. Posts already scheduled to it go to Instagram too." Then the link.
+- On "done", read the groups back and show the members by name and network.
 
 **Limits:**
-- Nothing here deletes a group or changes its icon: bolta.ai/dashboard/account/socials (the Social Buckets tab). Offer a rename instead.
-- A group made here holds the account, not a chosen Page or company page. Its posts go to that account's default (the primary Page; the LinkedIn personal profile). A company-page choice is set on that Bolta page; Facebook Page choices there aren't used. Never say a group "has the Acme Page" from this read.
+- Deleting a group or changing its icon is also on that page. Offer a rename instead of a delete.
+- A group holds the account, not a chosen Page or company page. Its posts go to that account's default (the primary Page; the LinkedIn personal profile). A company-page choice is set on that Bolta page; Facebook Page choices there aren't used. Never say a group "has the Acme Page" from this read.
+- To post to a group: `social_buckets` with the group's id on `save-post`, passed whole ([post](post.md)).
 
-## When a write fails
+## When something doesn't match
 
-See [connect-accounts-and-groups-errors.md](connect-accounts-and-groups-errors.md) for what each refusal means and what to do next.
+See [connect-accounts-and-groups-errors.md](connect-accounts-and-groups-errors.md) for what a missing group, a refused group on a post, or a refusal means and what to do next.
 
 ## Always
 
 - Follow the house rules in the Bolta skill.
-- Show a group's members before and after any change, by name and network.
+- Show a group's members before and after any change made in Bolta, by name and network.

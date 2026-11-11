@@ -1,10 +1,10 @@
 # Bolta's suggestions for the brand
 
-Read after [routine-improving.md](routine-improving.md) when the user asks what Bolta suggests, or the same complaint keeps coming back. These are brand-wide; a single routine's weekly recommendations are a different list (`list-routine-recommendations`).
+Read after [routine-improving.md](routine-improving.md) when the user asks what Bolta suggests, or the same complaint keeps coming back. These are brand-wide; a single routine's weekly recommendations are a different list (`list-suggestions` with `kind: "routine"`).
 
 ## What they are
 
-`list-bolta-suggestions` turns approvals, edits and rejections into one change each. Bolta finds them itself, shortly after review decisions, and keeps at most 2 open. Examples: pause a routine whose last 3 decided drafts were all no; post less often; move a routine's time to when drafts get moved to; add a phrase the user keeps adding to its brief; carousels of the brand's own photos; only their own photos; a seasonal campaign; reuse best posts. Show its title, reason and every change it lists: accepting can change a voice or schedule, switch a routine on or off, or start a campaign. Only an owner or admin can decide (`can_decide`). On a yes: `decide-bolta-suggestion` `accept`; `undo` works for 7 days.
+`list-suggestions` with `kind: "brand"` turns approvals, edits and rejections into one change each. Bolta finds them itself, shortly after review decisions, and keeps at most 2 open. Examples: pause a routine whose last 3 decided drafts were all no; post less often; move a routine's time to when drafts get moved to; add a phrase the user keeps adding to its brief; carousels of the brand's own photos; only their own photos; a seasonal campaign; reuse best posts. Show its title, reason and every change it lists: accepting can change a voice or schedule, switch a routine on or off, or start a campaign. Only an owner or admin can decide (`can_decide`). On a yes: `decide-suggestion` with its `suggestion_id` and `decision: "accept"`; `decline` turns it down; `undo` works for 7 days.
 
 ## Deciding one
 

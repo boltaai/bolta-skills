@@ -9,7 +9,7 @@ It's on, changed, paused or stopped; they know when drafts land: "Bolta routine 
 ## Know this
 
 - **One sentence is enough.** Fill every field. What it can make and which fits: [routine-templates.md](routine-templates.md).
-- **Bolta's planner first.** One routine, or a blank start: `plan-routine`; several: `recommend-routines`. Change with `revise-plan`, save switched off with `confirm-plan`: [routine-planner.md](routine-planner.md).
+- **Bolta's planner first.** One routine, or a blank start: `plan` `kind: "routine"`; several: `kind: "recommend"`. Change with `revise-plan`, save switched off with `confirm-plan`: [routine-planner.md](routine-planner.md).
 - **Load first:** drafts a week from active routines and campaigns, what waits (`list-inbox-items`), whether drafts get decided (`get-routine` `performance_summary`). Over about 6 a week (advice): "That's about 9 drafts a week to review. Make it 2?" 10+ waiting, or made but not decided: say the counts and offer to go through them first. Still want more: at most what Bolta's planner sizes, a report first (no review); never three new routines onto a backlog. Same job, same network: change that routine.
 - **One summary, then "Turn it on?"** Skip it only after a yes to an offer naming networks, count, day, time, "they wait for your yes" and "uses credits each run"; the offer's words are then the `goal`, never this week's topic. A yes to set up a proposal ("set up 1 and 2") saves each switched off, then asks "Switch them on?" ([start](start.md)).
   > **Bolta routine: Weekly LinkedIn, hiring**
@@ -26,12 +26,12 @@ It's on, changed, paused or stopped; they know when drafts land: "Bolta routine 
 
 ## Tools
 
-- `plan-routine`, `recommend-routines`, `revise-plan`, `confirm-plan`: Bolta's planner.
-- `list-routine-templates`, `list-routines`, `get-routine`, `list-voice-profiles`, `list-workspace-members`.
+- `plan`, `revise-plan`, `confirm-plan`: Bolta's planner.
+- `list-routine-templates`, `list-routines`, `get-routine`, `get-voice-context`, `list-workspace-members`.
 - `create-routine`, `update-routine`.
-- `activate-routine`, `pause-routine`, `resume-routine`, `archive-routine`: on, pause, resume, stop.
+- `activate-routine`, `pause-routine`, `archive-routine`: on or resume, pause, stop.
 - `run-routine-now`, `list-routine-runs`.
-- `list-routine-recommendations`, `decide-routine-recommendation`, `list-bolta-suggestions`, `decide-bolta-suggestion`: Bolta's changes, on a yes.
+- `list-suggestions`, `decide-suggestion`: Bolta's changes, on a yes.
 
 ## Hand off
 

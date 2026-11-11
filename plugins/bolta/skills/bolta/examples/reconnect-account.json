@@ -27,9 +27,12 @@
       "why": "Only after the user says done. Valid now: say it's connected. Still invalid: the sign-in went to another brand or a different LinkedIn profile; ask them to check the switcher and try again."
     },
     {
-      "tool": "list-scheduled-posts",
+      "tool": "list-workspace-posts",
       "arguments": {
         "workspace_id": "<brand's workspace id>",
+        "account_ids": [
+          "<each LinkedIn account id from the read>"
+        ],
         "start_date": "<now, UTC with Z>",
         "end_date": "<7 days ahead, UTC with Z>"
       },

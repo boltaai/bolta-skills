@@ -18,22 +18,14 @@
         "content_mix": {
           "text": 2,
           "still_image": 1
-        }
-      },
-      "why": "Problem / Solution (guidance): the pain the webinar solves, then the seat. Two weeks starting Friday Nov 27, so the second week ends on the event day, Thu Dec 10. X can't take a carousel, so the mix is text and an image, which both networks take."
-    },
-    {
-      "tool": "set-content-campaign-targets",
-      "arguments": {
-        "workspace_id": "<brand's workspace id>",
-        "campaign_id": "<campaign id>",
+        },
         "account_ids": [
           "<LinkedIn account id>",
           "<X account id>"
         ],
         "context_notes": "Webinar: Pricing for agencies, Thursday Dec 10 at 2pm New York time, free, sign up at acme.com/webinar. Week 1: why agencies underprice. Week 2: the countdown. Every post names the date, Thursday Dec 10, never 'in 3 days' or 'tomorrow', since posting days can move. Facts the user gave, nothing else."
       },
-      "why": "Bolta spreads posts across the week, so a post saying \"tomorrow\" could land on the wrong day. Naming the date keeps every post true. A post that must say \"today\" is pinned to Dec 10 under Post prompts on the campaign page; no call does that."
+      "why": "Problem / Solution (guidance): the pain the webinar solves, then the seat. Two weeks starting Friday Nov 27, so the second week ends on the event day, Thu Dec 10. X can't take a carousel, so the mix is text and an image, which both networks take. Accounts and notes go on the same create call, so it is made with them. Bolta spreads posts across the week, so a post saying \"tomorrow\" could land on the wrong day. Naming the date keeps every post true. A post that must say \"today\" is pinned to Dec 10 under Post prompts on the campaign page; no call does that."
     },
     {
       "tool": "set-content-campaign-status",

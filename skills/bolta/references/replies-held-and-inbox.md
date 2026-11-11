@@ -2,7 +2,7 @@
 
 ## Reading a reply's status
 
-`get-engagement-status(engagement_id, verify=true)`:
+`list-engagements(engagement_id, verify=true)`:
 
 | Status | Means | Do |
 |-|-|-|

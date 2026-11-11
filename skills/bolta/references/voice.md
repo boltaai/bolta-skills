@@ -24,13 +24,13 @@ The user has seen their voice, one change is saved and read back, a draft is che
 
 ## Tools
 
-- `list-workspaces`, `get-voice-context`: workspace; the live voice.
-- `list-voice-profiles`, `get-voice-profile`: which voice; one in full, with accounts.
+- `list-workspaces`, `get-voice-context`: workspace; the live voice; `all_profiles`: every voice.
+- `get-voice-profile`: one in full, with accounts.
 - `list-workspace-posts`: recent posts, drafts to check, a sample.
 - `extract-business-dna`: read their website (checked).
 - `create-voice-profile`: make the voice.
 - `update-voice-profile`: change rules, tone or audience (checked).
-- `list-business-dna`, `get-business-dna`, `update-business-dna`: about your business; change it (checked).
+- `list-business-dna` (`dna_id`), `update-business-dna`: about your business; change it (checked).
 - `voice-generate`, `bulk-create-status`, `bulk-create-posts`: a voice batch; its result; saving leftovers.
 
 ## Hand off

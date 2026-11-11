@@ -3,7 +3,7 @@
   "playbook": "post",
   "steps": [
     {
-      "tool": "create-post",
+      "tool": "save-post",
       "arguments": {
         "workspace_id": "<brand's workspace id>",
         "content": "Ten seconds of latte art.",
@@ -28,7 +28,7 @@
       "why": "A trial reel needs REELS and one video, set in the same call. SS_PERFORMANCE: Instagram shares it with followers if it does well; MANUAL would leave that to the user. One setting for the post, so every Instagram account on it gets a trial."
     },
     {
-      "tool": "get-post-platform-details",
+      "tool": "get-post",
       "arguments": {
         "post_id": "<post id>",
         "platform": "instagram"

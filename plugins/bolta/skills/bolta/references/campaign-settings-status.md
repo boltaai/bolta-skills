@@ -12,7 +12,7 @@ Read before changing a campaign's status, or when the user asks when drafts come
 
 ## Stopping is not unscheduling
 
-Pause, finish and retire stop **new** drafts only. Posts already approved and scheduled **still go out**. On "stop the campaign": pause it, then `list-content-campaign-posts`, show the ones still to go out (`status`, scheduled time), and offer to move or delete them one by one ([fix](fix.md) for undo). Undecided drafts just wait; say so.
+Pause, finish and retire stop **new** drafts only. Posts already approved and scheduled **still go out**. On "stop the campaign": pause it, then `list-workspace-posts` with `campaign_id`, show the ones still to go out (`status`, scheduled time), and offer to move or delete them one by one ([fix](fix.md) for undo). Undecided drafts just wait; say so.
 
 ## When drafts land
 

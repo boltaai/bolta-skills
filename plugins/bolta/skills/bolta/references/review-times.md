@@ -4,15 +4,15 @@ Read when a yes names no time, when someone wants a scheduled post moved, or whe
 
 ## Move a scheduled post
 
-- For a post already Scheduled: `update-post` with `post_id` and only `scheduled_time` (wall clock, no Z, no offset; `timezone` only if the user named a place). No `status`, no text, no media, no accounts. It must be in the future.
-- The post stays Scheduled, keeps its approval and keeps a client's yes already given. Only the time moves. A client request not yet answered goes stale instead ([sign-off](review-client-signoff.md)).
+- For a post already Scheduled: `publish-post` with `post_id` and the new `when` (wall clock, no Z, no offset; `timezone` only if the user named a place). It must be in the future. Never `save-post`: it can't take a time, and any edit sends the post back for review.
+- The post stays Scheduled, keeps its approval and keeps a client's yes already given; the result says `rescheduled: true`. Only the time moves. A client request not yet answered goes stale instead ([sign-off](review-client-signoff.md)).
 - Any change to text, media or accounts sends an approved post back for a new yes, and voids a client's sign-off too.
 - Still show the new time and get a yes first: "Move LinkedIn 'Most hiring advice…' to Thu Nov 19, 2:00 pm (New York)?"
 - Read the result's `status` and time back. A refusal says why (a time in the past, a format problem): say it plainly.
 - Still waiting for a yes? Don't move it: name the time in the approval (`set_fixed_time`).
-- Approved with no time, or "Ready for Scheduling": `update-post` stores a time but does not schedule it.
-  - Review mode off: `schedule-post` with the time.
-  - Review mode on: `schedule-post` sends it back to the review list. Instead: `update-post` with `status: "Draft"`, `submit-for-review`, then approve with `set_fixed_time`.
+- Approved with no time, or "Ready for Scheduling":
+  - Review mode off: `publish-post` with the time as `when`.
+  - Review mode on: `publish-post` sends it back to the review list. Instead: `save-post` with `post_id` and its unchanged `content` puts it back on the list with a new `content_fingerprint`, then approve with `set_fixed_time`.
 
 ## When nothing names a time
 
@@ -23,14 +23,14 @@ Read when a yes names no time, when someone wants a scheduled post moved, or whe
 
 ## Time zones
 
-- Every time you send is read in the brand's time zone (`get-workspace` `timezone`).
+- Every time you send is read in the brand's time zone (the `list-workspaces` row's `timezone`).
 - A brand's time zone is `UTC` until someone changes it, and often nobody has. If it reads `UTC` and a time matters, ask once: "Your brand's clock is set to UTC. Which city should I use for times?" Then send that city's zone as `timezone` on each time. That covers only those posts; the brand's own zone changes only in Bolta Settings, so offer that once.
-- `get-workspace` `audience_timezone`, when set, steers the hours Bolta picks itself. Mention it if a picked time looks odd for the brand.
-- `approve-post` and `list-scheduled-posts` give times in UTC. Show them in the brand clock with the city: "Tue Nov 17, 9:07 am (Chicago)".
+- The row's `audience_timezone`, when set, steers the hours Bolta picks itself. Mention it if a picked time looks odd for the brand.
+- `approve-many-posts` and `list-workspace-posts` give times in UTC. Show them in the brand clock with the city: "Tue Nov 17, 9:07 am (Chicago)".
 
 ## "Changed after approval"
 
-- `schedule-post` or `publish-post` can answer that the post changed since it was approved (`approval_reset` true). It is back waiting for a yes.
+- `publish-post` can answer that the post changed since it was approved (`approval_reset` true). It is back waiting for a yes.
 - That is not an error to retry. Show the current text, say what changed if the result names it, and get a new yes: "This post changed since you approved it. Here's the current version. Still yes?"
 - A time-only move never causes it.
 
