@@ -1,0 +1,42 @@
+{
+  "ask": "Draft a Reddit post for r/smallbusiness about how we cut onboarding from 9 steps to 3.",
+  "playbook": "post",
+  "steps": [
+    {
+      "tool": "create-post",
+      "arguments": {
+        "workspace_id": "<brand's workspace id>",
+        "content": "The body of the post. No hashtags on Reddit.",
+        "account_ids": [
+          "<Reddit account id>"
+        ],
+        "idempotency_key": "onboarding-reddit-1"
+      },
+      "why": "Reddit and Discord save with create-post; a bulk item without the subreddit is skipped."
+    },
+    {
+      "tool": "get-post-platform-details",
+      "arguments": {
+        "post_id": "<post id>",
+        "platform": "reddit"
+      },
+      "why": "Shows the fields this network takes and their allowed_values. Copy key names from it."
+    },
+    {
+      "tool": "update-post-platform-details",
+      "arguments": {
+        "post_id": "<post id>",
+        "platform": "reddit",
+        "fields": {
+          "title": "We cut onboarding from 9 steps to 3. Here is what we removed.",
+          "selected_subreddit_id": "<id the user set or named>"
+        }
+      },
+      "why": "Reddit needs a title (256 max) and a subreddit. Unknown keys are ignored with a success reply, so read back."
+    }
+  ],
+  "say": "Saved to Acme as a draft for Reddit. I couldn't pick the subreddit from here: choose r/smallbusiness on the draft in Bolta, then say schedule.",
+  "never": [
+    "A guessed subreddit, board or channel id."
+  ]
+}

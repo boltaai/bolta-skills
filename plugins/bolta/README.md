@@ -9,7 +9,7 @@ Tell Claude what you want to post about. Bolta writes it in your voice every wee
 - "We launch on Nov 3." A **campaign**: 1 to 4 weeks, a strategy, a verdict.
 - "What's waiting?" or "Any mentions?" With 8 or more drafts or 10 or more mentions, read-only **clearing-house** and **community-triage** helpers sort them first (Claude Code, Cowork). You decide.
 
-Start with `/bolta:start` or "set me up".
+Start with `/bolta:bolta` or "set me up". One skill covers all of it.
 
 ## Install
 
@@ -52,4 +52,4 @@ Drafts need none. **Bolta checks** `careful` in `/config` checks every approval.
 
 Bolta (mcp.bolta.ai) gets your requests and decisions. Sign-in is Claude's: the plugin never sees a password and makes no network calls of its own.
 
-v0.4.0 (beta). [Privacy](https://bolta.ai/privacy-policy) · [Terms](https://bolta.ai/tos) · [Support](https://bolta.ai/support) · MIT licence
+v0.5.0 (beta). [Privacy](https://bolta.ai/privacy-policy) · [Terms](https://bolta.ai/tos) · [Support](https://bolta.ai/support) · MIT licence

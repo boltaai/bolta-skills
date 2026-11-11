@@ -5,6 +5,6 @@ tags: [smoke, routing]
 expected_outcome: 'campaign fires; grounds itself in the workspace; shows the plan around Nov 3 for LinkedIn and X with the size math; saves nothing (no campaign, no drafts) and moves nothing.'
 max_turns: 20
 timeout_seconds: 300
-allowed_tools: [Skill]
+allowed_tools: [Skill, Read]
 ---
 Plan my content for November around our new cold brew subscription launching November 3rd. LinkedIn and X, about 3 posts a week. Show me the plan before you save anything.

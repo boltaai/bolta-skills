@@ -15,13 +15,19 @@ execution:
     No to 2, it is too salesy.
   max_turns: 20
   timeout_seconds: 300
-  allowed_tools: [Skill]
+  allowed_tools: [Skill, Read]
 graders:
   - name: skill-fired
     # The review skill owns this ask.
     type: tool_used
     tool: Skill
-    input_match: '"skill"\s*:\s*"(?:[\w-]+:)?(review)"'
+    input_match: '"skill"\s*:\s*"(?:[\w-]+:)?(bolta)"'
+    min: 1
+  - name: playbook-read
+    # One skill now: the ask is routed by which playbook is read.
+    type: tool_used
+    tool: Read
+    input_match: 'references/(review)\.md'
     min: 1
   - name: reads-the-list
     # Finds post 2 on the review list first.

@@ -5,6 +5,6 @@ tags: [smoke, routing]
 expected_outcome: 'connect, today or start fires; reads the workspace and accounts; reports the time zone, the disconnected Instagram account and a reconnect link; changes nothing.'
 max_turns: 15
 timeout_seconds: 300
-allowed_tools: [Skill]
+allowed_tools: [Skill, Read]
 ---
 I just connected Bolta. Can you check that everything is set up properly?

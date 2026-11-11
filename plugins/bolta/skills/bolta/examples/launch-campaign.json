@@ -1,0 +1,73 @@
+{
+  "ask": "Start it.",
+  "playbook": "campaign",
+  "before": "The plan was shown in the previous reply: New pricing, Problem / Solution, Nov 16 to Dec 6 (3 weeks, launch in week 3), 3 images and 1 carousel a week, 12 drafts to review, Bolta writes it.",
+  "steps": [
+    {
+      "tool": "create-content-campaign",
+      "arguments": {
+        "workspace_id": "<brand's workspace id>",
+        "name": "New pricing",
+        "strategy_key": "problem_solution",
+        "theme": "Our new pricing: three plans, one table",
+        "audience": "Small agencies choosing a plan",
+        "cta_text": "See the new pricing",
+        "cta_url": "https://example.com/pricing",
+        "starts_on": "2026-11-16",
+        "ends_on": "2026-12-06",
+        "content_mix": {
+          "still_image": 3,
+          "carousel": 1
+        }
+      },
+      "why": "A launch is problem_solution. ends_on is never null. Only known mix keys; others are dropped silently."
+    },
+    {
+      "tool": "set-content-campaign-targets",
+      "arguments": {
+        "campaign_id": "<campaign id>",
+        "account_ids": [
+          "<LinkedIn account id>",
+          "<Instagram account id>"
+        ],
+        "context_notes": "Launch day is Dec 1. Three plans. Facts the user gave, nothing else.",
+        "context_sources": [
+          {
+            "kind": "url",
+            "ref": "https://example.com/pricing",
+            "title": "Pricing page"
+          }
+        ]
+      },
+      "why": "A campaign with no accounts never starts. Missing here: the user picks accounts on the campaign's page, then says done."
+    },
+    {
+      "tool": "analyze-content-campaign-source",
+      "arguments": {
+        "campaign_id": "<campaign id>",
+        "kind": "url",
+        "ref": "https://example.com/pricing"
+      },
+      "why": "Only sources that were read reach the writer. Say which failed, and why."
+    },
+    {
+      "tool": "set-content-campaign-status",
+      "arguments": {
+        "campaign_id": "<campaign id>",
+        "action": "activate"
+      },
+      "why": "One Bolta check, and it uses credits. Never for a campaign the assistant filled with its own drafts."
+    },
+    {
+      "tool": "get-content-campaign",
+      "arguments": {
+        "campaign_id": "<campaign id>"
+      },
+      "why": "Read back when the first drafts land."
+    }
+  ],
+  "say": "Campaign on for Acme: New pricing, Nov 16 to Dec 6. Week 1's drafts land Sat Nov 14 and wait for your yes.",
+  "never": [
+    "Starting a campaign and also writing its posts by hand: Bolta would write a second set."
+  ]
+}

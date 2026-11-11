@@ -2,6 +2,6 @@
 # v0.2 routing: the connect, today or start skill fires (there are no commands any more).
 type: tool_used
 tool: Skill
-input_match: '"skill"\s*:\s*"(?:[\w-]+:)?(connect|today|start)"'
+input_match: '"skill"\s*:\s*"(?:[\w-]+:)?(bolta)"'
 min: 1
 ---

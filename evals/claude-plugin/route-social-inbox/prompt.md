@@ -5,6 +5,6 @@ tags: [smoke, routing]
 expected_outcome: 'replies fires; reads the review list; shows the reply draft; says it cannot see comments on the user''s own posts; sends nothing.'
 max_turns: 15
 timeout_seconds: 300
-allowed_tools: [Skill]
+allowed_tools: [Skill, Read]
 ---
 Any new mentions or replies I should answer?

@@ -5,6 +5,6 @@ tags: [smoke, friction]
 expected_outcome: 'post fires; reads the voice; saves ONE all-Draft batch on LinkedIn (no times, no prices it was not given), polls it, shows every stored post in full and ends by asking whether to schedule them. Nothing is sent for review, approved, scheduled or published.'
 max_turns: 25
 timeout_seconds: 300
-allowed_tools: [Skill]
+allowed_tools: [Skill, Read]
 ---
 Write a week of LinkedIn posts about our new pricing.

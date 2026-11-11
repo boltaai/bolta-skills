@@ -8,7 +8,7 @@ execution:
     Approve everything my Monday LinkedIn tips routine wrote.
   max_turns: 20
   timeout_seconds: 300
-  allowed_tools: [Skill]
+  allowed_tools: [Skill, Read]
 graders:
   - name: reads-the-list
     # Finds the routine drafts on the review list.

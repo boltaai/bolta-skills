@@ -1106,8 +1106,8 @@ assert "rules: one line of output" test "$(printf '%s\n' "$out" | wc -l | tr -d 
 assert "rules: valid JSON with hookEventName SessionStart" test "$(printf '%s' "$out" | jfield hookSpecificOutput.hookEventName)" = SessionStart
 ctx=$(printf '%s' "$out" | jfield hookSpecificOutput.additionalContext)
 expected=""
-if [ -f "$full/skills/today/SKILL.md" ]; then
-  expected=$(awk '/^## Always/ { a = 1; next } /^## / { a = 0 } a && /^[0-9]+\. /' "$full/skills/today/SKILL.md")
+if [ -f "$full/skills/bolta/SKILL.md" ]; then
+  expected=$(awk '/^## House rules/ { a = 1; next } /^## / { a = 0 } a && /^[0-9]+\. /' "$full/skills/bolta/SKILL.md")
 fi
 if [ "$(printf '%s\n' "$expected" | grep -c .)" -ne 10 ]; then
   expected=$(cat <<'RULES'
@@ -1119,11 +1119,11 @@ if [ "$(printf '%s\n' "$expected" | grep -c .)" -ne 10 ]; then
 6. Never invent facts, prices, dates, links, urgency or results.
 7. Read the result, not just the error flag. Say the reason in plain words. "Invalid or expired API key" means: reconnect, don't retry.
 8. When nobody is watching (a scheduled run): save drafts or send for review only. Everything else becomes a suggestion.
-9. Use the plain words in the today skill's plain-words list. Never show ids, tool names or error codes.
+9. Use the plain words in the Bolta skill's plain-words list. Never show ids, tool names or error codes.
 10. If it can't be done from here: one line, one link.
 RULES
 )
-  pass "rules: today skill not found or changed shape; using the built-in copy"
+  pass "rules: Bolta skill not found or changed shape; using the built-in copy"
 fi
 missing=0
 while IFS= read -r line; do
@@ -1132,16 +1132,17 @@ while IFS= read -r line; do
 done <<EOF
 $expected
 EOF
-assert "rules: all 10 house rules printed word for word (as in the today skill)" test "$missing" -eq 0
+assert "rules: all 10 house rules printed word for word (as in the Bolta skill)" test "$missing" -eq 0
 assert "rules: exactly 10 numbered rules" test "$(printf '%s\n' "$ctx" | grep -c '^[0-9][0-9]*\. ')" -eq 10
-assert "rules: the opening line matches the today skill" sh -c 'printf "%s\n" "$1" | head -n 1 | grep -Fxq "Bolta house rules:" && grep -Fxq "Bolta house rules:" "$2"' x "$ctx" "$full/skills/today/SKILL.md"
+assert "rules: the opening line matches the Bolta skill" sh -c 'printf "%s\n" "$1" | head -n 1 | grep -Fxq "Bolta house rules:" && grep -Fxq "Bolta house rules:" "$2"' x "$ctx" "$full/skills/bolta/SKILL.md"
 assert "rules: ends by saying the Bolta checks are on (the skills' evidence that hooks run)" test "$(printf '%s\n' "$ctx" | tail -n 1)" = "Bolta checks are on in this session."
 # The plan asked for 120 words; the ten rules are fixed text of about 175, so
 # the bound is the rules plus five short framing lines (opening, review
 # routing, declined checks, the card note, checks on).
 words=$(printf '%s' "$ctx" | wc -w | tr -d ' ')
 assert "rules: short enough ($words words, 230 or fewer)" test "$words" -le 230
-assert "rules: sends approve, schedule and post-now asks to the review skill" sh -c 'printf "%s\n" "$1" | grep -Fxq "To approve, schedule or post now, use the review skill first."' x "$ctx"
+review_line="To approve, schedule or post now, read the Bolta skill's review playbook first."
+assert "rules: sends approve, schedule and post-now asks to the review playbook" sh -c 'printf "%s\n" "$1" | grep -Fxq "$2"' x "$ctx" "$review_line"
 assert "rules: a declined check is never retried" sh -c 'printf "%s\n" "$1" | grep -Fxq "A declined Bolta check means not done: say so, and never retry it."' x "$ctx"
 assert "rules: says the card note is not for here and is never mentioned" sh -c 'printf "%s\n" "$1" | grep -Fxq "Some results say a Bolta card already showed them. Nothing showed here: show the data, and never mention that note."' x "$ctx"
 out2=$(run_hook "$rules" "" </dev/null)
@@ -1221,10 +1222,10 @@ assert "wiring: the guard's check texts were found ($nasks)" test "$nasks" -ge 3
 long=$(printf '%s\n' "$asks" | awk '{ n = split($0, s, /[.!?]( |$)/); for (i = 1; i <= n; i++) { c = split(s[i], x, " "); if (c >= 20) printf "[%d words] %s\n", c, s[i] } }')
 assert "wiring: every sentence in a check is under 20 words${long:+ (too long: $long)}" test -z "$long"
 assert "wiring: no check text says call" sh -c '! printf "%s\n" "$1" | grep -Eiq "\bcalls?\b"' x "$asks"
-assert "wiring: plugin.json version is 0.4.0" test "$(jfield version < "$pj")" = 0.4.0
+assert "wiring: plugin.json version is 0.5.0" test "$(jfield version < "$pj")" = 0.5.0
 assert "wiring: plugin.json name is bolta-checks" test "$(jfield name < "$pj")" = bolta-checks
 assert "wiring: plugin.json displayName is BOLTA checks" test "$(jfield displayName < "$pj")" = "BOLTA checks"
-assert "wiring: the full plugin is at the same version" test "$(jfield version < "$full/.claude-plugin/plugin.json")" = 0.4.0
+assert "wiring: the full plugin is at the same version" test "$(jfield version < "$full/.claude-plugin/plugin.json")" = 0.5.0
 assert "wiring: confirm_level defaults to standard" test "$(jfield userConfig.confirm_level.default < "$pj")" = standard
 assert "wiring: confirm_level describes both levels, standard and careful" sh -c 'printf "%s\n" "$1" | grep -Fq "standard:" && printf "%s\n" "$1" | grep -Fq "careful:"' x "$(jfield userConfig.confirm_level.description < "$pj")"
 assert "wiring: confirm_level has no third option" sh -c '! sh "$1" field userConfig.confirm_level.options.2 < "$2" >/dev/null' x "$reader" "$pj"

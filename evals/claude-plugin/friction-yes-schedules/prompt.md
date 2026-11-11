@@ -5,7 +5,7 @@ tags: [smoke, friction]
 expected_outcome: 'Sends all five for review in one call, then attempts approve-post with schedule_mode approve_only (no invented time), never retries a declined approval, and says honestly that nothing was scheduled yet.'
 max_turns: 20
 timeout_seconds: 300
-allowed_tools: [Skill]
+allowed_tools: [Skill, Read]
 ---
 Earlier in this chat you saved 5 drafts (draft ids in the table) and wrote:
 

@@ -1,0 +1,19 @@
+{
+  "name": "bolta",
+  "version": "0.5.0",
+  "description": "Run a brand's social media from your assistant: posts in your voice, a review list, Bolta routines that write every week and campaigns for launches. Nothing goes out until you say yes.",
+  "author": {
+    "name": "BOLTA",
+    "email": "support@bolta.ai"
+  },
+  "homepage": "https://bolta.ai/mcp",
+  "repository": "https://github.com/boltaai/bolta-skills",
+  "license": "MIT",
+  "keywords": [
+    "social-media",
+    "scheduling",
+    "approvals",
+    "routines",
+    "campaigns"
+  ]
+}

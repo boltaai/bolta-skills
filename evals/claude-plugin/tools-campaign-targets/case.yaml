@@ -8,13 +8,19 @@ execution:
     We launch new pricing on Nov 3. Run it for 3 weeks from Oct 19 and get people on the waitlist: bolta.ai/waitlist. Post it on LinkedIn and X, and have Bolta read https://northwind.example/pricing for the details. Start the campaign.
   max_turns: 30
   timeout_seconds: 300
-  allowed_tools: [Skill]
+  allowed_tools: [Skill, Read]
 graders:
   - name: skill-fired
     # The campaign skill owns this ask.
     type: tool_used
     tool: Skill
-    input_match: '"skill"\s*:\s*"(?:[\w-]+:)?(campaign)"'
+    input_match: '"skill"\s*:\s*"(?:[\w-]+:)?(bolta)"'
+    min: 1
+  - name: playbook-read
+    # One skill now: the ask is routed by which playbook is read.
+    type: tool_used
+    tool: Read
+    input_match: 'references/(campaign)\.md'
     min: 1
   - name: creates-once
     # One campaign.

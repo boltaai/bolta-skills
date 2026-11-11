@@ -8,13 +8,19 @@ execution:
     What's waiting for me?
   max_turns: 30
   timeout_seconds: 600
-  allowed_tools: [Skill, Agent]
+  allowed_tools: [Skill, Read, Agent]
 graders:
   - name: skill-fired
     # The review skill owns this ask.
     type: tool_used
     tool: Skill
-    input_match: '"skill"\s*:\s*"(?:[\w-]+:)?(review)"'
+    input_match: '"skill"\s*:\s*"(?:[\w-]+:)?(bolta)"'
+    min: 1
+  - name: playbook-read
+    # One skill now: the ask is routed by which playbook is read.
+    type: tool_used
+    tool: Read
+    input_match: 'references/(review)\.md'
     min: 1
   - name: asks-the-agent
     # 8 or more waiting: the first pass goes to the clearing-house agent.
