@@ -1,0 +1,1 @@
+"id": "e5000000-0000-4000-8000-000000000011", "schedule": {"interval": "weekly", "day": "friday", "time": "12:00"}, "output_config": {"artifact_type": "post", "count": 2, "platforms": ["x"]}, "source_bindings": [{"provider": "social_account", "ref": "a1b2c3d4-0001-4a00-8000-000000000002", "filters": {}}]

@@ -1,0 +1,49 @@
+schema_version: "1.1"
+name: choosing-backlog-forty-waiting
+description: "An owner with 40 drafts already waiting for review asks for three more routines. A good pick is clearing the backlog first or one smaller change; never three new routines."
+tags: [choosing]
+expected_outcome: "bolta fires; names the 40 waiting drafts; offers to go through them first or a smaller setup; at most one routine saved; nothing switched on; ends on a question."
+execution:
+  prompt: |
+    Bolta isn't giving us enough content. Set up three more routines so we have more to post.
+  max_turns: 25
+  timeout_seconds: 420
+  allowed_tools: [Skill, Read]
+graders:
+  - name: skill-fired
+    # The Bolta skill owns choosing what to set up.
+    type: tool_used
+    tool: Skill
+    input_match: '"skill"\s*:\s*"(?:[\w-]+:)?(bolta)"'
+    min: 1
+  - name: not-three-routines
+    # More drafts into an unread review list is the wrong fix: at most one new routine.
+    type: tool_used
+    tool: mcp__plugin_bolta_bolta__create-routine
+    min: 0
+    max: 1
+  - name: names-the-backlog
+    # Says how many are already waiting.
+    type: regex
+    pattern: '\b40\b'
+  - name: offers-review-first
+    # Offers to go through what is waiting.
+    type: regex
+    pattern: '(review|go through|clear|decide|approve|sort)[^.?\n]{0,80}(40|waiting|backlog|drafts|pile)|(40|waiting|backlog|pile)[^.?\n]{0,80}(review|go through|clear|decide|approve)'
+    flags: i
+  - name: asks-a-question
+    # Ends on a question.
+    type: regex
+    pattern: '\?(?=[\s*_)\]]|$)'
+  - name: nothing-public
+    # Nothing approved, scheduled, published, switched on, run or started without its own yes.
+    type: regex
+    pattern: '"name"\s*:\s*"mcp__plugin_bolta_bolta__(publish-post|schedule-post|approve-post|approve-many-posts|activate-routine|resume-routine|run-routine-now|set-content-campaign-status|submit-for-review)"'
+    target: trace
+    match: not_contains
+  - name: no-ids
+    # No ids in what the user reads.
+    type: regex
+    pattern: '\b[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}\b'
+    flags: i
+    match: not_contains

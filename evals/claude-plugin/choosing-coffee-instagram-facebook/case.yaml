@@ -1,0 +1,60 @@
+schema_version: "1.1"
+name: choosing-coffee-instagram-facebook
+description: "A cafe on Instagram and Facebook only (no LinkedIn) wants to post regularly. A good pick is weekly posts with pictures, maybe customer wins; never LinkedIn positions; never text-only Instagram."
+tags: [choosing]
+expected_outcome: "bolta fires; proposes or saves weekly post routines with images or carousels for Instagram and Facebook; no linkedin_thought_leadership and nothing on LinkedIn; any routine bound to Instagram carries media; nothing switched on."
+execution:
+  prompt: |
+    I own Northwind Coffee, a small cafe. We only use Instagram and Facebook. I want to post regularly without having to think about it. What should I set up?
+  max_turns: 25
+  timeout_seconds: 420
+  allowed_tools: [Skill, Read]
+graders:
+  - name: skill-fired
+    # The Bolta skill owns choosing what to set up.
+    type: tool_used
+    tool: Skill
+    input_match: '"skill"\s*:\s*"(?:[\w-]+:)?(bolta)"'
+    min: 1
+  - name: no-linkedin-positions
+    # LinkedIn positions need LinkedIn, which this cafe does not use.
+    type: tool_used
+    tool: mcp__plugin_bolta_bolta__create-routine
+    input_match: 'linkedin'
+    min: 0
+    max: 0
+  - name: never-offers-linkedin-positions
+    # Not offered in the reply either.
+    type: regex
+    pattern: 'linkedin_thought_leadership|thought leadership|LinkedIn positions'
+    flags: i
+    match: not_contains
+  - name: weekly-rhythm
+    # A weekly rhythm, not daily.
+    type: regex
+    pattern: '\b(every|each)\s+(mon|tues|wednes|thurs|fri|satur|sun)day|\bweekly\b|\ba week\b'
+    flags: i
+  - name: pictures-for-instagram
+    # Instagram needs media: the proposal says images, photos, carousels or video.
+    type: regex
+    pattern: '\b(images?|photos?|pictures?|carousels?|videos?|reels?)\b'
+    flags: i
+  - name: no-text-only-instagram
+    # A routine bound to Instagram always makes media.
+    type: tool_used
+    tool: mcp__plugin_bolta_bolta__create-routine
+    input_match: '^(?=[\s\S]*(instagram|a1b2c3d4-0001-4a00-8000-000000000003))(?![\s\S]*"media_mode"\W{1,6}(image|carousel|video))'
+    min: 0
+    max: 0
+  - name: nothing-public
+    # Nothing approved, scheduled, published, switched on, run or started without its own yes.
+    type: regex
+    pattern: '"name"\s*:\s*"mcp__plugin_bolta_bolta__(publish-post|schedule-post|approve-post|approve-many-posts|activate-routine|resume-routine|run-routine-now|set-content-campaign-status|submit-for-review)"'
+    target: trace
+    match: not_contains
+  - name: no-ids
+    # No ids in what the user reads.
+    type: regex
+    pattern: '\b[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}\b'
+    flags: i
+    match: not_contains

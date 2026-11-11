@@ -1,0 +1,60 @@
+schema_version: "1.1"
+name: choosing-agency-client-signoff
+description: "An agency sets up a weekly routine for a client whose rule is sign-off on every post. A good setup keeps drafts waiting for a yes, says how client approval fits, and sends nothing to the client without the user's yes."
+tags: [choosing]
+expected_outcome: "bolta fires; any routine is ask-me-first, never auto and never straight to the client; the reply mentions the client sign-off; nothing submitted, approved, switched on or published; ends on a question."
+execution:
+  prompt: |
+    We're an agency and Northwind Coffee is our client. Their rule: the client signs off on every post before it goes out. Set them up with a weekly LinkedIn routine, 3 posts every Tuesday.
+  max_turns: 25
+  timeout_seconds: 420
+  allowed_tools: [Skill, Read]
+graders:
+  - name: skill-fired
+    # The Bolta skill owns choosing what to set up.
+    type: tool_used
+    tool: Skill
+    input_match: '"skill"\s*:\s*"(?:[\w-]+:)?(bolta)"'
+    min: 1
+  - name: never-auto
+    # Sign-off on every post: drafts always wait.
+    type: tool_used
+    tool: mcp__plugin_bolta_bolta__create-routine
+    input_match: '"approval_policy"\W{1,6}(auto|inherit)'
+    min: 0
+    max: 0
+  - name: nothing-to-client-unasked
+    # Drafts straight to the client only after the user says yes to that.
+    type: tool_used
+    tool: mcp__plugin_bolta_bolta__create-routine
+    input_match: '"to_client"\W{1,6}true'
+    min: 0
+    max: 0
+  - name: nothing-to-client-on-change
+    # Same for a change to the routine.
+    type: tool_used
+    tool: mcp__plugin_bolta_bolta__update-routine
+    input_match: '"to_client"\W{1,6}true'
+    min: 0
+    max: 0
+  - name: mentions-client-signoff
+    # Says how the client's sign-off fits.
+    type: regex
+    pattern: 'client[\s\S]{0,120}?(sign[- ]?off|signs off|approv|their yes|review)|(sign[- ]?off|approv)[\s\S]{0,120}?client'
+    flags: i
+  - name: asks-a-question
+    # Ends on a question.
+    type: regex
+    pattern: '\?(?=[\s*_)\]]|$)'
+  - name: nothing-public
+    # Nothing approved, scheduled, published, switched on, run or started without its own yes.
+    type: regex
+    pattern: '"name"\s*:\s*"mcp__plugin_bolta_bolta__(publish-post|schedule-post|approve-post|approve-many-posts|activate-routine|resume-routine|run-routine-now|set-content-campaign-status|submit-for-review)"'
+    target: trace
+    match: not_contains
+  - name: no-ids
+    # No ids in what the user reads.
+    type: regex
+    pattern: '\b[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}\b'
+    flags: i
+    match: not_contains

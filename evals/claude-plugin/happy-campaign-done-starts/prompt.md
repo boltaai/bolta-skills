@@ -7,6 +7,6 @@ max_turns: 20
 timeout_seconds: 300
 allowed_tools: [Skill, Read]
 ---
-Earlier you set up the campaign "New pricing" for Northwind Coffee: Problem / Solution, Oct 19 to Nov 8, 3 images + 1 carousel a week x 3 weeks = 12 drafts, Bolta writes it. You asked me to pick the accounts on its page, bolta.ai/dashboard/campaigns/ca000000-0000-4000-8000-000000000004, and say done.
+Earlier you set up the campaign "New pricing" for Northwind Coffee: Problem / Solution, Nov 23 to Dec 13, 3 images + 1 carousel a week x 3 weeks = 12 drafts, Bolta writes it. You asked me to pick the accounts on its page, bolta.ai/dashboard/campaigns/ca000000-0000-4000-8000-000000000004, and say done.
 
 Done.

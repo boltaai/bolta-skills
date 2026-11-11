@@ -16,7 +16,7 @@
           "\"Three tools, four tabs, and nobody knows which caption is final.\""
         ]
       },
-      "theme": "New pricing launches Nov 3",
+      "theme": "New pricing launches Dec 8",
       "audience": "",
       "cta_text": "{{input.cta_text}}",
       "cta_url": "{{input.cta_url}}",

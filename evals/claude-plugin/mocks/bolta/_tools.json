@@ -1965,6 +1965,32 @@
       }
     },
     {
+      "name": "list-voice-profiles",
+      "title": "List Voice Profiles",
+      "description": "Retrieve all brand voice profiles for a workspace",
+      "inputSchema": {
+        "type": "object",
+        "properties": {
+          "workspace_id": {
+            "type": "string",
+            "format": "uuid",
+            "description": "The workspace ID"
+          }
+        },
+        "required": [
+          "workspace_id"
+        ],
+        "additionalProperties": false
+      },
+      "annotations": {
+        "title": "List Voice Profiles",
+        "readOnlyHint": true,
+        "destructiveHint": false,
+        "idempotentHint": true,
+        "openWorldHint": false
+      }
+    },
+    {
       "name": "get-voice-profile",
       "title": "Get Voice Profile",
       "description": "Get details of a specific brand voice profile",
