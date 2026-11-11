@@ -272,7 +272,10 @@ case "$tool" in
     fi ;;
   save-post)
     case $save in
-      # A new post is always a Draft (save-post refuses a time or an action), as a plain create-post was.
+      # A new post needs no check, even with per-network text or settings (platform_specific,
+      # platform_details): save-post refuses a time, a status or an action, so it is always a
+      # Draft, and drafts are free: nothing goes public. The check stays on edits to a saved post
+      # (an approved or scheduled one goes back for a yes) and on publish-post.
       create) exit 0 ;;
       edit) ask "Check before it changes ($conn): this edits a post. An approved or scheduled post goes back for a fresh yes. OK only if you have seen it." ;;
       settings) ask "Check before it changes ($conn): this changes a post's network settings or its text per network. An approved post goes back for a fresh yes." ;;
