@@ -1,0 +1,32 @@
+{
+  "ask": "Post our hiring news on the Acme company page on LinkedIn, not my profile.",
+  "playbook": "post",
+  "steps": [
+    {
+      "tool": "list-accounts",
+      "arguments": {
+        "workspace_id": "<brand's workspace id>"
+      },
+      "why": "The plain LinkedIn row is the person's profile. Each LinkedIn company page is its own row, id linkedin_org_<id> with is_organization. Pick the Acme page row; if none is listed, the page isn't connected, so say so instead of guessing an id."
+    },
+    {
+      "tool": "create-post",
+      "arguments": {
+        "workspace_id": "<brand's workspace id>",
+        "content": "We're hiring two engineers in Lisbon. Small team, real ownership, a product people use every day.",
+        "account_ids": [
+          "<linkedin_org_ id from list-accounts>"
+        ],
+        "idempotency_key": "hiring-li-page-1"
+      },
+      "why": "The page id alone posts as the page, not the profile. Saved as a draft with no requested_action; scheduling is a second call after the yes."
+    }
+  ],
+  "say": "Saved to Acme as a LinkedIn draft for the Acme company page, not your profile. Nothing goes out yet. Schedule it?",
+  "never": [
+    "A guessed page id, or one that didn't come from list-accounts.",
+    "Scheduling in the same call that creates a page post.",
+    "Adding the personal account id when the user said not my profile.",
+    "A link the user didn't give."
+  ]
+}

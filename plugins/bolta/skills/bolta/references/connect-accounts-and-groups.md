@@ -2,10 +2,11 @@
 
 ## Reading the accounts
 
-- Show network, name, and connected or disconnected. No ids. Filter by network only when one is named (lowercase, like linkedin or x).
-- valid: connected. invalid: disconnected. A disconnected account is silently left out when a post goes out, even inside a group. If every account on a post is disconnected, it doesn't go out.
+- Show network, name and status. No ids. Filter by network (like linkedin or x) only when one is named. Filter by `token_status` yourself.
+- valid: connected. invalid: disconnected; it is silently left out when a post goes out, even inside a group, and a post with only disconnected accounts doesn't go out.
+- ghost: added without connecting. Drafts for it are held and it never publishes until connected. Never call it disconnected; offer the connect link.
 - **Facebook shows only Pages**, one row each (`is_page`); `is_primary` marks the default Page. A Facebook sign-in with no Pages has no row, so "no Facebook" doesn't prove it's disconnected. Say you can't tell, and give bolta.ai/dashboard/account/socials.
-- **LinkedIn** shows the personal profile plus one row per company page (`is_organization`).
+- **LinkedIn** shows the personal profile plus one row per company page (`is_organization`). The personal row can be missing.
 - Page and company-page rows copy the parent's status; reconnecting the parent fixes them all. Their `base_account_id` is the real account behind them.
 - `count` counts rows, not sign-ins. Count by network and say what you counted: "LinkedIn: you and 2 company pages."
 - The connect link's list of connected networks leaves Facebook out. Trust the accounts read.
@@ -16,9 +17,8 @@
 
 ## Account groups
 
-A post sent to a group goes to every member that is connected when it goes out, not when it was scheduled.
+A post sent to a group goes to every member connected when it goes out, not when scheduled. Read groups and accounts fresh before any write.
 
-- **Read groups and accounts fresh** before any write.
 - **Members are real accounts.** Most rows: the row's own id. A Facebook Page or LinkedIn company page: its `base_account_id`. A Page or company-page id is refused, and nothing changes, not even a rename.
 - **Several accounts match** ("my LinkedIn" with 2 company pages): ask which, offering the personal one.
 
@@ -36,12 +36,8 @@ A post sent to a group goes to every member that is connected when it goes out, 
 
 **Limits:**
 - Nothing here deletes a group or changes its icon: bolta.ai/dashboard/account/socials (the Social Buckets tab). Offer a rename instead.
-- A group made here holds the account, not a chosen Page or company page. Its posts go to that account's default (the primary Page; the LinkedIn personal profile). Page choices for a group are set on that Bolta page. Never say a group "has the Acme Page" from this read.
+- A group made here holds the account, not a chosen Page or company page. Its posts go to that account's default (the primary Page; the LinkedIn personal profile). A company-page choice is set on that Bolta page; Facebook Page choices there aren't used. Never say a group "has the Acme Page" from this read.
 
 ## When a write fails
 
-- "Already exists": show that group, offer to change it. Not in the list? A retired group holds the name: pick another.
-- "Unsupported account ids": a Page or company-page id was sent. Use `base_account_id`.
-- "Accounts not found" or "Bucket not found": a stale read, or another client's connection. Read again.
-- A create timed out: read groups before retrying.
-- A permission refusal: see [connections.md](connect-connections.md).
+See [connect-accounts-and-groups-errors.md](connect-accounts-and-groups-errors.md) for what each refusal means and what to do next.

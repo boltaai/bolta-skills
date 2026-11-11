@@ -1,6 +1,6 @@
 # Strategies
 
-Read when picking a strategy or reading week 1. A strategy is the stance every post takes, not a topic or format. Say the dashboard name and gloss.
+Read when picking a strategy or reading week 1. A strategy is the stance every post takes, not a topic or format. Say its dashboard name and gloss.
 
 ## The six
 
@@ -18,14 +18,11 @@ Picking:
 - "Behind the scenes", "culture", "customer stories" are topics: put them in the theme.
 - How long: a first campaign 2 weeks; a launch 3, launch day in week 3; an offer 1-2, never past its end; Thought Leadership 4. Longer arcs are two campaigns, each with a verdict.
 
-## Four playbooks (Bolta University)
+## Four playbooks
 
-- **Product launch:** Problem / Solution, 3 weeks × (3 images + 1 carousel) = 12. Arc in Context: "Week 1: the problem, no product. Week 2: the fix. Week 3: results." Link the launch page, not the homepage. Mistake: launching with Offer & Promotion.
-- **Promotion with a deadline:** Offer & Promotion, 1-2 weeks × (3 images + 1 text) = 4-8. Real deadline, price and offer in Context. Mistake: running past the offer.
-- **Thought leadership:** 4 weeks × (2 images + 1 carousel) = 12. About your business filled in, a source page, real positions in Context. Mistake: an empty workspace.
-- **Consistency test (new):** Quick Tips or Product Education, 2 weeks × 3 images = 6, one network if unsure. Mistake: 4 weeks × 5 kinds × 3 networks.
+Launch, deadline promotion, thought leadership, consistency test: weeks, mix, totals and the usual mistake are in [playbooks.md](campaign-strategies-playbooks.md).
 
-**Context** is the campaign's notes (`context_notes`, see targets.md), not a question first. Size the plan on the mix it will run: a playbook's mix is sent as `content_mix`; otherwise Bolta uses the mix above.
+**Context** is the campaign's notes (`context_notes`, see campaign-targets.md), not a question first. Which mix runs: one you send, else the brand's saved Content defaults, else the strategy's mix above. Send `content_mix` only when the user asked for a playbook's mix; otherwise omit it and read `resolved_content_mix` in the reply.
 
 ## Week 1: wrong strategy or thin context?
 
@@ -38,5 +35,5 @@ Read week 1's drafts as a set, not one by one.
 - **Pretty scenes that sell nothing:** Lifestyle with no product moment: Product Education.
 - **Explaining what nobody asked:** Product Education aimed too deep: Quick Tips.
 
-- Switch after week 1, not week 3: `update-content-campaign` with the new `strategy_key`. Only unwritten weeks change.
+- Switch after week 1, not week 3: `update-content-campaign` with the new `strategy_key`. Only unwritten weeks change; the mix stays unless you send `content_mix`.
 - Vague everywhere is thin context; switching gives differently vague posts. Fix in order: about your business, the campaign's Context, a source page, your documents.

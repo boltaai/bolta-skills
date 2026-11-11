@@ -34,23 +34,21 @@
       "why": "Read the row again for its content_fingerprint."
     },
     {
-      "tool": "approve-many-posts",
+      "tool": "approve-post",
       "arguments": {
-        "items": [
-          {
-            "post_id": "<post id>",
-            "expected_fingerprint": "<content_fingerprint>",
-            "schedule_mode": "set_fixed_time",
-            "fixed_time": "2026-11-17T09:00:00"
-          }
-        ]
+        "workspace_id": "<brand's workspace id>",
+        "post_id": "<post id>",
+        "expected_fingerprint": "<content_fingerprint>",
+        "schedule_mode": "set_fixed_time",
+        "fixed_time": "2026-11-17T09:00:00"
       },
-      "why": "Wall clock in the brand's time zone: no Z, no offset, no timezone unless the user named a place."
+      "why": "One yes, so approve-post: its result carries scheduled_time (UTC) to read back in the brand's clock. Wall clock in, no Z, no offset, no timezone unless the user named a place."
     }
   ],
   "say": "Scheduled for Acme: Tue Nov 17, 9:00 am (New York) on LinkedIn.",
   "never": [
     "A UTC offset or a Z on the time.",
-    "A weekday copied from an example: work it out from the date."
+    "A weekday copied from an example: work it out from the date.",
+    "Retrying or calling publish-post after self_approval_not_allowed: in a team brand someone else must approve a post the user sent for review."
   ]
 }

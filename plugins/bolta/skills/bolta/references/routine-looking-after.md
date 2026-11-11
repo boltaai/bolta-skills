@@ -1,6 +1,6 @@
 # Looking after a Bolta routine
 
-Read for changes, pausing, stopping, running now, Monday's drafts and "why didn't it run?". Start with `get-routine`.
+Read for changes, pausing, stopping, running now and Monday's drafts. Start with `get-routine`. Why it didn't run, a failed run or a refused run now: [references/routine-runs.md](routine-runs.md). Pictures, the client, stories, Library posts: [references/routine-outputs.md](routine-outputs.md).
 
 ## Change, pause, stop, run now
 
@@ -11,38 +11,28 @@ Read for changes, pausing, stopping, running now, Monday's drafts and "why didn'
 | "Pause it", "hold off this week" | `pause-routine` | Never |
 | "Turn it back on" | `resume-routine` (paused) or `activate-routine` (never switched on) | One, unless set up as ask me first in this conversation |
 | "Stop it for good" | `archive-routine` | One. Say first: "This can't be undone. Pausing stops it for now." |
-| "Run it now" | `run-routine-now` | One: "Uses credits now. Drafts land in a few minutes." |
+| "Run it now" | `run-routine-now` | One: "Uses credits now. Drafts usually land in a few minutes." |
 | "Copy it" | `get-routine`, then `create-routine` with the same settings | As for a new one |
 
-- `update-routine` takes only what changes, but `output_config` and `source_bindings` are replaced whole: read, then resend them complete.
+- `update-routine` takes only what changes. `source_bindings`, `output_config` and `destination_config` are replaced whole: read, then resend them complete. Inside `output_config`, `review`, `story` and `library` are kept when left out.
 - **A change needs no check** on a routine made here as ask me first, or on one already ask me first when the change resends `approval_policy: "review_every_artifact"`. Resend it only where it is already set.
-- "Use my workspace setting" or "post without asking" only on their words: one Bolta check, plus one to switch on.
+- "Use my workspace setting" or "post without asking" only on their words: one Bolta check, plus one to switch on. `auto` is refused while the brand's `safe_mode` is on or its `autonomy_mode` (`get-workspace`) is manual or assisted; under client sign-off, drafts still wait for review. It changes in Bolta: Settings > Rules > Approvals.
+- **Schedules:** daily, weekly with a `day`, or monthly (the 1st). Another day of the month, or weekdays: a cron, `{"cron":"0 9 15 * *"}` or `{"cron":"0 9 * * 1-5"}`; "weekdays" is not an interval. After any schedule or clock change, read `next_run_at` back.
+- **Voice:** `get-routine` `destination_config.voice_profile_id` (empty: brand default). Change it with `update-routine` `destination_config`, resending its `account_refs` and `behavior`; on a copy, pass it to `create-routine`.
 - The kind of routine can't change. Make a new one.
-- Switching on can be refused (a missing source, a disconnected account, a plan limit, Bolta paused it). Say the reason; it stays off. Don't retry.
-- Pausing: a run already going may still deliver drafts. Stopped for good, its history stays.
-- Run now works only when it's on. `started: false` (a second press within 30 seconds) or an already-running refusal: "It's already running." Check `list-routine-runs` once; don't loop.
+- Switching on can be refused (a missing source, a disconnected account, a plan limit, a paused writer). Say the reason; it stays off. Don't retry.
+- Pausing: a run already going may still deliver drafts. Stopped, its history stays.
+- Run now works only when it's on. While a run is going, or on a second press within 30 seconds (`started: false`), say "It's already running." Check `list-routine-runs` once; don't loop. Other refusals: [references/routine-runs-refused.md](routine-runs-refused.md).
 - Stopping everything at once, campaigns too: [fix](fix.md).
 
 ## Monday: what it wrote
 
-1. `get-routine`: `review_queue[].agent_id`. `list-routine-runs`: the run ids (newest 50 at most).
-2. `list-inbox-items(source="team", status="pending", agent_id=<that id>, limit=100)`, paging with `offset`.
-3. Keep rows whose `workflow_run_id` is one of those run ids. Runs carry no post ids, so this match is the only link.
-4. Hand the list to [review](review.md). They already wait for a yes: never resend them, or look in the recurring queue.
+1. `list-routine-runs`: the newest runs (50 at most). Each run's drafts are its `run_details.artifacts[].id`.
+2. Or list them all: `get-routine` `review_queue[].agent_id`, then `list-inbox-items(source="team", status="pending", agent_id=<that id>, limit=100)`, paging with `offset`, keeping rows whose `workflow_run_id` is one of those runs.
+3. Hand the list to [review](review.md). They already wait for a yes: never resend them, or look in the recurring queue.
 
-Report routines post nothing: Bolta emails the report. Reply drafts belong to [replies](replies.md).
+Drafts sent straight to the client wait on the client, not the team: `get-routine` `review.waiting`. Report routines post nothing: Bolta emails the report. Reply drafts belong to [replies](replies.md).
 
-## "Why didn't it run?"
+## Where ideas come from
 
-Read `get-routine` (status, `blocked`, `next_run_at`, `last_run`), then `list-routine-runs`. Say the first that fits:
-
-- Paused or never switched on: "It's off. Turn it on?"
-- `blocked`: "Bolta's writer for this is paused, so it can't run. Switch it back on at bolta.ai/dashboard/agents."
-- No schedule: "It only runs when you ask. Run it now, or give it a schedule?"
-- On, but `next_run_at` is empty: the schedule can't fire (often "monthly"). Change it to a cron and read `next_run_at` again.
-- A failed or skipped run: its own reason, in plain words.
-- No run at the expected time: "Bolta skipped that slot and didn't record why. Usually: your page didn't change, a plan limit, a disconnected account, or a busy server."
-- A slot over 6 hours late is skipped, not caught up; the next runs as normal.
-- Drafts late around 17:45-18:15 UTC (say it in their clock): Bolta's servers are busy then, not the user or the routine.
-- A disconnected account: [connect](connect.md) for the link.
-- It ran, nothing went out: the drafts wait for your yes ([review](review.md)).
+Most post routines and weekly articles take one new idea per piece from the brand's documents (bolta.ai/dashboard/knowledge-base?tab=references; Dropbox in Settings > Integrations). New files show up in later runs: the lasting way to steer topics.

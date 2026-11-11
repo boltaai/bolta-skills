@@ -1,0 +1,67 @@
+{
+  "ask": "Yes, turn it on.",
+  "playbook": "routine",
+  "before": "The summary was shown: every Tuesday 9:00 am, 2 drafts for Instagram and LinkedIn about new menu items, each with an image made from the post and the brand's look; they wait for your yes; images use extra credits and step down to text if credits run short.",
+  "steps": [
+    {
+      "tool": "create-routine",
+      "arguments": {
+        "workspace_id": "<brand's workspace id>",
+        "name": "Tuesday menu posts with images",
+        "goal": "2 posts about new menu items every Tuesday, each with an image",
+        "template_key": "weekly_social_posts",
+        "trigger_type": "schedule",
+        "schedule": {
+          "interval": "weekly",
+          "day": "tuesday",
+          "time": "09:00"
+        },
+        "timezone": "<timezone from get-workspace>",
+        "approval_policy": "review_every_artifact",
+        "source_bindings": [
+          {
+            "provider": "social_account",
+            "ref": "<Instagram account id>"
+          },
+          {
+            "provider": "social_account",
+            "ref": "<LinkedIn account id>"
+          }
+        ],
+        "output_config": {
+          "artifact_type": "post",
+          "count": 2,
+          "platforms": [
+            "instagram",
+            "linkedin"
+          ],
+          "media_mode": "image",
+          "visual_style": "bright, close-up food photography"
+        },
+        "instructions": "Posts about new menu items. Never invent facts, numbers, prices or dates."
+      },
+      "why": "weekly_social_posts takes media; many other kinds refuse it. No media_prompt: each image is drawn from its post. No image_model: automatic. No reference_media_id: there was no id to use."
+    },
+    {
+      "tool": "activate-routine",
+      "arguments": {
+        "routine_id": "<routine id>"
+      },
+      "why": "Switching on is not running. Nothing is drawn or charged until the first run."
+    },
+    {
+      "tool": "get-routine",
+      "arguments": {
+        "routine_id": "<routine id>"
+      },
+      "why": "Read next_run_at (UTC) and say it in the brand's clock; check output_config kept media_mode image."
+    }
+  ],
+  "say": "Bolta routine on. First drafts with images Tue Nov 17, 9:00 am (Chicago). If credits run short, that week's drafts come without images, and an Instagram draft needs an image added before it can post. On Tuesday, say 'what's waiting'.",
+  "never": [
+    "run-routine-now in the same breath: it draws images and spends credits, so it needs its own yes.",
+    "Promising images on a kind of routine that refuses media.",
+    "Inventing a reference_media_id: only one the user gives or get-routine shows.",
+    "Sending a carousel_config with media_mode image."
+  ]
+}

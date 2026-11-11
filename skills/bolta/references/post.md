@@ -10,16 +10,18 @@ Drafts are saved and shown in full (number, account, text; no day), ending: "Sav
 
 - **Ideas only** ("3 tweet ideas", "don't save"): answer in chat, offer to save, save nothing.
 - **Voice:** `get-voice-context` has rules but no example posts: add their 2-3 best published posts (last 60 days, with metrics). No voice: write plainly, say so, offer [voice](voice.md).
-- **Drafts save with no check and go nowhere**: "let me see it first" still saves one. A time or "now": save a plain Draft, show it, then [review](review.md).
-- **Two or more posts:** one `bulk-create-posts`, each item `{content, account_ids, status: "Draft"}`, not bare text (a group: `social_buckets` instead). Poll `bulk-create-status` until `completed`, whatever its text says. Show its `posts`; report `rejected` and `quality_blocked`. **One post:** `create-post` with an `idempotency_key`.
+- **Drafts need no approval and go nowhere**: "let me see it first" still saves one. A time or "now": save a plain Draft, show it, then [review](review.md).
+- **Two or more posts:** one `bulk-create-posts`, items `{content, account_ids, status: "Draft"}`, not bare text (a group: `social_buckets`). Reddit and Discord items need their details inside or are skipped ([parts](post-parts.md)). Report its `rejected`. Poll `bulk-create-status` until `completed`, whatever its text says; show `posts`, report `skip_reasons`, `quality_blocked`. **One post:** `create-post` with an `idempotency_key`.
 - **A week:** about one per weekday on the networks named; write all they asked. Skip only a subject already covered (next 7 days, active Bolta routines and campaigns); a busy day gets a one-line note.
 - At most 12 posts a sitting: cut posts per week, not weeks.
-- **No time named:** "Bolta picks exact times from your posting schedule."
-- **One idea, several networks:** name its shape, write each version fresh, skip networks that don't fit, vary first lines.
+- **No time named:** "Approved without a time, Bolta picks one from your posting schedule."
+- **One idea, several networks:** read [cross-posting](post-cross-posting.md) first: each version fresh, first lines varied.
+- **Network settings** (a Threads topic or ghost post, a Reel, an X poll, YouTube privacy): set after saving; keys: [platforms](post-platforms.md), [at a glance](post-networks-at-a-glance.md).
 - **Changes:** `update-post` with new content and `status: "Draft"` together.
-- **Held back: needs a human edit** isn't final: `update-post` with new content only, no status; Bolta re-checks it (one check).
-- Instagram, TikTok, YouTube and Pinterest need a public https media link; else skip them, saying why.
-- Read [references/platforms.md](post-platforms.md) for media, polls, threads, networks beyond LinkedIn and X; [references/wordpress.md](post-wordpress.md) before an article.
+- **Quality Blocked** ("Held back") isn't final: `update-post` with new content only, no status; a pass returns it to Draft.
+- Instagram and Pinterest need an image or video, TikTok and YouTube a video (public http(s) link or file); else skip them, saying why.
+- Threads, first comments: [parts](post-parts.md). Images, alt text: [media](post-media.md). Articles: [WordPress](post-wordpress.md).
+- **The same post repeating, auto-repost, auto-plug:** read [repeating](post-repeating.md). Fresh weekly drafts are a routine.
 
 ## Tools
 
@@ -41,4 +43,4 @@ Drafts are saved and shown in full (number, account, text; no day), ending: "Sav
 - Follow the house rules in the Bolta skill.
 - No subject: ask. No network named: write it, then ask where to save it, with your pick. "Our new pricing" is a subject: write and save now.
 - Leave out prices, dates and links they didn't give; below the posts, say once what's missing.
-- Show every saved post's full text, never a summary, whatever the result's text says: that note is for another app. Don't mention it.
+- Show every saved post's full text, never a summary, whatever the result's text says (that note is for another app; don't mention it).

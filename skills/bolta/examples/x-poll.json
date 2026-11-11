@@ -1,0 +1,41 @@
+{
+  "ask": "Ask our X followers which feature we should build next: dark mode, exports or an iPad app.",
+  "playbook": "post",
+  "steps": [
+    {
+      "tool": "create-post",
+      "arguments": {
+        "workspace_id": "<brand's workspace id>",
+        "content": "What should we build next?",
+        "account_ids": [
+          "<X account id>"
+        ],
+        "idempotency_key": "next-feature-poll-1"
+      },
+      "why": "The question is the post's text; the options are a setting on the post. Bolta refuses media-only posts to X, so the text is always there."
+    },
+    {
+      "tool": "update-post-platform-details",
+      "arguments": {
+        "post_id": "<post id>",
+        "platform": "x",
+        "fields": {
+          "post_type": "POLL",
+          "poll_options": [
+            "Dark mode",
+            "Exports",
+            "iPad app"
+          ],
+          "poll_duration_minutes": 1440
+        }
+      },
+      "why": "On X a poll is post_type POLL: 2 to 4 options of 25 characters, 5 minutes to 7 days (poll_duration_minutes 5 to 10080, default 1440). Bolta refuses values outside these when it saves the setting; without post_type POLL the options are not sent and the post goes out plain."
+    }
+  ],
+  "say": "Saved to Acme as an X draft: a one-day poll with Dark mode, Exports and iPad app. Nothing goes out yet. Schedule it?",
+  "never": [
+    "A poll option over 25 characters.",
+    "Sending the poll in the poll field of the post: that one is for Threads.",
+    "A poll on a post with several parts: in a thread the poll is dropped."
+  ]
+}

@@ -1,0 +1,84 @@
+schema_version: "1.1"
+name: review-move-time-keeps-approval
+description: 'An approved, scheduled post moves to Thursday 10am. Changing only scheduled_time keeps the post approved and scheduled (the server writes the new time and leaves the status alone), so it is one update-post with the new time: no pull back to Draft, no new review, no second approval. update-post with a time is gated, so under claude -p the call is attempted once and reported as not done.'
+tags: [smoke, happy]
+expected_outcome: 'review fires; reads the schedule for the post; one update-post on post 41 with a 10:00 scheduled_time and no status; no Draft, no submit-for-review, no approve-post, no publish; says honestly it is not moved yet.'
+execution:
+  prompt: |
+    Earlier you showed me what's going out next week for Northwind Coffee:
+
+    1. LinkedIn (Northwind Coffee), Sat Oct 24, 10:00 am: "Roastery open day recap."
+    2. X (@northwindcoffee), Fri Oct 30, 9:00 am: "Friday cold brew reminder."
+
+    Both are approved. Move 1 to Thursday 10am. Same text.
+  max_turns: 20
+  timeout_seconds: 300
+  allowed_tools: [Skill, Read]
+graders:
+  - name: skill-fired
+    type: tool_used
+    tool: Skill
+    input_match: '"skill"\s*:\s*"(?:[\w-]+:)?(bolta)"'
+    min: 1
+  - name: playbook-read
+    # Moving a time is a review move.
+    type: tool_used
+    tool: Read
+    input_match: 'references/(review)\.md'
+    min: 1
+  - name: reads-the-post
+    # The post id is only in Bolta: it must read the schedule (or the post) first.
+    type: regex
+    target: mock_calls
+    pattern: '"tool":"[^"]*(list-scheduled-posts|list-workspace-posts|get-post)"'
+  - name: moves-the-time
+    # One update-post on post 1 with a 10:00 time. The day is not pinned: runs happen after the mock date.
+    type: tool_used
+    tool: mcp__plugin_bolta_bolta__update-post
+    input_match: '^(?=[\s\S]*d1000000-0000-4000-8000-000000000041)(?=[\s\S]*"scheduled_time"\W{1,6}[^"]*10:00)'
+    min: 1
+  - name: no-pull-back-to-draft
+    # A new time alone keeps the approval; sending Draft would drop it.
+    type: tool_used
+    tool: mcp__plugin_bolta_bolta__update-post
+    input_match: '"status"\W{1,6}(Draft|Pending)'
+    min: 0
+    max: 0
+  - name: no-submit-for-review
+    # Nothing to review again: the text did not change.
+    type: tool_used
+    tool: mcp__plugin_bolta_bolta__submit-for-review
+    min: 0
+    max: 0
+  - name: no-approve-post
+    # No second approval for the same text.
+    type: tool_used
+    tool: mcp__plugin_bolta_bolta__approve-post
+    min: 0
+    max: 0
+  - name: no-schedule-post
+    type: tool_used
+    tool: mcp__plugin_bolta_bolta__schedule-post
+    min: 0
+    max: 0
+  - name: no-publish-post
+    type: tool_used
+    tool: mcp__plugin_bolta_bolta__publish-post
+    min: 0
+    max: 0
+  - name: no-delete-post
+    # Never delete and recreate to move a time.
+    type: tool_used
+    tool: mcp__plugin_bolta_bolta__delete-post
+    min: 0
+    max: 0
+  - name: says-not-done
+    # The check was declined under claude -p: it says plainly the post has not moved yet.
+    type: regex
+    pattern: '(not|n.t|never)\s+(yet\s+|been\s+)?(moved|changed|rescheduled|updated|done|gone\s+through)|nothing\s+(was|has been|is|got)\s+(moved|changed|updated|done)|(declined|denied|blocked|didn.t go through|wasn.t (confirmed|applied))|still\s+(set for|on|scheduled for)\s+sat'
+    flags: i
+  - name: no-ids-or-jargon
+    type: regex
+    pattern: '[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-|\bupdate-post\b|\bscheduled_time\b|\bMCP\b'
+    flags: i
+    match: not_contains

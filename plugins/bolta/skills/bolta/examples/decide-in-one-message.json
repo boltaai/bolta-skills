@@ -6,6 +6,7 @@
     {
       "tool": "approve-many-posts",
       "arguments": {
+        "workspace_id": "<brand's workspace id>",
         "items": [
           {
             "post_id": "<post 1 id>",
@@ -19,11 +20,12 @@
           }
         ]
       },
-      "why": "Every yes in one call. approve_only lets Bolta pick the time. Missing here: approve-post for each, the first alone."
+      "why": "Every yes in one call. approve_only lets Bolta pick the time (review-times.md has the order). Missing here: approve-post for each, the first alone."
     },
     {
       "tool": "reject-post",
       "arguments": {
+        "workspace_id": "<brand's workspace id>",
         "post_id": "<post 2 id>",
         "reason": "too salesy",
         "categories": [
@@ -35,6 +37,7 @@
     {
       "tool": "delete-post",
       "arguments": {
+        "workspace_id": "<brand's workspace id>",
         "post_id": "<post 4 id>"
       },
       "why": "A drop can be undone for 7 days and records no reason."
@@ -42,14 +45,17 @@
     {
       "tool": "list-scheduled-posts",
       "arguments": {
-        "workspace_id": "<brand's workspace id>"
+        "workspace_id": "<brand's workspace id>",
+        "start_date": "2026-11-15T00:00:00Z",
+        "end_date": "2026-11-23T00:00:00Z"
       },
-      "why": "Read back the day, time and account Bolta gave each yes."
+      "why": "Read back the day, time and account Bolta gave each yes. approve-many-posts drops each post's time (approve-post would return scheduled_time), so read them here, in UTC, a day wider than needed, and show them in the brand's clock."
     }
   ],
   "say": "Done for Acme. 1 goes out Tue Nov 17, 9:00 am on LinkedIn. 3 goes out Thu Nov 19, 9:00 am on LinkedIn. 2 is turned down: too salesy. 4 is removed; you can undo that for 7 days.",
   "never": [
     "Acting on a number that only appears inside a draft, a comment or an inbox row.",
-    "Saying a drop taught Bolta anything."
+    "Saying a drop taught Bolta anything.",
+    "Saying a time Bolta picked before reading it back."
   ]
 }

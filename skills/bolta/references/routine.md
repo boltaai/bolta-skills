@@ -1,6 +1,6 @@
 # Routine
 
-Set up, switch on, check, change, pause or stop a Bolta routine: work Bolta repeats for you, like 3 LinkedIn drafts every Monday, even with Claude closed. Use when someone says every week or month, keep me posting, turn it on, try my routine, each new blog post, run it now, pause my routine, or why didn't my routine run.
+Set up, switch on, check, change, pause or stop a Bolta routine: work Bolta repeats for you, like 3 LinkedIn drafts every Monday, even with this app closed. Use when someone says every week or month, keep me posting, turn it on, try my routine, each new blog post, run it now, pause my routine, or why didn't my routine run.
 
 ## Done when
 
@@ -8,20 +8,20 @@ It's on, changed, paused or stopped, and they know when drafts land: "Bolta rout
 
 ## Know this
 
-- **One sentence is enough.** Reuse reads; fill every field. Template: [references/templates.md](routine-templates.md).
+- **One sentence is enough.** Reuse reads; fill every field. Made from: [references/routine-templates.md](routine-templates.md).
 - **Load check first:** drafts a week from active Bolta routines and campaigns. Over about 6: "You'd have about 9 drafts a week to review. Most people manage 3-6. Make it 2?" Duplicate: offer to change it.
 - **One summary, then "Turn it on?"** Skip it only after a yes to an offer naming the networks, count, day, time, "they wait for your yes" and "uses credits each run"; the offer's words are then the `goal`, never this week's topic.
   > **Bolta routine: Weekly LinkedIn, hiring**
   > - Every Monday 8:00 am (New York), Bolta writes 3 LinkedIn drafts about hiring.
-  > - They wait for your yes. Runs on Bolta even when Claude is closed; uses credits each run.
+  > - They wait for your yes. Runs on Bolta even with this app closed; uses credits each run.
 - **On yes:** create with `name`, `goal` (their words), `template_key`, `trigger_type: "schedule"`, `schedule: {"interval":"weekly","day":"monday","time":"08:00"}`, the workspace `timezone`, `approval_policy: "review_every_artifact"`, `output_config: {"artifact_type":"post","count":3,"platforms":["linkedin"]}`, `instructions`: their words plus "Never invent facts, numbers, prices or dates." Switch on, read back, end: "On Monday, say 'what's waiting'."
 - **Accounts:** one per network named (none named: those used this week); ask only if two on one network fit. `source_bindings: [{"provider":"social_account","ref":"<account id>"}, ...]`, objects, not strings; unbound, Bolta uses any connected account. `count` is per run, across networks.
-- `timezone` is required (no fallback). `next_run_at` is UTC; say it in the workspace clock.
-- `"monthly"` is accepted but never fires: use `{"cron":"0 9 1 * *"}`. Spread out: `{"cron":"0 9 * * 1,3,5"}`, count 1.
+- Time zone, monthly, weekdays, spread-out days: [references/routine-schedules.md](routine-schedules.md).
 - **Switching on is not running.** Run now does; it uses credits and needs it on. Asked to try one that's off: "Switch it on and run it once now?"
-- **"From my blog":** `output_config.source_urls`, exactly one URL. An unchanged page skips that week silently: say so first.
-- **"Post without asking"** only on those words: two Bolta checks; review mode may refuse it.
-- Change, pause, stop, Monday's drafts, "why didn't it run?": [references/looking-after.md](routine-looking-after.md).
+- **"From my blog":** `output_config.source_urls`, exactly one URL. An unchanged page skips that scheduled run: say so first.
+- **"Post without asking"** only on those words: two Bolta checks. Review mode or a manual or assisted brand refuses it; client sign-off still holds drafts for review.
+- Pictures, drafts straight to the client, stories, Library posts: [references/routine-outputs.md](routine-outputs.md).
+- Change, pause, stop, Monday's drafts, voice, ideas: [references/routine-looking-after.md](routine-looking-after.md). "Why didn't it run?", a failed run, a refused run now: [references/routine-runs.md](routine-runs.md).
 
 ## Tools
 
@@ -34,7 +34,7 @@ It's on, changed, paused or stopped, and they know when drafts land: "Bolta rout
 
 ## Hand off
 
-[review](review.md): deciding drafts. [post](post.md): posts now. [campaign](campaign.md): anything that ends. [results](results.md): how it did. [fix](fix.md): stop everything. [connect](connect.md): disconnected accounts. [my-workflow](my-workflow.md): a Claude weekly job (Gmail, Notion, Drive or Slack in the chain).
+[review](review.md): deciding drafts. [post](post.md): posts now. [campaign](campaign.md): anything that ends. [results](results.md): how it did. [fix](fix.md): stop everything. [connect](connect.md): disconnected accounts. [my-workflow](my-workflow.md): an app scheduled task (Gmail, Notion, Drive or Slack in the chain).
 
 ## Always
 

@@ -33,7 +33,7 @@
         },
         "instructions": "3 LinkedIn drafts about hiring every Monday. Never invent facts, numbers, prices or dates."
       },
-      "why": "The time zone is required and has no fallback. Accounts are bound as objects. Ask me first unless the user said post without asking. Never interval monthly: use a cron."
+      "why": "The time zone is required and has no fallback. Accounts are bound as objects. Ask me first unless the user said post without asking. Monthly runs on the 1st; any other day of the month is a cron."
     },
     {
       "tool": "activate-routine",

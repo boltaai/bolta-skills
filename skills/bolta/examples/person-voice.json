@@ -1,0 +1,56 @@
+{
+  "ask": "Set up a voice for our founder Dana. Her posts should sound like her, not like Acme.",
+  "playbook": "voice",
+  "steps": [
+    {
+      "tool": "list-voice-profiles",
+      "arguments": {
+        "workspace_id": "<brand's workspace id>"
+      },
+      "why": "Check for a voice already named for Dana and see which voice is the default. The list does not show accounts; get-voice-profile does."
+    },
+    {
+      "tool": "list-workspace-posts",
+      "arguments": {
+        "workspace_id": "<brand's workspace id>"
+      },
+      "why": "Find a post Dana wrote herself for the sample: one on her account with content_origin manual (written by hand, not by Bolta). Manual alone doesn't prove it was her, so check with her. None? Ask her to paste a paragraph."
+    },
+    {
+      "tool": "create-voice-profile",
+      "arguments": {
+        "workspace_id": "<brand's workspace id>",
+        "name": "Dana",
+        "is_default": false,
+        "writing_sample": "<a post or paragraph Dana wrote, 50 or more characters>",
+        "account_ids": [
+          "<Dana's LinkedIn account id>"
+        ]
+      },
+      "why": "A person voice, not a second brand voice: is_default false keeps Acme's voice as the default. The sample also sets the voice's tone, so it must be hers. account_ids only because she named her own LinkedIn: it moves that account off the Acme voice. Left out, every account no voice owns yet goes to Dana's voice. speaker_mode is not saved on create, so it is set next."
+    },
+    {
+      "tool": "update-voice-profile",
+      "arguments": {
+        "workspace_id": "<brand's workspace id>",
+        "profile_id": "<id from the reply>",
+        "speaker_mode": "founder"
+      },
+      "why": "speaker_mode founder makes drafts in this voice write as I."
+    },
+    {
+      "tool": "get-voice-profile",
+      "arguments": {
+        "workspace_id": "<brand's workspace id>",
+        "profile_id": "<id from the reply>"
+      },
+      "why": "Read back speaker_mode and account_assignments to confirm what was stored."
+    }
+  ],
+  "say": "Dana's voice is saved, writing as \"I\", and her LinkedIn now uses it. Acme's voice stays the default for everything else. Her angle can be set in Bolta under Brand > Edit voice. Want two first-person posts a week from her, ready for her to approve? That's a Bolta routine on her LinkedIn.",
+  "never": [
+    "A writing sample you or Bolta wrote.",
+    "Moving an account she didn't name.",
+    "Making Dana's voice the default."
+  ]
+}

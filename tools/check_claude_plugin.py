@@ -72,7 +72,13 @@ DEFAULT_FIXTURE = REPO / "tools" / "fixtures" / "claude_tools_list.json"
 #: live list lacks one, its schema comes from DEFAULT_FIXTURE. Delete a name here
 #: once the live list has it (the checker says when).
 PENDING_TOOLS = ("approve-many-posts", "reject-post", "set-content-campaign-targets",
-                 "analyze-content-campaign-source")
+                 "analyze-content-campaign-source",
+                 "propose-cascade", "update-cascade", "start-cascade", "get-cascade",
+                 "list-workspace-members", "list-routine-recommendations",
+                 "decide-routine-recommendation", "list-bolta-suggestions", "decide-bolta-suggestion")
+#: Live tools whose saved schema adds arguments production does not take yet. Until it does,
+#: the saved arguments are accepted too. Delete a name once the live list has them (the checker says when).
+PENDING_UPDATES = ("create-routine", "update-routine", "extract-business-dna", "voice-generate")
 #: Claude Code sends "claude-code/<version> (<entrypoint>)" on its MCP requests,
 #: and the server matches "claude" in it. Without it the list lacks the tools made for Claude.
 CLAUDE_USER_AGENT = "claude-code/2.1.302 (cli; bolta-plugin-check)"
@@ -88,7 +94,6 @@ NON_TOOL_TOKENS = {"read-only", "draft-only", "mcp-app", "claude-code", "bolta-s
 #: Exposed tools the skills deliberately never use. Naming one in a skill is an
 #: error only where the reason says so (`forbid`).
 INTENTIONALLY_UNUSED = {
-    "voice-generate": ("spends credits on every call and nothing here can read what it makes", True),
     "list-reviews": ("the review list is read with list-inbox-items", False),
 }
 
@@ -152,6 +157,8 @@ BANNED_EVERYWHERE = [
 #: Allowed only inside a <!-- host-note --> ... <!-- /host-note --> region.
 BANNED_OUTSIDE_HOST_NOTE = [
     (re.compile(r"\bcards?\b", re.I), "mentions a card (host-specific; only allowed in a host note)"),
+    # Case-sensitive: lowercase paths and commands (.claude/, `claude mcp add`, claude.ai) stay legal.
+    (re.compile(r"\bClaude\b"), "names Claude (host-specific; say \"your AI app\" or \"you\", or use a host note)"),
 ]
 HOST_NOTE = re.compile(r"<!--\s*host-note\s*-->.*?<!--\s*/host-note\s*-->", re.S)
 
@@ -295,6 +302,19 @@ def with_pending(live: dict[str, dict], fixture: pathlib.Path | None, from_serve
         if saved and a != b:
             warn("tools", f"{n} is live now with different arguments than the saved list "
                           f"(live only: {sorted(a - b) or '-'}; saved only: {sorted(b - a) or '-'}); refresh the saved list")
+    for n in PENDING_UPDATES:
+        if n not in live or n not in saved:
+            continue
+        lp = (live[n].get("inputSchema") or {}).get("properties", {})
+        sp = (saved[n].get("inputSchema") or {}).get("properties", {})
+        extra = {k: v for k, v in sp.items() if k not in lp}
+        if extra:
+            schema = dict(live[n].get("inputSchema") or {})
+            schema["properties"] = {**lp, **extra}
+            tools[n] = {**live[n], "inputSchema": schema}
+            info(f"pending arguments of {n}, not in the list: {', '.join(sorted(extra))} (from the saved list)")
+        elif from_server:
+            info(f"{n} is live with every saved argument: remove it from PENDING_UPDATES")
     if present and not absent and from_server:
         info("every pending tool is live now: remove PENDING_TOOLS and the saved list from tools/check_claude_plugin.py")
     return tools

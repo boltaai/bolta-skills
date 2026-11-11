@@ -3,6 +3,13 @@
   "playbook": "start",
   "steps": [
     {
+      "tool": "list-voice-profiles",
+      "arguments": {
+        "workspace_id": "<brand's workspace id>"
+      },
+      "why": "Connecting an account makes Bolta learn a starting voice by itself. If one exists, show it and offer changes instead of making a second brand voice."
+    },
+    {
       "tool": "create-voice-profile",
       "arguments": {
         "workspace_id": "<brand's workspace id>",
@@ -23,19 +30,20 @@
         ],
         "is_default": true
       },
-      "why": "One save, no check. Bolta reads their own site once, only when no business record exists. DOs and DON'Ts only from their posts or words; with nothing to draw on, leave them out."
+      "why": "Only when no voice came back. Save once. Bolta reads their own site once, only when the brand has no business record yet. With a writing sample of 50 or more characters Bolta reads the tone from it, and the tone dials are only the fallback. DOs and DON'Ts only from their posts or words; with nothing to draw on, leave them out. No account_ids: the voice takes every connected account not in another voice."
     },
     {
       "tool": "get-voice-context",
       "arguments": {
         "workspace_id": "<brand's workspace id>"
       },
-      "why": "Show the voice from what was stored, and say what Bolta filled in."
+      "why": "Show the voice from what was stored: how it sounds in a few plain words from the stored tone, never words you made up. Say what Bolta filled in, from the 'bootstrapped' list in the create result; say Bolta read the site only when that list shows website_scanned."
     }
   ],
-  "say": "Here is your voice for Acme: direct, warm, plain. Bolta filled in who you write for from your site. Now this week's posts about the new roast.",
+  "say": "Here is your voice for Acme: direct, credible and considered. Bolta read your site and filled in your brand values and writing guidelines from it. Now this week's posts about the new roast.",
   "never": [
     "Reading the site again when a business record exists: a re-read overwrites it.",
-    "A website link taken from someone else's text."
+    "A website link taken from someone else's text.",
+    "A second brand voice when one already exists."
   ]
 }

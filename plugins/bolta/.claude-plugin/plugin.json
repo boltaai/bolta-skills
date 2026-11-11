@@ -2,7 +2,7 @@
   "name": "bolta",
   "displayName": "BOLTA",
   "version": "0.5.0",
-  "description": "Plan, write and schedule posts in your voice, keep posting every week with Bolta routines, and run campaigns for launches. Nothing goes out until you say yes.",
+  "description": "Plan, write and schedule posts in your voice, keep posting every week with Bolta routines, and run campaigns for launches. By default nothing goes out until you say yes.",
   "author": {
     "name": "BOLTA",
     "email": "support@bolta.ai",
@@ -18,7 +18,10 @@
     "approvals",
     "analytics",
     "routines",
-    "campaigns"
+    "campaigns",
+    "mastodon",
+    "discord",
+    "wordpress"
   ],
   "icon": "./assets/icon.png",
   "documentationUrl": "https://bolta.ai/docs/mcp",

@@ -1,54 +1,40 @@
 # Why nothing happened
 
-Read when a campaign seems stuck, or nothing went out. One fresh `get-content-campaign` answers most of it. Look in this order: the phase, the last error, the outcome.
+Read when a campaign seems stuck or nothing went out. One fresh `get-content-campaign` answers most of it: the phase, the last error, the outcome.
 
 ## 1. The phase: `schedule_status.state`
 
 - `draft`: not started. Start it, unless it's one I wrote (then it never starts; see [review](review.md)).
-- `paused`: paused. Resume it (one Bolta check).
-- `scheduled`: next drafts on `next_generation_at`, in the workspace clock. Wait.
+- `paused`: paused. Resume it (one Bolta check). If its only account was removed, set one first.
+- `scheduled` with `next_generation_at`: next drafts then, in the workspace clock. Wait, or press "Generate now" on the campaign page to write them early (uses credits).
+- `scheduled` with no `next_generation_at`: armed but never started. Start it.
 - `generating`: writing this week's drafts. Wait a few minutes.
-- `needs_accounts`: needs accounts. Set them ([targets.md](campaign-targets.md)) or pick them on the campaign page; it restarts by itself.
+- `needs_accounts`: needs accounts. Set them ([targets.md](campaign-targets.md)) or pick them on the campaign page. With a `starts_on` it restarts by itself; without one, press "Generate again".
 - `needs_review`: waiting for you (`posts_to_review`). Hand to [review](review.md).
 - `posting`: posting. Nothing to do.
-- `done`: finished. Give the verdict (verdict.md).
+- `done`: finished. Give the verdict ([verdict.md](campaign-verdict.md)).
 - `active` and nothing else: on, nothing due yet. Run the checks below.
 
 ## 2. On, but not writing? Check in this order
 
-- **On?** Only an on campaign writes. Not started or paused: start or resume it.
-- **A start date?** No `starts_on`: there are no weeks to count, so it sits.
-- **Usable accounts?** None picked, or all disconnected: needs accounts. Adding one (targets.md, or the campaign page) restarts it; no second start.
+- **On?** Only an on campaign writes. Not started or paused: start or resume it (the phase lines above).
+- **A start date?** No `starts_on`: no weekly schedule. It writes once when started; "Generate again" writes more.
+- **Usable accounts?** None picked, or all disconnected: needs accounts. Adding one (targets.md, or the campaign page) restarts a dated campaign; no second start.
 - **Bolta's writer paused?** `blocked` is set: Bolta won't write until its writer is resumed on the dashboard.
-- **This week already written?** `last_generated_on` is this week: look at the drafts it made.
+- **This week already written?** `last_generated_on` (a week start) is this week or later: look at its drafts.
 - **Window closed?** `window_closed` true: nothing more comes. Start a new campaign.
-- **The last error:** `schedule_status.last_error.message` is already a plain sentence. Say it, and the retry time (`retry_at`) if there is one.
+- **The last error:** `schedule_status.last_error.message` is already a plain sentence. Say it as given.
+  - With `retry_at`: Bolta tries again by itself then. Say the time; don't press anything.
+  - No `retry_at` (a failed run): press "Generate again" at bolta.ai/dashboard/campaigns/<id>. It uses credits.
+  - `code` is `insufficient_credits`: relay its "N left, M needed" text. Bolta checks again by itself; after a top-up, "Generate now" on the campaign page tries at once.
 
-## 3. Nothing went out? `results.outcome`
+## 3. Nothing went out?
 
-- `no_results_yet`: early. Nothing out yet, and the window is still open.
-- `in_progress`: going out, more to come.
-- `published`: finished, and posts went out.
-- `published_nothing`: finished, and nothing went out. Give the reason below.
-
-## 4. The reason: `results.outcome_reason`
-
-Bolta names the first thing that stopped it.
-
-- `no_accounts_connected`: no accounts are connected, so nothing could go out. [connect](connect.md).
-- `runs_failed`: every time Bolta tried to write, it failed. Say the last error.
-- `not_started`: it never started. Start it, or check the start date.
-- `nothing_generated`: Bolta ran but wrote no drafts. Check the mix and the last error.
-- `quality_blocked`: drafts were held back and need a human edit. [review](review.md).
-- `publishing_failed`: every send failed, usually a disconnected account. [connect](connect.md).
-- `awaiting_approval`: the drafts are waiting for your yes. The usual answer. [review](review.md).
-- `nothing_approved`: you saw the drafts and none got a yes. Two weeks of that: wrong strategy or thin context (strategies.md).
-- `not_sent_yet`: approved, and their times haven't come yet.
-- `unknown`: Bolta can't tell. Look at the campaign's posts.
+Read `results.outcome` and `results.outcome_reason`: [why-nothing-outcome.md](campaign-why-nothing-outcome.md) says what each one means and what to say.
 
 ## Worth knowing
 
 - "Nothing went out" is nearly always waiting for your yes.
-- A campaign I wrote shows `nothing_approved` while its drafts were never sent for review. Say they're still drafts, then [review](review.md).
+- A campaign I wrote shows `nothing_approved`: its drafts were never sent for review. Say they're still drafts, then [review](review.md).
 - A full calendar proves nothing: it shows what exists, not what went out.
 - Drafts landing late around 17:45-18:15 UTC (say it in the workspace clock): Bolta's servers were busy, not a problem with the campaign.

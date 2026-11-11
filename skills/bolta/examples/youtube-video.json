@@ -1,0 +1,44 @@
+{
+  "ask": "Put our spring menu tour on YouTube, unlisted for now: https://cdn.example.com/spring-tour.mp4",
+  "playbook": "post",
+  "steps": [
+    {
+      "tool": "create-post",
+      "arguments": {
+        "workspace_id": "<brand's workspace id>",
+        "content": "A walk through the five new dishes on our spring menu.",
+        "account_ids": [
+          "<YouTube account id>"
+        ],
+        "media": [
+          {
+            "url": "https://cdn.example.com/spring-tour.mp4",
+            "alt_text": "Chef plating the spring menu"
+          }
+        ],
+        "idempotency_key": "spring-tour-yt-1"
+      },
+      "why": "YouTube needs a video from a public link the user gave. The text becomes the description unless one is set."
+    },
+    {
+      "tool": "update-post-platform-details",
+      "arguments": {
+        "post_id": "<post id>",
+        "platform": "youtube",
+        "fields": {
+          "video_title": "Spring menu tour",
+          "privacy_status": "unlisted",
+          "self_declared_made_for_kids": false
+        }
+      },
+      "why": "Always a title: an empty one is cut from the text. Privacy defaults to private, so set what the user said. self_declared_made_for_kids is the kids answer YouTube gets. Add thumbnail_url only if the user gave a public image link."
+    }
+  ],
+  "say": "Saved to Acme as a YouTube draft: 'Spring menu tour', unlisted, not for kids. Nothing goes up yet. Schedule it?",
+  "never": [
+    "Leaving privacy unsaid: a video saved without it goes up private.",
+    "Choosing a category the user didn't agree to.",
+    "Setting made_for_kids: only self_declared_made_for_kids is sent.",
+    "A thumbnail_url the user didn't give."
+  ]
+}

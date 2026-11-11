@@ -2693,6 +2693,10 @@
       "set_as_default": {
        "type": "boolean",
        "description": "Whether this DNA becomes the workspace default (defaults to true)."
+      },
+      "preview": {
+       "type": "boolean",
+       "description": "true: read the site and return what would be saved (dna_preview), saving nothing. Show it to the user and call again without preview only after they say yes. would_update_existing true means saving replaces the DNA of the same name. Credits are still used."
       }
      },
      "additionalProperties": false,
@@ -2842,6 +2846,10 @@
       "platform": {
        "type": "string",
        "description": "Target platform — pins example loading, platform-native style, and the target word range used in the generation prompt. One of: linkedin, x, threads, bluesky, facebook, instagram, reddit. Omit only for cross-platform generation (use enableMultiPlatform instead). Without a platform, example selection is non-deterministic and biased toward the most-recently-analyzed account — set this for reproducible single-platform generation."
+      },
+      "save_as_drafts": {
+       "type": "boolean",
+       "description": "Default true: the written posts are also saved as drafts in Bolta. Send false for a sample the user can read first: nothing is saved, and credits are still used."
       }
      },
      "additionalProperties": false,
@@ -3026,6 +3034,24 @@
       "output_config": {
        "type": "object",
        "description": "Template-specific output settings (platforms, counts)."
+      },
+      "destination_config": {
+       "type": "object",
+       "properties": {
+        "voice_profile_id": {
+         "type": "string"
+        }
+       },
+       "additionalProperties": false,
+       "description": "Which voice writes the drafts: {\"voice_profile_id\": \"<id from list-voice-profiles>\"}. The voice must be this brand's. Routines that write posts accept it; others refuse it. Leave it out to use the brand's default voice."
+      },
+      "default_reviewer_ids": {
+       "type": "array",
+       "maxItems": 20,
+       "items": {
+        "type": "string"
+       },
+       "description": "Who reviews this routine's drafts: ids from list-workspace-members. Each must be on the brand's team; client reviewers are refused. Leave it out to use the brand's default reviewer."
       }
      },
      "additionalProperties": false,
@@ -3122,6 +3148,38 @@
         "additionalProperties": false
        },
        "description": "Where the routine reads from and posts to, as objects, never strings: [{\"provider\": \"social_account\", \"ref\": \"<id from list-accounts>\"}]. Always bind the account(s) to post from: with no social_account binding Bolta may pick any connected account. Other providers (for example github or google_drive) take the id of a connection made in Bolta. At most 25. Replaces the whole list."
+      },
+      "destination_config": {
+       "type": "object",
+       "properties": {
+        "voice_profile_id": {
+         "type": "string"
+        },
+        "account_refs": {
+         "type": "array",
+         "items": {
+          "type": "string"
+         },
+         "maxItems": 25
+        },
+        "behavior": {
+         "type": "string",
+         "enum": [
+          "save_draft",
+          "schedule"
+         ]
+        }
+       },
+       "additionalProperties": false,
+       "description": "Which voice writes the drafts: {\"voice_profile_id\": \"<id from list-voice-profiles>\"}, a voice of this brand. Replaces the whole object: read destination_config from get-routine first and send its account_refs and behavior back with the new voice, or they are cleared (behavior returns to save_draft)."
+      },
+      "default_reviewer_ids": {
+       "type": "array",
+       "maxItems": 20,
+       "items": {
+        "type": "string"
+       },
+       "description": "Who reviews this routine's drafts: ids from list-workspace-members, each on the brand's team. Replaces the list; [] goes back to the brand's default reviewer."
       }
      },
      "additionalProperties": false,
@@ -3706,6 +3764,364 @@
      "destructiveHint": false,
      "idempotentHint": true,
      "openWorldHint": false
+    }
+   },
+   {
+    "name": "propose-cascade",
+    "title": "Plan Team Version",
+    "description": "Plan a team version: one idea written as one post per person or function, each in that person's voice, for the account that voice posts from. Returns the plan as rows (who, voice, account, angle) with an id and a revision. Saves the plan only: nothing is written, charged, scheduled or posted. Put the people and functions the user named in participants; Bolta never adds one. With no participants it uses the workspace's person voices and says so. A row Bolta could not place (a name that matches several voices or none, a voice with several accounts) comes back marked unresolved with the choices: ask the user, never choose for them. Show the plan to the user before start-cascade.",
+    "inputSchema": {
+     "type": "object",
+     "properties": {
+      "idea": {
+       "type": "string",
+       "description": "What every version is about, in the user's words: a sentence or two, at most 600 characters. Facts, numbers and names in the drafts come from here."
+      },
+      "participants": {
+       "type": "array",
+       "minItems": 2,
+       "maxItems": 6,
+       "items": {
+        "type": "object",
+        "properties": {
+         "name": {
+          "type": "string",
+          "maxLength": 60
+         },
+         "voice_profile_id": {
+          "type": "string"
+         },
+         "account_id": {
+          "type": "string"
+         },
+         "use_brand_voice": {
+          "type": "boolean"
+         }
+        },
+        "additionalProperties": false
+       },
+       "description": "Who writes, 2 to 6, only people or functions the user named: [{\"name\": \"David\"}, {\"name\": \"Procurement\"}]. Add voice_profile_id (from list-voice-profiles) when you know the voice, and account_id (from list-accounts) when the user named the account. A function such as Procurement is written in the brand voice. Set use_brand_voice true only when the user said a name that is not a voice should be written in the brand voice. Omit to use the workspace's person voices."
+      },
+      "count": {
+       "type": "integer",
+       "minimum": 2,
+       "maximum": 6,
+       "description": "Only when no participants are named: how many of the workspace's person voices to use, 2 to 6. The ones left out are listed in the result."
+      }
+     },
+     "additionalProperties": false,
+     "required": [
+      "idea"
+     ]
+    },
+    "annotations": {
+     "title": "Plan Team Version",
+     "readOnlyHint": false,
+     "destructiveHint": false,
+     "idempotentHint": false,
+     "openWorldHint": false
+    }
+   },
+   {
+    "name": "update-cascade",
+    "title": "Change Team Version",
+    "description": "Change a team version that has not been started: give a row another voice or account, remove a row, or add a row for a voice. Pass the revision the user last saw; if the plan changed since, the call is refused and the current plan comes back. Giving a row another voice makes it that person's row. Use it to settle an unresolved row with the user's answer. Saves the plan only: nothing is written, charged, scheduled or posted.",
+    "inputSchema": {
+     "type": "object",
+     "properties": {
+      "cascade_id": {
+       "type": "string",
+       "format": "uuid",
+       "description": "The team version's id, from propose-cascade."
+      },
+      "revision": {
+       "type": "string",
+       "description": "The revision of the plan the user last saw."
+      },
+      "change": {
+       "type": "array",
+       "maxItems": 6,
+       "items": {
+        "type": "object",
+        "properties": {
+         "slot_id": {
+          "type": "string"
+         },
+         "voice_profile_id": {
+          "type": "string"
+         },
+         "account_id": {
+          "type": "string"
+         }
+        },
+        "required": [
+         "slot_id"
+        ],
+        "additionalProperties": false
+       },
+       "description": "Rows to change: [{\"slot_id\": \"<the row's slot_id>\", \"voice_profile_id\": \"...\", \"account_id\": \"...\"}]. Send the voice, the account or both. An unresolved row needs its voice unless only its account was open."
+      },
+      "remove": {
+       "type": "array",
+       "maxItems": 6,
+       "items": {
+        "type": "string"
+       },
+       "description": "slot_id of each row to remove."
+      },
+      "add": {
+       "type": "array",
+       "maxItems": 6,
+       "items": {
+        "type": "object",
+        "properties": {
+         "voice_profile_id": {
+          "type": "string"
+         },
+         "name": {
+          "type": "string",
+          "maxLength": 60
+         },
+         "account_id": {
+          "type": "string"
+         }
+        },
+        "additionalProperties": false
+       },
+       "description": "Rows to add, each for one voice of this workspace: [{\"voice_profile_id\": \"...\"}], with account_id when the user named the account. A name works only when it means exactly one voice."
+      }
+     },
+     "additionalProperties": false,
+     "required": [
+      "cascade_id",
+      "revision"
+     ]
+    },
+    "annotations": {
+     "title": "Change Team Version",
+     "readOnlyHint": false,
+     "destructiveHint": true,
+     "idempotentHint": true,
+     "openWorldHint": false
+    }
+   },
+   {
+    "name": "start-cascade",
+    "title": "Write Team Version Drafts",
+    "description": "Write the drafts of a team version the user has seen and said yes to: one draft per row, saved together as one group for review. Drafts only: nothing is approved, scheduled or posted, and Bolta charges for a draft only when it is later approved. Pass the id and the revision the user saw. Refused if the plan changed since, if a row is still unresolved, if the plan or a full review queue blocks writing, or if it was already started (a repeat writes nothing twice). It returns as soon as the drafts are queued, before any is written: call get-cascade to see which drafts are saved, and never say they are written until it shows them.",
+    "inputSchema": {
+     "type": "object",
+     "properties": {
+      "cascade_id": {
+       "type": "string",
+       "format": "uuid",
+       "description": "The team version's id, from propose-cascade."
+      },
+      "revision": {
+       "type": "string",
+       "description": "The revision of the plan the user said yes to."
+      }
+     },
+     "additionalProperties": false,
+     "required": [
+      "cascade_id",
+      "revision"
+     ]
+    },
+    "annotations": {
+     "title": "Write Team Version Drafts",
+     "readOnlyHint": false,
+     "destructiveHint": false,
+     "idempotentHint": true,
+     "openWorldHint": false
+    }
+   },
+   {
+    "name": "get-cascade",
+    "title": "Get Team Version",
+    "description": "Read a team version: its rows, and for each one whether its draft is not started, queued or being written, saved, held back (its account is not connected) or failed, with the reason when Bolta recorded one. Gives the requested and saved counts, the saved posts' ids and where to review them. A row counts as written only when its draft is saved. Changes nothing.",
+    "inputSchema": {
+     "type": "object",
+     "properties": {
+      "cascade_id": {
+       "type": "string",
+       "format": "uuid",
+       "description": "The team version's id, from propose-cascade."
+      }
+     },
+     "additionalProperties": false,
+     "required": [
+      "cascade_id"
+     ]
+    },
+    "annotations": {
+     "title": "Get Team Version",
+     "readOnlyHint": true,
+     "destructiveHint": false,
+     "idempotentHint": true,
+     "openWorldHint": false
+    }
+   },
+   {
+    "name": "list-workspace-members",
+    "title": "List Brand Team",
+    "description": "List the people on this brand's team: each person's id, name and role (owner, admin, creator, viewer). Client reviewers are not listed. Use it to turn a name the user gives into the id that create-routine and update-routine take in default_reviewer_ids. No email addresses. Changes nothing.",
+    "inputSchema": {
+     "type": "object",
+     "properties": {
+      "workspace_id": {
+       "type": "string",
+       "format": "uuid",
+       "description": "The brand to act on (an id from list-workspaces). Needed when the connection reaches more than one brand."
+      }
+     },
+     "additionalProperties": false
+    },
+    "annotations": {
+     "title": "List Brand Team",
+     "readOnlyHint": true,
+     "destructiveHint": false,
+     "idempotentHint": true,
+     "openWorldHint": false
+    }
+   },
+   {
+    "name": "list-routine-recommendations",
+    "title": "List Routine Recommendations",
+    "description": "What Bolta recommends changing about this brand's routines, from how their drafts did: many rejected, heavily edited, piling up unreviewed, nothing published, ready to do more, or idle. Each row says what it would change (proposed_change), why, the routine it is for, and its status: proposed (waiting for the user) or applied (can still be undone). Use it after a review pass, or when the user asks why a routine's drafts keep missing. Pass routine_id for one routine; omit it for all. Changes nothing.",
+    "inputSchema": {
+     "type": "object",
+     "properties": {
+      "workspace_id": {
+       "type": "string",
+       "format": "uuid",
+       "description": "The brand to act on (an id from list-workspaces). Needed when the connection reaches more than one brand."
+      },
+      "routine_id": {
+       "type": "string",
+       "format": "uuid",
+       "description": "Only this routine's recommendations."
+      }
+     },
+     "additionalProperties": false
+    },
+    "annotations": {
+     "title": "List Routine Recommendations",
+     "readOnlyHint": true,
+     "destructiveHint": false,
+     "idempotentHint": true,
+     "openWorldHint": false
+    }
+   },
+   {
+    "name": "decide-routine-recommendation",
+    "title": "Decide Routine Recommendation",
+    "description": "Answer one of Bolta's routine recommendations after the user has seen what it changes and said what to do: apply makes the change to the routine (as if the user edited it), dismiss turns it down and keeps the record, undo reverses an applied change. Ask first; never apply on your own. Returns the recommendation and the routine as it now is.",
+    "inputSchema": {
+     "type": "object",
+     "properties": {
+      "workspace_id": {
+       "type": "string",
+       "format": "uuid",
+       "description": "The brand to act on (an id from list-workspaces). Needed when the connection reaches more than one brand."
+      },
+      "routine_id": {
+       "type": "string",
+       "format": "uuid",
+       "description": "The routine the recommendation is for (its routine_id)."
+      },
+      "recommendation_id": {
+       "type": "string",
+       "format": "uuid",
+       "description": "The recommendation's id, from list-routine-recommendations."
+      },
+      "decision": {
+       "type": "string",
+       "enum": [
+        "apply",
+        "dismiss",
+        "undo"
+       ],
+       "description": "apply, dismiss or undo."
+      }
+     },
+     "additionalProperties": false,
+     "required": [
+      "routine_id",
+      "recommendation_id",
+      "decision"
+     ]
+    },
+    "annotations": {
+     "title": "Decide Routine Recommendation",
+     "readOnlyHint": false,
+     "destructiveHint": true,
+     "idempotentHint": true,
+     "openWorldHint": false
+    }
+   },
+   {
+    "name": "list-bolta-suggestions",
+    "title": "List Bolta Suggestions",
+    "description": "Bolta's suggestions for this brand, made from what people approved, edited and rejected: for example use only your own photos, avoid a repeated phrase, post less often, move a routine's time, add to a brief, or start a seasonal campaign. Each one has a title, the reason and evidence, the changes it would make, its status, and can_decide (whether this connection's person may accept it: the brand's owner or an admin). Includes recently accepted ones that can still be undone. Changes nothing.",
+    "inputSchema": {
+     "type": "object",
+     "properties": {
+      "workspace_id": {
+       "type": "string",
+       "format": "uuid",
+       "description": "The brand to act on (an id from list-workspaces). Needed when the connection reaches more than one brand."
+      }
+     },
+     "additionalProperties": false
+    },
+    "annotations": {
+     "title": "List Bolta Suggestions",
+     "readOnlyHint": true,
+     "destructiveHint": false,
+     "idempotentHint": true,
+     "openWorldHint": false
+    }
+   },
+   {
+    "name": "decide-bolta-suggestion",
+    "title": "Decide Bolta Suggestion",
+    "description": "Answer one of Bolta's suggestions after the user has seen its changes and said what to do: accept makes every change it lists (it can change a voice, a routine's schedule, switch a routine on or off, or start a campaign), decline turns it down, undo reverses an accepted one within 7 days. Only the brand's owner or an admin can decide. Ask first; never accept on your own.",
+    "inputSchema": {
+     "type": "object",
+     "properties": {
+      "workspace_id": {
+       "type": "string",
+       "format": "uuid",
+       "description": "The brand to act on (an id from list-workspaces). Needed when the connection reaches more than one brand."
+      },
+      "suggestion_id": {
+       "type": "string",
+       "format": "uuid",
+       "description": "The suggestion's id, from list-bolta-suggestions."
+      },
+      "decision": {
+       "type": "string",
+       "enum": [
+        "accept",
+        "decline",
+        "undo"
+       ],
+       "description": "accept, decline or undo."
+      }
+     },
+     "additionalProperties": false,
+     "required": [
+      "suggestion_id",
+      "decision"
+     ]
+    },
+    "annotations": {
+     "title": "Decide Bolta Suggestion",
+     "readOnlyHint": false,
+     "destructiveHint": true,
+     "idempotentHint": true,
+     "openWorldHint": true
     }
    }
   ]

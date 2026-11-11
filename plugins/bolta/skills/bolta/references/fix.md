@@ -12,7 +12,7 @@ The user knows what changed and what still goes out, in the workspace clock: "Pu
 - **Already out**, sending now, or out on some accounts: it can't be recalled; deleting here removes only Bolta's copy, not the network's. Never set it to Draft; Bolta would only relabel it. Say: delete or edit it on the network. Offer a correction as a draft ([post](post.md)).
 - **Stop everything:** pause every Bolta routine that's on and every campaign that's on or about to start. No check, no question first. Then say: scheduled posts still go out. List the next 7 days, plus any due now, with times: "Pull these 5 back to drafts too?" On yes, soonest first, then list again. Keep the old times in the reply.
 - Switching back on usually asks one Bolta check ([routine](routine.md), [campaign](campaign.md)).
-- **Undo a delete:** only deletes made from Claude come back, for 7 days. Dashboard deletes are final. Show the first words and days left.
+- **Undo a delete:** `list-recently-deleted` returns the newest 100 posts deleted in the brand in the last 7 days that can come back, including deletes made from this app or in Bolta's chat. Deletes from the Bolta dashboard are final. Show the first words and days left.
 - **Restoring** brings it back exactly as it was. A scheduled post whose time passed in the last 2 days goes out within about 15 minutes. Say so, then ask: "As it was, or as a draft?" As a draft: restore, then take it back at once. One Bolta check, every time.
 - **Why nothing went out:** check in this order and stop at the first that fits ([references/symptoms.md](fix-symptoms.md)):
   1. A disconnected account: the reconnect link.
@@ -20,6 +20,7 @@ The user knows what changed and what still goes out, in the workspace clock: "Pu
   3. A Bolta routine: off, blocked, last run, next run.
   4. A campaign: phase, last error, outcome.
   5. A post that didn't go out: the reason Bolta saved on it, per network.
+- **Failed, partly out, waiting on an account, or out of credits:** [fix-after-publish.md](fix-after-publish.md).
 - Late around 17:45-18:15 UTC (say it in the workspace clock): Bolta's servers are busy then. Not the user, not the post.
 
 ## Tools
@@ -27,8 +28,9 @@ The user knows what changed and what still goes out, in the workspace clock: "Pu
 - `list-accounts`, `get-connect-link`: disconnected accounts; reconnect.
 - `list-inbox-items`: waiting for a yes (totals are workspace-wide).
 - `list-scheduled-posts`: scheduled posts, times in UTC.
-- `list-workspace-posts`: by status, such as `queued` (due now) or `failed`.
+- `list-workspace-posts`: by status, such as `queued` (due now), `failed` or `partially_published`.
 - `get-post`: status, time, the saved reason.
+- `create-post`: a fresh copy of a Failed post.
 - `update-post`: back to Draft.
 - `delete-post`: remove a post the user named; undo within 7 days.
 - `list-recently-deleted`, `restore-deleted`: undo a delete.

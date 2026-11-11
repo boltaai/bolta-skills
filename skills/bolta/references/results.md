@@ -14,21 +14,23 @@ One honest read, in plain words: what went out, how it did, what can't be seen y
 - **Count per account.** Out on LinkedIn but failed on X still counts on LinkedIn: "went out on 2 of 3 accounts".
 - **Never add campaigns together.** One post can sit in two; report each alone. Compare like with like: same weeks, mix and accounts.
 - **One campaign is one sample.** Give a strategy two runs before dropping it. Never say a strategy caused a result, or claim sales nobody tracked.
-- **Fresh posts:** metrics sync nightly. Zeros on posts under a day old mean "not synced yet": leave them out of rankings.
+- **Fresh posts:** Threads numbers update about every 12 hours; other networks about weekly. Zeros on posts under about a week old mean "not synced yet": leave them out of rankings.
 - **No publication record** (`has_publication_record: false`): missing data, not a flop. Leave those posts out and say how many.
 - **Disconnected accounts** stop syncing. Call `get-connect-link` and say: "Instagram is disconnected: reconnect here <link>."
 - **Nothing went out?** Say Bolta's own reason plainly. Nearly always: waiting for your yes.
 - The "already shown, don't repeat" note is for other apps: give the numbers; never mention it.
-- **One campaign:** verdict, then "Run it again with the same strategy?" if it worked, else "Try <another strategy> next?" Finishing it: [campaign](campaign.md).
-- Before quoting account or post numbers, read [references/reading-numbers.md](results-reading-numbers.md). For campaigns or a Bolta routine, read [references/campaigns-and-routines.md](results-campaigns-and-routines.md). If one won't open, carry on silently.
+- **The next step** after a winner, a campaign verdict or "when should I post?": read [references/next-step.md](results-next-step.md).
+- Before quoting account or post numbers, read [references/reading-numbers.md](results-reading-numbers.md). For the best posts, a live link, a report or anything only on the web, read [references/posts-and-reports.md](results-posts-and-reports.md). For campaigns, clicks or a Bolta routine, read [references/campaigns-and-routines.md](results-campaigns-and-routines.md). If one won't open, carry on silently.
 
 ## Tools
 
-- `list-workspaces`, `get-workspace`, `list-accounts`, `get-connect-link`: workspace, clock, accounts, reconnect link.
+- `list-workspaces`, `get-workspace`, `list-accounts`, `get-connect-link`: brand, clock, accounts, reconnect link.
 - `cross-platform-analytics`: followers and engagement by network.
 - `list-account-insights`: each account, with growth and reconnect flags.
 - `get-account-analytics`: one account, day by day.
-- `list-workspace-posts`: posts that went out, with metrics.
+- `list-workspace-posts`: `status: "published"`, `include_metrics: true`; `sort_by: "engagement"` for the best.
+- `get-post`, `list-recurring-reviews`: a link to the live post.
+- `list-inbox-items` (`source: "report"`): reports Bolta made.
 - `list-content-campaigns`, `get-content-campaign`: find a campaign; its results.
 - `list-content-campaign-posts`: its posts, and which are undecided.
 - `list-routines`, `get-routine`, `list-routine-runs`: find a Bolta routine; its counts and runs.
