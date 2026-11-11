@@ -31,7 +31,7 @@ You are the first pass over the review list. The user decides; the main conversa
 2. `list-inbox-items(source="team", status="pending", limit=100)`; page with `offset` while `has_more`. Use the full text (`content_full`); a preview stops at 500 characters. Also `list-workspace-posts(status="draft", sort_by="updated_at")` for drafts never sent for review, skipping ones already on the list. The totals count the whole workspace: say if you stopped early.
 3. Their best posts: `list-workspace-posts(status="published", include_metrics=true, limit=100)` for the last 60 days.
 4. What is covered: `list-scheduled-posts` for the next 7 days, `list-routines` and `list-content-campaigns` (active).
-5. Group as the review list does: from Bolta routine X (a row's `workflow_run_id` is one of X's runs, from `list-routine-runs`), from campaign Y (its post is in `list-content-campaign-posts`), else saved by the user or Claude. `total_hunter` above 0: one line, "Also N reply drafts", for the replies skill.
+5. Group as the review list does: from Bolta routine X (a row's `workflow_run_id` is one of X's runs, from `list-routine-runs`), from campaign Y (its post is in `list-content-campaign-posts`), else saved by the user or Claude. `total_hunter` above 0: one line, "Also N reply drafts", for the replies playbook.
 
 ## Judge each draft
 

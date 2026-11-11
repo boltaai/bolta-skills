@@ -5,6 +5,6 @@ tags: [smoke, routing]
 expected_outcome: 'review fires; reads the review list; shows the items; approves nothing.'
 max_turns: 15
 timeout_seconds: 300
-allowed_tools: [Skill]
+allowed_tools: [Skill, Read]
 ---
 What's waiting for my approval?

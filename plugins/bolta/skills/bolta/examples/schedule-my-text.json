@@ -1,0 +1,56 @@
+{
+  "ask": "Schedule this for Tuesday 9am on LinkedIn: 'We are hiring two support engineers. Remote, EU hours.'",
+  "playbook": "review",
+  "steps": [
+    {
+      "tool": "create-post",
+      "arguments": {
+        "workspace_id": "<brand's workspace id>",
+        "content": "We are hiring two support engineers. Remote, EU hours.",
+        "account_ids": [
+          "<LinkedIn account id>"
+        ],
+        "idempotency_key": "hiring-support-1"
+      },
+      "why": "Their own text with a time is the yes, but the post is still saved as a plain draft first."
+    },
+    {
+      "tool": "submit-for-review",
+      "arguments": {
+        "workspace_id": "<brand's workspace id>",
+        "post_ids": [
+          "<post id>"
+        ]
+      },
+      "why": "Puts it on the review list, which gives it a content_fingerprint."
+    },
+    {
+      "tool": "list-inbox-items",
+      "arguments": {
+        "workspace_id": "<brand's workspace id>",
+        "source": "team",
+        "status": "pending"
+      },
+      "why": "Read the row again for its content_fingerprint."
+    },
+    {
+      "tool": "approve-many-posts",
+      "arguments": {
+        "items": [
+          {
+            "post_id": "<post id>",
+            "expected_fingerprint": "<content_fingerprint>",
+            "schedule_mode": "set_fixed_time",
+            "fixed_time": "2026-11-17T09:00:00"
+          }
+        ]
+      },
+      "why": "Wall clock in the brand's time zone: no Z, no offset, no timezone unless the user named a place."
+    }
+  ],
+  "say": "Scheduled for Acme: Tue Nov 17, 9:00 am (New York) on LinkedIn.",
+  "never": [
+    "A UTC offset or a Z on the time.",
+    "A weekday copied from an example: work it out from the date."
+  ]
+}

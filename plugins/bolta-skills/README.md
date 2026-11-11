@@ -1,12 +1,12 @@
 # BOLTA skills
 
-The same twelve skills as the `bolta` plugin, with no connection of its own. Tell Claude what you want to post about. Bolta writes it in your voice every week, and nothing goes out until you say yes.
+The same Bolta skill as the `bolta` plugin, with no connection of its own. Tell Claude what you want to post about. Bolta writes it in your voice every week, and nothing goes out until you say yes.
 
 ## Which one to install
 
 - **bolta** brings its own Bolta connection. Pick it if Bolta is not connected yet.
 - **bolta-skills** (this one) brings none. Pick it if you already added Bolta in claude.ai (Customize > Connectors), in Cowork, or with `claude mcp add`.
-- Never both: every skill would run twice.
+- Never both: the skill would load twice.
 - **bolta-checks** adds the Bolta checks in Claude Code (see below). Install it next to either.
 
 Claude Code connects an address once, and your own `claude mcp add` server wins over the plugin's.
@@ -18,7 +18,7 @@ Claude Code connects an address once, and your own `claude mcp add` server wins 
 /plugin install bolta-skills@bolta-marketplace
 ```
 
-Then `/mcp`: Bolta should show as connected. Start with `/bolta-skills:start` or "set me up".
+Then `/mcp`: Bolta should show as connected. Start with `/bolta-skills:bolta` or "set me up".
 
 ## What Bolta checks, and where
 
@@ -35,4 +35,4 @@ In Claude Code, `bolta-checks` turns that into a Bolta check you answer before a
 
 Bolta (mcp.bolta.ai) gets your requests and decisions. Claude handles sign-in; the plugin never sees a password. The plugin makes no network calls of its own.
 
-v0.4.0 (beta). [Privacy](https://bolta.ai/privacy-policy) · [Terms](https://bolta.ai/tos) · [Support](https://bolta.ai/support) · MIT licence
+v0.5.0 (beta). [Privacy](https://bolta.ai/privacy-policy) · [Terms](https://bolta.ai/tos) · [Support](https://bolta.ai/support) · MIT licence

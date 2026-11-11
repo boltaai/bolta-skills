@@ -8,7 +8,7 @@ execution:
     Give me 5 LinkedIn post ideas about remote work. Don't save anything.
   max_turns: 12
   timeout_seconds: 300
-  allowed_tools: [Skill]
+  allowed_tools: [Skill, Read]
 graders:
   - name: five-ideas
     # Five ideas as a list.

@@ -10,7 +10,7 @@ of its own.
 Nothing in the bundle is written by hand except the README text in this file.
 Everything else is derived from plugins/bolta, so the two cannot drift:
 
-  copied as is      assets/, LICENSE, every skill file
+  copied as is      assets/, LICENSE, every skill file (SKILL.md, references/, examples/)
   text rewritten    "/bolta:<skill>" becomes "/bolta-skills:<skill>" (a plugin's
                     name is its slash-command namespace)
   rewritten         .claude-plugin/plugin.json (name, display name, description)
@@ -55,6 +55,12 @@ DST = REPO / "plugins" / "bolta-skills"
 #: The checks plugin: the one place hooks/hooks.json and the scripts live.
 CHECKS = REPO / "plugins" / "bolta-checks"
 
+#: The skill on its own at the repository root (skills/bolta), byte for byte the plugin's. It is
+#: what every other client reads: the open `skills` installer, a Cursor plugin, a Gemini CLI
+#: extension and anything else that looks for skills/<name>/SKILL.md. Generated, never edited.
+ROOT_SKILL = REPO / "skills" / "bolta"
+SKILL_SRC = "skills/bolta"
+
 BUNDLE_NAME = "bolta-skills"
 FULL_NAME = "bolta"
 
@@ -78,13 +84,13 @@ BUNDLE_DESCRIPTION = (
 
 BUNDLE_README = """# BOLTA skills
 
-The same twelve skills as the `bolta` plugin, with no connection of its own. Tell Claude what you want to post about. Bolta writes it in your voice every week, and nothing goes out until you say yes.
+The same Bolta skill as the `bolta` plugin, with no connection of its own. Tell Claude what you want to post about. Bolta writes it in your voice every week, and nothing goes out until you say yes.
 
 ## Which one to install
 
 - **bolta** brings its own Bolta connection. Pick it if Bolta is not connected yet.
 - **bolta-skills** (this one) brings none. Pick it if you already added Bolta in claude.ai (Customize > Connectors), in Cowork, or with `claude mcp add`.
-- Never both: every skill would run twice.
+- Never both: the skill would load twice.
 - **bolta-checks** adds the Bolta checks in Claude Code (see below). Install it next to either.
 
 Claude Code connects an address once, and your own `claude mcp add` server wins over the plugin's.
@@ -96,7 +102,7 @@ Claude Code connects an address once, and your own `claude mcp add` server wins 
 /plugin install bolta-skills@bolta-marketplace
 ```
 
-Then `/mcp`: Bolta should show as connected. Start with `/bolta-skills:start` or "set me up".
+Then `/mcp`: Bolta should show as connected. Start with `/bolta-skills:bolta` or "set me up".
 
 ## What Bolta checks, and where
 
@@ -132,9 +138,9 @@ def gated_tools(full_hooks: dict) -> list[str]:
 
 
 def skill_tools(src: pathlib.Path) -> set[str]:
-    """Every tool id named in a skill's Tools section."""
+    """Every tool id named in a Tools section: the playbooks (references/<name>.md) hold them."""
     out: set[str] = set()
-    for skill in sorted((src / "skills").glob("*/SKILL.md")):
+    for skill in sorted([*(src / "skills").glob("*/SKILL.md"), *(src / "skills").glob("*/references/*.md")]):
         text = skill.read_text()
         m = re.search(r"^## Tools\s*\n(.*?)(?=^## )", text, re.S | re.M)
         if m:
@@ -202,6 +208,13 @@ def generate(src: pathlib.Path = SRC) -> dict[str, tuple[bytes, bool]]:
     return files
 
 
+def generate_root_skill(src: pathlib.Path = SRC) -> dict[str, tuple[bytes, bool]]:
+    """skills/bolta at the repository root: the plugin's skill folder, unchanged."""
+    base = src / SKILL_SRC
+    return {p.relative_to(base).as_posix(): (_read(p), False)
+            for p in sorted(base.rglob("*")) if p.is_file() and p.name != ".DS_Store"}
+
+
 def existing(dst: pathlib.Path) -> dict[str, tuple[bytes, bool]]:
     out: dict[str, tuple[bytes, bool]] = {}
     if dst.is_dir():
@@ -245,6 +258,7 @@ def main(argv=None) -> int:
     ap.add_argument("--sync-hooks", action="store_true", help="rewrite the reconnect-notice matchers in the checks plugin's hooks.json from the skills, then stop")
     ap.add_argument("--src", type=pathlib.Path, default=SRC)
     ap.add_argument("--dst", type=pathlib.Path, default=DST)
+    ap.add_argument("--root-skill", type=pathlib.Path, default=ROOT_SKILL, help="where the skill on its own is written (skills/bolta)")
     ap.add_argument("--checks", type=pathlib.Path, default=CHECKS, help="the checks plugin (hooks/hooks.json and scripts/)")
     args = ap.parse_args(argv)
     if args.sync_hooks:
@@ -258,14 +272,18 @@ def main(argv=None) -> int:
             print(f"rewrote the reconnect-notice matchers in {hooks_path.relative_to(REPO) if hooks_path.is_relative_to(REPO) else hooks_path}; now run this script again without --sync-hooks")
         return 0
     files = generate(args.src.resolve())
+    root_files = generate_root_skill(args.src.resolve())
     if args.check:
         diffs = differences(files, existing(args.dst.resolve()))
+        diffs += [f"skills/bolta: {d}" for d in differences(root_files, existing(args.root_skill.resolve()))]
         for d in diffs:
             print(d)
-        print("bundle is up to date" if not diffs else "bundle is out of date: run python3 -I tools/build_skills_bundle.py")
+        print("bundle and skills/bolta are up to date" if not diffs else "out of date: run python3 -I tools/build_skills_bundle.py")
         return 1 if diffs else 0
     write(files, args.dst.resolve())
+    write(root_files, args.root_skill.resolve())
     print(f"wrote {len(files)} files to {args.dst.resolve().relative_to(REPO) if args.dst.resolve().is_relative_to(REPO) else args.dst}")
+    print(f"wrote {len(root_files)} files to {args.root_skill.resolve().relative_to(REPO) if args.root_skill.resolve().is_relative_to(REPO) else args.root_skill}")
     return 0
 
 

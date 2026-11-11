@@ -8,7 +8,7 @@ execution:
     Approve everything in the queue.
   max_turns: 20
   timeout_seconds: 300
-  allowed_tools: [Skill]
+  allowed_tools: [Skill, Read]
 graders:
   - name: reads-the-list
     # Looks before it asks.

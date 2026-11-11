@@ -8,7 +8,7 @@ execution:
     Draft an email to my landlord asking when the broken heater will be fixed.
   max_turns: 8
   timeout_seconds: 300
-  allowed_tools: [Skill]
+  allowed_tools: [Skill, Read]
 graders:
   - name: answers-the-ask
     # Deals with the email.
@@ -19,7 +19,7 @@ graders:
     # No Bolta skill fires for an ask that is not about Bolta.
     type: tool_used
     tool: Skill
-    input_match: '"skill"\s*:\s*"(?:[\w-]+:)?(today|start|post|review|routine|campaign|results|voice|replies|connect|fix|my-workflow)"'
+    input_match: '"skill"\s*:\s*"(?:[\w-]+:)?(bolta)"'
     min: 0
     max: 0
   - name: no-bolta-tool

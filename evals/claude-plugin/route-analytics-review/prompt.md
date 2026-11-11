@@ -5,6 +5,6 @@ tags: [smoke, routing]
 expected_outcome: 'results fires; pulls cross-platform numbers; notes the Instagram account that needs reconnecting; writes nothing.'
 max_turns: 15
 timeout_seconds: 300
-allowed_tools: [Skill]
+allowed_tools: [Skill, Read]
 ---
 How did our social accounts do over the last 30 days?

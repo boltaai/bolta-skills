@@ -1,0 +1,33 @@
+{
+  "ask": "I didn't mean to delete that one. Bring it back.",
+  "playbook": "fix",
+  "steps": [
+    {
+      "tool": "list-recently-deleted",
+      "arguments": {
+        "workspace_id": "<brand's workspace id>"
+      },
+      "why": "Deleted posts stay here for 7 days."
+    },
+    {
+      "tool": "restore-deleted",
+      "arguments": {
+        "workspace_id": "<brand's workspace id>",
+        "item_type": "post",
+        "item_id": "<deleted post id>"
+      },
+      "why": "It comes back as it was. Read it again before saying where it stands."
+    },
+    {
+      "tool": "get-post",
+      "arguments": {
+        "post_id": "<post id>"
+      },
+      "why": "Is it a draft again, or back on the review list?"
+    }
+  ],
+  "say": "It's back in Acme as a draft. Nothing goes out. Schedule it again?",
+  "never": [
+    "Re-scheduling it without asking."
+  ]
+}

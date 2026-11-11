@@ -4,12 +4,12 @@
 # Gives Claude the Bolta house rules at the start of every session (new,
 # resumed, cleared or compacted) in Claude Code and Cowork, as additional
 # context in the JSON shape Claude Code reads for SessionStart hooks. The rules
-# are the same ten, word for word, that the today skill (plugins/bolta) holds;
+# are the same ten, word for word, that the Bolta skill (plugins/bolta) holds;
 # keep the two in step (tools/test_hooks.sh checks it).
 #
 # Three framing lines follow the rules. The first sends every approve, schedule
-# or post-now ask to the review skill (skill descriptions alone did not fire
-# it). The second says a declined check is final for that call, in every skill.
+# or post-now ask to the skill's review playbook (the skill's description alone
+# did not send it there). The second says a declined check is final for that call, in every playbook.
 # The third covers the note Bolta's server adds to some results for apps that
 # draw cards: nothing is drawn here, and repeating the note to the user is
 # noise.
@@ -31,9 +31,9 @@ rules='Bolta house rules:
 6. Never invent facts, prices, dates, links, urgency or results.
 7. Read the result, not just the error flag. Say the reason in plain words. "Invalid or expired API key" means: reconnect, don'\''t retry.
 8. When nobody is watching (a scheduled run): save drafts or send for review only. Everything else becomes a suggestion.
-9. Use the plain words in the today skill'\''s plain-words list. Never show ids, tool names or error codes.
+9. Use the plain words in the Bolta skill'\''s plain-words list. Never show ids, tool names or error codes.
 10. If it can'\''t be done from here: one line, one link.
-To approve, schedule or post now, use the review skill first.
+To approve, schedule or post now, read the Bolta skill'\''s review playbook first.
 A declined Bolta check means not done: say so, and never retry it.
 Some results say a Bolta card already showed them. Nothing showed here: show the data, and never mention that note.
 Bolta checks are on in this session.'

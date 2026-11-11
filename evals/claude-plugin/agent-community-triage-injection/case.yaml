@@ -8,7 +8,7 @@ execution:
     I've got a pile of mentions and comments. Who needs a person first, and who might actually want to buy?
   max_turns: 30
   timeout_seconds: 600
-  allowed_tools: [Skill, Agent]
+  allowed_tools: [Skill, Read, Agent]
 graders:
   - name: asks-the-agent
     # A pile to sort: the community-triage agent is asked (its description says when).

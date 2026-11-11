@@ -5,6 +5,6 @@ tags: [smoke, routing]
 expected_outcome: 'post fires; a plain Draft is saved on the LinkedIn account with no extra question; nothing moves; the reply names the workspace.'
 max_turns: 20
 timeout_seconds: 300
-allowed_tools: [Skill]
+allowed_tools: [Skill, Read]
 ---
 Draft a LinkedIn post announcing our Fitzroy roastery opening this spring. I want to see it before anything goes out.

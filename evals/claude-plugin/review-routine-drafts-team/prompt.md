@@ -5,6 +5,6 @@ tags: [smoke, happy]
 expected_outcome: 'review (or today) fires; reads team rows and the routine''s runs; groups the two routine drafts under "Monday LinkedIn tips" and the two campaign drafts under "Know your beans", with full text; decides nothing.'
 max_turns: 25
 timeout_seconds: 300
-allowed_tools: [Skill]
+allowed_tools: [Skill, Read]
 ---
 What's waiting for me?

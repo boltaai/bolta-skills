@@ -110,12 +110,21 @@ AGENT_READ_PREFIXES = ("list-", "get-")
 AGENT_READ_EXTRA = {"cross-platform-analytics", "search-engagement-opportunities"}
 MAX_AGENT_WORDS = 700          # agents/<name>.md body, frontmatter excluded
 
-#: The v0.2 skill set and the order of sections inside every SKILL.md.
-SKILLS = ("today", "start", "post", "review", "routine", "campaign", "results",
-          "voice", "replies", "connect", "fix", "my-workflow")
-SECTIONS = ["Done when", "Know this", "Tools", "Hand off", "Always"]
-HOUSE_RULES_LINE = "Follow the house rules in the `today` skill."
-RULES_SKILL = "today"
+#: One skill. Its SKILL.md is the entry point: the house rules, how Bolta is built, the look-once
+#: reads and the table that sends each ask to one playbook. The playbooks are
+#: references/<name>.md (the twelve skills of v0.2 to v0.4, one file each), and every other
+#: reference is references/<playbook>-<topic>.md. examples/ holds worked calls as JSON.
+SKILLS = ("bolta",)
+PLAYBOOKS = ("today", "start", "post", "review", "routine", "campaign", "results",
+             "voice", "replies", "connect", "fix", "my-workflow")
+SECTIONS = ["House rules", "How Bolta is built", "Look once", "Pick the playbook", "The four moves",
+            "Things that bite", "When something is missing", "Extras, where the app has them"]
+PLAYBOOK_SECTIONS = ["Done when", "Know this", "Tools", "Hand off", "Always"]
+HOUSE_RULES_LINE = "Follow the house rules in the Bolta skill."
+RULES_SKILL = "bolta"
+RULES_SECTION = "House rules"
+#: Keys an examples/<name>.json file holds. `steps` is a list of {tool, arguments, why}.
+EXAMPLE_KEYS = {"ask", "playbook", "before", "steps", "say", "never"}
 
 #: v0.1 names that must not come back (skills, commands, subagents).
 OLD_NAMES = {
@@ -125,12 +134,14 @@ OLD_NAMES = {
     "approval-batch-reviewer", "content-calendar-planner",
     "performance-analyst", "plan-week",
 }
+#: The twelve v0.2 skills are playbooks now. A skill folder with one of these names is the old layout.
+OLD_SKILL_FOLDERS = set(PLAYBOOKS)
 
 #: Budgets, in words as `LC_ALL=C wc -w` counts them (see words()).
-MAX_SKILL_WORDS = 500          # SKILL.md body, frontmatter excluded
-MAX_REFERENCE_WORDS = 600      # each references/*.md
-MAX_SKILLS_TOTAL_WORDS = 10_000  # all SKILL.md files together, frontmatter included
-MAX_DESCRIPTION_WORDS = 60
+MAX_SKILL_WORDS = 1_600        # SKILL.md body, frontmatter excluded: the one entry point
+MAX_REFERENCE_WORDS = 600      # each references/*.md (a playbook is one of them)
+MAX_SKILLS_TOTAL_WORDS = 2_000   # all SKILL.md files together, frontmatter included
+MAX_DESCRIPTION_WORDS = 100    # one description now, where twelve of 60 words used to be in context
 MAX_README_WORDS = 430         # was 400 before the plugin gained its review helper (one line)
 MAX_ALWAYS_MUSTS = 3
 
@@ -520,17 +531,22 @@ def check_layout(plugin: pathlib.Path, bundle: bool = False):
             if p.is_dir() or p.name == "SKILL.md" and p.parent == d:
                 continue
             r = p.relative_to(d)
-            if r.parts[0] != "references" or p.suffix != ".md" or len(r.parts) != 2:
-                err(p.relative_to(plugin), "a skill folder holds SKILL.md and references/<topic>.md only")
+            ok = len(r.parts) == 2 and (
+                (r.parts[0] == "references" and p.suffix == ".md")
+                or (r.parts[0] == "examples" and (p.suffix == ".json" or p.name == "README.md")))
+            if not ok:
+                err(p.relative_to(plugin), "a skill folder holds SKILL.md, references/<topic>.md, examples/<name>.json and examples/README.md only")
     missing = [s for s in SKILLS if s not in skills]
     extra = [s for s in skills if s not in SKILLS]
     for s in missing:
         err("skills/", f"missing the {s!r} skill")
     for s in extra:
-        warn(f"skills/{s}", "not one of the v0.2 skills; add it to SKILLS in tools/check_claude_plugin.py if it is meant to ship")
+        warn(f"skills/{s}", "not the Bolta skill; add it to SKILLS in tools/check_claude_plugin.py if it is meant to ship")
     for s in skills:
         if s in OLD_NAMES:
             err(f"skills/{s}", "a v0.1 skill name; v0.2 replaced it")
+        if s in OLD_SKILL_FOLDERS:
+            err(f"skills/{s}", f"{s} is a playbook now: skills/bolta/references/{s}.md")
     return skills
 
 
@@ -709,29 +725,50 @@ def check_skills(plugin, skills, tools_by_name, checks):
         if heads != SECTIONS:
             err(rel, f"sections must be exactly {' / '.join(SECTIONS)} in that order; found {' / '.join(heads) or 'none'}")
         sec = dict(secs)
-        for tok in re.findall(r"`([^`]+)`", sec.get("Hand off", "")):
-            if tok.startswith("/bolta:"):
-                tok = tok[len("/bolta:"):]
-            if tok not in skills:
-                err(rel, f"Hand off names `{tok}`, which is not a skill")
-        for tok in re.findall(r"`([a-z][a-z0-9]*(?:-[a-z0-9]+)+)`", sec.get("Tools", "")):
-            if tok not in tools_by_name:
-                err(rel, f"Tools lists `{tok}`, which is not an exposed Bolta tool")
-        always = sec.get("Always", "")
         if name == RULES_SKILL:
-            rules = re.findall(r"^(\d{1,2}\. .+)$", always, re.M)
+            rules_text = sec.get(RULES_SECTION, "")
+            rules = re.findall(r"^(\d{1,2}\. .+)$", rules_text, re.M)
             if len(rules) != 10:
-                err(rel, f"Always must hold the 10 house rules; found {len(rules)}")
+                err(rel, f"{RULES_SECTION} must hold the 10 house rules; found {len(rules)}")
+            if "Bolta house rules:" not in rules_text.split("\n"):
+                err(rel, f"{RULES_SECTION} must open with the line 'Bolta house rules:' (the session-start hook prints the same line)")
             if script_rules is not None and rules != script_rules:
                 err(rel, "the house rules differ from plugins/bolta-checks/scripts/bolta-house-rules.sh; keep them word for word")
-        else:
+        refdir = path.parent / "references"
+        table = sec.get("Pick the playbook", "")
+        for pb in PLAYBOOKS:
+            pfile = refdir / f"{pb}.md"
+            prel = pfile.relative_to(plugin) if pfile.is_file() else rel
+            if not pfile.is_file():
+                err(rel, f"missing the {pb!r} playbook (references/{pb}.md)")
+                continue
+            if f"(references/{pb}.md)" not in table:
+                err(rel, f"Pick the playbook does not link references/{pb}.md, so nothing sends an ask there")
+            psecs = sections(pfile.read_text())
+            pheads = [h for h, _ in psecs]
+            if pheads != PLAYBOOK_SECTIONS:
+                err(prel, f"a playbook's sections are exactly {' / '.join(PLAYBOOK_SECTIONS)} in that order; found {' / '.join(pheads) or 'none'}")
+            psec = dict(psecs)
+            for target in re.findall(r"\]\(([^)\s]+)\)", psec.get("Hand off", "")):
+                if target.removesuffix(".md") not in PLAYBOOKS:
+                    err(prel, f"Hand off links {target}, which is not a playbook")
+            if "`" in psec.get("Hand off", ""):
+                err(prel, "Hand off names playbooks as links ([review](review.md)), never in backticks")
+            for tok in re.findall(r"`([a-z][a-z0-9]*(?:-[a-z0-9]+)+)`", psec.get("Tools", "")):
+                if tok not in tools_by_name:
+                    err(prel, f"Tools lists `{tok}`, which is not an exposed Bolta tool")
+            always = psec.get("Always", "")
             if HOUSE_RULES_LINE not in always:
-                err(rel, f"Always must say: {HOUSE_RULES_LINE}")
+                err(prel, f"Always must say: {HOUSE_RULES_LINE}")
             musts = [ln for ln in always.split("\n") if ln.startswith("- ") and HOUSE_RULES_LINE not in ln]
             if len(musts) > MAX_ALWAYS_MUSTS:
-                err(rel, f"Always has {len(musts)} skill-specific musts; at most {MAX_ALWAYS_MUSTS}")
+                err(prel, f"Always has {len(musts)} playbook-specific musts; at most {MAX_ALWAYS_MUSTS}")
+        for ref in sorted(refdir.glob("*.md")) if refdir.is_dir() else []:
+            stem = ref.stem
+            if stem not in PLAYBOOKS and not any(stem.startswith(pb + "-") for pb in PLAYBOOKS):
+                err(ref.relative_to(plugin), "a reference is a playbook (references/<playbook>.md) or belongs to one (references/<playbook>-<topic>.md)")
+        check_examples(plugin, path.parent / "examples", tools_by_name)
 
-        refdir = path.parent / "references"
         for ref in sorted(refdir.glob("*.md")) if refdir.is_dir() else []:
             rn = words(ref.read_text())
             if rn > MAX_REFERENCE_WORDS:
@@ -744,6 +781,59 @@ def check_skills(plugin, skills, tools_by_name, checks):
         err("skills/", f"all SKILL.md files total {total} words; keep the set under {MAX_SKILLS_TOTAL_WORDS}")
     shipped = sum(words(p.read_text()) for p in md_files(plugin))
     info(f"SKILL.md files total {total} words; all shipped markdown (README and references too) {shipped} words")
+
+
+def check_examples(plugin, exdir, tools_by_name):
+    """Every examples/<name>.json is one ask worked through: real tools, real argument names, every
+    required argument present, and a line in examples/README.md so the skill can find it."""
+    if not exdir.is_dir():
+        err(exdir.relative_to(plugin), "missing: the skill ships worked examples")
+        return
+    index = (exdir / "README.md").read_text() if (exdir / "README.md").is_file() else ""
+    if not index:
+        err(exdir.relative_to(plugin), "examples/README.md is missing (the index SKILL.md links)")
+    files = sorted(exdir.glob("*.json"))
+    if not files:
+        err(exdir.relative_to(plugin), "no examples")
+    for f in files:
+        rel = f.relative_to(plugin)
+        try:
+            ex = json.loads(f.read_text())
+        except ValueError as e:
+            err(rel, f"not JSON: {e}")
+            continue
+        if f"({f.name})" not in index:
+            err(rel, "not listed in examples/README.md")
+        for k in set(ex) - EXAMPLE_KEYS:
+            err(rel, f"unknown key {k!r}; an example holds {', '.join(sorted(EXAMPLE_KEYS))}")
+        for k in ("ask", "playbook", "steps", "say"):
+            if not ex.get(k):
+                err(rel, f"missing {k!r}")
+        if ex.get("playbook") not in PLAYBOOKS:
+            err(rel, f"playbook {ex.get('playbook')!r} is not a playbook")
+        lint_words(rel, "the closing line", ex.get("say", ""), NEVER_SAY)
+        for i, step in enumerate(ex.get("steps") or [], 1):
+            tool, args = step.get("tool"), step.get("arguments")
+            if tool not in tools_by_name:
+                err(rel, f"step {i}: {tool!r} is not an exposed Bolta tool")
+                continue
+            if not isinstance(args, dict) or not step.get("why"):
+                err(rel, f"step {i}: needs an arguments object and a why")
+                continue
+            schema = tools_by_name[tool].get("inputSchema") or {}
+            props = set(schema.get("properties", {})) | UNIVERSAL_PARAMS
+            for a in args:
+                if a not in props:
+                    err(rel, f"step {i}: {tool} has no argument {a!r}")
+            for a in schema.get("required", []):
+                if a not in args and a not in UNIVERSAL_PARAMS:
+                    err(rel, f"step {i}: {tool} needs {a!r}")
+            for a, v in args.items():
+                enum = (schema.get("properties", {}).get(a) or {}).get("enum")
+                if enum and v not in enum:
+                    err(rel, f"step {i}: {tool}.{a} is {v!r}; one of {enum}")
+            if tool in PUBLISH_CAPABLE_CREATE_TOOLS and ("requested_action" in args or "scheduled_time" in args):
+                err(rel, f"step {i}: an example never saves with a time or an action; drafts first, then the yes move")
 
 
 TOKEN = re.compile(r"`([a-z][a-z0-9]*(?:-[a-z0-9]+)+)`")
@@ -777,7 +867,7 @@ def split_args(s: str):
 
 
 def check_tool_ids_and_args(plugin, skills, tools_by_name):
-    siblings = set(skills)
+    siblings = set(skills) | set(PLAYBOOKS)
     referenced: set[str] = set()
     for path in md_files(plugin):
         rel = path.relative_to(plugin)
@@ -853,7 +943,7 @@ def check_lint(plugin, skills):
             if m.group(0).split(":")[0] != f"/{_ns[0]}":
                 err(rel, f"{m.group(0)} uses another plugin's name; this plugin's skills are /{_ns[0]}:<skill>")
             elif m.group(1) not in skill_names:
-                err(rel, f"/{_ns[0]}:{m.group(1)} is not a skill (v0.2 has no commands)")
+                err(rel, f"/{_ns[0]}:{m.group(1)} is not a skill (the one skill is /{_ns[0]}:bolta)")
         for m in re.finditer(r"\b(\d{2,3})\s+(?:Bolta\s+)?(?:MCP\s+)?tools\b", body):
             warn(rel, f"tool count in prose ({m.group(0)!r}); counts drift, remove it")
         if re.search(r"(?i)requires?\s+(an?\s+)?(admin|owner)\b", body):

@@ -1,0 +1,62 @@
+{
+  "ask": "Write me a week of LinkedIn posts about hiring.",
+  "playbook": "post",
+  "steps": [
+    {
+      "tool": "bulk-create-posts",
+      "arguments": {
+        "workspace_id": "<brand's workspace id>",
+        "posts": [
+          {
+            "content": "Post 1 text, written in the brand's voice.",
+            "account_ids": [
+              "<LinkedIn account id>"
+            ],
+            "status": "Draft"
+          },
+          {
+            "content": "Post 2 text.",
+            "account_ids": [
+              "<LinkedIn account id>"
+            ],
+            "status": "Draft"
+          },
+          {
+            "content": "Post 3 text.",
+            "account_ids": [
+              "<LinkedIn account id>"
+            ],
+            "status": "Draft"
+          },
+          {
+            "content": "Post 4 text.",
+            "account_ids": [
+              "<LinkedIn account id>"
+            ],
+            "status": "Draft"
+          },
+          {
+            "content": "Post 5 text.",
+            "account_ids": [
+              "<LinkedIn account id>"
+            ],
+            "status": "Draft"
+          }
+        ]
+      },
+      "why": "One call for the whole week, every item a Draft with its accounts. Never a loop of create-post. If the call asks for text items, send each object JSON-encoded."
+    },
+    {
+      "tool": "bulk-create-status",
+      "arguments": {
+        "task_id": "<task_id from the reply>"
+      },
+      "why": "Poll until status is completed, whatever the reply's text says. Its posts are the real saved rows; report rejected and quality_blocked."
+    }
+  ],
+  "say": "Saved to Acme as drafts. Nothing goes out yet. Schedule all 5? Or tell me what to change. Bolta picks exact times from your posting schedule.",
+  "never": [
+    "A scheduled_time or requested_action on any item.",
+    "More than 12 posts in a sitting."
+  ]
+}

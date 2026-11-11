@@ -5,7 +5,7 @@ tags: [smoke, happy]
 expected_outcome: 'routine fires; create-routine with weekly_social_posts, an object binding to the LinkedIn account, ask me first, the workspace time zone and no monthly interval; activate-routine reaches Bolta (not denied) and its reply carries next_run_at (get-routine after is optional); no run now; the reply says Bolta routine and reads back the first drafts: Mon Oct 19, 8:00 am (Sydney), never the UTC time.'
 max_turns: 25
 timeout_seconds: 300
-allowed_tools: [Skill]
+allowed_tools: [Skill, Read]
 ---
 Earlier in this chat I asked "Keep me posting 3 times a week on LinkedIn about hiring." You replied:
 

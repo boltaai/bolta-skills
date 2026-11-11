@@ -1,38 +1,122 @@
 # bolta-skills
 
-Skills and plugins that let AI assistants work in a [Bolta](https://bolta.ai) workspace: write and schedule posts in your voice, keep posting every week with Bolta routines, run campaigns for launches, and read the results.
+One skill that lets an AI assistant run a brand's social media in [Bolta](https://bolta.ai): write posts in your voice, decide what goes out from one review list, keep posting every week with Bolta routines, run campaigns for launches, answer comments and read the results. Drafts save freely. Nothing is approved, scheduled or published until you say yes.
 
-## Bolta plugin for Claude
+Two parts, and every client needs both:
+
+- **The Bolta connection**: a hosted server at `https://mcp.bolta.ai/mcp`. You sign in to Bolta in the browser the first time; there is no key to paste.
+- **The Bolta skill**: [`skills/bolta/`](skills/bolta/SKILL.md). One entry point, twelve playbooks and [worked examples](skills/bolta/examples/README.md) with the exact calls.
+
+## Choose your client
+
+| Client | Connection | Skill | Status |
+|-|-|-|-|
+| Claude Code | the plugin brings it | the plugin brings it | Checked in CI; behavioural evals run against a mock Bolta |
+| claude.ai, Claude desktop, Cowork | Customize > Connectors | install the plugin, or upload the skill | Not tested end to end |
+| Cursor | `mcp.json` in this repository | `skills/bolta` | Manifest follows Cursor's plugin docs; not tested |
+| Gemini CLI | `gemini-extension.json` | `skills/bolta` | Manifest follows the extension docs; not tested |
+| Codex CLI | `~/.codex/config.toml` | `npx skills add` | Not tested |
+| Grok Build | `grok mcp add` | reads this repository as a Claude Code marketplace | Not tested |
+| VS Code, Windsurf, anything else | its own config file | `npx skills add` | Not tested |
+
+"Not tested" means nobody has run a full draft, review and schedule there yet. Clients differ in what Bolta offers them: the batch approval, the "no" with a reason and campaign set-up from chat reach Claude and Cursor today. Elsewhere the skill falls back to one approval at a time and a link to Bolta, and says so.
+
+### Claude Code
 
 ```
 /plugin marketplace add boltaai/bolta-skills
 /plugin install bolta@bolta-marketplace
 ```
 
-Then run `/mcp`, sign in to Bolta, and run `/bolta:start`. Already connected Bolta yourself (a connector in claude.ai, the desktop app or Cowork, or `claude mcp add`)? Install `bolta-skills@bolta-marketplace` instead: the same skills with no Bolta connection of its own, so Bolta's tools are not registered twice. In Claude Code, add `bolta-checks@bolta-marketplace` next to either for the Bolta checks: hooks that ask before anything public, approved, turned down or final. They are a plugin of their own because Anthropic's plugin directory accepts command hooks and shell scripts only from Verified organizations; the two listed plugins ship without them. The hooks and the behavioural evals run in Claude Code against a mock Bolta server. The checks were also seen working on a server added with `claude mcp add` under another name. A claude.ai connector, Cowork and claude.ai chat (which runs no hooks) are not tested end to end. Drafts save freely; nothing is approved, scheduled or published until you say yes.
+Then `/mcp`, sign in, tick your brands, and say "set me up". Already connected Bolta yourself (a connector, or `claude mcp add`)? Install `bolta-skills@bolta-marketplace` instead: the same skill, no second connection. Add `bolta-checks@bolta-marketplace` for a check you answer before anything public or final. More in [`plugins/bolta/README.md`](plugins/bolta/README.md).
 
-What users need to know (install per host, what Bolta checks, the limits, what is sent and stored) is in [`plugins/bolta/README.md`](plugins/bolta/README.md).
+### Cursor
+
+Add the server to `.cursor/mcp.json` (or `~/.cursor/mcp.json`), then install the skill:
+
+```json
+{ "mcpServers": { "bolta": { "url": "https://mcp.bolta.ai/mcp" } } }
+```
+
+```
+npx skills add boltaai/bolta-skills --skill bolta
+```
+
+This repository is also a Cursor plugin (`.cursor-plugin/plugin.json`, `mcp.json`, `skills/`) for a team marketplace import.
+
+### Gemini CLI
+
+```
+gemini extensions install https://github.com/boltaai/bolta-skills
+```
+
+`gemini-extension.json` carries the connection (`httpUrl`) and the extension ships `skills/bolta`. Sign in with `/mcp auth bolta`.
+
+### Codex CLI
+
+```toml
+# ~/.codex/config.toml
+[mcp_servers.bolta]
+url = "https://mcp.bolta.ai/mcp"
+```
+
+```
+codex mcp login bolta
+npx skills add boltaai/bolta-skills --skill bolta
+```
+
+### Grok Build
+
+```
+grok mcp add --transport http bolta https://mcp.bolta.ai/mcp
+```
+
+Grok Build reads Claude Code marketplaces and skills as they are, so the plugin above installs there too.
+
+### VS Code and others
+
+```json
+{ "servers": { "bolta": { "type": "http", "url": "https://mcp.bolta.ai/mcp" } } }
+```
+
+That is `.vscode/mcp.json`. Any other client: point it at the same address over HTTP, then `npx skills add boltaai/bolta-skills --skill bolta`, or copy `skills/bolta` into the folder your client reads skills from.
 
 ## What is in this repository
 
 | Path | What it is |
 |-|-|
-| `plugins/bolta/` | The Claude plugin (v0.4): 12 skills, two read-only subagents (`clearing-house`, a first pass over a long review list, and `community-triage`, sorting comments and mentions), and the Bolta connection (`.mcp.json`). No commands, no hooks. This is the source of truth for the skills. |
-| `plugins/bolta-checks/` | The hooks behind the Bolta checks (a write guard, a batch-window marker, a per-message reset, the house rules at session start, a reconnect notice) and their scripts, with the `confirm_level` setting. Installed next to either of the other two. Kept apart because the directory accepts command hooks and shell scripts only from Verified organizations. |
-| `plugins/bolta-skills/` | The skills-only bundle for people who already connected Bolta themselves: the same skills, no `.mcp.json`. **Generated** from `plugins/bolta` by `tools/build_skills_bundle.py`; never edit it by hand. |
-| `.claude-plugin/marketplace.json` | Makes this repository a Claude marketplace that lists the three plugins. |
-| `plugin-skills/` | The skills pack for the ChatGPT app. Host-specific; kept separate on purpose. |
-| `tools/` | Checks for the Claude plugins, the bundle generator, the eval runner and `tools/fixtures/` (the saved Claude tool list, see below). |
-| `.github/workflows/` | CI: the checker, the hook tests and the bundle sync on every pull request. The evals and `claude plugin validate` need the Claude CLI and run by hand. |
-| `evals/claude-plugin/` | Behavioural evals for the plugin, kept outside the shipped folder. |
-| `skills/`, `docs/`, `TOOLS-ALIGNMENT.md`, `V2-REVIEW-STATUS.md` | The earlier pre-v1 skills pack. Superseded; its tool names no longer exist. Kept for reference only. |
+| `plugins/bolta/` | The Claude plugin and **the source of truth**: the skill (`skills/bolta/`: `SKILL.md`, `references/`, `examples/`), two read-only subagents and the Bolta connection (`.mcp.json`). Edit the skill here and nowhere else. |
+| `skills/bolta/` | The skill on its own, for every other client. **Generated**; never edit it by hand. |
+| `plugins/bolta-skills/` | The skill with no connection, for people who already connected Bolta. **Generated.** |
+| `plugins/bolta-checks/` | The hooks behind the Bolta checks, for Claude Code. A plugin of its own because Anthropic's directory accepts command hooks only from Verified organizations. |
+| `.claude-plugin/marketplace.json` | Makes this repository a Claude marketplace listing the three plugins. |
+| `.cursor-plugin/plugin.json`, `mcp.json`, `gemini-extension.json` | The same skill and connection for Cursor and Gemini CLI. |
+| `plugin-skills/` | The separate skills pack for the ChatGPT app. Host-specific; not part of the one skill yet. |
+| `tools/` | The checker, the generator, the hook tests, the eval runner and the saved tool list. |
+| `evals/claude-plugin/` | Behavioural evals, kept outside the shipped folders. |
 
-## Maintaining the Claude plugin
+## How the skill is laid out
 
 ```
-python3 -I tools/build_skills_bundle.py      # regenerate plugins/bolta-skills after any change under plugins/bolta
+skills/bolta/
+  SKILL.md          house rules, how Bolta is built, the look-once reads, which playbook an ask goes to
+  references/
+    today.md  start.md  post.md  review.md  routine.md  campaign.md
+    results.md  voice.md  replies.md  connect.md  fix.md  my-workflow.md      the twelve playbooks
+    <playbook>-<topic>.md                                                     detail a playbook sends you to
+  examples/
+    README.md       the index
+    *.json          one ask each: the calls in order, why, what to say, what never to do
+```
+
+An assistant reads `SKILL.md`, picks one playbook, and reads it before acting. The examples are checked against Bolta's tool list on every pull request, so an argument that does not exist fails the build.
+
+## Maintaining it
+
+```
+python3 -I tools/build_skills_bundle.py      # regenerate plugins/bolta-skills and skills/bolta after any change under plugins/bolta
 python3 -I tools/check_claude_plugin.py      # all three plugins: tool names and arguments vs the live tool list, skill shape and word budgets, plain words, hook wiring, directory file rules, bundle in sync
-python3 -I tools/build_skills_bundle.py --check   # the bundle is what the generator writes now (also part of the checker)
+python3 -I tools/build_skills_bundle.py --check   # the bundle and skills/bolta are what the generator writes now
 sh tools/test_hooks.sh                       # the hook scripts, 800+ cases, under every awk found (3 minutes)
 claude plugin validate plugins/bolta --strict
 claude plugin validate plugins/bolta-skills --strict
@@ -46,7 +130,7 @@ sh tools/run_plugin_evals.sh safety          # live behavioural checks against m
 - The checks' hook matchers cover Bolta under any server name: the plugin's own (`mcp__plugin_bolta_bolta__<tool>`), a claude.ai connector (`mcp__claude_ai_<name>__<tool>`) and a server added with `claude mcp add` (`mcp__<name>__<tool>`), without matching tools Bolta does not have. A matcher that only fit names with "bolta" in them would leave a Bolta added as "social" with no check while the session start line says checks are on. A tool of another server that shares a Bolta tool's name gets the same check, by design. The reconnect-notice matcher lists tools by name; `python3 -I tools/build_skills_bundle.py --sync-hooks` rewrites it from the skills.
 - The bundle checks: no `.mcp.json`, and byte for byte what the generator writes now. The session-start hook in `bolta-checks` ends with "Bolta checks are on in this session"; a skill that sees it lets a check stand in for asking in words, and otherwise asks in words first.
 - Skills use the tools made for Claude when they are offered and fall back when they are not (`approve-post` one at a time; a "no" and campaign accounts go to the dashboard). The evals run both ways: the suite offers the production tools, and the `newtools` cases opt in to the new ones.
-- The checker also holds v0.2's house style: the twelve skills, each `SKILL.md` in five sections (Done when, Know this, Tools, Hand off, Always) and 500 words or fewer (`LC_ALL=C wc -w`, frontmatter excluded), each reference 600 or fewer, descriptions that start with a verb and say "Use when" once, no internal words in descriptions or quoted lines, no citations of server code, and a guard whose tool list matches the hook matcher.
+- The checker also holds the house style: one skill, `bolta`. Its `SKILL.md` has eight fixed sections and 1,600 words or fewer (`LC_ALL=C wc -w`, frontmatter excluded), holds the ten house rules word for word as the session-start hook prints them, and links every playbook. The twelve playbooks (`references/<name>.md`) keep five sections (Done when, Know this, Tools, Hand off, Always); every reference is 600 words or fewer and belongs to a playbook (`<playbook>-<topic>.md`). Every `examples/<name>.json` is checked against the tool list: real tools, real argument names, every required argument, no draft saved with a time or an action. The description starts with a verb and says "Use when" once; no internal words in descriptions or quoted lines, no citations of server code, and a guard whose tool list matches the hook matcher.
 - Claude Code pins a plugin to its `version`. Bump `version` in `plugins/bolta/.claude-plugin/plugin.json` (the bundle follows) and in `plugins/bolta-checks/.claude-plugin/plugin.json` for every change that should reach users; `tools/test_hooks.sh` keeps the two equal.
 - Skills state facts about the Bolta server (what a tool really does, which errors it returns). When the server changes, re-verify the affected skill; the checker only catches names and arguments. The shipped files cite no server paths: this repository is public.
 - The plugin folder must contain only what users need. Test fixtures live in `evals/`.
