@@ -21,12 +21,11 @@ line, so this check passes for anyone, not just whoever has the list saved. Once
 the server change is deployed, the live list wins, a changed schema is a warning,
 and `--no-pending` makes a missing tool an error again.
 
-It checks three plugins: plugins/bolta (the full plugin, with its own Bolta
-connection), plugins/bolta-skills (the skills-only bundle for people who
-already connected Bolta themselves, generated from the full plugin by
-tools/build_skills_bundle.py) and plugins/bolta-checks (the hooks and scripts
-behind the Bolta checks). The bundle must have no .mcp.json and must match what
-the generator would write byte for byte. The two listed plugins carry no hooks
+It checks two plugins: plugins/bolta (the plugin: the skill, the subagents and
+its own Bolta connection) and plugins/bolta-checks (the hooks and scripts behind
+the Bolta checks). skills/bolta at the repository root, the copy other clients
+read, must match what tools/sync_skill.py would write byte for byte. The listed
+plugin carries no hooks
 and no shell scripts, and only the file types Anthropic's directory accepts from
 an unverified organization; the checks plugin carries nothing else. Its hook
 matchers must fit Bolta under any server name (the plugin's own, a connector, or
@@ -63,7 +62,6 @@ import importlib.util
 
 REPO = pathlib.Path(__file__).resolve().parent.parent
 DEFAULT_PLUGIN = REPO / "plugins" / "bolta"
-DEFAULT_BUNDLE = REPO / "plugins" / "bolta-skills"
 DEFAULT_CHECKS = REPO / "plugins" / "bolta-checks"
 DEFAULT_MARKETPLACE = REPO / ".claude-plugin" / "marketplace.json"
 DEFAULT_URL = "https://mcp.bolta.ai/mcp"
@@ -229,7 +227,7 @@ MARK_ONLY_TOOLS = {"create-content-campaign"}
 
 #: Which plugin is being checked. Messages carry it for the bundle and the checks so the three never blur.
 _ctx = [""]
-#: The plugin's name, which is also its slash-command namespace (/bolta:today, /bolta-skills:today).
+#: The plugin's name, which is also its slash-command namespace (/bolta:bolta).
 _ns = ["bolta"]
 
 errors: list[str] = []
@@ -1061,13 +1059,13 @@ def check_matcher_samples(where, matcher, tool):
 
 
 def load_generator():
-    """tools/build_skills_bundle.py as a module (it holds the rules for the notice matcher and the bundle)."""
-    gen = REPO / "tools" / "build_skills_bundle.py"
+    """tools/sync_skill.py as a module (it holds the rules for the notice matcher and the bundle)."""
+    gen = REPO / "tools" / "sync_skill.py"
     if not gen.is_file():
-        err("bundle", "tools/build_skills_bundle.py is missing")
+        err("bundle", "tools/sync_skill.py is missing")
         return None
     sys.dont_write_bytecode = True  # loading the generator must leave no __pycache__ behind
-    spec = importlib.util.spec_from_file_location("build_skills_bundle", gen)
+    spec = importlib.util.spec_from_file_location("sync_skill", gen)
     mod = importlib.util.module_from_spec(spec)
     spec.loader.exec_module(mod)
     return mod
@@ -1141,10 +1139,10 @@ def check_guard_matches_matcher(plugin, cfg, tools_by_name, skills_src):
                         continue
                     for t in sorted(want - tools):
                         err("hooks/hooks.json", f"{event} matcher does not list {t!r}, which a skill names; "
-                                                f"run python3 -I tools/build_skills_bundle.py --sync-hooks")
+                                                f"run python3 -I tools/sync_skill.py --sync-hooks")
                     for t in sorted(tools - want):
                         err("hooks/hooks.json", f"{event} matcher lists {t!r}, which no skill names and the guard does not gate; "
-                                                f"run python3 -I tools/build_skills_bundle.py --sync-hooks")
+                                                f"run python3 -I tools/sync_skill.py --sync-hooks")
 
 
 def check_server_gaps(tools_by_name):
@@ -1157,18 +1155,13 @@ def check_server_gaps(tools_by_name):
 
 # --------------------------------------------------------------------------- main
 
-def check_bundle_in_sync(bundle: pathlib.Path, source: pathlib.Path):
-    """The bundle is generated, never edited: it must equal what the generator writes now."""
+def check_root_skill_in_sync(source: pathlib.Path):
+    """skills/bolta at the repository root is generated, never edited: it must equal the plugin's skill."""
     mod = load_generator()
     if mod is None:
         return
-    try:
-        expected = mod.generate(source)
-    except SystemExit as e:
-        err("bundle", f"the generator refused: {e}")
-        return
-    for d in mod.differences(expected, mod.existing(bundle)):
-        err("bundle", f"{d}; it is generated from plugins/bolta: run python3 -I tools/build_skills_bundle.py")
+    for d in mod.differences(mod.generate_root_skill(source), mod.existing(mod.ROOT_SKILL)):
+        err("skills/bolta", f"{d}; it is generated from plugins/bolta: run python3 -I tools/sync_skill.py")
 
 
 def run_checks_plugin(checks, marketplace, tools_by_name, skills_src):
@@ -1215,8 +1208,6 @@ def run_checks(plugin, marketplace, tools_by_name, checks, gated, bundle=False, 
     check_lint(plugin, skills)
     check_citations(plugin)
     check_agents(plugin, tools_by_name, gated)
-    if bundle:
-        check_bundle_in_sync(plugin, source)
     _ctx[0] = ""
     return referenced
 
@@ -1224,9 +1215,7 @@ def run_checks(plugin, marketplace, tools_by_name, checks, gated, bundle=False, 
 def main(argv=None):
     ap = argparse.ArgumentParser(description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
     ap.add_argument("--plugin", type=pathlib.Path, default=DEFAULT_PLUGIN)
-    ap.add_argument("--bundle", type=pathlib.Path, default=DEFAULT_BUNDLE, help="the skills-only bundle (generated by tools/build_skills_bundle.py)")
     ap.add_argument("--checks", type=pathlib.Path, default=DEFAULT_CHECKS, help="the checks plugin (hooks and scripts)")
-    ap.add_argument("--no-bundle", action="store_true", help="check the full plugin and the checks only")
     ap.add_argument("--marketplace", type=pathlib.Path, default=DEFAULT_MARKETPLACE)
     ap.add_argument("--tools-json", type=pathlib.Path, help="saved tools/list response instead of fetching")
     ap.add_argument("--tools-url", default=DEFAULT_URL)
@@ -1260,12 +1249,7 @@ def main(argv=None):
     referenced = run_checks(plugin, marketplace, tools_by_name, checks, gated)
     check_server_gaps(tools_by_name)
 
-    if not args.no_bundle:
-        bundle = args.bundle.resolve()
-        if not bundle.is_dir():
-            err("bundle", f"{args.bundle} does not exist; generate it with python3 -I tools/build_skills_bundle.py")
-        else:
-            run_checks(bundle, marketplace, tools_by_name, checks, gated, bundle=True, source=plugin)
+    check_root_skill_in_sync(plugin)
 
     unreferenced = sorted(set(tools_by_name) - referenced - set(INTENTIONALLY_UNUSED))
     if unreferenced:

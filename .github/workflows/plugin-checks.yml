@@ -29,7 +29,7 @@ jobs:
         run: sudo apt-get update && sudo apt-get install -y gawk
 
       - name: Bundle is in step with the full plugin
-        run: python3 -I tools/build_skills_bundle.py --check
+        run: python3 -I tools/sync_skill.py --check
 
       - name: Plugin checker
         run: python3 -I tools/check_claude_plugin.py --tools-json tools/fixtures/claude_tools_list.json --strict
