@@ -72,7 +72,7 @@ here=$(dirname "$0")
 reader="$here/bolta-json.sh"
 
 ok=0 tool="" server="" sid="" prompt="" conn="Bolta" brand=""
-create="" update="" policy="" rid="" action="" bulk="" cid="" items=""
+create="" update="" policy="" rid="" action="" bulk="" cid="" items="" preview=0 switchon="" decision=""
 parsed=$(sh "$reader" guard 2>/dev/null) || parsed=""
 oldifs=$IFS
 IFS='
@@ -96,6 +96,9 @@ for kv in $parsed; do
     BULK) bulk=$v ;;
     CID) cid=$v ;;
     ITEMS) items=$v ;;
+    PREVIEW) preview=$v ;;
+    SWITCHON) switchon=$v ;;
+    DECISION) decision=$v ;;
   esac
 done
 IFS=$oldifs
@@ -260,13 +263,13 @@ case "$tool" in
     fi ;;
   update-post)
     if [ "$update" = edit ]; then
-      ask "Check before it changes ($conn): an edited post keeps its approval. The new text could go out without a fresh yes. OK only if you have seen it."
+      ask "Check before it changes ($conn): this edits a post, its text per network or its settings. An approved post goes back for a fresh yes. OK only if you have seen it."
     fi
     if [ "$update" != safe ]; then
       ask "Check before it changes ($conn): this edit changes when or whether a post goes out. An approved or scheduled post needs a fresh yes."
     fi ;;
   update-post-platform-details)
-    ask "Check before it changes ($conn): this changes a post's network settings, such as a subreddit, title, privacy or link. The post keeps its approval." ;;
+    ask "Check before it changes ($conn): this changes a post's network settings, such as a subreddit, title, privacy or link. An approved post goes back for a fresh yes." ;;
   update-social-bucket)
     ask "Check before it changes ($conn): changing an account group changes where every post already in it goes out." ;;
   restore-deleted)
@@ -274,6 +277,8 @@ case "$tool" in
   update-voice-profile|update-business-dna)
     ask "Check before it changes ($conn): this changes your voice or what Bolta knows about your business. Every future draft uses it. OK only if you have seen the before and after." ;;
   extract-business-dna)
+    # preview: true only reads the site and shows it; nothing is saved.
+    if [ "$preview" = 1 ]; then exit 0; fi
     ask "Check before it changes ($conn): reading this website can replace what Bolta knows about your business. Every future draft uses it. OK only if it is your own site." ;;
   create-routine)
     if [ "$careful" = 0 ] && [ "$policy" = review ]; then exit 0; fi
@@ -307,6 +312,31 @@ case "$tool" in
   set-content-campaign-status)
     if [ "$action" = pause ]; then exit 0; fi
     campaign_ask ;;
+  confirm-plan)
+    # switch_on missing or false saves the plan off: nothing runs or posts.
+    if [ "$switchon" = off ]; then
+      if [ "$careful" = 0 ]; then exit 0; fi
+      ask "Bolta check, careful mode ($conn): this saves a plan. Nothing runs until it is switched on."
+    fi
+    ask "Uses credits now ($conn): this saves the plan and switches it on. Bolta starts writing right away, then keeps to its schedule." ;;
+  decide-routine-recommendation)
+    case $decision in
+      dismiss)
+        if [ "$careful" = 0 ]; then exit 0; fi
+        ask "Bolta check, careful mode ($conn): this turns down one of Bolta's ideas for a Bolta routine." ;;
+      apply) ask "Check before it changes ($conn): this applies Bolta's change to a Bolta routine. Every run after this uses it." ;;
+      undo) ask "Check before it changes ($conn): this undoes a change to a Bolta routine. Every run after this uses the old settings." ;;
+    esac
+    ask "Bolta check ($conn): the plugin can't tell what this answer to Bolta does. OK it only if you expected it." ;;
+  decide-bolta-suggestion)
+    case $decision in
+      decline)
+        if [ "$careful" = 0 ]; then exit 0; fi
+        ask "Bolta check, careful mode ($conn): this turns down one of Bolta's suggestions." ;;
+      accept) ask "Check before it changes ($conn): this makes every change the suggestion lists. That can change a voice, switch a Bolta routine on or start a campaign." ;;
+      undo) ask "Check before it changes ($conn): this reverses a suggestion you accepted. Everything it changed goes back." ;;
+    esac
+    ask "Bolta check ($conn): the plugin can't tell what this answer to Bolta does. OK it only if you expected it." ;;
   set-content-campaign-targets)
     if [ "$careful" = 1 ]; then
       ask "Bolta check, careful mode ($conn): this sets a campaign's accounts, weeks, notes, sources or voice."

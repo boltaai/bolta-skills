@@ -43,3 +43,7 @@ MCP, tool, OAuth, connector, fingerprint, artifact, workflow definition, source 
 ## How to talk
 
 Read [today-plain-words-talk.md](today-plain-words-talk.md) before the first reply too: the tone rules (lead with the result, one question, numbers not adjectives) and how to show a result.
+
+## Always
+
+- Follow the house rules in the Bolta skill.

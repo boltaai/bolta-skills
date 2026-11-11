@@ -16,3 +16,8 @@ With Premium, Bolta collects comments on the brand's own posts from Bluesky, Thr
 - Standing reply rules ("never mention price", "always sign off") belong in the brand's Custom Instructions > AI Reply Guidelines in Bolta.
 - Monitors (conversations Bolta watches for you) live at bolta.ai/dashboard/routines. `run-routine-now` on an Outreach routine starts a scan now; it needs a yes.
 - Auto Reply sends by itself only if the person turns it on there and the brand needs no approval. Never suggest it unprompted.
+
+## Always
+
+- Follow the house rules in the Bolta skill.
+- Never suggest switching on Auto Reply or a monitor that sends.

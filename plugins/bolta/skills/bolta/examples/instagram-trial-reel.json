@@ -1,0 +1,45 @@
+{
+  "ask": "Post this 10-second latte art clip as a trial reel first, and share it with followers only if it does well: https://cdn.example.com/latte-art.mp4",
+  "playbook": "post",
+  "steps": [
+    {
+      "tool": "create-post",
+      "arguments": {
+        "workspace_id": "<brand's workspace id>",
+        "content": "Ten seconds of latte art.",
+        "account_ids": [
+          "<Instagram account id>"
+        ],
+        "media": [
+          {
+            "url": "https://cdn.example.com/latte-art.mp4",
+            "alt_text": "Latte art being poured"
+          }
+        ],
+        "platform_specific": {
+          "instagram": {
+            "content_type": "REELS",
+            "trialReelEnabled": true,
+            "trialGraduationStrategy": "SS_PERFORMANCE"
+          }
+        },
+        "idempotency_key": "latte-trial-1"
+      },
+      "why": "A trial reel needs REELS and one video, set in the same call. SS_PERFORMANCE: Instagram shares it with followers if it does well; MANUAL would leave that to the user. One setting for the post, so every Instagram account on it gets a trial."
+    },
+    {
+      "tool": "get-post-platform-details",
+      "arguments": {
+        "post_id": "<post id>",
+        "platform": "instagram"
+      },
+      "why": "Bad values are skipped, not refused: confirm content_type REELS and trial_reel_enabled true before saying it is set."
+    }
+  ],
+  "say": "Saved to Acme as an Instagram draft: a trial reel, shown to non-followers first and shared with your followers only if it does well. Nothing goes out yet. Schedule it?",
+  "never": [
+    "A trial on an image or a carousel: it goes out as a normal post.",
+    "Saying it is a trial before the read-back shows it.",
+    "A video link the user didn't give."
+  ]
+}

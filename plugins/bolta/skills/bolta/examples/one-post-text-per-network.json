@@ -1,0 +1,60 @@
+{
+  "ask": "Announce our new Lisbon office on LinkedIn, X and Threads: it's our second office, eight of us start there in January, and we're hiring two engineers. Same news, but write it right for each one.",
+  "playbook": "post",
+  "steps": [
+    {
+      "tool": "get-posting-rules",
+      "arguments": {
+        "workspace_id": "<brand's workspace id>"
+      },
+      "why": "Limits once for the networks named: X 280, Threads 500, LinkedIn 3,000. Each version is counted against its own network."
+    },
+    {
+      "tool": "list-accounts",
+      "arguments": {
+        "workspace_id": "<brand's workspace id>"
+      },
+      "why": "The three account ids. Any account marked for reconnecting is named before writing for it."
+    },
+    {
+      "tool": "create-post",
+      "arguments": {
+        "workspace_id": "<brand's workspace id>",
+        "content": "We've opened a second office, in Lisbon. Eight of us start there in January, and we're hiring two engineers.",
+        "account_ids": [
+          "<LinkedIn account id>",
+          "<X account id>",
+          "<Threads account id>"
+        ],
+        "platform_specific": {
+          "linkedin": {
+            "text": "We've opened our second office, in Lisbon.\n\nEight of us start there in January.\n\nWe're also hiring two engineers. Ask me anything about the team."
+          },
+          "x": {
+            "text": "New office: Lisbon. Eight of us start in January, and we're hiring two engineers."
+          },
+          "threads": {
+            "text": "We picked Lisbon for our second office. Eight of us start there in January. Anyone here worked from Lisbon? Tips welcome.",
+            "topic_tag": "Startups"
+          }
+        },
+        "idempotency_key": "lisbon-office-1"
+      },
+      "why": "The decision: one post, because the media, time and number of parts are the same and only the words differ; one yes covers all three. A fresh text per network in platform_specific, written separately with different first lines: LinkedIn gets room and an invitation, X one line, Threads a question. content stays as the fallback. The Threads topic goes in the same call; through platform_specific it needs no use_topic_tag. X carries text only: an X setting here would not be sent on a new post. Every fact is from the ask. Saved as a draft: no time, no action."
+    },
+    {
+      "tool": "get-post",
+      "arguments": {
+        "post_id": "<post id>"
+      },
+      "why": "Read back: metadata.platformSpecific holds each network's text and the topic as Bolta stored them."
+    }
+  ],
+  "say": "Saved to Acme as one draft for 3 networks. 1. LinkedIn: (full text) 2. X: (full text) 3. Threads: (full text), topic Startups. Nothing goes out yet. One yes covers all three. Schedule it?",
+  "never": [
+    "Pasting the LinkedIn text into X and trimming it.",
+    "Showing only the main text: each network's own text is what goes out.",
+    "Using per-network text for TikTok, YouTube, Pinterest or WordPress: they ignore it.",
+    "Splitting into three posts when nothing differs but the words."
+  ]
+}

@@ -1,0 +1,39 @@
+{
+  "ask": "Post our season-finale recap on Mastodon, but behind a spoiler warning and off the public timelines. And can you add a poll for the best moment?",
+  "playbook": "post",
+  "steps": [
+    {
+      "tool": "create-post",
+      "arguments": {
+        "workspace_id": "<brand's workspace id>",
+        "content": "Finale recap: the twist we argued about for weeks, and why the last scene works.",
+        "account_ids": [
+          "<Mastodon account id>"
+        ],
+        "platform_specific": {
+          "mastodon": {
+            "sensitive": true,
+            "spoiler_text": "Spoilers: season finale",
+            "visibility": "unlisted"
+          }
+        },
+        "idempotency_key": "finale-mastodon-1"
+      },
+      "why": "The decision: a content warning, because Mastodon readers expect spoilers hidden; the warning is a short plain label. Unlisted keeps a recap off the public timelines while followers still see it. These are network-wide Mastodon settings, so they sit at network level. No poll: Mastodon polls are saved but never sent yet, so it isn't offered."
+    },
+    {
+      "tool": "get-post-platform-details",
+      "arguments": {
+        "post_id": "<post id>",
+        "platform": "mastodon"
+      },
+      "why": "The settings were copied into Mastodon's own; read back sensitive, spoiler_text and visibility before saying they are set."
+    }
+  ],
+  "say": "Saved to Acme as a Mastodon draft, unlisted, behind the warning \"Spoilers: season finale\": \"Finale recap: the twist we argued about for weeks, and why the last scene works.\" A poll can't be added on Mastodon from here yet. Nothing goes out yet. Schedule it?",
+  "never": [
+    "Setting poll_options: saved, never sent.",
+    "visibility direct for a brand post: that's a private message.",
+    "Putting the Mastodon settings under accounts: only the network level is read."
+  ]
+}

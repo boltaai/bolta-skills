@@ -10,32 +10,22 @@
         "account_ids": [
           "<X account id>"
         ],
-        "idempotency_key": "next-feature-poll-1"
-      },
-      "why": "The question is the post's text; the options are a setting on the post. Bolta refuses media-only posts to X, so the text is always there."
-    },
-    {
-      "tool": "update-post-platform-details",
-      "arguments": {
-        "post_id": "<post id>",
-        "platform": "x",
-        "fields": {
-          "post_type": "POLL",
-          "poll_options": [
+        "poll": {
+          "options": [
             "Dark mode",
             "Exports",
             "iPad app"
-          ],
-          "poll_duration_minutes": 1440
-        }
+          ]
+        },
+        "idempotency_key": "next-feature-poll-1"
       },
-      "why": "On X a poll is post_type POLL: 2 to 4 options of 25 characters, 5 minutes to 7 days (poll_duration_minutes 5 to 10080, default 1440). Bolta refuses values outside these when it saves the setting; without post_type POLL the options are not sent and the post goes out plain."
+      "why": "The decision: the poll field on create-post, in the saving call. Bolta refuses a poll X would reject (2 to 4 options of 25 characters at most), with the reason. The question is the post's text. It runs one day, the default, which suits a quick product pulse; a longer one is an X setting (post_type POLL with poll_duration_minutes)."
     }
   ],
   "say": "Saved to Acme as an X draft: a one-day poll with Dark mode, Exports and iPad app. Nothing goes out yet. Schedule it?",
   "never": [
     "A poll option over 25 characters.",
-    "Sending the poll in the poll field of the post: that one is for Threads.",
-    "A poll on a post with several parts: in a thread the poll is dropped."
+    "A poll on a post with several parts: Bolta refuses it.",
+    "Options the user didn't give."
   ]
 }

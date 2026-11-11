@@ -1,0 +1,45 @@
+{
+  "ask": "Put a Threads post up for today's flash sale: code FLASH20 for 20% off, ends at midnight.",
+  "playbook": "post",
+  "steps": [
+    {
+      "tool": "get-posting-rules",
+      "arguments": {
+        "workspace_id": "<brand's workspace id>",
+        "platform": "threads"
+      },
+      "why": "Limits once: 500 characters, and longer becomes a reply chain, which a ghost post can't be."
+    },
+    {
+      "tool": "create-post",
+      "arguments": {
+        "workspace_id": "<brand's workspace id>",
+        "content": "Flash sale, today only: FLASH20 takes 20% off everything until midnight.",
+        "account_ids": [
+          "<Threads account id>"
+        ],
+        "platform_specific": {
+          "threads": {
+            "is_ghost_post": true,
+            "topic_tag": "Small Business"
+          }
+        },
+        "idempotency_key": "flash20-threads-1"
+      },
+      "why": "The decision: a ghost post, because the offer is dead after midnight and a lasting post would keep advertising an expired code. So it stays one short text part with no image and no poll (either would make it a normal, lasting post, without an error). The topic puts it where shoppers browse; in platform_specific the tag alone is enough, no use_topic_tag. Both settings ride the saving call."
+    },
+    {
+      "tool": "get-post",
+      "arguments": {
+        "post_id": "<post id>"
+      },
+      "why": "Ghost and topic are read back from metadata.platformSpecific.threads; unknown keys are kept quietly, so check the spelling landed before saying it is set."
+    }
+  ],
+  "say": "Saved to Acme as a Threads draft: \"Flash sale, today only: FLASH20 takes 20% off everything until midnight.\" Topic: Small Business. It disappears 24 hours after it goes out, so schedule it for this morning. Nothing goes out yet. What time?",
+  "never": [
+    "Adding the product photo or a poll: the post would no longer disappear.",
+    "A ghost post for anything people should find later.",
+    "Typing #SmallBusiness into the text instead of the topic setting."
+  ]
+}

@@ -1,6 +1,6 @@
 # Fix
 
-Take a post back, stop everything Bolta is about to write or post, undo a delete, or find out why nothing went out. Use when someone says undo, unschedule, pull that post, stop everything, pause everything, I deleted the wrong post, restore it, it didn't post, or nothing went out.
+Take a post back, stop everything Bolta is about to write or post, undo a delete, or find out why nothing went out. Use for: undo, unschedule, pull that post, stop or pause everything, I deleted the wrong post, restore it, it didn't post.
 
 ## Done when
 
@@ -32,7 +32,7 @@ The user knows what changed and what still goes out, in the workspace clock: "Pu
 - `get-post`: status, time, the saved reason.
 - `create-post`: a fresh copy of a Failed post.
 - `update-post`: back to Draft.
-- `delete-post`: remove a post the user named; undo within 7 days.
+- `delete-post`: remove a post the user named; undo within 7 days; at most 20 per 5 minutes.
 - `list-recently-deleted`, `restore-deleted`: undo a delete.
 - `list-routines`, `get-routine`, `list-routine-runs`, `pause-routine`: Bolta routines.
 - `list-content-campaigns`, `get-content-campaign`, `set-content-campaign-status`: campaigns.

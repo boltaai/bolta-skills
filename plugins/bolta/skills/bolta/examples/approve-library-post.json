@@ -21,7 +21,7 @@
       "why": "No schedule_mode time and no fixed_time: a Library post is never scheduled. Read the result: sent_to_client true means it went to the client (it was made with \"send to the client\"); otherwise it is live on the link. image_pending: the image is still being made, so wait and approve again. client_review_pending: the client already has it and decides it."
     }
   ],
-  "say": "Approved for Acme: the onboarding post is live on your Library link, so your team can open it there (no Bolta login needed) and share it. (If it went to the client: \"Sent to your client for review; it goes live on your Library link when they approve.\")",
+  "say": "Approved for Acme: the onboarding post is live on your Library link, so your team can open it there and share it. (If it went to the client: \"Sent to your client for review; it goes live on your Library link when they approve.\")",
   "never": [
     "Approving before the user has seen the post's full text and said yes to it.",
     "Passing a time, or calling schedule-post or publish-post for a Library post: both refuse it.",

@@ -1,0 +1,51 @@
+{
+  "ok": true,
+  "data": {
+    "proposal_id": "f1000000-0000-4000-8000-000000000203",
+    "kind": "routine",
+    "created": true,
+    "routine": {
+      "id": "e5000000-0000-4000-8000-000000000202",
+      "workspace_id": "7d2c4e81-5b3a-4f6e-9c1d-2a3b4c5d6e7f",
+      "name": "Gift ideas",
+      "status": "draft",
+      "created_by": "You",
+      "created_at": "2026-11-11T15:00:00+00:00",
+      "updated_at": "2026-11-11T15:00:00+00:00",
+      "template_key": "weekly_social_posts",
+      "goal": "Who each candle or gift set suits, for people buying a present",
+      "trigger_type": "schedule",
+      "schedule": {
+        "interval": "weekly",
+        "days": [
+          "saturday"
+        ],
+        "time": "09:00"
+      },
+      "timezone": "America/New_York",
+      "source_bindings": [],
+      "output_config": {
+        "artifact_type": "post",
+        "count": 1,
+        "platforms": [
+          "instagram",
+          "facebook"
+        ]
+      },
+      "approval_policy": "review_every_artifact",
+      "last_run": null,
+      "next_run_at": null,
+      "attention_count": 0,
+      "review_queue": [],
+      "blocked": null
+    },
+    "campaign": null,
+    "run": null,
+    "generation": null,
+    "start_error": null
+  },
+  "error": null,
+  "error_kind": null,
+  "meta": null,
+  "next_step": "SAVED, NOT RUNNING. The routine is saved and switched off; nothing runs and no credits are used. Ask the user before switching it on (confirm-plan with switch_on true, or activate-routine)."
+}

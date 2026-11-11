@@ -14,10 +14,10 @@ Read when a row is a Library post, a post came back for changes, an approval is 
 
 ## Sent back for changes
 
-- Find them: `list-workspace-posts(status="needs revision")`, or `list-inbox-items(status="needs_revision")`.
+- Find them: `list-workspace-posts(status="needs revision")`.
 - `get-post` gives `rejection_comments` (what to fix) and `editable_fields` (what may change). Show both.
 - Edit only those fields with `update-post`, show the new text, then `submit-for-review` once the user says so.
-- You can't send a post back for changes. `reject-post` is a hard no; never use it to ask for edits.
+- You can't send a post back for changes from here. `reject-post` is a hard no; never use it to ask for edits. What to offer instead: [saying no](review-saying-no.md).
 
 ## Approving your own post
 

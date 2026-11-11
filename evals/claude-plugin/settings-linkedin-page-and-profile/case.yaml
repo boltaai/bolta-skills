@@ -1,0 +1,84 @@
+schema_version: "1.1"
+name: settings-linkedin-page-and-profile
+description: 'One LinkedIn post to Maya''s own profile and the Northwind company page, first person on her profile and "we" on the page. The page is its own row in list-accounts (linkedin_org_<id>); its text goes under platform_specific.linkedin.accounts keyed by that id, the profile takes the network or main text. One post, never two; never the details-only post_as_organization route.'
+tags: [settings]
+expected_outcome: 'post fires; reads the accounts; one create-post to the profile and the page with the page''s own text under linkedin accounts; no details call; nothing approved; shows both versions.'
+execution:
+  prompt: |
+    I'm Maya, Northwind's founder. Saturday is the roastery's 5th birthday. Put one LinkedIn post on both my own profile and the Northwind company page: on my profile in first person (I started it in a garage five years ago), on the company page as "we", thanking the regulars. One post, different text on each. Draft only.
+  max_turns: 20
+  timeout_seconds: 300
+  allowed_tools: [Skill, Read]
+graders:
+  - name: skill-fired
+    type: tool_used
+    tool: Skill
+    input_match: '"skill"\s*:\s*"(?:[\w-]+:)?(bolta)"'
+    min: 1
+  - name: playbook-read
+    type: tool_used
+    tool: Read
+    input_match: 'references/(post)\.md'
+    min: 1
+  - name: reads-accounts
+    # The account and page ids are only in Bolta.
+    type: regex
+    target: mock_calls
+    pattern: '"tool":"[^"]*list-accounts"'
+  - name: profile-and-page
+    # Both destinations on one post: her profile and the page row.
+    type: tool_used
+    tool: mcp__plugin_bolta_bolta__create-post
+    input_match: '^(?=[\s\S]*a1b2c3d4-0001-4a00-8000-000000000006)(?=[\s\S]*linkedin_org_80412377)'
+    min: 1
+  - name: page-own-text
+    # The page's text sits under linkedin.accounts, keyed by the page's id.
+    type: tool_used
+    tool: mcp__plugin_bolta_bolta__create-post
+    input_match: '"linkedin"\s*:\s*\{[\s\S]*"accounts"\s*:\s*\{[\s\S]*"linkedin_org_80412377"\s*:\s*\{[^{}]*"text"\s*:'
+    min: 1
+  - name: one-create-only
+    type: tool_used
+    tool: mcp__plugin_bolta_bolta__create-post
+    min: 0
+    max: 1
+  - name: no-separate-posts
+    type: tool_used
+    tool: mcp__plugin_bolta_bolta__bulk-create-posts
+    min: 0
+    max: 0
+  - name: no-details-route
+    # Posting as the page is the page row, not post_as_organization or selected_organization.
+    # Checked on the details call's input only: the whole-trace regex this replaced also matched
+    # the skill's own LinkedIn and keys pages when the model Read them (they name these keys to
+    # say "don't"), failing runs that never sent either key.
+    type: tool_used
+    tool: mcp__plugin_bolta_bolta__update-post-platform-details
+    input_match: 'post_as_organization|selected_organization'
+    min: 0
+    max: 0
+  - name: no-org-key-in-post
+    # Nor in the saving or updating call's platform_specific.
+    type: regex
+    target: trace
+    pattern: '"name":"mcp__plugin_bolta_bolta__(create-post|update-post)","input":\{[^\n]{0,6000}?(post_as_organization|selected_organization)'
+    match: not_contains
+  - name: shows-both
+    type: regex
+    pattern: '^(?=[\s\S]*(your (own )?profile|your personal|Maya))(?=[\s\S]*(company page|Northwind Coffee page|the page))'
+    flags: i
+  - name: says-draft
+    type: regex
+    pattern: 'draft|nothing (goes|has gone|will go) out|not (posted|scheduled|published)'
+    flags: i
+  - name: no-approve-schedule-publish
+    # Drafts only: nothing approved, scheduled or posted.
+    type: regex
+    target: trace
+    pattern: '"name":"mcp__plugin_bolta_bolta__(approve-post|approve-many-posts|schedule-post|publish-post)"'
+    match: not_contains
+  - name: no-ids-or-jargon
+    type: regex
+    pattern: '[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-|linkedin_org_|platform_specific|\bcreate-post\b|\bupdate-post\b|\bMCP\b'
+    flags: i
+    match: not_contains

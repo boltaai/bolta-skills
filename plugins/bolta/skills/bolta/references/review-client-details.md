@@ -4,8 +4,8 @@ What client reviewers can do beyond Approve, and when their yes is refused. Read
 
 ## What a client reviewer sees and does
 
-- The posts sent to them, plus the brand's other client requests and its schedule (what is scheduled or already out).
-- **Edit the text** of a post they were sent. Refused for a post with its own copy per network, or one going to Instagram, Pinterest or YouTube. After an edit the post still needs an Approve, and any yes given before the edit no longer counts.
+- Every client request on the brand, not just the ones sent to them, plus its schedule (what is scheduled or already out). They decide only requests sent to them.
+- **Edit the text** of a post they were sent. Refused for a post with its own copy per network, one going to Instagram, Pinterest or YouTube, and a Library post with more than one text or a caption over the Library limit. After an edit the post still needs an Approve, any yes given before no longer counts, and that post keeps needing the client's yes even if the brand's sign-off setting is off.
 - **Swap one image** for one made in their reviewer chat in Bolta. Not for carousels or videos, and refused wherever editing the text is. The image is charged to the brand owner's credits when the post is approved.
 - **Comment**: comments and change reasons land in the client approvals thread in Bolta, where the team reads and answers them: [bolta.ai/dashboard/approvals](https://bolta.ai/dashboard/approvals).
 - If a post's text changed and nobody on the team edited it, the client may have. Say so; don't guess who.
@@ -25,10 +25,7 @@ What client reviewers can do beyond Approve, and when their yes is refused. Read
 
 ## Bolta routines that send straight to the client
 
-- Drafts go to the client with no time attached, so they hold no slot. A yes gives the next open slot.
-- No notice per run and no reminders: the client gets one notice per fill. The team gets a daily summary of the client's decisions.
-- The client can save one of these posts for later: it stays waiting, just out of their queue. Once an approved one is published, it becomes a Library post.
-- Setup and reading these: [routine-outputs.md](routine-outputs.md).
+No team pass, no reminders, a daily summary to the team: [review-client-howto.md](review-client-howto.md), [routine-outputs.md](routine-outputs.md). The client can save one of these posts for later: it stays waiting, out of their queue.
 
 ## What to say
 

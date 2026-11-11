@@ -20,3 +20,8 @@ It helps what Bolta writes for you while nobody is in the chat (Bolta routines, 
 ## What you can't do from here
 
 - You can't add or read a file from here. "Use my price list": ask them to paste the facts this post needs, and give the line above for next time.
+
+## Always
+
+- Follow the house rules in the Bolta skill.
+- Never say a document was added or read from here.

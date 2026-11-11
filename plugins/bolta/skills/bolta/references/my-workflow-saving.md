@@ -37,4 +37,8 @@ Say "weekly scheduled task". The app calls its own schedulers "routines" too, so
 
 ## Why drafts only
 
-A scheduled run only saves drafts and sends them for review, so it never stalls and the user still decides every post. Why: [my-workflow-saving-drafts-only.md](my-workflow-saving-drafts-only.md).
+A scheduled run only saves drafts and sends them for review. Why: [my-workflow-saving-drafts-only.md](my-workflow-saving-drafts-only.md).
+
+## Always
+
+- Confirm a schedule only after the host shows it was created.

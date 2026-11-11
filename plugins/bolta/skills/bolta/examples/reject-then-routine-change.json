@@ -1,0 +1,55 @@
+{
+  "ask": "No to 2 and 4, both way too salesy, we never quote prices. And stop the Monday routine doing that.",
+  "playbook": "review",
+  "before": "The numbered list showed posts 1-3 from the Monday LinkedIn Bolta routine and post 4, a draft the user saved here earlier (signed in to Bolta) and never sent for review.",
+  "steps": [
+    {
+      "tool": "reject-post",
+      "arguments": {
+        "workspace_id": "<brand's workspace id>",
+        "post_id": "<post 2 id>",
+        "reason": "Way too salesy, we never quote prices.",
+        "categories": [
+          "too_salesy"
+        ]
+      },
+      "why": "The user's own words as the reason: what is wrong, not what to do. Only the category that fits; an unknown code refuses the whole call. It is kept as Rejected and Bolta keeps the reason."
+    },
+    {
+      "tool": "submit-for-review",
+      "arguments": {
+        "workspace_id": "<brand's workspace id>",
+        "post_ids": [
+          "<post 4 id>"
+        ]
+      },
+      "why": "Post 4 was never sent for review, so reject-post alone would answer not_in_review and record nothing. The user gave a reason, so keep it: put it on the review list first. Deleting would drop the reason."
+    },
+    {
+      "tool": "reject-post",
+      "arguments": {
+        "workspace_id": "<brand's workspace id>",
+        "post_id": "<post 4 id>",
+        "reason": "Way too salesy, we never quote prices.",
+        "categories": [
+          "too_salesy"
+        ]
+      },
+      "why": "Now it is waiting for review, so the no records the reason."
+    },
+    {
+      "tool": "get-routine",
+      "arguments": {
+        "workspace_id": "<brand's workspace id>",
+        "routine_id": "<Monday routine id>"
+      },
+      "why": "Fresh instructions before proposing one change. If list-routine-recommendations is on this app, read Bolta's own suggestion first and offer that instead."
+    }
+  ],
+  "say": "Turned down 2 and 4 as too salesy. Bolta saved your reason on both; 4 wasn't on the review list yet, so I put it there first. For the Monday routine I'd add one line to its instructions: \"Never quote prices or push a sale; teach instead.\" Add it?",
+  "never": [
+    "Deleting post 4 to get it off the list: a drop keeps no reason.",
+    "Changing the routine before the user says yes to the exact line.",
+    "Saying Bolta has learned not to quote prices: it saved the reason; promise nothing about when it changes."
+  ]
+}

@@ -1,0 +1,28 @@
+{
+  "ask": "Done, the blog is connected. Save it.",
+  "playbook": "routine",
+  "before": "The user asked for posts about each new blog article. plan-routine returned a plan for new_article_to_social (3 drafts per article, LinkedIn and Facebook, the article's link kept exactly) whose needs said 'Connect Blog' with a link; the reply showed the plan and sent the link.",
+  "steps": [
+    {
+      "tool": "confirm-plan",
+      "arguments": {
+        "workspace_id": "<brand's workspace id>",
+        "proposal_id": "<current plan id>"
+      },
+      "why": "No switch_on: saved switched off, nothing runs. Confirm binds the blog connected since the plan was made. If it is still missing, it is refused as plan_not_ready naming it: say so and send the link again."
+    },
+    {
+      "tool": "get-routine",
+      "arguments": {
+        "workspace_id": "<brand's workspace id>",
+        "routine_id": "<routine id from confirm-plan>"
+      },
+      "why": "Check it saved with the blog bound and status draft before asking to switch it on."
+    }
+  ],
+  "say": "Saved, switched off: New article to social. Each time you publish an article, Bolta writes 3 drafts for LinkedIn and Facebook with the article's link; they wait for your yes. Switch it on?",
+  "never": [
+    "switch_on true on the same yes: switching on is its own yes.",
+    "Promising it fires the minute an article goes live: it notices new articles when Bolta syncs the blog."
+  ]
+}

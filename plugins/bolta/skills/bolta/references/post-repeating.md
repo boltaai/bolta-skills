@@ -13,3 +13,9 @@ When someone wants one finished post to go out more than once, rather than new p
 - Only if asked. Both are set in the composer's Schedule dialog in Bolta, not from here.
 - Both skip review and drop the post's network settings.
 - A plug is a new post, not a reply to the original.
+
+## Always
+
+- Never promise to set up repeating, auto-repost or auto-plug from here: point to the page in Bolta.
+- Say that copies skip review before the user turns one on.
+- A new post each time is a routine, not a repeat.

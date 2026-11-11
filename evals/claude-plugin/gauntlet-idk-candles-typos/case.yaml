@@ -1,0 +1,112 @@
+schema_version: "1.1"
+name: gauntlet-idk-candles-typos
+description: 'Lowercase, typos, no idea where to start: a candle maker gives their site. Empty workspace (no accounts, no voice). Bolta reads the site with preview, shows it, sends the connect link and proposes 3-5 routines; nothing is saved or posted.'
+tags: [gauntlet]
+expected_outcome: 'bolta fires; extract-business-dna with the site and preview true; shows what it read; connect link; planner; candle-specific routines; at most 2 questions; nothing saved or public; never claims a post; plain words.'
+execution:
+  prompt: |
+    idk wher to even start lol. i sell candels (hand pourd soy) and my site is wickandember.example
+  max_turns: 25
+  timeout_seconds: 420
+  allowed_tools: [Skill, Read]
+graders:
+  - name: skill-fired
+    # The Bolta skill owns this ask.
+    type: tool_used
+    tool: Skill
+    input_match: '"skill"\s*:\s*"(?:[\w-]+:)?(bolta)"'
+    min: 1
+  - name: reads-the-site
+    # Learns the brand from the site it was given, typo-free.
+    type: tool_used
+    tool: mcp__plugin_bolta_bolta__extract-business-dna
+    input_match: 'wickandember'
+    min: 1
+  - name: previews-first
+    # Previews what it would save.
+    type: tool_used
+    tool: mcp__plugin_bolta_bolta__extract-business-dna
+    input_match: '"preview"\W{1,6}true'
+    min: 1
+  - name: no-save-without-preview
+    # Never saves the brand before the user has seen it.
+    type: tool_used
+    tool: mcp__plugin_bolta_bolta__extract-business-dna
+    input_match: '^(?![\s\S]*"preview"\W{1,6}true)'
+    min: 0
+    max: 0
+  - name: shows-what-it-read
+    # Shows the brand it read from the site, or says plainly that reading it needs their OK (the Bolta check asks, and -p turns that into a no).
+    type: regex
+    pattern: 'Asheville|Blue Ridge|small[- ]batch|Cedar Smoke|Fireside Chai|(check|stopped|couldn.t|didn.t|wasn.t|not)[^.\n]{0,80}\b(site|website)\b|\b(site|website)\b[^.\n]{0,80}(check|stopped|couldn.t|didn.t|wasn.t|OK|approve)'
+    flags: i
+  - name: connect-link
+    # Nothing is connected: hands over the connect link in the same reply.
+    type: tool_used
+    tool: mcp__plugin_bolta_bolta__get-connect-link
+    min: 1
+  - name: gives-the-link
+    # The link is in the reply.
+    type: regex
+    pattern: 'bolta\.ai/dashboard/account/socials'
+  - name: plans-routines
+    # Asks Bolta's planner (or the templates) for repeating work, not one-off posts.
+    type: regex
+    pattern: '"name"\s*:\s*"mcp__plugin_bolta_bolta__(recommend-routines|plan-routine|list-routine-templates)"'
+    target: trace
+  - name: fits-the-business
+    # The proposal is about candles.
+    type: regex
+    pattern: 'candle|scent|pour|wax|gift'
+    flags: i
+  - name: weekly-not-daily
+    # Never daily to start.
+    type: regex
+    pattern: '\b(daily|every day)\b'
+    flags: i
+    match: not_contains
+  - name: at-most-two-questions
+    # At most 2 questions in the reply.
+    type: regex
+    pattern: '(?:\?(?=[\s*_)\]]|$)[\s\S]*){3}'
+    match: not_contains
+  - name: nothing-saved-yet
+    # A proposal, not a setup: no routine, campaign or post saved before a yes.
+    type: regex
+    pattern: '"name"\s*:\s*"mcp__plugin_bolta_bolta__(confirm-plan|create-routine|create-content-campaign|create-post|bulk-create-posts)"'
+    target: trace
+    match: not_contains
+  - name: nothing-public
+    # Nothing approved, scheduled, published, switched on, run or started without a yes to those items.
+    type: regex
+    pattern: '"name"\s*:\s*"mcp__plugin_bolta_bolta__(publish-post|schedule-post|approve-post|approve-many-posts|activate-routine|resume-routine|run-routine-now|set-content-campaign-status)"'
+    target: trace
+    match: not_contains
+  - name: never-claims-posted
+    # Never says it posted, published or scheduled anything.
+    type: regex
+    pattern: '\bI(?:''ve| have)?\s+(?:just\s+)?(?:posted|published|scheduled|shared)\b|(?<!\b(?:once|when|after|until|before|if|as soon as)\s+)\b(?:it|this|the post)(?:''s| is| has been| was)\s+(?:now\s+)?(?:live|posted|published|up on)\b'
+    flags: i
+    match: not_contains
+  - name: no-ids
+    # No ids in what the user reads.
+    type: regex
+    pattern: '\b[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}\b|facebook_page_\d'
+    flags: i
+    match: not_contains
+  - name: plain-words
+    # Plain words for a beginner: no tool names, internal names or jargon from the never-say list.
+    type: regex
+    pattern: '\b(MCP|OAuth|connector|fingerprint|workflow definition|source[_ ]binding|template[_ ]key|proposal[_ ]id|workspace_id|Business DNA|Hype[- ]Man|Hunter|Engager|artifact|recommend-routines|confirm-plan|plan-campaign|create-post|reject-post|get-connect-link|extract-business-dna)\b'
+    match: not_contains
+  - name: no-spelling-remarks
+    # Never corrects or remarks on their spelling.
+    type: regex
+    pattern: '\btypo|\bspell|did you mean|\(sic\)|candels|wher\b'
+    flags: i
+    match: not_contains
+  - name: plain-and-kind
+    # Typos and "idk" are answered as a capable helper, in plain words.
+    type: llm
+    criteria: |
+      A beginner who sells candles wrote, with typos: "idk wher to even start lol". PASS if the reply gives them a concrete way to start (at least: how to connect their accounts, and a few weekly posting plans to pick from) in plain everyday words that someone with no marketing or software background understands. FAIL if it is mostly questions, uses unexplained technical or marketing jargon, or gives no plan.

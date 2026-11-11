@@ -1,0 +1,54 @@
+{
+  "ask": "25% off everything, Friday Nov 27 to Monday Nov 30, on acme.com/sale. Instagram and Facebook.",
+  "playbook": "campaign",
+  "before": "The user first asked for a Black Friday campaign. The one question asked was the offer and when it ends; this is the answer. Nothing else about the sale is known: no code, no stock limit.",
+  "steps": [
+    {
+      "tool": "create-content-campaign",
+      "arguments": {
+        "workspace_id": "<brand's workspace id>",
+        "name": "Black Friday sale",
+        "strategy_key": "offer_promotion",
+        "theme": "25% off everything at Acme, Friday Nov 27 to Monday Nov 30",
+        "audience": "People who follow Acme and buy gifts",
+        "cta_text": "Shop the sale",
+        "cta_url": "https://acme.com/sale",
+        "starts_on": "2026-11-24",
+        "ends_on": "2026-11-30",
+        "content_mix": {
+          "still_image": 3,
+          "carousel": 1
+        }
+      },
+      "why": "Offer & Promotion only because a real discount and end date were given. One week, Tue Nov 24 to Mon Nov 30: three days of build-up, then the sale, never past its end. The strategy's own mix has a text post, which Instagram can't take, so the mix is sent without it: images and one carousel both fit Instagram and Facebook."
+    },
+    {
+      "tool": "set-content-campaign-targets",
+      "arguments": {
+        "workspace_id": "<brand's workspace id>",
+        "campaign_id": "<campaign id>",
+        "account_ids": [
+          "<Instagram account id>",
+          "<Facebook account id>"
+        ],
+        "context_notes": "The offer: 25% off everything at acme.com/sale. It runs Friday Nov 27 to Monday Nov 30 only. Before Nov 27, say it is coming and when; never say it is live. Nothing after Nov 30. No codes, stock limits or countdown claims: none were given."
+      },
+      "why": "The notes reach the writer word for word in the week's brief, so the real offer, dates and limits go here. The strategy already tells it never to invent urgency; the notes add what this sale does not have. Bolta spreads a week's posts over weekdays (or the brand's posting days), so no call puts a post on Saturday or Sunday: the user pins one under Post prompts on the campaign page."
+    },
+    {
+      "tool": "get-content-campaign",
+      "arguments": {
+        "workspace_id": "<brand's workspace id>",
+        "campaign_id": "<campaign id>"
+      },
+      "why": "Check before asking to start: starts_on not past, accounts set, resolved_content_mix as sent. Week 1 starts Tue Nov 24, so its drafts are written around Sun Nov 22."
+    }
+  ],
+  "say": "Ready, not started: Black Friday sale for Acme, Offer & Promotion (the deal, its price, when it ends). Nov 24 to Nov 30 on Instagram and Facebook: 3 images and 1 carousel, 4 drafts to review, written around Sun Nov 22. The notes tell Bolta: teasers before Friday, the sale from Friday, nothing after Monday; check each draft's day when you review. Want a weekend post? Pin it under Post prompts at bolta.ai/dashboard/campaigns/<id>. Start it?",
+  "never": [
+    "Inventing a discount, a code, a stock limit or \"ends tonight\" the user didn't give.",
+    "Running an offer campaign past the offer's end date.",
+    "A text post in a mix that goes to Instagram.",
+    "Promising which day each post lands: only the campaign page pins a post to a day."
+  ]
+}

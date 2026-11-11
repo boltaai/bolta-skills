@@ -19,3 +19,8 @@
 
 - It finishes in the browser, on whichever brand the browser has selected: "Connecting happens in your browser. Check the workspace switcher shows Acme first."
 - On "done", read the accounts again. Never say it's connected until that read shows it.
+
+## Always
+
+- Follow the house rules in the Bolta skill.
+- Never say an account is connected until a fresh read shows it.

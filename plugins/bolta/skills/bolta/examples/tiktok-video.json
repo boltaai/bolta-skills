@@ -1,5 +1,5 @@
 {
-  "ask": "Post this behind-the-scenes clip to TikTok, followers only, no duets: https://cdn.example.com/bts.mp4",
+  "ask": "Post this behind-the-scenes clip of how our candles get their swirl to TikTok, followers only, no duets: https://cdn.example.com/bts.mp4",
   "playbook": "post",
   "steps": [
     {
@@ -12,8 +12,7 @@
         ],
         "media": [
           {
-            "url": "https://cdn.example.com/bts.mp4",
-            "alt_text": "Hands pouring wax into a jar"
+            "url": "https://cdn.example.com/bts.mp4"
           }
         ],
         "idempotency_key": "bts-tiktok-1"
@@ -30,12 +29,12 @@
           "disable_duet": true
         }
       },
-      "why": "Privacy defaults to public, so set what the user asked. Only the switches they named."
+      "why": "The decision: followers only and duets off, because the user asked for both. Privacy defaults to public, so it must be set; the details call refuses a misspelled level. Only the switches they named: stitches and comments stay as they are."
     }
   ],
   "say": "Saved to Acme as a TikTok draft: followers only, duets off. Nothing goes out yet. Schedule it?",
   "never": [
     "Assuming public when the user didn't say: ask.",
-    "Saying a paid or brand video is disclosed: that switch is set in Bolta's composer."
+    "Saying a paid or brand video is disclosed without setting it: brand_organic_toggle or brand_content_toggle in platform_specific (see tiktok-brand-disclosure)."
   ]
 }

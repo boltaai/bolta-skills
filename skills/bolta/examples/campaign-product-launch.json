@@ -1,0 +1,57 @@
+{
+  "ask": "We launch Acme Inbox on Tuesday Dec 8. Plan a campaign for LinkedIn and Instagram. The page is acme.com/inbox.",
+  "playbook": "campaign",
+  "before": "Bolta's planner is offered on this connection. The workspace clock is New York. Today is Wed Nov 11.",
+  "steps": [
+    {
+      "tool": "plan-campaign",
+      "arguments": {
+        "workspace_id": "<brand's workspace id>",
+        "ask": "Launch campaign for Acme Inbox, which launches Tuesday Dec 8, on LinkedIn and Instagram.",
+        "context": "Product: Acme Inbox. Launch day: Tue Dec 8. Facts the user gave, nothing else.",
+        "links": ["https://acme.com/inbox"]
+      },
+      "why": "The date is in the ask, so no question first. The planner picks the strategy, accounts, mix and dates and creates nothing. Its plan came back starting tomorrow (its default when it reads no start date) for 2 weeks (the default when weeks aren't said), so it ended before launch day; Problem / Solution, and notes. Always read the plan's dates: a launch date can also be taken as the start. Show it in a few lines: name, strategy and its gloss, dates, posts a week × weeks = drafts to review."
+    },
+    {
+      "tool": "revise-plan",
+      "arguments": {
+        "workspace_id": "<brand's workspace id>",
+        "proposal_id": "<plan id from plan-campaign>",
+        "change": "3 weeks from Monday Nov 23 to Sunday Dec 13, so launch day Dec 8 falls in the last week."
+      },
+      "why": "Guidance: a launch runs 3 weeks with launch day in the last week. Weeks start on the start date's weekday, so a Monday start puts Tue Dec 8 in week 3. The user said yes to that change. The reply has a new id; the old one can't be saved."
+    },
+    {
+      "tool": "confirm-plan",
+      "arguments": {
+        "workspace_id": "<brand's workspace id>",
+        "proposal_id": "<new plan id from revise-plan>"
+      },
+      "why": "The user said \"save it\". No switch_on: the campaign is saved not started and nothing is written. Confirm reads the linked page itself; its sources row said ready. A failed row: say its error and offer to put the facts in the notes."
+    },
+    {
+      "tool": "get-content-campaign",
+      "arguments": {
+        "workspace_id": "<brand's workspace id>",
+        "campaign_id": "<campaign id from confirm-plan>"
+      },
+      "why": "The pre-start check: strategy_key set, starts_on Nov 23 (not past), account_ids has LinkedIn and Instagram, every context_sources row ready, resolved_content_mix has no text (Instagram can't take text posts). Then show the plan and ask \"Start it?\" on its own."
+    },
+    {
+      "tool": "set-content-campaign-status",
+      "arguments": {
+        "workspace_id": "<brand's workspace id>",
+        "campaign_id": "<campaign id>",
+        "action": "activate"
+      },
+      "why": "The second, separate yes. This is what makes Bolta write. Read generation.scheduled_for, then status back as active."
+    }
+  ],
+  "say": "Campaign on for Acme: Acme Inbox launch, Nov 23 to Dec 13, launch day Dec 8 in week 3, LinkedIn and Instagram. Week 1's drafts land around Sat Nov 21 and wait for your yes.",
+  "never": [
+    "Starting it in the same yes that saved the plan.",
+    "Offer & Promotion for a launch with no price or deadline.",
+    "Leaving the campaign saved and not started without saying so: a saved campaign writes nothing."
+  ]
+}

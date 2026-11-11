@@ -9,3 +9,7 @@ Read with [fix-symptoms.md](fix-symptoms.md).
 - After taking posts back, list again and report each; never "all done" when one failed.
 - A deleted `job` is an older Bolta automation; it comes back without the conversations it watched.
 - A declined Bolta check means not done; never reach it another way.
+
+## Always
+
+- Follow the house rules in the Bolta skill.

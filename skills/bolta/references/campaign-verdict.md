@@ -22,12 +22,17 @@ Read when a campaign's end date has passed, or the user asks how one did. Read `
 
 ## Closing it
 
-- **On or paused:** offer to finish it: `set-content-campaign-status` with `action: "complete"`. One Bolta check. Final: it can't start again; its results stay.
+- Read `status` first. **Completed** (`status_reason` `window_ended`): an on campaign finishes by itself after its end date; nothing to do.
+- **Paused, or on before its end:** offer to finish it: `set-content-campaign-status` with `action: "complete"`. One Bolta check. Final: it can't start again; its results stay. Scheduled posts still go out ([settings-status.md](campaign-settings-status.md)).
 - **Not started** (one I wrote): give the verdict and leave the status alone. It can't be finished from there.
 - **Retire** (`action: "archive"`) only when asked. One check, final. Pause is usually what they meant.
 
 ## One next step
 
-- It worked: "Run it again with the same strategy?" The fastest way is the copy icon ("Duplicate this campaign") on the cover at bolta.ai/dashboard/campaigns/<id>: it saves a draft with the same strategy, brief, accounts, weekly plan, voice and settings, dated from the day after this one ends (or today), not started. Or I make a new one with the same brief; then the accounts and Context step comes back unless Content defaults fill the accounts.
+- It worked: "Run it again with the same strategy?" The fastest way is the copy icon ("Duplicate this campaign") on the cover at bolta.ai/dashboard/campaigns/<id>: a not-started copy with the same strategy, brief, accounts, weekly plan, voice and settings, dated from the day after this one ends (or today). Its sources come back unread: analyze each, then start it on a yes. Or I make a new one with the same brief; then the accounts and Context step comes back unless Content defaults fill the accounts.
 - It didn't: name one other strategy, using the week 1 signs in [strategies.md](campaign-strategies.md): "Try Product Education next?"
 - A leftover draft or two: one line, not the question ("1 X draft never went out."). The question stays the run-again or strategy one.
+
+## Always
+
+- Follow the house rules in the Bolta skill.

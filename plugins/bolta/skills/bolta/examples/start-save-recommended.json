@@ -1,0 +1,28 @@
+{
+  "ask": "Set up 1 and 3.",
+  "playbook": "start",
+  "before": "recommend-routines returned three plans, each with its own id; the reply listed them numbered and asked which to set up.",
+  "steps": [
+    {
+      "tool": "confirm-plan",
+      "arguments": {
+        "workspace_id": "<brand's workspace id>",
+        "proposal_id": "<plan 1 id>"
+      },
+      "why": "A yes to set up is a yes to save: no switch_on, saved switched off."
+    },
+    {
+      "tool": "confirm-plan",
+      "arguments": {
+        "workspace_id": "<brand's workspace id>",
+        "proposal_id": "<plan 3 id>"
+      },
+      "why": "Each plan saves by its own id. A plan_not_ready refusal names what is missing (here none: a report needs no accounts)."
+    }
+  ],
+  "say": "Saved, switched off: Patient wins and Weekly numbers. Switch both on?",
+  "never": [
+    "switch_on true: it also runs at once and spends credits.",
+    "Saving plan 2, which the user didn't pick."
+  ]
+}

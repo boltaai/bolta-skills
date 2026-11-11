@@ -1,6 +1,6 @@
 # Strategies
 
-Read when picking a strategy or reading week 1. A strategy is the stance every post takes, not a topic or format. Say its dashboard name and gloss.
+Read when picking a strategy or reading week 1. A strategy is the stance every post takes, not a topic or format. Bolta adds its instruction to every week's brief. Say its dashboard name and gloss. Blank means no angle reaches the writer, and those drafts are sent back far more often.
 
 ## The six
 
@@ -13,16 +13,16 @@ Read when picking a strategy or reading week 1. A strategy is the stance every p
 
 Picking:
 
-- A launch is Problem / Solution. Offer & Promotion assumes people already know the thing: the most common mistake.
-- No real price and end date: not Offer & Promotion. Bolta never invents urgency.
+- Bolta's own pick by kind of business: wellness or beauty, Offer & Promotion; clinics and studios, Product Education; founders and operators, Problem / Solution; consultants and creators, Thought Leadership; unknown, Problem / Solution.
+- Guidance: a launch is Problem / Solution. Offer & Promotion assumes people already know the thing: the most common mistake.
 - "Behind the scenes", "culture", "customer stories" are topics: put them in the theme.
-- How long: a first campaign 2 weeks; a launch 3, launch day in week 3; an offer 1-2, never past its end; Thought Leadership 4. Longer arcs are two campaigns, each with a verdict.
+- How long: [settings.md](campaign-settings.md).
 
 ## Four playbooks
 
 Launch, deadline promotion, thought leadership, consistency test: weeks, mix, totals and the usual mistake are in [playbooks.md](campaign-strategies-playbooks.md).
 
-**Context** is the campaign's notes (`context_notes`, see campaign-targets.md), not a question first. Which mix runs: one you send, else the brand's saved Content defaults, else the strategy's mix above. Send `content_mix` only when the user asked for a playbook's mix; otherwise omit it and read `resolved_content_mix` in the reply.
+**Context** is the campaign's notes (`context_notes`), not a question first. Which mix runs: one you send, else the brand's saved Content defaults, else the strategy's mix above. Send `content_mix` only when the user asked for a playbook's mix; otherwise omit it and read `resolved_content_mix` in the reply.
 
 ## Week 1: wrong strategy or thin context?
 
@@ -35,5 +35,11 @@ Read week 1's drafts as a set, not one by one.
 - **Pretty scenes that sell nothing:** Lifestyle with no product moment: Product Education.
 - **Explaining what nobody asked:** Product Education aimed too deep: Quick Tips.
 
-- Switch after week 1, not week 3: `update-content-campaign` with the new `strategy_key`. Only unwritten weeks change; the mix stays unless you send `content_mix`.
+- Switch after week 1, not week 3: `update-content-campaign` with the new `strategy_key`. Only the instruction for unwritten weeks changes; the mix stays unless you send `content_mix`. Pair a switch with better notes.
+- The strategy page's "Make default" doesn't change what Bolta writes for a campaign made here.
 - Vague everywhere is thin context; switching gives differently vague posts. Fix in order: about your business, the campaign's Context, a source page, your documents.
+
+## Always
+
+- Never leave `strategy_key` blank; never Offer & Promotion without a real price and end date.
+- Follow the house rules in the Bolta skill.

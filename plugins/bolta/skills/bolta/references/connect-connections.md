@@ -35,7 +35,7 @@ One connection for the agency's organization; tick the client brands.
 ## Sign-in versus a pasted API key
 
 - Sign-in marks posts from this app as AI drafts, keeping the first version, so edits teach the voice; Bolta keeps them on the review list until approved.
-- A pasted Bolta API key acts as the person directly: no AI-draft mark, so edits don't teach, and the sign-in hold is off: it can schedule or publish without an approval. Safe Mode and required client sign-off still apply, plus the plugin's checks.
+- A pasted Bolta API key acts as the person directly: its posts still teach the voice, but the sign-in hold is off: it can schedule or publish without an approval. Safe Mode and required client sign-off still apply, plus the plugin's checks.
 - Used a key, or asking? Say this once; recommend sign-in.
 
 ## What this connection may do
@@ -53,6 +53,10 @@ One connection for the agency's organization; tick the client brands.
 - Access follows the role of whoever signed in. A viewer's connection is read-only: no saves, nothing that uses credits. A client reviewer can't connect at all. A role change applies when the sign-in next renews; sign in again to apply it now.
 - A role that can't connect accounts: a teammate whose role can does it.
 - The read can say yes and Bolta still refuse. Give Bolta's sentence; don't try another way.
-- Owners, admins and creators approve by default, but per-member permissions can change that: trust this read, never memory.
+- Here owners and admins approve; a creator's `approve_posts` can read true while `approve-post` refuses: trust the refusal ([roles](connect-people-and-roles.md)).
 
 Clock, review mode and "Is everything set up?": [team-and-integrations](connect-team-and-integrations.md).
+
+## Always
+
+- Follow the house rules in the Bolta skill.

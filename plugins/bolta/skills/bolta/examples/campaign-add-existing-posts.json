@@ -1,0 +1,51 @@
+{
+  "ask": "Add my LinkedIn posts from last week to the Spring launch campaign.",
+  "playbook": "campaign",
+  "before": "Today is Wed Nov 11; last week is Mon Nov 2 to Sun Nov 8 in the workspace clock.",
+  "steps": [
+    {
+      "tool": "list-content-campaigns",
+      "arguments": {
+        "workspace_id": "<brand's workspace id>"
+      },
+      "why": "Find the campaign by name. Two with that name: ask which. Attaching works whatever its status, finished ones too."
+    },
+    {
+      "tool": "list-workspace-posts",
+      "arguments": {
+        "workspace_id": "<brand's workspace id>",
+        "platform": "linkedin",
+        "start_date": "2026-11-02T00:00:00",
+        "end_date": "2026-11-08T23:59:59"
+      },
+      "why": "Last week's LinkedIn posts. Show them (#, day, first line) so the user sees exactly what will be added; add only what they confirm."
+    },
+    {
+      "tool": "add-posts-to-content-campaign",
+      "arguments": {
+        "workspace_id": "<brand's workspace id>",
+        "campaign_id": "<campaign id>",
+        "post_ids": [
+          "<post id 1>",
+          "<post id 2>",
+          "<post id 3>"
+        ]
+      },
+      "why": "Up to 100 ids a call. Partial results are normal: already_present means it was in the campaign, not_found means not this brand's. Report what attached. Attaching writes, schedules and publishes nothing and doesn't start the campaign."
+    },
+    {
+      "tool": "list-content-campaign-posts",
+      "arguments": {
+        "workspace_id": "<brand's workspace id>",
+        "campaign_id": "<campaign id>"
+      },
+      "why": "Read back: the three now show among its posts."
+    }
+  ],
+  "say": "Added 3 LinkedIn posts from last week to Acme's Spring launch campaign. Their results now count toward it.",
+  "never": [
+    "Adding posts the user didn't see listed.",
+    "Saying a post can be removed here: removing one is done from the calendar's campaign picker in Bolta.",
+    "Starting a campaign because posts were added to it."
+  ]
+}

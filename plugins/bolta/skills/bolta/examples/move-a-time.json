@@ -9,7 +9,7 @@
         "post_id": "<post id>",
         "scheduled_time": "2026-11-19T14:00:00"
       },
-      "why": "Only post_id and scheduled_time: update-post takes no workspace_id, and no status, text, media or accounts here. A time-only move keeps the post Scheduled with its approval and any client sign-off; the approval moves to the new slot. Wall clock in the brand's time zone, no Z, no offset; add timezone only if the user named a place. The new time must be in the future."
+      "why": "Only post_id and scheduled_time (plus workspace_id when the connection reaches several brands): no status, text, media, accounts or platform_specific here. A time-only move keeps the post Scheduled with its approval and any client sign-off; the approval moves to the new slot. Wall clock in the brand's time zone, no Z, no offset; add timezone only if the user named a place. The new time must be in the future."
     },
     {
       "tool": "get-post",

@@ -1,5 +1,5 @@
 {
-  "ask": "Post this photo to Instagram and LinkedIn with a caption about the new roast: https://cdn.example.com/roast.jpg",
+  "ask": "Post this photo of the bag to Instagram and LinkedIn with a caption about the new roast, out today, notes of plum and cocoa: https://cdn.example.com/roast.jpg",
   "playbook": "post",
   "steps": [
     {
@@ -14,12 +14,12 @@
         "media": [
           {
             "url": "https://cdn.example.com/roast.jpg",
-            "alt_text": "A bag of the new roast on a wooden counter"
+            "alt_text": "A bag of the new roast"
           }
         ],
         "idempotency_key": "new-roast-1"
       },
-      "why": "Only a public http(s) link to the image file itself, given by the user. Alt text on every image (255 characters or fewer): Instagram reads it, LinkedIn ignores it. Instagram, TikTok, YouTube and Pinterest fail hours later without media."
+      "why": "The decision: one post for both, because the photo, the moment and the words are the same. Only a public http(s) link to the image file itself, given by the user. Alt text on every image (255 characters or fewer), saying only what the user said it shows: Instagram receives it, LinkedIn doesn't. Without media, Instagram would save and then fail when the post goes out."
     }
   ],
   "say": "Saved to Acme as a draft for Instagram and LinkedIn, with your photo. Nothing goes out yet. Post it now, or pick a time?",

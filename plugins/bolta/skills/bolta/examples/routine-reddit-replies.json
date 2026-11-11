@@ -1,0 +1,65 @@
+{
+  "ask": "Yes, turn it on.",
+  "playbook": "routine",
+  "before": "The brand is on Premium. The user wants Bolta to find Reddit threads where small agencies ask about client reporting. The summary listed the topics in their words, two subreddits, 3 reply drafts every Monday and Thursday 9:00 am (Chicago), each waiting for their yes, uses credits each run.",
+  "steps": [
+    {
+      "tool": "create-routine",
+      "arguments": {
+        "workspace_id": "<brand's workspace id>",
+        "name": "Reddit replies, client reporting",
+        "goal": "Help agency owners asking how to report to clients; never pitch unless asked",
+        "template_key": "reddit_engagement",
+        "trigger_type": "schedule",
+        "schedule": {
+          "cron": "0 9 * * 1,4"
+        },
+        "timezone": "<timezone from get-workspace>",
+        "approval_policy": "review_every_artifact",
+        "source_bindings": [
+          {
+            "provider": "social_account",
+            "ref": "<Reddit account id>"
+          }
+        ],
+        "output_config": {
+          "artifact_type": "reply",
+          "count": 3,
+          "topics": [
+            "client reporting for agencies",
+            "monthly client report template",
+            "how to show clients ROI"
+          ],
+          "communities": [
+            "agency",
+            "marketing"
+          ]
+        },
+        "instructions": "Answer the question first. Mention us only if someone asks for a tool. Never invent facts, numbers, prices or dates."
+      },
+      "why": "Topics are required: a reply routine without them fails every run. communities are subreddit names, Reddit only. Two weekdays is a cron. Reply routines never post without asking."
+    },
+    {
+      "tool": "activate-routine",
+      "arguments": {
+        "workspace_id": "<brand's workspace id>",
+        "routine_id": "<routine id>"
+      },
+      "why": "Premium is checked again here; a refusal means the plan changed: say so plainly."
+    },
+    {
+      "tool": "get-routine",
+      "arguments": {
+        "workspace_id": "<brand's workspace id>",
+        "routine_id": "<routine id>"
+      },
+      "why": "next_run_at in the brand's clock. Its drafts will wait in list-engagements as pending, not in the review list."
+    }
+  ],
+  "say": "Bolta routine on: Reddit replies about client reporting. First 3 drafts Thu Nov 12, 9:00 am (Chicago). Say 'show my reply drafts' to go through them.",
+  "never": [
+    "Saving a reply routine with no topics.",
+    "approval_policy auto on a reply routine.",
+    "Looking for its drafts in the review list: they are in list-engagements."
+  ]
+}

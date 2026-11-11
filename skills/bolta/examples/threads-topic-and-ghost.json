@@ -1,5 +1,5 @@
 {
-  "ask": "Two Threads posts for tomorrow's flash sale: one that stays up with the Small Business topic, and a 24-hour one that says the sale ends tonight.",
+  "ask": "Two Threads posts for tomorrow's flash sale, 30% off every candle for one day: one that stays up with the Small Business topic, and a 24-hour one that says the sale ends tonight.",
   "playbook": "post",
   "steps": [
     {
@@ -54,7 +54,7 @@
           "is_ghost_post": true
         }
       },
-      "why": "A ghost post: text only, gone after 24 hours. Short, one part, no image or poll, or it goes out as a normal post."
+      "why": "A ghost post: gone after 24 hours. One text part of 500 characters or fewer, no image or poll, or it goes out as a normal post without an error."
     },
     {
       "tool": "get-post-platform-details",

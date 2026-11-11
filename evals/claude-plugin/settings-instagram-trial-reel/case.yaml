@@ -1,0 +1,68 @@
+schema_version: "1.1"
+name: settings-instagram-trial-reel
+description: 'A trial reel on Instagram: shown to non-followers first, and the user decides later whether followers see it. In platform_specific.instagram on the saving create-post: content_type REELS and the trial switch (trialReelEnabled or trial_reel_enabled) true with MANUAL graduation (the default, so leaving the strategy out is fine), and the one video attached. A trial reel without REELS and a video is switched off, so both must be there.'
+tags: [settings]
+expected_outcome: 'post fires; one create-post to Instagram with the video, content_type REELS and the trial switch on, never SS_PERFORMANCE; says non-followers see it first and the user decides; nothing approved or scheduled.'
+execution:
+  prompt: |
+    Make an Instagram trial reel for Northwind with this video: https://cdn.northwindcoffee.com.au/video/latte-art-slowmo.mp4 Caption it around our latte art class on Sunday mornings. Show it to non-followers first; I'll decide myself later whether it goes to our followers. Save it as a draft.
+  max_turns: 20
+  timeout_seconds: 300
+  allowed_tools: [Skill, Read]
+graders:
+  - name: skill-fired
+    type: tool_used
+    tool: Skill
+    input_match: '"skill"\s*:\s*"(?:[\w-]+:)?(bolta)"'
+    min: 1
+  - name: playbook-read
+    type: tool_used
+    tool: Read
+    input_match: 'references/(post)\.md'
+    min: 1
+  - name: instagram-account
+    type: tool_used
+    tool: mcp__plugin_bolta_bolta__create-post
+    input_match: 'a1b2c3d4-0001-4a00-8000-000000000003'
+    min: 1
+  - name: video-attached
+    type: tool_used
+    tool: mcp__plugin_bolta_bolta__create-post
+    input_match: 'latte-art-slowmo\.mp4'
+    min: 1
+  - name: reels
+    type: tool_used
+    tool: mcp__plugin_bolta_bolta__create-post
+    input_match: '"instagram"\s*:\s*\{[^{}]*"content_type"\s*:\s*"REELS"'
+    min: 1
+  - name: trial-on
+    # Either spelling the server reads.
+    type: tool_used
+    tool: mcp__plugin_bolta_bolta__create-post
+    input_match: '"instagram"\s*:\s*\{[^{}]*"(trialReelEnabled|trial_reel_enabled)"\s*:\s*true'
+    min: 1
+  - name: user-decides
+    # The user graduates it: never the automatic strategy.
+    type: regex
+    target: trace
+    pattern: 'SS_PERFORMANCE"'
+    match: not_contains
+  - name: says-non-followers-first
+    type: regex
+    pattern: 'non.?followers|people who (don.t|do not) follow|not (yet )?(to|shown to|seen by) (your )?followers'
+    flags: i
+  - name: says-draft
+    type: regex
+    pattern: 'draft|nothing (goes|has gone|will go) out|not (posted|scheduled|published)'
+    flags: i
+  - name: no-approve-schedule-publish
+    # Drafts only: nothing approved, scheduled or posted.
+    type: regex
+    target: trace
+    pattern: '"name":"mcp__plugin_bolta_bolta__(approve-post|approve-many-posts|schedule-post|publish-post)"'
+    match: not_contains
+  - name: no-ids-or-jargon
+    type: regex
+    pattern: '[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-|linkedin_org_|platform_specific|\bcreate-post\b|\bupdate-post\b|trialReelEnabled|trial_reel_enabled|content_type|\bMCP\b'
+    flags: i
+    match: not_contains

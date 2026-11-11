@@ -1,0 +1,68 @@
+{
+  "ask": "My Spring launch campaign made nothing. Fix it.",
+  "playbook": "campaign",
+  "before": "Today is Wed Nov 11. The campaign was made last week on the dashboard.",
+  "steps": [
+    {
+      "tool": "list-content-campaigns",
+      "arguments": {
+        "workspace_id": "<brand's workspace id>"
+      },
+      "why": "Find it by name and read its status."
+    },
+    {
+      "tool": "get-content-campaign",
+      "arguments": {
+        "workspace_id": "<brand's workspace id>",
+        "campaign_id": "<campaign id>"
+      },
+      "why": "One fresh read is the diagnosis. Found: status draft (never started, the usual cause), account_ids empty, starts_on Nov 2 (its first week is already over), strategy_key problem_solution, one url source still pending (made in the web dialog, so never read). Say each cause from these fields, then propose the fix: new dates, the accounts, read the page. The user said yes to it."
+    },
+    {
+      "tool": "update-content-campaign",
+      "arguments": {
+        "workspace_id": "<brand's workspace id>",
+        "campaign_id": "<campaign id>",
+        "starts_on": "2026-11-16",
+        "ends_on": "2026-11-29"
+      },
+      "why": "Started now, the weeks already over would be skipped, never written. Two full weeks from next Monday instead."
+    },
+    {
+      "tool": "set-content-campaign-targets",
+      "arguments": {
+        "workspace_id": "<brand's workspace id>",
+        "campaign_id": "<campaign id>",
+        "account_ids": [
+          "<LinkedIn account id>",
+          "<Instagram account id>"
+        ]
+      },
+      "why": "With accounts in the brand and none on the campaign, starting would switch it on and then wait at needs_accounts. These are the networks the user named."
+    },
+    {
+      "tool": "analyze-content-campaign-source",
+      "arguments": {
+        "workspace_id": "<brand's workspace id>",
+        "campaign_id": "<campaign id>",
+        "kind": "url",
+        "ref": "<the pending url, exactly as in context_sources>"
+      },
+      "why": "Only read sources reach the writer. It came back ready."
+    },
+    {
+      "tool": "get-content-campaign",
+      "arguments": {
+        "workspace_id": "<brand's workspace id>",
+        "campaign_id": "<campaign id>"
+      },
+      "why": "The pre-start check, all clear: strategy set, future start, accounts, every source ready, a mix both networks take. Starting is a separate yes."
+    }
+  ],
+  "say": "It made nothing because it was never started, and it had no accounts. I moved it to Nov 16 to Nov 29, added LinkedIn and Instagram, and Bolta read your launch page. 8 drafts to review; week 1's land around Sat Nov 14. Start it?",
+  "never": [
+    "Starting it before the user says yes to starting.",
+    "Guessing a cause the campaign's fields don't show.",
+    "Starting it with a past start date: those weeks are skipped."
+  ]
+}

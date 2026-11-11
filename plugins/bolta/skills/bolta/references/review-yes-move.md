@@ -22,8 +22,8 @@ Read before carrying out decisions. Times: [review-times.md](review-times.md). L
 
 ## Fingerprints, roles, notes
 
-- `expected_fingerprint`: the row's `content_fingerprint`, read after any change; never reuse an old one. `approve-post` may leave it out when the row's is empty.
-- Only owners and admins can approve or turn down. Others: send for review, say who can.
+- `expected_fingerprint`: the row's `content_fingerprint`, read after any change; never reuse an old one. A row with an empty one can't go in `approve-many-posts`: use `approve-post` for it, without it.
+- Here, `approve-post`, `approve-many-posts` and `reject-post` take owners and admins only, and a per-person setting can take that away. A creator is refused even on Bolta's drafts, which they can approve in Bolta (bolta.ai/dashboard/approvals); `approve-recurring-review` takes creators. `get-my-capabilities` can show `approve_posts` true for a creator while the approval still refuses: trust the refusal. Who approves in Bolta: [people and roles](connect-people-and-roles.md). Others: send for review, say who can.
 - `comments` on an approval: an optional note kept on the review trail, and for AI drafts fed to Bolta's learning. Use the user's words only.
 - No checks plugin, no Bolta checks. Past 3 yeses, also offer bolta.ai/dashboard/approvals.
 

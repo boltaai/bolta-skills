@@ -1,5 +1,5 @@
 {
-  "ask": "Announce our new store hours on LinkedIn, X, Threads and our Facebook Page, with the full schedule as a comment on Facebook.",
+  "ask": "Announce our new store hours on LinkedIn, X, Threads and our Facebook Page: from Monday we open at 7 am. Put the full schedule as a comment on Facebook: Mon-Fri 7 am to 6 pm, Sat 8 am to 4 pm, Sun closed.",
   "playbook": "post",
   "steps": [
     {
@@ -15,7 +15,7 @@
         "workspace_id": "<brand's workspace id>",
         "posts": [
           {
-            "content": "From Monday we open at 7 am. Earlier coffee for the commute crowd, same team behind the counter.",
+            "content": "From Monday we open at 7 am. Earlier coffee for the commute, same team behind the counter.",
             "account_ids": [
               "<LinkedIn account id>"
             ],
@@ -53,7 +53,7 @@
           }
         ]
       },
-      "why": "Each network wants its own shape, so one post per network, written fresh, in one bulk call. The Facebook item has two parts: part 2 goes out as a comment from the Page, so it is aimed at the Page alone. Then poll bulk-create-status: its posts list gives the Facebook and Threads post ids for the next steps."
+      "why": "The Facebook first comment is a second part on one network only, and parts are shared by every account on a post, so this is one post per network, each written fresh, in one bulk call (without it, one post with a text per network in platform_specific would do). The Facebook item has two parts: part 2 goes out as a comment from the Page, so it is aimed at the Page alone. Then poll bulk-create-status: its posts list gives the Facebook and Threads post ids for the next steps."
     },
     {
       "tool": "update-post",
@@ -75,10 +75,10 @@
           "use_topic_tag": true
         }
       },
-      "why": "A setting only where it adds something; the user agreed to the topic."
+      "why": "A setting only where it adds something: the topic people browse for this post. Name it in the reply so the user can drop it. With the details call the tag needs use_topic_tag too."
     }
   ],
-  "say": "Saved to Acme as 4 drafts: 1 LinkedIn, 2 X, 3 Threads (topic Coffee), 4 Facebook with the schedule as a comment under it. Nothing goes out yet. Schedule all 4 for Monday 7 am? Once they're out, I'll check the live Facebook post for the comment.",
+  "say": "Saved to Acme as 4 drafts: 1 LinkedIn, 2 X, 3 Threads (topic Coffee), 4 Facebook with the schedule as a comment under it. Nothing goes out yet. Schedule all 4? Once they're out, I'll check the live Facebook post for the comment.",
   "never": [
     "Pasting one text and trimming it per network.",
     "Claiming the posts will look the same everywhere.",

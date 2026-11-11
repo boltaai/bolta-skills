@@ -32,3 +32,8 @@ Routines, campaigns and single posts all write through a voice, so one rule chan
 ## No description yet
 
 `business_overview` missing: "Bolta has no description of Acme yet. Tell me what you do in two sentences and I'll add it." No record at all: offer to read their own site ([voice-setup-and-documents](voice-setup-and-documents.md)).
+
+## Always
+
+- Follow the house rules in the Bolta skill.
+- Send only the fields that changed.

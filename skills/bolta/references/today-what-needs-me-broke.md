@@ -8,3 +8,7 @@ The **Broke** lines of the summary ([today-what-needs-me.md](today-what-needs-me
 - Routine `pause_reason` `plan_gate` or `trial_quota`: a plan or credit limit. Point to the plan; never offer resume.
 - Routine `display_state` `failed`: its `last_run.explanation`, in plain words ([routine](routine.md)).
 - Campaign `state` is `needs_accounts`: "Campaign 'X' is on but has no accounts, so nothing gets written." Campaign `last_error`: say it plainly ([campaign](campaign.md)).
+
+## Always
+
+- Follow the house rules in the Bolta skill.

@@ -12,7 +12,7 @@
 | `failed` | it didn't go | give the reason as written (none given: say so); don't retry, a new draft is needed |
 
 - No `verification_status`: it wasn't checked (only `sent` replies are). `published`: found. On X, Threads, Bluesky and Mastodon that only means the reply is still reachable.
-- `missing_or_removed`: sent, then taken down. `verification_unavailable`: this network can't be checked (anything but Reddit, X, Threads, Bluesky and Mastodon). `verification_failed`: the check errored.
+- `missing_or_removed`: sent, then taken down. `verification_unavailable`: this network can't be checked (anything but Reddit, X, Threads, Bluesky and Mastodon). `verification_failed`: the check errored; off Reddit a removed reply can look like this too.
 - Queued or throttled is not a failure. `list-engagements(status="failed")` lists failures.
 
 ## When it goes wrong
@@ -23,14 +23,9 @@
 - Timeout on a send: outcome unknown. Check `list-engagements` first, before any resend.
 - A limit or "wait a moment": stop for now.
 
-## Reddit safety
+## Reddit
 
-- **New or low-karma accounts** (under 30 days old, under 100 karma, or no verified email) are paced, even with a person's yes.
-- **A suspended account** blocks sending ([connect](connect.md)).
-- **Removed by Reddit:** a `failed` row whose reason starts `REMOVED_BY_PLATFORM` was taken down. Don't resend. Bolta then pauses unattended Reddit replies from that account for 72 hours (7 days after a second removal within 7 days, or a removal only the author can see), and skips that subreddit after an AutoModerator removal. Replies a person approves still go.
-- **Locked or archived threads:** an unattended reply is dropped for good.
-- A rate limit: stop. "Rate limited (conservative)": Bolta resends shortly, so report it queued. Banned, or below a community's posting requirements: not there for now. "Reddit refused this wording": Bolta holds the draft unchanged; the user rewords it and approves it in Bolta. Never resend the same text.
-- **Warm-up rows:** `send-outreach-reply` returns `warmup_requires_human`. The person approves those in Bolta themselves; don't retry.
+Pacing, whose yes counts, subreddit rules, removals and warm-up rows: [replies-reddit.md](replies-reddit.md). Read it before sending or promising any Reddit reply.
 
 ## Premium
 
@@ -42,5 +37,6 @@ Comments on the brand's own posts, standing reply rules, monitors and Auto Reply
 
 ## Always
 
+- Follow the house rules in the Bolta skill.
 - A held reply waits for a person in Bolta. Never resend, reword or switch tools to get past a hold, a pause or a removal.
 - Say queued until a status read shows it sent.

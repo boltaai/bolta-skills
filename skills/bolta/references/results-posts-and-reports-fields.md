@@ -20,3 +20,7 @@ Top-level `*_count` fields add up all networks. Each post's `metrics` also has a
 - Post totals are rebuilt daily for posts under 14 days old, weekly up to 90 days, monthly after that.
 - Zeros on a post under about a week old mean "not synced yet": leave it out of rankings and say so: "3 posts from this week aren't counted yet."
 - The user can refresh one post: the refresh icon by Results on that post in Bolta's Inbox, once a minute. You can't refresh it. Say: "Want fresher numbers on that one? Hit refresh by Results on the post in Bolta."
+
+## Always
+
+- Follow the house rules in the Bolta skill.

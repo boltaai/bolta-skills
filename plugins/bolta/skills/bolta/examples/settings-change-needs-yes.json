@@ -1,0 +1,33 @@
+{
+  "ask": "On tomorrow's launch post, make the X version shorter and only let people we follow reply.",
+  "playbook": "review",
+  "before": "list-scheduled-posts showed the post Scheduled for Thu Nov 19, 9:00 am (New York) on LinkedIn and X. The reply showed the new X text and said: \"Changing the X text and replies sends this scheduled post back for your yes, and a client's yes no longer counts. Change it?\" The user said yes.",
+  "steps": [
+    {
+      "tool": "update-post",
+      "arguments": {
+        "post_id": "<post id>",
+        "platform_specific": {
+          "x": {
+            "text": "Launch day: Acme Scheduling is live.",
+            "reply_settings": "followers"
+          }
+        }
+      },
+      "why": "Only the X entry: update-post merges it into what the post has, so LinkedIn's text and settings stay. No status, content or time. Any real change to an approved or scheduled post's per-network text or settings sends it back to waiting; the result carries approval_reset and a message."
+    },
+    {
+      "tool": "get-post",
+      "arguments": {
+        "post_id": "<post id>"
+      },
+      "why": "Read back the status (now waiting for a yes) and metadata.platformSpecific.x."
+    }
+  ],
+  "say": "Changed for Acme: the X version is now \"Launch day: Acme Scheduling is live.\" and only accounts you follow can reply. That sent the post back to waiting for your yes, so it won't go out Thu 9:00 am until you approve it again. Approve it now?",
+  "never": [
+    "Changing it before saying it needs a new yes.",
+    "Sending the whole platform_specific again with other networks' values guessed: send only what changes.",
+    "Approving it again in the same turn without a fresh yes to the new version."
+  ]
+}

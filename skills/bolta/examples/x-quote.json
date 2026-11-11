@@ -1,0 +1,35 @@
+{
+  "ask": "Quote this customer's post on X and thank them: https://x.com/janedoe/status/1856000000000000001",
+  "playbook": "post",
+  "steps": [
+    {
+      "tool": "create-post",
+      "arguments": {
+        "workspace_id": "<brand's workspace id>",
+        "content": "Thank you, Jane. This is why we built it.",
+        "account_ids": [
+          "<X account id>"
+        ],
+        "idempotency_key": "quote-janedoe-1"
+      },
+      "why": "The decision: a quote, not a reply. A quote puts the customer's words in front of the brand's followers with the brand's comment; a reply would only be seen in her thread. The text stands on its own and stays under 280."
+    },
+    {
+      "tool": "update-post-platform-details",
+      "arguments": {
+        "post_id": "<post id>",
+        "platform": "x",
+        "fields": {
+          "quoted_tweet_id": "1856000000000000001"
+        }
+      },
+      "why": "The quote is a details-only setting: in platform_specific it would be kept and never used. The id is the number after /status/ in the link the user gave, never found or guessed."
+    }
+  ],
+  "say": "Saved to Acme as an X draft quoting Jane's post: \"Thank you, Jane. This is why we built it.\" Nothing goes out yet. Post it now or schedule it?",
+  "never": [
+    "A post id from search results or memory: only from the user's link.",
+    "Putting quoted_tweet_id in platform_specific.",
+    "Quoting inside a thread: the quote would repeat on every part."
+  ]
+}

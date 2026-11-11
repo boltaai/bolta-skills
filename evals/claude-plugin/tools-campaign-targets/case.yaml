@@ -103,9 +103,10 @@ graders:
     flags: i
     match: not_contains
   - name: no-false-start
-    # Never says the campaign is running (the start check is denied under claude -p).
+    # Never says the campaign is running (the start check is denied under claude -p). "I haven't
+    # started the campaign" is the honest answer, so a negated "started the campaign" doesn't count.
     type: regex
-    pattern: '\b(campaign|it)\s+(is|''s)\s+(now\s+)?(live|running|started|active|on)\b|\bstarted (the|your) campaign|\b(i|we)(''ve| have)? started\b'
+    pattern: '\b(campaign|it)\s+(is|''s)\s+(now\s+)?(live|running|started|active|on)\b|(?<!n''t )(?<!not )(?<!never )\bstarted (the|your) campaign|\b(i|we)(''ve| have)? started\b'
     flags: i
     match: not_contains
   - name: no-ids-or-jargon

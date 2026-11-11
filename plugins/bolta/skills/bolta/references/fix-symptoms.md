@@ -28,3 +28,7 @@ Read when something didn't go out or get written. The first row that fits is the
 ## Traps
 
 Taking posts back, queued posts, deleted jobs, declined checks: [fix-symptoms-traps.md](fix-symptoms-traps.md).
+
+## Always
+
+- Follow the house rules in the Bolta skill.

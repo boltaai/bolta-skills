@@ -1,0 +1,68 @@
+{
+  "ask": "Announce our Lisbon opening everywhere: my LinkedIn, the Acme company page, X, Threads, and both Facebook Pages (Acme and Acme Lisbon). It opens this Saturday at Rua Augusta 12. The Lisbon Page should speak to locals.",
+  "playbook": "post",
+  "steps": [
+    {
+      "tool": "list-accounts",
+      "arguments": {
+        "workspace_id": "<brand's workspace id>"
+      },
+      "why": "Every destination's id: the profile, the company page (linkedin_org_<id>), each Facebook Page (facebook_page_<id>), X and Threads. A missing Page means it isn't connected: say so, never guess."
+    },
+    {
+      "tool": "get-posting-rules",
+      "arguments": {
+        "workspace_id": "<brand's workspace id>"
+      },
+      "why": "Limits for every network at once, to count each version against its own."
+    },
+    {
+      "tool": "create-post",
+      "arguments": {
+        "workspace_id": "<brand's workspace id>",
+        "content": "Our Lisbon shop opens this Saturday at Rua Augusta 12. If you're nearby, come say hello.",
+        "account_ids": [
+          "<LinkedIn profile account id>",
+          "<linkedin_org_ id>",
+          "<X account id>",
+          "<Threads account id>",
+          "<facebook_page_ id for Acme>",
+          "<facebook_page_ id for Acme Lisbon>"
+        ],
+        "platform_specific": {
+          "linkedin": {
+            "accounts": {
+              "<linkedin_org_ id>": {
+                "text": "Acme opens its Lisbon shop this Saturday at Rua Augusta 12."
+              }
+            }
+          },
+          "x": {
+            "text": "Acme Lisbon opens Saturday. Rua Augusta 12."
+          },
+          "threads": {
+            "text": "Lisbon friends: our shop opens Saturday on Rua Augusta. What should we stock first?",
+            "topic_tag": "Lisbon"
+          },
+          "facebook": {
+            "text": "Our Lisbon shop opens this Saturday at Rua Augusta 12.",
+            "accounts": {
+              "<facebook_page_ id for Acme Lisbon>": {
+                "text": "Olá, vizinhos! We open this Saturday at Rua Augusta 12. Come by and say hello."
+              }
+            }
+          }
+        },
+        "idempotency_key": "lisbon-opening-1"
+      },
+      "why": "The decision: one post, because every destination shares the same moment and no network needs different media, a different time or extra parts; one yes covers all six and results stay together. The main text is the founder's for the profile. The company page gets its own (an account entry beats the LinkedIn text). X and Threads get network text cut to their shape; Threads also gets a topic. X needs no setting here: replies are open by default. The Acme Page takes the Facebook text, the Lisbon Page its own local line. Every fact is from the ask: Saturday and the address, nothing added. Account keys exactly as list-accounts gave them; Bolta stores them by name."
+    }
+  ],
+  "say": "Saved to Acme as one draft for 6 destinations. 1. LinkedIn, you: (full text) 2. LinkedIn, Acme company page: (full text) 3. X, @acme: (full text) 4. Threads, @acme: (full text), topic Lisbon 5. Facebook, Acme Page: (full text) 6. Facebook, Acme Lisbon Page: (full text). Nothing goes out yet. Schedule it?",
+  "never": [
+    "Six separate posts when one post with its own text per destination does it.",
+    "A page or Page id that didn't come from list-accounts.",
+    "Showing only the main text: every destination is listed with its own.",
+    "An X key in platform_specific under a name Bolta doesn't know (twitter): it is refused."
+  ]
+}

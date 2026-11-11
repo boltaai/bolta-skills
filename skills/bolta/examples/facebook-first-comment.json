@@ -1,5 +1,5 @@
 {
-  "ask": "Post our spring menu on the Facebook Page, and put the booking link in the first comment: https://acme.example.com/book",
+  "ask": "Post our spring menu on the Facebook Page (wild garlic soup, lamb with peas, rhubarb tart), and put the booking link in the first comment: https://acme.example.com/book",
   "playbook": "post",
   "steps": [
     {
@@ -55,7 +55,7 @@
   "say": "Saved to Acme as a Facebook draft: the menu as the post, the booking link as the first comment. Nothing goes out yet. Schedule it? Once it's out, check the live post for the comment.",
   "never": [
     "Saying the comment is live without checking the published post: if the comment fails, Bolta skips it and the post still counts as published.",
-    "Adding other networks to this post: they share its parts, so LinkedIn would add the link to the post text and X, Threads or Bluesky would post it as a reply.",
+    "Adding other networks to this post: they share its parts, so X, Threads or Bluesky would post the link as a reply and LinkedIn or Mastodon would drop it.",
     "A link the user didn't give."
   ]
 }

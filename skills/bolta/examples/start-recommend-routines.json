@@ -1,0 +1,34 @@
+{
+  "ask": "What should Bolta run for us? We're a 3-person physio clinic and want more bookings.",
+  "playbook": "start",
+  "before": "The look was done: the brand record exists, LinkedIn, Instagram and Facebook are connected, one routine (Weekly tips, 3 a week) is on.",
+  "steps": [
+    {
+      "tool": "list-inbox-items",
+      "arguments": {
+        "workspace_id": "<brand's workspace id>",
+        "source": "team",
+        "status": "pending",
+        "limit": 20
+      },
+      "why": "What already waits for a yes: 12 drafts, most from Weekly tips. Count them before adding anything."
+    },
+    {
+      "tool": "recommend-routines",
+      "arguments": {
+        "workspace_id": "<brand's workspace id>",
+        "goals": "More bookings for our physio clinic",
+        "context": "3-person physio clinic. Patients are mostly desk workers with back and neck pain and runners. They book online.",
+        "count": 4
+      },
+      "why": "They asked what to run, so ask Bolta's planner, which sizes the set to review_load: here 12 waiting and 10 decided in two weeks, level medium, so at most 3 plans of at most 3 drafts a run, none repeating Weekly tips. At high (25+ waiting, or 10+ waiting and more than 3 times a week's decisions) it would be 2 plans of 2. Each plan has its own id and a why."
+    }
+  ],
+  "say": "You have 12 drafts waiting for your yes, so more drafts isn't the first fix. Want to go through those first? If you'd rather add now, Bolta kept it small:\n1. Patient wins: 2 Instagram and Facebook drafts every Thursday about a real recovery you share (only with the patient's yes).\n2. A monthly article on desk posture for your site, which you publish.\n3. A weekly numbers report every Monday: posts nothing, no review.\nEvery draft waits for your yes. Nothing is saved yet; which should I set up? They'd be saved switched off.",
+  "never": [
+    "Proposing more drafts with 10+ waiting without naming the count and offering to go through them first.",
+    "More plans, or more drafts a run, than Bolta's planner sized.",
+    "A second weekly-tips routine on the same networks.",
+    "confirm-plan before the user picks."
+  ]
+}

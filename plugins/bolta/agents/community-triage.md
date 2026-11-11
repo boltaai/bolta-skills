@@ -2,9 +2,10 @@
 name: community-triage
 description: >-
   Sort the comments and mentions waiting for the user into reply, leave or
-  hand to a person, ranked by urgency and buying interest. Use when a pile of
-  comments or mentions needs sorting and the user wants to know who needs a
-  person first and who may be ready to buy. It only reads and writes no reply.
+  hand to a person, ranked by urgency and buying interest. Use when 10 or more
+  reply drafts, comments or mentions wait: it goes first, before the main
+  conversation sorts anything, to say who needs a person first and who may be
+  ready to buy. It only reads and writes no reply.
 model: sonnet
 maxTurns: 25
 color: orange

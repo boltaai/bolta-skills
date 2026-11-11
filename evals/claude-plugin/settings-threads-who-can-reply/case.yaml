@@ -1,0 +1,58 @@
+schema_version: "1.1"
+name: settings-threads-who-can-reply
+description: 'Threads "only accounts we follow can reply". Since server Release 1 (f9e715259) reply_control is sent to Threads. "Accounts we follow" is Threads'' own accounts_you_follow, which the publisher passes through from platform_specific, but the Threads details row only holds everyone / mentioned / followers: the details call refuses it, and in platform_specific it can''t be saved as a row (a bigger call loses later networks'' rows; get-post-platform-details keeps showing everyone). The skill sends accounts_you_follow in platform_specific on this Threads-only post, never followers (the brand''s followers: a different audience), reads it back where it lives, and says it plainly. Nothing approved or scheduled.'
+tags: [settings]
+expected_outcome: 'post fires; reads Bolta; reply_control accounts_you_follow in create-post or update-post platform_specific; never followers / followers_only (wrong audience); says only accounts you follow can reply; nothing approved or scheduled.'
+execution:
+  prompt: |
+    Save a Threads post for Northwind: "Cold brew season starts Monday. What's your go-to order?" and set it so only accounts we follow can reply.
+  max_turns: 20
+  timeout_seconds: 300
+  allowed_tools: [Skill, Read]
+graders:
+  - name: skill-fired
+    type: tool_used
+    tool: Skill
+    input_match: '"skill"\s*:\s*"(?:[\w-]+:)?(bolta)"'
+    min: 1
+  - name: playbook-read
+    type: tool_used
+    tool: Read
+    input_match: 'references/(post)\.md'
+    min: 1
+  - name: reads-bolta
+    type: regex
+    target: mock_calls
+    pattern: '"tool":"[^"]*(list-accounts|get-posting-rules|get-workspace)"'
+  - name: sets-accounts-you-follow
+    # Threads' own value, in platform_specific on the saving create-post or a later update-post.
+    type: regex
+    target: trace
+    pattern: '"name":"mcp__plugin_bolta_bolta__(create-post|update-post)","input":\{[^\n]{0,6000}?\Wreply_control\W{1,6}accounts_you_follow\W'
+  - name: no-wrong-audience
+    # followers (followers_only) is the brand's followers, not accounts the brand follows.
+    type: regex
+    target: trace
+    pattern: '"name":"mcp__plugin_bolta_bolta__(create-post|update-post|update-post-platform-details|bulk-create-posts)","input":\{[^\n]{0,6000}?\Wreply_control\W{1,6}(followers|followers_only|mentioned|mentioned_only)\W'
+    match: not_contains
+  - name: one-create-only
+    type: tool_used
+    tool: mcp__plugin_bolta_bolta__create-post
+    min: 1
+    max: 1
+  - name: says-who-can-reply
+    # Plainly, who can reply.
+    type: regex
+    pattern: '(only|just)[^.\n]{0,40}(accounts|people) (you|we|northwind|the brand|your brand|it) follows?[^.\n]{0,40}(repl|respon)|(repl|respon)[^.\n]{0,60}(accounts|people) (you|we|northwind|the brand|your brand|it) follows?|(accounts|people) (you|we|northwind|the brand|your brand|it) follows?[^.\n]{0,20}(can|may) (repl|respon)'
+    flags: i
+  - name: no-approve-schedule-publish
+    # Drafts only: nothing approved, scheduled or posted.
+    type: regex
+    target: trace
+    pattern: '"name":"mcp__plugin_bolta_bolta__(approve-post|approve-many-posts|schedule-post|publish-post)"'
+    match: not_contains
+  - name: no-ids-or-jargon
+    type: regex
+    pattern: '[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-|linkedin_org_|platform_specific|\bcreate-post\b|\bupdate-post\b|reply_control|accounts_you_follow|\bMCP\b'
+    flags: i
+    match: not_contains

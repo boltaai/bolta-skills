@@ -4,8 +4,10 @@ Read when an approve, reject or batch call refuses or comes back unclear. The or
 
 | Result | Say or do |
 |-|-|
-| stale review (409), alone or on one batch item | "This post changed since you looked. Here's the new version. Still yes?" Re-read the list for the new text and fingerprint; approve only after a new yes. The rest of the batch stands. |
-| review conflict (409) | Someone already decided it. Say its status; stop. |
+| stale review, alone or on one batch item | The post changed since it was read: its text, media, accounts or time. "This post changed since you looked. Here's the new version. Still yes?" Re-read the list and show text, account and time; approve only after a new yes. The rest of the batch stands. |
+| review conflict | Someone already decided it. Say its status; stop. |
+| `not_in_review` on a no | Never sent for review: [saying no](review-saying-no.md). |
+| deletes stopped after 20 | The 5-minute limit per brand. Say how many went and ask before more. |
 | `CLIENT_SIGNOFF_REQUIRED` | Client's yes first ([client approval](review-client-approval.md)). Stop. |
 | `self_approval_not_allowed` | "Bolta needs someone else to approve posts you wrote here." Stop: no retry, no `publish-post`. |
 | out of credits | Say `credits_needed` and `credits_remaining`; send them to bolta.ai/dashboard/settings/billing; approve again after. |

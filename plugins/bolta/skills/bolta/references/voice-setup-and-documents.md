@@ -19,8 +19,8 @@ No duplicate brand voice: show what the site says that the voice lacks, and offe
 ## Making the voice
 
 One save, with:
-- `name`: "Acme voice" (or their name, for a founder).
-- `writing_sample`: 50+ characters. Prefer their best recent published post by a person (`content_origin` manual), or a pasted paragraph. Never one you or Bolta wrote: that teaches Bolta its own writing.
+- `name`: "Acme voice" (or their name, for a founder). `language` and `use_emojis` when they said them: only creation sets those ([rules or settings](voice-rules-or-settings.md)).
+- `writing_sample`: 50+ characters. Prefer their best recent published post by a person (`content_origin` manual), or a pasted paragraph. Never one you or Bolta wrote: the sample sets the voice's tone dials, so it must sound like them.
 - `tone`: all four dials (playful, professional, direct, thoughtful, 0-100) as a fallback. If the sample can't be read and no dials are sent, Bolta refuses the save.
 - `tone_of_voice`: 3-5 words. `target_audience`: one sentence.
 - `dos` and `donts`: 3-5 each, checkable, under 200 characters, from the site read and their posts.
@@ -39,3 +39,8 @@ Before mentioning documents, a price list or a one-pager, read [voice-setup-and-
 ## Thin or generic drafts
 
 Generic output is usually thin context, not a bad voice. Fix in this order: about your business, then the campaign's Context, a source page, your documents ([campaign](campaign.md)).
+
+## Always
+
+- Follow the house rules in the Bolta skill.
+- Read only a site the user named as their own, and show the read before saving it.

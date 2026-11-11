@@ -4,16 +4,14 @@
 
 - Show network, name and status. No ids. Filter by network (like linkedin or x) only when one is named. Filter by `token_status` yourself.
 - valid: connected. invalid: disconnected; it is silently left out when a post goes out, even inside a group, and a post with only disconnected accounts doesn't go out.
-- ghost: added without connecting. Drafts for it are held and it never publishes until connected. Never call it disconnected; offer the connect link.
+- ghost: added without connecting. Its approved drafts are held. Connecting the real account doesn't release them: someone must also move its voice and drafts over in Bolta ([ghost accounts](connect-ghost-accounts.md)). Never call it disconnected or offer a reconnect.
 - **Facebook shows only Pages**, one row each (`is_page`); `is_primary` marks the default Page. A Facebook sign-in with no Pages has no row, so "no Facebook" doesn't prove it's disconnected. Say you can't tell, and give bolta.ai/dashboard/account/socials.
 - **LinkedIn** shows the personal profile plus one row per company page (`is_organization`). The personal row can be missing.
 - Page and company-page rows copy the parent's status; reconnecting the parent fixes them all. Their `base_account_id` is the real account behind them.
 - `count` counts rows, not sign-ins. Count by network and say what you counted: "LinkedIn: you and 2 company pages."
 - The connect link's list of connected networks leaves Facebook out. Trust the accounts read.
 
-## Connecting
-
-- Say: "Connecting happens in your browser. Check the workspace switcher shows Acme first." The link carries no brand; the browser's selection picks it.
+Connecting: [networks](connect-networks.md).
 
 ## Account groups
 
@@ -41,3 +39,8 @@ A post sent to a group goes to every member connected when it goes out, not when
 ## When a write fails
 
 See [connect-accounts-and-groups-errors.md](connect-accounts-and-groups-errors.md) for what each refusal means and what to do next.
+
+## Always
+
+- Follow the house rules in the Bolta skill.
+- Show a group's members before and after any change, by name and network.

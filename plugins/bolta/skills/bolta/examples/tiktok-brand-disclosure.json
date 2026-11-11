@@ -1,0 +1,55 @@
+{
+  "ask": "Post this video of our new serum on TikTok: https://cdn.example.com/serum.mp4",
+  "playbook": "post",
+  "before": "The reply asked two things TikTok needs: who should see it, and whether it's the brand's own product or a paid partnership. The user said: public, and it's our own product, nobody paid us.",
+  "steps": [
+    {
+      "tool": "create-post",
+      "arguments": {
+        "workspace_id": "<brand's workspace id>",
+        "content": "Our new serum is here.",
+        "account_ids": [
+          "<TikTok account id>"
+        ],
+        "media": [
+          {
+            "url": "https://cdn.example.com/serum.mp4"
+          }
+        ],
+        "platform_specific": {
+          "tiktok": {
+            "brand_organic_toggle": true
+          }
+        },
+        "idempotency_key": "serum-tiktok-1"
+      },
+      "why": "The decision: the video sells the brand's own product, so TikTok expects it disclosed as promoting the user's business: brand_organic_toggle. Not brand_content_toggle, which is for a paid partner. These two can only be set in platform_specific. The post's text is the caption."
+    },
+    {
+      "tool": "update-post-platform-details",
+      "arguments": {
+        "post_id": "<post id>",
+        "platform": "tiktok",
+        "fields": {
+          "privacy_level": "PUBLIC_TO_EVERYONE",
+          "disable_duet": false,
+          "disable_stitch": false
+        }
+      },
+      "why": "Privacy through the details call, which refuses a misspelled level; in platform_specific a typo would quietly become the first level the account allows. Public is what the user said. Duets and stitches stay on: product demos spread through them."
+    },
+    {
+      "tool": "get-post",
+      "arguments": {
+        "post_id": "<post id>"
+      },
+      "why": "Read back metadata.platformSpecific.tiktok for the disclosure; the privacy reply already showed the saved level."
+    }
+  ],
+  "say": "Saved to Acme as a TikTok draft, public to everyone, marked as promoting your own business: \"Our new serum is here.\" Duets and stitches are on. Nothing goes out yet. Schedule it?",
+  "never": [
+    "Deciding for the user that a product video needs no disclosure.",
+    "Setting the disclosure with update-post-platform-details: it answers success and keeps nothing.",
+    "Assuming public without asking."
+  ]
+}

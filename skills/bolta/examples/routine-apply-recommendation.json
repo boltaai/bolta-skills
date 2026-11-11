@@ -1,0 +1,22 @@
+{
+  "ask": "Do Bolta's one.",
+  "playbook": "routine",
+  "before": "The reply showed Bolta's recommendation for Weekly posts (high_rejection: 2 drafts a run instead of 4, because 3 of 5 decided drafts were turned down) and offered an instructions line instead.",
+  "steps": [
+    {
+      "tool": "decide-routine-recommendation",
+      "arguments": {
+        "workspace_id": "<brand's workspace id>",
+        "routine_id": "<routine id>",
+        "recommendation_id": "<recommendation id from list-routine-recommendations>",
+        "decision": "apply"
+      },
+      "why": "The user chose Bolta's change over the instructions line, so apply it and nothing else. Apply makes exactly the change shown: output_config count 4 to 2, everything else kept. It returns the routine as it now is; read the count back from that, not from memory."
+    }
+  ],
+  "say": "Done: Weekly posts now writes 2 drafts a run instead of 4, from its next run. I can undo this if you change your mind. Keep giving a reason when you turn one down; that's what Bolta learns from.",
+  "never": [
+    "Also adding the instructions line: one change, one yes.",
+    "decide-bolta-suggestion for a routine recommendation: they are different lists."
+  ]
+}

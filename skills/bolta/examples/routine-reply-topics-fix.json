@@ -1,0 +1,37 @@
+{
+  "ask": "My Reddit routine never makes anything. Fix it.",
+  "playbook": "routine",
+  "before": "get-routine shows it on, a reply routine made on Bolta's web page, its output_config {\"artifact_type\": \"reply\", \"count\": 3} with no topics; list-routine-runs shows no runs in three weeks, because Bolta refuses each run before it starts without topics. The reply explained that it doesn't know what to look for, proposed three topics from the brand's own words, and the user said 'yes, use those'.",
+  "steps": [
+    {
+      "tool": "get-routine",
+      "arguments": {
+        "workspace_id": "<brand's workspace id>",
+        "routine_id": "<routine id>"
+      },
+      "why": "Read output_config again just before changing it: it is replaced whole."
+    },
+    {
+      "tool": "update-routine",
+      "arguments": {
+        "workspace_id": "<brand's workspace id>",
+        "routine_id": "<routine id>",
+        "output_config": {
+          "artifact_type": "reply",
+          "count": 3,
+          "topics": [
+            "dog grooming at home",
+            "nervous dog grooming tips",
+            "mobile groomer near me"
+          ]
+        }
+      },
+      "why": "The whole output_config: artifact_type and count as they were, plus the topics. The routine's ask me first is unchanged, so no other setting is resent."
+    }
+  ],
+  "say": "Fixed: it now looks for people asking about home grooming, nervous dogs and mobile groomers. Its next run is Monday 9:00 am; want me to run it once now? Uses credits.",
+  "never": [
+    "Sending output_config with only topics: artifact_type and count would be dropped and the save refused.",
+    "Inventing topics the user didn't agree to."
+  ]
+}

@@ -4,10 +4,7 @@ None of this is set from here. Say where it lives in Bolta and who can do it.
 
 ## People and roles
 
-- Team members: Settings > Organization > Members (bolta.ai/dashboard/organization), by an org owner or admin. Who reaches one brand, and its client reviewers: that brand's Settings > People & access.
-- Owners, admins and creators write, approve, schedule and publish. Only owners and admins connect accounts, invite people and change brand settings. Viewers read.
-- An owner or admin can grant or deny single permissions for one person on one brand, in that brand's People & access. So for what this person can do right now, read `get-my-capabilities`; never state it from the role alone.
-- **Reviewers** (clients who sign off) see only what is sent to them, take no seat and can hold no key.
+Who can do what, organization and brand roles, client reviewers and turning a name into a teammate: [people and roles](connect-people-and-roles.md).
 
 ## Client connect-only links
 
@@ -19,6 +16,7 @@ None of this is set from here. Say where it lives in Bolta and who can do it.
 
 - **Dropbox:** one folder, read-only, connected by an owner or admin at bolta.ai/dashboard/hub?settings=integrations&integration=dropbox. Its files become the brand's source material (knowledge base and media library), and routines and campaigns check it for new files when they plan.
 - **Google Drive and WordPress** also connect from Settings > Integrations.
+- **GitHub, HubSpot and Square** connect there too, each feeding Bolta routines: GitHub a post per merged pull request, HubSpot a win post per closed deal, Square service spotlights, open slots and weekly bookings ([routine templates](routine-templates-special-cases.md)).
 - **Bolta in Slack** (Settings > Integrations): failure alerts, review pings and a direct-message chat with Bolta. Approving in Slack doesn't train the voice and doesn't count as a client's sign-off. A routine that reads a Slack channel isn't available yet. This is separate from your AI app's own Slack connection: never mix them up.
 
 ## Credits and billing

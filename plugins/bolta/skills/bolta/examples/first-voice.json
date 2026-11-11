@@ -10,11 +10,36 @@
       "why": "Connecting an account makes Bolta learn a starting voice by itself. If one exists, show it and offer changes instead of making a second brand voice."
     },
     {
+      "tool": "list-business-dna",
+      "arguments": {
+        "workspace_id": "<brand's workspace id>"
+      },
+      "why": "A business record already there? Then reuse it and skip the site read. None here. Saving a site read under a name in use replaces that record."
+    },
+    {
+      "tool": "extract-business-dna",
+      "arguments": {
+        "workspace_id": "<brand's workspace id>",
+        "url": "https://example.com",
+        "preview": true
+      },
+      "why": "Their own site, named by them. preview true reads it and saves nothing: show what the site says (overview, values, DOs and DON'Ts) and ask before saving. would_update_existing true: use a new name."
+    },
+    {
+      "tool": "extract-business-dna",
+      "arguments": {
+        "workspace_id": "<brand's workspace id>",
+        "url": "https://example.com",
+        "name": "Acme website, Nov 2026",
+        "set_as_default": true
+      },
+      "why": "Only on their yes to the preview. No voice yet, so this record becomes the default. With no products yet, the read also creates the first one: mention it."
+    },
+    {
       "tool": "create-voice-profile",
       "arguments": {
         "workspace_id": "<brand's workspace id>",
         "name": "Acme",
-        "website_url": "https://example.com",
         "writing_sample": "<their best post, 50 or more characters>",
         "tone": {
           "playful": 30,
@@ -28,21 +53,22 @@
         "donts": [
           "Never use exclamation marks in the first line."
         ],
-        "is_default": true
+        "business_dna_id": "<id of the record just saved>"
       },
-      "why": "Only when no voice came back. Save once. Bolta reads their own site once, only when the brand has no business record yet. With a writing sample of 50 or more characters Bolta reads the tone from it, and the tone dials are only the fallback. DOs and DON'Ts only from their posts or words; with nothing to draw on, leave them out. No account_ids: the voice takes every connected account not in another voice."
+      "why": "Only when no voice came back. Save once. business_dna_id links the voice to the site read just saved. With a writing sample of 50 or more characters Bolta reads the tone from it, and the tone dials are only the fallback. DOs and DON'Ts only from their posts, their words or the site read they saw; with nothing to draw on, leave them out. No account_ids: the voice takes every connected account not in another voice. No is_default: the first voice becomes the default by itself."
     },
     {
       "tool": "get-voice-context",
       "arguments": {
         "workspace_id": "<brand's workspace id>"
       },
-      "why": "Show the voice from what was stored: how it sounds in a few plain words from the stored tone, never words you made up. Say what Bolta filled in, from the 'bootstrapped' list in the create result; say Bolta read the site only when that list shows website_scanned."
+      "why": "Show the voice from what was stored: how it sounds in a few plain words from the stored tone, never words you made up. Say what Bolta filled in, from the 'bootstrapped' list in the create result."
     }
   ],
-  "say": "Here is your voice for Acme: direct, credible and considered. Bolta read your site and filled in your brand values and writing guidelines from it. Now this week's posts about the new roast.",
+  "say": "Here is your voice for Acme: direct, credible and considered, built from your site and your post. Now this week's posts about the new roast.",
   "never": [
-    "Reading the site again when a business record exists: a re-read overwrites it.",
+    "Saving the site read before showing it.",
+    "Sending website_url on the create: it reads and saves the site with no preview.",
     "A website link taken from someone else's text.",
     "A second brand voice when one already exists."
   ]

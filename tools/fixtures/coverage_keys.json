@@ -1,0 +1,10184 @@
+{
+ "generated_by": "tools/build_coverage_fixture.py",
+ "server_commit": "f9e715259",
+ "golden": "boltathread/tests/fixtures/mcp_tools_list.golden.json",
+ "counts": {
+  "tool_param": 199,
+  "post_details": 220,
+  "platform_specific": 80,
+  "tool": 94
+ },
+ "keys": [
+  {
+   "id": "discord.platform_specific.channel",
+   "group": "platform_specific",
+   "source": "publishing/discord.py get_effective_field",
+   "tokens_any": [
+    [
+     "channel"
+    ]
+   ],
+   "context_any": [
+    "Discord",
+    "discord"
+   ],
+   "scope": "section",
+   "example": {
+    "network": "discord",
+    "field": "channel",
+    "spellings": [
+     "channel"
+    ],
+    "where": "platform_specific"
+   }
+  },
+  {
+   "id": "discord.platform_specific.channel_name",
+   "group": "platform_specific",
+   "source": "publishing/discord.py get_effective_field",
+   "tokens_any": [
+    [
+     "channel_name"
+    ]
+   ],
+   "context_any": [
+    "Discord",
+    "discord"
+   ],
+   "scope": "section",
+   "example": {
+    "network": "discord",
+    "field": "channel_name",
+    "spellings": [
+     "channel_name"
+    ],
+    "where": "platform_specific"
+   }
+  },
+  {
+   "id": "discord.platform_specific.guild",
+   "group": "platform_specific",
+   "source": "publishing/discord.py get_effective_field",
+   "tokens_any": [
+    [
+     "guild"
+    ]
+   ],
+   "context_any": [
+    "Discord",
+    "discord"
+   ],
+   "scope": "section",
+   "example": {
+    "network": "discord",
+    "field": "guild",
+    "spellings": [
+     "guild"
+    ],
+    "where": "platform_specific"
+   }
+  },
+  {
+   "id": "discord.platform_specific.guild_name",
+   "group": "platform_specific",
+   "source": "publishing/discord.py get_effective_field",
+   "tokens_any": [
+    [
+     "guild_name"
+    ]
+   ],
+   "context_any": [
+    "Discord",
+    "discord"
+   ],
+   "scope": "section",
+   "example": {
+    "network": "discord",
+    "field": "guild_name",
+    "spellings": [
+     "guild_name"
+    ],
+    "where": "platform_specific"
+   }
+  },
+  {
+   "id": "facebook.platform_specific.activity",
+   "group": "platform_specific",
+   "source": "publishing/facebook.py get_effective_field",
+   "tokens_any": [
+    [
+     "activity"
+    ]
+   ],
+   "context_any": [
+    "Facebook",
+    "facebook"
+   ],
+   "scope": "section",
+   "example": {
+    "network": "facebook",
+    "field": "activity",
+    "spellings": [
+     "activity"
+    ],
+    "where": "platform_specific"
+   }
+  },
+  {
+   "id": "facebook.platform_specific.feeling",
+   "group": "platform_specific",
+   "source": "publishing/facebook.py get_effective_field",
+   "tokens_any": [
+    [
+     "feeling"
+    ]
+   ],
+   "context_any": [
+    "Facebook",
+    "facebook"
+   ],
+   "scope": "section",
+   "example": {
+    "network": "facebook",
+    "field": "feeling",
+    "spellings": [
+     "feeling"
+    ],
+    "where": "platform_specific"
+   }
+  },
+  {
+   "id": "facebook.platform_specific.location",
+   "group": "platform_specific",
+   "source": "publishing/facebook.py get_effective_field",
+   "tokens_any": [
+    [
+     "location"
+    ]
+   ],
+   "context_any": [
+    "Facebook",
+    "facebook"
+   ],
+   "scope": "section",
+   "example": {
+    "network": "facebook",
+    "field": "location",
+    "spellings": [
+     "location"
+    ],
+    "where": "platform_specific"
+   }
+  },
+  {
+   "id": "instagram.platform_specific.alt_text",
+   "group": "platform_specific",
+   "source": "platform_specific.instagram_row_fields",
+   "tokens_any": [
+    [
+     "alt_text"
+    ],
+    [
+     "altText"
+    ]
+   ],
+   "context_any": [
+    "Instagram",
+    "instagram"
+   ],
+   "scope": "section",
+   "example": {
+    "network": "instagram",
+    "field": "alt_text",
+    "spellings": [
+     "altText",
+     "alt_text"
+    ],
+    "where": "platform_specific"
+   }
+  },
+  {
+   "id": "instagram.platform_specific.caption",
+   "group": "platform_specific",
+   "source": "platform_specific.instagram_row_fields",
+   "tokens_any": [
+    [
+     "caption"
+    ]
+   ],
+   "context_any": [
+    "Instagram",
+    "instagram"
+   ],
+   "scope": "section",
+   "example": {
+    "network": "instagram",
+    "field": "caption",
+    "spellings": [
+     "caption"
+    ],
+    "where": "platform_specific"
+   }
+  },
+  {
+   "id": "instagram.platform_specific.content_type",
+   "group": "platform_specific",
+   "source": "platform_specific.instagram_row_fields; publishing/instagram.py get_effective_field",
+   "tokens_any": [
+    [
+     "content_type"
+    ],
+    [
+     "contentType"
+    ]
+   ],
+   "context_any": [
+    "Instagram",
+    "instagram"
+   ],
+   "scope": "section",
+   "example": {
+    "network": "instagram",
+    "field": "content_type",
+    "spellings": [
+     "contentType",
+     "content_type"
+    ],
+    "where": "platform_specific"
+   }
+  },
+  {
+   "id": "instagram.platform_specific.content_type=FEED",
+   "group": "platform_specific",
+   "source": "platform_specific._IG_CONTENT_TYPES",
+   "tokens_any": [
+    [
+     "content_type",
+     "FEED"
+    ],
+    [
+     "contentType",
+     "FEED"
+    ]
+   ],
+   "context_any": [
+    "Instagram",
+    "instagram"
+   ],
+   "scope": "section"
+  },
+  {
+   "id": "instagram.platform_specific.content_type=REELS",
+   "group": "platform_specific",
+   "source": "platform_specific._IG_CONTENT_TYPES",
+   "tokens_any": [
+    [
+     "content_type",
+     "REELS"
+    ],
+    [
+     "contentType",
+     "REELS"
+    ]
+   ],
+   "context_any": [
+    "Instagram",
+    "instagram"
+   ],
+   "scope": "section"
+  },
+  {
+   "id": "instagram.platform_specific.content_type=STORY",
+   "group": "platform_specific",
+   "source": "platform_specific._IG_CONTENT_TYPES",
+   "tokens_any": [
+    [
+     "content_type",
+     "STORY"
+    ],
+    [
+     "contentType",
+     "STORY"
+    ]
+   ],
+   "context_any": [
+    "Instagram",
+    "instagram"
+   ],
+   "scope": "section"
+  },
+  {
+   "id": "instagram.platform_specific.cover_url",
+   "group": "platform_specific",
+   "source": "platform_specific.instagram_row_fields; publishing/instagram.py get_effective_field",
+   "tokens_any": [
+    [
+     "cover_url"
+    ],
+    [
+     "coverUrl"
+    ]
+   ],
+   "context_any": [
+    "Instagram",
+    "instagram"
+   ],
+   "scope": "section",
+   "example": {
+    "network": "instagram",
+    "field": "cover_url",
+    "spellings": [
+     "coverUrl",
+     "cover_url"
+    ],
+    "where": "platform_specific"
+   }
+  },
+  {
+   "id": "instagram.platform_specific.location_id",
+   "group": "platform_specific",
+   "source": "platform_specific.instagram_row_fields; publishing/instagram.py get_effective_field",
+   "tokens_any": [
+    [
+     "location_id"
+    ],
+    [
+     "locationId"
+    ]
+   ],
+   "context_any": [
+    "Instagram",
+    "instagram"
+   ],
+   "scope": "section",
+   "example": {
+    "network": "instagram",
+    "field": "location_id",
+    "spellings": [
+     "locationId",
+     "location_id"
+    ],
+    "where": "platform_specific"
+   }
+  },
+  {
+   "id": "instagram.platform_specific.media_type",
+   "group": "platform_specific",
+   "source": "platform_specific.instagram_row_fields",
+   "tokens_any": [
+    [
+     "media_type"
+    ],
+    [
+     "mediaType"
+    ]
+   ],
+   "context_any": [
+    "Instagram",
+    "instagram"
+   ],
+   "scope": "section",
+   "example": {
+    "network": "instagram",
+    "field": "media_type",
+    "spellings": [
+     "mediaType",
+     "media_type"
+    ],
+    "where": "platform_specific"
+   }
+  },
+  {
+   "id": "instagram.platform_specific.media_type=CAROUSEL_ALBUM",
+   "group": "platform_specific",
+   "source": "platform_specific._IG_MEDIA_TYPES",
+   "tokens_any": [
+    [
+     "media_type",
+     "CAROUSEL_ALBUM"
+    ],
+    [
+     "mediaType",
+     "CAROUSEL_ALBUM"
+    ]
+   ],
+   "context_any": [
+    "Instagram",
+    "instagram"
+   ],
+   "scope": "section"
+  },
+  {
+   "id": "instagram.platform_specific.media_type=IMAGE",
+   "group": "platform_specific",
+   "source": "platform_specific._IG_MEDIA_TYPES",
+   "tokens_any": [
+    [
+     "media_type",
+     "IMAGE"
+    ],
+    [
+     "mediaType",
+     "IMAGE"
+    ]
+   ],
+   "context_any": [
+    "Instagram",
+    "instagram"
+   ],
+   "scope": "section"
+  },
+  {
+   "id": "instagram.platform_specific.media_type=VIDEO",
+   "group": "platform_specific",
+   "source": "platform_specific._IG_MEDIA_TYPES",
+   "tokens_any": [
+    [
+     "media_type",
+     "VIDEO"
+    ],
+    [
+     "mediaType",
+     "VIDEO"
+    ]
+   ],
+   "context_any": [
+    "Instagram",
+    "instagram"
+   ],
+   "scope": "section"
+  },
+  {
+   "id": "instagram.platform_specific.product_tags",
+   "group": "platform_specific",
+   "source": "platform_specific.instagram_row_fields",
+   "tokens_any": [
+    [
+     "product_tags"
+    ],
+    [
+     "productTags"
+    ]
+   ],
+   "context_any": [
+    "Instagram",
+    "instagram"
+   ],
+   "scope": "section",
+   "example": {
+    "network": "instagram",
+    "field": "product_tags",
+    "spellings": [
+     "productTags",
+     "product_tags"
+    ],
+    "where": "platform_specific"
+   }
+  },
+  {
+   "id": "instagram.platform_specific.thumbnail_offset",
+   "group": "platform_specific",
+   "source": "platform_specific.instagram_row_fields; publishing/instagram.py get_effective_field",
+   "tokens_any": [
+    [
+     "thumbnail_offset"
+    ],
+    [
+     "thumbnailOffset"
+    ]
+   ],
+   "context_any": [
+    "Instagram",
+    "instagram"
+   ],
+   "scope": "section",
+   "example": {
+    "network": "instagram",
+    "field": "thumbnail_offset",
+    "spellings": [
+     "thumbnailOffset",
+     "thumbnail_offset"
+    ],
+    "where": "platform_specific"
+   }
+  },
+  {
+   "id": "instagram.platform_specific.trial_graduation_strategy",
+   "group": "platform_specific",
+   "source": "platform_specific.instagram_row_fields",
+   "tokens_any": [
+    [
+     "trial_graduation_strategy"
+    ],
+    [
+     "trialGraduationStrategy"
+    ]
+   ],
+   "context_any": [
+    "Instagram",
+    "instagram"
+   ],
+   "scope": "section",
+   "example": {
+    "network": "instagram",
+    "field": "trial_graduation_strategy",
+    "spellings": [
+     "trialGraduationStrategy",
+     "trial_graduation_strategy"
+    ],
+    "where": "platform_specific"
+   }
+  },
+  {
+   "id": "instagram.platform_specific.trial_graduation_strategy=MANUAL",
+   "group": "platform_specific",
+   "source": "platform_specific._IG_TRIAL_STRATEGIES",
+   "tokens_any": [
+    [
+     "trial_graduation_strategy",
+     "MANUAL"
+    ],
+    [
+     "trialGraduationStrategy",
+     "MANUAL"
+    ]
+   ],
+   "context_any": [
+    "Instagram",
+    "instagram"
+   ],
+   "scope": "section"
+  },
+  {
+   "id": "instagram.platform_specific.trial_graduation_strategy=SS_PERFORMANCE",
+   "group": "platform_specific",
+   "source": "platform_specific._IG_TRIAL_STRATEGIES",
+   "tokens_any": [
+    [
+     "trial_graduation_strategy",
+     "SS_PERFORMANCE"
+    ],
+    [
+     "trialGraduationStrategy",
+     "SS_PERFORMANCE"
+    ]
+   ],
+   "context_any": [
+    "Instagram",
+    "instagram"
+   ],
+   "scope": "section"
+  },
+  {
+   "id": "instagram.platform_specific.trial_reel_enabled",
+   "group": "platform_specific",
+   "source": "platform_specific.instagram_row_fields",
+   "tokens_any": [
+    [
+     "trial_reel_enabled"
+    ],
+    [
+     "trialReelEnabled"
+    ]
+   ],
+   "context_any": [
+    "Instagram",
+    "instagram"
+   ],
+   "scope": "section",
+   "example": {
+    "network": "instagram",
+    "field": "trial_reel_enabled",
+    "spellings": [
+     "trialReelEnabled",
+     "trial_reel_enabled"
+    ],
+    "where": "platform_specific"
+   }
+  },
+  {
+   "id": "instagram.platform_specific.user_tags",
+   "group": "platform_specific",
+   "source": "platform_specific.instagram_row_fields",
+   "tokens_any": [
+    [
+     "user_tags"
+    ],
+    [
+     "userTags"
+    ]
+   ],
+   "context_any": [
+    "Instagram",
+    "instagram"
+   ],
+   "scope": "section",
+   "example": {
+    "network": "instagram",
+    "field": "user_tags",
+    "spellings": [
+     "userTags",
+     "user_tags"
+    ],
+    "where": "platform_specific"
+   }
+  },
+  {
+   "id": "linkedin.platform_specific.visibility",
+   "group": "platform_specific",
+   "source": "publishing/linkedin.py get_effective_field",
+   "tokens_any": [
+    [
+     "visibility"
+    ]
+   ],
+   "context_any": [
+    "LinkedIn",
+    "linkedin"
+   ],
+   "scope": "section",
+   "example": {
+    "network": "linkedin",
+    "field": "visibility",
+    "spellings": [
+     "visibility"
+    ],
+    "where": "platform_specific"
+   }
+  },
+  {
+   "id": "pinterest.platform_specific.alt_text",
+   "group": "platform_specific",
+   "source": "pinterest_api_handler/media.py resolve_pin_media",
+   "tokens_any": [
+    [
+     "alt_text"
+    ]
+   ],
+   "context_any": [
+    "Pinterest",
+    "pinterest"
+   ],
+   "scope": "section",
+   "example": {
+    "network": "pinterest",
+    "field": "alt_text",
+    "spellings": [
+     "alt_text"
+    ],
+    "where": "platform_specific"
+   }
+  },
+  {
+   "id": "pinterest.platform_specific.board_id",
+   "group": "platform_specific",
+   "source": "publishing/pinterest.py platform_options.get",
+   "tokens_any": [
+    [
+     "board_id"
+    ]
+   ],
+   "context_any": [
+    "Pinterest",
+    "pinterest"
+   ],
+   "scope": "section",
+   "example": {
+    "network": "pinterest",
+    "field": "board_id",
+    "spellings": [
+     "board_id"
+    ],
+    "where": "platform_specific"
+   }
+  },
+  {
+   "id": "pinterest.platform_specific.cover_image_url",
+   "group": "platform_specific",
+   "source": "pinterest_api_handler/media.py resolve_pin_media",
+   "tokens_any": [
+    [
+     "cover_image_url"
+    ]
+   ],
+   "context_any": [
+    "Pinterest",
+    "pinterest"
+   ],
+   "scope": "section",
+   "example": {
+    "network": "pinterest",
+    "field": "cover_image_url",
+    "spellings": [
+     "cover_image_url"
+    ],
+    "where": "platform_specific"
+   }
+  },
+  {
+   "id": "pinterest.platform_specific.description",
+   "group": "platform_specific",
+   "source": "publishing/pinterest.py platform_options.get",
+   "tokens_any": [
+    [
+     "description"
+    ]
+   ],
+   "context_any": [
+    "Pinterest",
+    "pinterest"
+   ],
+   "scope": "section",
+   "example": {
+    "network": "pinterest",
+    "field": "description",
+    "spellings": [
+     "description"
+    ],
+    "where": "platform_specific"
+   }
+  },
+  {
+   "id": "pinterest.platform_specific.link",
+   "group": "platform_specific",
+   "source": "publishing/pinterest.py platform_options.get",
+   "tokens_any": [
+    [
+     "link"
+    ]
+   ],
+   "context_any": [
+    "Pinterest",
+    "pinterest"
+   ],
+   "scope": "section",
+   "example": {
+    "network": "pinterest",
+    "field": "link",
+    "spellings": [
+     "link"
+    ],
+    "where": "platform_specific"
+   }
+  },
+  {
+   "id": "pinterest.platform_specific.media_type",
+   "group": "platform_specific",
+   "source": "pinterest_api_handler/media.py resolve_pin_media",
+   "tokens_any": [
+    [
+     "media_type"
+    ]
+   ],
+   "context_any": [
+    "Pinterest",
+    "pinterest"
+   ],
+   "scope": "section",
+   "example": {
+    "network": "pinterest",
+    "field": "media_type",
+    "spellings": [
+     "media_type"
+    ],
+    "where": "platform_specific"
+   }
+  },
+  {
+   "id": "pinterest.platform_specific.media_url",
+   "group": "platform_specific",
+   "source": "pinterest_api_handler/media.py resolve_pin_media",
+   "tokens_any": [
+    [
+     "media_url"
+    ]
+   ],
+   "context_any": [
+    "Pinterest",
+    "pinterest"
+   ],
+   "scope": "section",
+   "example": {
+    "network": "pinterest",
+    "field": "media_url",
+    "spellings": [
+     "media_url"
+    ],
+    "where": "platform_specific"
+   }
+  },
+  {
+   "id": "pinterest.platform_specific.title",
+   "group": "platform_specific",
+   "source": "publishing/pinterest.py platform_options.get",
+   "tokens_any": [
+    [
+     "title"
+    ]
+   ],
+   "context_any": [
+    "Pinterest",
+    "pinterest"
+   ],
+   "scope": "section",
+   "example": {
+    "network": "pinterest",
+    "field": "title",
+    "spellings": [
+     "title"
+    ],
+    "where": "platform_specific"
+   }
+  },
+  {
+   "id": "platform_specific.accounts",
+   "group": "platform_specific",
+   "source": "posts/platform_specific.py shape",
+   "tokens_any": [
+    [
+     "platform_specific",
+     "accounts"
+    ]
+   ],
+   "context_any": [],
+   "scope": "file"
+  },
+  {
+   "id": "platform_specific.text",
+   "group": "platform_specific",
+   "source": "publishing/base.py get_effective_content",
+   "tokens_any": [
+    [
+     "platform_specific",
+     "text"
+    ]
+   ],
+   "context_any": [],
+   "scope": "file"
+  },
+  {
+   "id": "reddit.platform_specific.flair_id",
+   "group": "platform_specific",
+   "source": "publishing/reddit.py get_effective_field",
+   "tokens_any": [
+    [
+     "flair_id"
+    ]
+   ],
+   "context_any": [
+    "Reddit",
+    "reddit"
+   ],
+   "scope": "section",
+   "example": {
+    "network": "reddit",
+    "field": "flair_id",
+    "spellings": [
+     "flair_id"
+    ],
+    "where": "platform_specific"
+   }
+  },
+  {
+   "id": "reddit.platform_specific.flair_text",
+   "group": "platform_specific",
+   "source": "publishing/reddit.py get_effective_field",
+   "tokens_any": [
+    [
+     "flair_text"
+    ]
+   ],
+   "context_any": [
+    "Reddit",
+    "reddit"
+   ],
+   "scope": "section",
+   "example": {
+    "network": "reddit",
+    "field": "flair_text",
+    "spellings": [
+     "flair_text"
+    ],
+    "where": "platform_specific"
+   }
+  },
+  {
+   "id": "reddit.platform_specific.nsfw",
+   "group": "platform_specific",
+   "source": "publishing/reddit.py get_effective_field",
+   "tokens_any": [
+    [
+     "nsfw"
+    ]
+   ],
+   "context_any": [
+    "Reddit",
+    "reddit"
+   ],
+   "scope": "section",
+   "example": {
+    "network": "reddit",
+    "field": "nsfw",
+    "spellings": [
+     "nsfw"
+    ],
+    "where": "platform_specific"
+   }
+  },
+  {
+   "id": "reddit.platform_specific.resubmit",
+   "group": "platform_specific",
+   "source": "publishing/reddit.py get_effective_field",
+   "tokens_any": [
+    [
+     "resubmit"
+    ]
+   ],
+   "context_any": [
+    "Reddit",
+    "reddit"
+   ],
+   "scope": "section",
+   "example": {
+    "network": "reddit",
+    "field": "resubmit",
+    "spellings": [
+     "resubmit"
+    ],
+    "where": "platform_specific"
+   }
+  },
+  {
+   "id": "reddit.platform_specific.sendreplies",
+   "group": "platform_specific",
+   "source": "publishing/reddit.py get_effective_field",
+   "tokens_any": [
+    [
+     "sendreplies"
+    ]
+   ],
+   "context_any": [
+    "Reddit",
+    "reddit"
+   ],
+   "scope": "section",
+   "example": {
+    "network": "reddit",
+    "field": "sendreplies",
+    "spellings": [
+     "sendreplies"
+    ],
+    "where": "platform_specific"
+   }
+  },
+  {
+   "id": "reddit.platform_specific.spoiler",
+   "group": "platform_specific",
+   "source": "publishing/reddit.py get_effective_field",
+   "tokens_any": [
+    [
+     "spoiler"
+    ]
+   ],
+   "context_any": [
+    "Reddit",
+    "reddit"
+   ],
+   "scope": "section",
+   "example": {
+    "network": "reddit",
+    "field": "spoiler",
+    "spellings": [
+     "spoiler"
+    ],
+    "where": "platform_specific"
+   }
+  },
+  {
+   "id": "reddit.platform_specific.title",
+   "group": "platform_specific",
+   "source": "publishing/reddit.py get_effective_field",
+   "tokens_any": [
+    [
+     "title"
+    ]
+   ],
+   "context_any": [
+    "Reddit",
+    "reddit"
+   ],
+   "scope": "section",
+   "example": {
+    "network": "reddit",
+    "field": "title",
+    "spellings": [
+     "title"
+    ],
+    "where": "platform_specific"
+   }
+  },
+  {
+   "id": "threads.platform_specific.is_ghost_post",
+   "group": "platform_specific",
+   "source": "publishing/threads.py get_effective_field",
+   "tokens_any": [
+    [
+     "is_ghost_post"
+    ],
+    [
+     "isGhostPost"
+    ]
+   ],
+   "context_any": [
+    "Threads",
+    "threads"
+   ],
+   "scope": "section",
+   "example": {
+    "network": "threads",
+    "field": "is_ghost_post",
+    "spellings": [
+     "isGhostPost",
+     "is_ghost_post"
+    ],
+    "where": "platform_specific"
+   }
+  },
+  {
+   "id": "threads.platform_specific.is_spoiler_media",
+   "group": "platform_specific",
+   "source": "publishing/threads.py get_effective_field",
+   "tokens_any": [
+    [
+     "is_spoiler_media"
+    ],
+    [
+     "isSpoilerMedia"
+    ]
+   ],
+   "context_any": [
+    "Threads",
+    "threads"
+   ],
+   "scope": "section",
+   "example": {
+    "network": "threads",
+    "field": "is_spoiler_media",
+    "spellings": [
+     "isSpoilerMedia",
+     "is_spoiler_media"
+    ],
+    "where": "platform_specific"
+   }
+  },
+  {
+   "id": "threads.platform_specific.location_id",
+   "group": "platform_specific",
+   "source": "publishing/threads.py get_effective_field",
+   "tokens_any": [
+    [
+     "location_id"
+    ],
+    [
+     "locationId"
+    ]
+   ],
+   "context_any": [
+    "Threads",
+    "threads"
+   ],
+   "scope": "section",
+   "example": {
+    "network": "threads",
+    "field": "location_id",
+    "spellings": [
+     "locationId",
+     "location_id"
+    ],
+    "where": "platform_specific"
+   }
+  },
+  {
+   "id": "threads.platform_specific.reply_control",
+   "group": "platform_specific",
+   "source": "publishing/threads.py get_effective_field",
+   "tokens_any": [
+    [
+     "reply_control"
+    ],
+    [
+     "replyControl"
+    ]
+   ],
+   "context_any": [
+    "Threads",
+    "threads"
+   ],
+   "scope": "section",
+   "example": {
+    "network": "threads",
+    "field": "reply_control",
+    "spellings": [
+     "replyControl",
+     "reply_control"
+    ],
+    "where": "platform_specific"
+   }
+  },
+  {
+   "id": "threads.platform_specific.topic_tag",
+   "group": "platform_specific",
+   "source": "publishing/threads.py get_effective_field",
+   "tokens_any": [
+    [
+     "topic_tag"
+    ],
+    [
+     "topicTag"
+    ]
+   ],
+   "context_any": [
+    "Threads",
+    "threads"
+   ],
+   "scope": "section",
+   "example": {
+    "network": "threads",
+    "field": "topic_tag",
+    "spellings": [
+     "topicTag",
+     "topic_tag"
+    ],
+    "where": "platform_specific"
+   }
+  },
+  {
+   "id": "tiktok.platform_specific.brand_content_toggle",
+   "group": "platform_specific",
+   "source": "publishing/tiktok.py platform_options.get",
+   "tokens_any": [
+    [
+     "brand_content_toggle"
+    ]
+   ],
+   "context_any": [
+    "TikTok",
+    "tiktok"
+   ],
+   "scope": "section",
+   "example": {
+    "network": "tiktok",
+    "field": "brand_content_toggle",
+    "spellings": [
+     "brand_content_toggle"
+    ],
+    "where": "platform_specific"
+   }
+  },
+  {
+   "id": "tiktok.platform_specific.brand_organic_toggle",
+   "group": "platform_specific",
+   "source": "publishing/tiktok.py platform_options.get",
+   "tokens_any": [
+    [
+     "brand_organic_toggle"
+    ]
+   ],
+   "context_any": [
+    "TikTok",
+    "tiktok"
+   ],
+   "scope": "section",
+   "example": {
+    "network": "tiktok",
+    "field": "brand_organic_toggle",
+    "spellings": [
+     "brand_organic_toggle"
+    ],
+    "where": "platform_specific"
+   }
+  },
+  {
+   "id": "tiktok.platform_specific.disable_comments",
+   "group": "platform_specific",
+   "source": "publishing/tiktok.py platform_options.get",
+   "tokens_any": [
+    [
+     "disable_comments"
+    ]
+   ],
+   "context_any": [
+    "TikTok",
+    "tiktok"
+   ],
+   "scope": "section",
+   "example": {
+    "network": "tiktok",
+    "field": "disable_comments",
+    "spellings": [
+     "disable_comments"
+    ],
+    "where": "platform_specific"
+   }
+  },
+  {
+   "id": "tiktok.platform_specific.disable_duet",
+   "group": "platform_specific",
+   "source": "publishing/tiktok.py platform_options.get",
+   "tokens_any": [
+    [
+     "disable_duet"
+    ]
+   ],
+   "context_any": [
+    "TikTok",
+    "tiktok"
+   ],
+   "scope": "section",
+   "example": {
+    "network": "tiktok",
+    "field": "disable_duet",
+    "spellings": [
+     "disable_duet"
+    ],
+    "where": "platform_specific"
+   }
+  },
+  {
+   "id": "tiktok.platform_specific.disable_stitch",
+   "group": "platform_specific",
+   "source": "publishing/tiktok.py platform_options.get",
+   "tokens_any": [
+    [
+     "disable_stitch"
+    ]
+   ],
+   "context_any": [
+    "TikTok",
+    "tiktok"
+   ],
+   "scope": "section",
+   "example": {
+    "network": "tiktok",
+    "field": "disable_stitch",
+    "spellings": [
+     "disable_stitch"
+    ],
+    "where": "platform_specific"
+   }
+  },
+  {
+   "id": "tiktok.platform_specific.privacy_level",
+   "group": "platform_specific",
+   "source": "publishing/tiktok.py platform_options.get",
+   "tokens_any": [
+    [
+     "privacy_level"
+    ]
+   ],
+   "context_any": [
+    "TikTok",
+    "tiktok"
+   ],
+   "scope": "section",
+   "example": {
+    "network": "tiktok",
+    "field": "privacy_level",
+    "spellings": [
+     "privacy_level"
+    ],
+    "where": "platform_specific"
+   }
+  },
+  {
+   "id": "wordpress.platform_specific.categories",
+   "group": "platform_specific",
+   "source": "publishing/wordpress.py WORDPRESS_PLATFORM_SPECIFIC_KEYS",
+   "tokens_any": [
+    [
+     "categories"
+    ]
+   ],
+   "context_any": [
+    "WordPress",
+    "wordpress"
+   ],
+   "scope": "section",
+   "example": {
+    "network": "wordpress",
+    "field": "categories",
+    "spellings": [
+     "categories"
+    ],
+    "where": "platform_specific"
+   }
+  },
+  {
+   "id": "wordpress.platform_specific.comment_status",
+   "group": "platform_specific",
+   "source": "publishing/wordpress.py WORDPRESS_PLATFORM_SPECIFIC_KEYS",
+   "tokens_any": [
+    [
+     "comment_status"
+    ]
+   ],
+   "context_any": [
+    "WordPress",
+    "wordpress"
+   ],
+   "scope": "section",
+   "example": {
+    "network": "wordpress",
+    "field": "comment_status",
+    "spellings": [
+     "comment_status"
+    ],
+    "where": "platform_specific"
+   }
+  },
+  {
+   "id": "wordpress.platform_specific.excerpt",
+   "group": "platform_specific",
+   "source": "publishing/wordpress.py WORDPRESS_PLATFORM_SPECIFIC_KEYS",
+   "tokens_any": [
+    [
+     "excerpt"
+    ]
+   ],
+   "context_any": [
+    "WordPress",
+    "wordpress"
+   ],
+   "scope": "section",
+   "example": {
+    "network": "wordpress",
+    "field": "excerpt",
+    "spellings": [
+     "excerpt"
+    ],
+    "where": "platform_specific"
+   }
+  },
+  {
+   "id": "wordpress.platform_specific.format",
+   "group": "platform_specific",
+   "source": "publishing/wordpress.py WORDPRESS_PLATFORM_SPECIFIC_KEYS",
+   "tokens_any": [
+    [
+     "format"
+    ]
+   ],
+   "context_any": [
+    "WordPress",
+    "wordpress"
+   ],
+   "scope": "section",
+   "example": {
+    "network": "wordpress",
+    "field": "format",
+    "spellings": [
+     "format"
+    ],
+    "where": "platform_specific"
+   }
+  },
+  {
+   "id": "wordpress.platform_specific.meta_description",
+   "group": "platform_specific",
+   "source": "publishing/wordpress.py WORDPRESS_PLATFORM_SPECIFIC_KEYS",
+   "tokens_any": [
+    [
+     "meta_description"
+    ]
+   ],
+   "context_any": [
+    "WordPress",
+    "wordpress"
+   ],
+   "scope": "section",
+   "example": {
+    "network": "wordpress",
+    "field": "meta_description",
+    "spellings": [
+     "meta_description"
+    ],
+    "where": "platform_specific"
+   }
+  },
+  {
+   "id": "wordpress.platform_specific.meta_title",
+   "group": "platform_specific",
+   "source": "publishing/wordpress.py WORDPRESS_PLATFORM_SPECIFIC_KEYS",
+   "tokens_any": [
+    [
+     "meta_title"
+    ]
+   ],
+   "context_any": [
+    "WordPress",
+    "wordpress"
+   ],
+   "scope": "section",
+   "example": {
+    "network": "wordpress",
+    "field": "meta_title",
+    "spellings": [
+     "meta_title"
+    ],
+    "where": "platform_specific"
+   }
+  },
+  {
+   "id": "wordpress.platform_specific.ping_status",
+   "group": "platform_specific",
+   "source": "publishing/wordpress.py WORDPRESS_PLATFORM_SPECIFIC_KEYS",
+   "tokens_any": [
+    [
+     "ping_status"
+    ]
+   ],
+   "context_any": [
+    "WordPress",
+    "wordpress"
+   ],
+   "scope": "section",
+   "example": {
+    "network": "wordpress",
+    "field": "ping_status",
+    "spellings": [
+     "ping_status"
+    ],
+    "where": "platform_specific"
+   }
+  },
+  {
+   "id": "wordpress.platform_specific.post_type",
+   "group": "platform_specific",
+   "source": "publishing/wordpress.py WORDPRESS_PLATFORM_SPECIFIC_KEYS",
+   "tokens_any": [
+    [
+     "post_type"
+    ]
+   ],
+   "context_any": [
+    "WordPress",
+    "wordpress"
+   ],
+   "scope": "section",
+   "example": {
+    "network": "wordpress",
+    "field": "post_type",
+    "spellings": [
+     "post_type"
+    ],
+    "where": "platform_specific"
+   }
+  },
+  {
+   "id": "wordpress.platform_specific.slug",
+   "group": "platform_specific",
+   "source": "publishing/wordpress.py WORDPRESS_PLATFORM_SPECIFIC_KEYS",
+   "tokens_any": [
+    [
+     "slug"
+    ]
+   ],
+   "context_any": [
+    "WordPress",
+    "wordpress"
+   ],
+   "scope": "section",
+   "example": {
+    "network": "wordpress",
+    "field": "slug",
+    "spellings": [
+     "slug"
+    ],
+    "where": "platform_specific"
+   }
+  },
+  {
+   "id": "wordpress.platform_specific.sticky",
+   "group": "platform_specific",
+   "source": "publishing/wordpress.py WORDPRESS_PLATFORM_SPECIFIC_KEYS",
+   "tokens_any": [
+    [
+     "sticky"
+    ]
+   ],
+   "context_any": [
+    "WordPress",
+    "wordpress"
+   ],
+   "scope": "section",
+   "example": {
+    "network": "wordpress",
+    "field": "sticky",
+    "spellings": [
+     "sticky"
+    ],
+    "where": "platform_specific"
+   }
+  },
+  {
+   "id": "wordpress.platform_specific.tags",
+   "group": "platform_specific",
+   "source": "publishing/wordpress.py WORDPRESS_PLATFORM_SPECIFIC_KEYS",
+   "tokens_any": [
+    [
+     "tags"
+    ]
+   ],
+   "context_any": [
+    "WordPress",
+    "wordpress"
+   ],
+   "scope": "section",
+   "example": {
+    "network": "wordpress",
+    "field": "tags",
+    "spellings": [
+     "tags"
+    ],
+    "where": "platform_specific"
+   }
+  },
+  {
+   "id": "wordpress.platform_specific.title",
+   "group": "platform_specific",
+   "source": "publishing/wordpress.py WORDPRESS_PLATFORM_SPECIFIC_KEYS",
+   "tokens_any": [
+    [
+     "title"
+    ]
+   ],
+   "context_any": [
+    "WordPress",
+    "wordpress"
+   ],
+   "scope": "section",
+   "example": {
+    "network": "wordpress",
+    "field": "title",
+    "spellings": [
+     "title"
+    ],
+    "where": "platform_specific"
+   }
+  },
+  {
+   "id": "x.platform_specific.for_super_followers_only",
+   "group": "platform_specific",
+   "source": "publishing/x.py get_effective_field",
+   "tokens_any": [
+    [
+     "for_super_followers_only"
+    ]
+   ],
+   "context_any": [
+    "X",
+    "x"
+   ],
+   "scope": "section",
+   "example": {
+    "network": "x",
+    "field": "for_super_followers_only",
+    "spellings": [
+     "for_super_followers_only"
+    ],
+    "where": "platform_specific"
+   }
+  },
+  {
+   "id": "x.platform_specific.reply_settings",
+   "group": "platform_specific",
+   "source": "publishing/x.py get_effective_field",
+   "tokens_any": [
+    [
+     "reply_settings"
+    ]
+   ],
+   "context_any": [
+    "X",
+    "x"
+   ],
+   "scope": "section",
+   "example": {
+    "network": "x",
+    "field": "reply_settings",
+    "spellings": [
+     "reply_settings"
+    ],
+    "where": "platform_specific"
+   }
+  },
+  {
+   "id": "youtube.platform_specific.allow_embedding",
+   "group": "platform_specific",
+   "source": "publishing/youtube.py _resolved_bool",
+   "tokens_any": [
+    [
+     "allow_embedding"
+    ]
+   ],
+   "context_any": [
+    "YouTube",
+    "youtube"
+   ],
+   "scope": "section",
+   "example": {
+    "network": "youtube",
+    "field": "allow_embedding",
+    "spellings": [
+     "allow_embedding"
+    ],
+    "where": "platform_specific"
+   }
+  },
+  {
+   "id": "youtube.platform_specific.category_id",
+   "group": "platform_specific",
+   "source": "publishing/youtube.py platform_options.get",
+   "tokens_any": [
+    [
+     "category_id"
+    ]
+   ],
+   "context_any": [
+    "YouTube",
+    "youtube"
+   ],
+   "scope": "section",
+   "example": {
+    "network": "youtube",
+    "field": "category_id",
+    "spellings": [
+     "category_id"
+    ],
+    "where": "platform_specific"
+   }
+  },
+  {
+   "id": "youtube.platform_specific.default_language",
+   "group": "platform_specific",
+   "source": "publishing/youtube.py platform_options.get",
+   "tokens_any": [
+    [
+     "default_language"
+    ]
+   ],
+   "context_any": [
+    "YouTube",
+    "youtube"
+   ],
+   "scope": "section",
+   "example": {
+    "network": "youtube",
+    "field": "default_language",
+    "spellings": [
+     "default_language"
+    ],
+    "where": "platform_specific"
+   }
+  },
+  {
+   "id": "youtube.platform_specific.made_for_kids",
+   "group": "platform_specific",
+   "source": "publishing/youtube.py _resolved_bool",
+   "tokens_any": [
+    [
+     "made_for_kids"
+    ]
+   ],
+   "context_any": [
+    "YouTube",
+    "youtube"
+   ],
+   "scope": "section",
+   "example": {
+    "network": "youtube",
+    "field": "made_for_kids",
+    "spellings": [
+     "made_for_kids"
+    ],
+    "where": "platform_specific"
+   }
+  },
+  {
+   "id": "youtube.platform_specific.notify_subscribers",
+   "group": "platform_specific",
+   "source": "publishing/youtube.py _resolved_bool",
+   "tokens_any": [
+    [
+     "notify_subscribers"
+    ]
+   ],
+   "context_any": [
+    "YouTube",
+    "youtube"
+   ],
+   "scope": "section",
+   "example": {
+    "network": "youtube",
+    "field": "notify_subscribers",
+    "spellings": [
+     "notify_subscribers"
+    ],
+    "where": "platform_specific"
+   }
+  },
+  {
+   "id": "youtube.platform_specific.privacy_status",
+   "group": "platform_specific",
+   "source": "publishing/youtube.py platform_options.get",
+   "tokens_any": [
+    [
+     "privacy_status"
+    ]
+   ],
+   "context_any": [
+    "YouTube",
+    "youtube"
+   ],
+   "scope": "section",
+   "example": {
+    "network": "youtube",
+    "field": "privacy_status",
+    "spellings": [
+     "privacy_status"
+    ],
+    "where": "platform_specific"
+   }
+  },
+  {
+   "id": "youtube.platform_specific.self_declared_made_for_kids",
+   "group": "platform_specific",
+   "source": "publishing/youtube.py _resolved_bool",
+   "tokens_any": [
+    [
+     "self_declared_made_for_kids"
+    ]
+   ],
+   "context_any": [
+    "YouTube",
+    "youtube"
+   ],
+   "scope": "section",
+   "example": {
+    "network": "youtube",
+    "field": "self_declared_made_for_kids",
+    "spellings": [
+     "self_declared_made_for_kids"
+    ],
+    "where": "platform_specific"
+   }
+  },
+  {
+   "id": "youtube.platform_specific.tags",
+   "group": "platform_specific",
+   "source": "publishing/youtube.py platform_options.get",
+   "tokens_any": [
+    [
+     "tags"
+    ]
+   ],
+   "context_any": [
+    "YouTube",
+    "youtube"
+   ],
+   "scope": "section",
+   "example": {
+    "network": "youtube",
+    "field": "tags",
+    "spellings": [
+     "tags"
+    ],
+    "where": "platform_specific"
+   }
+  },
+  {
+   "id": "youtube.platform_specific.thumbnail_url",
+   "group": "platform_specific",
+   "source": "publishing/youtube.py platform_options.get",
+   "tokens_any": [
+    [
+     "thumbnail_url"
+    ]
+   ],
+   "context_any": [
+    "YouTube",
+    "youtube"
+   ],
+   "scope": "section",
+   "example": {
+    "network": "youtube",
+    "field": "thumbnail_url",
+    "spellings": [
+     "thumbnail_url"
+    ],
+    "where": "platform_specific"
+   }
+  },
+  {
+   "id": "youtube.platform_specific.video_description",
+   "group": "platform_specific",
+   "source": "publishing/youtube.py platform_options.get",
+   "tokens_any": [
+    [
+     "video_description"
+    ]
+   ],
+   "context_any": [
+    "YouTube",
+    "youtube"
+   ],
+   "scope": "section",
+   "example": {
+    "network": "youtube",
+    "field": "video_description",
+    "spellings": [
+     "video_description"
+    ],
+    "where": "platform_specific"
+   }
+  },
+  {
+   "id": "youtube.platform_specific.video_title",
+   "group": "platform_specific",
+   "source": "publishing/youtube.py platform_options.get",
+   "tokens_any": [
+    [
+     "video_title"
+    ]
+   ],
+   "context_any": [
+    "YouTube",
+    "youtube"
+   ],
+   "scope": "section",
+   "example": {
+    "network": "youtube",
+    "field": "video_title",
+    "spellings": [
+     "video_title"
+    ],
+    "where": "platform_specific"
+   }
+  },
+  {
+   "id": "bluesky.include_facets",
+   "group": "post_details",
+   "source": "BlueSkyPostDetails (update-post-platform-details)",
+   "tokens_any": [
+    [
+     "include_facets"
+    ]
+   ],
+   "context_any": [
+    "BlueSky",
+    "bluesky"
+   ],
+   "scope": "section",
+   "example": {
+    "network": "bluesky",
+    "field": "include_facets",
+    "where": "fields"
+   }
+  },
+  {
+   "id": "bluesky.languages",
+   "group": "post_details",
+   "source": "BlueSkyPostDetails (update-post-platform-details)",
+   "tokens_any": [
+    [
+     "languages"
+    ]
+   ],
+   "context_any": [
+    "BlueSky",
+    "bluesky"
+   ],
+   "scope": "section",
+   "example": {
+    "network": "bluesky",
+    "field": "languages",
+    "where": "fields"
+   }
+  },
+  {
+   "id": "bluesky.reply_settings",
+   "group": "post_details",
+   "source": "BlueSkyPostDetails (update-post-platform-details)",
+   "tokens_any": [
+    [
+     "reply_settings"
+    ]
+   ],
+   "context_any": [
+    "BlueSky",
+    "bluesky"
+   ],
+   "scope": "section",
+   "example": {
+    "network": "bluesky",
+    "field": "reply_settings",
+    "where": "fields"
+   }
+  },
+  {
+   "id": "bluesky.reply_settings=everyone",
+   "group": "post_details",
+   "source": "BlueSkyPostDetails.reply_settings choices",
+   "tokens_any": [
+    [
+     "reply_settings",
+     "everyone"
+    ]
+   ],
+   "context_any": [
+    "BlueSky",
+    "bluesky"
+   ],
+   "scope": "section"
+  },
+  {
+   "id": "bluesky.reply_settings=mentioned",
+   "group": "post_details",
+   "source": "BlueSkyPostDetails.reply_settings choices",
+   "tokens_any": [
+    [
+     "reply_settings",
+     "mentioned"
+    ]
+   ],
+   "context_any": [
+    "BlueSky",
+    "bluesky"
+   ],
+   "scope": "section"
+  },
+  {
+   "id": "bluesky.reply_settings=nobody",
+   "group": "post_details",
+   "source": "BlueSkyPostDetails.reply_settings choices",
+   "tokens_any": [
+    [
+     "reply_settings",
+     "nobody"
+    ]
+   ],
+   "context_any": [
+    "BlueSky",
+    "bluesky"
+   ],
+   "scope": "section"
+  },
+  {
+   "id": "discord.embed_color",
+   "group": "post_details",
+   "source": "DiscordPostDetails (update-post-platform-details)",
+   "tokens_any": [
+    [
+     "embed_color"
+    ]
+   ],
+   "context_any": [
+    "Discord",
+    "discord"
+   ],
+   "scope": "section",
+   "example": {
+    "network": "discord",
+    "field": "embed_color",
+    "where": "fields"
+   }
+  },
+  {
+   "id": "discord.embed_description",
+   "group": "post_details",
+   "source": "DiscordPostDetails (update-post-platform-details)",
+   "tokens_any": [
+    [
+     "embed_description"
+    ]
+   ],
+   "context_any": [
+    "Discord",
+    "discord"
+   ],
+   "scope": "section",
+   "example": {
+    "network": "discord",
+    "field": "embed_description",
+    "where": "fields"
+   }
+  },
+  {
+   "id": "discord.embed_enabled",
+   "group": "post_details",
+   "source": "DiscordPostDetails (update-post-platform-details)",
+   "tokens_any": [
+    [
+     "embed_enabled"
+    ]
+   ],
+   "context_any": [
+    "Discord",
+    "discord"
+   ],
+   "scope": "section",
+   "example": {
+    "network": "discord",
+    "field": "embed_enabled",
+    "where": "fields"
+   }
+  },
+  {
+   "id": "discord.embed_footer",
+   "group": "post_details",
+   "source": "DiscordPostDetails (update-post-platform-details)",
+   "tokens_any": [
+    [
+     "embed_footer"
+    ]
+   ],
+   "context_any": [
+    "Discord",
+    "discord"
+   ],
+   "scope": "section",
+   "example": {
+    "network": "discord",
+    "field": "embed_footer",
+    "where": "fields"
+   }
+  },
+  {
+   "id": "discord.embed_title",
+   "group": "post_details",
+   "source": "DiscordPostDetails (update-post-platform-details)",
+   "tokens_any": [
+    [
+     "embed_title"
+    ]
+   ],
+   "context_any": [
+    "Discord",
+    "discord"
+   ],
+   "scope": "section",
+   "example": {
+    "network": "discord",
+    "field": "embed_title",
+    "where": "fields"
+   }
+  },
+  {
+   "id": "discord.selected_channel",
+   "group": "post_details",
+   "source": "DiscordPostDetails (update-post-platform-details)",
+   "tokens_any": [
+    [
+     "selected_channel"
+    ],
+    [
+     "selected_channel_id"
+    ]
+   ],
+   "context_any": [
+    "Discord",
+    "discord"
+   ],
+   "scope": "section",
+   "example": {
+    "network": "discord",
+    "field": "selected_channel",
+    "where": "fields"
+   }
+  },
+  {
+   "id": "discord.selected_channel_id",
+   "group": "post_details",
+   "source": "DiscordPostDetails (update-post-platform-details)",
+   "tokens_any": [
+    [
+     "selected_channel_id"
+    ],
+    [
+     "selected_channel"
+    ]
+   ],
+   "context_any": [
+    "Discord",
+    "discord"
+   ],
+   "scope": "section",
+   "example": {
+    "network": "discord",
+    "field": "selected_channel_id",
+    "where": "fields"
+   }
+  },
+  {
+   "id": "discord.selected_guild",
+   "group": "post_details",
+   "source": "DiscordPostDetails (update-post-platform-details)",
+   "tokens_any": [
+    [
+     "selected_guild"
+    ],
+    [
+     "selected_guild_id"
+    ]
+   ],
+   "context_any": [
+    "Discord",
+    "discord"
+   ],
+   "scope": "section",
+   "example": {
+    "network": "discord",
+    "field": "selected_guild",
+    "where": "fields"
+   }
+  },
+  {
+   "id": "discord.selected_guild_id",
+   "group": "post_details",
+   "source": "DiscordPostDetails (update-post-platform-details)",
+   "tokens_any": [
+    [
+     "selected_guild_id"
+    ],
+    [
+     "selected_guild"
+    ]
+   ],
+   "context_any": [
+    "Discord",
+    "discord"
+   ],
+   "scope": "section",
+   "example": {
+    "network": "discord",
+    "field": "selected_guild_id",
+    "where": "fields"
+   }
+  },
+  {
+   "id": "facebook.activity",
+   "group": "post_details",
+   "source": "FacebookPostDetails (update-post-platform-details)",
+   "tokens_any": [
+    [
+     "activity"
+    ]
+   ],
+   "context_any": [
+    "Facebook",
+    "facebook"
+   ],
+   "scope": "section",
+   "example": {
+    "network": "facebook",
+    "field": "activity",
+    "where": "fields"
+   }
+  },
+  {
+   "id": "facebook.cross_post_delay",
+   "group": "post_details",
+   "source": "FacebookPostDetails (update-post-platform-details)",
+   "tokens_any": [
+    [
+     "cross_post_delay"
+    ]
+   ],
+   "context_any": [
+    "Facebook",
+    "facebook"
+   ],
+   "scope": "section",
+   "example": {
+    "network": "facebook",
+    "field": "cross_post_delay",
+    "where": "fields"
+   }
+  },
+  {
+   "id": "facebook.cross_post_enabled",
+   "group": "post_details",
+   "source": "FacebookPostDetails (update-post-platform-details)",
+   "tokens_any": [
+    [
+     "cross_post_enabled"
+    ]
+   ],
+   "context_any": [
+    "Facebook",
+    "facebook"
+   ],
+   "scope": "section",
+   "example": {
+    "network": "facebook",
+    "field": "cross_post_enabled",
+    "where": "fields"
+   }
+  },
+  {
+   "id": "facebook.cross_post_pages",
+   "group": "post_details",
+   "source": "FacebookPostDetails (update-post-platform-details)",
+   "tokens_any": [
+    [
+     "cross_post_pages"
+    ]
+   ],
+   "context_any": [
+    "Facebook",
+    "facebook"
+   ],
+   "scope": "section",
+   "example": {
+    "network": "facebook",
+    "field": "cross_post_pages",
+    "where": "fields"
+   }
+  },
+  {
+   "id": "facebook.enable_comments",
+   "group": "post_details",
+   "source": "FacebookPostDetails (update-post-platform-details)",
+   "tokens_any": [
+    [
+     "enable_comments"
+    ]
+   ],
+   "context_any": [
+    "Facebook",
+    "facebook"
+   ],
+   "scope": "section",
+   "example": {
+    "network": "facebook",
+    "field": "enable_comments",
+    "where": "fields"
+   }
+  },
+  {
+   "id": "facebook.enable_reactions",
+   "group": "post_details",
+   "source": "FacebookPostDetails (update-post-platform-details)",
+   "tokens_any": [
+    [
+     "enable_reactions"
+    ]
+   ],
+   "context_any": [
+    "Facebook",
+    "facebook"
+   ],
+   "scope": "section",
+   "example": {
+    "network": "facebook",
+    "field": "enable_reactions",
+    "where": "fields"
+   }
+  },
+  {
+   "id": "facebook.enable_sharing",
+   "group": "post_details",
+   "source": "FacebookPostDetails (update-post-platform-details)",
+   "tokens_any": [
+    [
+     "enable_sharing"
+    ]
+   ],
+   "context_any": [
+    "Facebook",
+    "facebook"
+   ],
+   "scope": "section",
+   "example": {
+    "network": "facebook",
+    "field": "enable_sharing",
+    "where": "fields"
+   }
+  },
+  {
+   "id": "facebook.feeling",
+   "group": "post_details",
+   "source": "FacebookPostDetails (update-post-platform-details)",
+   "tokens_any": [
+    [
+     "feeling"
+    ]
+   ],
+   "context_any": [
+    "Facebook",
+    "facebook"
+   ],
+   "scope": "section",
+   "example": {
+    "network": "facebook",
+    "field": "feeling",
+    "where": "fields"
+   }
+  },
+  {
+   "id": "facebook.location",
+   "group": "post_details",
+   "source": "FacebookPostDetails (update-post-platform-details)",
+   "tokens_any": [
+    [
+     "location"
+    ]
+   ],
+   "context_any": [
+    "Facebook",
+    "facebook"
+   ],
+   "scope": "section",
+   "example": {
+    "network": "facebook",
+    "field": "location",
+    "where": "fields"
+   }
+  },
+  {
+   "id": "facebook.post_type",
+   "group": "post_details",
+   "source": "FacebookPostDetails (update-post-platform-details)",
+   "tokens_any": [
+    [
+     "post_type"
+    ]
+   ],
+   "context_any": [
+    "Facebook",
+    "facebook"
+   ],
+   "scope": "section",
+   "example": {
+    "network": "facebook",
+    "field": "post_type",
+    "where": "fields"
+   }
+  },
+  {
+   "id": "facebook.post_type=LINK",
+   "group": "post_details",
+   "source": "FacebookPostDetails.post_type choices",
+   "tokens_any": [
+    [
+     "post_type",
+     "LINK"
+    ]
+   ],
+   "context_any": [
+    "Facebook",
+    "facebook"
+   ],
+   "scope": "section"
+  },
+  {
+   "id": "facebook.post_type=PHOTO",
+   "group": "post_details",
+   "source": "FacebookPostDetails.post_type choices",
+   "tokens_any": [
+    [
+     "post_type",
+     "PHOTO"
+    ]
+   ],
+   "context_any": [
+    "Facebook",
+    "facebook"
+   ],
+   "scope": "section"
+  },
+  {
+   "id": "facebook.post_type=STORY",
+   "group": "post_details",
+   "source": "FacebookPostDetails.post_type choices",
+   "tokens_any": [
+    [
+     "post_type",
+     "STORY"
+    ]
+   ],
+   "context_any": [
+    "Facebook",
+    "facebook"
+   ],
+   "scope": "section"
+  },
+  {
+   "id": "facebook.post_type=TEXT",
+   "group": "post_details",
+   "source": "FacebookPostDetails.post_type choices",
+   "tokens_any": [
+    [
+     "post_type",
+     "TEXT"
+    ]
+   ],
+   "context_any": [
+    "Facebook",
+    "facebook"
+   ],
+   "scope": "section"
+  },
+  {
+   "id": "facebook.post_type=VIDEO",
+   "group": "post_details",
+   "source": "FacebookPostDetails.post_type choices",
+   "tokens_any": [
+    [
+     "post_type",
+     "VIDEO"
+    ]
+   ],
+   "context_any": [
+    "Facebook",
+    "facebook"
+   ],
+   "scope": "section"
+  },
+  {
+   "id": "facebook.primary_page",
+   "group": "post_details",
+   "source": "FacebookPostDetails (update-post-platform-details)",
+   "tokens_any": [
+    [
+     "primary_page"
+    ],
+    [
+     "primary_page_id"
+    ]
+   ],
+   "context_any": [
+    "Facebook",
+    "facebook"
+   ],
+   "scope": "section",
+   "example": {
+    "network": "facebook",
+    "field": "primary_page",
+    "where": "fields"
+   }
+  },
+  {
+   "id": "facebook.primary_page_id",
+   "group": "post_details",
+   "source": "FacebookPostDetails (update-post-platform-details)",
+   "tokens_any": [
+    [
+     "primary_page_id"
+    ],
+    [
+     "primary_page"
+    ]
+   ],
+   "context_any": [
+    "Facebook",
+    "facebook"
+   ],
+   "scope": "section",
+   "example": {
+    "network": "facebook",
+    "field": "primary_page_id",
+    "where": "fields"
+   }
+  },
+  {
+   "id": "facebook.privacy",
+   "group": "post_details",
+   "source": "FacebookPostDetails (update-post-platform-details)",
+   "tokens_any": [
+    [
+     "privacy"
+    ]
+   ],
+   "context_any": [
+    "Facebook",
+    "facebook"
+   ],
+   "scope": "section",
+   "example": {
+    "network": "facebook",
+    "field": "privacy",
+    "where": "fields"
+   }
+  },
+  {
+   "id": "facebook.privacy=CUSTOM",
+   "group": "post_details",
+   "source": "FacebookPostDetails.privacy choices",
+   "tokens_any": [
+    [
+     "privacy",
+     "CUSTOM"
+    ]
+   ],
+   "context_any": [
+    "Facebook",
+    "facebook"
+   ],
+   "scope": "section"
+  },
+  {
+   "id": "facebook.privacy=EVERYONE",
+   "group": "post_details",
+   "source": "FacebookPostDetails.privacy choices",
+   "tokens_any": [
+    [
+     "privacy",
+     "EVERYONE"
+    ]
+   ],
+   "context_any": [
+    "Facebook",
+    "facebook"
+   ],
+   "scope": "section"
+  },
+  {
+   "id": "facebook.privacy=FRIENDS",
+   "group": "post_details",
+   "source": "FacebookPostDetails.privacy choices",
+   "tokens_any": [
+    [
+     "privacy",
+     "FRIENDS"
+    ]
+   ],
+   "context_any": [
+    "Facebook",
+    "facebook"
+   ],
+   "scope": "section"
+  },
+  {
+   "id": "facebook.privacy=FRIENDS_OF_FRIENDS",
+   "group": "post_details",
+   "source": "FacebookPostDetails.privacy choices",
+   "tokens_any": [
+    [
+     "privacy",
+     "FRIENDS_OF_FRIENDS"
+    ]
+   ],
+   "context_any": [
+    "Facebook",
+    "facebook"
+   ],
+   "scope": "section"
+  },
+  {
+   "id": "instagram.alt_text",
+   "group": "post_details",
+   "source": "InstagramPostDetails (update-post-platform-details)",
+   "tokens_any": [
+    [
+     "alt_text"
+    ]
+   ],
+   "context_any": [
+    "Instagram",
+    "instagram"
+   ],
+   "scope": "section",
+   "example": {
+    "network": "instagram",
+    "field": "alt_text",
+    "where": "fields"
+   }
+  },
+  {
+   "id": "instagram.caption",
+   "group": "post_details",
+   "source": "InstagramPostDetails (update-post-platform-details)",
+   "tokens_any": [
+    [
+     "caption"
+    ]
+   ],
+   "context_any": [
+    "Instagram",
+    "instagram"
+   ],
+   "scope": "section",
+   "example": {
+    "network": "instagram",
+    "field": "caption",
+    "where": "fields"
+   }
+  },
+  {
+   "id": "instagram.content_type",
+   "group": "post_details",
+   "source": "InstagramPostDetails (update-post-platform-details)",
+   "tokens_any": [
+    [
+     "content_type"
+    ]
+   ],
+   "context_any": [
+    "Instagram",
+    "instagram"
+   ],
+   "scope": "section",
+   "example": {
+    "network": "instagram",
+    "field": "content_type",
+    "where": "fields"
+   }
+  },
+  {
+   "id": "instagram.content_type=FEED",
+   "group": "post_details",
+   "source": "InstagramPostDetails.content_type choices",
+   "tokens_any": [
+    [
+     "content_type",
+     "FEED"
+    ]
+   ],
+   "context_any": [
+    "Instagram",
+    "instagram"
+   ],
+   "scope": "section"
+  },
+  {
+   "id": "instagram.content_type=REELS",
+   "group": "post_details",
+   "source": "InstagramPostDetails.content_type choices",
+   "tokens_any": [
+    [
+     "content_type",
+     "REELS"
+    ]
+   ],
+   "context_any": [
+    "Instagram",
+    "instagram"
+   ],
+   "scope": "section"
+  },
+  {
+   "id": "instagram.content_type=STORY",
+   "group": "post_details",
+   "source": "InstagramPostDetails.content_type choices",
+   "tokens_any": [
+    [
+     "content_type",
+     "STORY"
+    ]
+   ],
+   "context_any": [
+    "Instagram",
+    "instagram"
+   ],
+   "scope": "section"
+  },
+  {
+   "id": "instagram.cover_url",
+   "group": "post_details",
+   "source": "InstagramPostDetails (update-post-platform-details)",
+   "tokens_any": [
+    [
+     "cover_url"
+    ]
+   ],
+   "context_any": [
+    "Instagram",
+    "instagram"
+   ],
+   "scope": "section",
+   "example": {
+    "network": "instagram",
+    "field": "cover_url",
+    "where": "fields"
+   }
+  },
+  {
+   "id": "instagram.location_id",
+   "group": "post_details",
+   "source": "InstagramPostDetails (update-post-platform-details)",
+   "tokens_any": [
+    [
+     "location_id"
+    ]
+   ],
+   "context_any": [
+    "Instagram",
+    "instagram"
+   ],
+   "scope": "section",
+   "example": {
+    "network": "instagram",
+    "field": "location_id",
+    "where": "fields"
+   }
+  },
+  {
+   "id": "instagram.media_type",
+   "group": "post_details",
+   "source": "InstagramPostDetails (update-post-platform-details)",
+   "tokens_any": [
+    [
+     "media_type"
+    ]
+   ],
+   "context_any": [
+    "Instagram",
+    "instagram"
+   ],
+   "scope": "section",
+   "example": {
+    "network": "instagram",
+    "field": "media_type",
+    "where": "fields"
+   }
+  },
+  {
+   "id": "instagram.media_type=CAROUSEL_ALBUM",
+   "group": "post_details",
+   "source": "InstagramPostDetails.media_type choices",
+   "tokens_any": [
+    [
+     "media_type",
+     "CAROUSEL_ALBUM"
+    ]
+   ],
+   "context_any": [
+    "Instagram",
+    "instagram"
+   ],
+   "scope": "section"
+  },
+  {
+   "id": "instagram.media_type=IMAGE",
+   "group": "post_details",
+   "source": "InstagramPostDetails.media_type choices",
+   "tokens_any": [
+    [
+     "media_type",
+     "IMAGE"
+    ]
+   ],
+   "context_any": [
+    "Instagram",
+    "instagram"
+   ],
+   "scope": "section"
+  },
+  {
+   "id": "instagram.media_type=VIDEO",
+   "group": "post_details",
+   "source": "InstagramPostDetails.media_type choices",
+   "tokens_any": [
+    [
+     "media_type",
+     "VIDEO"
+    ]
+   ],
+   "context_any": [
+    "Instagram",
+    "instagram"
+   ],
+   "scope": "section"
+  },
+  {
+   "id": "instagram.product_tags",
+   "group": "post_details",
+   "source": "InstagramPostDetails (update-post-platform-details)",
+   "tokens_any": [
+    [
+     "product_tags"
+    ]
+   ],
+   "context_any": [
+    "Instagram",
+    "instagram"
+   ],
+   "scope": "section",
+   "example": {
+    "network": "instagram",
+    "field": "product_tags",
+    "where": "fields"
+   }
+  },
+  {
+   "id": "instagram.thumbnail_offset",
+   "group": "post_details",
+   "source": "InstagramPostDetails (update-post-platform-details)",
+   "tokens_any": [
+    [
+     "thumbnail_offset"
+    ]
+   ],
+   "context_any": [
+    "Instagram",
+    "instagram"
+   ],
+   "scope": "section",
+   "example": {
+    "network": "instagram",
+    "field": "thumbnail_offset",
+    "where": "fields"
+   }
+  },
+  {
+   "id": "instagram.trial_graduation_strategy",
+   "group": "post_details",
+   "source": "InstagramPostDetails (update-post-platform-details)",
+   "tokens_any": [
+    [
+     "trial_graduation_strategy"
+    ]
+   ],
+   "context_any": [
+    "Instagram",
+    "instagram"
+   ],
+   "scope": "section",
+   "example": {
+    "network": "instagram",
+    "field": "trial_graduation_strategy",
+    "where": "fields"
+   }
+  },
+  {
+   "id": "instagram.trial_graduation_strategy=MANUAL",
+   "group": "post_details",
+   "source": "InstagramPostDetails.trial_graduation_strategy choices",
+   "tokens_any": [
+    [
+     "trial_graduation_strategy",
+     "MANUAL"
+    ]
+   ],
+   "context_any": [
+    "Instagram",
+    "instagram"
+   ],
+   "scope": "section"
+  },
+  {
+   "id": "instagram.trial_graduation_strategy=SS_PERFORMANCE",
+   "group": "post_details",
+   "source": "InstagramPostDetails.trial_graduation_strategy choices",
+   "tokens_any": [
+    [
+     "trial_graduation_strategy",
+     "SS_PERFORMANCE"
+    ]
+   ],
+   "context_any": [
+    "Instagram",
+    "instagram"
+   ],
+   "scope": "section"
+  },
+  {
+   "id": "instagram.trial_reel_enabled",
+   "group": "post_details",
+   "source": "InstagramPostDetails (update-post-platform-details)",
+   "tokens_any": [
+    [
+     "trial_reel_enabled"
+    ]
+   ],
+   "context_any": [
+    "Instagram",
+    "instagram"
+   ],
+   "scope": "section",
+   "example": {
+    "network": "instagram",
+    "field": "trial_reel_enabled",
+    "where": "fields"
+   }
+  },
+  {
+   "id": "instagram.user_tags",
+   "group": "post_details",
+   "source": "InstagramPostDetails (update-post-platform-details)",
+   "tokens_any": [
+    [
+     "user_tags"
+    ]
+   ],
+   "context_any": [
+    "Instagram",
+    "instagram"
+   ],
+   "scope": "section",
+   "example": {
+    "network": "instagram",
+    "field": "user_tags",
+    "where": "fields"
+   }
+  },
+  {
+   "id": "linkedin.activity",
+   "group": "post_details",
+   "source": "LinkedInPostDetails (update-post-platform-details)",
+   "tokens_any": [
+    [
+     "activity"
+    ]
+   ],
+   "context_any": [
+    "LinkedIn",
+    "linkedin"
+   ],
+   "scope": "section",
+   "example": {
+    "network": "linkedin",
+    "field": "activity",
+    "where": "fields"
+   }
+  },
+  {
+   "id": "linkedin.cross_post_delay",
+   "group": "post_details",
+   "source": "LinkedInPostDetails (update-post-platform-details)",
+   "tokens_any": [
+    [
+     "cross_post_delay"
+    ]
+   ],
+   "context_any": [
+    "LinkedIn",
+    "linkedin"
+   ],
+   "scope": "section",
+   "example": {
+    "network": "linkedin",
+    "field": "cross_post_delay",
+    "where": "fields"
+   }
+  },
+  {
+   "id": "linkedin.cross_post_enabled",
+   "group": "post_details",
+   "source": "LinkedInPostDetails (update-post-platform-details)",
+   "tokens_any": [
+    [
+     "cross_post_enabled"
+    ]
+   ],
+   "context_any": [
+    "LinkedIn",
+    "linkedin"
+   ],
+   "scope": "section",
+   "example": {
+    "network": "linkedin",
+    "field": "cross_post_enabled",
+    "where": "fields"
+   }
+  },
+  {
+   "id": "linkedin.cross_post_organizations",
+   "group": "post_details",
+   "source": "LinkedInPostDetails (update-post-platform-details)",
+   "tokens_any": [
+    [
+     "cross_post_organizations"
+    ]
+   ],
+   "context_any": [
+    "LinkedIn",
+    "linkedin"
+   ],
+   "scope": "section",
+   "example": {
+    "network": "linkedin",
+    "field": "cross_post_organizations",
+    "where": "fields"
+   }
+  },
+  {
+   "id": "linkedin.enable_comments",
+   "group": "post_details",
+   "source": "LinkedInPostDetails (update-post-platform-details)",
+   "tokens_any": [
+    [
+     "enable_comments"
+    ]
+   ],
+   "context_any": [
+    "LinkedIn",
+    "linkedin"
+   ],
+   "scope": "section",
+   "example": {
+    "network": "linkedin",
+    "field": "enable_comments",
+    "where": "fields"
+   }
+  },
+  {
+   "id": "linkedin.enable_resharing",
+   "group": "post_details",
+   "source": "LinkedInPostDetails (update-post-platform-details)",
+   "tokens_any": [
+    [
+     "enable_resharing"
+    ]
+   ],
+   "context_any": [
+    "LinkedIn",
+    "linkedin"
+   ],
+   "scope": "section",
+   "example": {
+    "network": "linkedin",
+    "field": "enable_resharing",
+    "where": "fields"
+   }
+  },
+  {
+   "id": "linkedin.feeling",
+   "group": "post_details",
+   "source": "LinkedInPostDetails (update-post-platform-details)",
+   "tokens_any": [
+    [
+     "feeling"
+    ]
+   ],
+   "context_any": [
+    "LinkedIn",
+    "linkedin"
+   ],
+   "scope": "section",
+   "example": {
+    "network": "linkedin",
+    "field": "feeling",
+    "where": "fields"
+   }
+  },
+  {
+   "id": "linkedin.include_hashtags",
+   "group": "post_details",
+   "source": "LinkedInPostDetails (update-post-platform-details)",
+   "tokens_any": [
+    [
+     "include_hashtags"
+    ]
+   ],
+   "context_any": [
+    "LinkedIn",
+    "linkedin"
+   ],
+   "scope": "section",
+   "example": {
+    "network": "linkedin",
+    "field": "include_hashtags",
+    "where": "fields"
+   }
+  },
+  {
+   "id": "linkedin.linkedin_specific_content",
+   "group": "post_details",
+   "source": "LinkedInPostDetails (update-post-platform-details)",
+   "tokens_any": [
+    [
+     "linkedin_specific_content"
+    ]
+   ],
+   "context_any": [
+    "LinkedIn",
+    "linkedin"
+   ],
+   "scope": "section",
+   "example": {
+    "network": "linkedin",
+    "field": "linkedin_specific_content",
+    "where": "fields"
+   }
+  },
+  {
+   "id": "linkedin.location",
+   "group": "post_details",
+   "source": "LinkedInPostDetails (update-post-platform-details)",
+   "tokens_any": [
+    [
+     "location"
+    ]
+   ],
+   "context_any": [
+    "LinkedIn",
+    "linkedin"
+   ],
+   "scope": "section",
+   "example": {
+    "network": "linkedin",
+    "field": "location",
+    "where": "fields"
+   }
+  },
+  {
+   "id": "linkedin.post_as_organization",
+   "group": "post_details",
+   "source": "LinkedInPostDetails (update-post-platform-details)",
+   "tokens_any": [
+    [
+     "post_as_organization"
+    ]
+   ],
+   "context_any": [
+    "LinkedIn",
+    "linkedin"
+   ],
+   "scope": "section",
+   "example": {
+    "network": "linkedin",
+    "field": "post_as_organization",
+    "where": "fields"
+   }
+  },
+  {
+   "id": "linkedin.post_type",
+   "group": "post_details",
+   "source": "LinkedInPostDetails (update-post-platform-details)",
+   "tokens_any": [
+    [
+     "post_type"
+    ]
+   ],
+   "context_any": [
+    "LinkedIn",
+    "linkedin"
+   ],
+   "scope": "section",
+   "example": {
+    "network": "linkedin",
+    "field": "post_type",
+    "where": "fields"
+   }
+  },
+  {
+   "id": "linkedin.post_type=ARTICLE",
+   "group": "post_details",
+   "source": "LinkedInPostDetails.post_type choices",
+   "tokens_any": [
+    [
+     "post_type",
+     "ARTICLE"
+    ]
+   ],
+   "context_any": [
+    "LinkedIn",
+    "linkedin"
+   ],
+   "scope": "section"
+  },
+  {
+   "id": "linkedin.post_type=DOCUMENT",
+   "group": "post_details",
+   "source": "LinkedInPostDetails.post_type choices",
+   "tokens_any": [
+    [
+     "post_type",
+     "DOCUMENT"
+    ]
+   ],
+   "context_any": [
+    "LinkedIn",
+    "linkedin"
+   ],
+   "scope": "section"
+  },
+  {
+   "id": "linkedin.post_type=IMAGE",
+   "group": "post_details",
+   "source": "LinkedInPostDetails.post_type choices",
+   "tokens_any": [
+    [
+     "post_type",
+     "IMAGE"
+    ]
+   ],
+   "context_any": [
+    "LinkedIn",
+    "linkedin"
+   ],
+   "scope": "section"
+  },
+  {
+   "id": "linkedin.post_type=POLL",
+   "group": "post_details",
+   "source": "LinkedInPostDetails.post_type choices",
+   "tokens_any": [
+    [
+     "post_type",
+     "POLL"
+    ]
+   ],
+   "context_any": [
+    "LinkedIn",
+    "linkedin"
+   ],
+   "scope": "section"
+  },
+  {
+   "id": "linkedin.post_type=TEXT",
+   "group": "post_details",
+   "source": "LinkedInPostDetails.post_type choices",
+   "tokens_any": [
+    [
+     "post_type",
+     "TEXT"
+    ]
+   ],
+   "context_any": [
+    "LinkedIn",
+    "linkedin"
+   ],
+   "scope": "section"
+  },
+  {
+   "id": "linkedin.post_type=VIDEO",
+   "group": "post_details",
+   "source": "LinkedInPostDetails.post_type choices",
+   "tokens_any": [
+    [
+     "post_type",
+     "VIDEO"
+    ]
+   ],
+   "context_any": [
+    "LinkedIn",
+    "linkedin"
+   ],
+   "scope": "section"
+  },
+  {
+   "id": "linkedin.selected_organization",
+   "group": "post_details",
+   "source": "LinkedInPostDetails (update-post-platform-details)",
+   "tokens_any": [
+    [
+     "selected_organization"
+    ],
+    [
+     "selected_organization_id"
+    ]
+   ],
+   "context_any": [
+    "LinkedIn",
+    "linkedin"
+   ],
+   "scope": "section",
+   "example": {
+    "network": "linkedin",
+    "field": "selected_organization",
+    "where": "fields"
+   }
+  },
+  {
+   "id": "linkedin.selected_organization_id",
+   "group": "post_details",
+   "source": "LinkedInPostDetails (update-post-platform-details)",
+   "tokens_any": [
+    [
+     "selected_organization_id"
+    ],
+    [
+     "selected_organization"
+    ]
+   ],
+   "context_any": [
+    "LinkedIn",
+    "linkedin"
+   ],
+   "scope": "section",
+   "example": {
+    "network": "linkedin",
+    "field": "selected_organization_id",
+    "where": "fields"
+   }
+  },
+  {
+   "id": "linkedin.tag_connections",
+   "group": "post_details",
+   "source": "LinkedInPostDetails (update-post-platform-details)",
+   "tokens_any": [
+    [
+     "tag_connections"
+    ]
+   ],
+   "context_any": [
+    "LinkedIn",
+    "linkedin"
+   ],
+   "scope": "section",
+   "example": {
+    "network": "linkedin",
+    "field": "tag_connections",
+    "where": "fields"
+   }
+  },
+  {
+   "id": "linkedin.visibility",
+   "group": "post_details",
+   "source": "LinkedInPostDetails (update-post-platform-details)",
+   "tokens_any": [
+    [
+     "visibility"
+    ]
+   ],
+   "context_any": [
+    "LinkedIn",
+    "linkedin"
+   ],
+   "scope": "section",
+   "example": {
+    "network": "linkedin",
+    "field": "visibility",
+    "where": "fields"
+   }
+  },
+  {
+   "id": "linkedin.visibility=CONNECTIONS",
+   "group": "post_details",
+   "source": "LinkedInPostDetails.visibility choices",
+   "tokens_any": [
+    [
+     "visibility",
+     "CONNECTIONS"
+    ]
+   ],
+   "context_any": [
+    "LinkedIn",
+    "linkedin"
+   ],
+   "scope": "section"
+  },
+  {
+   "id": "linkedin.visibility=PUBLIC",
+   "group": "post_details",
+   "source": "LinkedInPostDetails.visibility choices",
+   "tokens_any": [
+    [
+     "visibility",
+     "PUBLIC"
+    ]
+   ],
+   "context_any": [
+    "LinkedIn",
+    "linkedin"
+   ],
+   "scope": "section"
+  },
+  {
+   "id": "mastodon.in_reply_to_id",
+   "group": "post_details",
+   "source": "MastodonPostDetails (update-post-platform-details)",
+   "tokens_any": [
+    [
+     "in_reply_to_id"
+    ]
+   ],
+   "context_any": [
+    "Mastodon",
+    "mastodon"
+   ],
+   "scope": "section",
+   "example": {
+    "network": "mastodon",
+    "field": "in_reply_to_id",
+    "where": "fields"
+   }
+  },
+  {
+   "id": "mastodon.language",
+   "group": "post_details",
+   "source": "MastodonPostDetails (update-post-platform-details)",
+   "tokens_any": [
+    [
+     "language"
+    ]
+   ],
+   "context_any": [
+    "Mastodon",
+    "mastodon"
+   ],
+   "scope": "section",
+   "example": {
+    "network": "mastodon",
+    "field": "language",
+    "where": "fields"
+   }
+  },
+  {
+   "id": "mastodon.poll_expires_in",
+   "group": "post_details",
+   "source": "MastodonPostDetails (update-post-platform-details)",
+   "tokens_any": [
+    [
+     "poll_expires_in"
+    ]
+   ],
+   "context_any": [
+    "Mastodon",
+    "mastodon"
+   ],
+   "scope": "section",
+   "example": {
+    "network": "mastodon",
+    "field": "poll_expires_in",
+    "where": "fields"
+   }
+  },
+  {
+   "id": "mastodon.poll_hide_totals",
+   "group": "post_details",
+   "source": "MastodonPostDetails (update-post-platform-details)",
+   "tokens_any": [
+    [
+     "poll_hide_totals"
+    ]
+   ],
+   "context_any": [
+    "Mastodon",
+    "mastodon"
+   ],
+   "scope": "section",
+   "example": {
+    "network": "mastodon",
+    "field": "poll_hide_totals",
+    "where": "fields"
+   }
+  },
+  {
+   "id": "mastodon.poll_multiple",
+   "group": "post_details",
+   "source": "MastodonPostDetails (update-post-platform-details)",
+   "tokens_any": [
+    [
+     "poll_multiple"
+    ]
+   ],
+   "context_any": [
+    "Mastodon",
+    "mastodon"
+   ],
+   "scope": "section",
+   "example": {
+    "network": "mastodon",
+    "field": "poll_multiple",
+    "where": "fields"
+   }
+  },
+  {
+   "id": "mastodon.poll_options",
+   "group": "post_details",
+   "source": "MastodonPostDetails (update-post-platform-details)",
+   "tokens_any": [
+    [
+     "poll_options"
+    ]
+   ],
+   "context_any": [
+    "Mastodon",
+    "mastodon"
+   ],
+   "scope": "section",
+   "example": {
+    "network": "mastodon",
+    "field": "poll_options",
+    "where": "fields"
+   }
+  },
+  {
+   "id": "mastodon.sensitive",
+   "group": "post_details",
+   "source": "MastodonPostDetails (update-post-platform-details)",
+   "tokens_any": [
+    [
+     "sensitive"
+    ]
+   ],
+   "context_any": [
+    "Mastodon",
+    "mastodon"
+   ],
+   "scope": "section",
+   "example": {
+    "network": "mastodon",
+    "field": "sensitive",
+    "where": "fields"
+   }
+  },
+  {
+   "id": "mastodon.spoiler_text",
+   "group": "post_details",
+   "source": "MastodonPostDetails (update-post-platform-details)",
+   "tokens_any": [
+    [
+     "spoiler_text"
+    ]
+   ],
+   "context_any": [
+    "Mastodon",
+    "mastodon"
+   ],
+   "scope": "section",
+   "example": {
+    "network": "mastodon",
+    "field": "spoiler_text",
+    "where": "fields"
+   }
+  },
+  {
+   "id": "mastodon.visibility",
+   "group": "post_details",
+   "source": "MastodonPostDetails (update-post-platform-details)",
+   "tokens_any": [
+    [
+     "visibility"
+    ]
+   ],
+   "context_any": [
+    "Mastodon",
+    "mastodon"
+   ],
+   "scope": "section",
+   "example": {
+    "network": "mastodon",
+    "field": "visibility",
+    "where": "fields"
+   }
+  },
+  {
+   "id": "mastodon.visibility=direct",
+   "group": "post_details",
+   "source": "MastodonPostDetails.visibility choices",
+   "tokens_any": [
+    [
+     "visibility",
+     "direct"
+    ]
+   ],
+   "context_any": [
+    "Mastodon",
+    "mastodon"
+   ],
+   "scope": "section"
+  },
+  {
+   "id": "mastodon.visibility=private",
+   "group": "post_details",
+   "source": "MastodonPostDetails.visibility choices",
+   "tokens_any": [
+    [
+     "visibility",
+     "private"
+    ]
+   ],
+   "context_any": [
+    "Mastodon",
+    "mastodon"
+   ],
+   "scope": "section"
+  },
+  {
+   "id": "mastodon.visibility=public",
+   "group": "post_details",
+   "source": "MastodonPostDetails.visibility choices",
+   "tokens_any": [
+    [
+     "visibility",
+     "public"
+    ]
+   ],
+   "context_any": [
+    "Mastodon",
+    "mastodon"
+   ],
+   "scope": "section"
+  },
+  {
+   "id": "mastodon.visibility=unlisted",
+   "group": "post_details",
+   "source": "MastodonPostDetails.visibility choices",
+   "tokens_any": [
+    [
+     "visibility",
+     "unlisted"
+    ]
+   ],
+   "context_any": [
+    "Mastodon",
+    "mastodon"
+   ],
+   "scope": "section"
+  },
+  {
+   "id": "pinterest.alt_text",
+   "group": "post_details",
+   "source": "PinterestPostDetails (update-post-platform-details)",
+   "tokens_any": [
+    [
+     "alt_text"
+    ]
+   ],
+   "context_any": [
+    "Pinterest",
+    "pinterest"
+   ],
+   "scope": "section",
+   "example": {
+    "network": "pinterest",
+    "field": "alt_text",
+    "where": "fields"
+   }
+  },
+  {
+   "id": "pinterest.board",
+   "group": "post_details",
+   "source": "PinterestPostDetails (update-post-platform-details)",
+   "tokens_any": [
+    [
+     "board"
+    ],
+    [
+     "board_id"
+    ]
+   ],
+   "context_any": [
+    "Pinterest",
+    "pinterest"
+   ],
+   "scope": "section",
+   "example": {
+    "network": "pinterest",
+    "field": "board",
+    "where": "fields"
+   }
+  },
+  {
+   "id": "pinterest.board_id",
+   "group": "post_details",
+   "source": "PinterestPostDetails (update-post-platform-details)",
+   "tokens_any": [
+    [
+     "board_id"
+    ],
+    [
+     "board"
+    ]
+   ],
+   "context_any": [
+    "Pinterest",
+    "pinterest"
+   ],
+   "scope": "section",
+   "example": {
+    "network": "pinterest",
+    "field": "board_id",
+    "where": "fields"
+   }
+  },
+  {
+   "id": "pinterest.cover_image_url",
+   "group": "post_details",
+   "source": "PinterestPostDetails (update-post-platform-details)",
+   "tokens_any": [
+    [
+     "cover_image_url"
+    ]
+   ],
+   "context_any": [
+    "Pinterest",
+    "pinterest"
+   ],
+   "scope": "section",
+   "example": {
+    "network": "pinterest",
+    "field": "cover_image_url",
+    "where": "fields"
+   }
+  },
+  {
+   "id": "pinterest.description",
+   "group": "post_details",
+   "source": "PinterestPostDetails (update-post-platform-details)",
+   "tokens_any": [
+    [
+     "description"
+    ]
+   ],
+   "context_any": [
+    "Pinterest",
+    "pinterest"
+   ],
+   "scope": "section",
+   "example": {
+    "network": "pinterest",
+    "field": "description",
+    "where": "fields"
+   }
+  },
+  {
+   "id": "pinterest.link",
+   "group": "post_details",
+   "source": "PinterestPostDetails (update-post-platform-details)",
+   "tokens_any": [
+    [
+     "link"
+    ]
+   ],
+   "context_any": [
+    "Pinterest",
+    "pinterest"
+   ],
+   "scope": "section",
+   "example": {
+    "network": "pinterest",
+    "field": "link",
+    "where": "fields"
+   }
+  },
+  {
+   "id": "pinterest.media_type",
+   "group": "post_details",
+   "source": "PinterestPostDetails (update-post-platform-details)",
+   "tokens_any": [
+    [
+     "media_type"
+    ]
+   ],
+   "context_any": [
+    "Pinterest",
+    "pinterest"
+   ],
+   "scope": "section",
+   "example": {
+    "network": "pinterest",
+    "field": "media_type",
+    "where": "fields"
+   }
+  },
+  {
+   "id": "pinterest.media_type=idea",
+   "group": "post_details",
+   "source": "PinterestPostDetails.media_type choices",
+   "tokens_any": [
+    [
+     "media_type",
+     "idea"
+    ]
+   ],
+   "context_any": [
+    "Pinterest",
+    "pinterest"
+   ],
+   "scope": "section"
+  },
+  {
+   "id": "pinterest.media_type=image",
+   "group": "post_details",
+   "source": "PinterestPostDetails.media_type choices",
+   "tokens_any": [
+    [
+     "media_type",
+     "image"
+    ]
+   ],
+   "context_any": [
+    "Pinterest",
+    "pinterest"
+   ],
+   "scope": "section"
+  },
+  {
+   "id": "pinterest.media_type=video",
+   "group": "post_details",
+   "source": "PinterestPostDetails.media_type choices",
+   "tokens_any": [
+    [
+     "media_type",
+     "video"
+    ]
+   ],
+   "context_any": [
+    "Pinterest",
+    "pinterest"
+   ],
+   "scope": "section"
+  },
+  {
+   "id": "pinterest.media_url",
+   "group": "post_details",
+   "source": "PinterestPostDetails (update-post-platform-details)",
+   "tokens_any": [
+    [
+     "media_url"
+    ]
+   ],
+   "context_any": [
+    "Pinterest",
+    "pinterest"
+   ],
+   "scope": "section",
+   "example": {
+    "network": "pinterest",
+    "field": "media_url",
+    "where": "fields"
+   }
+  },
+  {
+   "id": "pinterest.post",
+   "group": "post_details",
+   "source": "PinterestPostDetails (update-post-platform-details)",
+   "tokens_any": [
+    [
+     "post"
+    ]
+   ],
+   "context_any": [
+    "Pinterest",
+    "pinterest"
+   ],
+   "scope": "section",
+   "example": {
+    "network": "pinterest",
+    "field": "post",
+    "where": "fields"
+   }
+  },
+  {
+   "id": "pinterest.scheduled_publish_time",
+   "group": "post_details",
+   "source": "PinterestPostDetails (update-post-platform-details)",
+   "tokens_any": [
+    [
+     "scheduled_publish_time"
+    ]
+   ],
+   "context_any": [
+    "Pinterest",
+    "pinterest"
+   ],
+   "scope": "section",
+   "example": {
+    "network": "pinterest",
+    "field": "scheduled_publish_time",
+    "where": "fields"
+   }
+  },
+  {
+   "id": "pinterest.title",
+   "group": "post_details",
+   "source": "PinterestPostDetails (update-post-platform-details)",
+   "tokens_any": [
+    [
+     "title"
+    ]
+   ],
+   "context_any": [
+    "Pinterest",
+    "pinterest"
+   ],
+   "scope": "section",
+   "example": {
+    "network": "pinterest",
+    "field": "title",
+    "where": "fields"
+   }
+  },
+  {
+   "id": "reddit.flair_id",
+   "group": "post_details",
+   "source": "RedditPostDetails (update-post-platform-details)",
+   "tokens_any": [
+    [
+     "flair_id"
+    ]
+   ],
+   "context_any": [
+    "Reddit",
+    "reddit"
+   ],
+   "scope": "section",
+   "example": {
+    "network": "reddit",
+    "field": "flair_id",
+    "where": "fields"
+   }
+  },
+  {
+   "id": "reddit.flair_text",
+   "group": "post_details",
+   "source": "RedditPostDetails (update-post-platform-details)",
+   "tokens_any": [
+    [
+     "flair_text"
+    ]
+   ],
+   "context_any": [
+    "Reddit",
+    "reddit"
+   ],
+   "scope": "section",
+   "example": {
+    "network": "reddit",
+    "field": "flair_text",
+    "where": "fields"
+   }
+  },
+  {
+   "id": "reddit.nsfw",
+   "group": "post_details",
+   "source": "RedditPostDetails (update-post-platform-details)",
+   "tokens_any": [
+    [
+     "nsfw"
+    ]
+   ],
+   "context_any": [
+    "Reddit",
+    "reddit"
+   ],
+   "scope": "section",
+   "example": {
+    "network": "reddit",
+    "field": "nsfw",
+    "where": "fields"
+   }
+  },
+  {
+   "id": "reddit.resubmit",
+   "group": "post_details",
+   "source": "RedditPostDetails (update-post-platform-details)",
+   "tokens_any": [
+    [
+     "resubmit"
+    ]
+   ],
+   "context_any": [
+    "Reddit",
+    "reddit"
+   ],
+   "scope": "section",
+   "example": {
+    "network": "reddit",
+    "field": "resubmit",
+    "where": "fields"
+   }
+  },
+  {
+   "id": "reddit.scheduling_metadata",
+   "group": "post_details",
+   "source": "RedditPostDetails (update-post-platform-details)",
+   "tokens_any": [
+    [
+     "scheduling_metadata"
+    ]
+   ],
+   "context_any": [
+    "Reddit",
+    "reddit"
+   ],
+   "scope": "section",
+   "example": {
+    "network": "reddit",
+    "field": "scheduling_metadata",
+    "where": "fields"
+   }
+  },
+  {
+   "id": "reddit.selected_subreddit",
+   "group": "post_details",
+   "source": "RedditPostDetails (update-post-platform-details)",
+   "tokens_any": [
+    [
+     "selected_subreddit"
+    ],
+    [
+     "selected_subreddit_id"
+    ]
+   ],
+   "context_any": [
+    "Reddit",
+    "reddit"
+   ],
+   "scope": "section",
+   "example": {
+    "network": "reddit",
+    "field": "selected_subreddit",
+    "where": "fields"
+   }
+  },
+  {
+   "id": "reddit.selected_subreddit_id",
+   "group": "post_details",
+   "source": "RedditPostDetails (update-post-platform-details)",
+   "tokens_any": [
+    [
+     "selected_subreddit_id"
+    ],
+    [
+     "selected_subreddit"
+    ]
+   ],
+   "context_any": [
+    "Reddit",
+    "reddit"
+   ],
+   "scope": "section",
+   "example": {
+    "network": "reddit",
+    "field": "selected_subreddit_id",
+    "where": "fields"
+   }
+  },
+  {
+   "id": "reddit.sendreplies",
+   "group": "post_details",
+   "source": "RedditPostDetails (update-post-platform-details)",
+   "tokens_any": [
+    [
+     "sendreplies"
+    ]
+   ],
+   "context_any": [
+    "Reddit",
+    "reddit"
+   ],
+   "scope": "section",
+   "example": {
+    "network": "reddit",
+    "field": "sendreplies",
+    "where": "fields"
+   }
+  },
+  {
+   "id": "reddit.spoiler",
+   "group": "post_details",
+   "source": "RedditPostDetails (update-post-platform-details)",
+   "tokens_any": [
+    [
+     "spoiler"
+    ]
+   ],
+   "context_any": [
+    "Reddit",
+    "reddit"
+   ],
+   "scope": "section",
+   "example": {
+    "network": "reddit",
+    "field": "spoiler",
+    "where": "fields"
+   }
+  },
+  {
+   "id": "reddit.title",
+   "group": "post_details",
+   "source": "RedditPostDetails (update-post-platform-details)",
+   "tokens_any": [
+    [
+     "title"
+    ]
+   ],
+   "context_any": [
+    "Reddit",
+    "reddit"
+   ],
+   "scope": "section",
+   "example": {
+    "network": "reddit",
+    "field": "title",
+    "where": "fields"
+   }
+  },
+  {
+   "id": "threads.auto_publish",
+   "group": "post_details",
+   "source": "ThreadsPostDetails (update-post-platform-details)",
+   "tokens_any": [
+    [
+     "auto_publish"
+    ]
+   ],
+   "context_any": [
+    "Threads",
+    "threads"
+   ],
+   "scope": "section",
+   "example": {
+    "network": "threads",
+    "field": "auto_publish",
+    "where": "fields"
+   }
+  },
+  {
+   "id": "threads.is_ghost_post",
+   "group": "post_details",
+   "source": "ThreadsPostDetails (update-post-platform-details)",
+   "tokens_any": [
+    [
+     "is_ghost_post"
+    ]
+   ],
+   "context_any": [
+    "Threads",
+    "threads"
+   ],
+   "scope": "section",
+   "example": {
+    "network": "threads",
+    "field": "is_ghost_post",
+    "where": "fields"
+   }
+  },
+  {
+   "id": "threads.is_spoiler_media",
+   "group": "post_details",
+   "source": "ThreadsPostDetails (update-post-platform-details)",
+   "tokens_any": [
+    [
+     "is_spoiler_media"
+    ]
+   ],
+   "context_any": [
+    "Threads",
+    "threads"
+   ],
+   "scope": "section",
+   "example": {
+    "network": "threads",
+    "field": "is_spoiler_media",
+    "where": "fields"
+   }
+  },
+  {
+   "id": "threads.location_id",
+   "group": "post_details",
+   "source": "ThreadsPostDetails (update-post-platform-details)",
+   "tokens_any": [
+    [
+     "location_id"
+    ]
+   ],
+   "context_any": [
+    "Threads",
+    "threads"
+   ],
+   "scope": "section",
+   "example": {
+    "network": "threads",
+    "field": "location_id",
+    "where": "fields"
+   }
+  },
+  {
+   "id": "threads.reply_control",
+   "group": "post_details",
+   "source": "ThreadsPostDetails (update-post-platform-details)",
+   "tokens_any": [
+    [
+     "reply_control"
+    ]
+   ],
+   "context_any": [
+    "Threads",
+    "threads"
+   ],
+   "scope": "section",
+   "example": {
+    "network": "threads",
+    "field": "reply_control",
+    "where": "fields"
+   }
+  },
+  {
+   "id": "threads.reply_control=everyone",
+   "group": "post_details",
+   "source": "ThreadsPostDetails.reply_control choices",
+   "tokens_any": [
+    [
+     "reply_control",
+     "everyone"
+    ]
+   ],
+   "context_any": [
+    "Threads",
+    "threads"
+   ],
+   "scope": "section"
+  },
+  {
+   "id": "threads.reply_control=followers",
+   "group": "post_details",
+   "source": "ThreadsPostDetails.reply_control choices",
+   "tokens_any": [
+    [
+     "reply_control",
+     "followers"
+    ]
+   ],
+   "context_any": [
+    "Threads",
+    "threads"
+   ],
+   "scope": "section"
+  },
+  {
+   "id": "threads.reply_control=mentioned",
+   "group": "post_details",
+   "source": "ThreadsPostDetails.reply_control choices",
+   "tokens_any": [
+    [
+     "reply_control",
+     "mentioned"
+    ]
+   ],
+   "context_any": [
+    "Threads",
+    "threads"
+   ],
+   "scope": "section"
+  },
+  {
+   "id": "threads.topic_tag",
+   "group": "post_details",
+   "source": "ThreadsPostDetails (update-post-platform-details)",
+   "tokens_any": [
+    [
+     "topic_tag"
+    ]
+   ],
+   "context_any": [
+    "Threads",
+    "threads"
+   ],
+   "scope": "section",
+   "example": {
+    "network": "threads",
+    "field": "topic_tag",
+    "where": "fields"
+   }
+  },
+  {
+   "id": "threads.use_topic_tag",
+   "group": "post_details",
+   "source": "ThreadsPostDetails (update-post-platform-details)",
+   "tokens_any": [
+    [
+     "use_topic_tag"
+    ]
+   ],
+   "context_any": [
+    "Threads",
+    "threads"
+   ],
+   "scope": "section",
+   "example": {
+    "network": "threads",
+    "field": "use_topic_tag",
+    "where": "fields"
+   }
+  },
+  {
+   "id": "tiktok.disable_comments",
+   "group": "post_details",
+   "source": "TikTokPostDetails (update-post-platform-details)",
+   "tokens_any": [
+    [
+     "disable_comments"
+    ]
+   ],
+   "context_any": [
+    "TikTok",
+    "tiktok"
+   ],
+   "scope": "section",
+   "example": {
+    "network": "tiktok",
+    "field": "disable_comments",
+    "where": "fields"
+   }
+  },
+  {
+   "id": "tiktok.disable_duet",
+   "group": "post_details",
+   "source": "TikTokPostDetails (update-post-platform-details)",
+   "tokens_any": [
+    [
+     "disable_duet"
+    ]
+   ],
+   "context_any": [
+    "TikTok",
+    "tiktok"
+   ],
+   "scope": "section",
+   "example": {
+    "network": "tiktok",
+    "field": "disable_duet",
+    "where": "fields"
+   }
+  },
+  {
+   "id": "tiktok.disable_stitch",
+   "group": "post_details",
+   "source": "TikTokPostDetails (update-post-platform-details)",
+   "tokens_any": [
+    [
+     "disable_stitch"
+    ]
+   ],
+   "context_any": [
+    "TikTok",
+    "tiktok"
+   ],
+   "scope": "section",
+   "example": {
+    "network": "tiktok",
+    "field": "disable_stitch",
+    "where": "fields"
+   }
+  },
+  {
+   "id": "tiktok.post",
+   "group": "post_details",
+   "source": "TikTokPostDetails (update-post-platform-details)",
+   "tokens_any": [
+    [
+     "post"
+    ]
+   ],
+   "context_any": [
+    "TikTok",
+    "tiktok"
+   ],
+   "scope": "section",
+   "example": {
+    "network": "tiktok",
+    "field": "post",
+    "where": "fields"
+   }
+  },
+  {
+   "id": "tiktok.privacy_level",
+   "group": "post_details",
+   "source": "TikTokPostDetails (update-post-platform-details)",
+   "tokens_any": [
+    [
+     "privacy_level"
+    ]
+   ],
+   "context_any": [
+    "TikTok",
+    "tiktok"
+   ],
+   "scope": "section",
+   "example": {
+    "network": "tiktok",
+    "field": "privacy_level",
+    "where": "fields"
+   }
+  },
+  {
+   "id": "tiktok.privacy_level=FOLLOWER_OF_CREATOR",
+   "group": "post_details",
+   "source": "TikTokPostDetails.privacy_level choices",
+   "tokens_any": [
+    [
+     "privacy_level",
+     "FOLLOWER_OF_CREATOR"
+    ]
+   ],
+   "context_any": [
+    "TikTok",
+    "tiktok"
+   ],
+   "scope": "section"
+  },
+  {
+   "id": "tiktok.privacy_level=MUTUAL_FOLLOW_FRIEND",
+   "group": "post_details",
+   "source": "TikTokPostDetails.privacy_level choices",
+   "tokens_any": [
+    [
+     "privacy_level",
+     "MUTUAL_FOLLOW_FRIEND"
+    ]
+   ],
+   "context_any": [
+    "TikTok",
+    "tiktok"
+   ],
+   "scope": "section"
+  },
+  {
+   "id": "tiktok.privacy_level=PUBLIC_TO_EVERYONE",
+   "group": "post_details",
+   "source": "TikTokPostDetails.privacy_level choices",
+   "tokens_any": [
+    [
+     "privacy_level",
+     "PUBLIC_TO_EVERYONE"
+    ]
+   ],
+   "context_any": [
+    "TikTok",
+    "tiktok"
+   ],
+   "scope": "section"
+  },
+  {
+   "id": "tiktok.privacy_level=SELF_ONLY",
+   "group": "post_details",
+   "source": "TikTokPostDetails.privacy_level choices",
+   "tokens_any": [
+    [
+     "privacy_level",
+     "SELF_ONLY"
+    ]
+   ],
+   "context_any": [
+    "TikTok",
+    "tiktok"
+   ],
+   "scope": "section"
+  },
+  {
+   "id": "wordpress.categories",
+   "group": "post_details",
+   "source": "WordPressPostDetails (update-post-platform-details)",
+   "tokens_any": [
+    [
+     "categories"
+    ]
+   ],
+   "context_any": [
+    "WordPress",
+    "wordpress"
+   ],
+   "scope": "section",
+   "example": {
+    "network": "wordpress",
+    "field": "categories",
+    "where": "fields"
+   }
+  },
+  {
+   "id": "wordpress.comment_status",
+   "group": "post_details",
+   "source": "WordPressPostDetails (update-post-platform-details)",
+   "tokens_any": [
+    [
+     "comment_status"
+    ]
+   ],
+   "context_any": [
+    "WordPress",
+    "wordpress"
+   ],
+   "scope": "section",
+   "example": {
+    "network": "wordpress",
+    "field": "comment_status",
+    "where": "fields"
+   }
+  },
+  {
+   "id": "wordpress.comment_status=closed",
+   "group": "post_details",
+   "source": "WordPressPostDetails.comment_status choices",
+   "tokens_any": [
+    [
+     "comment_status",
+     "closed"
+    ]
+   ],
+   "context_any": [
+    "WordPress",
+    "wordpress"
+   ],
+   "scope": "section"
+  },
+  {
+   "id": "wordpress.comment_status=open",
+   "group": "post_details",
+   "source": "WordPressPostDetails.comment_status choices",
+   "tokens_any": [
+    [
+     "comment_status",
+     "open"
+    ]
+   ],
+   "context_any": [
+    "WordPress",
+    "wordpress"
+   ],
+   "scope": "section"
+  },
+  {
+   "id": "wordpress.custom_fields",
+   "group": "post_details",
+   "source": "WordPressPostDetails (update-post-platform-details)",
+   "tokens_any": [
+    [
+     "custom_fields"
+    ]
+   ],
+   "context_any": [
+    "WordPress",
+    "wordpress"
+   ],
+   "scope": "section",
+   "example": {
+    "network": "wordpress",
+    "field": "custom_fields",
+    "where": "fields"
+   }
+  },
+  {
+   "id": "wordpress.excerpt",
+   "group": "post_details",
+   "source": "WordPressPostDetails (update-post-platform-details)",
+   "tokens_any": [
+    [
+     "excerpt"
+    ]
+   ],
+   "context_any": [
+    "WordPress",
+    "wordpress"
+   ],
+   "scope": "section",
+   "example": {
+    "network": "wordpress",
+    "field": "excerpt",
+    "where": "fields"
+   }
+  },
+  {
+   "id": "wordpress.featured_media_id",
+   "group": "post_details",
+   "source": "WordPressPostDetails (update-post-platform-details)",
+   "tokens_any": [
+    [
+     "featured_media_id"
+    ]
+   ],
+   "context_any": [
+    "WordPress",
+    "wordpress"
+   ],
+   "scope": "section",
+   "example": {
+    "network": "wordpress",
+    "field": "featured_media_id",
+    "where": "fields"
+   }
+  },
+  {
+   "id": "wordpress.format",
+   "group": "post_details",
+   "source": "WordPressPostDetails (update-post-platform-details)",
+   "tokens_any": [
+    [
+     "format"
+    ]
+   ],
+   "context_any": [
+    "WordPress",
+    "wordpress"
+   ],
+   "scope": "section",
+   "example": {
+    "network": "wordpress",
+    "field": "format",
+    "where": "fields"
+   }
+  },
+  {
+   "id": "wordpress.format=aside",
+   "group": "post_details",
+   "source": "WordPressPostDetails.format choices",
+   "tokens_any": [
+    [
+     "format",
+     "aside"
+    ]
+   ],
+   "context_any": [
+    "WordPress",
+    "wordpress"
+   ],
+   "scope": "section"
+  },
+  {
+   "id": "wordpress.format=audio",
+   "group": "post_details",
+   "source": "WordPressPostDetails.format choices",
+   "tokens_any": [
+    [
+     "format",
+     "audio"
+    ]
+   ],
+   "context_any": [
+    "WordPress",
+    "wordpress"
+   ],
+   "scope": "section"
+  },
+  {
+   "id": "wordpress.format=chat",
+   "group": "post_details",
+   "source": "WordPressPostDetails.format choices",
+   "tokens_any": [
+    [
+     "format",
+     "chat"
+    ]
+   ],
+   "context_any": [
+    "WordPress",
+    "wordpress"
+   ],
+   "scope": "section"
+  },
+  {
+   "id": "wordpress.format=gallery",
+   "group": "post_details",
+   "source": "WordPressPostDetails.format choices",
+   "tokens_any": [
+    [
+     "format",
+     "gallery"
+    ]
+   ],
+   "context_any": [
+    "WordPress",
+    "wordpress"
+   ],
+   "scope": "section"
+  },
+  {
+   "id": "wordpress.format=image",
+   "group": "post_details",
+   "source": "WordPressPostDetails.format choices",
+   "tokens_any": [
+    [
+     "format",
+     "image"
+    ]
+   ],
+   "context_any": [
+    "WordPress",
+    "wordpress"
+   ],
+   "scope": "section"
+  },
+  {
+   "id": "wordpress.format=link",
+   "group": "post_details",
+   "source": "WordPressPostDetails.format choices",
+   "tokens_any": [
+    [
+     "format",
+     "link"
+    ]
+   ],
+   "context_any": [
+    "WordPress",
+    "wordpress"
+   ],
+   "scope": "section"
+  },
+  {
+   "id": "wordpress.format=quote",
+   "group": "post_details",
+   "source": "WordPressPostDetails.format choices",
+   "tokens_any": [
+    [
+     "format",
+     "quote"
+    ]
+   ],
+   "context_any": [
+    "WordPress",
+    "wordpress"
+   ],
+   "scope": "section"
+  },
+  {
+   "id": "wordpress.format=standard",
+   "group": "post_details",
+   "source": "WordPressPostDetails.format choices",
+   "tokens_any": [
+    [
+     "format",
+     "standard"
+    ]
+   ],
+   "context_any": [
+    "WordPress",
+    "wordpress"
+   ],
+   "scope": "section"
+  },
+  {
+   "id": "wordpress.format=status",
+   "group": "post_details",
+   "source": "WordPressPostDetails.format choices",
+   "tokens_any": [
+    [
+     "format",
+     "status"
+    ]
+   ],
+   "context_any": [
+    "WordPress",
+    "wordpress"
+   ],
+   "scope": "section"
+  },
+  {
+   "id": "wordpress.format=video",
+   "group": "post_details",
+   "source": "WordPressPostDetails.format choices",
+   "tokens_any": [
+    [
+     "format",
+     "video"
+    ]
+   ],
+   "context_any": [
+    "WordPress",
+    "wordpress"
+   ],
+   "scope": "section"
+  },
+  {
+   "id": "wordpress.menu_order",
+   "group": "post_details",
+   "source": "WordPressPostDetails (update-post-platform-details)",
+   "tokens_any": [
+    [
+     "menu_order"
+    ]
+   ],
+   "context_any": [
+    "WordPress",
+    "wordpress"
+   ],
+   "scope": "section",
+   "example": {
+    "network": "wordpress",
+    "field": "menu_order",
+    "where": "fields"
+   }
+  },
+  {
+   "id": "wordpress.meta_description",
+   "group": "post_details",
+   "source": "WordPressPostDetails (update-post-platform-details)",
+   "tokens_any": [
+    [
+     "meta_description"
+    ]
+   ],
+   "context_any": [
+    "WordPress",
+    "wordpress"
+   ],
+   "scope": "section",
+   "example": {
+    "network": "wordpress",
+    "field": "meta_description",
+    "where": "fields"
+   }
+  },
+  {
+   "id": "wordpress.meta_title",
+   "group": "post_details",
+   "source": "WordPressPostDetails (update-post-platform-details)",
+   "tokens_any": [
+    [
+     "meta_title"
+    ]
+   ],
+   "context_any": [
+    "WordPress",
+    "wordpress"
+   ],
+   "scope": "section",
+   "example": {
+    "network": "wordpress",
+    "field": "meta_title",
+    "where": "fields"
+   }
+  },
+  {
+   "id": "wordpress.parent_id",
+   "group": "post_details",
+   "source": "WordPressPostDetails (update-post-platform-details)",
+   "tokens_any": [
+    [
+     "parent_id"
+    ]
+   ],
+   "context_any": [
+    "WordPress",
+    "wordpress"
+   ],
+   "scope": "section",
+   "example": {
+    "network": "wordpress",
+    "field": "parent_id",
+    "where": "fields"
+   }
+  },
+  {
+   "id": "wordpress.password",
+   "group": "post_details",
+   "source": "WordPressPostDetails (update-post-platform-details)",
+   "tokens_any": [
+    [
+     "password"
+    ]
+   ],
+   "context_any": [
+    "WordPress",
+    "wordpress"
+   ],
+   "scope": "section",
+   "example": {
+    "network": "wordpress",
+    "field": "password",
+    "where": "fields"
+   }
+  },
+  {
+   "id": "wordpress.ping_status",
+   "group": "post_details",
+   "source": "WordPressPostDetails (update-post-platform-details)",
+   "tokens_any": [
+    [
+     "ping_status"
+    ]
+   ],
+   "context_any": [
+    "WordPress",
+    "wordpress"
+   ],
+   "scope": "section",
+   "example": {
+    "network": "wordpress",
+    "field": "ping_status",
+    "where": "fields"
+   }
+  },
+  {
+   "id": "wordpress.ping_status=closed",
+   "group": "post_details",
+   "source": "WordPressPostDetails.ping_status choices",
+   "tokens_any": [
+    [
+     "ping_status",
+     "closed"
+    ]
+   ],
+   "context_any": [
+    "WordPress",
+    "wordpress"
+   ],
+   "scope": "section"
+  },
+  {
+   "id": "wordpress.ping_status=open",
+   "group": "post_details",
+   "source": "WordPressPostDetails.ping_status choices",
+   "tokens_any": [
+    [
+     "ping_status",
+     "open"
+    ]
+   ],
+   "context_any": [
+    "WordPress",
+    "wordpress"
+   ],
+   "scope": "section"
+  },
+  {
+   "id": "wordpress.post",
+   "group": "post_details",
+   "source": "WordPressPostDetails (update-post-platform-details)",
+   "tokens_any": [
+    [
+     "post"
+    ]
+   ],
+   "context_any": [
+    "WordPress",
+    "wordpress"
+   ],
+   "scope": "section",
+   "example": {
+    "network": "wordpress",
+    "field": "post",
+    "where": "fields"
+   }
+  },
+  {
+   "id": "wordpress.post_type",
+   "group": "post_details",
+   "source": "WordPressPostDetails (update-post-platform-details)",
+   "tokens_any": [
+    [
+     "post_type"
+    ]
+   ],
+   "context_any": [
+    "WordPress",
+    "wordpress"
+   ],
+   "scope": "section",
+   "example": {
+    "network": "wordpress",
+    "field": "post_type",
+    "where": "fields"
+   }
+  },
+  {
+   "id": "wordpress.post_type=page",
+   "group": "post_details",
+   "source": "WordPressPostDetails.post_type choices",
+   "tokens_any": [
+    [
+     "post_type",
+     "page"
+    ]
+   ],
+   "context_any": [
+    "WordPress",
+    "wordpress"
+   ],
+   "scope": "section"
+  },
+  {
+   "id": "wordpress.post_type=post",
+   "group": "post_details",
+   "source": "WordPressPostDetails.post_type choices",
+   "tokens_any": [
+    [
+     "post_type",
+     "post"
+    ]
+   ],
+   "context_any": [
+    "WordPress",
+    "wordpress"
+   ],
+   "scope": "section"
+  },
+  {
+   "id": "wordpress.seo_metadata",
+   "group": "post_details",
+   "source": "WordPressPostDetails (update-post-platform-details)",
+   "tokens_any": [
+    [
+     "seo_metadata"
+    ]
+   ],
+   "context_any": [
+    "WordPress",
+    "wordpress"
+   ],
+   "scope": "section",
+   "example": {
+    "network": "wordpress",
+    "field": "seo_metadata",
+    "where": "fields"
+   }
+  },
+  {
+   "id": "wordpress.status",
+   "group": "post_details",
+   "source": "WordPressPostDetails (update-post-platform-details)",
+   "tokens_any": [
+    [
+     "status"
+    ]
+   ],
+   "context_any": [
+    "WordPress",
+    "wordpress"
+   ],
+   "scope": "section",
+   "example": {
+    "network": "wordpress",
+    "field": "status",
+    "where": "fields"
+   }
+  },
+  {
+   "id": "wordpress.status=draft",
+   "group": "post_details",
+   "source": "WordPressPostDetails.status choices",
+   "tokens_any": [
+    [
+     "status",
+     "draft"
+    ]
+   ],
+   "context_any": [
+    "WordPress",
+    "wordpress"
+   ],
+   "scope": "section"
+  },
+  {
+   "id": "wordpress.status=future",
+   "group": "post_details",
+   "source": "WordPressPostDetails.status choices",
+   "tokens_any": [
+    [
+     "status",
+     "future"
+    ]
+   ],
+   "context_any": [
+    "WordPress",
+    "wordpress"
+   ],
+   "scope": "section"
+  },
+  {
+   "id": "wordpress.status=pending",
+   "group": "post_details",
+   "source": "WordPressPostDetails.status choices",
+   "tokens_any": [
+    [
+     "status",
+     "pending"
+    ]
+   ],
+   "context_any": [
+    "WordPress",
+    "wordpress"
+   ],
+   "scope": "section"
+  },
+  {
+   "id": "wordpress.status=private",
+   "group": "post_details",
+   "source": "WordPressPostDetails.status choices",
+   "tokens_any": [
+    [
+     "status",
+     "private"
+    ]
+   ],
+   "context_any": [
+    "WordPress",
+    "wordpress"
+   ],
+   "scope": "section"
+  },
+  {
+   "id": "wordpress.status=publish",
+   "group": "post_details",
+   "source": "WordPressPostDetails.status choices",
+   "tokens_any": [
+    [
+     "status",
+     "publish"
+    ]
+   ],
+   "context_any": [
+    "WordPress",
+    "wordpress"
+   ],
+   "scope": "section"
+  },
+  {
+   "id": "wordpress.status=trash",
+   "group": "post_details",
+   "source": "WordPressPostDetails.status choices",
+   "tokens_any": [
+    [
+     "status",
+     "trash"
+    ]
+   ],
+   "context_any": [
+    "WordPress",
+    "wordpress"
+   ],
+   "scope": "section"
+  },
+  {
+   "id": "wordpress.sticky",
+   "group": "post_details",
+   "source": "WordPressPostDetails (update-post-platform-details)",
+   "tokens_any": [
+    [
+     "sticky"
+    ]
+   ],
+   "context_any": [
+    "WordPress",
+    "wordpress"
+   ],
+   "scope": "section",
+   "example": {
+    "network": "wordpress",
+    "field": "sticky",
+    "where": "fields"
+   }
+  },
+  {
+   "id": "wordpress.tags",
+   "group": "post_details",
+   "source": "WordPressPostDetails (update-post-platform-details)",
+   "tokens_any": [
+    [
+     "tags"
+    ]
+   ],
+   "context_any": [
+    "WordPress",
+    "wordpress"
+   ],
+   "scope": "section",
+   "example": {
+    "network": "wordpress",
+    "field": "tags",
+    "where": "fields"
+   }
+  },
+  {
+   "id": "wordpress.template",
+   "group": "post_details",
+   "source": "WordPressPostDetails (update-post-platform-details)",
+   "tokens_any": [
+    [
+     "template"
+    ]
+   ],
+   "context_any": [
+    "WordPress",
+    "wordpress"
+   ],
+   "scope": "section",
+   "example": {
+    "network": "wordpress",
+    "field": "template",
+    "where": "fields"
+   }
+  },
+  {
+   "id": "wordpress.title",
+   "group": "post_details",
+   "source": "WordPressPostDetails (update-post-platform-details)",
+   "tokens_any": [
+    [
+     "title"
+    ]
+   ],
+   "context_any": [
+    "WordPress",
+    "wordpress"
+   ],
+   "scope": "section",
+   "example": {
+    "network": "wordpress",
+    "field": "title",
+    "where": "fields"
+   }
+  },
+  {
+   "id": "x.auto_publish",
+   "group": "post_details",
+   "source": "XPostDetails (update-post-platform-details)",
+   "tokens_any": [
+    [
+     "auto_publish"
+    ]
+   ],
+   "context_any": [
+    "X",
+    "x"
+   ],
+   "scope": "section",
+   "example": {
+    "network": "x",
+    "field": "auto_publish",
+    "where": "fields"
+   }
+  },
+  {
+   "id": "x.for_super_followers_only",
+   "group": "post_details",
+   "source": "XPostDetails (update-post-platform-details)",
+   "tokens_any": [
+    [
+     "for_super_followers_only"
+    ]
+   ],
+   "context_any": [
+    "X",
+    "x"
+   ],
+   "scope": "section",
+   "example": {
+    "network": "x",
+    "field": "for_super_followers_only",
+    "where": "fields"
+   }
+  },
+  {
+   "id": "x.geo_place_id",
+   "group": "post_details",
+   "source": "XPostDetails (update-post-platform-details)",
+   "tokens_any": [
+    [
+     "geo_place_id"
+    ]
+   ],
+   "context_any": [
+    "X",
+    "x"
+   ],
+   "scope": "section",
+   "example": {
+    "network": "x",
+    "field": "geo_place_id",
+    "where": "fields"
+   }
+  },
+  {
+   "id": "x.in_reply_to_tweet_id",
+   "group": "post_details",
+   "source": "XPostDetails (update-post-platform-details)",
+   "tokens_any": [
+    [
+     "in_reply_to_tweet_id"
+    ]
+   ],
+   "context_any": [
+    "X",
+    "x"
+   ],
+   "scope": "section",
+   "example": {
+    "network": "x",
+    "field": "in_reply_to_tweet_id",
+    "where": "fields"
+   }
+  },
+  {
+   "id": "x.is_thread",
+   "group": "post_details",
+   "source": "XPostDetails (update-post-platform-details)",
+   "tokens_any": [
+    [
+     "is_thread"
+    ]
+   ],
+   "context_any": [
+    "X",
+    "x"
+   ],
+   "scope": "section",
+   "example": {
+    "network": "x",
+    "field": "is_thread",
+    "where": "fields"
+   }
+  },
+  {
+   "id": "x.media_tagged_user_ids",
+   "group": "post_details",
+   "source": "XPostDetails (update-post-platform-details)",
+   "tokens_any": [
+    [
+     "media_tagged_user_ids"
+    ]
+   ],
+   "context_any": [
+    "X",
+    "x"
+   ],
+   "scope": "section",
+   "example": {
+    "network": "x",
+    "field": "media_tagged_user_ids",
+    "where": "fields"
+   }
+  },
+  {
+   "id": "x.poll_duration_minutes",
+   "group": "post_details",
+   "source": "XPostDetails (update-post-platform-details)",
+   "tokens_any": [
+    [
+     "poll_duration_minutes"
+    ]
+   ],
+   "context_any": [
+    "X",
+    "x"
+   ],
+   "scope": "section",
+   "example": {
+    "network": "x",
+    "field": "poll_duration_minutes",
+    "where": "fields"
+   }
+  },
+  {
+   "id": "x.poll_options",
+   "group": "post_details",
+   "source": "XPostDetails (update-post-platform-details)",
+   "tokens_any": [
+    [
+     "poll_options"
+    ]
+   ],
+   "context_any": [
+    "X",
+    "x"
+   ],
+   "scope": "section",
+   "example": {
+    "network": "x",
+    "field": "poll_options",
+    "where": "fields"
+   }
+  },
+  {
+   "id": "x.post_type",
+   "group": "post_details",
+   "source": "XPostDetails (update-post-platform-details)",
+   "tokens_any": [
+    [
+     "post_type"
+    ]
+   ],
+   "context_any": [
+    "X",
+    "x"
+   ],
+   "scope": "section",
+   "example": {
+    "network": "x",
+    "field": "post_type",
+    "where": "fields"
+   }
+  },
+  {
+   "id": "x.post_type=MEDIA",
+   "group": "post_details",
+   "source": "XPostDetails.post_type choices",
+   "tokens_any": [
+    [
+     "post_type",
+     "MEDIA"
+    ]
+   ],
+   "context_any": [
+    "X",
+    "x"
+   ],
+   "scope": "section"
+  },
+  {
+   "id": "x.post_type=POLL",
+   "group": "post_details",
+   "source": "XPostDetails.post_type choices",
+   "tokens_any": [
+    [
+     "post_type",
+     "POLL"
+    ]
+   ],
+   "context_any": [
+    "X",
+    "x"
+   ],
+   "scope": "section"
+  },
+  {
+   "id": "x.post_type=QUOTE",
+   "group": "post_details",
+   "source": "XPostDetails.post_type choices",
+   "tokens_any": [
+    [
+     "post_type",
+     "QUOTE"
+    ]
+   ],
+   "context_any": [
+    "X",
+    "x"
+   ],
+   "scope": "section"
+  },
+  {
+   "id": "x.post_type=REPLY",
+   "group": "post_details",
+   "source": "XPostDetails.post_type choices",
+   "tokens_any": [
+    [
+     "post_type",
+     "REPLY"
+    ]
+   ],
+   "context_any": [
+    "X",
+    "x"
+   ],
+   "scope": "section"
+  },
+  {
+   "id": "x.post_type=TEXT",
+   "group": "post_details",
+   "source": "XPostDetails.post_type choices",
+   "tokens_any": [
+    [
+     "post_type",
+     "TEXT"
+    ]
+   ],
+   "context_any": [
+    "X",
+    "x"
+   ],
+   "scope": "section"
+  },
+  {
+   "id": "x.post_type=THREAD",
+   "group": "post_details",
+   "source": "XPostDetails.post_type choices",
+   "tokens_any": [
+    [
+     "post_type",
+     "THREAD"
+    ]
+   ],
+   "context_any": [
+    "X",
+    "x"
+   ],
+   "scope": "section"
+  },
+  {
+   "id": "x.quoted_tweet_id",
+   "group": "post_details",
+   "source": "XPostDetails (update-post-platform-details)",
+   "tokens_any": [
+    [
+     "quoted_tweet_id"
+    ]
+   ],
+   "context_any": [
+    "X",
+    "x"
+   ],
+   "scope": "section",
+   "example": {
+    "network": "x",
+    "field": "quoted_tweet_id",
+    "where": "fields"
+   }
+  },
+  {
+   "id": "x.reply_settings",
+   "group": "post_details",
+   "source": "XPostDetails (update-post-platform-details)",
+   "tokens_any": [
+    [
+     "reply_settings"
+    ]
+   ],
+   "context_any": [
+    "X",
+    "x"
+   ],
+   "scope": "section",
+   "example": {
+    "network": "x",
+    "field": "reply_settings",
+    "where": "fields"
+   }
+  },
+  {
+   "id": "x.reply_settings=everyone",
+   "group": "post_details",
+   "source": "XPostDetails.reply_settings choices",
+   "tokens_any": [
+    [
+     "reply_settings",
+     "everyone"
+    ]
+   ],
+   "context_any": [
+    "X",
+    "x"
+   ],
+   "scope": "section"
+  },
+  {
+   "id": "x.reply_settings=followers",
+   "group": "post_details",
+   "source": "XPostDetails.reply_settings choices",
+   "tokens_any": [
+    [
+     "reply_settings",
+     "followers"
+    ]
+   ],
+   "context_any": [
+    "X",
+    "x"
+   ],
+   "scope": "section"
+  },
+  {
+   "id": "x.reply_settings=mentioned_users",
+   "group": "post_details",
+   "source": "XPostDetails.reply_settings choices",
+   "tokens_any": [
+    [
+     "reply_settings",
+     "mentioned_users"
+    ]
+   ],
+   "context_any": [
+    "X",
+    "x"
+   ],
+   "scope": "section"
+  },
+  {
+   "id": "x.thread_position",
+   "group": "post_details",
+   "source": "XPostDetails (update-post-platform-details)",
+   "tokens_any": [
+    [
+     "thread_position"
+    ]
+   ],
+   "context_any": [
+    "X",
+    "x"
+   ],
+   "scope": "section",
+   "example": {
+    "network": "x",
+    "field": "thread_position",
+    "where": "fields"
+   }
+  },
+  {
+   "id": "youtube.allow_comments",
+   "group": "post_details",
+   "source": "YouTubePostDetails (update-post-platform-details)",
+   "tokens_any": [
+    [
+     "allow_comments"
+    ]
+   ],
+   "context_any": [
+    "YouTube",
+    "youtube"
+   ],
+   "scope": "section",
+   "example": {
+    "network": "youtube",
+    "field": "allow_comments",
+    "where": "fields"
+   }
+  },
+  {
+   "id": "youtube.allow_embedding",
+   "group": "post_details",
+   "source": "YouTubePostDetails (update-post-platform-details)",
+   "tokens_any": [
+    [
+     "allow_embedding"
+    ]
+   ],
+   "context_any": [
+    "YouTube",
+    "youtube"
+   ],
+   "scope": "section",
+   "example": {
+    "network": "youtube",
+    "field": "allow_embedding",
+    "where": "fields"
+   }
+  },
+  {
+   "id": "youtube.category_id",
+   "group": "post_details",
+   "source": "YouTubePostDetails (update-post-platform-details)",
+   "tokens_any": [
+    [
+     "category_id"
+    ]
+   ],
+   "context_any": [
+    "YouTube",
+    "youtube"
+   ],
+   "scope": "section",
+   "example": {
+    "network": "youtube",
+    "field": "category_id",
+    "where": "fields"
+   }
+  },
+  {
+   "id": "youtube.default_language",
+   "group": "post_details",
+   "source": "YouTubePostDetails (update-post-platform-details)",
+   "tokens_any": [
+    [
+     "default_language"
+    ]
+   ],
+   "context_any": [
+    "YouTube",
+    "youtube"
+   ],
+   "scope": "section",
+   "example": {
+    "network": "youtube",
+    "field": "default_language",
+    "where": "fields"
+   }
+  },
+  {
+   "id": "youtube.enable_auto_chapters",
+   "group": "post_details",
+   "source": "YouTubePostDetails (update-post-platform-details)",
+   "tokens_any": [
+    [
+     "enable_auto_chapters"
+    ]
+   ],
+   "context_any": [
+    "YouTube",
+    "youtube"
+   ],
+   "scope": "section",
+   "example": {
+    "network": "youtube",
+    "field": "enable_auto_chapters",
+    "where": "fields"
+   }
+  },
+  {
+   "id": "youtube.made_for_kids",
+   "group": "post_details",
+   "source": "YouTubePostDetails (update-post-platform-details)",
+   "tokens_any": [
+    [
+     "made_for_kids"
+    ]
+   ],
+   "context_any": [
+    "YouTube",
+    "youtube"
+   ],
+   "scope": "section",
+   "example": {
+    "network": "youtube",
+    "field": "made_for_kids",
+    "where": "fields"
+   }
+  },
+  {
+   "id": "youtube.notify_subscribers",
+   "group": "post_details",
+   "source": "YouTubePostDetails (update-post-platform-details)",
+   "tokens_any": [
+    [
+     "notify_subscribers"
+    ]
+   ],
+   "context_any": [
+    "YouTube",
+    "youtube"
+   ],
+   "scope": "section",
+   "example": {
+    "network": "youtube",
+    "field": "notify_subscribers",
+    "where": "fields"
+   }
+  },
+  {
+   "id": "youtube.playlist_ids",
+   "group": "post_details",
+   "source": "YouTubePostDetails (update-post-platform-details)",
+   "tokens_any": [
+    [
+     "playlist_ids"
+    ]
+   ],
+   "context_any": [
+    "YouTube",
+    "youtube"
+   ],
+   "scope": "section",
+   "example": {
+    "network": "youtube",
+    "field": "playlist_ids",
+    "where": "fields"
+   }
+  },
+  {
+   "id": "youtube.post",
+   "group": "post_details",
+   "source": "YouTubePostDetails (update-post-platform-details)",
+   "tokens_any": [
+    [
+     "post"
+    ]
+   ],
+   "context_any": [
+    "YouTube",
+    "youtube"
+   ],
+   "scope": "section",
+   "example": {
+    "network": "youtube",
+    "field": "post",
+    "where": "fields"
+   }
+  },
+  {
+   "id": "youtube.privacy_status",
+   "group": "post_details",
+   "source": "YouTubePostDetails (update-post-platform-details)",
+   "tokens_any": [
+    [
+     "privacy_status"
+    ]
+   ],
+   "context_any": [
+    "YouTube",
+    "youtube"
+   ],
+   "scope": "section",
+   "example": {
+    "network": "youtube",
+    "field": "privacy_status",
+    "where": "fields"
+   }
+  },
+  {
+   "id": "youtube.privacy_status=private",
+   "group": "post_details",
+   "source": "YouTubePostDetails.privacy_status choices",
+   "tokens_any": [
+    [
+     "privacy_status",
+     "private"
+    ]
+   ],
+   "context_any": [
+    "YouTube",
+    "youtube"
+   ],
+   "scope": "section"
+  },
+  {
+   "id": "youtube.privacy_status=public",
+   "group": "post_details",
+   "source": "YouTubePostDetails.privacy_status choices",
+   "tokens_any": [
+    [
+     "privacy_status",
+     "public"
+    ]
+   ],
+   "context_any": [
+    "YouTube",
+    "youtube"
+   ],
+   "scope": "section"
+  },
+  {
+   "id": "youtube.privacy_status=scheduled",
+   "group": "post_details",
+   "source": "YouTubePostDetails.privacy_status choices",
+   "tokens_any": [
+    [
+     "privacy_status",
+     "scheduled"
+    ]
+   ],
+   "context_any": [
+    "YouTube",
+    "youtube"
+   ],
+   "scope": "section"
+  },
+  {
+   "id": "youtube.privacy_status=unlisted",
+   "group": "post_details",
+   "source": "YouTubePostDetails.privacy_status choices",
+   "tokens_any": [
+    [
+     "privacy_status",
+     "unlisted"
+    ]
+   ],
+   "context_any": [
+    "YouTube",
+    "youtube"
+   ],
+   "scope": "section"
+  },
+  {
+   "id": "youtube.publish_at",
+   "group": "post_details",
+   "source": "YouTubePostDetails (update-post-platform-details)",
+   "tokens_any": [
+    [
+     "publish_at"
+    ]
+   ],
+   "context_any": [
+    "YouTube",
+    "youtube"
+   ],
+   "scope": "section",
+   "example": {
+    "network": "youtube",
+    "field": "publish_at",
+    "where": "fields"
+   }
+  },
+  {
+   "id": "youtube.self_declared_made_for_kids",
+   "group": "post_details",
+   "source": "YouTubePostDetails (update-post-platform-details)",
+   "tokens_any": [
+    [
+     "self_declared_made_for_kids"
+    ]
+   ],
+   "context_any": [
+    "YouTube",
+    "youtube"
+   ],
+   "scope": "section",
+   "example": {
+    "network": "youtube",
+    "field": "self_declared_made_for_kids",
+    "where": "fields"
+   }
+  },
+  {
+   "id": "youtube.tags",
+   "group": "post_details",
+   "source": "YouTubePostDetails (update-post-platform-details)",
+   "tokens_any": [
+    [
+     "tags"
+    ]
+   ],
+   "context_any": [
+    "YouTube",
+    "youtube"
+   ],
+   "scope": "section",
+   "example": {
+    "network": "youtube",
+    "field": "tags",
+    "where": "fields"
+   }
+  },
+  {
+   "id": "youtube.thumbnail_url",
+   "group": "post_details",
+   "source": "YouTubePostDetails (update-post-platform-details)",
+   "tokens_any": [
+    [
+     "thumbnail_url"
+    ]
+   ],
+   "context_any": [
+    "YouTube",
+    "youtube"
+   ],
+   "scope": "section",
+   "example": {
+    "network": "youtube",
+    "field": "thumbnail_url",
+    "where": "fields"
+   }
+  },
+  {
+   "id": "youtube.video_description",
+   "group": "post_details",
+   "source": "YouTubePostDetails (update-post-platform-details)",
+   "tokens_any": [
+    [
+     "video_description"
+    ]
+   ],
+   "context_any": [
+    "YouTube",
+    "youtube"
+   ],
+   "scope": "section",
+   "example": {
+    "network": "youtube",
+    "field": "video_description",
+    "where": "fields"
+   }
+  },
+  {
+   "id": "youtube.video_id",
+   "group": "post_details",
+   "source": "YouTubePostDetails (update-post-platform-details)",
+   "tokens_any": [
+    [
+     "video_id"
+    ]
+   ],
+   "context_any": [
+    "YouTube",
+    "youtube"
+   ],
+   "scope": "section",
+   "example": {
+    "network": "youtube",
+    "field": "video_id",
+    "where": "fields"
+   }
+  },
+  {
+   "id": "youtube.video_title",
+   "group": "post_details",
+   "source": "YouTubePostDetails (update-post-platform-details)",
+   "tokens_any": [
+    [
+     "video_title"
+    ]
+   ],
+   "context_any": [
+    "YouTube",
+    "youtube"
+   ],
+   "scope": "section",
+   "example": {
+    "network": "youtube",
+    "field": "video_title",
+    "where": "fields"
+   }
+  },
+  {
+   "id": "tool.activate-routine",
+   "group": "tool",
+   "source": "mcp golden",
+   "tokens_any": [
+    [
+     "activate-routine"
+    ]
+   ],
+   "context_any": [],
+   "scope": "file"
+  },
+  {
+   "id": "tool.add-posts-to-content-campaign",
+   "group": "tool",
+   "source": "mcp golden",
+   "tokens_any": [
+    [
+     "add-posts-to-content-campaign"
+    ]
+   ],
+   "context_any": [],
+   "scope": "file"
+  },
+  {
+   "id": "tool.analyze-content-campaign-source",
+   "group": "tool",
+   "source": "mcp golden",
+   "tokens_any": [
+    [
+     "analyze-content-campaign-source"
+    ]
+   ],
+   "context_any": [],
+   "scope": "file"
+  },
+  {
+   "id": "tool.approve-many-posts",
+   "group": "tool",
+   "source": "mcp golden",
+   "tokens_any": [
+    [
+     "approve-many-posts"
+    ]
+   ],
+   "context_any": [],
+   "scope": "file"
+  },
+  {
+   "id": "tool.approve-post",
+   "group": "tool",
+   "source": "mcp golden",
+   "tokens_any": [
+    [
+     "approve-post"
+    ]
+   ],
+   "context_any": [],
+   "scope": "file"
+  },
+  {
+   "id": "tool.approve-recurring-review",
+   "group": "tool",
+   "source": "mcp golden",
+   "tokens_any": [
+    [
+     "approve-recurring-review"
+    ]
+   ],
+   "context_any": [],
+   "scope": "file"
+  },
+  {
+   "id": "tool.archive-routine",
+   "group": "tool",
+   "source": "mcp golden",
+   "tokens_any": [
+    [
+     "archive-routine"
+    ]
+   ],
+   "context_any": [],
+   "scope": "file"
+  },
+  {
+   "id": "tool.bulk-create-posts",
+   "group": "tool",
+   "source": "mcp golden",
+   "tokens_any": [
+    [
+     "bulk-create-posts"
+    ]
+   ],
+   "context_any": [],
+   "scope": "file"
+  },
+  {
+   "id": "tool.bulk-create-status",
+   "group": "tool",
+   "source": "mcp golden",
+   "tokens_any": [
+    [
+     "bulk-create-status"
+    ]
+   ],
+   "context_any": [],
+   "scope": "file"
+  },
+  {
+   "id": "tool.confirm-plan",
+   "group": "tool",
+   "source": "mcp golden",
+   "tokens_any": [
+    [
+     "confirm-plan"
+    ]
+   ],
+   "context_any": [],
+   "scope": "file"
+  },
+  {
+   "id": "tool.create-content-campaign",
+   "group": "tool",
+   "source": "mcp golden",
+   "tokens_any": [
+    [
+     "create-content-campaign"
+    ]
+   ],
+   "context_any": [],
+   "scope": "file"
+  },
+  {
+   "id": "tool.create-engagement-opportunity",
+   "group": "tool",
+   "source": "mcp golden",
+   "tokens_any": [
+    [
+     "create-engagement-opportunity"
+    ]
+   ],
+   "context_any": [],
+   "scope": "file"
+  },
+  {
+   "id": "tool.create-post",
+   "group": "tool",
+   "source": "mcp golden",
+   "tokens_any": [
+    [
+     "create-post"
+    ]
+   ],
+   "context_any": [],
+   "scope": "file"
+  },
+  {
+   "id": "tool.create-routine",
+   "group": "tool",
+   "source": "mcp golden",
+   "tokens_any": [
+    [
+     "create-routine"
+    ]
+   ],
+   "context_any": [],
+   "scope": "file"
+  },
+  {
+   "id": "tool.create-social-bucket",
+   "group": "tool",
+   "source": "mcp golden",
+   "tokens_any": [
+    [
+     "create-social-bucket"
+    ]
+   ],
+   "context_any": [],
+   "scope": "file"
+  },
+  {
+   "id": "tool.create-voice-profile",
+   "group": "tool",
+   "source": "mcp golden",
+   "tokens_any": [
+    [
+     "create-voice-profile"
+    ]
+   ],
+   "context_any": [],
+   "scope": "file"
+  },
+  {
+   "id": "tool.create-wordpress-blog-post",
+   "group": "tool",
+   "source": "mcp golden",
+   "tokens_any": [
+    [
+     "create-wordpress-blog-post"
+    ]
+   ],
+   "context_any": [],
+   "scope": "file"
+  },
+  {
+   "id": "tool.cross-platform-analytics",
+   "group": "tool",
+   "source": "mcp golden",
+   "tokens_any": [
+    [
+     "cross-platform-analytics"
+    ]
+   ],
+   "context_any": [],
+   "scope": "file"
+  },
+  {
+   "id": "tool.decide-bolta-suggestion",
+   "group": "tool",
+   "source": "mcp golden",
+   "tokens_any": [
+    [
+     "decide-bolta-suggestion"
+    ]
+   ],
+   "context_any": [],
+   "scope": "file"
+  },
+  {
+   "id": "tool.decide-routine-recommendation",
+   "group": "tool",
+   "source": "mcp golden",
+   "tokens_any": [
+    [
+     "decide-routine-recommendation"
+    ]
+   ],
+   "context_any": [],
+   "scope": "file"
+  },
+  {
+   "id": "tool.delete-post",
+   "group": "tool",
+   "source": "mcp golden",
+   "tokens_any": [
+    [
+     "delete-post"
+    ]
+   ],
+   "context_any": [],
+   "scope": "file"
+  },
+  {
+   "id": "tool.draft-engagement-reply",
+   "group": "tool",
+   "source": "mcp golden",
+   "tokens_any": [
+    [
+     "draft-engagement-reply"
+    ]
+   ],
+   "context_any": [],
+   "scope": "file"
+  },
+  {
+   "id": "tool.draft-inbound-reply",
+   "group": "tool",
+   "source": "mcp golden",
+   "tokens_any": [
+    [
+     "draft-inbound-reply"
+    ]
+   ],
+   "context_any": [],
+   "scope": "file"
+  },
+  {
+   "id": "tool.extract-business-dna",
+   "group": "tool",
+   "source": "mcp golden",
+   "tokens_any": [
+    [
+     "extract-business-dna"
+    ]
+   ],
+   "context_any": [],
+   "scope": "file"
+  },
+  {
+   "id": "tool.get-account-analytics",
+   "group": "tool",
+   "source": "mcp golden",
+   "tokens_any": [
+    [
+     "get-account-analytics"
+    ]
+   ],
+   "context_any": [],
+   "scope": "file"
+  },
+  {
+   "id": "tool.get-business-dna",
+   "group": "tool",
+   "source": "mcp golden",
+   "tokens_any": [
+    [
+     "get-business-dna"
+    ]
+   ],
+   "context_any": [],
+   "scope": "file"
+  },
+  {
+   "id": "tool.get-cascade",
+   "group": "tool",
+   "source": "mcp golden",
+   "tokens_any": [
+    [
+     "get-cascade"
+    ]
+   ],
+   "context_any": [],
+   "scope": "file"
+  },
+  {
+   "id": "tool.get-connect-link",
+   "group": "tool",
+   "source": "mcp golden",
+   "tokens_any": [
+    [
+     "get-connect-link"
+    ]
+   ],
+   "context_any": [],
+   "scope": "file"
+  },
+  {
+   "id": "tool.get-content-campaign",
+   "group": "tool",
+   "source": "mcp golden",
+   "tokens_any": [
+    [
+     "get-content-campaign"
+    ]
+   ],
+   "context_any": [],
+   "scope": "file"
+  },
+  {
+   "id": "tool.get-engagement-conversation",
+   "group": "tool",
+   "source": "mcp golden",
+   "tokens_any": [
+    [
+     "get-engagement-conversation"
+    ]
+   ],
+   "context_any": [],
+   "scope": "file"
+  },
+  {
+   "id": "tool.get-engagement-status",
+   "group": "tool",
+   "source": "mcp golden",
+   "tokens_any": [
+    [
+     "get-engagement-status"
+    ]
+   ],
+   "context_any": [],
+   "scope": "file"
+  },
+  {
+   "id": "tool.get-my-capabilities",
+   "group": "tool",
+   "source": "mcp golden",
+   "tokens_any": [
+    [
+     "get-my-capabilities"
+    ]
+   ],
+   "context_any": [],
+   "scope": "file"
+  },
+  {
+   "id": "tool.get-post",
+   "group": "tool",
+   "source": "mcp golden",
+   "tokens_any": [
+    [
+     "get-post"
+    ]
+   ],
+   "context_any": [],
+   "scope": "file"
+  },
+  {
+   "id": "tool.get-post-platform-details",
+   "group": "tool",
+   "source": "mcp golden",
+   "tokens_any": [
+    [
+     "get-post-platform-details"
+    ]
+   ],
+   "context_any": [],
+   "scope": "file"
+  },
+  {
+   "id": "tool.get-posting-rules",
+   "group": "tool",
+   "source": "mcp golden",
+   "tokens_any": [
+    [
+     "get-posting-rules"
+    ]
+   ],
+   "context_any": [],
+   "scope": "file"
+  },
+  {
+   "id": "tool.get-routine",
+   "group": "tool",
+   "source": "mcp golden",
+   "tokens_any": [
+    [
+     "get-routine"
+    ]
+   ],
+   "context_any": [],
+   "scope": "file"
+  },
+  {
+   "id": "tool.get-social-content",
+   "group": "tool",
+   "source": "mcp golden",
+   "tokens_any": [
+    [
+     "get-social-content"
+    ]
+   ],
+   "context_any": [],
+   "scope": "file"
+  },
+  {
+   "id": "tool.get-voice-context",
+   "group": "tool",
+   "source": "mcp golden",
+   "tokens_any": [
+    [
+     "get-voice-context"
+    ]
+   ],
+   "context_any": [],
+   "scope": "file"
+  },
+  {
+   "id": "tool.get-voice-profile",
+   "group": "tool",
+   "source": "mcp golden",
+   "tokens_any": [
+    [
+     "get-voice-profile"
+    ]
+   ],
+   "context_any": [],
+   "scope": "file"
+  },
+  {
+   "id": "tool.get-workspace",
+   "group": "tool",
+   "source": "mcp golden",
+   "tokens_any": [
+    [
+     "get-workspace"
+    ]
+   ],
+   "context_any": [],
+   "scope": "file"
+  },
+  {
+   "id": "tool.list-account-insights",
+   "group": "tool",
+   "source": "mcp golden",
+   "tokens_any": [
+    [
+     "list-account-insights"
+    ]
+   ],
+   "context_any": [],
+   "scope": "file"
+  },
+  {
+   "id": "tool.list-accounts",
+   "group": "tool",
+   "source": "mcp golden",
+   "tokens_any": [
+    [
+     "list-accounts"
+    ]
+   ],
+   "context_any": [],
+   "scope": "file"
+  },
+  {
+   "id": "tool.list-bolta-suggestions",
+   "group": "tool",
+   "source": "mcp golden",
+   "tokens_any": [
+    [
+     "list-bolta-suggestions"
+    ]
+   ],
+   "context_any": [],
+   "scope": "file"
+  },
+  {
+   "id": "tool.list-buckets",
+   "group": "tool",
+   "source": "mcp golden",
+   "tokens_any": [
+    [
+     "list-buckets"
+    ]
+   ],
+   "context_any": [],
+   "scope": "file"
+  },
+  {
+   "id": "tool.list-business-dna",
+   "group": "tool",
+   "source": "mcp golden",
+   "tokens_any": [
+    [
+     "list-business-dna"
+    ]
+   ],
+   "context_any": [],
+   "scope": "file"
+  },
+  {
+   "id": "tool.list-content-campaign-posts",
+   "group": "tool",
+   "source": "mcp golden",
+   "tokens_any": [
+    [
+     "list-content-campaign-posts"
+    ]
+   ],
+   "context_any": [],
+   "scope": "file"
+  },
+  {
+   "id": "tool.list-content-campaigns",
+   "group": "tool",
+   "source": "mcp golden",
+   "tokens_any": [
+    [
+     "list-content-campaigns"
+    ]
+   ],
+   "context_any": [],
+   "scope": "file"
+  },
+  {
+   "id": "tool.list-engagement-capabilities",
+   "group": "tool",
+   "source": "mcp golden",
+   "tokens_any": [
+    [
+     "list-engagement-capabilities"
+    ]
+   ],
+   "context_any": [],
+   "scope": "file"
+  },
+  {
+   "id": "tool.list-engagements",
+   "group": "tool",
+   "source": "mcp golden",
+   "tokens_any": [
+    [
+     "list-engagements"
+    ]
+   ],
+   "context_any": [],
+   "scope": "file"
+  },
+  {
+   "id": "tool.list-inbox-items",
+   "group": "tool",
+   "source": "mcp golden",
+   "tokens_any": [
+    [
+     "list-inbox-items"
+    ]
+   ],
+   "context_any": [],
+   "scope": "file"
+  },
+  {
+   "id": "tool.list-recently-deleted",
+   "group": "tool",
+   "source": "mcp golden",
+   "tokens_any": [
+    [
+     "list-recently-deleted"
+    ]
+   ],
+   "context_any": [],
+   "scope": "file"
+  },
+  {
+   "id": "tool.list-recurring-reviews",
+   "group": "tool",
+   "source": "mcp golden",
+   "tokens_any": [
+    [
+     "list-recurring-reviews"
+    ]
+   ],
+   "context_any": [],
+   "scope": "file"
+  },
+  {
+   "id": "tool.list-reviews",
+   "group": "tool",
+   "source": "mcp golden",
+   "tokens_any": [
+    [
+     "list-reviews"
+    ]
+   ],
+   "context_any": [],
+   "scope": "file"
+  },
+  {
+   "id": "tool.list-routine-recommendations",
+   "group": "tool",
+   "source": "mcp golden",
+   "tokens_any": [
+    [
+     "list-routine-recommendations"
+    ]
+   ],
+   "context_any": [],
+   "scope": "file"
+  },
+  {
+   "id": "tool.list-routine-runs",
+   "group": "tool",
+   "source": "mcp golden",
+   "tokens_any": [
+    [
+     "list-routine-runs"
+    ]
+   ],
+   "context_any": [],
+   "scope": "file"
+  },
+  {
+   "id": "tool.list-routine-templates",
+   "group": "tool",
+   "source": "mcp golden",
+   "tokens_any": [
+    [
+     "list-routine-templates"
+    ]
+   ],
+   "context_any": [],
+   "scope": "file"
+  },
+  {
+   "id": "tool.list-routines",
+   "group": "tool",
+   "source": "mcp golden",
+   "tokens_any": [
+    [
+     "list-routines"
+    ]
+   ],
+   "context_any": [],
+   "scope": "file"
+  },
+  {
+   "id": "tool.list-scheduled-posts",
+   "group": "tool",
+   "source": "mcp golden",
+   "tokens_any": [
+    [
+     "list-scheduled-posts"
+    ]
+   ],
+   "context_any": [],
+   "scope": "file"
+  },
+  {
+   "id": "tool.list-voice-profiles",
+   "group": "tool",
+   "source": "mcp golden",
+   "tokens_any": [
+    [
+     "list-voice-profiles"
+    ]
+   ],
+   "context_any": [],
+   "scope": "file"
+  },
+  {
+   "id": "tool.list-workspace-members",
+   "group": "tool",
+   "source": "mcp golden",
+   "tokens_any": [
+    [
+     "list-workspace-members"
+    ]
+   ],
+   "context_any": [],
+   "scope": "file"
+  },
+  {
+   "id": "tool.list-workspace-posts",
+   "group": "tool",
+   "source": "mcp golden",
+   "tokens_any": [
+    [
+     "list-workspace-posts"
+    ]
+   ],
+   "context_any": [],
+   "scope": "file"
+  },
+  {
+   "id": "tool.list-workspaces",
+   "group": "tool",
+   "source": "mcp golden",
+   "tokens_any": [
+    [
+     "list-workspaces"
+    ]
+   ],
+   "context_any": [],
+   "scope": "file"
+  },
+  {
+   "id": "tool.pause-routine",
+   "group": "tool",
+   "source": "mcp golden",
+   "tokens_any": [
+    [
+     "pause-routine"
+    ]
+   ],
+   "context_any": [],
+   "scope": "file"
+  },
+  {
+   "id": "tool.plan-campaign",
+   "group": "tool",
+   "source": "mcp golden",
+   "tokens_any": [
+    [
+     "plan-campaign"
+    ]
+   ],
+   "context_any": [],
+   "scope": "file"
+  },
+  {
+   "id": "tool.plan-routine",
+   "group": "tool",
+   "source": "mcp golden",
+   "tokens_any": [
+    [
+     "plan-routine"
+    ]
+   ],
+   "context_any": [],
+   "scope": "file"
+  },
+  {
+   "id": "tool.propose-cascade",
+   "group": "tool",
+   "source": "mcp golden",
+   "tokens_any": [
+    [
+     "propose-cascade"
+    ]
+   ],
+   "context_any": [],
+   "scope": "file"
+  },
+  {
+   "id": "tool.publish-engagement-reply",
+   "group": "tool",
+   "source": "mcp golden",
+   "tokens_any": [
+    [
+     "publish-engagement-reply"
+    ]
+   ],
+   "context_any": [],
+   "scope": "file"
+  },
+  {
+   "id": "tool.publish-post",
+   "group": "tool",
+   "source": "mcp golden",
+   "tokens_any": [
+    [
+     "publish-post"
+    ]
+   ],
+   "context_any": [],
+   "scope": "file"
+  },
+  {
+   "id": "tool.react-to-social-content",
+   "group": "tool",
+   "source": "mcp golden",
+   "tokens_any": [
+    [
+     "react-to-social-content"
+    ]
+   ],
+   "context_any": [],
+   "scope": "file"
+  },
+  {
+   "id": "tool.recommend-routines",
+   "group": "tool",
+   "source": "mcp golden",
+   "tokens_any": [
+    [
+     "recommend-routines"
+    ]
+   ],
+   "context_any": [],
+   "scope": "file"
+  },
+  {
+   "id": "tool.reject-post",
+   "group": "tool",
+   "source": "mcp golden",
+   "tokens_any": [
+    [
+     "reject-post"
+    ]
+   ],
+   "context_any": [],
+   "scope": "file"
+  },
+  {
+   "id": "tool.reject-recurring-review",
+   "group": "tool",
+   "source": "mcp golden",
+   "tokens_any": [
+    [
+     "reject-recurring-review"
+    ]
+   ],
+   "context_any": [],
+   "scope": "file"
+  },
+  {
+   "id": "tool.reply-to-social-content",
+   "group": "tool",
+   "source": "mcp golden",
+   "tokens_any": [
+    [
+     "reply-to-social-content"
+    ]
+   ],
+   "context_any": [],
+   "scope": "file"
+  },
+  {
+   "id": "tool.restore-deleted",
+   "group": "tool",
+   "source": "mcp golden",
+   "tokens_any": [
+    [
+     "restore-deleted"
+    ]
+   ],
+   "context_any": [],
+   "scope": "file"
+  },
+  {
+   "id": "tool.resume-routine",
+   "group": "tool",
+   "source": "mcp golden",
+   "tokens_any": [
+    [
+     "resume-routine"
+    ]
+   ],
+   "context_any": [],
+   "scope": "file"
+  },
+  {
+   "id": "tool.revise-plan",
+   "group": "tool",
+   "source": "mcp golden",
+   "tokens_any": [
+    [
+     "revise-plan"
+    ]
+   ],
+   "context_any": [],
+   "scope": "file"
+  },
+  {
+   "id": "tool.run-routine-now",
+   "group": "tool",
+   "source": "mcp golden",
+   "tokens_any": [
+    [
+     "run-routine-now"
+    ]
+   ],
+   "context_any": [],
+   "scope": "file"
+  },
+  {
+   "id": "tool.schedule-post",
+   "group": "tool",
+   "source": "mcp golden",
+   "tokens_any": [
+    [
+     "schedule-post"
+    ]
+   ],
+   "context_any": [],
+   "scope": "file"
+  },
+  {
+   "id": "tool.search-engagement-opportunities",
+   "group": "tool",
+   "source": "mcp golden",
+   "tokens_any": [
+    [
+     "search-engagement-opportunities"
+    ]
+   ],
+   "context_any": [],
+   "scope": "file"
+  },
+  {
+   "id": "tool.send-outreach-reply",
+   "group": "tool",
+   "source": "mcp golden",
+   "tokens_any": [
+    [
+     "send-outreach-reply"
+    ]
+   ],
+   "context_any": [],
+   "scope": "file"
+  },
+  {
+   "id": "tool.set-content-campaign-status",
+   "group": "tool",
+   "source": "mcp golden",
+   "tokens_any": [
+    [
+     "set-content-campaign-status"
+    ]
+   ],
+   "context_any": [],
+   "scope": "file"
+  },
+  {
+   "id": "tool.set-content-campaign-targets",
+   "group": "tool",
+   "source": "mcp golden",
+   "tokens_any": [
+    [
+     "set-content-campaign-targets"
+    ]
+   ],
+   "context_any": [],
+   "scope": "file"
+  },
+  {
+   "id": "tool.start-cascade",
+   "group": "tool",
+   "source": "mcp golden",
+   "tokens_any": [
+    [
+     "start-cascade"
+    ]
+   ],
+   "context_any": [],
+   "scope": "file"
+  },
+  {
+   "id": "tool.submit-for-review",
+   "group": "tool",
+   "source": "mcp golden",
+   "tokens_any": [
+    [
+     "submit-for-review"
+    ]
+   ],
+   "context_any": [],
+   "scope": "file"
+  },
+  {
+   "id": "tool.update-business-dna",
+   "group": "tool",
+   "source": "mcp golden",
+   "tokens_any": [
+    [
+     "update-business-dna"
+    ]
+   ],
+   "context_any": [],
+   "scope": "file"
+  },
+  {
+   "id": "tool.update-cascade",
+   "group": "tool",
+   "source": "mcp golden",
+   "tokens_any": [
+    [
+     "update-cascade"
+    ]
+   ],
+   "context_any": [],
+   "scope": "file"
+  },
+  {
+   "id": "tool.update-content-campaign",
+   "group": "tool",
+   "source": "mcp golden",
+   "tokens_any": [
+    [
+     "update-content-campaign"
+    ]
+   ],
+   "context_any": [],
+   "scope": "file"
+  },
+  {
+   "id": "tool.update-outreach-reply",
+   "group": "tool",
+   "source": "mcp golden",
+   "tokens_any": [
+    [
+     "update-outreach-reply"
+    ]
+   ],
+   "context_any": [],
+   "scope": "file"
+  },
+  {
+   "id": "tool.update-post",
+   "group": "tool",
+   "source": "mcp golden",
+   "tokens_any": [
+    [
+     "update-post"
+    ]
+   ],
+   "context_any": [],
+   "scope": "file"
+  },
+  {
+   "id": "tool.update-post-platform-details",
+   "group": "tool",
+   "source": "mcp golden",
+   "tokens_any": [
+    [
+     "update-post-platform-details"
+    ]
+   ],
+   "context_any": [],
+   "scope": "file"
+  },
+  {
+   "id": "tool.update-routine",
+   "group": "tool",
+   "source": "mcp golden",
+   "tokens_any": [
+    [
+     "update-routine"
+    ]
+   ],
+   "context_any": [],
+   "scope": "file"
+  },
+  {
+   "id": "tool.update-social-bucket",
+   "group": "tool",
+   "source": "mcp golden",
+   "tokens_any": [
+    [
+     "update-social-bucket"
+    ]
+   ],
+   "context_any": [],
+   "scope": "file"
+  },
+  {
+   "id": "tool.update-voice-profile",
+   "group": "tool",
+   "source": "mcp golden",
+   "tokens_any": [
+    [
+     "update-voice-profile"
+    ]
+   ],
+   "context_any": [],
+   "scope": "file"
+  },
+  {
+   "id": "tool.voice-generate",
+   "group": "tool",
+   "source": "mcp golden",
+   "tokens_any": [
+    [
+     "voice-generate"
+    ]
+   ],
+   "context_any": [],
+   "scope": "file"
+  },
+  {
+   "id": "campaign-source.campaign_id",
+   "group": "tool_param",
+   "source": "mcp golden schema",
+   "tokens_any": [
+    [
+     "campaign_id"
+    ]
+   ],
+   "context_any": [
+    "analyze-content-campaign-source"
+   ],
+   "scope": "file"
+  },
+  {
+   "id": "campaign-source.kind",
+   "group": "tool_param",
+   "source": "mcp golden schema",
+   "tokens_any": [
+    [
+     "kind"
+    ]
+   ],
+   "context_any": [
+    "analyze-content-campaign-source"
+   ],
+   "scope": "file"
+  },
+  {
+   "id": "campaign-source.kind=brand_kit",
+   "group": "tool_param",
+   "source": "mcp golden enum",
+   "tokens_any": [
+    [
+     "kind",
+     "brand_kit"
+    ]
+   ],
+   "context_any": [
+    "analyze-content-campaign-source"
+   ],
+   "scope": "file"
+  },
+  {
+   "id": "campaign-source.kind=file",
+   "group": "tool_param",
+   "source": "mcp golden enum",
+   "tokens_any": [
+    [
+     "kind",
+     "file"
+    ]
+   ],
+   "context_any": [
+    "analyze-content-campaign-source"
+   ],
+   "scope": "file"
+  },
+  {
+   "id": "campaign-source.kind=url",
+   "group": "tool_param",
+   "source": "mcp golden enum",
+   "tokens_any": [
+    [
+     "kind",
+     "url"
+    ]
+   ],
+   "context_any": [
+    "analyze-content-campaign-source"
+   ],
+   "scope": "file"
+  },
+  {
+   "id": "campaign-source.ref",
+   "group": "tool_param",
+   "source": "mcp golden schema",
+   "tokens_any": [
+    [
+     "ref"
+    ]
+   ],
+   "context_any": [
+    "analyze-content-campaign-source"
+   ],
+   "scope": "file"
+  },
+  {
+   "id": "campaign-status.action",
+   "group": "tool_param",
+   "source": "mcp golden schema",
+   "tokens_any": [
+    [
+     "action"
+    ]
+   ],
+   "context_any": [
+    "set-content-campaign-status"
+   ],
+   "scope": "file"
+  },
+  {
+   "id": "campaign-status.action=activate",
+   "group": "tool_param",
+   "source": "set-content-campaign-status action description",
+   "tokens_any": [
+    [
+     "action",
+     "activate"
+    ]
+   ],
+   "context_any": [
+    "set-content-campaign-status"
+   ],
+   "scope": "file"
+  },
+  {
+   "id": "campaign-status.action=archive",
+   "group": "tool_param",
+   "source": "set-content-campaign-status action description",
+   "tokens_any": [
+    [
+     "action",
+     "archive"
+    ]
+   ],
+   "context_any": [
+    "set-content-campaign-status"
+   ],
+   "scope": "file"
+  },
+  {
+   "id": "campaign-status.action=complete",
+   "group": "tool_param",
+   "source": "set-content-campaign-status action description",
+   "tokens_any": [
+    [
+     "action",
+     "complete"
+    ]
+   ],
+   "context_any": [
+    "set-content-campaign-status"
+   ],
+   "scope": "file"
+  },
+  {
+   "id": "campaign-status.action=pause",
+   "group": "tool_param",
+   "source": "set-content-campaign-status action description",
+   "tokens_any": [
+    [
+     "action",
+     "pause"
+    ]
+   ],
+   "context_any": [
+    "set-content-campaign-status"
+   ],
+   "scope": "file"
+  },
+  {
+   "id": "campaign-status.action=resume",
+   "group": "tool_param",
+   "source": "set-content-campaign-status action description",
+   "tokens_any": [
+    [
+     "action",
+     "resume"
+    ]
+   ],
+   "context_any": [
+    "set-content-campaign-status"
+   ],
+   "scope": "file"
+  },
+  {
+   "id": "campaign-status.campaign_id",
+   "group": "tool_param",
+   "source": "mcp golden schema",
+   "tokens_any": [
+    [
+     "campaign_id"
+    ]
+   ],
+   "context_any": [
+    "set-content-campaign-status"
+   ],
+   "scope": "file"
+  },
+  {
+   "id": "campaign-targets.account_ids",
+   "group": "tool_param",
+   "source": "mcp golden schema",
+   "tokens_any": [
+    [
+     "account_ids"
+    ]
+   ],
+   "context_any": [
+    "set-content-campaign-targets"
+   ],
+   "scope": "file"
+  },
+  {
+   "id": "campaign-targets.campaign_id",
+   "group": "tool_param",
+   "source": "mcp golden schema",
+   "tokens_any": [
+    [
+     "campaign_id"
+    ]
+   ],
+   "context_any": [
+    "set-content-campaign-targets"
+   ],
+   "scope": "file"
+  },
+  {
+   "id": "campaign-targets.context_notes",
+   "group": "tool_param",
+   "source": "mcp golden schema",
+   "tokens_any": [
+    [
+     "context_notes"
+    ]
+   ],
+   "context_any": [
+    "set-content-campaign-targets"
+   ],
+   "scope": "file"
+  },
+  {
+   "id": "campaign-targets.context_sources",
+   "group": "tool_param",
+   "source": "mcp golden schema",
+   "tokens_any": [
+    [
+     "context_sources"
+    ]
+   ],
+   "context_any": [
+    "set-content-campaign-targets"
+   ],
+   "scope": "file"
+  },
+  {
+   "id": "campaign-targets.context_sources.brand_kit=brand_values",
+   "group": "tool_param",
+   "source": "set-content-campaign-targets description",
+   "tokens_any": [
+    [
+     "brand_kit",
+     "brand_values"
+    ]
+   ],
+   "context_any": [
+    "set-content-campaign-targets"
+   ],
+   "scope": "file"
+  },
+  {
+   "id": "campaign-targets.context_sources.brand_kit=business_overview",
+   "group": "tool_param",
+   "source": "set-content-campaign-targets description",
+   "tokens_any": [
+    [
+     "brand_kit",
+     "business_overview"
+    ]
+   ],
+   "context_any": [
+    "set-content-campaign-targets"
+   ],
+   "scope": "file"
+  },
+  {
+   "id": "campaign-targets.context_sources.brand_kit=community_involvement",
+   "group": "tool_param",
+   "source": "set-content-campaign-targets description",
+   "tokens_any": [
+    [
+     "brand_kit",
+     "community_involvement"
+    ]
+   ],
+   "context_any": [
+    "set-content-campaign-targets"
+   ],
+   "scope": "file"
+  },
+  {
+   "id": "campaign-targets.context_sources.brand_kit=custom_image_instructions",
+   "group": "tool_param",
+   "source": "set-content-campaign-targets description",
+   "tokens_any": [
+    [
+     "brand_kit",
+     "custom_image_instructions"
+    ]
+   ],
+   "context_any": [
+    "set-content-campaign-targets"
+   ],
+   "scope": "file"
+  },
+  {
+   "id": "campaign-targets.context_sources.brand_kit=customer_testimonials",
+   "group": "tool_param",
+   "source": "set-content-campaign-targets description",
+   "tokens_any": [
+    [
+     "brand_kit",
+     "customer_testimonials"
+    ]
+   ],
+   "context_any": [
+    "set-content-campaign-targets"
+   ],
+   "scope": "file"
+  },
+  {
+   "id": "campaign-targets.context_sources.brand_kit=donts",
+   "group": "tool_param",
+   "source": "set-content-campaign-targets description",
+   "tokens_any": [
+    [
+     "brand_kit",
+     "donts"
+    ]
+   ],
+   "context_any": [
+    "set-content-campaign-targets"
+   ],
+   "scope": "file"
+  },
+  {
+   "id": "campaign-targets.context_sources.brand_kit=dos",
+   "group": "tool_param",
+   "source": "set-content-campaign-targets description",
+   "tokens_any": [
+    [
+     "brand_kit",
+     "dos"
+    ]
+   ],
+   "context_any": [
+    "set-content-campaign-targets"
+   ],
+   "scope": "file"
+  },
+  {
+   "id": "campaign-targets.context_sources.brand_kit=origin_story",
+   "group": "tool_param",
+   "source": "set-content-campaign-targets description",
+   "tokens_any": [
+    [
+     "brand_kit",
+     "origin_story"
+    ]
+   ],
+   "context_any": [
+    "set-content-campaign-targets"
+   ],
+   "scope": "file"
+  },
+  {
+   "id": "campaign-targets.context_sources.brand_kit=tagline",
+   "group": "tool_param",
+   "source": "set-content-campaign-targets description",
+   "tokens_any": [
+    [
+     "brand_kit",
+     "tagline"
+    ]
+   ],
+   "context_any": [
+    "set-content-campaign-targets"
+   ],
+   "scope": "file"
+  },
+  {
+   "id": "campaign-targets.context_sources.brand_kit=tone_of_voice",
+   "group": "tool_param",
+   "source": "set-content-campaign-targets description",
+   "tokens_any": [
+    [
+     "brand_kit",
+     "tone_of_voice"
+    ]
+   ],
+   "context_any": [
+    "set-content-campaign-targets"
+   ],
+   "scope": "file"
+  },
+  {
+   "id": "campaign-targets.context_sources.kind",
+   "group": "tool_param",
+   "source": "mcp golden schema",
+   "tokens_any": [
+    [
+     "context_sources",
+     "kind"
+    ]
+   ],
+   "context_any": [
+    "set-content-campaign-targets"
+   ],
+   "scope": "file"
+  },
+  {
+   "id": "campaign-targets.context_sources.kind=brand_kit",
+   "group": "tool_param",
+   "source": "mcp golden enum",
+   "tokens_any": [
+    [
+     "kind",
+     "brand_kit"
+    ]
+   ],
+   "context_any": [
+    "set-content-campaign-targets"
+   ],
+   "scope": "file"
+  },
+  {
+   "id": "campaign-targets.context_sources.kind=file",
+   "group": "tool_param",
+   "source": "mcp golden enum",
+   "tokens_any": [
+    [
+     "kind",
+     "file"
+    ]
+   ],
+   "context_any": [
+    "set-content-campaign-targets"
+   ],
+   "scope": "file"
+  },
+  {
+   "id": "campaign-targets.context_sources.kind=url",
+   "group": "tool_param",
+   "source": "mcp golden enum",
+   "tokens_any": [
+    [
+     "kind",
+     "url"
+    ]
+   ],
+   "context_any": [
+    "set-content-campaign-targets"
+   ],
+   "scope": "file"
+  },
+  {
+   "id": "campaign-targets.context_sources.ref",
+   "group": "tool_param",
+   "source": "mcp golden schema",
+   "tokens_any": [
+    [
+     "context_sources",
+     "ref"
+    ]
+   ],
+   "context_any": [
+    "set-content-campaign-targets"
+   ],
+   "scope": "file"
+  },
+  {
+   "id": "campaign-targets.context_sources.title",
+   "group": "tool_param",
+   "source": "mcp golden schema",
+   "tokens_any": [
+    [
+     "context_sources",
+     "title"
+    ]
+   ],
+   "context_any": [
+    "set-content-campaign-targets"
+   ],
+   "scope": "file"
+  },
+  {
+   "id": "campaign-targets.duration_weeks",
+   "group": "tool_param",
+   "source": "mcp golden schema",
+   "tokens_any": [
+    [
+     "duration_weeks"
+    ]
+   ],
+   "context_any": [
+    "set-content-campaign-targets"
+   ],
+   "scope": "file"
+  },
+  {
+   "id": "campaign-targets.voice_profile_id",
+   "group": "tool_param",
+   "source": "mcp golden schema",
+   "tokens_any": [
+    [
+     "voice_profile_id"
+    ]
+   ],
+   "context_any": [
+    "set-content-campaign-targets"
+   ],
+   "scope": "file"
+  },
+  {
+   "id": "campaign.audience",
+   "group": "tool_param",
+   "source": "mcp golden schema",
+   "tokens_any": [
+    [
+     "audience"
+    ]
+   ],
+   "context_any": [
+    "create-content-campaign",
+    "update-content-campaign"
+   ],
+   "scope": "file"
+  },
+  {
+   "id": "campaign.campaign_id",
+   "group": "tool_param",
+   "source": "mcp golden schema",
+   "tokens_any": [
+    [
+     "campaign_id"
+    ]
+   ],
+   "context_any": [
+    "create-content-campaign",
+    "update-content-campaign"
+   ],
+   "scope": "file"
+  },
+  {
+   "id": "campaign.content_mix",
+   "group": "tool_param",
+   "source": "mcp golden schema",
+   "tokens_any": [
+    [
+     "content_mix"
+    ]
+   ],
+   "context_any": [
+    "create-content-campaign",
+    "update-content-campaign"
+   ],
+   "scope": "file"
+  },
+  {
+   "id": "campaign.content_mix.blog",
+   "group": "tool_param",
+   "source": "create-content-campaign content_mix description",
+   "tokens_any": [
+    [
+     "content_mix",
+     "blog"
+    ]
+   ],
+   "context_any": [
+    "create-content-campaign",
+    "update-content-campaign"
+   ],
+   "scope": "file"
+  },
+  {
+   "id": "campaign.content_mix.carousel",
+   "group": "tool_param",
+   "source": "create-content-campaign content_mix description",
+   "tokens_any": [
+    [
+     "content_mix",
+     "carousel"
+    ]
+   ],
+   "context_any": [
+    "create-content-campaign",
+    "update-content-campaign"
+   ],
+   "scope": "file"
+  },
+  {
+   "id": "campaign.content_mix.email",
+   "group": "tool_param",
+   "source": "create-content-campaign content_mix description",
+   "tokens_any": [
+    [
+     "content_mix",
+     "email"
+    ]
+   ],
+   "context_any": [
+    "create-content-campaign",
+    "update-content-campaign"
+   ],
+   "scope": "file"
+  },
+  {
+   "id": "campaign.content_mix.feed_video",
+   "group": "tool_param",
+   "source": "create-content-campaign content_mix description",
+   "tokens_any": [
+    [
+     "content_mix",
+     "feed_video"
+    ]
+   ],
+   "context_any": [
+    "create-content-campaign",
+    "update-content-campaign"
+   ],
+   "scope": "file"
+  },
+  {
+   "id": "campaign.content_mix.short_video",
+   "group": "tool_param",
+   "source": "create-content-campaign content_mix description",
+   "tokens_any": [
+    [
+     "content_mix",
+     "short_video"
+    ]
+   ],
+   "context_any": [
+    "create-content-campaign",
+    "update-content-campaign"
+   ],
+   "scope": "file"
+  },
+  {
+   "id": "campaign.content_mix.still_image",
+   "group": "tool_param",
+   "source": "create-content-campaign content_mix description",
+   "tokens_any": [
+    [
+     "content_mix",
+     "still_image"
+    ]
+   ],
+   "context_any": [
+    "create-content-campaign",
+    "update-content-campaign"
+   ],
+   "scope": "file"
+  },
+  {
+   "id": "campaign.content_mix.text",
+   "group": "tool_param",
+   "source": "create-content-campaign content_mix description",
+   "tokens_any": [
+    [
+     "content_mix",
+     "text"
+    ]
+   ],
+   "context_any": [
+    "create-content-campaign",
+    "update-content-campaign"
+   ],
+   "scope": "file"
+  },
+  {
+   "id": "campaign.cta_text",
+   "group": "tool_param",
+   "source": "mcp golden schema",
+   "tokens_any": [
+    [
+     "cta_text"
+    ]
+   ],
+   "context_any": [
+    "create-content-campaign",
+    "update-content-campaign"
+   ],
+   "scope": "file"
+  },
+  {
+   "id": "campaign.cta_url",
+   "group": "tool_param",
+   "source": "mcp golden schema",
+   "tokens_any": [
+    [
+     "cta_url"
+    ]
+   ],
+   "context_any": [
+    "create-content-campaign",
+    "update-content-campaign"
+   ],
+   "scope": "file"
+  },
+  {
+   "id": "campaign.ends_on",
+   "group": "tool_param",
+   "source": "mcp golden schema",
+   "tokens_any": [
+    [
+     "ends_on"
+    ]
+   ],
+   "context_any": [
+    "create-content-campaign",
+    "update-content-campaign"
+   ],
+   "scope": "file"
+  },
+  {
+   "id": "campaign.name",
+   "group": "tool_param",
+   "source": "mcp golden schema",
+   "tokens_any": [
+    [
+     "name"
+    ]
+   ],
+   "context_any": [
+    "create-content-campaign",
+    "update-content-campaign"
+   ],
+   "scope": "file"
+  },
+  {
+   "id": "campaign.starts_on",
+   "group": "tool_param",
+   "source": "mcp golden schema",
+   "tokens_any": [
+    [
+     "starts_on"
+    ]
+   ],
+   "context_any": [
+    "create-content-campaign",
+    "update-content-campaign"
+   ],
+   "scope": "file"
+  },
+  {
+   "id": "campaign.strategy_key",
+   "group": "tool_param",
+   "source": "mcp golden schema",
+   "tokens_any": [
+    [
+     "strategy_key"
+    ]
+   ],
+   "context_any": [
+    "create-content-campaign",
+    "update-content-campaign"
+   ],
+   "scope": "file"
+  },
+  {
+   "id": "campaign.strategy_key=lifestyle",
+   "group": "tool_param",
+   "source": "workflows/strategies.py Strategy(key=)",
+   "tokens_any": [
+    [
+     "strategy_key",
+     "lifestyle"
+    ]
+   ],
+   "context_any": [
+    "create-content-campaign",
+    "update-content-campaign"
+   ],
+   "scope": "file"
+  },
+  {
+   "id": "campaign.strategy_key=offer_promotion",
+   "group": "tool_param",
+   "source": "workflows/strategies.py Strategy(key=)",
+   "tokens_any": [
+    [
+     "strategy_key",
+     "offer_promotion"
+    ]
+   ],
+   "context_any": [
+    "create-content-campaign",
+    "update-content-campaign"
+   ],
+   "scope": "file"
+  },
+  {
+   "id": "campaign.strategy_key=problem_solution",
+   "group": "tool_param",
+   "source": "workflows/strategies.py Strategy(key=)",
+   "tokens_any": [
+    [
+     "strategy_key",
+     "problem_solution"
+    ]
+   ],
+   "context_any": [
+    "create-content-campaign",
+    "update-content-campaign"
+   ],
+   "scope": "file"
+  },
+  {
+   "id": "campaign.strategy_key=product_education",
+   "group": "tool_param",
+   "source": "workflows/strategies.py Strategy(key=)",
+   "tokens_any": [
+    [
+     "strategy_key",
+     "product_education"
+    ]
+   ],
+   "context_any": [
+    "create-content-campaign",
+    "update-content-campaign"
+   ],
+   "scope": "file"
+  },
+  {
+   "id": "campaign.strategy_key=quick_tips",
+   "group": "tool_param",
+   "source": "workflows/strategies.py Strategy(key=)",
+   "tokens_any": [
+    [
+     "strategy_key",
+     "quick_tips"
+    ]
+   ],
+   "context_any": [
+    "create-content-campaign",
+    "update-content-campaign"
+   ],
+   "scope": "file"
+  },
+  {
+   "id": "campaign.strategy_key=thought_leadership",
+   "group": "tool_param",
+   "source": "workflows/strategies.py Strategy(key=)",
+   "tokens_any": [
+    [
+     "strategy_key",
+     "thought_leadership"
+    ]
+   ],
+   "context_any": [
+    "create-content-campaign",
+    "update-content-campaign"
+   ],
+   "scope": "file"
+  },
+  {
+   "id": "campaign.theme",
+   "group": "tool_param",
+   "source": "mcp golden schema",
+   "tokens_any": [
+    [
+     "theme"
+    ]
+   ],
+   "context_any": [
+    "create-content-campaign",
+    "update-content-campaign"
+   ],
+   "scope": "file"
+  },
+  {
+   "id": "confirm-plan.proposal_id",
+   "group": "tool_param",
+   "source": "mcp golden schema",
+   "tokens_any": [
+    [
+     "proposal_id"
+    ]
+   ],
+   "context_any": [
+    "confirm-plan"
+   ],
+   "scope": "file"
+  },
+  {
+   "id": "confirm-plan.switch_on",
+   "group": "tool_param",
+   "source": "mcp golden schema",
+   "tokens_any": [
+    [
+     "switch_on"
+    ]
+   ],
+   "context_any": [
+    "confirm-plan"
+   ],
+   "scope": "file"
+  },
+  {
+   "id": "plan-campaign.ask",
+   "group": "tool_param",
+   "source": "mcp golden schema",
+   "tokens_any": [
+    [
+     "ask"
+    ]
+   ],
+   "context_any": [
+    "plan-campaign"
+   ],
+   "scope": "file"
+  },
+  {
+   "id": "plan-campaign.context",
+   "group": "tool_param",
+   "source": "mcp golden schema",
+   "tokens_any": [
+    [
+     "context"
+    ]
+   ],
+   "context_any": [
+    "plan-campaign"
+   ],
+   "scope": "file"
+  },
+  {
+   "id": "plan-campaign.links",
+   "group": "tool_param",
+   "source": "mcp golden schema",
+   "tokens_any": [
+    [
+     "links"
+    ]
+   ],
+   "context_any": [
+    "plan-campaign"
+   ],
+   "scope": "file"
+  },
+  {
+   "id": "plan-routine.ask",
+   "group": "tool_param",
+   "source": "mcp golden schema",
+   "tokens_any": [
+    [
+     "ask"
+    ]
+   ],
+   "context_any": [
+    "plan-routine"
+   ],
+   "scope": "file"
+  },
+  {
+   "id": "plan-routine.context",
+   "group": "tool_param",
+   "source": "mcp golden schema",
+   "tokens_any": [
+    [
+     "context"
+    ]
+   ],
+   "context_any": [
+    "plan-routine"
+   ],
+   "scope": "file"
+  },
+  {
+   "id": "recommend-routines.context",
+   "group": "tool_param",
+   "source": "mcp golden schema",
+   "tokens_any": [
+    [
+     "context"
+    ]
+   ],
+   "context_any": [
+    "recommend-routines"
+   ],
+   "scope": "file"
+  },
+  {
+   "id": "recommend-routines.count",
+   "group": "tool_param",
+   "source": "mcp golden schema",
+   "tokens_any": [
+    [
+     "count"
+    ]
+   ],
+   "context_any": [
+    "recommend-routines"
+   ],
+   "scope": "file"
+  },
+  {
+   "id": "recommend-routines.goals",
+   "group": "tool_param",
+   "source": "mcp golden schema",
+   "tokens_any": [
+    [
+     "goals"
+    ]
+   ],
+   "context_any": [
+    "recommend-routines"
+   ],
+   "scope": "file"
+  },
+  {
+   "id": "revise-plan.change",
+   "group": "tool_param",
+   "source": "mcp golden schema",
+   "tokens_any": [
+    [
+     "change"
+    ]
+   ],
+   "context_any": [
+    "revise-plan"
+   ],
+   "scope": "file"
+  },
+  {
+   "id": "revise-plan.changes",
+   "group": "tool_param",
+   "source": "mcp golden schema",
+   "tokens_any": [
+    [
+     "changes"
+    ]
+   ],
+   "context_any": [
+    "revise-plan"
+   ],
+   "scope": "file"
+  },
+  {
+   "id": "revise-plan.changes.campaign.account_ids",
+   "group": "tool_param",
+   "source": "plan_shaping.CAMPAIGN_CHANGE_KEYS",
+   "tokens_any": [
+    [
+     "changes",
+     "account_ids"
+    ]
+   ],
+   "context_any": [
+    "revise-plan"
+   ],
+   "scope": "file"
+  },
+  {
+   "id": "revise-plan.changes.campaign.goal",
+   "group": "tool_param",
+   "source": "plan_shaping.CAMPAIGN_CHANGE_KEYS",
+   "tokens_any": [
+    [
+     "changes",
+     "goal"
+    ]
+   ],
+   "context_any": [
+    "revise-plan"
+   ],
+   "scope": "file"
+  },
+  {
+   "id": "revise-plan.changes.campaign.instructions",
+   "group": "tool_param",
+   "source": "plan_shaping.CAMPAIGN_CHANGE_KEYS",
+   "tokens_any": [
+    [
+     "changes",
+     "instructions"
+    ]
+   ],
+   "context_any": [
+    "revise-plan"
+   ],
+   "scope": "file"
+  },
+  {
+   "id": "revise-plan.changes.campaign.name",
+   "group": "tool_param",
+   "source": "plan_shaping.CAMPAIGN_CHANGE_KEYS",
+   "tokens_any": [
+    [
+     "changes",
+     "name"
+    ]
+   ],
+   "context_any": [
+    "revise-plan"
+   ],
+   "scope": "file"
+  },
+  {
+   "id": "revise-plan.changes.campaign.platforms",
+   "group": "tool_param",
+   "source": "plan_shaping.CAMPAIGN_CHANGE_KEYS",
+   "tokens_any": [
+    [
+     "changes",
+     "platforms"
+    ]
+   ],
+   "context_any": [
+    "revise-plan"
+   ],
+   "scope": "file"
+  },
+  {
+   "id": "revise-plan.changes.campaign.source_urls",
+   "group": "tool_param",
+   "source": "plan_shaping.CAMPAIGN_CHANGE_KEYS",
+   "tokens_any": [
+    [
+     "changes",
+     "source_urls"
+    ]
+   ],
+   "context_any": [
+    "revise-plan"
+   ],
+   "scope": "file"
+  },
+  {
+   "id": "revise-plan.changes.campaign.voice_profile_id",
+   "group": "tool_param",
+   "source": "plan_shaping.CAMPAIGN_CHANGE_KEYS",
+   "tokens_any": [
+    [
+     "changes",
+     "voice_profile_id"
+    ]
+   ],
+   "context_any": [
+    "revise-plan"
+   ],
+   "scope": "file"
+  },
+  {
+   "id": "revise-plan.changes.routine.account_ids",
+   "group": "tool_param",
+   "source": "plan_shaping.ROUTINE_CHANGE_KEYS",
+   "tokens_any": [
+    [
+     "changes",
+     "account_ids"
+    ]
+   ],
+   "context_any": [
+    "revise-plan"
+   ],
+   "scope": "file"
+  },
+  {
+   "id": "revise-plan.changes.routine.approval_policy",
+   "group": "tool_param",
+   "source": "plan_shaping.ROUTINE_CHANGE_KEYS",
+   "tokens_any": [
+    [
+     "changes",
+     "approval_policy"
+    ]
+   ],
+   "context_any": [
+    "revise-plan"
+   ],
+   "scope": "file"
+  },
+  {
+   "id": "revise-plan.changes.routine.carousel_config",
+   "group": "tool_param",
+   "source": "plan_shaping.ROUTINE_CHANGE_KEYS",
+   "tokens_any": [
+    [
+     "changes",
+     "carousel_config"
+    ]
+   ],
+   "context_any": [
+    "revise-plan"
+   ],
+   "scope": "file"
+  },
+  {
+   "id": "revise-plan.changes.routine.count",
+   "group": "tool_param",
+   "source": "plan_shaping.ROUTINE_CHANGE_KEYS",
+   "tokens_any": [
+    [
+     "changes",
+     "count"
+    ]
+   ],
+   "context_any": [
+    "revise-plan"
+   ],
+   "scope": "file"
+  },
+  {
+   "id": "revise-plan.changes.routine.default_reviewer_ids",
+   "group": "tool_param",
+   "source": "plan_shaping.ROUTINE_CHANGE_KEYS",
+   "tokens_any": [
+    [
+     "changes",
+     "default_reviewer_ids"
+    ]
+   ],
+   "context_any": [
+    "revise-plan"
+   ],
+   "scope": "file"
+  },
+  {
+   "id": "revise-plan.changes.routine.goal",
+   "group": "tool_param",
+   "source": "plan_shaping.ROUTINE_CHANGE_KEYS",
+   "tokens_any": [
+    [
+     "changes",
+     "goal"
+    ]
+   ],
+   "context_any": [
+    "revise-plan"
+   ],
+   "scope": "file"
+  },
+  {
+   "id": "revise-plan.changes.routine.instructions",
+   "group": "tool_param",
+   "source": "plan_shaping.ROUTINE_CHANGE_KEYS",
+   "tokens_any": [
+    [
+     "changes",
+     "instructions"
+    ]
+   ],
+   "context_any": [
+    "revise-plan"
+   ],
+   "scope": "file"
+  },
+  {
+   "id": "revise-plan.changes.routine.keywords",
+   "group": "tool_param",
+   "source": "plan_shaping.ROUTINE_CHANGE_KEYS",
+   "tokens_any": [
+    [
+     "changes",
+     "keywords"
+    ]
+   ],
+   "context_any": [
+    "revise-plan"
+   ],
+   "scope": "file"
+  },
+  {
+   "id": "revise-plan.changes.routine.media_mode",
+   "group": "tool_param",
+   "source": "plan_shaping.ROUTINE_CHANGE_KEYS",
+   "tokens_any": [
+    [
+     "changes",
+     "media_mode"
+    ]
+   ],
+   "context_any": [
+    "revise-plan"
+   ],
+   "scope": "file"
+  },
+  {
+   "id": "revise-plan.changes.routine.media_prompt",
+   "group": "tool_param",
+   "source": "plan_shaping.ROUTINE_CHANGE_KEYS",
+   "tokens_any": [
+    [
+     "changes",
+     "media_prompt"
+    ]
+   ],
+   "context_any": [
+    "revise-plan"
+   ],
+   "scope": "file"
+  },
+  {
+   "id": "revise-plan.changes.routine.name",
+   "group": "tool_param",
+   "source": "plan_shaping.ROUTINE_CHANGE_KEYS",
+   "tokens_any": [
+    [
+     "changes",
+     "name"
+    ]
+   ],
+   "context_any": [
+    "revise-plan"
+   ],
+   "scope": "file"
+  },
+  {
+   "id": "revise-plan.changes.routine.platforms",
+   "group": "tool_param",
+   "source": "plan_shaping.ROUTINE_CHANGE_KEYS",
+   "tokens_any": [
+    [
+     "changes",
+     "platforms"
+    ]
+   ],
+   "context_any": [
+    "revise-plan"
+   ],
+   "scope": "file"
+  },
+  {
+   "id": "revise-plan.changes.routine.schedule",
+   "group": "tool_param",
+   "source": "plan_shaping.ROUTINE_CHANGE_KEYS",
+   "tokens_any": [
+    [
+     "changes",
+     "schedule"
+    ]
+   ],
+   "context_any": [
+    "revise-plan"
+   ],
+   "scope": "file"
+  },
+  {
+   "id": "revise-plan.changes.routine.source_urls",
+   "group": "tool_param",
+   "source": "plan_shaping.ROUTINE_CHANGE_KEYS",
+   "tokens_any": [
+    [
+     "changes",
+     "source_urls"
+    ]
+   ],
+   "context_any": [
+    "revise-plan"
+   ],
+   "scope": "file"
+  },
+  {
+   "id": "revise-plan.changes.routine.subreddits",
+   "group": "tool_param",
+   "source": "plan_shaping.ROUTINE_CHANGE_KEYS",
+   "tokens_any": [
+    [
+     "changes",
+     "subreddits"
+    ]
+   ],
+   "context_any": [
+    "revise-plan"
+   ],
+   "scope": "file"
+  },
+  {
+   "id": "revise-plan.changes.routine.template_key",
+   "group": "tool_param",
+   "source": "plan_shaping.ROUTINE_CHANGE_KEYS",
+   "tokens_any": [
+    [
+     "changes",
+     "template_key"
+    ]
+   ],
+   "context_any": [
+    "revise-plan"
+   ],
+   "scope": "file"
+  },
+  {
+   "id": "revise-plan.changes.routine.timezone",
+   "group": "tool_param",
+   "source": "plan_shaping.ROUTINE_CHANGE_KEYS",
+   "tokens_any": [
+    [
+     "changes",
+     "timezone"
+    ]
+   ],
+   "context_any": [
+    "revise-plan"
+   ],
+   "scope": "file"
+  },
+  {
+   "id": "revise-plan.changes.routine.topics",
+   "group": "tool_param",
+   "source": "plan_shaping.ROUTINE_CHANGE_KEYS",
+   "tokens_any": [
+    [
+     "changes",
+     "topics"
+    ]
+   ],
+   "context_any": [
+    "revise-plan"
+   ],
+   "scope": "file"
+  },
+  {
+   "id": "revise-plan.changes.routine.visual_style",
+   "group": "tool_param",
+   "source": "plan_shaping.ROUTINE_CHANGE_KEYS",
+   "tokens_any": [
+    [
+     "changes",
+     "visual_style"
+    ]
+   ],
+   "context_any": [
+    "revise-plan"
+   ],
+   "scope": "file"
+  },
+  {
+   "id": "revise-plan.changes.routine.voice_profile_id",
+   "group": "tool_param",
+   "source": "plan_shaping.ROUTINE_CHANGE_KEYS",
+   "tokens_any": [
+    [
+     "changes",
+     "voice_profile_id"
+    ]
+   ],
+   "context_any": [
+    "revise-plan"
+   ],
+   "scope": "file"
+  },
+  {
+   "id": "revise-plan.proposal_id",
+   "group": "tool_param",
+   "source": "mcp golden schema",
+   "tokens_any": [
+    [
+     "proposal_id"
+    ]
+   ],
+   "context_any": [
+    "revise-plan"
+   ],
+   "scope": "file"
+  },
+  {
+   "id": "routine.approval_policy",
+   "group": "tool_param",
+   "source": "mcp golden schema",
+   "tokens_any": [
+    [
+     "approval_policy"
+    ]
+   ],
+   "context_any": [
+    "create-routine",
+    "update-routine"
+   ],
+   "scope": "file"
+  },
+  {
+   "id": "routine.approval_policy=auto",
+   "group": "tool_param",
+   "source": "routine_contract.ApprovalPolicy",
+   "tokens_any": [
+    [
+     "approval_policy",
+     "auto"
+    ]
+   ],
+   "context_any": [
+    "create-routine",
+    "update-routine"
+   ],
+   "scope": "file"
+  },
+  {
+   "id": "routine.approval_policy=inherit",
+   "group": "tool_param",
+   "source": "routine_contract.ApprovalPolicy",
+   "tokens_any": [
+    [
+     "approval_policy",
+     "inherit"
+    ]
+   ],
+   "context_any": [
+    "create-routine",
+    "update-routine"
+   ],
+   "scope": "file"
+  },
+  {
+   "id": "routine.approval_policy=review_every_artifact",
+   "group": "tool_param",
+   "source": "routine_contract.ApprovalPolicy",
+   "tokens_any": [
+    [
+     "approval_policy",
+     "review_every_artifact"
+    ]
+   ],
+   "context_any": [
+    "create-routine",
+    "update-routine"
+   ],
+   "scope": "file"
+  },
+  {
+   "id": "routine.capability_keys",
+   "group": "tool_param",
+   "source": "mcp golden schema",
+   "tokens_any": [
+    [
+     "capability_keys"
+    ]
+   ],
+   "context_any": [
+    "create-routine",
+    "update-routine"
+   ],
+   "scope": "file"
+  },
+  {
+   "id": "routine.default_reviewer_ids",
+   "group": "tool_param",
+   "source": "mcp golden schema",
+   "tokens_any": [
+    [
+     "default_reviewer_ids"
+    ]
+   ],
+   "context_any": [
+    "create-routine",
+    "update-routine"
+   ],
+   "scope": "file"
+  },
+  {
+   "id": "routine.destination_config",
+   "group": "tool_param",
+   "source": "mcp golden schema",
+   "tokens_any": [
+    [
+     "destination_config"
+    ]
+   ],
+   "context_any": [
+    "create-routine",
+    "update-routine"
+   ],
+   "scope": "file"
+  },
+  {
+   "id": "routine.destination_config.account_refs",
+   "group": "tool_param",
+   "source": "mcp golden schema",
+   "tokens_any": [
+    [
+     "destination_config",
+     "account_refs"
+    ]
+   ],
+   "context_any": [
+    "create-routine",
+    "update-routine"
+   ],
+   "scope": "file"
+  },
+  {
+   "id": "routine.destination_config.behavior",
+   "group": "tool_param",
+   "source": "mcp golden schema",
+   "tokens_any": [
+    [
+     "destination_config",
+     "behavior"
+    ]
+   ],
+   "context_any": [
+    "create-routine",
+    "update-routine"
+   ],
+   "scope": "file"
+  },
+  {
+   "id": "routine.destination_config.behavior=save_draft",
+   "group": "tool_param",
+   "source": "mcp golden enum",
+   "tokens_any": [
+    [
+     "behavior",
+     "save_draft"
+    ]
+   ],
+   "context_any": [
+    "create-routine",
+    "update-routine"
+   ],
+   "scope": "file"
+  },
+  {
+   "id": "routine.destination_config.behavior=schedule",
+   "group": "tool_param",
+   "source": "mcp golden enum",
+   "tokens_any": [
+    [
+     "behavior",
+     "schedule"
+    ]
+   ],
+   "context_any": [
+    "create-routine",
+    "update-routine"
+   ],
+   "scope": "file"
+  },
+  {
+   "id": "routine.destination_config.voice_profile_id",
+   "group": "tool_param",
+   "source": "mcp golden schema",
+   "tokens_any": [
+    [
+     "destination_config",
+     "voice_profile_id"
+    ]
+   ],
+   "context_any": [
+    "create-routine",
+    "update-routine"
+   ],
+   "scope": "file"
+  },
+  {
+   "id": "routine.goal",
+   "group": "tool_param",
+   "source": "mcp golden schema",
+   "tokens_any": [
+    [
+     "goal"
+    ]
+   ],
+   "context_any": [
+    "create-routine",
+    "update-routine"
+   ],
+   "scope": "file"
+  },
+  {
+   "id": "routine.instructions",
+   "group": "tool_param",
+   "source": "mcp golden schema",
+   "tokens_any": [
+    [
+     "instructions"
+    ]
+   ],
+   "context_any": [
+    "create-routine",
+    "update-routine"
+   ],
+   "scope": "file"
+  },
+  {
+   "id": "routine.name",
+   "group": "tool_param",
+   "source": "mcp golden schema",
+   "tokens_any": [
+    [
+     "name"
+    ]
+   ],
+   "context_any": [
+    "create-routine",
+    "update-routine"
+   ],
+   "scope": "file"
+  },
+  {
+   "id": "routine.outcome_category",
+   "group": "tool_param",
+   "source": "mcp golden schema",
+   "tokens_any": [
+    [
+     "outcome_category"
+    ]
+   ],
+   "context_any": [
+    "create-routine",
+    "update-routine"
+   ],
+   "scope": "file"
+  },
+  {
+   "id": "routine.outcome_category=audience_research",
+   "group": "tool_param",
+   "source": "routine_contract.OutcomeCategory",
+   "tokens_any": [
+    [
+     "outcome_category",
+     "audience_research"
+    ]
+   ],
+   "context_any": [
+    "create-routine",
+    "update-routine"
+   ],
+   "scope": "file"
+  },
+  {
+   "id": "routine.outcome_category=engagement_replies",
+   "group": "tool_param",
+   "source": "routine_contract.OutcomeCategory",
+   "tokens_any": [
+    [
+     "outcome_category",
+     "engagement_replies"
+    ]
+   ],
+   "context_any": [
+    "create-routine",
+    "update-routine"
+   ],
+   "scope": "file"
+  },
+  {
+   "id": "routine.outcome_category=performance_reporting",
+   "group": "tool_param",
+   "source": "routine_contract.OutcomeCategory",
+   "tokens_any": [
+    [
+     "outcome_category",
+     "performance_reporting"
+    ]
+   ],
+   "context_any": [
+    "create-routine",
+    "update-routine"
+   ],
+   "scope": "file"
+  },
+  {
+   "id": "routine.outcome_category=repurposing",
+   "group": "tool_param",
+   "source": "routine_contract.OutcomeCategory",
+   "tokens_any": [
+    [
+     "outcome_category",
+     "repurposing"
+    ]
+   ],
+   "context_any": [
+    "create-routine",
+    "update-routine"
+   ],
+   "scope": "file"
+  },
+  {
+   "id": "routine.outcome_category=seo_articles",
+   "group": "tool_param",
+   "source": "routine_contract.OutcomeCategory",
+   "tokens_any": [
+    [
+     "outcome_category",
+     "seo_articles"
+    ]
+   ],
+   "context_any": [
+    "create-routine",
+    "update-routine"
+   ],
+   "scope": "file"
+  },
+  {
+   "id": "routine.outcome_category=social_posts",
+   "group": "tool_param",
+   "source": "routine_contract.OutcomeCategory",
+   "tokens_any": [
+    [
+     "outcome_category",
+     "social_posts"
+    ]
+   ],
+   "context_any": [
+    "create-routine",
+    "update-routine"
+   ],
+   "scope": "file"
+  },
+  {
+   "id": "routine.output_config",
+   "group": "tool_param",
+   "source": "mcp golden schema",
+   "tokens_any": [
+    [
+     "output_config"
+    ]
+   ],
+   "context_any": [
+    "create-routine",
+    "update-routine"
+   ],
+   "scope": "file"
+  },
+  {
+   "id": "routine.output_config.artifact_type",
+   "group": "tool_param",
+   "source": "routine_service._validate_output_config",
+   "tokens_any": [
+    [
+     "output_config",
+     "artifact_type"
+    ]
+   ],
+   "context_any": [
+    "create-routine",
+    "update-routine"
+   ],
+   "scope": "file"
+  },
+  {
+   "id": "routine.output_config.artifact_type=article",
+   "group": "tool_param",
+   "source": "routine_contract.ArtifactType",
+   "tokens_any": [
+    [
+     "artifact_type",
+     "article"
+    ]
+   ],
+   "context_any": [
+    "create-routine",
+    "update-routine"
+   ],
+   "scope": "file"
+  },
+  {
+   "id": "routine.output_config.artifact_type=post",
+   "group": "tool_param",
+   "source": "routine_contract.ArtifactType",
+   "tokens_any": [
+    [
+     "artifact_type",
+     "post"
+    ]
+   ],
+   "context_any": [
+    "create-routine",
+    "update-routine"
+   ],
+   "scope": "file"
+  },
+  {
+   "id": "routine.output_config.artifact_type=reply",
+   "group": "tool_param",
+   "source": "routine_contract.ArtifactType",
+   "tokens_any": [
+    [
+     "artifact_type",
+     "reply"
+    ]
+   ],
+   "context_any": [
+    "create-routine",
+    "update-routine"
+   ],
+   "scope": "file"
+  },
+  {
+   "id": "routine.output_config.artifact_type=report",
+   "group": "tool_param",
+   "source": "routine_contract.ArtifactType",
+   "tokens_any": [
+    [
+     "artifact_type",
+     "report"
+    ]
+   ],
+   "context_any": [
+    "create-routine",
+    "update-routine"
+   ],
+   "scope": "file"
+  },
+  {
+   "id": "routine.output_config.carousel_config",
+   "group": "tool_param",
+   "source": "routine_service._validate_output_config",
+   "tokens_any": [
+    [
+     "output_config",
+     "carousel_config"
+    ]
+   ],
+   "context_any": [
+    "create-routine",
+    "update-routine"
+   ],
+   "scope": "file"
+  },
+  {
+   "id": "routine.output_config.carousel_config.aspectRatio",
+   "group": "tool_param",
+   "source": "carousel_job_settings.validate_carousel_settings",
+   "tokens_any": [
+    [
+     "carousel_config",
+     "aspectRatio"
+    ]
+   ],
+   "context_any": [
+    "create-routine",
+    "update-routine"
+   ],
+   "scope": "file"
+  },
+  {
+   "id": "routine.output_config.carousel_config.aspectRatio=portrait_4_5",
+   "group": "tool_param",
+   "source": "workflows.models.CAROUSEL_ASPECT_RATIOS",
+   "tokens_any": [
+    [
+     "aspectRatio",
+     "portrait_4_5"
+    ]
+   ],
+   "context_any": [
+    "create-routine",
+    "update-routine"
+   ],
+   "scope": "file"
+  },
+  {
+   "id": "routine.output_config.carousel_config.aspectRatio=square_1_1",
+   "group": "tool_param",
+   "source": "workflows.models.CAROUSEL_ASPECT_RATIOS",
+   "tokens_any": [
+    [
+     "aspectRatio",
+     "square_1_1"
+    ]
+   ],
+   "context_any": [
+    "create-routine",
+    "update-routine"
+   ],
+   "scope": "file"
+  },
+  {
+   "id": "routine.output_config.carousel_config.continuity",
+   "group": "tool_param",
+   "source": "carousel_job_settings.validate_carousel_settings",
+   "tokens_any": [
+    [
+     "carousel_config",
+     "continuity"
+    ]
+   ],
+   "context_any": [
+    "create-routine",
+    "update-routine"
+   ],
+   "scope": "file"
+  },
+  {
+   "id": "routine.output_config.carousel_config.continuity=brand_lock",
+   "group": "tool_param",
+   "source": "workflows.models.CAROUSEL_CONTINUITY",
+   "tokens_any": [
+    [
+     "continuity",
+     "brand_lock"
+    ]
+   ],
+   "context_any": [
+    "create-routine",
+    "update-routine"
+   ],
+   "scope": "file"
+  },
+  {
+   "id": "routine.output_config.carousel_config.continuity=chain",
+   "group": "tool_param",
+   "source": "workflows.models.CAROUSEL_CONTINUITY",
+   "tokens_any": [
+    [
+     "continuity",
+     "chain"
+    ]
+   ],
+   "context_any": [
+    "create-routine",
+    "update-routine"
+   ],
+   "scope": "file"
+  },
+  {
+   "id": "routine.output_config.carousel_config.slideCount",
+   "group": "tool_param",
+   "source": "carousel_job_settings.validate_carousel_settings",
+   "tokens_any": [
+    [
+     "carousel_config",
+     "slideCount"
+    ]
+   ],
+   "context_any": [
+    "create-routine",
+    "update-routine"
+   ],
+   "scope": "file"
+  },
+  {
+   "id": "routine.output_config.carousel_config.useBrand",
+   "group": "tool_param",
+   "source": "carousel_job_settings.validate_carousel_settings",
+   "tokens_any": [
+    [
+     "carousel_config",
+     "useBrand"
+    ]
+   ],
+   "context_any": [
+    "create-routine",
+    "update-routine"
+   ],
+   "scope": "file"
+  },
+  {
+   "id": "routine.output_config.carousel_config.visualStyle",
+   "group": "tool_param",
+   "source": "carousel_job_settings.validate_carousel_settings",
+   "tokens_any": [
+    [
+     "carousel_config",
+     "visualStyle"
+    ]
+   ],
+   "context_any": [
+    "create-routine",
+    "update-routine"
+   ],
+   "scope": "file"
+  },
+  {
+   "id": "routine.output_config.carousel_config.visualStyle=auto",
+   "group": "tool_param",
+   "source": "workflows.models.CAROUSEL_VISUAL_STYLES",
+   "tokens_any": [
+    [
+     "visualStyle",
+     "auto"
+    ]
+   ],
+   "context_any": [
+    "create-routine",
+    "update-routine"
+   ],
+   "scope": "file"
+  },
+  {
+   "id": "routine.output_config.carousel_config.visualStyle=bold",
+   "group": "tool_param",
+   "source": "workflows.models.CAROUSEL_VISUAL_STYLES",
+   "tokens_any": [
+    [
+     "visualStyle",
+     "bold"
+    ]
+   ],
+   "context_any": [
+    "create-routine",
+    "update-routine"
+   ],
+   "scope": "file"
+  },
+  {
+   "id": "routine.output_config.carousel_config.visualStyle=editorial",
+   "group": "tool_param",
+   "source": "workflows.models.CAROUSEL_VISUAL_STYLES",
+   "tokens_any": [
+    [
+     "visualStyle",
+     "editorial"
+    ]
+   ],
+   "context_any": [
+    "create-routine",
+    "update-routine"
+   ],
+   "scope": "file"
+  },
+  {
+   "id": "routine.output_config.carousel_config.visualStyle=minimal",
+   "group": "tool_param",
+   "source": "workflows.models.CAROUSEL_VISUAL_STYLES",
+   "tokens_any": [
+    [
+     "visualStyle",
+     "minimal"
+    ]
+   ],
+   "context_any": [
+    "create-routine",
+    "update-routine"
+   ],
+   "scope": "file"
+  },
+  {
+   "id": "routine.output_config.carousel_config.visualStyle=photographic",
+   "group": "tool_param",
+   "source": "workflows.models.CAROUSEL_VISUAL_STYLES",
+   "tokens_any": [
+    [
+     "visualStyle",
+     "photographic"
+    ]
+   ],
+   "context_any": [
+    "create-routine",
+    "update-routine"
+   ],
+   "scope": "file"
+  },
+  {
+   "id": "routine.output_config.communities",
+   "group": "tool_param",
+   "source": "routine_service._validate_output_config",
+   "tokens_any": [
+    [
+     "output_config",
+     "communities"
+    ]
+   ],
+   "context_any": [
+    "create-routine",
+    "update-routine"
+   ],
+   "scope": "file"
+  },
+  {
+   "id": "routine.output_config.count",
+   "group": "tool_param",
+   "source": "routine_service._validate_output_config",
+   "tokens_any": [
+    [
+     "output_config",
+     "count"
+    ]
+   ],
+   "context_any": [
+    "create-routine",
+    "update-routine"
+   ],
+   "scope": "file"
+  },
+  {
+   "id": "routine.output_config.cta",
+   "group": "tool_param",
+   "source": "routine_service._validate_output_config",
+   "tokens_any": [
+    [
+     "output_config",
+     "cta"
+    ]
+   ],
+   "context_any": [
+    "create-routine",
+    "update-routine"
+   ],
+   "scope": "file"
+  },
+  {
+   "id": "routine.output_config.image_model",
+   "group": "tool_param",
+   "source": "routine_service._validate_output_config",
+   "tokens_any": [
+    [
+     "output_config",
+     "image_model"
+    ]
+   ],
+   "context_any": [
+    "create-routine",
+    "update-routine"
+   ],
+   "scope": "file"
+  },
+  {
+   "id": "routine.output_config.library",
+   "group": "tool_param",
+   "source": "routine_service._validate_output_config",
+   "tokens_any": [
+    [
+     "output_config",
+     "library"
+    ]
+   ],
+   "context_any": [
+    "create-routine",
+    "update-routine"
+   ],
+   "scope": "file"
+  },
+  {
+   "id": "routine.output_config.library.enabled",
+   "group": "tool_param",
+   "source": "routine_service._validate_library_companion",
+   "tokens_any": [
+    [
+     "library",
+     "enabled"
+    ]
+   ],
+   "context_any": [
+    "create-routine",
+    "update-routine"
+   ],
+   "scope": "file"
+  },
+  {
+   "id": "routine.output_config.library.include_images",
+   "group": "tool_param",
+   "source": "routine_service._validate_library_config",
+   "tokens_any": [
+    [
+     "library",
+     "include_images"
+    ]
+   ],
+   "context_any": [
+    "create-routine",
+    "update-routine"
+   ],
+   "scope": "file"
+  },
+  {
+   "id": "routine.output_config.library.per_topic",
+   "group": "tool_param",
+   "source": "routine_service._validate_library_config",
+   "tokens_any": [
+    [
+     "library",
+     "per_topic"
+    ]
+   ],
+   "context_any": [
+    "create-routine",
+    "update-routine"
+   ],
+   "scope": "file"
+  },
+  {
+   "id": "routine.output_config.library.send_to_client",
+   "group": "tool_param",
+   "source": "routine_service._validate_library_config; routine_service._validate_library_companion",
+   "tokens_any": [
+    [
+     "library",
+     "send_to_client"
+    ]
+   ],
+   "context_any": [
+    "create-routine",
+    "update-routine"
+   ],
+   "scope": "file"
+  },
+  {
+   "id": "routine.output_config.library.voice_mode",
+   "group": "tool_param",
+   "source": "routine_service._validate_library_config",
+   "tokens_any": [
+    [
+     "library",
+     "voice_mode"
+    ]
+   ],
+   "context_any": [
+    "create-routine",
+    "update-routine"
+   ],
+   "scope": "file"
+  },
+  {
+   "id": "routine.output_config.library.voice_profile_ids",
+   "group": "tool_param",
+   "source": "routine_service._validate_library_config; routine_service._validate_library_companion",
+   "tokens_any": [
+    [
+     "library",
+     "voice_profile_ids"
+    ]
+   ],
+   "context_any": [
+    "create-routine",
+    "update-routine"
+   ],
+   "scope": "file"
+  },
+  {
+   "id": "routine.output_config.library_media",
+   "group": "tool_param",
+   "source": "routine_service._validate_output_config",
+   "tokens_any": [
+    [
+     "output_config",
+     "library_media"
+    ]
+   ],
+   "context_any": [
+    "create-routine",
+    "update-routine"
+   ],
+   "scope": "file"
+  },
+  {
+   "id": "routine.output_config.media_mode",
+   "group": "tool_param",
+   "source": "routine_service._validate_output_config",
+   "tokens_any": [
+    [
+     "output_config",
+     "media_mode"
+    ]
+   ],
+   "context_any": [
+    "create-routine",
+    "update-routine"
+   ],
+   "scope": "file"
+  },
+  {
+   "id": "routine.output_config.media_mode=carousel",
+   "group": "tool_param",
+   "source": "routine_media.MEDIA_MODES",
+   "tokens_any": [
+    [
+     "media_mode",
+     "carousel"
+    ]
+   ],
+   "context_any": [
+    "create-routine",
+    "update-routine"
+   ],
+   "scope": "file"
+  },
+  {
+   "id": "routine.output_config.media_mode=image",
+   "group": "tool_param",
+   "source": "routine_media.MEDIA_MODES",
+   "tokens_any": [
+    [
+     "media_mode",
+     "image"
+    ]
+   ],
+   "context_any": [
+    "create-routine",
+    "update-routine"
+   ],
+   "scope": "file"
+  },
+  {
+   "id": "routine.output_config.media_mode=none",
+   "group": "tool_param",
+   "source": "routine_media.MEDIA_MODES",
+   "tokens_any": [
+    [
+     "media_mode",
+     "none"
+    ]
+   ],
+   "context_any": [
+    "create-routine",
+    "update-routine"
+   ],
+   "scope": "file"
+  },
+  {
+   "id": "routine.output_config.media_mode=video",
+   "group": "tool_param",
+   "source": "routine_media.MEDIA_MODES",
+   "tokens_any": [
+    [
+     "media_mode",
+     "video"
+    ]
+   ],
+   "context_any": [
+    "create-routine",
+    "update-routine"
+   ],
+   "scope": "file"
+  },
+  {
+   "id": "routine.output_config.media_prompt",
+   "group": "tool_param",
+   "source": "routine_service._validate_output_config",
+   "tokens_any": [
+    [
+     "output_config",
+     "media_prompt"
+    ]
+   ],
+   "context_any": [
+    "create-routine",
+    "update-routine"
+   ],
+   "scope": "file"
+  },
+  {
+   "id": "routine.output_config.platforms",
+   "group": "tool_param",
+   "source": "routine_service._validate_output_config",
+   "tokens_any": [
+    [
+     "output_config",
+     "platforms"
+    ]
+   ],
+   "context_any": [
+    "create-routine",
+    "update-routine"
+   ],
+   "scope": "file"
+  },
+  {
+   "id": "routine.output_config.reference_image_url",
+   "group": "tool_param",
+   "source": "routine_service._validate_output_config",
+   "tokens_any": [
+    [
+     "output_config",
+     "reference_image_url"
+    ]
+   ],
+   "context_any": [
+    "create-routine",
+    "update-routine"
+   ],
+   "scope": "file"
+  },
+  {
+   "id": "routine.output_config.reference_media_id",
+   "group": "tool_param",
+   "source": "routine_service._validate_output_config",
+   "tokens_any": [
+    [
+     "output_config",
+     "reference_media_id"
+    ]
+   ],
+   "context_any": [
+    "create-routine",
+    "update-routine"
+   ],
+   "scope": "file"
+  },
+  {
+   "id": "routine.output_config.review",
+   "group": "tool_param",
+   "source": "routine_service._validate_output_config",
+   "tokens_any": [
+    [
+     "output_config",
+     "review"
+    ]
+   ],
+   "context_any": [
+    "create-routine",
+    "update-routine"
+   ],
+   "scope": "file"
+  },
+  {
+   "id": "routine.output_config.review.bank_target",
+   "group": "tool_param",
+   "source": "routine_service._validate_review_config",
+   "tokens_any": [
+    [
+     "review",
+     "bank_target"
+    ]
+   ],
+   "context_any": [
+    "create-routine",
+    "update-routine"
+   ],
+   "scope": "file"
+  },
+  {
+   "id": "routine.output_config.review.recipient_ids",
+   "group": "tool_param",
+   "source": "routine_service._validate_review_config",
+   "tokens_any": [
+    [
+     "review",
+     "recipient_ids"
+    ]
+   ],
+   "context_any": [
+    "create-routine",
+    "update-routine"
+   ],
+   "scope": "file"
+  },
+  {
+   "id": "routine.output_config.review.to_client",
+   "group": "tool_param",
+   "source": "routine_service._validate_review_config",
+   "tokens_any": [
+    [
+     "review",
+     "to_client"
+    ]
+   ],
+   "context_any": [
+    "create-routine",
+    "update-routine"
+   ],
+   "scope": "file"
+  },
+  {
+   "id": "routine.output_config.settings",
+   "group": "tool_param",
+   "source": "routine_service._validate_output_config",
+   "tokens_any": [
+    [
+     "output_config",
+     "settings"
+    ]
+   ],
+   "context_any": [
+    "create-routine",
+    "update-routine"
+   ],
+   "scope": "file"
+  },
+  {
+   "id": "routine.output_config.source_urls",
+   "group": "tool_param",
+   "source": "routine_service._validate_output_config",
+   "tokens_any": [
+    [
+     "output_config",
+     "source_urls"
+    ]
+   ],
+   "context_any": [
+    "create-routine",
+    "update-routine"
+   ],
+   "scope": "file"
+  },
+  {
+   "id": "routine.output_config.story",
+   "group": "tool_param",
+   "source": "routine_service._validate_output_config",
+   "tokens_any": [
+    [
+     "output_config",
+     "story"
+    ]
+   ],
+   "context_any": [
+    "create-routine",
+    "update-routine"
+   ],
+   "scope": "file"
+  },
+  {
+   "id": "routine.output_config.story.article",
+   "group": "tool_param",
+   "source": "routine_service._validate_story_config",
+   "tokens_any": [
+    [
+     "story",
+     "article"
+    ]
+   ],
+   "context_any": [
+    "create-routine",
+    "update-routine"
+   ],
+   "scope": "file"
+  },
+  {
+   "id": "routine.output_config.story.carousel",
+   "group": "tool_param",
+   "source": "routine_service._validate_story_config",
+   "tokens_any": [
+    [
+     "story",
+     "carousel"
+    ]
+   ],
+   "context_any": [
+    "create-routine",
+    "update-routine"
+   ],
+   "scope": "file"
+  },
+  {
+   "id": "routine.output_config.story.enabled",
+   "group": "tool_param",
+   "source": "routine_service._validate_story_config",
+   "tokens_any": [
+    [
+     "story",
+     "enabled"
+    ]
+   ],
+   "context_any": [
+    "create-routine",
+    "update-routine"
+   ],
+   "scope": "file"
+  },
+  {
+   "id": "routine.output_config.story.library",
+   "group": "tool_param",
+   "source": "routine_service._validate_story_config",
+   "tokens_any": [
+    [
+     "story",
+     "library"
+    ]
+   ],
+   "context_any": [
+    "create-routine",
+    "update-routine"
+   ],
+   "scope": "file"
+  },
+  {
+   "id": "routine.output_config.story.post",
+   "group": "tool_param",
+   "source": "routine_service._validate_story_config",
+   "tokens_any": [
+    [
+     "story",
+     "post"
+    ]
+   ],
+   "context_any": [
+    "create-routine",
+    "update-routine"
+   ],
+   "scope": "file"
+  },
+  {
+   "id": "routine.output_config.story.send_to_client",
+   "group": "tool_param",
+   "source": "routine_service._validate_story_config",
+   "tokens_any": [
+    [
+     "story",
+     "send_to_client"
+    ]
+   ],
+   "context_any": [
+    "create-routine",
+    "update-routine"
+   ],
+   "scope": "file"
+  },
+  {
+   "id": "routine.output_config.topics",
+   "group": "tool_param",
+   "source": "routine_service._validate_output_config",
+   "tokens_any": [
+    [
+     "output_config",
+     "topics"
+    ]
+   ],
+   "context_any": [
+    "create-routine",
+    "update-routine"
+   ],
+   "scope": "file"
+  },
+  {
+   "id": "routine.output_config.visual_style",
+   "group": "tool_param",
+   "source": "routine_service._validate_output_config",
+   "tokens_any": [
+    [
+     "output_config",
+     "visual_style"
+    ]
+   ],
+   "context_any": [
+    "create-routine",
+    "update-routine"
+   ],
+   "scope": "file"
+  },
+  {
+   "id": "routine.routine_id",
+   "group": "tool_param",
+   "source": "mcp golden schema",
+   "tokens_any": [
+    [
+     "routine_id"
+    ]
+   ],
+   "context_any": [
+    "create-routine",
+    "update-routine"
+   ],
+   "scope": "file"
+  },
+  {
+   "id": "routine.schedule",
+   "group": "tool_param",
+   "source": "mcp golden schema",
+   "tokens_any": [
+    [
+     "schedule"
+    ]
+   ],
+   "context_any": [
+    "create-routine",
+    "update-routine"
+   ],
+   "scope": "file"
+  },
+  {
+   "id": "routine.schedule.cron",
+   "group": "tool_param",
+   "source": "routine_service._validate_schedule",
+   "tokens_any": [
+    [
+     "schedule",
+     "cron"
+    ]
+   ],
+   "context_any": [
+    "create-routine",
+    "update-routine"
+   ],
+   "scope": "file"
+  },
+  {
+   "id": "routine.schedule.day",
+   "group": "tool_param",
+   "source": "routine_service._validate_schedule",
+   "tokens_any": [
+    [
+     "schedule",
+     "day"
+    ]
+   ],
+   "context_any": [
+    "create-routine",
+    "update-routine"
+   ],
+   "scope": "file"
+  },
+  {
+   "id": "routine.schedule.interval",
+   "group": "tool_param",
+   "source": "routine_service._validate_schedule",
+   "tokens_any": [
+    [
+     "schedule",
+     "interval"
+    ]
+   ],
+   "context_any": [
+    "create-routine",
+    "update-routine"
+   ],
+   "scope": "file"
+  },
+  {
+   "id": "routine.schedule.interval=daily",
+   "group": "tool_param",
+   "source": "routine_service._SCHEDULE_INTERVALS",
+   "tokens_any": [
+    [
+     "interval",
+     "daily"
+    ]
+   ],
+   "context_any": [
+    "create-routine",
+    "update-routine"
+   ],
+   "scope": "file"
+  },
+  {
+   "id": "routine.schedule.interval=monthly",
+   "group": "tool_param",
+   "source": "routine_service._SCHEDULE_INTERVALS",
+   "tokens_any": [
+    [
+     "interval",
+     "monthly"
+    ]
+   ],
+   "context_any": [
+    "create-routine",
+    "update-routine"
+   ],
+   "scope": "file"
+  },
+  {
+   "id": "routine.schedule.interval=weekly",
+   "group": "tool_param",
+   "source": "routine_service._SCHEDULE_INTERVALS",
+   "tokens_any": [
+    [
+     "interval",
+     "weekly"
+    ]
+   ],
+   "context_any": [
+    "create-routine",
+    "update-routine"
+   ],
+   "scope": "file"
+  },
+  {
+   "id": "routine.schedule.time",
+   "group": "tool_param",
+   "source": "routine_service._validate_schedule",
+   "tokens_any": [
+    [
+     "schedule",
+     "time"
+    ]
+   ],
+   "context_any": [
+    "create-routine",
+    "update-routine"
+   ],
+   "scope": "file"
+  },
+  {
+   "id": "routine.source_bindings",
+   "group": "tool_param",
+   "source": "mcp golden schema",
+   "tokens_any": [
+    [
+     "source_bindings"
+    ]
+   ],
+   "context_any": [
+    "create-routine",
+    "update-routine"
+   ],
+   "scope": "file"
+  },
+  {
+   "id": "routine.source_bindings.filters",
+   "group": "tool_param",
+   "source": "mcp golden schema",
+   "tokens_any": [
+    [
+     "source_bindings",
+     "filters"
+    ]
+   ],
+   "context_any": [
+    "create-routine",
+    "update-routine"
+   ],
+   "scope": "file"
+  },
+  {
+   "id": "routine.source_bindings.kind",
+   "group": "tool_param",
+   "source": "mcp golden schema",
+   "tokens_any": [
+    [
+     "source_bindings",
+     "kind"
+    ]
+   ],
+   "context_any": [
+    "create-routine",
+    "update-routine"
+   ],
+   "scope": "file"
+  },
+  {
+   "id": "routine.source_bindings.meeting_category",
+   "group": "tool_param",
+   "source": "mcp golden schema",
+   "tokens_any": [
+    [
+     "source_bindings",
+     "meeting_category"
+    ]
+   ],
+   "context_any": [
+    "create-routine",
+    "update-routine"
+   ],
+   "scope": "file"
+  },
+  {
+   "id": "routine.source_bindings.provider",
+   "group": "tool_param",
+   "source": "mcp golden schema",
+   "tokens_any": [
+    [
+     "source_bindings",
+     "provider"
+    ]
+   ],
+   "context_any": [
+    "create-routine",
+    "update-routine"
+   ],
+   "scope": "file"
+  },
+  {
+   "id": "routine.source_bindings.ref",
+   "group": "tool_param",
+   "source": "mcp golden schema",
+   "tokens_any": [
+    [
+     "source_bindings",
+     "ref"
+    ]
+   ],
+   "context_any": [
+    "create-routine",
+    "update-routine"
+   ],
+   "scope": "file"
+  },
+  {
+   "id": "routine.template_key",
+   "group": "tool_param",
+   "source": "mcp golden schema",
+   "tokens_any": [
+    [
+     "template_key"
+    ]
+   ],
+   "context_any": [
+    "create-routine",
+    "update-routine"
+   ],
+   "scope": "file"
+  },
+  {
+   "id": "routine.timezone",
+   "group": "tool_param",
+   "source": "mcp golden schema",
+   "tokens_any": [
+    [
+     "timezone"
+    ]
+   ],
+   "context_any": [
+    "create-routine",
+    "update-routine"
+   ],
+   "scope": "file"
+  },
+  {
+   "id": "routine.trigger_type",
+   "group": "tool_param",
+   "source": "mcp golden schema",
+   "tokens_any": [
+    [
+     "trigger_type"
+    ]
+   ],
+   "context_any": [
+    "create-routine",
+    "update-routine"
+   ],
+   "scope": "file"
+  },
+  {
+   "id": "routine.trigger_type=manual",
+   "group": "tool_param",
+   "source": "routine_contract.TriggerType",
+   "tokens_any": [
+    [
+     "trigger_type",
+     "manual"
+    ]
+   ],
+   "context_any": [
+    "create-routine",
+    "update-routine"
+   ],
+   "scope": "file"
+  },
+  {
+   "id": "routine.trigger_type=schedule",
+   "group": "tool_param",
+   "source": "routine_contract.TriggerType",
+   "tokens_any": [
+    [
+     "trigger_type",
+     "schedule"
+    ]
+   ],
+   "context_any": [
+    "create-routine",
+    "update-routine"
+   ],
+   "scope": "file"
+  },
+  {
+   "id": "routine.trigger_type=source_event",
+   "group": "tool_param",
+   "source": "routine_contract.TriggerType",
+   "tokens_any": [
+    [
+     "trigger_type",
+     "source_event"
+    ]
+   ],
+   "context_any": [
+    "create-routine",
+    "update-routine"
+   ],
+   "scope": "file"
+  },
+  {
+   "id": "routine.workflow_definition_key",
+   "group": "tool_param",
+   "source": "mcp golden schema",
+   "tokens_any": [
+    [
+     "workflow_definition_key"
+    ]
+   ],
+   "context_any": [
+    "create-routine",
+    "update-routine"
+   ],
+   "scope": "file"
+  }
+ ]
+}

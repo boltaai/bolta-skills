@@ -19,7 +19,7 @@ Without it, Claude still asks in words before anything public; the skills are wr
 
 The checks go by each tool's name, so any connection name works: the `bolta` plugin's own server, a server added with `claude mcp add`, or a claude.ai connector.
 
-- Bolta asks before anything public (a post, a reply, a reaction), approving or turning down posts (once per batch per message), scheduling, running a Bolta routine now, starting or finishing a campaign, changing a running campaign, changing your voice or business details, and anything that can't be undone.
+- Bolta asks before anything public (a post, a reply, a reaction), approving or turning down posts (once per batch per message), scheduling, running a Bolta routine now, switching on a plan as it is saved, applying or accepting one of Bolta's suggestions, starting or finishing a campaign, changing a running campaign, changing your voice or business details, and anything that can't be undone.
 - **Bolta checks** `careful` in `/config` checks every approval, one at a time.
 - A declined check is final for that call: Claude says so and never retries it.
 - After a sign-in error, Claude tells you to reconnect instead of retrying.

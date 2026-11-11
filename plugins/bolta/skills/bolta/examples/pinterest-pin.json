@@ -1,0 +1,54 @@
+{
+  "ask": "Pin this photo of our 20-minute fig galette to the same board as last week's lemon tart pin, linking to the recipe: https://cdn.example.com/fig-galette.jpg and https://acme.example.com/recipes/fig-galette",
+  "playbook": "post",
+  "steps": [
+    {
+      "tool": "get-post-platform-details",
+      "arguments": {
+        "post_id": "<last week's lemon tart pin id>",
+        "platform": "pinterest"
+      },
+      "why": "The decision on the board: take it from the pin the user named. No tool lists boards, and with none set Bolta uses the most recently synced board, which may be wrong. This read shows the board as board_id, Pinterest's own id. If that board_id comes back empty, the earlier pin's board was set another way: check its metadata.platformSpecific.pinterest with get-post, else ask the user to pick the board in Bolta."
+    },
+    {
+      "tool": "create-post",
+      "arguments": {
+        "workspace_id": "<brand's workspace id>",
+        "content": "A fig galette you can make in 20 minutes.",
+        "account_ids": [
+          "<Pinterest account id>"
+        ],
+        "media": [
+          {
+            "url": "https://cdn.example.com/fig-galette.jpg",
+            "alt_text": "A fig galette"
+          }
+        ],
+        "platform_specific": {
+          "pinterest": {
+            "board_id": "<board_id from the lemon tart pin>",
+            "title": "Easy 20-minute fig galette",
+            "description": "A fig galette you can make in 20 minutes. The full recipe is one tap away.",
+            "link": "https://acme.example.com/recipes/fig-galette",
+            "alt_text": "A fig galette"
+          }
+        },
+        "idempotency_key": "fig-galette-pin-1"
+      },
+      "why": "One image, one pin, all in the saving call. platform_specific board_id takes Pinterest's id, exactly what the read gave (update-post-platform-details would want Bolta's own id instead, so the read's value never goes there). A title people would search, the recipe page as the link (a pin without one gets saves, not visits), and alt text, which Pinterest does receive."
+    },
+    {
+      "tool": "get-post",
+      "arguments": {
+        "post_id": "<post id>"
+      },
+      "why": "Read back metadata.platformSpecific.pinterest: unknown keys and typos are kept quietly."
+    }
+  ],
+  "say": "Saved to Acme as a Pinterest draft on the same board as the lemon tart pin: \"Easy 20-minute fig galette\", linking to your fig galette recipe. Nothing goes out yet. Schedule it?",
+  "never": [
+    "Guessing a board, or leaving it to the most recently synced one.",
+    "Sending the read's board_id to update-post-platform-details: that one takes Bolta's id.",
+    "A link the user didn't give."
+  ]
+}

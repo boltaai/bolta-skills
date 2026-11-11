@@ -7,7 +7,7 @@
       "arguments": {
         "workspace_id": "<brand's workspace id>"
       },
-      "why": "The brand's timezone, to work out today's date there, so the post window can end now, like the account numbers do."
+      "why": "The brand's timezone, to work out today's date there, so the 30 days end now."
     },
     {
       "tool": "list-workspace-posts",
@@ -19,20 +19,24 @@
         "end_date": "<now>",
         "limit": 100
       },
-      "why": "What went out, with numbers, over the same 30 days counted back from now. Zeros on posts under about a week old mean not synced yet: leave them out of rankings."
+      "why": "What went out, with numbers, over 30 days counted back from now. Zeros on posts under about a week old mean not synced yet: leave them out of rankings."
     },
     {
-      "tool": "cross-platform-analytics",
+      "tool": "list-workspace-posts",
       "arguments": {
         "workspace_id": "<brand's workspace id>",
-        "days": 30
+        "status": "partially published",
+        "include_metrics": true,
+        "start_date": "<today minus 30 days>",
+        "end_date": "<now>",
+        "limit": 100
       },
-      "why": "Account numbers by network over the same 30 days. engagement here is what posts published in the window earned; never mix it up with one post's results."
+      "why": "status is exact: published leaves out posts that went out on only some accounts. Read those too, count them apart, and say so."
     }
   ],
-  "say": "Acme, last 30 days: 14 posts went out, 12 on LinkedIn and 2 on X. Your two best on LinkedIn were both customer stories. 3 posts from this week aren't synced yet, so they're left out. Want next week's drafts to lean that way?",
+  "say": "Acme, last 30 days: 14 posts went out in full, 12 on LinkedIn and 2 on X, and 1 more went out on only some of its accounts. Your two best on LinkedIn were both customer stories. 3 posts from this week aren't synced yet, so they're left out. Want next week's drafts to lean that way?",
   "never": [
-    "Two reads over different windows, such as a calendar month for posts and 30 days to now for accounts, without saying they differ.",
+    "Counting only fully published posts as everything that went out.",
     "A cause for a number.",
     "Sales or leads nobody tracked.",
     "Comparing networks with fewer than 5 posts."

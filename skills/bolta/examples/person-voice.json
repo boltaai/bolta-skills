@@ -1,5 +1,5 @@
 {
-  "ask": "Set up a voice for our founder Dana. Her posts should sound like her, not like Acme.",
+  "ask": "Set up a voice for our founder Dana on her LinkedIn. Her posts should sound like her, not like Acme.",
   "playbook": "voice",
   "steps": [
     {
@@ -27,7 +27,7 @@
           "<Dana's LinkedIn account id>"
         ]
       },
-      "why": "A person voice, not a second brand voice: is_default false keeps Acme's voice as the default. The sample also sets the voice's tone, so it must be hers. account_ids only because she named her own LinkedIn: it moves that account off the Acme voice. Left out, every account no voice owns yet goes to Dana's voice. speaker_mode is not saved on create, so it is set next."
+      "why": "A person voice, not a second brand voice: is_default false keeps Acme's voice as the default. The sample also sets the voice's tone, so it must be hers. account_ids only because she named her own LinkedIn: it moves that account off the Acme voice. Left out, every account no voice owns yet goes to Dana's voice. speaker_mode is not saved on create, so it is set next. Choose the accounts now: after creation an account can only be moved between voices in Bolta (Brand > Voices)."
     },
     {
       "tool": "update-voice-profile",
@@ -51,6 +51,7 @@
   "never": [
     "A writing sample you or Bolta wrote.",
     "Moving an account she didn't name.",
-    "Making Dana's voice the default."
+    "Making Dana's voice the default.",
+    "Promising to move another account to her voice later from here: update-voice-profile can't."
   ]
 }

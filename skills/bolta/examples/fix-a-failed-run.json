@@ -16,14 +16,14 @@
         "routine_id": "<routine id>",
         "instructions": "<the current instructions, unchanged> Write about our spring workshops and what attendees learn."
       },
-      "why": "One change, and only to name, goal, instructions or schedule with timezone. instructions is sent whole: the current text from get-routine plus the new sentence."
+      "why": "One change, the one the user said yes to: the skip was for a missing topic, so the fix is a topic in instructions, not a new schedule or count. instructions is sent whole: the current text from get-routine plus the new sentence."
     },
     {
       "tool": "run-routine-now",
       "arguments": {
         "routine_id": "<routine id>"
       },
-      "why": "The same yes covered running it now and its credits. started false means this press repeated one from the last 30 seconds and returned the same run; a 409 workflow_already_running means a run is still going. Either way say it's already running, don't press again."
+      "why": "The same yes covered running it now and its credits. started false means this press repeated one from the last 30 seconds and returned the same run; a workflow_already_running refusal means a run is still going. Either way say it's already running, don't press again."
     }
   ],
   "say": "Changed: it now writes about your spring workshops, so its scheduled runs stop skipping. Running it now; the drafts land in a few minutes and wait for your yes.",

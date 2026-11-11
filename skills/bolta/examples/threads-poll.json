@@ -1,0 +1,37 @@
+{
+  "ask": "Ask our Threads and X followers which flavour we should bring back: lavender, pistachio or black sesame.",
+  "playbook": "post",
+  "steps": [
+    {
+      "tool": "create-post",
+      "arguments": {
+        "workspace_id": "<brand's workspace id>",
+        "content": "We're bringing one flavour back. You choose:",
+        "account_ids": [
+          "<Threads account id>",
+          "<X account id>"
+        ],
+        "poll": {
+          "options": [
+            "Lavender",
+            "Pistachio",
+            "Black sesame"
+          ]
+        },
+        "platform_specific": {
+          "threads": {
+            "topic_tag": "Ice Cream"
+          }
+        },
+        "idempotency_key": "flavour-poll-1"
+      },
+      "why": "The decision: one post for both, because the question, options and moment are the same; the poll field goes to Threads and X alike. A text post with no media (with media Threads drops the poll). 3 short options fit X's limit of 25 characters each; Bolta refuses a poll X would reject. X's poll runs one day by default. The topic is Threads only."
+    }
+  ],
+  "say": "Saved to Acme as one draft for Threads and X: \"We're bringing one flavour back. You choose:\" with a poll (Lavender, Pistachio, Black sesame), topic Ice Cream on Threads; on X it runs one day. Nothing goes out yet. Schedule it?",
+  "never": [
+    "An image on the poll post: Threads drops the poll.",
+    "A poll in a batch item: batch items carry no poll.",
+    "An option over 25 characters when X is on the post."
+  ]
+}

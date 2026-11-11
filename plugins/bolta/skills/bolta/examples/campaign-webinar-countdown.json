@@ -1,0 +1,62 @@
+{
+  "ask": "Our webinar \"Pricing for agencies\" is Thursday Dec 10 at 2pm. Do a countdown on LinkedIn and X. Sign-up is acme.com/webinar. Start it.",
+  "playbook": "campaign",
+  "before": "The user said start, so the plan shown with the create is the yes. The workspace clock is New York.",
+  "steps": [
+    {
+      "tool": "create-content-campaign",
+      "arguments": {
+        "workspace_id": "<brand's workspace id>",
+        "name": "Pricing for agencies webinar",
+        "strategy_key": "problem_solution",
+        "theme": "Sign up for the free webinar Pricing for agencies, Thursday Dec 10 at 2pm",
+        "audience": "Agency owners who set their own prices",
+        "cta_text": "Save your seat",
+        "cta_url": "https://acme.com/webinar",
+        "starts_on": "2026-11-27",
+        "ends_on": "2026-12-10",
+        "content_mix": {
+          "text": 2,
+          "still_image": 1
+        }
+      },
+      "why": "Problem / Solution (guidance): the pain the webinar solves, then the seat. Two weeks starting Friday Nov 27, so the second week ends on the event day, Thu Dec 10. X can't take a carousel, so the mix is text and an image, which both networks take."
+    },
+    {
+      "tool": "set-content-campaign-targets",
+      "arguments": {
+        "workspace_id": "<brand's workspace id>",
+        "campaign_id": "<campaign id>",
+        "account_ids": [
+          "<LinkedIn account id>",
+          "<X account id>"
+        ],
+        "context_notes": "Webinar: Pricing for agencies, Thursday Dec 10 at 2pm New York time, free, sign up at acme.com/webinar. Week 1: why agencies underprice. Week 2: the countdown. Every post names the date, Thursday Dec 10, never 'in 3 days' or 'tomorrow', since posting days can move. Facts the user gave, nothing else."
+      },
+      "why": "Bolta spreads posts across the week, so a post saying \"tomorrow\" could land on the wrong day. Naming the date keeps every post true. A post that must say \"today\" is pinned to Dec 10 under Post prompts on the campaign page; no call does that."
+    },
+    {
+      "tool": "set-content-campaign-status",
+      "arguments": {
+        "workspace_id": "<brand's workspace id>",
+        "campaign_id": "<campaign id>",
+        "action": "activate"
+      },
+      "why": "The user said start and saw the plan. Week 1 starts Fri Nov 27, written around Wed Nov 25."
+    },
+    {
+      "tool": "get-content-campaign",
+      "arguments": {
+        "workspace_id": "<brand's workspace id>",
+        "campaign_id": "<campaign id>"
+      },
+      "why": "Read status active and schedule_status.state not needs_accounts before saying it is on."
+    }
+  ],
+  "say": "Campaign on for Acme: Pricing for agencies webinar, Nov 27 to Dec 10 on LinkedIn and X, 2 text posts and 1 image a week, 6 drafts to review. Every post names Thursday Dec 10. Week 1's drafts land around Wed Nov 25. Want a \"today, 2pm\" post pinned to Dec 10? Add it under Post prompts at bolta.ai/dashboard/campaigns/<id>.",
+  "never": [
+    "\"3 days left\" or \"tomorrow\" in notes for posts whose day isn't pinned.",
+    "Running the campaign past the event.",
+    "A carousel for X."
+  ]
+}

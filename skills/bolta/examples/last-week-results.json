@@ -1,0 +1,50 @@
+{
+  "ask": "How did last week do? What should we change?",
+  "playbook": "results",
+  "steps": [
+    {
+      "tool": "list-workspace-posts",
+      "arguments": {
+        "workspace_id": "<brand's workspace id>",
+        "status": "published",
+        "include_metrics": true,
+        "start_date": "<last Monday, brand clock>",
+        "end_date": "<last Sunday, brand clock>",
+        "sort_by": "engagement"
+      },
+      "why": "Process first: what went out last week, then how each did, best first. Posts under about a week old may not have synced (Threads every 12 hours, others about weekly): zeros there mean not synced yet, so leave them out of the ranking and say how many. No publication record: missing data, not a flop."
+    },
+    {
+      "tool": "list-inbox-items",
+      "arguments": {
+        "workspace_id": "<brand's workspace id>",
+        "source": "team",
+        "status": "pending"
+      },
+      "why": "What still waits for a yes (total_team): drafts nobody decided explain a quiet week better than engagement does. Say only this count; nothing here says how many were decided last week."
+    },
+    {
+      "tool": "list-account-insights",
+      "arguments": {
+        "workspace_id": "<brand's workspace id>",
+        "days": 7
+      },
+      "why": "Per account: growth, and needs_reconnect. days counts back from now, not last Monday to Sunday, so use it for the reconnect flag, not as last week's figures. A disconnected account stops syncing, so its zeros are missing data. Here Instagram needs a reconnect."
+    },
+    {
+      "tool": "get-connect-link",
+      "arguments": {
+        "workspace_id": "<brand's workspace id>",
+        "platform": "instagram"
+      },
+      "why": "The one next step: reconnect comes before any content change, because nothing else is worth changing until Instagram syncs again."
+    }
+  ],
+  "say": "Last week in Acme: 7 posts went out, and 3 drafts still wait for your yes. LinkedIn carried it: the post on hiring mistakes got 38 likes and 12 comments, about twice your other LinkedIn posts. X posts got little, but 2 of them are only 3 days old and not synced yet. Instagram is disconnected, so its numbers are missing. Reconnect it here first: <link>",
+  "never": [
+    "Ranking posts that haven't synced, or reading a disconnected account's zeros as a flop.",
+    "Stating how many drafts were made or decided without a read that returned it.",
+    "Saying the hiring post caused anything beyond its own numbers, or adding a benchmark.",
+    "Offering a content change before the reconnect, or a menu of changes: exactly one next step."
+  ]
+}
