@@ -1,5 +1,5 @@
 {
-  "ask": "Post our season-finale recap on Mastodon, but behind a spoiler warning. And can you add a poll for the best moment?",
+  "ask": "Post our season-finale recap on Mastodon, but behind a spoiler warning and off the public timelines. And can you add a poll for the best moment?",
   "playbook": "post",
   "steps": [
     {

@@ -5,7 +5,7 @@ Read when a yes names no time, when someone wants a scheduled post moved, or whe
 ## Move a scheduled post
 
 - For a post already Scheduled: `update-post` with `post_id` and only `scheduled_time` (wall clock, no Z, no offset; `timezone` only if the user named a place). No `status`, no text, no media, no accounts. It must be in the future.
-- The post stays Scheduled, keeps its approval and keeps the client's sign-off. Only the time moves.
+- The post stays Scheduled, keeps its approval and keeps a client's yes already given. Only the time moves. A client request not yet answered goes stale instead ([sign-off](review-client-signoff.md)).
 - Any change to text, media or accounts sends an approved post back for a new yes, and voids a client's sign-off too.
 - Still show the new time and get a yes first: "Move LinkedIn 'Most hiring advice…' to Thu Nov 19, 2:00 pm (New York)?"
 - Read the result's `status` and time back. A refusal says why (a time in the past, a format problem): say it plainly.

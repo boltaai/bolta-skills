@@ -30,7 +30,7 @@
         },
         "instructions": "3 LinkedIn drafts about hiring every Monday. Never invent facts, numbers, prices or dates."
       },
-      "why": "The time zone is required and has no fallback. Accounts are bound as objects, and they decide the networks: platforms is sent only when the user limits networks, so an account added later is used. count goes with artifact_type every time output_config is sent. Ask me first unless the user said post without asking."
+      "why": "Weekly posts, the default kind for steady presence; weekly at 3 fits what most people can review. The time zone is required and has no fallback. Accounts are bound as objects, and they decide the networks: platforms is sent only when the user limits networks, so an account added later is used. count goes with artifact_type every time output_config is sent. Ask me first unless the user said post without asking."
     },
     {
       "tool": "activate-routine",

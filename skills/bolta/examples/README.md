@@ -44,14 +44,14 @@ Each file is one ask from start to finish: the calls in order, why each one is s
 | [reject-then-routine-change.json](reject-then-routine-change.json) | No to two drafts with the reason, then one routine instructions change offered | [review](../references/review.md) |
 | [one-post.json](one-post.json) | One LinkedIn post, saved as a draft | [post](../references/post.md) |
 | [week-of-posts.json](week-of-posts.json) | A week of posts in one batch, then the status poll | [post](../references/post.md) |
-| [reddit-post.json](reddit-post.json) | A network with its own fields: title and subreddit | [post](../references/post.md) |
+| [reddit-post.json](reddit-post.json) | A Reddit post for a subreddit the user named: title and subreddit name in a one-item batch | [post](../references/post.md) |
 | [instagram-with-image.json](instagram-with-image.json) | A post with media, for two networks | [post](../references/post.md) |
 | [threads-topic-and-ghost.json](threads-topic-and-ghost.json) | Threads: a topic, and a post that disappears after 24 hours | [post](../references/post.md) |
 | [x-poll.json](x-poll.json) | An X poll | [post](../references/post.md) |
 | [linkedin-company-page.json](linkedin-company-page.json) | LinkedIn as the company page, by its page id from the account list | [post](../references/post.md) |
 | [youtube-video.json](youtube-video.json) | A YouTube video: title, privacy, the self-declared kids flag, a thumbnail | [post](../references/post.md) |
 | [tiktok-video.json](tiktok-video.json) | A TikTok video: privacy and duets | [post](../references/post.md) |
-| [one-idea-three-networks.json](one-idea-three-networks.json) | One idea on four networks as separate posts, because Facebook gets a first comment | [post](../references/post.md) |
+| [one-idea-three-networks.json](one-idea-three-networks.json) | One idea on LinkedIn, X, Threads and Facebook as separate posts, because Facebook gets a first comment | [post](../references/post.md) |
 | [one-post-text-per-network.json](one-post-text-per-network.json) | One post, its own text on LinkedIn, X and Threads | [post](../references/post.md) |
 | [text-per-page.json](text-per-page.json) | Its own text for a LinkedIn company page and one Facebook Page | [post](../references/post.md) |
 | [instagram-trial-reel.json](instagram-trial-reel.json) | An Instagram trial reel, set when it is saved | [post](../references/post.md) |

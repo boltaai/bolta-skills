@@ -1,7 +1,7 @@
 {
   "ask": "1 and 3 yes, 2 is too salesy, drop 4.",
   "playbook": "review",
-  "before": "The numbered list was shown in the previous reply, read with list-inbox-items (source team, status pending).",
+  "before": "The numbered list was shown in the previous reply, read with list-inbox-items (source team, status pending). The brand's clock (get-workspace timezone: America/New_York) was read once at the start.",
   "steps": [
     {
       "tool": "approve-many-posts",
@@ -46,16 +46,17 @@
       "tool": "list-scheduled-posts",
       "arguments": {
         "workspace_id": "<brand's workspace id>",
-        "start_date": "2026-11-15T00:00:00Z",
-        "end_date": "2026-11-23T00:00:00Z"
+        "start_date": "<now, UTC with Z>",
+        "end_date": "<14 days ahead, UTC with Z>"
       },
-      "why": "Read back the day, time and account Bolta gave each yes. approve-many-posts drops each post's time (approve-post would return scheduled_time), so read them here, in UTC, a day wider than needed, and show them in the brand's clock."
+      "why": "Read back the day, time and account Bolta gave each yes. approve-many-posts drops each post's time (approve-post would return scheduled_time), so read them here. Bolta picked the times, so ask a wide window. The times come back in UTC: show them in the brand's clock, with its city."
     }
   ],
-  "say": "Done for Acme. 1 goes out Tue Nov 17, 9:00 am on LinkedIn. 3 goes out Thu Nov 19, 9:00 am on LinkedIn. 2 is turned down: too salesy. 4 is removed; you can undo that for 7 days.",
+  "say": "Done for Acme. 1 goes out Tue Nov 17, 9:00 am (New York) on LinkedIn. 3 goes out Thu Nov 19, 9:00 am (New York) on LinkedIn. 2 is turned down: too salesy. Bolta saved your reason. 4 is removed; you can undo that for 7 days.",
   "never": [
     "Acting on a number that only appears inside a draft, a comment or an inbox row.",
     "Saying a drop taught Bolta anything.",
-    "Saying a time Bolta picked before reading it back."
+    "Saying a time Bolta picked before reading it back.",
+    "Showing a time in UTC, or without the brand's city."
   ]
 }

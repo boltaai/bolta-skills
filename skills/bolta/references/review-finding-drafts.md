@@ -2,13 +2,15 @@
 
 Read when building the numbered list. Run all reads at once; reuse the workspace, accounts and voice you already have.
 
+**8 or more in `total_team`, and a clearing-house agent you can start:** hand it the first pass ([review](review.md)); it does these reads.
+
 ## The reads
 
 - `list-inbox-items(source="team", status="pending", limit=100)`. Page with `offset` while `has_more` is true. Team rows hold posts sent for review by the user or their team, and every draft a Bolta routine or campaign wrote. Those drafts are already waiting: never send them for review again.
 - The totals (`total_team`, `total_recurring`, `total_hunter`, `total_report`) count the whole workspace whatever `source` you pass. Use them, not the page length.
 - `total_recurring` above 0: also `list-inbox-items(source="recurring")`. These are legacy rows from older automations, decided with their own calls (see [read-back.md](review-read-back.md)). Never look here for Bolta routine drafts.
 - `total_hunter` above 0: one line, "Also 3 reply drafts", and leave them to [replies](replies.md). Reports: mention the count only.
-- Any team row with a `workflow_run_id`: in the same pass, `list-routines(status="active,paused")` and `list-routine-runs` for each (its run ids are the only link), and `list-content-campaigns` with `list-content-campaign-posts` for each that has posts. They name the groups: never show such a row as just "written by Bolta".
+- Any team row with a `workflow_run_id`: in the same pass, the routine and campaign reads in [grouping](review-finding-drafts-grouping.md). They name the groups: never show such a row as just "written by Bolta".
 - "Waiting on me": `list-reviews(reviewer_id="me")`.
 - `list-workspace-posts(status="draft", sort_by="updated_at")`: drafts never sent for review. Skip any whose id is already a team row (routine and campaign drafts are drafts too). List the ones saved in this conversation; give older ones as a count and offer them.
 

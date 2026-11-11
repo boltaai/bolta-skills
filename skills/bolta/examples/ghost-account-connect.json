@@ -8,7 +8,7 @@
         "workspace_id": "<brand's workspace id>",
         "platform": "linkedin"
       },
-      "why": "Priya's row shows token_status ghost: added without connecting, so Bolta wrote for it but it can't post. Not disconnected, so no reconnect wording. Connecting alone won't release her drafts, so the reply says: \"In Bolta, open Brand > Accounts (bolta.ai/dashboard/knowledge-base?tab=accounts), press Connect LinkedIn on Priya's row, sign in with her login, then say yes to moving Priya's voice and drafts. Tell me when it's done.\" Not get-connect-link: started there, Bolta doesn't offer the move."
+      "why": "Priya's row shows token_status ghost: added without connecting, so Bolta wrote for it but it can't post. Not disconnected, so no reconnect wording. Connecting alone won't release her drafts, so the reply says: \"In Bolta, open Brand > Accounts (bolta.ai/dashboard/knowledge-base?tab=accounts), press Connect LinkedIn on Priya's row and sign in to LinkedIn as Priya (Priya herself, or whoever she gave the login to; it must be her LinkedIn, not yours), then say yes to moving Priya's voice and drafts. Tell me when it's done.\" Not get-connect-link: started there, Bolta doesn't offer the move."
     },
     {
       "tool": "list-accounts",

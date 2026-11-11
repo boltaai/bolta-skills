@@ -33,7 +33,7 @@
         ],
         "context_notes": "The offer: 25% off everything at acme.com/sale. It runs Friday Nov 27 to Monday Nov 30 only. Before Nov 27, say it is coming and when; never say it is live. Nothing after Nov 30. No codes, stock limits or countdown claims: none were given."
       },
-      "why": "The notes reach the writer word for word every day it writes, so the real offer, dates and limits go here. The strategy already tells it never to invent urgency; the notes add what this sale does not have."
+      "why": "The notes reach the writer word for word in the week's brief, so the real offer, dates and limits go here. The strategy already tells it never to invent urgency; the notes add what this sale does not have. Bolta spreads a week's posts over weekdays (or the brand's posting days), so no call puts a post on Saturday or Sunday: the user pins one under Post prompts on the campaign page."
     },
     {
       "tool": "get-content-campaign",
@@ -44,10 +44,11 @@
       "why": "Check before asking to start: starts_on not past, accounts set, resolved_content_mix as sent. Week 1 starts Tue Nov 24, so its drafts are written around Sun Nov 22."
     }
   ],
-  "say": "Ready, not started: Black Friday sale for Acme, Offer & Promotion (the deal, its price, when it ends). Nov 24 to Nov 30 on Instagram and Facebook: 3 images and 1 carousel, 4 drafts to review, written around Sun Nov 22. Teasers before Friday, the sale Fri to Mon, nothing after. Start it?",
+  "say": "Ready, not started: Black Friday sale for Acme, Offer & Promotion (the deal, its price, when it ends). Nov 24 to Nov 30 on Instagram and Facebook: 3 images and 1 carousel, 4 drafts to review, written around Sun Nov 22. The notes tell Bolta: teasers before Friday, the sale from Friday, nothing after Monday; check each draft's day when you review. Want a weekend post? Pin it under Post prompts at bolta.ai/dashboard/campaigns/<id>. Start it?",
   "never": [
     "Inventing a discount, a code, a stock limit or \"ends tonight\" the user didn't give.",
     "Running an offer campaign past the offer's end date.",
-    "A text post in a mix that goes to Instagram."
+    "A text post in a mix that goes to Instagram.",
+    "Promising which day each post lands: only the campaign page pins a post to a day."
   ]
 }

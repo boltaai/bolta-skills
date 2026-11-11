@@ -4,7 +4,7 @@ How to set and which wins: [network settings](post-settings.md). Apart from `tex
 
 ## Bluesky
 
-Network `bluesky`. 300 characters; longer is cut with "...". Parts from a batch go out as a reply thread ([post parts](post-parts.md)).
+Network `bluesky`. 300 characters; each part over that is cut to 297 and "...". Parts from a batch go out as a reply thread, each answering the one before ([post parts](post-parts.md)).
 
 - **Own text**: `text`. Both, per account.
 - **Languages**: `languages`, a list of language codes such as `["en"]` or `["en", "es"]`. Both, network only. Default: none set.
@@ -17,7 +17,7 @@ Not possible here: alt text (Bluesky always gets an empty one), choosing who can
 
 ## Mastodon
 
-Network `mastodon`. 500 characters, or the server's own limit; longer is cut. Extra parts are joined into one post.
+Network `mastodon`. 500 characters, or the server's own limit; longer is cut. Extra parts are not posted: only part 1's text goes out. Write one part.
 
 - **Own text**: `text`. Both, per account.
 - **Who sees it**: `visibility` `public` (default), `unlisted` (not on public timelines, still public by link), `private` (followers only) or `direct` (only people mentioned). Both, network only.

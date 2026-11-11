@@ -6,7 +6,7 @@
       "tool": "create-post",
       "arguments": {
         "workspace_id": "<brand's workspace id>",
-        "content": "Bringing one flavour back for spring. You choose:",
+        "content": "We're bringing one flavour back. You choose:",
         "account_ids": [
           "<Threads account id>"
         ],
@@ -30,7 +30,7 @@
       "tool": "create-post",
       "arguments": {
         "workspace_id": "<brand's workspace id>",
-        "content": "Bringing one flavour back for spring. You choose:",
+        "content": "We're bringing one flavour back. You choose:",
         "account_ids": [
           "<X account id>"
         ],
@@ -56,7 +56,7 @@
       "why": "X's poll is a setting; this call refuses an option over 25 characters or a bad duration instead of dropping it. One day: a quick choice."
     }
   ],
-  "say": "Saved to Acme as 2 drafts. 1. Threads: \"Bringing one flavour back for spring. You choose:\" with a poll (Lavender, Pistachio, Black sesame), topic Ice Cream. 2. X: the same question as a one-day poll. Nothing goes out yet. Schedule both for the same time?",
+  "say": "Saved to Acme as 2 drafts. 1. Threads: \"We're bringing one flavour back. You choose:\" with a poll (Lavender, Pistachio, Black sesame), topic Ice Cream. 2. X: the same question as a one-day poll. Nothing goes out yet. Schedule both for the same time?",
   "never": [
     "One post for Threads and X with the poll field: X would go out with no poll.",
     "An image on the Threads poll post: the poll would be dropped.",

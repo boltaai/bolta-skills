@@ -1,5 +1,5 @@
 {
-  "ask": "Set up a voice for our founder Dana. Her posts should sound like her, not like Acme.",
+  "ask": "Set up a voice for our founder Dana on her LinkedIn. Her posts should sound like her, not like Acme.",
   "playbook": "voice",
   "steps": [
     {

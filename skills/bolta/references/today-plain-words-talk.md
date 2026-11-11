@@ -12,7 +12,7 @@ The vocabulary is in [today-plain-words.md](today-plain-words.md). These rules a
 - One next step, not a menu.
 - "I" is the AI app. "Bolta" is the product working on its servers.
 - Never promise to come back unless a schedule was really created.
-- Never overclaim learning: "After 10 new decisions, Bolta updates your DOs and DON'Ts overnight." A deleted draft records no reason.
+- Never overclaim learning: "After about 10 new decisions on its drafts, Bolta updates your DOs and DON'Ts overnight." A deleted draft records no reason.
 
 ## Showing a result
 

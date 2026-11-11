@@ -29,7 +29,7 @@
       "why": "Pausing doesn't unschedule anything. Filter the rows yourself (status and filters sent here are ignored): Scheduled ones still go out at their times; undecided drafts just wait."
     }
   ],
-  "say": "Paused Acme's Black Friday campaign: Bolta writes no more. 2 posts are still scheduled and will go out: Instagram Fri Nov 27 at 9:00 and Facebook Sat Nov 28 at 12:00. Move or delete either?",
+  "say": "Paused Acme's Black Friday campaign: Bolta writes no more. 2 posts are still scheduled and will go out: Instagram Fri Nov 27 at 9:00 and Facebook Mon Nov 30 at 12:00. Move or delete either?",
   "never": [
     "Saying the campaign is stopped without saying scheduled posts still go out.",
     "Archiving or finishing it when the user said stop.",

@@ -6,7 +6,7 @@
       "tool": "create-post",
       "arguments": {
         "workspace_id": "<brand's workspace id>",
-        "content": "This is why we built it. Thank you, Jane, for trying it on day one.",
+        "content": "Thank you, Jane. This is why we built it.",
         "account_ids": [
           "<X account id>"
         ],
@@ -26,7 +26,7 @@
       "why": "The quote is a details-only setting: in platform_specific it would be kept and never used. The id is the number after /status/ in the link the user gave, never found or guessed."
     }
   ],
-  "say": "Saved to Acme as an X draft quoting Jane's post: \"This is why we built it. Thank you, Jane, for trying it on day one.\" Nothing goes out yet. Post it now or schedule it?",
+  "say": "Saved to Acme as an X draft quoting Jane's post: \"Thank you, Jane. This is why we built it.\" Nothing goes out yet. Post it now or schedule it?",
   "never": [
     "A post id from search results or memory: only from the user's link.",
     "Putting quoted_tweet_id in platform_specific.",

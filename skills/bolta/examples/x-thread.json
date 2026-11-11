@@ -1,5 +1,5 @@
 {
-  "ask": "Turn our launch notes into an X thread, with the dashboard screenshot on the last part: https://cdn.example.com/dashboard.png. Last launch got a pile of spam replies.",
+  "ask": "Turn our launch notes into an X thread, with the dashboard screenshot on the last part: https://cdn.example.com/dashboard.png. The notes: the new dashboard shipped today; every number links to the posts behind it; results load in under a second; exports work on mobile. Last launch got a pile of spam replies.",
   "playbook": "post",
   "steps": [
     {
@@ -35,7 +35,7 @@
                 "media": [
                   {
                     "media_url": "https://cdn.example.com/dashboard.png",
-                    "alt_text": "The new dashboard showing weekly results"
+                    "alt_text": "The new dashboard"
                   }
                 ]
               }
@@ -70,6 +70,7 @@
     "create-post for a thread: it saves part 1 only.",
     "Leaving the batch-saved thread with no X setting: the parts go out as separate posts.",
     "A poll in the thread: X drops it.",
-    "A video on X: it takes images only."
+    "A video on X: it takes images only.",
+    "Saying the thread is fully out without checking: a part that fails stops it, and the parts already out stay up."
   ]
 }

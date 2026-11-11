@@ -8,7 +8,7 @@ Which keys each network reads, and from where. How `platform_specific` works: [p
 
 | Network | Per account | Network only | Details only |
 |-|-|-|-|
-| X | `text`, `reply_settings`, `for_super_followers_only` | `post_type`, `poll_options`, `poll_duration_minutes` | `quoted_tweet_id`, `in_reply_to_tweet_id`, `geo_place_id` |
+| X (settings need one details call first: [X](post-settings-x.md)) | `text`, `reply_settings`, `for_super_followers_only` | `post_type`, `poll_options`, `poll_duration_minutes` | `quoted_tweet_id`, `in_reply_to_tweet_id`, `geo_place_id` |
 | Threads | `text`, `topic_tag`, `is_ghost_post`, `is_spoiler_media`, `location_id` | | `use_topic_tag` (needed only here) |
 | Instagram | `text` | `content_type`, `trialReelEnabled`, `trialGraduationStrategy`, `cover_url`, `thumbnail_offset`, `location_id`, `user_tags`, `product_tags` | |
 | Facebook | `text`, per Page | | `primary_page`, `cross_post_pages`, `cross_post_enabled` |
@@ -20,7 +20,7 @@ Which keys each network reads, and from where. How `platform_specific` works: [p
 | Mastodon | `text` | `visibility`, `sensitive`, `spoiler_text` | |
 | Reddit | `text`, `title`, `flair_id`, `flair_text`, `nsfw`, `spoiler`, `sendreplies` | | `selected_subreddit_id`; `title` must be saved here too |
 | Discord | `text`, `channel`, `guild` (Discord's ids) | `embed_enabled`, `embed_title`, `embed_description`, `embed_color` | `selected_channel_id` (Bolta's id), `embed_footer` |
-| WordPress | `title`, `slug`, `excerpt`, `categories`, `tags`, `meta_title`, `meta_description`, `post_type`, `comment_status`, `ping_status`, `sticky`, `format` | | `featured_media_id` |
+| WordPress | `title`, `slug`, `excerpt`, `categories`, `tags`, `meta_title`, `meta_description`, `comment_status`, `ping_status`, `sticky`, `format` | | `featured_media_id` |
 
 \* `platform_specific` only: `update-post-platform-details` answers success and keeps nothing.
 

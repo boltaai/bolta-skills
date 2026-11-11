@@ -1,7 +1,7 @@
 {
   "ask": "Yes, turn it on.",
   "playbook": "routine",
-  "before": "The user wants one blog article a week for search. The summary said: every Wednesday 7:00 am (Denver), Bolta drafts 1 researched article about running a small bakery, with an SEO title and description, in the brand voice; it never publishes: once approved, they publish it. WordPress is connected.",
+  "before": "The user, who said they have run two bakeries since 2015, wants one blog article a week for search. The summary said: every Wednesday 7:00 am (Denver), Bolta drafts 1 researched article about running a small bakery, with an SEO title and description, in the brand voice; it never publishes: once approved, they publish it. WordPress is connected.",
   "steps": [
     {
       "tool": "create-routine",
@@ -31,7 +31,7 @@
         },
         "instructions": "Write from our experience running two bakeries since 2015. Never invent facts, numbers, prices or dates."
       },
-      "why": "artifact_type article, count 1 (most 2). The weekly article takes only outputFormat article. No auto: articles always wait. No social accounts: it writes an article, not posts."
+      "why": "A weekly article, not weekly posts: search traffic comes from pages on their site, and they have one. artifact_type article, count 1 (most 2). The weekly article takes only outputFormat article. No auto: articles always wait. No social accounts: it writes an article, not posts."
     },
     {
       "tool": "activate-routine",

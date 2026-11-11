@@ -8,13 +8,13 @@ Bolta's Create a routine groups them as Posts (apps folded under "From your apps
 |-|-|-|-|-|
 | `weekly_social_posts` | "A week of drafts, ready for you to approve every Monday." Any network | An account | Anyone wanting steady presence; the default | Weekly, 3 |
 | `founder_story_series` | First-person stories: a decision, what it cost, what changed | Real events; a person voice | Founders, consultants, coaches | Weekly, 2 |
-| `customer_win_social_proof` | Customer outcomes told as proof, with specifics | Real wins the customer agreed to share | Service and B2B brands with results | Weekly, 2, while wins keep coming (advice) |
+| `customer_win_social_proof` | Customer outcomes told as proof, with specifics | Real wins the customer agreed to share | Clinics, salons, service and B2B brands with results | Weekly, 2, while wins keep coming (advice) |
 | `linkedin_thought_leadership` (beta) | LinkedIn posts that take a position, reasoning shown | LinkedIn accounts only | B2B founders, advisers | Weekly, 2 |
 | `deep_dive_series` | One topic researched, told across connected posts; posts, never an article | A specific topic | Expert and education brands | Weekly, 2 (most 5) |
-| `repurpose_top_posts` | Best posts rewritten for another network, naming the original; text only | Published posts with likes, comments or shares | Brands with months of posts | Monthly, 3; never a first routine (seen: 37 made, none ran in 90 days) |
+| `repurpose_top_posts` | Best posts rewritten for another network, naming the original; text only | Published posts with likes, comments or shares | Brands with months of posts | Monthly, 3; never a first routine (seen: rarely run) |
 | `thread_from_top_post` | The month's best post expanded into a thread | X, Threads or LinkedIn; best posts | Writers on X and Threads | Monthly, 2 |
 
-Fed by an app (GitHub, a blog, HubSpot, Drive, a meeting, Square): [routine-templates-special-cases.md](routine-templates-special-cases.md).
+Fed by an app (GitHub, a blog, HubSpot, Drive, a meeting, Square): [routine-templates-special-cases.md](routine-templates-special-cases.md). Which 3-5 fit which business: [routine-templates-by-business.md](routine-templates-by-business.md).
 
 ## Articles
 

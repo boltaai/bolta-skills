@@ -1,7 +1,7 @@
 {
   "ask": "Yes, set it up and turn it on.",
   "playbook": "routine",
-  "before": "The user asked for 'my stories as a founder, LinkedIn and X'. list-voice-profiles showed a person voice 'Maya (founder)' beside the brand voice. The user named three real events to draw on: losing their biggest client in March, rebuilding onboarding, hiring a first engineer. The summary said: every Tuesday 8:00 am (London), 2 first-person drafts in Maya's voice for LinkedIn and X, from those events, raw rather than polished, no selling; they wait for your yes; uses credits each run.",
+  "before": "The user asked for 'my stories as a founder, LinkedIn and X'. list-voice-profiles showed a person voice 'Maya (founder)' beside the brand voice. The user named three real events to draw on: losing their biggest client in March, rebuilding onboarding because of it, hiring a first engineer in June. The summary said: every Tuesday 8:00 am (London), 2 first-person drafts in Maya's voice for LinkedIn and X, from those events, raw rather than polished, no selling; they wait for your yes; uses credits each run.",
   "steps": [
     {
       "tool": "create-routine",
@@ -56,7 +56,7 @@
         },
         "instructions": "Write as Maya, first person. Draw only on these real events: we lost our biggest client in March and rebuilt onboarding because of it; we hired our first engineer in June. Never invent facts, numbers, prices or dates."
       },
-      "why": "A person voice for a first-person story routine; the brand voice would sound like the company. count is sent with output_config, or Bolta would use 4 instead of 2. The storyteller settings shape the story, but only instructions carry the real events: without them the posts turn generic. No platforms key: the two bound accounts decide the networks."
+      "why": "Founder stories, not weekly posts: the ask is first-person stories from real events, which is this kind's job. A person voice for a first-person story routine; the brand voice would sound like the company. count is sent with output_config, or Bolta would use 4 instead of 2. The storyteller settings shape the story, but only instructions carry the real events: without them the posts turn generic. No platforms key: the two bound accounts decide the networks."
     },
     {
       "tool": "activate-routine",

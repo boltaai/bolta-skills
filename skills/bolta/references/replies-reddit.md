@@ -13,10 +13,10 @@ So say "queued" when a status read shows it queued, never "it's posting now".
 
 ## The limits
 
-- **New or low-karma accounts** (under 30 days old, under 100 karma, or no verified email) are paced, even with a person's approval.
+- **New or low-karma accounts** (under 30 days old, under 100 karma, or no verified email) are paced, even with a person's approval: about 3 replies a day, 30 minutes apart, one per subreddit.
 - **Unattended pacing** (the two sends above): a few replies a day by account age (2 a day from 30 days old, 4 from 90, 6 from 180), at least 45 minutes apart, one per subreddit a day. Over a limit Bolta holds the reply: `pending`, `needs_approval` true, with the reason. A person releases it in Bolta's Inbox; never resend it from here.
 - **The subreddit's own rules** hold any reply, a person's approval included, in a community that bans bots or AI, has closed comments, or sets karma or age minimums the account doesn't meet. Quote the hold reason. Those rules can't be read from here.
-- **Removed by Reddit:** a `failed` row whose reason starts `REMOVED_BY_PLATFORM` was taken down. Don't resend. Bolta pauses unattended Reddit replies from that account for 72 hours (7 days after a second removal within 7 days, or one only the author can see), and skips that subreddit after an AutoModerator removal.
+- **Removed by Reddit:** a `failed` row whose reason starts `REMOVED_BY_PLATFORM` was taken down. Don't resend. Bolta pauses unattended Reddit replies from that account for 72 hours (7 days after a second removal within 7 days, or one only the author can see), and skips that subreddit for 14 days after an AutoModerator removal.
 - **A suspended or banned account** blocks every send ([connect](connect.md)).
 - **Locked or archived threads:** an unattended reply is dropped for good.
 - A rate limit: stop. "Rate limited (conservative)": Bolta resends shortly, so report it queued. "Reddit refused this wording": Bolta holds the draft unchanged; the user rewords it and approves it in Bolta. Never resend the same text.

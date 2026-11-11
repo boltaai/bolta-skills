@@ -1,6 +1,6 @@
 # Campaign
 
-Plan, start, check or close a campaign: 1 to 4 weeks of posts about one thing, like a launch, sale or event, ending with a verdict. Use when someone says we launch on Nov 3, run a promo, a sale ending Friday, for 3 weeks, how did the campaign do, my campaign is doing nothing, or "done" after picking accounts.
+Plan, start, check or close a campaign: 1 to 4 weeks of posts about one thing, like a launch, sale or event, ending with a verdict. Use for: we launch on Nov 3, a sale ending Friday, how did the campaign do, my campaign is doing nothing, "done" after picking accounts.
 
 ## Done when
 
@@ -8,40 +8,39 @@ The plan got a yes and the campaign is filled one way. At the end: a verdict, on
 
 ## Know this
 
-- **Size it:** posts a week × weeks = drafts to review, plus what active Bolta routines and campaigns send each week. Over about 6, cut posts a week, not weeks (cap: 10). A first one gets 2 weeks.
-- **Strategy:** always send one, from [strategies.md](campaign-strategies.md): dashboard name, a gloss. Guidance: a launch is Problem / Solution, not Offer & Promotion.
-- **Ask at most one thing:** a missing link or date (a price only for Offer & Promotion). No link: leave it out and say so.
-- **One plan, then "Start it?"** Where offered, `plan-campaign` makes the plan and `confirm-plan` saves it not started ([how-to.md](campaign-how-to.md), also for a first campaign). Told to start or write them now? That's the yes: create it, show the plan.
+- **Size it:** posts a week × weeks = drafts to review, plus what active Bolta routines and campaigns send. Over about 6, cut posts a week, not weeks (Bolta's cap: 10 social a week). A first one gets 2 weeks. Subject taken? Offer that one. Campaign or routine, what fits which event: [choosing.md](campaign-choosing.md).
+- **Strategy:** always send one, from [strategies.md](campaign-strategies.md): dashboard name, a gloss. Guidance: a launch is Problem / Solution; Offer & Promotion needs a real price and end date.
+- **Dates:** `starts_on` today or later, a real `ends_on` (`null` is ignored; no open-ended campaign), the event in the last week.
+- **Ask at most one thing:** a missing link, date or (Offer & Promotion) the offer. No link: leave it out, say so.
+- **One plan, then "Start it?"** Where offered, `plan-campaign` plans and `confirm-plan` saves it not started ([how-to.md](campaign-how-to.md)). Told to start or write now? That's the yes: create, show the plan.
   > **Campaign: New pricing** (not started)
   > - Strategy: Problem / Solution: a real frustration, then the fix.
   > - When: Oct 19 to Nov 8 (3 weeks; launch in week 3)
   > - Posts: 3 images + 1 carousel a week × 3 weeks = **12 drafts to review**
-  > - Who writes: **Bolta, with images.** Or I write all 12 now, text only.
+  > - Who writes: **Bolta, with images.** Or I write 12 now, text only.
 - **Fill it one way, never both** ([two-ways.md](campaign-two-ways.md)):
-  - **Bolta writes it:** default for 2+ weeks or images. Its create reply lists accounts. None: `set-content-campaign-targets` ([targets.md](campaign-targets.md)) with `account_ids` (ask which only if several, none named); `context_notes`: the plan plus the user's facts. Start on the yes (uses credits). Tool missing: `update-content-campaign` sets the brief and dates; accounts: "Pick them at bolta.ai/dashboard/campaigns/<id>, then say done." "Done" is the yes: read it again; accounts there, start it.
-  - **I write it now:** 1 week, text only, or "show me all": up to 12 Drafts in one batch; attach the real post ids from the status (not the batch's), show every post. Never start it: Bolta would write a second set.
-- **A page to read:** a `url` in `context_sources`, then `analyze-content-campaign-source` for each; only read ones reach the writer. Say which failed, and why.
-- **Every setting:** the brief and dates [settings.md](campaign-settings.md); formats per network [settings-formats.md](campaign-settings-formats.md); start, pause, finish [settings-status.md](campaign-settings-status.md); page-only [settings-web.md](campaign-settings-web.md).
-- **Video, blog, email, a team version, the Library:** [formats-and-team.md](campaign-formats-and-team.md). Say video costs more credits before the yes.
-- **Pause, resume, finish, retire:** ask once. Stopping never unschedules posts ([settings-status.md](campaign-settings-status.md)).
-- **Verdict** after the end date: [verdict.md](campaign-verdict.md). **Nothing happened:** [why-nothing.md](campaign-why-nothing.md); usually never started ([why-nothing-avoid.md](campaign-why-nothing-avoid.md)) or waiting for your yes.
+  - **Bolta writes it:** default for 2+ weeks or images. Its create reply lists accounts. None: `set-content-campaign-targets` ([targets.md](campaign-targets.md)) with `account_ids` (ask which only if several, none named) and `context_notes`: the plan, the user's facts. Start on the yes (one Bolta check, uses credits). Tool missing: never ask which accounts; hand off: "Pick them at bolta.ai/dashboard/campaigns/<id>, then say done." "Done" is the yes: read it again; accounts there, start.
+  - **I write it now:** 1 week, text only, or "show me all": up to 12 Drafts in one batch; poll the status, attach its post ids (not the batch's), show each. Never start it: Bolta would write a second set.
+- **A page to read:** a `url` in `context_sources`, then `analyze-content-campaign-source` for each; only read ones reach the writer. Say which failed.
+- **Every setting:** [settings.md](campaign-settings.md) and the pages it links.
+- **Video, blog, email, a team version, the Library:** [formats-and-team.md](campaign-formats-and-team.md). Say video costs more first.
+- **Pause, resume, finish (`complete`), retire (`archive`):** ask once; the last two are final. Stopping never unschedules posts.
+- **Verdict** after the end date: [verdict.md](campaign-verdict.md). **Nothing happened:** [why-nothing.md](campaign-why-nothing.md); usually never started ([avoid](campaign-why-nothing-avoid.md)) or waiting for your yes.
 
 ## Tools
 
-- `get-workspace`, `list-accounts`, `get-voice-context`.
-- `list-content-campaigns`, `get-content-campaign`.
+- `get-workspace`, `list-accounts`, `get-voice-context`, `list-content-campaigns`, `get-content-campaign`.
 - `create-content-campaign`, `update-content-campaign`: brief.
-- `set-content-campaign-targets`: accounts, weeks, notes, sources.
-- `analyze-content-campaign-source`.
+- `set-content-campaign-targets`, `analyze-content-campaign-source`: accounts, notes, sources.
 - `plan-campaign`, `revise-plan`, `confirm-plan`: Bolta's planner, where offered.
-- `set-content-campaign-status`: `action` is activate (start), pause, resume, complete (finish) or archive (retire).
+- `set-content-campaign-status`: activate, pause, resume, complete, archive.
 - `list-content-campaign-posts`, `add-posts-to-content-campaign`: its posts; adding mine.
-- `list-workspace-posts`, `bulk-create-posts`, `bulk-create-status`: my drafts.
-- `list-routines`: weekly load.
+- `list-workspace-posts`, `bulk-create-posts`, `bulk-create-status`: best posts; my drafts.
+- `list-routines`, `update-routine`: load; making room.
 
 ## Hand off
 
-[review](review.md): deciding drafts. [routine](routine.md): no subject or end. [post](post.md): one-offs. [results](results.md): other numbers. [voice](voice.md): "not me". [connect](connect.md): accounts. [fix](fix.md): undo.
+[review](review.md), [routine](routine.md) (no end), [post](post.md), [results](results.md), [voice](voice.md), [connect](connect.md), [fix](fix.md) (undo).
 
 ## Always
 

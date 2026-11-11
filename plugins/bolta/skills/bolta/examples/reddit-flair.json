@@ -1,5 +1,5 @@
 {
-  "ask": "Post our pricing teardown to the same subreddit as last month's one. They remove posts without the Case Study flair.",
+  "ask": "Post our pricing teardown to the same subreddit as last month's one: we changed pricing three times this year, and here's what each change did to signups (numbers in the doc I pasted). They remove posts without the Case Study flair.",
   "playbook": "post",
   "steps": [
     {
@@ -14,13 +14,13 @@
       "tool": "create-post",
       "arguments": {
         "workspace_id": "<brand's workspace id>",
-        "content": "We changed our pricing three times this year. Here is what each change did to signups, with the numbers.\n\n**Round 1:** ...",
+        "content": "We changed our pricing three times this year. Here is what each change did to signups, with the numbers.\n\n**Round 1:** <from the user's doc>\n\n**Round 2:** <from the user's doc>\n\n**Round 3:** <from the user's doc>",
         "account_ids": [
           "<Reddit account id>"
         ],
         "idempotency_key": "pricing-teardown-reddit-1"
       },
-      "why": "No media: an image would make it an image post and only the title would go out. Markdown shows as written on Reddit; no hashtags, no pitch."
+      "why": "No media: an image would make it an image post and only the title would go out. Markdown shows as written on Reddit; no hashtags, no pitch. Every number comes from the user's doc, never filled in."
     },
     {
       "tool": "update-post-platform-details",

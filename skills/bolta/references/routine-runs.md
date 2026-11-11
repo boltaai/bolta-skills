@@ -14,13 +14,14 @@ Read for "why didn't it run?", "it failed", a refused run now, credits, or Bolta
 | `trial_quota` | "Your trial's runs are used up." |
 | `disconnected_source` | "An account it uses got disconnected. Reconnect it, then it can go back on." ([connect](connect.md)) |
 | `user_requested`, `user` | "Someone paused it. Turn it back on?" |
-| `backpressure`, `system` | Bolta paused it; try `resume-routine` once, then say what came back. |
+| `backpressure` | "Too many drafts are waiting." Decide those ([review](review.md)), then `resume-routine`. |
+| `system` | Bolta paused it; try `resume-routine` once, then say what came back. |
 
 - **Blocked**: Bolta's writer for it is paused. `blocked.paused_by` holding `billing` means the plan is paused or unpaid; otherwise "Bolta's writer for this is paused, so it can't run. Switch it back on at bolta.ai/dashboard/agents."
 
 ## Why a run went wrong
 
-In `list-routine-runs`, read `error_code` and `error_summary`. Paraphrase the summary; it can be a raw error. `run_skipped` means Bolta chose not to write; the summary says why (for example no business details and no topic). A run's drafts are its `run_details.artifacts[].id` (`type` `post`).
+In `list-routine-runs`, each run's `status` is `running`, `awaiting_approval` (drafts wait for a yes), `scheduled`, `completed`, `partial` (some didn't make it), `failed` or `cancelled`. Read `error_code` and `error_summary`; paraphrase the summary, it can be a raw error. `cancelled` with `run_skipped`: Bolta chose not to write; the summary says why (for example no business details and no topic). A run's drafts are its `run_details.artifacts[].id` (`type` `post`).
 
 No run at all, say the first that fits:
 
@@ -35,7 +36,7 @@ No run at all, say the first that fits:
 
 ## Run now refused, or out of credits
 
-A refused `run-routine-now` (already running, too many drafts waiting, a daily cap, a setting to fix) or credits run out: [references/routine-runs-refused.md](routine-runs-refused.md).
+A refused `run-routine-now` or credits run out: [routine-runs-refused.md](routine-runs-refused.md).
 
 ## Fix a failed run
 
@@ -46,11 +47,11 @@ A refused `run-routine-now` (already running, too many drafts waiting, a daily c
 
 Example, a skipped run: "Monday's run skipped: Bolta doesn't know what the business does yet, and this routine has no topic, so it didn't write generic posts. Add 'Write about our spring workshops' to its instructions and run it once now? Uses credits." Steps: [fix-a-failed-run](../examples/fix-a-failed-run.json).
 
-A disconnected account or an app to connect: [connect](connect.md). Bolta's web Inbox has a Fix Routine button that does the same.
+A disconnected account or an app to connect: [connect](connect.md).
 
 ## Bolta's weekly recommendations
 
-Read and apply them here, on a yes: [references/routine-improving.md](routine-improving.md). They also show on the routine's page (Performance). Deeper results: [results](results.md).
+Read and apply them, on a yes: [routine-improving.md](routine-improving.md). Deeper results: [results](results.md).
 
 ## Always
 

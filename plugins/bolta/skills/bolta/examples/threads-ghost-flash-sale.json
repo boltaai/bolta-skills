@@ -26,7 +26,7 @@
         },
         "idempotency_key": "flash20-threads-1"
       },
-      "why": "The decision: a ghost post, because the offer is dead after midnight and a lasting post would keep advertising an expired code. So it stays one short text part with no image and no link (any of those would make it a normal, lasting post). The topic puts it where shoppers browse; in platform_specific the tag alone is enough, no use_topic_tag. Both settings ride the saving call."
+      "why": "The decision: a ghost post, because the offer is dead after midnight and a lasting post would keep advertising an expired code. So it stays one short text part with no image and no poll (either would make it a normal, lasting post, without an error). The topic puts it where shoppers browse; in platform_specific the tag alone is enough, no use_topic_tag. Both settings ride the saving call."
     },
     {
       "tool": "get-post",
@@ -38,7 +38,7 @@
   ],
   "say": "Saved to Acme as a Threads draft: \"Flash sale, today only: FLASH20 takes 20% off everything until midnight.\" Topic: Small Business. It disappears 24 hours after it goes out, so schedule it for this morning. Nothing goes out yet. What time?",
   "never": [
-    "Adding the product photo or a link: the post would no longer disappear.",
+    "Adding the product photo or a poll: the post would no longer disappear.",
     "A ghost post for anything people should find later.",
     "Typing #SmallBusiness into the text instead of the topic setting."
   ]

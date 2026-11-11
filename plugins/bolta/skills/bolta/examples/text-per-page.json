@@ -1,5 +1,5 @@
 {
-  "ask": "Same launch post on my LinkedIn and the Acme company page, and on both our Facebook Pages, but the company page and the Lisbon Page should sound like the company, not me.",
+  "ask": "Same launch post on my LinkedIn and the Acme company page, and on both our Facebook Pages: Acme Scheduling is live today, and it lets you book, move and confirm appointments in one place. The company page and the Lisbon Page should sound like the company, not me.",
   "playbook": "post",
   "steps": [
     {
@@ -13,7 +13,7 @@
       "tool": "create-post",
       "arguments": {
         "workspace_id": "<brand's workspace id>",
-        "content": "I've spent a year building this. Today Acme Scheduling is live, and I'd love your honest take.",
+        "content": "Today Acme Scheduling is live: book, move and confirm appointments in one place. I'd love your honest take.",
         "account_ids": [
           "<LinkedIn profile account id>",
           "<linkedin_org_ id>",
@@ -24,7 +24,7 @@
           "linkedin": {
             "accounts": {
               "<linkedin_org_ id>": {
-                "text": "Acme Scheduling is live today: book, move and confirm appointments in one place. Try it free for 14 days."
+                "text": "Acme Scheduling is live today: book, move and confirm appointments in one place."
               }
             }
           },
@@ -39,7 +39,7 @@
         },
         "idempotency_key": "launch-pages-1"
       },
-      "why": "Ids exactly as list-accounts gave them; Bolta stores them under the page names. The profile has no entry, so it gets the main text in the founder's voice. The company page gets its own. The Acme Page gets the Facebook text, the Lisbon Page its own. Saved as a draft; scheduling a page post is a second call after the yes."
+      "why": "The decision: one post with a text per destination, because only the voice differs. Ids exactly as list-accounts gave them; Bolta stores them under the page names. The profile has no entry, so it gets the main text in the founder's \"I\". The company page gets its own in \"we\". The Acme Page gets the Facebook text, the Lisbon Page its own. No price or trial: none was given. Saved as a draft; scheduling a page post is a second call after the yes."
     }
   ],
   "say": "Saved to Acme as one draft for 4 destinations. 1. LinkedIn, you: (full text) 2. LinkedIn, Acme company page: (full text) 3. Facebook, Acme Page: (full text) 4. Facebook, Acme Lisbon Page: (full text). Nothing goes out yet. Schedule it?",

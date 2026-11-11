@@ -8,35 +8,35 @@
         "workspace_id": "<brand's workspace id>",
         "posts": [
           {
-            "content": "Post 1 text, written in the brand's voice.",
+            "content": "Hiring advice I keep coming back to: write the job post for one person, not for everyone.",
             "account_ids": [
               "<LinkedIn account id>"
             ],
             "status": "Draft"
           },
           {
-            "content": "Post 2 text.",
+            "content": "An interview is two people deciding whether to work together. It goes better when both of them get to ask questions.",
             "account_ids": [
               "<LinkedIn account id>"
             ],
             "status": "Draft"
           },
           {
-            "content": "Post 3 text.",
+            "content": "The best hiring signal I know is still the simplest one: did they do the thing they said they would do?",
             "account_ids": [
               "<LinkedIn account id>"
             ],
             "status": "Draft"
           },
           {
-            "content": "Post 4 text.",
+            "content": "A slow no is worse than a fast no. Candidates remember how long you left them waiting.",
             "account_ids": [
               "<LinkedIn account id>"
             ],
             "status": "Draft"
           },
           {
-            "content": "Post 5 text.",
+            "content": "The first week matters more than the offer letter. Plan it before the person says yes.",
             "account_ids": [
               "<LinkedIn account id>"
             ],
@@ -44,7 +44,7 @@
           }
         ]
       },
-      "why": "One call for the whole week, every item a Draft with its accounts. Never a loop of create-post. If the call asks for text items, send each object JSON-encoded."
+      "why": "The decision: one call for the whole week, about one post per weekday, every item a Draft with its accounts. Never a loop of create-post. Each post is a different angle on hiring with a different first line, in the voice get-voice-context gave. Opinions only: no open roles, salaries, numbers or links, because the user gave none. If the call asks for text items, send each object JSON-encoded."
     },
     {
       "tool": "bulk-create-status",
@@ -54,9 +54,10 @@
       "why": "Poll until status is completed, whatever the reply's text says. Its posts are the real saved rows; report rejected and quality_blocked."
     }
   ],
-  "say": "Saved to Acme as drafts. Nothing goes out yet. Schedule all 5? Or tell me what to change. Bolta picks exact times from your posting schedule.",
+  "say": "Saved to Acme as drafts (all 5 shown above in full). Nothing goes out yet. I kept them to opinions because you didn't name open roles or a link to apply. Schedule all 5? Or tell me what to change. Approved without a time, Bolta picks one from your posting schedule.",
   "never": [
     "A scheduled_time or requested_action on any item.",
-    "More than 12 posts in a sitting."
+    "More than 12 posts in a sitting.",
+    "An open role, number or apply link the user did not give."
   ]
 }

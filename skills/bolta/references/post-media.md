@@ -21,7 +21,7 @@ Bolta facts for images, video and how text is shown. Which links work, file size
 ## What goes wrong at posting time
 
 - X takes images only; a video fails when it posts.
-- Instagram pads an image of the wrong shape with white.
+- Instagram pads an image of the wrong shape with white, never crops it.
 - A Facebook comment carries one image.
 - Bolta doesn't check video length or file size, so a network may refuse them when it posts.
 
@@ -38,7 +38,8 @@ Bolta facts for images, video and how text is shown. Which links work, file size
 ## Links
 
 - Use only links the user gave.
-- Links go out exactly as written. Bolta does not add tracking tags at posting time, whatever `get-posting-rules` says. If the user wants clicks tracked, they give a link that already carries `utm_` tags; clicks then show in their own site analytics, never in Bolta.
+- Links go out as written, with one exception: on Threads everything after a `?` or `#` in a link is removed, tracking tags included.
+- Never promise Bolta adds tracking tags, whatever `get-posting-rules` says. If the user wants clicks tracked, they give a link that already carries `utm_` tags; clicks then show in their own site analytics, never in Bolta.
 
 ## Always
 

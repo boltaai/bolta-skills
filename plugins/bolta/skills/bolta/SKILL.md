@@ -11,7 +11,9 @@ description: >-
   email, calendars, documents or other apps.
 ---
 
-Bolta is where a team's social media lives: brands, their voice, posts, the review list, work that repeats and campaigns. This skill is the whole of it. Read the house rules, look once, pick one playbook, read it, do the work, read the result back.
+Bolta is a voice-first content factory: it learns how a brand writes, drafts in that voice, and puts every draft on one review list, where each yes, edit and no with a reason on Bolta's drafts teaches it.
+
+Getting someone running, in order: their voice, 3 to 5 Bolta routines, a campaign for anything dated, then the review list every week ([start](references/start.md)). Every ask: read the house rules, look once, pick one playbook, read it, do the work, read the result back.
 
 ## House rules
 
@@ -32,7 +34,7 @@ Bolta house rules:
 - **Organization**: the customer. One connection belongs to one organization and reaches the brands ticked when it was connected.
 - **Brand**: one business or client inside it. Tools call it a workspace and take `workspace_id`. It owns the clock, the accounts, the voice and everything below.
 - **Account**: one connected profile on a network. An account group is a named set of them.
-- **Voice**: how the brand writes: tone, DOs, DON'Ts, a sample. It learns from yes, no and edits on Bolta's drafts, not drops.
+- **Voice**: how the brand writes: tone, DOs, DON'Ts, a sample. A drop teaches it nothing.
 - **Post**: one thing, now. Saved as a draft; it goes nowhere until a yes.
 - **Bolta routine**: work Bolta repeats with no end, even when this app is closed ("3 LinkedIn drafts every Monday").
 - **Campaign**: 1 to 4 weeks about one thing that ends (a launch, a sale, an event), with a verdict.
@@ -45,7 +47,7 @@ Bolta's own writers do the work behind routines and campaigns. Never name them o
 
 On the first Bolta ask, read together and reuse all conversation: `list-workspaces`, then for the brand `get-workspace` (name, clock, review mode), `list-accounts`, `get-voice-context`. Read again only after an error or a change.
 
-- Several brands and none named: ask which. Then pass its `workspace_id` on every call.
+- Several brands and none named: ask which.
 - No accounts or no voice: [start](references/start.md).
 - "No voice profile" is an answer, not an error.
 - `get-my-capabilities` only after a refusal.
@@ -64,23 +66,23 @@ Read exactly one before acting, plus what it names. Never act from this page alo
 | Every week, images or video every week, each new blog post, pause or run my routine, its drafts keep missing | [routine](references/routine.md) |
 | A launch, sale or event, "for 3 weeks", how did the campaign do | [campaign](references/campaign.md) |
 | How did it do, what's working, which post did best | [results](references/results.md) |
-| That's not me, show my voice, add a rule | [voice](references/voice.md) |
+| That's not me, show my voice, add a rule, what has Bolta learned | [voice](references/voice.md) |
 | Comments, mentions, conversations to join | [replies](references/replies.md) |
-| Which accounts, account groups, brands this reaches, reconnect | [connect](references/connect.md) |
+| Which accounts, account groups, brands this reaches, reconnect, roles | [connect](references/connect.md) |
 | Undo, take it back, stop everything, why didn't it go out | [fix](references/fix.md) |
 | Save this as my own workflow, run it on this app's schedule | [my-workflow](references/my-workflow.md) |
 
-Choosing between the three kinds of work: one thing now is a post. "Every", "weekly", "keep posting", "each time X" is a Bolta routine. "Launch", "sale", "event", "for 3 weeks", "by Nov 3" is a campaign. Still unclear, ask once: "Should this keep going with no end, or is it about one thing that ends?"
+One thing now is a post. "Every", "weekly", "keep posting", "each time X": a Bolta routine. "Launch", "sale", "event", "for 3 weeks", "by Nov 3": a campaign. Unclear, ask once: "Should this keep going with no end, or is it about one thing that ends?"
 
 Before the first reply, read [the plain-words list](references/today-plain-words.md).
 
 ## The four moves
 
-Each is a summary; the playbook has the rest. Worked calls for every one are in [examples/](examples/README.md).
+Summaries; the playbook has the rest. Worked calls: [examples/](examples/README.md).
 
-**Write.** One post: `create-post` with `content`, `account_ids` and an `idempotency_key`, no time and no action. Two or more: one `bulk-create-posts`, every item a Draft, then poll `bulk-create-status` until `completed` and show what it stored. Every claim comes from the user, the business record or the voice: no added scarcity or stock lines, and a missing fact is asked with a blank ("__% off"), never a made-up figure. Show every saved post in full. End: "Saved to <brand> as drafts. Nothing goes out yet. Schedule all N? Or tell me what to change."
+**Write.** One post: `create-post` with `content`, `account_ids` and an `idempotency_key`, no time and no action. Two or more: one `bulk-create-posts`, every item a Draft, then poll `bulk-create-status` until `completed` and show what it stored. Every claim comes from the user, the business record or the voice: no added scarcity or stock lines; a missing fact gets a blank ("__% off"). Show every saved post in full. End: "Saved to <brand> as drafts. Nothing goes out yet. Schedule all N? Or tell me what to change."
 
-**Decide.** Read `list-inbox-items` and number what waits (account, full text). One message decides all: "1, 3 yes · 2 too salesy · 4 drop". Yes: `submit-for-review` for drafts not yet listed, then one `approve-many-posts` with each post's `expected_fingerprint`. No with a reason: `reject-post` in the user's words. Drop: `delete-post`. Read back day, time and account for each. Only owners and admins approve; a post the user wrote may need another admin's (Bolta's drafts don't).
+**Decide.** Read `list-inbox-items`. 8 or more waiting and you can start a clearing-house agent: start it before judging anything and show its advice. Otherwise number what waits (account, full text). One message decides all: "1, 3 yes · 2 too salesy · 4 drop". Yes: `submit-for-review` for drafts not yet listed, then one `approve-many-posts` with each post's `expected_fingerprint`. No with a reason: `reject-post` in the user's words. Drop: `delete-post`. Read back day, time and account for each. Only owners and admins approve; a post the user wrote may need another admin's (Bolta's drafts don't).
 
 **Repeat.** One summary, "Turn it on?", then `create-routine` (schedule, the brand's `timezone`, ask me first, accounts bound as objects), `activate-routine`, and read `next_run_at` back in the brand's clock. Switching on is not running.
 
@@ -93,7 +95,7 @@ Each is a summary; the playbook has the rest. Worked calls for every one are in 
 - Instagram, TikTok, YouTube and Pinterest need a public https link to the media file. No link: skip that network and say why.
 - Past a network's length limit Bolta cuts or splits silently. Count first ([post-platforms](references/post-platforms.md)).
 - X takes images only; a video fails when it goes out ([at a glance](references/post-networks-at-a-glance.md)).
-- Every network's settings, how to set them and which way wins: [network settings](references/post-settings.md).
+- Per-network settings and which way wins: [network settings](references/post-settings.md).
 - Social networks get plain text; bold and headings become look-alike letters ([media](references/post-media.md)).
 - A setting can save and still not go out; read it back.
 - A campaign's `ends_on: null` is ignored; always send `strategy_key` and a future `starts_on`. Pausing or finishing never unschedules posts.
@@ -104,7 +106,7 @@ Each is a summary; the playbook has the rest. Worked calls for every one are in 
 
 ## When something is missing
 
-Not every app is offered every tool, and a plan or role can refuse one.
+An app may lack a tool, and a plan or role can refuse one.
 
 - No `approve-many-posts`: `approve-post` for each yes, the first one alone.
 - No `reject-post`: "I can't turn this down from here. Tap the X (Dismiss) on that post at bolta.ai/dashboard/approvals and give your reason." Never delete to stand in for a no.
@@ -115,6 +117,6 @@ Not every app is offered every tool, and a plan or role can refuse one.
 
 ## Extras, where the app has them
 
-- Two read-only helpers ship with the full plugin: clearing-house (a first pass over 8 or more waiting drafts) and community-triage (sorting comments and mentions). Their advice is never a yes.
+- Two read-only agents ship with the full plugin and, where you can start them, go first: clearing-house (8 or more drafts waiting), community-triage (10 or more reply drafts or comments). Advice is never a yes. Not there: do it yourself; never mention them.
 - The Bolta checks plugin asks before anything public, approved, turned down or final. A session that starts with "Bolta checks are on in this session" has them; a check then stands in for asking in words. Without that line, ask in words first.
-- The my-workflow playbook applies only in apps that have their own skills and scheduled tasks.
+- The my-workflow playbook is only for apps with their own skills and scheduled tasks.

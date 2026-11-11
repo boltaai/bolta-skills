@@ -1,12 +1,12 @@
 # Bolta routine settings: what, when, who decides
 
-Top-level settings of `create-routine` and `update-routine`; `output_config`: [routine-settings-output.md](routine-settings-output.md). Labels: **Bolta**, Bolta's own rule or default; **seen**, what customers keep or drop; **advice**, judgement.
+Top-level settings of `create-routine` and `update-routine`; `output_config`: [routine-settings-output.md](routine-settings-output.md). Labels: **Bolta**, Bolta's own rule or default; **seen**, what customers keep or drop (never quote the counts); **advice**, judgement.
 
 ## What it is
 
 - `name` (required, up to 255 characters): what it does, "Weekly LinkedIn, hiring". Display only.
 - `goal` (required, up to 2000): their words, audience plus purpose: "Help clinic owners see why posture coaching beats one-off treatment." Never invent one. Not a dated event: it repeats every run. Bolta's sample goals ("Post consistently each week") count as no topic, so with no brand details the run is skipped (Bolta).
-- `instructions` (up to 4000, default empty): rules for every run: tone, words to avoid, facts to use, "Never invent facts, numbers, prices or dates." Every rule belongs here. A line starting "reply to…", "respond to…" or "draft replies" is refused on a post routine (`reply_workflow_required`): reword it as a topic, or use a reply routine.
+- `instructions` (up to 4000, default empty): rules for every run: tone, words to avoid, facts to use, "Never invent facts, numbers, prices or dates." A `goal` or `instructions` starting "reply to…", "respond to…" or "draft replies" is refused on a post routine (`reply_workflow_required`): reword it as a topic, or use a reply routine.
 - `template_key`: what it makes ([routine-templates.md](routine-templates.md)). It never changes: another kind is a new routine. Leave `workflow_definition_key` and `outcome_category` out.
 
 ## When it runs
@@ -28,7 +28,7 @@ Top-level settings of `create-routine` and `update-routine`; `output_config`: [r
 
 ## Settings that do nothing
 
-`conditions`, `guardrails`, `performance_objective`, `autonomy_override`, `capability_keys`, and `destination_config` `behavior` and `account_refs` are stored, never read; use `instructions`. These and the rest Bolta fills itself: [routine-settings-leave-alone.md](routine-settings-leave-alone.md).
+`capability_keys` and `destination_config` `behavior` and `account_refs` are stored, never read. `conditions`, `guardrails`, `performance_objective` and `autonomy_override` show in `get-routine` but these tools don't take them. Use `instructions`. More: [routine-settings-leave-alone.md](routine-settings-leave-alone.md).
 
 ## Always
 

@@ -11,7 +11,7 @@
         "context": "Product: Acme Inbox. Launch day: Tue Dec 8. Facts the user gave, nothing else.",
         "links": ["https://acme.com/inbox"]
       },
-      "why": "The date is in the ask, so no question first. The planner picks the strategy, accounts, mix and dates and creates nothing. Its plan came back with 2 weeks (the default when weeks aren't said) ending before launch day, Problem / Solution, and notes. Show it in a few lines: name, strategy and its gloss, dates, posts a week × weeks = drafts to review."
+      "why": "The date is in the ask, so no question first. The planner picks the strategy, accounts, mix and dates and creates nothing. Its plan came back starting tomorrow (its default when it reads no start date) for 2 weeks (the default when weeks aren't said), so it ended before launch day; Problem / Solution, and notes. Always read the plan's dates: a launch date can also be taken as the start. Show it in a few lines: name, strategy and its gloss, dates, posts a week × weeks = drafts to review."
     },
     {
       "tool": "revise-plan",

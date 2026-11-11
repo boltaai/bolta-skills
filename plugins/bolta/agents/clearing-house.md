@@ -3,9 +3,11 @@ name: clearing-house
 description: >-
   Read everything waiting for the user's yes in Bolta and return numbered
   approve, edit or drop advice, checked against their voice, best posts and
-  what is already scheduled. Use when the review list is long, for example
-  after a Bolta routine or campaign wrote a week of drafts. It only reads and
-  advises; it never approves, schedules, edits or posts.
+  what is already scheduled. Use when 8 or more posts wait for a yes in Bolta ("what's
+  waiting", "go through my drafts"): it goes first, before the main
+  conversation judges any post, for example after a Bolta routine or
+  campaign wrote a week of drafts. It only reads and advises; it never
+  approves, schedules, edits or posts.
 model: sonnet
 maxTurns: 30
 color: blue

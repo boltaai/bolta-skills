@@ -13,13 +13,13 @@
       "why": "The exact text shown goes as content, so a check shows what goes out. On a reply draft this counts as the person's approval. It queues; a status read says when it is sent."
     },
     {
-      "tool": "send-outreach-reply",
+      "tool": "update-outreach-reply",
       "arguments": {
         "workspace_id": "<brand's workspace id>",
         "reply_id": "<reply 3 id>",
-        "content": "<draft 3 without its last sentence, exactly as agreed>"
+        "content": "<draft 3 without its last sentence>"
       },
-      "why": "The user's edit is the agreed text: send it as content in one step rather than saving first. Sent this way it counts as the person's approval, so Bolta's unattended pacing is skipped, but a new or low-karma account is still paced and the subreddit's own rules can hold even a person's approval."
+      "why": "The user asked for a change, so save the new text; this sends nothing. They have not seen the edited reply yet, and a sent reply can't be changed, so show it in full and send only on a yes to that exact text (send-outreach-reply with the same content)."
     },
     {
       "tool": "get-social-content",
@@ -46,13 +46,14 @@
         "engagement_id": "<reply 1 id>",
         "verify": true
       },
-      "why": "Pending with needs_approval false is queued, not failed; sent with canonical_url is live. Same read for reply 3."
+      "why": "Pending with needs_approval false is queued, not failed; sent with canonical_url is live. Reply 3 has not been sent, so there is nothing to read for it yet."
     }
   ],
-  "say": "Reply 1 is live on Threads (link). Reply 3 is queued on Reddit; I'll confirm once it's up. 2 is a refund ask: answer it yourself in Bolta's Inbox. Here's Bolta's answer to the espresso comment, from your Reddit account: \"...\" Send it?",
+  "say": "Reply 1 is live on Threads (link). 2 is a refund ask: answer it yourself in Bolta's Inbox. Two to check before they go out from your Reddit account. Reply 3, without its last sentence: \"...\" And Bolta's answer to the espresso comment: \"...\" Send both?",
   "never": [
     "Sending 2, or drafting an answer to a refund ask.",
+    "Sending reply 3 before the user has seen the edited text and said yes to it.",
     "Sending the Reddit comment reply in the same yes: the user hasn't seen its text.",
-    "Calling a queued Reddit reply failed, or resending it."
+    "Calling a queued reply failed, or resending it."
   ]
 }

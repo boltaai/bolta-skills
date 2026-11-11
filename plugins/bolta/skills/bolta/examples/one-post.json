@@ -1,5 +1,5 @@
 {
-  "ask": "Write a LinkedIn post about our new pricing page.",
+  "ask": "Write a LinkedIn post about our new pricing page: three plans, one table, no calculator.",
   "playbook": "post",
   "steps": [
     {
@@ -12,7 +12,7 @@
         ],
         "idempotency_key": "pricing-page-linkedin-1"
       },
-      "why": "A plain draft: no time, no requested_action. It goes nowhere."
+      "why": "A plain draft: no time, no requested_action. It goes nowhere. One post, so create-post with an idempotency_key. The only facts are the three the user gave; no prices, since none were given."
     }
   ],
   "say": "Saved to Acme as a draft. Nothing goes out yet. Schedule it? Or tell me what to change.",

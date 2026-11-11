@@ -4,7 +4,7 @@ Read before changing a campaign's status, or when the user asks when drafts come
 
 ## The five actions
 
-- **`activate`** (start): from not started, or paused. **This is what makes Bolta write**; creating a campaign never does. Needs its own yes, after the user saw the plan. One Bolta check; uses credits when a week is due. Accounts first: with accounts in the brand and none on the campaign, it switches on and then makes nothing (`needs_accounts`).
+- **`activate`** (start): from not started (a paused one: `resume`). **This is what makes Bolta write**; creating a campaign never does. Needs its own yes, after the user saw the plan. One Bolta check; uses credits when a week is due. Accounts first: with accounts in the brand and none on the campaign, the reply is an error (`no_accounts`) yet the campaign is on and makes nothing (`needs_accounts`) until accounts are set.
 - **`pause`**: stops new drafts. Reversible. What the user nearly always means by "stop".
 - **`resume`**: from paused. Bolta writes every week still owed, on its usual days; weeks already over are skipped. If the campaign's only account was removed, set one first or it is refused.
 - **`complete`** (finish): from on or paused. Final: it can't start again; results stay.

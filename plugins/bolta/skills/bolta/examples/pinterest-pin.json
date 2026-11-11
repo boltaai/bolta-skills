@@ -1,5 +1,5 @@
 {
-  "ask": "Pin this recipe photo to the same board as last week's lemon tart pin, linking to the recipe: https://cdn.example.com/fig-galette.jpg and https://acme.example.com/recipes/fig-galette",
+  "ask": "Pin this photo of our 20-minute fig galette to the same board as last week's lemon tart pin, linking to the recipe: https://cdn.example.com/fig-galette.jpg and https://acme.example.com/recipes/fig-galette",
   "playbook": "post",
   "steps": [
     {
@@ -14,23 +14,23 @@
       "tool": "create-post",
       "arguments": {
         "workspace_id": "<brand's workspace id>",
-        "content": "A fig galette that looks fancy and takes 20 minutes of work.",
+        "content": "A fig galette you can make in 20 minutes.",
         "account_ids": [
           "<Pinterest account id>"
         ],
         "media": [
           {
             "url": "https://cdn.example.com/fig-galette.jpg",
-            "alt_text": "A rustic fig galette on parchment, sliced, with a dusting of sugar"
+            "alt_text": "A fig galette"
           }
         ],
         "platform_specific": {
           "pinterest": {
             "board_id": "<board_id from the lemon tart pin>",
-            "title": "Easy fig galette (20 minutes of work)",
-            "description": "A fig galette that looks fancy and takes 20 minutes of work. Flaky crust, jammy figs, no special tools.",
+            "title": "Easy 20-minute fig galette",
+            "description": "A fig galette you can make in 20 minutes. The full recipe is one tap away.",
             "link": "https://acme.example.com/recipes/fig-galette",
-            "alt_text": "A rustic fig galette on parchment, sliced, with a dusting of sugar"
+            "alt_text": "A fig galette"
           }
         },
         "idempotency_key": "fig-galette-pin-1"
@@ -45,7 +45,7 @@
       "why": "Read back metadata.platformSpecific.pinterest: unknown keys and typos are kept quietly."
     }
   ],
-  "say": "Saved to Acme as a Pinterest draft on the same board as the lemon tart pin: \"Easy fig galette (20 minutes of work)\", linking to your fig galette recipe. Nothing goes out yet. Schedule it?",
+  "say": "Saved to Acme as a Pinterest draft on the same board as the lemon tart pin: \"Easy 20-minute fig galette\", linking to your fig galette recipe. Nothing goes out yet. Schedule it?",
   "never": [
     "Guessing a board, or leaving it to the most recently synced one.",
     "Sending the read's board_id to update-post-platform-details: that one takes Bolta's id.",

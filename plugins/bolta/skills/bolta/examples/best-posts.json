@@ -26,7 +26,7 @@
       "why": "A link to the live post from linkedin_metrics.permalink. If it is missing, say there is no link yet; never build one from an id."
     }
   ],
-  "say": "Acme, Nov 1 to today: your best LinkedIn post was \"We cut onboarding to one day...\" (Nov 4): 86 likes, 14 comments, 2,310 views. 2 posts from this week aren't synced yet. Want 3 more like it now, or a Bolta routine that reuses your best posts each week? Your best posts, working again somewhere else: 3 fresh drafts each run, waiting for your yes.",
+  "say": "Acme, Nov 1 to today: your best LinkedIn post was \"We cut onboarding to one day...\" (Nov 4): 86 likes, 14 comments, 2,310 views (link). 2 posts from this week aren't synced yet, so they're left out. Make 3 more like it?",
   "never": [
     "Naming a best LinkedIn post from the all-network total.",
     "Ranking a post whose numbers haven't synced yet.",

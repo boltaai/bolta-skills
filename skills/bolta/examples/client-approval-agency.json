@@ -13,7 +13,8 @@
       "tool": "list-inbox-items",
       "arguments": {
         "workspace_id": "<Acme's workspace id>",
-        "source": "team"
+        "source": "team",
+        "status": "pending"
       },
       "why": "Next week's 4 drafts, numbered with account and full text, so the user sees exactly what the client will see. Rows don't say whether a post is already with the client."
     },

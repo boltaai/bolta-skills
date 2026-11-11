@@ -1,5 +1,5 @@
 {
-  "ask": "Announce our new Lisbon office on LinkedIn, X and Threads. Same news, but write it right for each one.",
+  "ask": "Announce our new Lisbon office on LinkedIn, X and Threads: it's our second office, eight of us start there in January, and we're hiring two engineers. Same news, but write it right for each one.",
   "playbook": "post",
   "steps": [
     {
@@ -20,7 +20,7 @@
       "tool": "create-post",
       "arguments": {
         "workspace_id": "<brand's workspace id>",
-        "content": "We've opened an office in Lisbon. Eight of us start there in January, and we're hiring two more.",
+        "content": "We've opened a second office, in Lisbon. Eight of us start there in January, and we're hiring two engineers.",
         "account_ids": [
           "<LinkedIn account id>",
           "<X account id>",
@@ -28,19 +28,19 @@
         ],
         "platform_specific": {
           "linkedin": {
-            "text": "We've opened our second office, in Lisbon.\n\nEight of us start there in January. Why Lisbon: half our customers are within three hours of it, and the people we want to hire already live there.\n\nWe're hiring two engineers. Ask me anything about the team."
+            "text": "We've opened our second office, in Lisbon.\n\nEight of us start there in January.\n\nWe're also hiring two engineers. Ask me anything about the team."
           },
           "x": {
             "text": "New office: Lisbon. Eight of us start in January, and we're hiring two engineers."
           },
           "threads": {
-            "text": "We picked Lisbon for our second office. Eight of us move in January. Anyone here worked from there? Tips welcome.",
+            "text": "We picked Lisbon for our second office. Eight of us start there in January. Anyone here worked from Lisbon? Tips welcome.",
             "topic_tag": "Startups"
           }
         },
         "idempotency_key": "lisbon-office-1"
       },
-      "why": "Same media, same time, one part each: one post, a fresh text per network in platform_specific, written separately with different first lines. content stays as the fallback. The Threads topic goes in the same call; through platform_specific it needs no use_topic_tag. Saved as a draft: no time, no action."
+      "why": "The decision: one post, because the media, time and number of parts are the same and only the words differ; one yes covers all three. A fresh text per network in platform_specific, written separately with different first lines: LinkedIn gets room and an invitation, X one line, Threads a question. content stays as the fallback. The Threads topic goes in the same call; through platform_specific it needs no use_topic_tag. X carries text only: an X setting here would not be sent on a new post. Every fact is from the ask. Saved as a draft: no time, no action."
     },
     {
       "tool": "get-post",

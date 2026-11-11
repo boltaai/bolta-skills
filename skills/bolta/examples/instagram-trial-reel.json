@@ -1,19 +1,19 @@
 {
-  "ask": "Post this reel as a trial first, and share it with followers only if it does well: https://cdn.example.com/latte-art.mp4",
+  "ask": "Post this 10-second latte art clip as a trial reel first, and share it with followers only if it does well: https://cdn.example.com/latte-art.mp4",
   "playbook": "post",
   "steps": [
     {
       "tool": "create-post",
       "arguments": {
         "workspace_id": "<brand's workspace id>",
-        "content": "Ten seconds of latte art, one shaky hand.",
+        "content": "Ten seconds of latte art.",
         "account_ids": [
           "<Instagram account id>"
         ],
         "media": [
           {
             "url": "https://cdn.example.com/latte-art.mp4",
-            "alt_text": "A barista pouring a leaf into a latte"
+            "alt_text": "Latte art being poured"
           }
         ],
         "platform_specific": {

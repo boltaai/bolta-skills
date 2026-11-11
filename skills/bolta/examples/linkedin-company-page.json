@@ -1,5 +1,5 @@
 {
-  "ask": "Post our hiring news on the Acme company page on LinkedIn, not my profile.",
+  "ask": "Post our hiring news on the Acme company page on LinkedIn, not my profile: we're hiring two engineers in Lisbon.",
   "playbook": "post",
   "steps": [
     {
@@ -13,16 +13,16 @@
       "tool": "create-post",
       "arguments": {
         "workspace_id": "<brand's workspace id>",
-        "content": "We're hiring two engineers in Lisbon. Small team, real ownership, a product people use every day.",
+        "content": "We're hiring two engineers in Lisbon. If that could be you, or someone you know, we'd love to hear from you.",
         "account_ids": [
           "<linkedin_org_ id from list-accounts>"
         ],
         "idempotency_key": "hiring-li-page-1"
       },
-      "why": "The page id alone posts as the page, not the profile. Saved as a draft with no requested_action; scheduling is a second call after the yes."
+      "why": "The decision: the page id alone, because hiring news is company news and the user said not the profile. The page id alone posts as the page. Saved as a draft with no requested_action; scheduling is a second call after the yes. No salary, deadline or apply link: none was given, so say that below the draft."
     }
   ],
-  "say": "Saved to Acme as a LinkedIn draft for the Acme company page, not your profile. Nothing goes out yet. Schedule it?",
+  "say": "Saved to Acme as a LinkedIn draft for the Acme company page, not your profile. Nothing goes out yet. I left out how to apply because you didn't give a link. Schedule it?",
   "never": [
     "A guessed page id, or one that didn't come from list-accounts.",
     "Scheduling in the same call that creates a page post.",

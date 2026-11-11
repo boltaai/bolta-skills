@@ -7,7 +7,7 @@
       "arguments": {
         "workspace_id": "<brand's workspace id>"
       },
-      "why": "Posts deleted through this app or Bolta's chat in the last 7 days, newest first (up to 100), each with days left before it is purged. Deletes made in the Bolta dashboard are permanent and never listed."
+      "why": "Posts deleted through this app or Bolta's chat in the last 7 days, newest first (up to 100), each with days left before it is purged. Deletes made in the Bolta dashboard are permanent and never listed. Show each one's first words and days left, and restore only the one the user picks. Restoring brings it back exactly as it was: if it was Scheduled and its time passed in the last 2 days, it goes out within about 15 minutes, so say that and ask \"As it was, or as a draft?\" first. Here the user said: as it was."
     },
     {
       "tool": "restore-deleted",

@@ -8,7 +8,7 @@ Get the subject, the date and one link (an event, launch or offer page). A date 
 
 ## 2. Plan it
 
-- **Bolta's planner, where offered:** `plan-campaign` with `ask` (the user's words with the date), `context` (audience, offer, facts they gave) and `links` (up to 5 pages). It returns a plan with an id: dates, weeks (2 when unsaid, at most 4), strategy, accounts, posts per week, total drafts and notes such as "Left out blog posts". Nothing is created. A question in the result needs its answer first.
+- **Bolta's planner, where offered:** `plan-campaign` with `ask` (the user's words with the date), `context` (audience, offer, facts they gave) and `links` (up to 5 pages). It returns a plan with an id: dates, weeks (2 when unsaid, at most 4), strategy, accounts, posts per week, total drafts and notes such as "Left out blog posts". Nothing is created. A question in the result needs its answer first. Read its dates: no date said, it starts tomorrow; "launches Dec 8" can be taken as the start. Step 3 puts the event in the last week.
 - **No planner:** write the plan yourself ([campaign.md](campaign.md)): name, strategy, dates with the event in the last week, posts a week × weeks, who writes it.
 
 Show it in a few lines and ask "Save it?".

@@ -1,6 +1,6 @@
 # Looking after a Bolta routine
 
-Read for changes, pausing, stopping, running now and Monday's drafts. Start with `get-routine`. Why it didn't run, a failed run or a refused run now: [references/routine-runs.md](routine-runs.md). Pictures, the client, stories, Library posts: [references/routine-outputs.md](routine-outputs.md).
+Read for changes, pausing, stopping, running now and Monday's drafts. Start with `get-routine`. Why it didn't run, a failed or refused run: [routine-runs.md](routine-runs.md). Pictures, the client, stories, Library posts: [routine-outputs.md](routine-outputs.md).
 
 ## Change, pause, stop, run now
 
@@ -18,11 +18,11 @@ Read for changes, pausing, stopping, running now and Monday's drafts. Start with
 - **A change needs no check** on a routine made here as ask me first, or on one already ask me first when the change resends `approval_policy: "review_every_artifact"`. Resend it only where it is already set.
 - "Use my workspace setting" or "post without asking" only on their words: one Bolta check, plus one to switch on. Which routines and brands allow `auto`: [routine-settings.md](routine-settings.md). The brand's rule changes in Bolta: Settings > Rules > Approvals.
 - **Schedules:** daily, weekly with a `day`, or monthly (the 1st). Another day of the month, or weekdays: a cron, `{"cron":"0 9 15 * *"}` or `{"cron":"0 9 * * 1-5"}`; "weekdays" is not an interval. After any schedule or clock change, read `next_run_at` back.
-- **Voice and reviewers:** `get-routine` `destination_config.voice_profile_id` (empty: brand default) and `default_reviewer_ids`. Change with `update-routine`: `destination_config: {"voice_profile_id": ...}` alone is enough. Copy both onto a copy.
-- The kind of routine can't change. Make a new one.
+- **Voice and reviewers:** `get-routine` `destination_config.voice_profile_id` (empty: brand default) and `default_reviewer_ids`. Change the voice with `update-routine` `destination_config`: the new `voice_profile_id` plus the `account_refs` and `behavior` `get-routine` returned, or those are cleared. Copy both onto a copy.
+- Its kind can't change. Make a new one.
 - Switching on can be refused (a missing source, a disconnected account, a plan limit, a paused writer). Say the reason; it stays off. Don't retry.
 - Pausing: a run already going may still deliver drafts. Stopped, its history stays.
-- Run now works only when it's on. While a run is going, or on a second press within 30 seconds (`started: false`), say "It's already running." Check `list-routine-runs` once; don't loop. Other refusals: [references/routine-runs-refused.md](routine-runs-refused.md).
+- Run now works only when it's on. While a run is going, or on a second press within 30 seconds (`started: false`), say "It's already running." Check `list-routine-runs` once; don't loop. Other refusals: [routine-runs-refused.md](routine-runs-refused.md).
 - Stopping everything at once, campaigns too: [fix](fix.md).
 
 ## Monday: what it wrote

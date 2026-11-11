@@ -31,12 +31,12 @@
           "selected_channel_id": "<selected_channel.id from the last release note>",
           "embed_enabled": true,
           "embed_title": "Acme 2.4",
-          "embed_description": "Exports now finish in seconds, even for a year of posts.\nNew calendar view: see every scheduled post by week.",
+          "embed_description": "Faster exports.\nA new calendar view.",
           "embed_color": "#7B23CB",
-          "embed_footer": "Full notes on the changelog"
+          "embed_footer": "Acme release notes"
         }
       },
-      "why": "The decision: an embed, because a release note has a title and a list worth setting apart; a chat-style update would stay plain text. With embed_description set, the embed replaces the message text; without it the text would show twice. The footer is a details-only key, so everything goes in this one call."
+      "why": "The decision: an embed, because a release note has a title and a list worth setting apart; a chat-style update would stay plain text. With embed_description set, the embed replaces the message text; without it the text would show twice. Only the two changes the user named, nothing invented. The footer is a details-only key, so everything goes in this one call. The channel id is Bolta's own, as the read gave it."
     }
   ],
   "say": "Saved to Acme as a Discord draft for the same channel as the last release note, as an embed titled \"Acme 2.4\": faster exports, and a new calendar view. Nothing goes out yet. Post it now or schedule it?",

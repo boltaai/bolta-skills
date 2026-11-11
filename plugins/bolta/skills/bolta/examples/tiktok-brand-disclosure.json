@@ -7,7 +7,7 @@
       "tool": "create-post",
       "arguments": {
         "workspace_id": "<brand's workspace id>",
-        "content": "Three drops, thirty seconds, done. Our new serum is here.",
+        "content": "Our new serum is here.",
         "account_ids": [
           "<TikTok account id>"
         ],
@@ -46,7 +46,7 @@
       "why": "Read back metadata.platformSpecific.tiktok for the disclosure; the privacy reply already showed the saved level."
     }
   ],
-  "say": "Saved to Acme as a TikTok draft, public to everyone, marked as promoting your own business: \"Three drops, thirty seconds, done. Our new serum is here.\" Duets and stitches are on. Nothing goes out yet. Schedule it?",
+  "say": "Saved to Acme as a TikTok draft, public to everyone, marked as promoting your own business: \"Our new serum is here.\" Duets and stitches are on. Nothing goes out yet. Schedule it?",
   "never": [
     "Deciding for the user that a product video needs no disclosure.",
     "Setting the disclosure with update-post-platform-details: it answers success and keeps nothing.",

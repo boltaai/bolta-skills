@@ -15,12 +15,12 @@ Every setting on every network, one page per network: [X](post-settings-x.md) ·
 Each network page marks every key with how it can be set:
 
 - **Both, per account**: read from `platform_specific` when the post goes out. The account's entry wins, then the network's, then what `update-post-platform-details` saved.
-- **Both, network only**: `platform_specific` at network level is copied into the network's settings when the post is saved, so the last save wins. An account entry for these is ignored. A later `update-post` that names this network copies its values again over a details change: set each key in one place.
+- **Both, network only**: `platform_specific` at network level is copied into the network's settings when the post is saved, so the last save wins (Instagram differs: [Instagram](post-settings-instagram.md)). An account entry for these is ignored. A later `update-post` that names this network copies its values again over a details change: set each key in one place. One bad value here (a misspelled Mastodon `visibility`) is dropped silently, with the networks after it in that call.
 - **Details only**: `update-post-platform-details` (or the batch details). In `platform_specific` it is saved and never used.
 
-Not working yet: on a post with no X settings saved, a `platform_specific` naming `x` creates none (unless it carries a complete, valid poll), and the network-only keys of Mastodon, Bluesky, Reddit and Discord sent in that same call are skipped. Set X with `update-post-platform-details` first, or set those networks' keys in their own call.
+Not working yet: on a post with no X settings saved, a `platform_specific` naming `x` creates none, so no X setting goes out, and the network-only keys of Mastodon, Bluesky, Reddit and Discord sent in that same call are skipped. Set X with `update-post-platform-details` first, and those networks' keys in their own call.
 
-`platform_specific` values are not checked (Instagram skips bad ones). A wrong TikTok privacy there goes out as the first level the account allows, usually public. For a choice field, prefer the details call, which refuses a bad value, or copy from `allowed_values`.
+`platform_specific` values are not checked (Instagram skips bad ones). Send real `true` or `false`: the text "false" counts as true. A wrong TikTok privacy there goes out as the first level the account allows, usually public. For a choice field, prefer the details call, which refuses a bad value, or copy from `allowed_values`.
 
 Unknown or misspelled keys are kept quietly and never used, either way. Read back before saying a setting is set.
 

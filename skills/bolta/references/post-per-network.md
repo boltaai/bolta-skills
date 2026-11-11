@@ -7,7 +7,8 @@ One post can carry its own text and settings for each network, and for each acco
 ```json
 {"linkedin": {"text": "The longer story for LinkedIn",
               "accounts": {"<linkedin_org_ id from list-accounts>": {"text": "The company page's version"}}},
- "x": {"text": "One line for X", "reply_settings": "followers"},
+ "x": {"text": "One line for X"},
+ "threads": {"topic_tag": "Coffee"},
  "instagram": {"content_type": "REELS"}}
 ```
 
@@ -33,7 +34,7 @@ One post can carry its own text and settings for each network, and for each acco
 ## When to use which
 
 - **`platform_specific`**: text per network or Page; a setting for one account only; settings in the same call that saves the post; an Instagram trial reel; TikTok paid or brand disclosure; a Pinterest board (Pinterest's id, as a read shows it).
-- **`update-post-platform-details`**: one network's settings on a saved post when a bad value should be refused (X poll, TikTok or YouTube privacy), and anything that takes Bolta's own ids: Reddit subreddit, Discord channel, LinkedIn `selected_organization`, Facebook Pages, X quote or reply.
+- **`update-post-platform-details`**: every X setting; one network's settings on a saved post when a bad value should be refused (TikTok or YouTube privacy), and anything that takes Bolta's own ids: Reddit subreddit, Discord channel, LinkedIn `selected_organization`, Facebook Pages, X quote or reply.
 - Set each key one way. To change it, change it where it was set.
 
 ## Approval

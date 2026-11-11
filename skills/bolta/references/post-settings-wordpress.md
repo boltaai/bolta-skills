@@ -8,12 +8,12 @@ Change settings on a saved article with `update-post-platform-details` (network 
 
 All both, per account, unless marked.
 
-- **Title**: `title`, up to 255 characters. Empty: the first line if short, else "Blog Post" and the date. Always set one.
+- **Title**: `title`, up to 255 characters. Empty: the first line if under 100 characters (a leading `#` and all), else "Blog Post" and the date. Always set one.
 - **Address**: `slug`. `platform_specific` only; the `slug` on `create-wordpress-blog-post` has no effect. Empty: made from the title. Guidance: short, lowercase, the main search words ("sourdough-starter-guide"); change it only before the article goes out, since a live address change breaks links.
 - **Search title and description**: `meta_title` (aim for 60 characters or fewer), `meta_description` (160 or fewer). Sent as the post's `title` and `description` meta keys; they show in search results only if the site's SEO plugin reads those keys. Never promise they appear.
-- **Excerpt**: `excerpt`. Empty: taken from the start of the article. Guidance: one or two sentences that make someone click from the blog index.
-- **Categories and tags**: `categories`, `tags`, lists of names. A new name is created on the live site at publish, so match existing spelling. Guidance: one or two categories, a handful of tags.
-- **Post or page**: `post_type` `post` (default) or `page`. Guidance: `page` only for a standing page (About, Pricing), never a dated article.
+- **Excerpt**: `excerpt`. Empty: about the first 155 characters of the article. Guidance: one or two sentences that make someone click from the blog index.
+- **Categories and tags**: `categories`, `tags`, lists of names. A new name is created on the live site at publish, so match existing spelling; one that can't be created is dropped without a word. Guidance: one or two categories, a handful of tags.
+- `post_type` takes `post` (default) or `page`, but `page` is not honoured yet: everything goes out as a blog post. Don't offer pages.
 - **Comments and pingbacks**: `comment_status`, `ping_status`, `open` (default) or `closed`.
 - **Pinned to the top**: `sticky` (default false). Guidance: one sticky article at a time, for a launch or an important notice.
 - **Format**: `format` `standard` (default), `aside`, `chat`, `gallery`, `link`, `image`, `quote`, `status`, `video`, `audio`. Only matters if the site's theme uses formats; leave `standard` otherwise.
@@ -23,11 +23,11 @@ When it goes out it is published live on the site, never sent as a WordPress dra
 
 ## Saved, not sent yet
 
-`custom_fields`, `password`, `template`, `parent_id` (a parent page), `menu_order`, `seo_metadata` beyond the meta title and description (canonical link, focus keyphrase, schema), and `status`. Don't offer them.
+`custom_fields`, `password`, `template`, `parent_id` (a parent page), `menu_order`, `post_type` `page`, `seo_metadata` beyond the meta title and description (canonical link, focus keyphrase, schema), and `status`. Don't offer them.
 
 ## Not possible here
 
-Editing an article already on the site, choosing an author, scheduling inside WordPress, Markdown tables, password-protected or private posts.
+A standing page (About, Pricing), editing an article already on the site, choosing an author, scheduling inside WordPress, Markdown tables or code blocks, password-protected or private posts.
 
 ## Always
 

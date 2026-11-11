@@ -16,11 +16,11 @@ Read when filling or changing a campaign's brief, or when the user asks what a s
 
 ## Dates and length
 
-- **Start** (`starts_on`, `YYYY-MM-DD`): the weekly rhythm counts from it, and **each week starts on that weekday**. Default: the next Monday, so weeks run Monday to Sunday. No start date: Bolta writes once when started, with no weekly rhythm. Always send one.
+- **Start** (`starts_on`, `YYYY-MM-DD`): the weekly rhythm counts from it, and **each week starts on that weekday**. No default here: left out, the campaign is undated and Bolta writes once when started, with no weekly rhythm. Always send one. Guidance: the next Monday, so weeks run Monday to Sunday. Bolta's planner assumes tomorrow when no date is said, and says so.
 - **Length**: 1 to 4 weeks. Send `ends_on` (= start + 7 × weeks − 1 day) on create or update, or `duration_weeks` on `set-content-campaign-targets`, never both in one call. Leaving the end out means 1 week; more than 4 weeks is refused. **`ends_on: null` is ignored, not refused**: the campaign keeps its length. There is no open-ended campaign.
 - An event or launch goes in the **last week**: start = the event's weekday minus 2 or 3 weeks.
 - **A start in the past:** weeks already over are skipped, never written; the current week is written at once. Move the start forward first, or say what is skipped.
-- Guidance: a first campaign 2 weeks; a launch 3; an offer 1-2, never past its end; thought leadership 4. Longer arcs are back-to-back campaigns, each with a verdict.
+- Guidance: a first campaign 2 weeks; a launch 3; an offer 1-2, never past its end; thought leadership 4 ([choosing.md](campaign-choosing.md)). Longer arcs are back-to-back campaigns.
 
 ## Always
 

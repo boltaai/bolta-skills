@@ -7,7 +7,8 @@ Read when `run-routine-now` comes back refused, or for credits. Back to the run'
 | Refusal | Say or do |
 |-|-|
 | `workflow_already_running`, or `started: false` (pressed twice in 30 seconds) | "It's already running." Check `list-routine-runs` once |
-| `workflow_backpressure` | Too many drafts wait; decide those first ([review](review.md)) |
+| `workflow_backpressure` | Too many drafts wait (Bolta stops writing at about 50; `review_load.backpressure.pending_limit` has the brand's number): decide those first ([review](review.md)) |
+| `setup_required` | Bolta's writer isn't set up for this brand; the owner finishes setup in Bolta |
 | `run_now_member_daily_cap` | Teammates' 25 manual runs a day (shared by everyone but the owner) are used up |
 | `routine_invalid` | `detail.errors` names the setting; fix it with `update-routine` |
 | `routine_not_runnable`, `routine_not_active` | Paused or a draft: resume or switch it on first |

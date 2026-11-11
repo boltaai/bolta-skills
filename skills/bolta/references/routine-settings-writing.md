@@ -41,7 +41,7 @@ One of `educational`, `bold`, `insightful`, `conversational`. Only on the user's
 
 ## `repurposing`: best posts again
 
-`{"sourceAccountId": "<account id>", "lookbackDays": 90, "minEngagement": 1, "maxSourcesPerRun": 1, "postsPerSource": 3}` (the defaults). `count` must equal `maxSourcesPerRun` times `postsPerSource`, at most 8. Text only, no voice. Without posts that earned likes, comments or shares in that window, the run is skipped.
+`{"sourceAccountId": "<account id>", "lookbackDays": 90, "minEngagement": 1, "maxSourcesPerRun": 1, "postsPerSource": 3}` (the defaults; `lookbackDays` at most 365). `count` must equal `maxSourcesPerRun` times `postsPerSource`, at most 8. Text only, no voice. Without posts that earned likes, comments or shares in that window, the run is skipped.
 
 ## Always
 
