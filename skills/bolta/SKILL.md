@@ -45,9 +45,8 @@ Bolta's own writers do the work behind routines and campaigns. Never name them o
 
 ## Look once
 
-On the first Bolta ask, read together and reuse all conversation: `list-workspaces`, then for the brand `get-workspace` (name, clock, review mode), `list-accounts`, `get-voice-context`. Read again only after an error or a change.
+On the first Bolta ask, read together and reuse all conversation: `list-workspaces`, then for the brand `get-workspace` (name, clock, review mode), `list-accounts`, `get-voice-context`. Reread only after an error or change.
 
-- Several brands and none named: ask which.
 - No accounts or no voice: [start](references/start.md).
 - "No voice profile" is an answer, not an error.
 - `get-my-capabilities` only after a refusal.
@@ -82,7 +81,7 @@ Summaries; the playbook has the rest. Worked calls: [examples/](examples/README.
 
 **Write.** One post: `create-post` with `content`, `account_ids` and an `idempotency_key`, no time and no action. Two or more: one `bulk-create-posts`, every item a Draft, then poll `bulk-create-status` until `completed` and show what it stored. Every claim comes from the user, the business record or the voice: no added scarcity or stock lines; a missing fact gets a blank ("__% off"). Show every saved post in full. End: "Saved to <brand> as drafts. Nothing goes out yet. Schedule all N? Or tell me what to change."
 
-**Decide.** Read `list-inbox-items`. 8 or more waiting and you can start a clearing-house agent: start it before judging anything and show its advice. Otherwise number what waits (account, full text). One message decides all: "1, 3 yes · 2 too salesy · 4 drop". Yes: `submit-for-review` for drafts not yet listed, then one `approve-many-posts` with each post's `expected_fingerprint`. No with a reason: `reject-post` in the user's words. Drop: `delete-post`. Read back day, time and account for each. Here owners and admins approve ([roles](references/connect-people-and-roles.md)); the user's own post may need another admin.
+**Decide.** Read `list-inbox-items`. 8 or more waiting and you can start a clearing-house agent: start it before judging anything and show its advice. Otherwise number what waits (account, full text). One message decides all: "1, 3 yes · 2 too salesy · 4 drop". Yes: `submit-for-review` for drafts not yet listed, then one `approve-many-posts` with each post's `expected_fingerprint`. No with a reason: `reject-post` in the user's words; same reason on 2+ of a routine's drafts: then `list-routine-recommendations`, offer the fit or a routine change. Drop: `delete-post`. Read back day, time and account for each. Here owners and admins approve ([roles](references/connect-people-and-roles.md)).
 
 **Repeat.** One summary, "Turn it on?", then `create-routine` (schedule, the brand's `timezone`, ask me first, accounts bound as objects), `activate-routine`, and read `next_run_at` back in the brand's clock. Switching on is not running.
 
