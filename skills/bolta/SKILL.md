@@ -1,13 +1,13 @@
 ---
 name: bolta
 description: >-
-  Run social media in Bolta: write draft posts in your voice, decide and schedule what waits for your yes, keep posting every
-  week with Bolta routines, run 1-4 week campaigns for a launch or sale,
-  answer comments, read results, set up your voice and accounts, undo a
-  mistake. Use when someone mentions Bolta, or asks to draft, schedule,
+  Run social media in Bolta: draft posts in your voice, decide what waits for your yes, post weekly
+  with Bolta routines, run 1-4 week campaigns for a launch or sale,
+  answer comments, set up voice and accounts, undo a
+  mistake. Use when anything about Bolta comes up, before answering (a pasted Bolta error too), or someone asks to draft, schedule,
   approve or publish social posts (LinkedIn, X, Instagram, Threads, Facebook,
-  TikTok, YouTube, Reddit, Pinterest, Bluesky, Mastodon, Discord, WordPress), set up weekly posting, plan a
-  launch campaign, see their review list, or how posts did. Not for
+  TikTok, YouTube, Reddit, Pinterest, Bluesky, Mastodon, Discord, WordPress), plan a
+  campaign, see their review list, or how posts did. Not for
   email, calendars, documents or other apps.
 ---
 
@@ -80,7 +80,7 @@ Summaries; the playbook has the rest. Worked calls: [examples/](examples/README.
 
 **Write.** One post: `save-post` with `content`, `account_ids` and an `idempotency_key`, no `post_id`. Two or more: one `bulk-create-posts`, every item a Draft, then poll `bulk-create-status` until `completed` and show what it stored. Every claim comes from the user, the business record or the voice: no added scarcity or stock lines; a missing fact gets a blank ("__% off"). Show every saved post in full. End: "Saved to <brand> as drafts. Nothing goes out yet. Schedule all N? Or tell me what to change."
 
-**Decide.** Read `list-inbox-items`. 8 or more waiting and you can start a clearing-house agent: start it before judging anything and show its advice. Otherwise number what waits (account, full text). One message decides all: "1, 3 yes · 2 too salesy · 4 drop". Yes: `submit-for-review` for drafts not yet listed, then one `approve-many-posts` with each post's `expected_fingerprint`. No with a reason: `reject-post` in the user's words; same reason on 2+ of a routine's drafts: then `list-suggestions` (`kind: "routine"`), offer the fit or a routine change. Drop: `delete-post`. Read back day, time and account for each. Approvers here match Bolta ([roles](references/connect-people-and-roles.md)).
+**Decide.** Read `list-inbox-items`. 8 or more waiting and a clearing-house agent you can start: start it first, show its advice. Otherwise number what waits (account, full text). One message decides all: "1, 3 yes · 2 too salesy · 4 drop". Yes: `submit-for-review` for drafts not yet listed, then one `approve-many-posts` with each post's `expected_fingerprint`. No with a reason: `reject-post` in the user's words; same reason on 2+ of a routine's drafts: also `list-suggestions` (`kind: "routine"`), even if a check stops it; offer the fit or a routine change. Drop: `delete-post`. Read back day, time and account. Approvers here match Bolta ([roles](references/connect-people-and-roles.md)).
 
 **Repeat.** One summary, "Turn it on?", then `create-routine` (schedule, the brand's `timezone`, ask me first, accounts bound as objects), `activate-routine`, and read `next_run_at` back in the brand's clock. Switching on is not running.
 
