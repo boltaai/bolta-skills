@@ -19,7 +19,7 @@
       "theme": "New pricing launches Dec 8",
       "audience": "",
       "cta_text": "Join the waitlist",
-      "cta_url": "https://bolta.ai/waitlist",
+      "cta_url": "https://northwind.example/waitlist",
       "cover_image_url": "",
       "starts_on": "2026-11-23",
       "ends_on": "2026-12-13",

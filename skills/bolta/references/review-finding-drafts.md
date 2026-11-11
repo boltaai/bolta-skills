@@ -2,7 +2,7 @@
 
 Read when building the numbered list. Run all reads at once; reuse the workspace, accounts and voice you already have.
 
-**8 or more in `total_team`, and a clearing-house agent you can start:** hand it the first pass ([review](review.md)); it does these reads.
+**8 or more in `total_team` plus `total_recurring`, and a clearing-house agent you can start:** hand it the first pass ([review](review.md)); it does these reads.
 
 ## The reads
 
