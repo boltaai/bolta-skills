@@ -9,7 +9,7 @@ Read before editing a post that waits or is scheduled, moving a time, posting no
 3. On that yes, the yes move ([yes move](review-yes-move.md)).
 
 - A yes given to the old text never covers the new one.
-- Edit an approved or scheduled post only for a real change: any edit needs a new yes. A Published or publishing post can't be edited.
+- Edit an approved or scheduled post only for a real change: any edit needs a new yes. Find the post first, then say that and ask before saving. A Published or publishing post can't be edited.
 - A post the client has, or has approved: an edit voids their answer. Say so first ([sign-off](review-client-signoff.md)).
 
 ## Move a time

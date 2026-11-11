@@ -77,7 +77,7 @@ Before the first reply, read [the plain-words list](references/today-plain-words
 
 ## The four moves
 
-Summaries; worked calls: [examples/](examples/README.md).
+Summaries; the playbook has the rest. Worked calls: [examples/](examples/README.md).
 
 **Write.** One post: `save-post` with `content`, `account_ids` and an `idempotency_key`, no `post_id`. Two or more: one `bulk-create-posts`, every item a Draft, then poll `bulk-create-status` until `completed` and show what it stored. Every claim comes from the user, the business record or the voice: no added scarcity or stock lines; a missing fact gets a blank ("__% off"). Show every saved post in full. End: "Saved to <brand> as drafts. Nothing goes out yet. Schedule all N? Or tell me what to change."
 
@@ -108,7 +108,6 @@ Summaries; worked calls: [examples/](examples/README.md).
 An app or an older Bolta may lack a tool, and a plan or role can refuse one.
 
 - No `approve-many-posts`: `approve-post` for each yes, the first one alone.
-- No `save-post`: `create-post`, `update-post`, `schedule-post`.
 - No `reject-post`: "I can't turn this down from here. Tap the X (Dismiss) on that post at bolta.ai/dashboard/approvals and give your reason." Never delete to stand in for a no.
 - Campaigns refuse `account_ids`: `set-content-campaign-targets`, else `update-content-campaign` for the brief and dates, then "Pick the accounts at bolta.ai/dashboard/campaigns/<id>, then say done."
 - No routine tools: one line, one link to bolta.ai/dashboard/routines. Never fake a routine with scheduled posts unless asked.

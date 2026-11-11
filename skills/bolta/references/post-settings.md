@@ -1,6 +1,6 @@
 # Network settings: how to set them and which wins
 
-Every setting on every network, one page per network: [X](post-settings-x.md) · [Threads](post-settings-threads.md) · [Instagram](post-settings-instagram.md) · [Facebook](post-settings-facebook.md) · [LinkedIn](post-settings-linkedin.md) · [TikTok](post-settings-tiktok.md) · [YouTube](post-settings-youtube.md) · [Pinterest](post-settings-pinterest.md) · [Bluesky and Mastodon](post-settings-bluesky-mastodon.md) · [Reddit and Discord](post-settings-reddit-discord.md) · [WordPress](post-settings-wordpress.md). One post on several networks: [cross-posting](post-cross-posting.md). Approval, settings never sent, and what only the web app does: [approval and limits](post-settings-approval.md).
+Every setting on every network, one page per network: [X](post-settings-x.md) · [Threads](post-settings-threads.md) · [Instagram](post-settings-instagram.md) · [Facebook](post-settings-facebook.md) · [LinkedIn](post-settings-linkedin.md) · [TikTok](post-settings-tiktok.md) · [YouTube](post-settings-youtube.md) · [Pinterest](post-settings-pinterest.md) · [Bluesky and Mastodon](post-settings-bluesky-mastodon.md) · [Reddit and Discord](post-settings-reddit-discord.md) · [WordPress](post-settings-wordpress.md). One post on several networks: [cross-posting](post-cross-posting.md). A change to an Approved or Scheduled post sends it back for a yes: read it, say so and ask first ([approval, settings never sent, web-app only](post-settings-approval.md)).
 
 ## Three ways to set one
 

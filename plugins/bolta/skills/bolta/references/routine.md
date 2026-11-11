@@ -1,6 +1,6 @@
 # Routine
 
-Set up, switch on, check, change, improve, pause or stop a Bolta routine: work Bolta repeats, like 3 LinkedIn drafts every Monday, even with this app closed. Use for: every week or month, turn it on, try my routine, each new blog post, run it now, pause it, why didn't it run, its drafts keep missing.
+Set up, switch on, check, change, improve, pause or stop a Bolta routine: work Bolta repeats, like 3 LinkedIn drafts every Monday, with this app closed. Use for: every week or month, turn it on, try my routine, each new blog post, run it now, pause it, why didn't it run, its drafts keep missing.
 
 ## Done when
 
@@ -10,7 +10,7 @@ It's on, changed, paused or stopped; they know when drafts land: "Bolta routine 
 
 - **One sentence is enough.** Fill every field. What it can make and which fits: [routine-templates.md](routine-templates.md).
 - **Bolta's planner first.** One routine, or a blank start: `plan` `kind: "routine"`; several: `kind: "recommend"`. Change with `revise-plan`, save switched off with `confirm-plan`: [routine-planner.md](routine-planner.md).
-- **Load first:** drafts a week from active routines and campaigns, what waits (`list-inbox-items`), whether drafts get decided (`get-routine` `performance_summary`). Over about 6 a week (advice): "That's about 9 drafts a week to review. Make it 2?" 10+ waiting, or made but not decided: say the counts and offer to go through them first. Still want more: at most what Bolta's planner sizes, a report first (no review); never three new routines onto a backlog. Same job, same network: change that routine.
+- **Load first, before proposing any:** read `list-inbox-items` (what waits), drafts a week from active routines and campaigns, whether drafts get decided (`get-routine` `performance_summary`). Over about 6 a week: "That's about 9 drafts a week to review. Make it 2?" 10+ waiting, or made but not decided: say the counts and offer to go through them first. Still want more: at most what the planner sizes, a report first (no review); never three onto a backlog. Same job, same network: change that routine.
 - **One summary, then "Turn it on?"** Skip it only after a yes to an offer naming networks, count, day, time, "they wait for your yes" and "uses credits each run"; the offer's words are then the `goal`, never this week's topic. A yes to set up a proposal ("set up 1 and 2") saves each switched off, then asks "Switch them on?" ([start](start.md)).
   > **Bolta routine: Weekly LinkedIn, hiring**
   > - Every Monday 8:00 am (New York), Bolta writes 3 LinkedIn drafts about hiring.
