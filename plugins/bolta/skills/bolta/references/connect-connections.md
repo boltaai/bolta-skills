@@ -35,12 +35,14 @@ One connection for the agency's organization; tick the client brands.
 ## Sign-in versus a pasted API key
 
 - Sign-in marks posts from this app as AI drafts, keeping the first version, so edits teach the voice; Bolta keeps them on the review list until approved.
-- A pasted Bolta API key acts as the person directly: no AI-draft mark, so edits don't teach, and the sign-in hold is off: it can schedule or publish without an approval. Safe Mode and required client sign-off still apply, plus the plugin's checks.
+- A pasted Bolta API key acts as the person directly: its posts still teach the voice, but the sign-in hold is off: it can schedule or publish without an approval. Safe Mode and required client sign-off still apply, plus the plugin's checks.
 - Used a key, or asking? Say this once; recommend sign-in.
 
 ## What this connection may do
 
 Nothing lists it ahead of time; a refusal names the reason. What each one means and what to say: [refusals](connect-refusals.md).
+
+- Here the same people approve as in Bolta: owners and admins any post, creators Bolta's drafts and posts naming them reviewer ([roles](connect-people-and-roles.md)).
 
 Clock, review mode and "Is everything set up?": [team-and-integrations](connect-team-and-integrations.md).
 

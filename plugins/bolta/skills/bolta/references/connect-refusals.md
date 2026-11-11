@@ -15,7 +15,7 @@ Nothing here lists what this connection may do ahead of time. A refusal names th
 - Access follows the role of whoever signed in. A viewer's connection is read-only: no saves, nothing that uses credits. A client reviewer can't connect at all. A role change applies when the sign-in next renews; sign in again to apply it now.
 - A role that can't connect accounts: a teammate whose role can does it.
 - Give Bolta's sentence; don't try another way.
-- Owners and admins approve; a creator's approval is refused. Per-member permissions change either: trust the refusal.
+- Approving follows Bolta's rule: owners and admins any post, creators Bolta's drafts and posts naming them reviewer; per-member permissions change either ([roles](connect-people-and-roles.md)).
 
 ## Always
 

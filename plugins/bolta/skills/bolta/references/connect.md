@@ -16,7 +16,7 @@ Accounts are shown as connected, disconnected or added without connecting, with 
 - **What this connection may do:** nothing lists it ahead of time; a refusal names the role, plan or access that's missing. Say it plainly, in the words on [refusals](connect-refusals.md).
 - **Brand settings** (clock, review mode, reviewers, `autonomy_mode`): read [references/brand-settings.md](connect-brand-settings.md). They change only in Bolta; never suggest turning review mode off to pass a refusal.
 - **Teammates, roles, client links, reviewers, integrations, billing:** read [references/team-and-integrations.md](connect-team-and-integrations.md) and [people and roles](connect-people-and-roles.md).
-- **Sign-in, not an API key.** Sign-in marks posts made here as Bolta's drafts, so a yes, no or edit on them teaches the voice, and Bolta keeps them on the review list until approved. On a pasted Bolta API key a post saved with `save-post` teaches nothing.
+- **Sign-in, not an API key.** Posts made here teach the voice either way: a yes, an edit or a no with a reason. Sign-in also keeps them on the review list until approved; a pasted Bolta API key can schedule or publish without a yes.
 
 ## Tools
 

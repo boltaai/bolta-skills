@@ -13,7 +13,7 @@ Read before turning a post down, when a "no" lands on a draft nobody sent for re
   - substance: not_engaging, off_topic, repetitive, no_substance
   - anything else: other
 - The post is kept as Rejected, never deleted, scheduled or posted. In a campaign it stays in the campaign and counts as turned down.
-- Only owners and admins can turn a post down, the same as a yes ([yes move](review-yes-move.md)).
+- Through this app, only owners and admins can turn a post down, the same as a yes ([yes move](review-yes-move.md)).
 - Repeating it is safe: `already_decided`, and the first reason stands. Already approved: someone decided it; say its status and stop.
 
 ## A draft nobody sent for review
@@ -25,7 +25,7 @@ Read before turning a post down, when a "no" lands on a draft nobody sent for re
 
 ## What a no teaches
 
-A reason teaches the voice only on posts Bolta counts as its own writing: drafts from a Bolta routine, a campaign, a voice batch, Bolta's chat, and posts saved here while signed in to Bolta. On a post saved with `save-post` over a pasted Bolta API key, or typed by hand in Bolta, the reason stays on the post and the voice learns nothing. Never say it taught Bolta then. Same reason twice: the DON'T offer in [read-back](review-read-back.md).
+A reason teaches the voice on drafts from a Bolta routine, a campaign, a voice batch or Bolta's chat, and on posts saved from this app (sign-in or a pasted Bolta API key). On a post typed by hand in Bolta, the reason stays on the post and the voice learns nothing. Never say it taught Bolta then. Same reason twice: the DON'T offer in [read-back](review-read-back.md).
 
 ## "Send it back for changes"
 
@@ -48,4 +48,4 @@ No `reject-post` on this app: "Tap the X (Dismiss) on that post at bolta.ai/dash
 
 - Follow the house rules in the Bolta skill.
 - Never use `reject-post` to ask for edits, or `delete-post` to stand in for a no that has a reason.
-- Never say Bolta learned from a no unless the post was Bolta's own writing.
+- Never say Bolta learned from a no on a post typed by hand in Bolta.

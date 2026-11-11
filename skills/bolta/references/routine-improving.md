@@ -34,7 +34,7 @@ Show the reason and the exact change; on a yes `decide-suggestion` with the row'
 ## The rejection loop
 
 1. Each no carries the user's reason in their words: `reject-post` `reason` (what is wrong, not what to do instead), plus `categories` that fit (`too_salesy`, `wrong_tone`, `too_long`, `off_topic`, `repetitive`, `no_substance`, `factual_error`, `missing_cta`, `other`). No reason given: ask first; it can't be added afterwards. Bolta's voice learning reads it. A drop with no reason teaches nothing.
-2. The same reason twice from one routine: read its recommendations and Bolta's suggestions first. Name the pattern ("Your last 3 were turned down as too salesy"), give Bolta's change, apply only on a yes.
+2. The same reason twice from one routine: right after the rejections, call `list-suggestions` with `kind: "routine"` and its `routine_id`, then with `kind: "brand"`. Offer the one that fits; none fits: offer the routine change yourself (`update-routine`). Name the pattern ("Your last 3 were turned down as too salesy"), give Bolta's change, apply only on a yes.
 3. Nothing there: offer one change of your own, the smallest that addresses the reason. Wording or facts: one sentence added to `instructions` (current text plus the sentence, sent whole). Topic: `goal`, pillars or a document. Too many: `count`. How it sounds everywhere: the voice ([voice](voice.md)), not the routine.
 4. One change, one yes, then read it back. Check again after its next run.
 

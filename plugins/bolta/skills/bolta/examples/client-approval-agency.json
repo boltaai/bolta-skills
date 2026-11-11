@@ -35,7 +35,7 @@
   "never": [
     "Saying the drafts were sent to the client: a hand-picked request is sent in Bolta, not from here.",
     "Approving the drafts for the team to save the client a step.",
-    "Telling a creator they can approve for the team: a team yes is owners and admins only, and a refusal names the role.",
+    "Telling a creator they can approve any post for the team: a creator approves only Bolta's drafts and posts naming them reviewer, and a refusal names the role.",
     "Moving a post's time while the client hasn't answered without saying it voids the request."
   ]
 }
