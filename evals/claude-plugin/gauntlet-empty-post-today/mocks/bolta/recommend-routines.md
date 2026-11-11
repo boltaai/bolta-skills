@@ -39,10 +39,10 @@
         },
         "display": {
           "title": "Scent of the week",
-          "summary": "Your scents are named after real places; each one is a story."
+          "summary": "Each scent has its own story; one a week gives every post a topic."
         },
         "preview_topics": [],
-        "why": "Your scents are named after real places; each one is a story.",
+        "why": "Each scent has its own story; one a week gives every post a topic.",
         "rank": 1,
         "expires_at": "2026-11-25T05:00:00+00:00"
       },

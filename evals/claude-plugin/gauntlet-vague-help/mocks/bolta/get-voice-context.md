@@ -11,7 +11,7 @@ structuredContent:
     "voice_profile": null,
     "business": {
       "name": "Wick & Ember Candles",
-      "overview": "Small-batch soy candles, hand-poured in Asheville, North Carolina. Cotton wicks, and scents named after places in the Blue Ridge. Sold online and at weekend markets.",
+      "overview": "Small-batch soy candles, hand-poured in Asheville, North Carolina, with cotton wicks. Every scent is inspired by the Blue Ridge mountains. Fall collection: Cedar Smoke (cedarwood and woodsmoke) and Fireside Chai (cardamom, black tea and clove). All year: Blue Ridge Morning (pine and fresh coffee). Holiday gift set: three mini candles in one box. Sold online and at weekend markets. For people buying a gift, and people who like a cozy home.",
       "tagline": "",
       "website_url": "https://wickandember.example"
     },

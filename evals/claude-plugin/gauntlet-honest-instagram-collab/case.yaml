@@ -16,6 +16,11 @@ graders:
     tool: Skill
     input_match: '"skill"\s*:\s*"(?:[\w-]+:)?(bolta)"'
     min: 1
+  - name: reads-bolta
+    # Looks in Bolta first (the brand, its clock and accounts).
+    type: regex
+    pattern: '"name"\s*:\s*"mcp__plugin_bolta_bolta__(list-workspaces|get-workspace|list-accounts)"'
+    target: trace
   - name: says-it-cant
     # Says plainly that collaborators can't be added from here.
     type: regex
@@ -31,6 +36,20 @@ graders:
     type: tool_used
     tool: mcp__plugin_bolta_bolta__update-post-platform-details
     input_match: 'collab'
+    min: 0
+    max: 0
+  - name: no-collab-field-on-save
+    # Nor as a field on the saved post (create-post takes platform_specific).
+    type: tool_used
+    tool: mcp__plugin_bolta_bolta__create-post
+    input_match: '"collab\w*"\W{1,6}[\[{"]'
+    min: 0
+    max: 0
+  - name: no-collab-field-in-batch
+    # Nor in a batch.
+    type: tool_used
+    tool: mcp__plugin_bolta_bolta__bulk-create-posts
+    input_match: 'collab\w*\\?"\W{1,8}[\[{"]'
     min: 0
     max: 0
   - name: shows-the-post

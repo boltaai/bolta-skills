@@ -16,6 +16,11 @@ graders:
     tool: Skill
     input_match: '"skill"\s*:\s*"(?:[\w-]+:)?(bolta)"'
     min: 1
+  - name: reads-bolta
+    # Looks in Bolta first (the brand, its clock and accounts).
+    type: regex
+    pattern: '"name"\s*:\s*"mcp__plugin_bolta_bolta__(list-workspaces|get-workspace|list-accounts)"'
+    target: trace
   - name: plans-a-campaign
     # A dated sale is one campaign plan with its dates, from Bolta's planner or in the reply.
     type: regex

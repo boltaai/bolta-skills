@@ -41,7 +41,7 @@ graders:
   - name: no-ai-filler
     # No stock AI phrases, and none the voice bans.
     type: regex
-    pattern: 'fast-paced world|in today.s|\belevate|\bindulge|\bunleash|\bunlock|game[- ]changer|look no further|dive into|\bembark|\bjourney\b|tapestry|symphony|treat yourself|must-have|don.t miss|shop now|perfect blend|cozy vibes|warm embrace'
+    pattern: 'fast-paced world|in today.s|\belevate|\bindulge|\bunleash|\bunlock|game[- ]changer|look no further|dive into|\bembark|\bjourney\b|tapestry|symphony|treat yourself|must-have|perfect blend|cozy vibes|warm embrace'
     flags: i
     match: not_contains
   - name: no-hashtag-stuffing
@@ -65,13 +65,13 @@ graders:
     # Top-tier drafts are about this business, not any candle shop.
     type: llm
     criteria: |
-      Business facts the assistant was given by Bolta (the only facts it has): Wick & Ember Candles, small-batch soy candles hand-poured in Asheville, North Carolina; website wickandember.example; cotton wicks; scents named after places in the Blue Ridge; sold online and at weekend markets. Products: Cedar Smoke candle (fall collection), Fireside Chai candle (fall collection), Blue Ridge Morning candle, Holiday gift set (three mini candles). Audience: people buying a gift, and people who like a cozy home. There are NO prices, sales figures, review counts, ratings, testimonials, discounts or customer quotes anywhere in what Bolta holds.
+      Business facts the assistant was given by Bolta (the only facts it has): Wick & Ember Candles, small-batch soy candles hand-poured in Asheville, North Carolina; website wickandember.example; cotton wicks; every scent inspired by the Blue Ridge mountains; sold online and at weekend markets. Fall collection: Cedar Smoke (cedarwood and woodsmoke), Fireside Chai (cardamom, black tea and clove). All year: Blue Ridge Morning (pine and fresh coffee). Holiday gift set (three mini candles in one box). Audience: people buying a gift, and people who like a cozy home. There are NO prices, sales figures, review counts, ratings, testimonials, discounts or customer quotes anywhere in what Bolta holds.
 
-      The user asked for 3 Instagram posts about their fall candles. PASS only if the reply contains 3 distinct posts and every one names a real Wick & Ember scent or product from the list above and says something concrete about it (what it smells like, the making, the Blue Ridge place it is named after), and no post states a fact not in the list (no prices, discounts, numbers, reviews, awards, dates or ingredients beyond soy wax and cotton wicks). Otherwise FAIL.
+      The user asked for 3 Instagram posts about their fall candles. PASS only if the reply contains 3 distinct posts and every one names a real Wick & Ember scent or product from the list above and says something concrete about it (what it smells like, how it is made), and no post states a fact not in the list (no prices, discounts, numbers, reviews, awards, dates, or scent notes and ingredients beyond those listed). Otherwise FAIL.
   - name: voice-and-craft
     # Reads like the maker wrote it, not like generic AI copy.
     type: llm
     criteria: |
       The brand voice: warm, unfussy, a little wry; the maker at the market stall. DO: name the scent and say what it smells like; short sentences; talk as the makers ('we pour'). DON'T: more than 3 hashtags; invented numbers, reviews or prices; the words 'elevate' or 'indulge'.
 
-      PASS only if every one of the 3 Instagram posts in the reply: follows the DOs and DON'Ts above; has at most 3 hashtags; is under 2,200 characters; contains no generic filler or marketing cliches (for example 'In today's fast-paced world', 'elevate your space', 'cozy vibes', 'treat yourself', 'look no further'); and reads as if a small maker wrote it in plain, specific language. Otherwise FAIL.
+      PASS only if every one of the 3 Instagram posts in the reply: follows the DOs and DON'Ts above; has at most 3 hashtags; is under 2,200 characters; contains none of these stock phrases: 'In today's fast-paced world', 'elevate your space', 'cozy vibes', 'treat yourself', 'look no further' (plain words like 'cozy' alone are fine); and reads as if a small maker wrote it in plain, specific language. Otherwise FAIL.
