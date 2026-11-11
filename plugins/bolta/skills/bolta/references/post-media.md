@@ -14,8 +14,8 @@ Bolta facts for images, video and how text is shown. Which links work, file size
 ## Alt text
 
 - Write `alt_text` on every image: what it shows, in one plain sentence of 255 characters or fewer, like "Three founders laughing around a laptop in a sunny office."
-- Used by Instagram, Threads and Pinterest. On Pinterest the pin's own `alt_text` setting (500 characters) wins ([Pinterest](post-settings-pinterest.md)).
-- Not sent to X, LinkedIn, Facebook, Mastodon or Discord. Bluesky always gets an empty alt.
+- Used by Instagram, Threads, Bluesky and Pinterest. On Pinterest the pin's own `alt_text` setting (500 characters) wins ([Pinterest](post-settings-pinterest.md)).
+- Not sent to X, LinkedIn, Facebook, Mastodon or Discord.
 - Alt text on media already attached can't be changed from here: sending the same link again is skipped. Point the user to the post in Bolta.
 
 ## What goes wrong at posting time
@@ -39,7 +39,7 @@ Bolta facts for images, video and how text is shown. Which links work, file size
 
 - Use only links the user gave.
 - Links go out as written, with one exception: on Threads everything after a `?` or `#` in a link is removed, tracking tags included.
-- Never promise Bolta adds tracking tags, whatever `get-posting-rules` says. If the user wants clicks tracked, they give a link that already carries `utm_` tags; clicks then show in their own site analytics, never in Bolta.
+- Bolta adds no tracking tags; never promise them. If the user wants clicks tracked, they give a link that already carries `utm_` tags; clicks then show in their own site analytics, never in Bolta.
 
 ## Always
 

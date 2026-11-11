@@ -55,10 +55,11 @@ Each file is one ask from start to finish: the calls in order, why each one is s
 | [one-post-text-per-network.json](one-post-text-per-network.json) | One post, its own text on LinkedIn, X and Threads | [post](../references/post.md) |
 | [text-per-page.json](text-per-page.json) | Its own text for a LinkedIn company page and one Facebook Page | [post](../references/post.md) |
 | [instagram-trial-reel.json](instagram-trial-reel.json) | An Instagram trial reel, set when it is saved | [post](../references/post.md) |
-| [x-thread.json](x-thread.json) | An X thread with replies limited to accounts it follows, and the X setting that makes it chain | [post](../references/post.md) |
+| [x-thread.json](x-thread.json) | An X thread with replies limited to accounts it follows | [post](../references/post.md) |
 | [facebook-first-comment.json](facebook-first-comment.json) | A Facebook Page post with the link as its first comment | [post](../references/post.md) |
 | [threads-ghost-flash-sale.json](threads-ghost-flash-sale.json) | A 24-hour Threads post for a code that expires tonight, with a topic | [post](../references/post.md) |
-| [threads-poll.json](threads-poll.json) | A Threads poll, and why X needs its own post and poll setting | [post](../references/post.md) |
+| [threads-poll.json](threads-poll.json) | One poll on Threads and X in one post |
+| [threads-who-can-reply.json](threads-who-can-reply.json) | A Threads post only accounts the brand follows can reply to | [post](../references/post.md) |
 | [threads-spoiler-media.json](threads-spoiler-media.json) | A blurred reveal photo on Threads | [post](../references/post.md) |
 | [x-quote.json](x-quote.json) | Quote a customer's X post, the id from the user's link | [post](../references/post.md) |
 | [instagram-story-reel-carousel.json](instagram-story-reel-carousel.json) | One sale, three Instagram formats: story, reel, carousel, and why each | [post](../references/post.md) |

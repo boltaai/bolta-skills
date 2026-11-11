@@ -14,7 +14,7 @@ A thread on X, a reply chain on Threads or Bluesky, or a Facebook post with a co
 ## What each network does with parts
 
 - **X, Threads, Bluesky:** every part after the first goes out as a reply, whatever `post_type` says.
-  - X: each part replies to the one before, **only once the post has an X setting saved**, which a batch never does: after it, set one (`reply_settings` is enough) with `update-post-platform-details`, or parts 2 onward go out as separate posts ([X](post-settings-x.md)). A failed part stops it.
+  - X: each part replies to the one before ([X](post-settings-x.md)). A failed part stops it.
   - Threads: each part replies to the first post, so they read as answers to it, not a chain. Only part 1's text past 500 characters is split into a chain of replies; a later part over 500 is cut short. For a long Threads thread, put all the text in one long first part.
   - Bluesky: each part replies to the one before.
 - **Facebook:** part 2 and later become comments from the Page, a few seconds after the post, one image each. A comment that fails is skipped silently, so check the live post before saying the comment is there.

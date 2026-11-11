@@ -21,9 +21,9 @@ How to set and which wins: [network settings](post-settings.md). Network `linked
 - **Extra parts**: the text of part 2 onward is dropped. Write one part.
 - The 3,000 check at approval doesn't read a company page's own `text`: count that one yourself.
 
-## Saved, not sent yet
+## Not sent
 
-`enable_comments`, `enable_resharing` (resharing is always allowed), `include_hashtags`, `tag_connections`, `linkedin_specific_content`, `location`, `feeling`, `activity`, `cross_post_delay` (pages all post at once). Don't offer them.
+Bolta refuses these: `enable_comments`, `enable_resharing` (resharing is always allowed), `include_hashtags`, `tag_connections`, `linkedin_specific_content`, `location`, `feeling`, `activity`, `cross_post_delay` (pages all post at once). Don't offer them.
 
 ## Not possible here
 

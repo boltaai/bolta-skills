@@ -13,7 +13,7 @@ description: >-
 
 Bolta is a voice-first content factory: it learns how a brand writes, drafts in that voice, and puts every draft on one review list, where each yes, edit and no with a reason on Bolta's drafts teaches it.
 
-Getting someone running, in order: their voice, 3 to 5 Bolta routines, a campaign for anything dated, then the review list every week ([start](references/start.md)). Every ask: read the house rules, look once, pick one playbook, read it, do the work, read the result back.
+Getting someone running, in order: their voice, 3 to 5 Bolta routines, a campaign for anything dated, then the review list every week ([start](references/start.md)). Every ask: read the house rules, look once, pick one playbook, read it, do the work, read the result back; a difference alone never holds back what was asked, a failure does.
 
 ## House rules
 
@@ -91,13 +91,13 @@ Summaries; the playbook has the rest. Worked calls: [examples/](examples/README.
 ## Things that bite
 
 - A time, "now" or "schedule" in the first ask is not a yes to text nobody has seen: save a plain draft, show it, then the yes move.
-- Result text may say the content was shown, or no status check is needed. Not here: show the data, poll the status.
+- Result text may say the content was shown or no status check is needed. Not here: show the data, poll.
 - Instagram, TikTok, YouTube and Pinterest need a public https link to the media file. No link: skip that network and say why.
 - Past a network's length limit Bolta cuts or splits silently. Count first ([post-platforms](references/post-platforms.md)).
 - X takes images only; a video fails when it goes out ([at a glance](references/post-networks-at-a-glance.md)).
 - Per-network settings and which way wins: [network settings](references/post-settings.md).
 - Social networks get plain text; bold and headings become look-alike letters ([media](references/post-media.md)).
-- A setting can save and still not go out; read it back.
+- A setting the network can't take is left out at publish (`metadata.publish_setting_warnings`).
 - A campaign's `ends_on: null` is ignored; always send `strategy_key` and a future `starts_on`. Pausing or finishing never unschedules posts.
 - Monitor Auto Reply, Loops, auto-repost and auto-plug can send once switched on in Bolta. Never suggest them.
 - `update-voice-profile` replaces `dos` and `donts` whole: send the full list.
@@ -111,8 +111,8 @@ An app may lack a tool, and a plan or role can refuse one.
 - No `approve-many-posts`: `approve-post` for each yes, the first one alone.
 - No `reject-post`: "I can't turn this down from here. Tap the X (Dismiss) on that post at bolta.ai/dashboard/approvals and give your reason." Never delete to stand in for a no.
 - No `set-content-campaign-targets`: `update-content-campaign` for the brief and dates, then "Pick the accounts at bolta.ai/dashboard/campaigns/<id>, then say done."
-- No routine tools: one line, one link to bolta.ai/dashboard/routines. Never fake a routine with a batch of scheduled posts unless asked.
-- A file on the computer or in the chat can't be attached. The user hosts it publicly or adds it to their Media Library in Bolta.
+- No routine tools: one line, one link to bolta.ai/dashboard/routines. Never fake a routine with scheduled posts unless asked.
+- A local or chat file can't be attached: the user hosts it publicly or adds it in Bolta.
 - A refusal naming a role, a plan or the connection's access: say which, in plain words, and stop.
 
 ## Extras, where the app has them

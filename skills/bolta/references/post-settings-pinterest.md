@@ -25,9 +25,9 @@ All both, per account, unless marked.
 - **Video cover**: `cover_image_url`, a public JPEG or PNG link the user gave. A video pin needs one; an image pin ignores it.
 - `media_url` adds a second file to the attached one, and a pin with two is refused; `media_type` (`image` or `video`) must match the file. Leave both out. `idea` saves, then fails when it goes out.
 
-## Saved, not sent yet
+## Not sent
 
-`scheduled_publish_time`: schedule the post instead.
+`scheduled_publish_time`: Bolta refuses it; schedule the post instead.
 
 ## Not possible here
 

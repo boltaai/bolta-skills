@@ -49,9 +49,19 @@ graders:
     max: 0
   - name: no-details-route
     # Posting as the page is the page row, not post_as_organization or selected_organization.
+    # Checked on the details call's input only: the whole-trace regex this replaced also matched
+    # the skill's own LinkedIn and keys pages when the model Read them (they name these keys to
+    # say "don't"), failing runs that never sent either key.
+    type: tool_used
+    tool: mcp__plugin_bolta_bolta__update-post-platform-details
+    input_match: 'post_as_organization|selected_organization'
+    min: 0
+    max: 0
+  - name: no-org-key-in-post
+    # Nor in the saving or updating call's platform_specific.
     type: regex
     target: trace
-    pattern: 'post_as_organization|selected_organization'
+    pattern: '"name":"mcp__plugin_bolta_bolta__(create-post|update-post)","input":\{[^\n]{0,6000}?(post_as_organization|selected_organization)'
     match: not_contains
   - name: shows-both
     type: regex

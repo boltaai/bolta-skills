@@ -55,7 +55,7 @@
         },
         "idempotency_key": "lisbon-opening-1"
       },
-      "why": "The decision: one post, because every destination shares the same moment and no network needs different media, a different time or extra parts; one yes covers all six and results stay together. The main text is the founder's for the profile. The company page gets its own (an account entry beats the LinkedIn text). X and Threads get network text cut to their shape; Threads also gets a topic. X carries text only: on a new post an X setting in platform_specific is not sent, and replies are open by default anyway. The Acme Page takes the Facebook text, the Lisbon Page its own local line. Every fact is from the ask: Saturday and the address, nothing added. Account keys exactly as list-accounts gave them; Bolta stores them by name."
+      "why": "The decision: one post, because every destination shares the same moment and no network needs different media, a different time or extra parts; one yes covers all six and results stay together. The main text is the founder's for the profile. The company page gets its own (an account entry beats the LinkedIn text). X and Threads get network text cut to their shape; Threads also gets a topic. X needs no setting here: replies are open by default. The Acme Page takes the Facebook text, the Lisbon Page its own local line. Every fact is from the ask: Saturday and the address, nothing added. Account keys exactly as list-accounts gave them; Bolta stores them by name."
     }
   ],
   "say": "Saved to Acme as one draft for 6 destinations. 1. LinkedIn, you: (full text) 2. LinkedIn, Acme company page: (full text) 3. X, @acme: (full text) 4. Threads, @acme: (full text), topic Lisbon 5. Facebook, Acme Page: (full text) 6. Facebook, Acme Lisbon Page: (full text). Nothing goes out yet. Schedule it?",
@@ -63,6 +63,6 @@
     "Six separate posts when one post with its own text per destination does it.",
     "A page or Page id that didn't come from list-accounts.",
     "Showing only the main text: every destination is listed with its own.",
-    "An X setting in platform_specific on a new post: it is not sent. Use update-post-platform-details."
+    "An X key in platform_specific under a name Bolta doesn't know (twitter): it is refused."
   ]
 }

@@ -1,6 +1,6 @@
 # Different text and settings per network or account
 
-One post can carry its own text and settings for each network, and for each account, Facebook Page or LinkedIn page on it: `platform_specific` on `create-post` or `update-post`. Which keys each network reads, network level or per account: [per-network keys](post-per-network-keys.md). Every setting in detail: [network settings](post-settings.md).
+One post can carry its own text and settings per network, and per account, Facebook Page or LinkedIn page: `platform_specific` on `create-post` or `update-post`. Which keys each network reads, network level or per account: [per-network keys](post-per-network-keys.md). Every setting in detail: [network settings](post-settings.md).
 
 ## The shape
 
@@ -18,7 +18,7 @@ One post can carry its own text and settings for each network, and for each acco
 
 ## Which wins
 
-- For keys read per account: the account's entry, then the network's, then what `update-post-platform-details` saved.
+- For keys read per account: the account's entry, then the network's, then what `update-post-platform-details` saved. A later details call rewrites a copy of the key here.
 - TikTok and YouTube: an account with its own entry uses only that entry; repeat every key it needs there.
 - Keys marked network only are copied into the network's settings when the post saves; an account entry for them is ignored, and the latest save wins.
 - Keys marked details only do nothing here, though they are kept.
@@ -34,7 +34,7 @@ One post can carry its own text and settings for each network, and for each acco
 ## When to use which
 
 - **`platform_specific`**: text per network or Page; a setting for one account only; settings in the same call that saves the post; an Instagram trial reel; TikTok paid or brand disclosure; a Pinterest board (Pinterest's id, as a read shows it).
-- **`update-post-platform-details`**: every X setting; one network's settings on a saved post when a bad value should be refused (TikTok or YouTube privacy), and anything that takes Bolta's own ids: Reddit subreddit, Discord channel, LinkedIn `selected_organization`, Facebook Pages, X quote or reply.
+- **`update-post-platform-details`**: X quote, reply, place and image tags; one network's settings on a saved post when a bad value should be refused (TikTok or YouTube privacy), and anything that takes Bolta's own ids: Reddit subreddit, Discord channel, LinkedIn `selected_organization`, Facebook Pages.
 - Set each key one way. To change it, change it where it was set.
 
 ## Approval

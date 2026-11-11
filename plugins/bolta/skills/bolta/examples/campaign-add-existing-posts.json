@@ -42,7 +42,7 @@
       "why": "Read back: the three now show among its posts."
     }
   ],
-  "say": "Added 3 LinkedIn posts from last week to Acme's Spring launch campaign. They had already gone out, so their links carry no campaign tag in your own analytics; posts added before they go out do.",
+  "say": "Added 3 LinkedIn posts from last week to Acme's Spring launch campaign. Their results now count toward it.",
   "never": [
     "Adding posts the user didn't see listed.",
     "Saying a post can be removed here: removing one is done from the calendar's campaign picker in Bolta.",

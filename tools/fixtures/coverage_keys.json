@@ -1,11 +1,11 @@
 {
  "generated_by": "tools/build_coverage_fixture.py",
- "server_commit": "3df3bc6f2",
+ "server_commit": "f9e715259",
  "golden": "boltathread/tests/fixtures/mcp_tools_list.golden.json",
  "counts": {
   "tool_param": 199,
   "post_details": 220,
-  "platform_specific": 78,
+  "platform_specific": 80,
   "tool": 94
  },
  "keys": [
@@ -1654,6 +1654,52 @@
     "field": "category_id",
     "spellings": [
      "category_id"
+    ],
+    "where": "platform_specific"
+   }
+  },
+  {
+   "id": "youtube.platform_specific.default_language",
+   "group": "platform_specific",
+   "source": "publishing/youtube.py platform_options.get",
+   "tokens_any": [
+    [
+     "default_language"
+    ]
+   ],
+   "context_any": [
+    "YouTube",
+    "youtube"
+   ],
+   "scope": "section",
+   "example": {
+    "network": "youtube",
+    "field": "default_language",
+    "spellings": [
+     "default_language"
+    ],
+    "where": "platform_specific"
+   }
+  },
+  {
+   "id": "youtube.platform_specific.made_for_kids",
+   "group": "platform_specific",
+   "source": "publishing/youtube.py _resolved_bool",
+   "tokens_any": [
+    [
+     "made_for_kids"
+    ]
+   ],
+   "context_any": [
+    "YouTube",
+    "youtube"
+   ],
+   "scope": "section",
+   "example": {
+    "network": "youtube",
+    "field": "made_for_kids",
+    "spellings": [
+     "made_for_kids"
     ],
     "where": "platform_specific"
    }

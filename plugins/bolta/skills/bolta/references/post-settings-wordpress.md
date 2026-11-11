@@ -9,7 +9,7 @@ Change settings on a saved article with `update-post-platform-details` (network 
 All both, per account, unless marked.
 
 - **Title**: `title`, up to 255 characters. Empty: the first line if under 100 characters (a leading `#` and all), else "Blog Post" and the date. Always set one.
-- **Address**: `slug`. `platform_specific` only; the `slug` on `create-wordpress-blog-post` has no effect. Empty: made from the title. Guidance: short, lowercase, the main search words ("sourdough-starter-guide"); change it only before the article goes out, since a live address change breaks links.
+- **Address**: `slug`, on `create-wordpress-blog-post` or in `platform_specific` (which wins). Empty: made from the title. Guidance: short, lowercase, the main search words ("sourdough-starter-guide"); change it only before the article goes out, since a live address change breaks links.
 - **Search title and description**: `meta_title` (aim for 60 characters or fewer), `meta_description` (160 or fewer). Sent as the post's `title` and `description` meta keys; they show in search results only if the site's SEO plugin reads those keys. Never promise they appear.
 - **Excerpt**: `excerpt`. Empty: about the first 155 characters of the article. Guidance: one or two sentences that make someone click from the blog index.
 - **Categories and tags**: `categories`, `tags`, lists of names. A new name is created on the live site at publish, so match existing spelling; one that can't be created is dropped without a word. Guidance: one or two categories, a handful of tags.
@@ -19,11 +19,11 @@ All both, per account, unless marked.
 - **Format**: `format` `standard` (default), `aside`, `chat`, `gallery`, `link`, `image`, `quote`, `status`, `video`, `audio`. Only matters if the site's theme uses formats; leave `standard` otherwise.
 - **Featured image**: on save, `media` with `role: "featured"` ([WordPress articles](post-wordpress.md)). `featured_media_id` (details only) takes the site's own media id; leave it to the save.
 
-When it goes out it is published live on the site, never sent as a WordPress draft or for review there; `status` (`publish`, `draft`, `private`, `pending`, `future`, `trash`) is ignored.
+When it goes out it is published live on the site, never sent as a WordPress draft or for review there; `status` (`publish`, `draft`, `private`, `pending`, `future`, `trash`) can't be set.
 
-## Saved, not sent yet
+## Not sent
 
-`custom_fields`, `password`, `template`, `parent_id` (a parent page), `menu_order`, `post_type` `page`, `seo_metadata` beyond the meta title and description (canonical link, focus keyphrase, schema), and `status`. Don't offer them.
+`custom_fields`, `password`, `template`, `parent_id` (a parent page), `menu_order` and `status`: Bolta refuses them. Also never used: `post_type` `page`, and `seo_metadata` beyond the slug, meta title and description (canonical link, focus keyphrase, schema). Don't offer them.
 
 ## Not possible here
 

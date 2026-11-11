@@ -1,0 +1,36 @@
+{
+  "ask": "Save a Threads post: \"Our winter blend is back Friday. Tell us your favourite way to brew it.\" Only accounts we follow should be able to reply; last time we got spam.",
+  "playbook": "post",
+  "steps": [
+    {
+      "tool": "create-post",
+      "arguments": {
+        "workspace_id": "<brand's workspace id>",
+        "content": "Our winter blend is back Friday. Tell us your favourite way to brew it.",
+        "account_ids": [
+          "<Threads account id>"
+        ],
+        "platform_specific": {
+          "threads": {
+            "reply_control": "accounts_you_follow"
+          }
+        },
+        "idempotency_key": "winter-blend-threads-1"
+      },
+      "why": "The decision: \"only accounts we follow\" is Threads' own accounts_you_follow, not followers (that means the brand's followers). It works only in platform_specific, and this save names only threads, so nothing else is lost. Bolta can't keep it as a saved Threads setting."
+    },
+    {
+      "tool": "get-post",
+      "arguments": {
+        "post_id": "<post id>"
+      },
+      "why": "Read back in metadata.platformSpecific: get-post-platform-details would still show everyone for this one."
+    }
+  ],
+  "say": "Saved to Acme as a Threads draft: \"Our winter blend is back Friday. Tell us your favourite way to brew it.\" Only accounts you follow can reply. Nothing goes out yet. Schedule it?",
+  "never": [
+    "followers for \"accounts we follow\": that limits replies to the brand's followers.",
+    "accounts_you_follow in a call that also sets other networks: their settings are lost.",
+    "Saying replies are limited before reading it back."
+  ]
+}

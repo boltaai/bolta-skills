@@ -20,7 +20,7 @@ What goes out: no media is a text post; one image an image post; 2 or more a gal
 
 - Guidance: read the subreddit's rules first; no hashtags, no pitch, a title that states the point, and give before asking. One subreddit per post.
 
-Saved, not sent yet: `resubmit`; the composer's brand-affiliate tag. `scheduling_metadata` belongs to the web app's promotion mode; never send it.
+Not sent: `resubmit` (Bolta refuses it); the composer's brand-affiliate tag. `scheduling_metadata` belongs to the web app's promotion mode; never send it.
 
 Not possible here: video, link posts with a preview, crossposting to several subreddits from one post (Bolta's web app has a promotion mode for that), polls.
 

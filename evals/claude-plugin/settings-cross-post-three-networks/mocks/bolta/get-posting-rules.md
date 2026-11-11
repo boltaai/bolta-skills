@@ -8,7 +8,7 @@
     },
     "how_length_is_counted": "Bolta counts characters one by one: letters, spaces and line breaks each count as 1, and so does an emoji unless it is built from several parts (flags, skin tones, joined emoji), which count more. Leave a little room.",
     "links_and_hashtags": {
-      "link_tracking": "When a post goes out, Bolta can add tracking parameters (utm_source, utm_medium, utm_content) to links that have no utm_ parameters of their own. The text you save is not changed.",
+      "link_tracking": "Bolta does not add tracking parameters to links. A link goes out exactly as you write it, so add your own utm_ parameters (for example utm_source, utm_medium, utm_content) if you want them.",
       "hashtags": "A #hashtag or @mention is kept exactly as you write it. Bolta does not check how many there are or their format."
     },
     "not_checked_by_bolta": [

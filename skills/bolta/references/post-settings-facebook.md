@@ -18,9 +18,9 @@ How to set and which wins: [network settings](post-settings.md). Network `facebo
   - Guidance: put the link in the first comment when the post should read as a story, not an ad. A comment that fails is skipped silently and the post still counts as published: check the live post before saying it is there.
 - **Media**: text alone, one video, or images. A video with images, or two videos, saves and can be approved, then is refused at scheduling: say so when saving. Alt text is not sent to Facebook.
 
-## Saved, not sent yet
+## Not sent
 
-`privacy` (`EVERYONE`, `FRIENDS`, `FRIENDS_OF_FRIENDS`, `CUSTOM`), `post_type` (`TEXT`, `PHOTO`, `VIDEO`, `LINK`, `STORY`), `enable_comments`, `enable_sharing`, `enable_reactions`, `cross_post_delay`, `location`, `feeling`, `activity`. Bolta's composer shows some of them; none reaches Facebook. Don't offer them.
+Bolta refuses these: `privacy` (`EVERYONE`, `FRIENDS`, `FRIENDS_OF_FRIENDS`, `CUSTOM`), `post_type` (`TEXT`, `PHOTO`, `VIDEO`, `LINK`, `STORY`), `enable_comments`, `enable_sharing`, `enable_reactions`, `cross_post_delay`, `location`, `feeling`, `activity`. Bolta's composer shows some of them; none reaches Facebook. Don't offer them.
 
 ## Not possible here
 

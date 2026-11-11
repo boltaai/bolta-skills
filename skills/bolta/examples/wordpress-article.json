@@ -7,6 +7,7 @@
       "arguments": {
         "workspace_id": "<brand's workspace id>",
         "title": "How to keep a sourdough starter alive",
+        "slug": "sourdough-starter-guide",
         "content": "A starter is flour, water and patience. Here is the routine we use in the bakery.\n\n## Feed it on a schedule\n\nOnce a day at room temperature...\n\n## Read the signs\n\nBubbles, a domed top and a sour smell mean it is ready...",
         "excerpt": "The daily routine we use in the bakery, and the three signs your starter is ready.",
         "categories": [
@@ -29,19 +30,7 @@
         ],
         "idempotency_key": "starter-guide-1"
       },
-      "why": "The decision: a draft only, with no time and no publish: going out is public and can't be undone from here, so the yes comes in review. The title is the page heading, so the body opens with the introduction and uses ## sections, no tables. Category spelled as the site has it, since a new name is created live. Meta title and description within 60 and 160 characters."
-    },
-    {
-      "tool": "update-post",
-      "arguments": {
-        "post_id": "<post id>",
-        "platform_specific": {
-          "wordpress": {
-            "slug": "sourdough-starter-guide"
-          }
-        }
-      },
-      "why": "The address: the slug on the saving call has no effect, but in platform_specific it is used. Short and searchable, set before it goes out so no link breaks."
+      "why": "The decision: a draft only, with no time and no publish: going out is public and can't be undone from here, so the yes comes in review. The title is the page heading, so the body opens with the introduction and uses ## sections, no tables. Category spelled as the site has it, since a new name is created live. Meta title and description within 60 and 160 characters. The slug sets the address: short and searchable, set before it goes out so no link breaks."
     }
   ],
   "say": "Saved to Acme as a WordPress draft: \"How to keep a sourdough starter alive\", in Baking, with your photo on top, at /sourdough-starter-guide. Nothing goes out yet; when it does, it's public on your site. Want to read it first, or schedule it?",

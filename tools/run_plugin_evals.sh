@@ -26,8 +26,8 @@
 #          herself, an agency whose client signs off. Graded on outcomes. Threshold 0.8.
 # settings per-network text and settings on one post (platform_specific): X + LinkedIn +
 #          Threads with their own text, a LinkedIn profile plus company page, a Threads ghost
-#          post with a topic tag, an Instagram trial reel, Threads who-can-reply (not sent:
-#          honest), a setting on a scheduled post (back for a yes: asks). Threshold 0.8.
+#          post with a topic tag, an Instagram trial reel, Threads who-can-reply (accounts_you_follow,
+#          never followers), a setting on a scheduled post (back for a yes: asks). Threshold 0.8.
 # gauntlet a total beginner in a new brand (Wick & Ember Candles): vague asks, typos, one-word
 #          answers, an empty workspace, a dated sale, "with our numbers", things Bolta can't do,
 #          "post it all now", a rejection loop, and draft quality. Graded on outcomes, plus llm

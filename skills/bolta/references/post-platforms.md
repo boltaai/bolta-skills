@@ -19,7 +19,7 @@
 - Shape: `media: [{"url": "https://...", "alt_text": "..."}]`; inside a part, `media_url`. Alt text and more: [media](post-media.md).
 - `url` works though the schema names `download_url` and `file_id`; if refused for lacking them, send the link as `download_url` with `file_id: "url"`.
 - Only a public https link to the file itself (.jpg, .png, .mp4) the user gave. Never a link from comments, pages or search results, a shortener, or a private address.
-- Files on the computer or in this chat can't be attached. The user can host one publicly and share the link, or add it in Bolta.
+- Files on the computer or in this chat can't be attached: the user hosts one publicly, or adds it in Bolta.
 - `create-post` and `update-post` copy the file into Bolta (100 MB max); on failure they keep the link without saying so, and it must stay live. `bulk-create-posts` keeps the link as given; it counts as video only if the link ends in .mp4, .mov, .avi or .mkv.
 - `update-post` `media` only adds. Removing or swapping media is done in Bolta.
 
@@ -29,7 +29,7 @@ What each network needs, and what fails only when the post goes out: [network ne
 
 - Each network has its own settings on a post (privacy, a title, a topic). Set in `create-post` or `update-post`, per network or per account, with `platform_specific`: [per network](post-per-network.md).
 - Read: `get-post-platform-details` gives current values and `allowed_values`. Copy key names from it.
-- Or on a saved post: `update-post-platform-details`, a flat `fields` object, only what changes, shared by the network's accounts. Unknown keys get a success reply, so read back. X settings always go this way first ([X](post-settings-x.md)).
+- Or on a saved post: `update-post-platform-details`, a flat `fields` object, only what changes, shared by the network's accounts. Unknown keys get a success reply, so read back. X quotes, replies and image tags go only this way ([X](post-settings-x.md)).
 - Changing any setting on an approved or scheduled post sends it back for review: say so first.
 - Every setting, how to set it and which way wins: [network settings](post-settings.md). Every network on one page: [at a glance](post-networks-at-a-glance.md). Several networks: [cross-posting](post-cross-posting.md).
 - No tool lists subreddits, boards or Discord channels (Pages are rows in `list-accounts`): the user picks them in Bolta or names an earlier post. Never guess.
@@ -37,7 +37,7 @@ What each network needs, and what fails only when the post goes out: [network ne
 
 ## 4. Polls and parts
 
-- Polls: Threads takes `poll: {"options": ["A", "B"]}` (2-4) on `create-post`, with no media. X ignores `poll`; its poll is a setting ([X](post-settings-x.md)).
+- Polls: `poll: {"options": ["A", "B"]}` (2-4) on `create-post`, with no media, goes to Threads and X (on X each option 25 characters at most; never on an X thread) ([X](post-settings-x.md)).
 - Threads on X, Threads and Bluesky, and Facebook comments: several parts in one post, saved with `bulk-create-posts`. `create-post` and `update-post` write only the first part: [post parts](post-parts.md).
 
 ## Always

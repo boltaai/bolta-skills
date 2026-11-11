@@ -54,7 +54,7 @@
           "reply_settings": "followers"
         }
       },
-      "why": "Two jobs in one call. The user's spam worry decides the value: followers means only accounts the brand follows can reply, which suits a launch. And a batch saves no X settings; without any saved, parts 2 and 3 go out as separate posts, not replies. Saving any X setting makes them chain."
+      "why": "The user's spam worry decides the value: followers means only accounts the brand follows can reply, which suits a launch. A batch item carries no settings, so it is set on the saved post; the details call refuses a misspelled value. The parts chain as replies either way."
     },
     {
       "tool": "get-post-platform-details",
@@ -68,8 +68,7 @@
   "say": "Saved to Acme as a draft X thread: part 1 is the post, parts 2 and 3 go out as replies, with your screenshot on part 3. Only accounts you follow can reply. Nothing goes out yet. Schedule it, or change a part?",
   "never": [
     "create-post for a thread: it saves part 1 only.",
-    "Leaving the batch-saved thread with no X setting: the parts go out as separate posts.",
-    "A poll in the thread: X drops it.",
+    "A poll in the thread: Bolta refuses it.",
     "A video on X: it takes images only.",
     "Saying the thread is fully out without checking: a part that fails stops it, and the parts already out stay up."
   ]

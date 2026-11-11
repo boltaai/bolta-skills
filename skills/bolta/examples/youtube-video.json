@@ -37,7 +37,6 @@
   "never": [
     "Leaving privacy unsaid: a video saved without it goes up private.",
     "Choosing a category the user didn't agree to.",
-    "Setting made_for_kids: only self_declared_made_for_kids is sent.",
     "A thumbnail_url the user didn't give."
   ]
 }

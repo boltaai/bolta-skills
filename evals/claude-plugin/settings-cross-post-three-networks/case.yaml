@@ -32,9 +32,8 @@ graders:
     input_match: '^(?=[\s\S]*a1b2c3d4-0001-4a00-8000-000000000002)(?=[\s\S]*a1b2c3d4-0001-4a00-8000-000000000005)(?=[\s\S]*linkedin_org_80412377)'
     min: 1
   - name: x-own-text-any-route
-    # X's own text, by any route: in the saving create-post, or after it with update-post or the
-    # details tool (the skill sends X settings after the post exists while platform_specific on a
-    # new post saves no X settings). Those two are checked, so under -p the attempt is graded.
+    # X's own text, by any route: in the saving create-post (platform_specific x works on a new
+    # post since server f9e715259), or after it with update-post or the details tool.
     type: regex
     target: trace
     pattern: '"name":"mcp__plugin_bolta_bolta__(create-post|update-post)"[\s\S]{0,6000}?\W"x\W{1,6}\{[^{}]*\Wtext\W|"name":"mcp__plugin_bolta_bolta__update-post-platform-details"[\s\S]{0,600}?\Wplatform\W{1,6}x\W'

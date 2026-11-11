@@ -7,7 +7,7 @@ How one post reaches many networks and accounts, and when to write separate post
 - **One post, many destinations**: every account in `account_ids` (or an account group in `social_buckets`). A Facebook Page is its own row (`facebook_page_<id>`), a LinkedIn company page too (`linkedin_org_<id>`): read `list-accounts` once and use those ids.
 - **One text by default**: every destination gets the post's text and media.
 - **Its own text per network**: `platform_specific` `<network>.text`. **Per account, Page or LinkedIn page**: `<network>.accounts.<id from list-accounts>.text`. The account's text wins over the network's, which wins over the post's.
-- **Settings**: some can differ per account (LinkedIn visibility, TikTok privacy, YouTube title), others are one value for every account of that network (Instagram reel or story, Mastodon visibility, Bluesky languages), and some need `update-post-platform-details` after saving (every X setting, subreddit, Discord channel). The table: [which keys, from where](post-per-network-keys.md).
+- **Settings**: some can differ per account (LinkedIn visibility, TikTok privacy, YouTube title), others are one value for every account of that network (Instagram reel or story, Mastodon visibility, Bluesky languages), and some need `update-post-platform-details` after saving (X quote or reply, subreddit, Discord channel). The table: [which keys, from where](post-per-network-keys.md).
 - **Media, time and parts are shared** by every destination on the post.
 
 ## One post or several
