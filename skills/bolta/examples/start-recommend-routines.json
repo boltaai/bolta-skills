@@ -1,0 +1,33 @@
+{
+  "ask": "What should Bolta run for us? We're a 3-person physio clinic and want more bookings.",
+  "playbook": "start",
+  "before": "The look was done: the brand record exists, LinkedIn, Instagram and Facebook are connected, one routine (Weekly tips, 3 a week) is on.",
+  "steps": [
+    {
+      "tool": "list-inbox-items",
+      "arguments": {
+        "workspace_id": "<brand's workspace id>",
+        "source": "team",
+        "status": "pending",
+        "limit": 20
+      },
+      "why": "What already waits for a yes: 12 drafts, most from Weekly tips. Count them before adding anything."
+    },
+    {
+      "tool": "recommend-routines",
+      "arguments": {
+        "workspace_id": "<brand's workspace id>",
+        "goals": "More bookings for our physio clinic",
+        "context": "3-person physio clinic. Patients are mostly desk workers with back and neck pain and runners. They book online.",
+        "count": 4
+      },
+      "why": "Bolta sizes the set to review_load: here 12 waiting and 10 decided in two weeks, level medium, so at most 3 plans of at most 3 drafts a run, none repeating Weekly tips. At high (25+ waiting, or 10+ waiting and decisions far behind) it would be 2 plans of 2. Each plan has its own id and a why."
+    }
+  ],
+  "say": "You have 12 drafts waiting, so I've kept this small:\n1. Patient wins: 2 Instagram and Facebook posts every Thursday about a real recovery you share (only with the patient's yes).\n2. A monthly article on desk posture for your site, which you publish.\n3. A weekly numbers report every Monday: posts nothing, no review.\nEvery draft waits for your yes. Which should I set up? They're saved switched off; nothing runs until you say so.",
+  "never": [
+    "Recommending more drafts a week while 10+ wait undecided.",
+    "A second weekly-tips routine on the same networks.",
+    "confirm-plan before the user picks."
+  ]
+}

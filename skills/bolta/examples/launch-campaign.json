@@ -16,7 +16,7 @@
         "starts_on": "2026-11-16",
         "ends_on": "2026-12-06"
       },
-      "why": "A launch is problem_solution. ends_on is never null: a null end with a start date is refused. No content_mix: the brand's saved Content defaults apply, else the strategy's own mix (3 images and 1 carousel). Check resolved_content_mix in the reply. If the user asks for a different mix, send only known mix keys; others are dropped silently."
+      "why": "A launch is problem_solution (guidance; always send a strategy). theme is the writer's goal sentence; cta_text is used word for word. ends_on is a real date: null is ignored, not refused, and the campaign would keep 1 week. Launch day Dec 1 sits in week 3 because weeks start on the start date's weekday (Monday). No content_mix: the brand's saved Content defaults apply, else the strategy's own mix (3 images and 1 carousel). Check resolved_content_mix in the reply. If the user asks for a different mix, send only known mix keys; others are dropped silently."
     },
     {
       "tool": "set-content-campaign-targets",
@@ -59,10 +59,10 @@
       "arguments": {
         "campaign_id": "<campaign id>"
       },
-      "why": "Read next_generation_at for when week 1's drafts land: the brand's review lead before the week starts, 2 days by default."
+      "why": "Read status (active) and schedule_status (not needs_accounts), and next_generation_at: week 1's drafts are written about 2 days before the week, starting around midnight UTC, so say \"around\"."
     }
   ],
-  "say": "Campaign on for Acme: New pricing, Nov 16 to Dec 6. Week 1's drafts land Sat Nov 14 and wait for your yes.",
+  "say": "Campaign on for Acme: New pricing, Nov 16 to Dec 6. Week 1's drafts land around Sat Nov 14 and wait for your yes.",
   "never": [
     "Starting a campaign and also writing its posts by hand: Bolta would write a second set.",
     "Sending content_mix when the plan uses the default mix: it skips the brand's saved Content defaults."

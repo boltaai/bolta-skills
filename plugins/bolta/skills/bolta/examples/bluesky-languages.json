@@ -1,0 +1,39 @@
+{
+  "ask": "Post this on Bluesky in English and Spanish: our Austin shop now has weekend hours.",
+  "playbook": "post",
+  "steps": [
+    {
+      "tool": "create-post",
+      "arguments": {
+        "workspace_id": "<brand's workspace id>",
+        "content": "Austin: we're open weekends now, 10 to 4.\nAustin: ya abrimos los fines de semana, de 10 a 4.",
+        "account_ids": [
+          "<Bluesky account id>"
+        ],
+        "platform_specific": {
+          "bluesky": {
+            "languages": [
+              "en",
+              "es"
+            ]
+          }
+        },
+        "idempotency_key": "austin-weekends-bsky-1"
+      },
+      "why": "The decision: tag both languages because the post really contains both, so people who filter their feed to Spanish see it too. Languages are network-wide on Bluesky. Both lines together stay under 300 characters, so nothing is cut."
+    },
+    {
+      "tool": "get-post-platform-details",
+      "arguments": {
+        "post_id": "<post id>",
+        "platform": "bluesky"
+      },
+      "why": "Read back languages before saying they are set."
+    }
+  ],
+  "say": "Saved to Acme as a Bluesky draft in English and Spanish, tagged as both: \"Austin: we're open weekends now, 10 to 4. / Austin: ya abrimos los fines de semana, de 10 a 4.\" Nothing goes out yet. Schedule it?",
+  "never": [
+    "A language code for a language not in the post.",
+    "Offering who-can-reply on Bluesky: saved, never sent yet."
+  ]
+}

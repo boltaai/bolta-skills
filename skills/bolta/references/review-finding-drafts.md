@@ -46,3 +46,7 @@ Group rows under **From Bolta routine "<name>"**, **From campaign "<name>"**, Li
 That last line holds for drafts you, a Bolta routine, a campaign or Bolta's chat wrote. A post typed in Bolta's own composer with review mode on is approved without a time, and Library posts never get one: see [times Bolta picks](review-times-auto.md).
 
 Nothing waiting: say so in one line, add the next scheduled post if there is one, then one next step.
+
+## Always
+
+- Follow the house rules in the Bolta skill.

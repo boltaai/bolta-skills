@@ -1,0 +1,43 @@
+{
+  "ask": "Put this vertical clip on YouTube so the client can watch it before everyone sees it: https://cdn.example.com/behind-the-scenes.mp4",
+  "playbook": "post",
+  "steps": [
+    {
+      "tool": "create-post",
+      "arguments": {
+        "workspace_id": "<brand's workspace id>",
+        "content": "Behind the scenes of the spring shoot.",
+        "account_ids": [
+          "<YouTube account id>"
+        ],
+        "media": [
+          {
+            "url": "https://cdn.example.com/behind-the-scenes.mp4"
+          }
+        ],
+        "idempotency_key": "bts-youtube-1"
+      },
+      "why": "One vertical clip. Bolta has no Shorts switch: YouTube decides from the video's shape and length whether it shows as a Short, so it is never promised."
+    },
+    {
+      "tool": "update-post-platform-details",
+      "arguments": {
+        "post_id": "<post id>",
+        "platform": "youtube",
+        "fields": {
+          "video_title": "Behind the scenes: spring shoot",
+          "privacy_status": "unlisted",
+          "self_declared_made_for_kids": false,
+          "notify_subscribers": false
+        }
+      },
+      "why": "The decision: unlisted, because the client watches by link before it is public; private would let only the channel and people it invites watch. No subscriber notice for a preview. A real title, since a blank one is cut from the text. Not for kids: a shoot's behind-the-scenes isn't made for children; ask whenever it could be. Details call so a misspelled privacy is refused."
+    }
+  ],
+  "say": "Saved to Acme as a YouTube draft: \"Behind the scenes: spring shoot\", unlisted (anyone with the link can watch; it won't show on the channel), not for kids, no notice to subscribers. YouTube decides whether it shows as a Short. Nothing goes up yet. Once the client is happy, I'll switch it to public, and that needs your yes again if it is scheduled.",
+  "never": [
+    "Leaving privacy unset: it would go up private.",
+    "privacy_status scheduled: schedule the post instead.",
+    "Promising it will be a Short."
+  ]
+}

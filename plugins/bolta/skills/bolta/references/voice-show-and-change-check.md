@@ -16,3 +16,8 @@ Pasted, or a saved draft from the post list. Judge against the voice only.
 - Several drafts: one line each (verdict, worst problem), details for the worst.
 
 Showing or changing the voice: [show and change](voice-show-and-change.md).
+
+## Always
+
+- Follow the house rules in the Bolta skill.
+- Call a check your read, never a Bolta score.

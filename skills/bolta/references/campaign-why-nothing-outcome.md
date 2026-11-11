@@ -23,3 +23,7 @@ Bolta names the first thing that stopped it.
 - `nothing_approved`: drafts were turned down or are still plain drafts; none got a yes. Two weeks of that: wrong strategy or thin context ([strategies.md](campaign-strategies.md)).
 - `not_sent_yet`: approved, and their times haven't come yet.
 - `unknown`: Bolta can't tell. Look at the campaign's posts.
+
+## Always
+
+- Follow the house rules in the Bolta skill.

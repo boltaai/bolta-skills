@@ -32,12 +32,13 @@
 
 `list-engagement-capabilities` (live, per account) wins over this table.
 
+**A reaction** is public too: show which post and which reaction, get a yes, then `react-to-social-content(account_id, target_url, reaction)` with like, upvote, repost, favorite or boost as the table allows. A downvote only when the user named it. Worked, with a Reddit reply: [replies-triage](../examples/replies-triage.json). Reddit limits: [replies-reddit.md](replies-reddit.md).
+
 ## When it goes wrong
 
-- The network can't do it: give the link; don't retry another way.
-- Disconnected account: hand to [connect](connect.md).
-- Not found: deleted, private or a wrong link. Ask for another.
-- Timeout on a send: outcome unknown. Check `list-engagements` first.
-- A limit or "wait a moment": stop for now.
+Unsupported network, disconnected account, not found, timeout, a hold, a removal, Reddit or the web Inbox: [held-and-inbox](replies-held-and-inbox.md).
 
-A hold, a removal, Reddit safety or the web Inbox: [held-and-inbox](replies-held-and-inbox.md).
+## Always
+
+- Follow the house rules in the Bolta skill.
+- Send or react only on a yes to that exact text, account and link.

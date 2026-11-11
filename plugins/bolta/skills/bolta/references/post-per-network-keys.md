@@ -1,50 +1,43 @@
-# Per-network keys: what each network reads
+# Per-network keys: per account, network only, or details only
 
-The keys `platform_specific` takes, per network, and what is saved but never used. How it works: [per network](post-per-network.md). What each setting means: [Threads, Instagram, Facebook](post-networks-meta.md) · [X, LinkedIn, Bluesky, Mastodon, Reddit, Discord](post-networks-text.md) · [TikTok, YouTube, Pinterest](post-networks-video.md) · [WordPress](post-wordpress.md).
+Which keys each network reads, and from where. How `platform_specific` works: [per network](post-per-network.md). What each key does, its values and when to use it: [network settings](post-settings.md).
 
-## Keys, by network
+- **Per account**: works in `platform_specific` at network level or under `accounts`, and with `update-post-platform-details`.
+- **Network only**: works at network level in `platform_specific` (copied when the post saves) and with `update-post-platform-details`; an account entry is ignored.
+- **Details only**: `update-post-platform-details` (or a batch item's details). In `platform_specific` it is kept and never used.
 
-| Network | `text` used | Other keys read (network or account) |
-|-|-|-|
-| X | Yes | `reply_settings`, `for_super_followers_only` |
-| Threads | Yes | `topic_tag` (no `use_topic_tag` needed here), `is_ghost_post`, `is_spoiler_media`, `location_id` |
-| Instagram | Yes | `content_type`, `location_id`, `cover_url`, `thumbnail_offset`; trial reel below |
-| Facebook | Yes, per Page | none |
-| LinkedIn | Yes, per profile and per page | `visibility` |
-| Bluesky, Mastodon | Yes | none |
-| Reddit | Yes | `title`, `flair_id`, `flair_text`, `nsfw`, `spoiler`, `sendreplies` |
-| TikTok | No: the post's text is the caption | `privacy_level`, `disable_comments`, `disable_duet`, `disable_stitch`, `brand_organic_toggle`, `brand_content_toggle` |
-| YouTube | No | `video_title`, `video_description`, `tags`, `category_id`, `privacy_status`, `self_declared_made_for_kids`, `allow_embedding`, `notify_subscribers` |
-| Pinterest | No | `title`, `description`, `link`, `board_id` |
-| WordPress | No | `title`, `excerpt`, `categories`, `tags`, `meta_title`, `meta_description`, `comment_status`, `sticky`, `format` |
+| Network | Per account | Network only | Details only |
+|-|-|-|-|
+| X | `text`, `reply_settings`, `for_super_followers_only` | `post_type`, `poll_options`, `poll_duration_minutes` | `quoted_tweet_id`, `in_reply_to_tweet_id`, `geo_place_id` |
+| Threads | `text`, `topic_tag`, `is_ghost_post`, `is_spoiler_media`, `location_id` | | `use_topic_tag` (needed only here) |
+| Instagram | `text` | `content_type`, `trialReelEnabled`, `trialGraduationStrategy`, `cover_url`, `thumbnail_offset`, `location_id`, `user_tags`, `product_tags` | |
+| Facebook | `text`, per Page | | `primary_page`, `cross_post_pages`, `cross_post_enabled` |
+| LinkedIn | `text`, `visibility`, per profile or page | | `post_as_organization`, `selected_organization`, `cross_post_organizations`, `cross_post_enabled` |
+| TikTok | `privacy_level`, `disable_comments`, `disable_duet`, `disable_stitch`, `brand_organic_toggle`*, `brand_content_toggle`* | | |
+| YouTube | `video_title`, `video_description`, `tags`, `category_id`, `privacy_status`, `self_declared_made_for_kids`, `allow_embedding`, `notify_subscribers`, `thumbnail_url` | | `publish_at` |
+| Pinterest | `board_id` (Pinterest's id), `title`, `description`, `link`, `alt_text`, `cover_image_url` | | `board` (Bolta's id; no read shows it, so use `board_id`) |
+| Bluesky | `text` | `languages`, `include_facets` | |
+| Mastodon | `text` | `visibility`, `sensitive`, `spoiler_text` | |
+| Reddit | `text`, `title`, `flair_id`, `flair_text`, `nsfw`, `spoiler`, `sendreplies` | | `selected_subreddit_id`; `title` must be saved here too |
+| Discord | `text`, `channel`, `guild` (Discord's ids) | `embed_enabled`, `embed_title`, `embed_description`, `embed_color` | `selected_channel_id` (Bolta's id), `embed_footer` |
+| WordPress | `title`, `slug`, `excerpt`, `categories`, `tags`, `meta_title`, `meta_description`, `post_type`, `comment_status`, `ping_status`, `sticky`, `format` | | `featured_media_id` |
 
-A different caption for TikTok, YouTube, Pinterest or WordPress needs its own post, or the network's own field (`video_description`, `description`, `excerpt`).
+\* `platform_specific` only: `update-post-platform-details` answers success and keeps nothing.
 
-## Instagram trial reel
+## Notes
 
-`{"instagram": {"content_type": "REELS", "trialReelEnabled": true, "trialGraduationStrategy": "SS_PERFORMANCE"}}` on `create-post` (or `update-post`) makes a trial reel: shown to non-followers first; `SS_PERFORMANCE` shares it with followers if it does well, `MANUAL` (the default) leaves that to the user in Instagram.
-
-- One setting for the whole post: every Instagram account on it gets the same.
-- It needs `REELS` and one video. Without `REELS` the trial is switched off; with an image it goes out as a normal post. Any other strategy value becomes `MANUAL`.
-- Bad Instagram values are skipped, not refused: read back with `get-post-platform-details` (network `instagram`) before saying it is set.
+- Instagram: keep every key at network level. A few read an account's entry for a single image or video, but a story or carousel check uses the network value, so mixed entries misbehave. Bad Instagram values are skipped, not refused.
+- TikTok and YouTube: an account's entry replaces the network's keys entirely.
+- Pinterest and WordPress: an account's entry merges with the network's.
+- `text` is ignored by TikTok, YouTube, Pinterest and WordPress: a different caption there needs the network's own field (`video_description`, `description`, `excerpt`) or its own post.
+- `slug` works only in `platform_specific`; `use_topic_tag` only matters with the details call.
 
 ## Saved, never used
 
-- Threads `reply_control`: who can reply is not sent to Threads. Don't offer it.
-- Facebook `location`, `feeling`, `activity`: not sent.
-- On an account's entry, `useMainMedia`, `hashtags` and `link` (except Pinterest's pin link): not read. Media and hashtags are the post's own.
-- Any key not listed above.
-
-## Pinterest board ids
-
-`board_id` here is Pinterest's own board id. `update-post-platform-details` takes a different one, Bolta's id for the board, and `get-post-platform-details` shows that one. Never copy one into the other. No tool lists boards: the user picks in Bolta or names an earlier pin.
-
-## WordPress
-
-Article settings only; the text is the article. `wordpress_post_id` is ignored: an article is never pointed at an existing WordPress post from here. New category and tag names are created on the site when it goes out, so match the existing spelling.
+Every network page lists its settings that are saved but not sent yet. Also never read on an account's entry: `useMainMedia`, `hashtags`, and `link` (except Pinterest's). Media and hashtags are the post's own. Any key not in the table above.
 
 ## Always
 
-- Never offer a key marked saved, never used; say plainly it isn't possible here.
+- Never offer a key listed as saved, not sent yet; say plainly it isn't possible here.
 - Read back before saying a setting is set: unknown keys and bad values are dropped quietly.
-- Never invent an id (board, location, account).
+- Never invent an id (board, channel, subreddit, location, account).

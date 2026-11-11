@@ -32,12 +32,12 @@ What each network needs, and what fails only when the post goes out: [network ne
 - Read: `get-post-platform-details` gives current values and `allowed_values`. Copy key names from it.
 - Or on a saved post: `update-post-platform-details`, a flat `fields` object, only what changes, shared by the network's accounts. Unknown keys get a success reply, so read back.
 - Changing any setting on an approved or scheduled post sends it back for review. Say so first; it needs a yes again.
-- Every network on one page: [at a glance](post-networks-at-a-glance.md). The keys: [Threads, Instagram, Facebook](post-networks-meta.md) · [X, LinkedIn, Bluesky, Mastodon, Reddit, Discord](post-networks-text.md) · [TikTok, YouTube, Pinterest](post-networks-video.md) · [WordPress](post-wordpress.md) · [per network](post-per-network-keys.md). Several networks: [cross-posting](post-cross-posting.md).
+- Every setting, how to set it and which way wins: [network settings](post-settings.md). Every network on one page: [at a glance](post-networks-at-a-glance.md). Several networks: [cross-posting](post-cross-posting.md).
 - No tool lists subreddits, boards or Discord channels (Pages are rows in `list-accounts`): the user picks them in Bolta or names an earlier post. Never guess.
 - Not in Bolta: Instagram collaborators, X communities, Google Business, posting to Telegram or Substack. Say so; never fake one. A Facebook first comment is a second part: [post parts](post-parts.md).
 
 ## 4. Polls and parts
 
 - Threads poll: `poll: {"options": ["A", "B"]}` (2-4) on `create-post`, on a post with no media.
-- X poll: a setting, [X](post-networks-text.md). Without it the post goes out plain.
+- X poll: a setting, not `poll` ([X](post-settings-x.md)). `poll` on an X post is ignored.
 - Threads on X, Threads and Bluesky, and Facebook comments: several parts in one post, saved with `bulk-create-posts`. `create-post` and `update-post` write only the first part. How each network posts them: [post parts](post-parts.md).

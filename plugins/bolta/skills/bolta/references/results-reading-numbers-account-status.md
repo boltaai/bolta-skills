@@ -15,3 +15,7 @@ Rows come sorted by followers, not by performance.
 - Account numbers exist for LinkedIn, X, Instagram, Facebook, Threads, Bluesky, Mastodon and Reddit only. For any other network, say there are none; never report zeros.
 - `get-account-analytics` needs a `list-accounts` UUID: for Facebook Page and LinkedIn company rows, use `base_account_id`.
 - Account numbers come from account snapshots; post numbers from Bolta's per-post records. Neither is evidence about the other.
+
+## Always
+
+- Follow the house rules in the Bolta skill.

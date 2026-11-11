@@ -16,9 +16,9 @@ Read for changes, pausing, stopping, running now and Monday's drafts. Start with
 
 - `update-routine` takes only what changes. `source_bindings`, `output_config` and `destination_config` are replaced whole: read, then resend them complete. Inside `output_config`, `review`, `story` and `library` are kept when left out.
 - **A change needs no check** on a routine made here as ask me first, or on one already ask me first when the change resends `approval_policy: "review_every_artifact"`. Resend it only where it is already set.
-- "Use my workspace setting" or "post without asking" only on their words: one Bolta check, plus one to switch on. `auto` is refused while the brand's `safe_mode` is on or its `autonomy_mode` (`get-workspace`) is manual or assisted; under client sign-off, drafts still wait for review. It changes in Bolta: Settings > Rules > Approvals.
+- "Use my workspace setting" or "post without asking" only on their words: one Bolta check, plus one to switch on. Which routines and brands allow `auto`: [routine-settings.md](routine-settings.md). The brand's rule changes in Bolta: Settings > Rules > Approvals.
 - **Schedules:** daily, weekly with a `day`, or monthly (the 1st). Another day of the month, or weekdays: a cron, `{"cron":"0 9 15 * *"}` or `{"cron":"0 9 * * 1-5"}`; "weekdays" is not an interval. After any schedule or clock change, read `next_run_at` back.
-- **Voice:** `get-routine` `destination_config.voice_profile_id` (empty: brand default). Change it with `update-routine` `destination_config`, resending its `account_refs` and `behavior`; on a copy, pass it to `create-routine`.
+- **Voice and reviewers:** `get-routine` `destination_config.voice_profile_id` (empty: brand default) and `default_reviewer_ids`. Change with `update-routine`: `destination_config: {"voice_profile_id": ...}` alone is enough. Copy both onto a copy.
 - The kind of routine can't change. Make a new one.
 - Switching on can be refused (a missing source, a disconnected account, a plan limit, a paused writer). Say the reason; it stays off. Don't retry.
 - Pausing: a run already going may still deliver drafts. Stopped, its history stays.
@@ -35,4 +35,9 @@ Drafts sent straight to the client wait on the client, not the team: `get-routin
 
 ## Where ideas come from
 
-Most post routines and weekly articles take one new idea per piece from the brand's documents (bolta.ai/dashboard/knowledge-base?tab=references; Dropbox in Settings > Integrations). New files show up in later runs: the lasting way to steer topics.
+From the brand's documents, one idea per piece: [routine-settings-output.md](routine-settings-output.md). Dropbox connects in Settings > Integrations.
+
+## Always
+
+- Read `get-routine` before any change, and resend whole what is replaced whole.
+- One change per yes; read `next_run_at` back after schedule or switch-on changes.

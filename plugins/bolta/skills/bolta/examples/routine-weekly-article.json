@@ -1,0 +1,58 @@
+{
+  "ask": "Yes, turn it on.",
+  "playbook": "routine",
+  "before": "The user wants one blog article a week for search. The summary said: every Wednesday 7:00 am (Denver), Bolta drafts 1 researched article about running a small bakery, with an SEO title and description, in the brand voice; it never publishes: once approved, they publish it. WordPress is connected.",
+  "steps": [
+    {
+      "tool": "create-routine",
+      "arguments": {
+        "workspace_id": "<brand's workspace id>",
+        "name": "Weekly article, running a bakery",
+        "goal": "One researched article a week that helps people thinking of opening a small bakery, so they find us",
+        "template_key": "weekly_blog_article",
+        "trigger_type": "schedule",
+        "schedule": {
+          "interval": "weekly",
+          "day": "wednesday",
+          "time": "07:00"
+        },
+        "timezone": "<timezone from get-workspace>",
+        "approval_policy": "review_every_artifact",
+        "output_config": {
+          "artifact_type": "article",
+          "count": 1,
+          "settings": {
+            "longform": {
+              "topic": "Practical lessons on opening and running a small neighbourhood bakery",
+              "researchDepth": "deep",
+              "outputFormat": "article"
+            }
+          }
+        },
+        "instructions": "Write from our experience running two bakeries since 2015. Never invent facts, numbers, prices or dates."
+      },
+      "why": "artifact_type article, count 1 (most 2). The weekly article takes only outputFormat article. No auto: articles always wait. No social accounts: it writes an article, not posts."
+    },
+    {
+      "tool": "activate-routine",
+      "arguments": {
+        "workspace_id": "<brand's workspace id>",
+        "routine_id": "<routine id>"
+      },
+      "why": "Switching on runs nothing until Wednesday."
+    },
+    {
+      "tool": "get-routine",
+      "arguments": {
+        "workspace_id": "<brand's workspace id>",
+        "routine_id": "<routine id>"
+      },
+      "why": "Read next_run_at back in the brand's clock."
+    }
+  ],
+  "say": "Bolta routine on: Weekly article. First draft Wed Nov 18, 7:00 am (Denver), waiting for your yes; once approved, you publish it to WordPress.",
+  "never": [
+    "Saying it publishes weekly: it drafts, the user publishes.",
+    "outputFormat thread or carousel on the weekly article: refused."
+  ]
+}

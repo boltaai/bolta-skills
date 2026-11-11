@@ -38,6 +38,19 @@ Usage:
     python3 -I tools/check_claude_plugin.py --strict              # warnings fail
     python3 -I tools/check_claude_plugin.py --require-coverage    # every tool used
     python3 -I tools/check_claude_plugin.py --no-bundle           # the full plugin and the checks only
+    python3 -I tools/check_claude_plugin.py --coverage-only       # key coverage only, offline
+    python3 -I tools/check_claude_plugin.py --coverage-only --coverage-report missing.md
+
+Key coverage (runs first, needs no tool list): every key in
+tools/fixtures/coverage_keys.json (routine and campaign tool inputs, per-network
+fields, platform_specific keys the publishers read, tool names) must appear in a
+code span or fence of some references/*.md, next to its tool, parent key or
+network. A missing key is an ERROR; a per-network key with no examples/*.json
+showing it is a WARN. Deliberate gaps go in tools/fixtures/coverage_exempt.json as
+{"key id": "reason"}: an empty reason or a key the fixture lacks is an ERROR, an
+exempt key the skill now teaches is a WARN. When the server changes, regenerate
+the fixture (python3 -I tools/build_coverage_fixture.py [SERVER_PATH]) and commit
+it with the skill change that teaches the new keys.
 
 Checks, in order: manifest and marketplace, file hygiene, layout (skills, plus
 agents/ in the full plugin only; no commands/), agent shape (read-only tool list,
@@ -1235,6 +1248,193 @@ def run_checks(plugin, marketplace, tools_by_name, checks, gated, bundle=False, 
     return referenced
 
 
+# --------------------------------------------------------------------------- key coverage
+#
+# tools/fixtures/coverage_keys.json (written by tools/build_coverage_fixture.py from the
+# server) lists every routine/campaign tool input, per-network field, platform_specific key
+# and tool name. Each key carries `tokens_any` (alternative groups; every token of a group
+# must appear inside a code span or fence) and `context_any` (one of these words in the same
+# file or, for scope "section", the same heading section). A key no reference teaches is an
+# ERROR unless tools/fixtures/coverage_exempt.json names it with a reason.
+
+COVERAGE_FIXTURE = REPO / "tools" / "fixtures" / "coverage_keys.json"
+COVERAGE_EXEMPT = REPO / "tools" / "fixtures" / "coverage_exempt.json"
+_FENCE = re.compile(r"```[^\n]*\n(.*?)```", re.S)
+_SPAN = re.compile(r"`([^`\n]+)`")
+_CODE_TOKEN = re.compile(r"[A-Za-z_][A-Za-z0-9_]*(?:-[A-Za-z0-9_]+)*")
+_HEADING = re.compile(r"^(#{1,6})\s+(.*)$")
+
+
+def _code_tokens(text: str) -> set[str]:
+    toks: set[str] = set()
+    for m in _FENCE.finditer(text):
+        toks.update(_CODE_TOKEN.findall(m.group(1)))
+    rest = _FENCE.sub("", text)
+    for m in _SPAN.finditer(rest):
+        toks.update(_CODE_TOKEN.findall(m.group(1)))
+    toks.update(m.group(1) for m in CALL.finditer(rest))
+    return toks
+
+
+def _coverage_units(refdir: pathlib.Path):
+    """(file units, section units): each unit is (where, prose, code tokens, lines).
+    File unit: prose is the whole file. Section unit: the text under one heading (each
+    table row on its own); prose is its heading chain, and a context word outside the
+    chain counts only on the same line as the token."""
+    files, sections = [], []
+    for path in sorted(refdir.glob("*.md")):
+        text = path.read_text()
+        files.append((path.name, text, _code_tokens(text), None))
+        chain: list[str] = []
+        body: list[str] = []
+
+        def flush():
+            # A table row is its own unit (a per-network table names many networks in one
+            # section); the rest of the section is one unit. Both carry the heading chain.
+            rows = [ln for ln in body if ln.lstrip().startswith("|")]
+            rest = [ln for ln in body if not ln.lstrip().startswith("|")]
+            for chunk in [rest] + [[r] for r in rows]:
+                s = "\n".join(chain + chunk)
+                sections.append((path.name, "\n".join(chain), _code_tokens(s), chunk))
+        in_fence = False
+        for line in text.splitlines():
+            if line.startswith("```"):
+                in_fence = not in_fence
+            m = None if in_fence else _HEADING.match(line)
+            if m:
+                flush()
+                level = len(m.group(1))
+                chain = chain[: level - 1] + [line]
+                body = []
+            else:
+                body.append(line)
+        flush()
+    return files, sections
+
+
+def _covered(key: dict, units) -> str | None:
+    ctx = [re.compile(r"(?<![A-Za-z0-9_-])" + re.escape(c) + r"(?![A-Za-z0-9_-])", re.I) for c in key.get("context_any") or []]
+    for where, prose, code, lines in units:
+        groups = [g for g in key["tokens_any"] if all(t in code for t in g)]
+        if not groups:
+            continue
+        if not ctx or any(c.search(prose) for c in ctx):
+            return where
+        # Section scope, the network not in the heading chain: it must share a line with the token.
+        if lines is not None:
+            word = [re.compile(r"(?<![A-Za-z0-9_-])" + re.escape(g[0]) + r"(?![A-Za-z0-9_-])") for g in groups]
+            if any(w.search(ln) and any(c.search(ln) for c in ctx) for ln in lines for w in word):
+                return where
+    return None
+
+
+def _example_keys(exdir: pathlib.Path):
+    """Per network: field names set through update-post-platform-details, and platform_specific keys."""
+    fields: dict[str, set] = {}
+    ps: dict[str, set] = {}
+
+    def walk(node):
+        if isinstance(node, dict):
+            if isinstance(node.get("platform"), str) and isinstance(node.get("fields"), dict):
+                fields.setdefault(node["platform"], set()).update(node["fields"])
+            spec = node.get("platform_specific")
+            if isinstance(spec, dict):
+                for net, data in spec.items():
+                    if isinstance(data, dict):
+                        ps.setdefault(net, set()).update(data)
+                        for acct in (data.get("accounts") or {}).values():
+                            if isinstance(acct, dict):
+                                ps[net].update(acct)
+            for v in node.values():
+                walk(v)
+        elif isinstance(node, list):
+            for v in node:
+                walk(v)
+    for path in sorted(exdir.glob("*.json")):
+        try:
+            walk(json.loads(path.read_text()))
+        except ValueError:
+            pass  # check_examples reports bad JSON
+    return fields, ps
+
+
+def check_key_coverage(plugin: pathlib.Path, fixture: pathlib.Path, exempt_path: pathlib.Path,
+                       report: pathlib.Path | None = None):
+    where = "coverage"
+    if not fixture.is_file():
+        err(where, f"no key fixture at {fixture}; run tools/build_coverage_fixture.py")
+        return
+    data = json.loads(fixture.read_text())
+    keys = {k["id"]: k for k in data["keys"]}
+    exempt: dict = {}
+    if exempt_path.is_file():
+        exempt = json.loads(exempt_path.read_text())
+        if not isinstance(exempt, dict):
+            err(where, f"{exempt_path.name} must be an object of key id -> reason")
+            exempt = {}
+        for kid, reason in exempt.items():
+            if kid not in keys:
+                err(where, f"{exempt_path.name}: exempt key '{kid}' is not in the fixture (stale?)")
+            if not isinstance(reason, str) or not reason.strip():
+                err(where, f"{exempt_path.name}: exempt key '{kid}' needs a reason")
+    skill = plugin / "skills" / "bolta"
+    files, sections = _coverage_units(skill / "references")
+    ex_fields, ex_ps = _example_keys(skill / "examples")
+    missing: list[dict] = []
+    no_example: dict[str, list[str]] = {}
+    for kid, key in keys.items():
+        found = _covered(key, sections if key.get("scope") == "section" else files)
+        if kid in exempt:
+            if found:
+                warn(where, f"exempt key '{kid}' is taught in {found}: drop the exemption")
+            continue
+        if not found:
+            missing.append(key)
+            continue
+        ex = key.get("example")
+        if ex:
+            pool = (ex_fields if ex["where"] == "fields" else ex_ps).get(ex["network"], set())
+            spellings = {t for g in key["tokens_any"] for t in g}
+            if not pool & spellings:
+                no_example.setdefault(ex["network"], []).append(kid.split(".", 1)[1])
+    for key in missing:
+        err(where, f"{key['id']} is taught in no references/*.md (needs {' or '.join('+'.join(g) for g in key['tokens_any'])}"
+                   + (f" near {'/'.join(key['context_any'])}" if key.get("context_any") else "") + f"; from {key['source']})")
+    for net, ids in sorted(no_example.items()):
+        warn(where, f"{net}: {len(ids)} per-network key(s) taught but shown in no examples/*.json: {', '.join(sorted(ids))}")
+    covered = len(keys) - len(missing) - len(set(exempt) & set(keys))
+    info(f"key coverage: {covered}/{len(keys)} keys taught, {len(missing)} missing, {len(set(exempt) & set(keys))} exempt "
+         f"(fixture from server {data.get('server_commit', '?')})")
+    if report is not None:
+        _write_coverage_report(report, data, missing, no_example, exempt)
+
+
+def _write_coverage_report(path: pathlib.Path, data: dict, missing: list[dict], no_example: dict, exempt: dict):
+    by_group: dict[str, list[dict]] = {}
+    for k in missing:
+        by_group.setdefault(k["group"], []).append(k)
+    total = data.get("counts") or {}
+    lines = ["# Skill key coverage: missing keys", "",
+             f"Fixture: `tools/fixtures/coverage_keys.json` from server `{data.get('server_commit', '?')}`. "
+             f"{len(data['keys'])} keys, {len(missing)} missing, {len(exempt)} exempt.", "",
+             "| Group | Keys | Missing |", "|-|-|-|"]
+    for g, n in sorted(total.items()):
+        lines.append(f"| {g} | {n} | {len(by_group.get(g, []))} |")
+    for g, ks in sorted(by_group.items()):
+        lines += ["", f"## {g} ({len(ks)})", "", "| Key | Needs | Source |", "|-|-|-|"]
+        for k in ks:
+            needs = " or ".join("+".join(f"`{t}`" for t in grp) for grp in k["tokens_any"])
+            if k.get("context_any"):
+                needs += " near " + "/".join(k["context_any"])
+            lines.append(f"| `{k['id']}` | {needs} | {k['source']} |")
+    if no_example:
+        lines += ["", "## Taught, but no example (warning)", ""]
+        for net, ids in sorted(no_example.items()):
+            lines.append(f"- {net}: {', '.join(f'`{i}`' for i in sorted(ids))}")
+    path.parent.mkdir(parents=True, exist_ok=True)
+    path.write_text("\n".join(lines) + "\n")
+
+
 def main(argv=None):
     ap = argparse.ArgumentParser(description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
     ap.add_argument("--plugin", type=pathlib.Path, default=DEFAULT_PLUGIN)
@@ -1247,12 +1447,26 @@ def main(argv=None):
     ap.add_argument("--user-agent", default=CLAUDE_USER_AGENT, help="User-Agent for the live fetch (default: a Claude Code-like one, so the Claude tools show)")
     ap.add_argument("--strict", action="store_true", help="treat warnings as errors")
     ap.add_argument("--require-coverage", action="store_true", help="error when an exposed tool is referenced nowhere (except the deliberately unused ones)")
+    ap.add_argument("--coverage-fixture", type=pathlib.Path, default=COVERAGE_FIXTURE, help="key fixture from tools/build_coverage_fixture.py")
+    ap.add_argument("--coverage-exempt", type=pathlib.Path, default=COVERAGE_EXEMPT, help="reviewed exemptions: {key id: reason}")
+    ap.add_argument("--coverage-report", type=pathlib.Path, help="also write the missing keys as Markdown here")
+    ap.add_argument("--coverage-only", action="store_true", help="run only the key coverage check (offline, fast)")
     args = ap.parse_args(argv)
 
     plugin = args.plugin.resolve()
     if not plugin.is_dir():
         print(f"ERROR no such plugin dir: {plugin}")
         return 2
+
+    # Key coverage needs no tool list, so it runs first and on its own with --coverage-only.
+    check_key_coverage(plugin, args.coverage_fixture.resolve(), args.coverage_exempt.resolve(),
+                       args.coverage_report.resolve() if args.coverage_report else None)
+    if args.coverage_only:
+        for line in infos + warns + errors:
+            print(line)
+        failed = bool(errors) or (args.strict and bool(warns))
+        print(f"\n{len(errors)} error(s), {len(warns)} warning(s)" + (" - FAIL" if failed else " - ok"))
+        return 1 if failed else 0
     try:
         tools = unwrap_tools(json.loads(args.tools_json.read_text())) if args.tools_json else fetch_tools(args.tools_url, args.user_agent)
     except Exception as e:  # noqa: BLE001 - report any fetch/parse failure plainly

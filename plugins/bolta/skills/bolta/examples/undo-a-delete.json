@@ -7,7 +7,7 @@
       "arguments": {
         "workspace_id": "<brand's workspace id>"
       },
-      "why": "Posts and agent jobs deleted through this app (delete-post, delete-agent-job) in the last 7 days, newest first, each with days left before it is purged. Deletes made in the Bolta dashboard are permanent and never listed."
+      "why": "Posts deleted through this app or Bolta's chat in the last 7 days, newest first (up to 100), each with days left before it is purged. Deletes made in the Bolta dashboard are permanent and never listed."
     },
     {
       "tool": "restore-deleted",

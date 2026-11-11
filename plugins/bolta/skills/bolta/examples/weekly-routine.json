@@ -26,14 +26,11 @@
         ],
         "output_config": {
           "artifact_type": "post",
-          "count": 3,
-          "platforms": [
-            "linkedin"
-          ]
+          "count": 3
         },
         "instructions": "3 LinkedIn drafts about hiring every Monday. Never invent facts, numbers, prices or dates."
       },
-      "why": "The time zone is required and has no fallback. Accounts are bound as objects. Ask me first unless the user said post without asking. Monthly runs on the 1st; any other day of the month is a cron."
+      "why": "The time zone is required and has no fallback. Accounts are bound as objects, and they decide the networks: platforms is sent only when the user limits networks, so an account added later is used. count goes with artifact_type every time output_config is sent. Ask me first unless the user said post without asking."
     },
     {
       "tool": "activate-routine",
@@ -53,6 +50,7 @@
   "say": "Bolta routine on. First drafts Mon Nov 16, 8:00 am (New York). On Monday, say 'what's waiting'.",
   "never": [
     "run-routine-now in the same breath: it spends credits and needs its own yes.",
-    "A bare 'routine' where the app's own scheduling could be meant."
+    "A bare 'routine' where the app's own scheduling could be meant.",
+    "Leaving count out of output_config: Bolta would use its writer's default, 4."
   ]
 }

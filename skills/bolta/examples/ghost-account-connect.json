@@ -1,0 +1,37 @@
+{
+  "ask": "Priya finally gave us her LinkedIn login. Connect her so her drafts start going out.",
+  "playbook": "connect",
+  "steps": [
+    {
+      "tool": "list-accounts",
+      "arguments": {
+        "workspace_id": "<brand's workspace id>",
+        "platform": "linkedin"
+      },
+      "why": "Priya's row shows token_status ghost: added without connecting, so Bolta wrote for it but it can't post. Not disconnected, so no reconnect wording. Connecting alone won't release her drafts, so the reply says: \"In Bolta, open Brand > Accounts (bolta.ai/dashboard/knowledge-base?tab=accounts), press Connect LinkedIn on Priya's row, sign in with her login, then say yes to moving Priya's voice and drafts. Tell me when it's done.\" Not get-connect-link: started there, Bolta doesn't offer the move."
+    },
+    {
+      "tool": "list-accounts",
+      "arguments": {
+        "workspace_id": "<brand's workspace id>",
+        "platform": "linkedin"
+      },
+      "why": "After the user says it's done in Bolta. The ghost row gone and a valid LinkedIn row for Priya means the move happened. A new valid row but the ghost still there: connected but not moved, so her drafts are still held; point to the row's \"Already connected?\" button."
+    },
+    {
+      "tool": "list-scheduled-posts",
+      "arguments": {
+        "workspace_id": "<brand's workspace id>",
+        "start_date": "<now, UTC with Z>",
+        "end_date": "<14 days ahead, UTC with Z>"
+      },
+      "why": "Moved drafts go out at their chosen time if still ahead, else the next free slot. Read the times back instead of promising them."
+    }
+  ],
+  "say": "Priya's LinkedIn is connected and her voice and drafts moved to it. Her 3 approved posts are scheduled for Tue 9:07 am, Thu 12:23 pm and next Mon 9:15 am.",
+  "never": [
+    "Sending get-connect-link and saying her drafts will now post: connecting alone releases nothing.",
+    "Calling her account disconnected or offering a reconnect.",
+    "Saying the move happened before the account list shows the ghost row gone."
+  ]
+}

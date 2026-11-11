@@ -1,0 +1,48 @@
+{
+  "ask": "How did last week do? What should we change?",
+  "playbook": "results",
+  "steps": [
+    {
+      "tool": "list-workspace-posts",
+      "arguments": {
+        "workspace_id": "<brand's workspace id>",
+        "status": "published",
+        "include_metrics": true,
+        "start_date": "<last Monday, brand clock>",
+        "end_date": "<last Sunday, brand clock>",
+        "sort_by": "engagement"
+      },
+      "why": "Process first: what went out last week, then how each did, best first. Posts under about a week old may not have synced (Threads every 12 hours, others about weekly): zeros there mean not synced yet, so leave them out of the ranking and say how many. No publication record: missing data, not a flop."
+    },
+    {
+      "tool": "list-inbox-items",
+      "arguments": {
+        "workspace_id": "<brand's workspace id>",
+        "source": "team"
+      },
+      "why": "What was made but not decided: the decision rate (decided out of made) explains a quiet week better than engagement does."
+    },
+    {
+      "tool": "list-account-insights",
+      "arguments": {
+        "workspace_id": "<brand's workspace id>",
+        "days": 7
+      },
+      "why": "Per account: growth, and needs_reconnect. A disconnected account stops syncing, so its zeros are missing data. Here Instagram needs a reconnect."
+    },
+    {
+      "tool": "get-connect-link",
+      "arguments": {
+        "workspace_id": "<brand's workspace id>",
+        "platform": "instagram"
+      },
+      "why": "The one fix that comes before any content change: numbers can't be read until it syncs again."
+    }
+  ],
+  "say": "Last week in Acme: Bolta made 10 drafts, you decided 8, 7 went out. LinkedIn carried it: the post on hiring mistakes got 38 reactions and 12 comments, about twice your other posts. X posts got little, but 2 of them are only 3 days old and not synced yet. Instagram is disconnected, so its numbers are missing: reconnect here first <link>. One change I'd make after that: have your Monday routine write one more post like the hiring one each week. Want that?",
+  "never": [
+    "Ranking posts that haven't synced, or reading a disconnected account's zeros as a flop.",
+    "Saying the hiring post caused anything beyond its own numbers, or adding a benchmark.",
+    "Offering a menu of changes: exactly one next step."
+  ]
+}

@@ -31,6 +31,6 @@
   "never": [
     "Running it before saying the credits.",
     "Using it for a single post: you write that one, free.",
-    "Promising images or a language."
+    "Promising images: generate_images adds an image idea at most, never an image."
   ]
 }

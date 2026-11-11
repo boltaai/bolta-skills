@@ -9,3 +9,7 @@ Read with [finding what's waiting](review-finding-drafts.md) to sort the numbere
 - **Library:** rows with `is_library` true or a `library_topic`. Test this first: they also carry a `cascade_name`. See [more decisions](review-more-decisions.md).
 - **One idea, N versions:** rows sharing a `cascade_name` (one draft per person or angle). Show the idea once, then each version.
 - **Saved by you or me:** everything else ("me" is you, the assistant). Use a teammate's name from `post_creator` when it isn't the user. A leftover row with a `workflow_run_id` is "from Bolta".
+
+## Always
+
+- Follow the house rules in the Bolta skill.

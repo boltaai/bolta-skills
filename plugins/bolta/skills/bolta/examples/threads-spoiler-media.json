@@ -1,0 +1,34 @@
+{
+  "ask": "Tease the new packaging on Threads tomorrow, but blur the photo so people tap to see it: https://cdn.example.com/new-box.jpg",
+  "playbook": "post",
+  "steps": [
+    {
+      "tool": "create-post",
+      "arguments": {
+        "workspace_id": "<brand's workspace id>",
+        "content": "New box, same coffee. Tap if you want to see it before it ships.",
+        "account_ids": [
+          "<Threads account id>"
+        ],
+        "media": [
+          {
+            "url": "https://cdn.example.com/new-box.jpg",
+            "alt_text": "A matte green coffee box with the Acme logo in gold"
+          }
+        ],
+        "platform_specific": {
+          "threads": {
+            "is_spoiler_media": true
+          }
+        },
+        "idempotency_key": "new-box-spoiler-1"
+      },
+      "why": "The decision: spoiler media, because the reveal is the point and the image does the work; the text says what's behind the blur so the tap feels earned. It blurs images and videos only, so it needs the photo. Not a ghost post: the reveal should stay up."
+    }
+  ],
+  "say": "Saved to Acme as a Threads draft: \"New box, same coffee. Tap if you want to see it before it ships.\" The photo is blurred until someone taps it. Nothing goes out yet. What time tomorrow?",
+  "never": [
+    "Spoiler on a text-only post: it does nothing.",
+    "Hiding a phrase of the text from here: a text spoiler is marked in Bolta's web app only."
+  ]
+}

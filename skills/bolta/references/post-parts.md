@@ -7,13 +7,14 @@ A thread on X, a reply chain on Threads or Bluesky, or a Facebook post with a co
 - Only `bulk-create-posts` takes parts. Each item carries a nested `contents` list instead of `content`:
   `{"account_ids": [...], "status": "Draft", "contents": [{"content": "...", "index": 0}, {"content": "...", "index": 1, "media": [{"media_url": "https://...", "alt_text": "..."}]}]}`
 - Media inside a part must use `media_url`. A `url` key there is dropped without a word.
-- `create-post` has no parts. `update-post` changes part 1 only and keeps the rest. To change a later part, save a new post with all the parts and, after a yes, delete the old draft; or change it in Bolta's composer.
+- `create-post` has no parts. `update-post` changes part 1 only. To change a later part, save a new post with all parts and, after a yes, delete the old draft; or edit it in Bolta.
 - Bolta spaces the parts itself; the gap between them can't be chosen.
+- A batch item carries no `platform_specific` and no poll: set settings after, one `update-post` per post.
 
 ## What each network does with parts
 
 - **X, Threads, Bluesky:** every part after the first goes out as a reply, whatever `post_type` says.
-  - X: each part replies to the one before. If a part fails, the thread stops there; the rest don't go out.
+  - X: each part replies to the one before, **only once the post has an X setting saved**, which a batch never does: after it, set one (`reply_settings` is enough) with `update-post-platform-details`, or parts 2 onward go out as separate posts ([X](post-settings-x.md)). A failed part stops it.
   - Threads: each part replies to the first post, so they read as answers to it, not a chain. Only part 1's text past 500 characters is split into a chain of replies; a later part over 500 is cut short. For a long Threads thread, put all the text in one long first part.
   - Bluesky: each part replies to the one before.
 - **Facebook:** part 2 and later become comments from the Page, a few seconds after the post, one image each. A comment that fails is skipped silently, so check the live post before saying the comment is there.
@@ -38,7 +39,7 @@ An item aimed straight at Instagram (not through an account group) with no media
 
 - The `bulk-create-posts` reply lists refused items in `rejected`, each with a reason. Those posts don't exist.
 - Poll `bulk-create-status` until `completed`. `skipped_count` and `skip_reasons` say how many were skipped and why; each item in `items` carries its own `reason` and `error`. Report `quality_blocked` too.
-- Tell the user every item that didn't save and what to add.
+- Name every item that didn't save and what to add.
 
 ## Always
 

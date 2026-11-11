@@ -24,3 +24,4 @@ Say it as: "Bolta reads your files for ideas, a few a day, and each post takes o
 
 - Send Library work to Bolta's own pages; never claim I did it.
 - Never say a file was read before a routine, campaign or the Library writes from it.
+- Follow the house rules in the Bolta skill.

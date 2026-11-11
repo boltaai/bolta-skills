@@ -1,0 +1,84 @@
+{
+  "ask": "Yes, set it up and turn it on.",
+  "playbook": "routine",
+  "before": "The user asked for 'my stories as a founder, LinkedIn and X'. list-voice-profiles showed a person voice 'Maya (founder)' beside the brand voice. The user named three real events to draw on: losing their biggest client in March, rebuilding onboarding, hiring a first engineer. The summary said: every Tuesday 8:00 am (London), 2 first-person drafts in Maya's voice for LinkedIn and X, from those events, raw rather than polished, no selling; they wait for your yes; uses credits each run.",
+  "steps": [
+    {
+      "tool": "create-routine",
+      "arguments": {
+        "workspace_id": "<brand's workspace id>",
+        "name": "Founder stories, Maya",
+        "goal": "Share what we are learning building the company, in Maya's own voice: the decision, what it cost, what changed",
+        "template_key": "founder_story_series",
+        "trigger_type": "schedule",
+        "schedule": {
+          "interval": "weekly",
+          "day": "tuesday",
+          "time": "08:00"
+        },
+        "timezone": "<timezone from get-workspace>",
+        "approval_policy": "review_every_artifact",
+        "source_bindings": [
+          {
+            "provider": "social_account",
+            "ref": "<Maya's LinkedIn account id>"
+          },
+          {
+            "provider": "social_account",
+            "ref": "<Maya's X account id>"
+          }
+        ],
+        "destination_config": {
+          "voice_profile_id": "<Maya's voice id from list-voice-profiles>"
+        },
+        "output_config": {
+          "artifact_type": "post",
+          "count": 2,
+          "settings": {
+            "storyteller": {
+              "storySources": [
+                "milestones",
+                "failures_lessons"
+              ],
+              "narrativeThemes": [
+                "losing our biggest client",
+                "rebuilding onboarding",
+                "hiring our first engineer"
+              ],
+              "contentStyle": "raw",
+              "storyLength": "medium"
+            },
+            "editorial": {
+              "hashtagStrategy": "minimal",
+              "promotionalAngle": false
+            }
+          }
+        },
+        "instructions": "Write as Maya, first person. Draw only on these real events: we lost our biggest client in March and rebuilt onboarding because of it; we hired our first engineer in June. Never invent facts, numbers, prices or dates."
+      },
+      "why": "A person voice for a first-person story routine; the brand voice would sound like the company. count is sent with output_config, or Bolta would use 4 instead of 2. The storyteller settings shape the story, but only instructions carry the real events: without them the posts turn generic. No platforms key: the two bound accounts decide the networks."
+    },
+    {
+      "tool": "activate-routine",
+      "arguments": {
+        "workspace_id": "<brand's workspace id>",
+        "routine_id": "<routine id>"
+      },
+      "why": "The yes covered switching on. Switching on is not running: nothing is written until Tuesday."
+    },
+    {
+      "tool": "get-routine",
+      "arguments": {
+        "workspace_id": "<brand's workspace id>",
+        "routine_id": "<routine id>"
+      },
+      "why": "Read next_run_at (UTC) and say it in the brand's clock; only now say it is on."
+    }
+  ],
+  "say": "Bolta routine on: Founder stories, in Maya's voice. First 2 drafts Tue Nov 17, 8:00 am (London), for LinkedIn and X. When you have a new story, tell me and I'll add it to what it draws on.",
+  "never": [
+    "Running a story routine with no real events in instructions: it writes generic stories.",
+    "The brand voice for a first-person routine when a person voice exists.",
+    "Leaving count out of output_config: founder stories would jump from 2 to 4 a run."
+  ]
+}

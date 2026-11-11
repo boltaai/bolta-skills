@@ -1,5 +1,5 @@
 {
-  "ask": "Turn our launch notes into a 3-part X thread, with the dashboard screenshot on the last part: https://cdn.example.com/dashboard.png",
+  "ask": "Turn our launch notes into an X thread, with the dashboard screenshot on the last part: https://cdn.example.com/dashboard.png. Last launch got a pile of spam replies.",
   "playbook": "post",
   "steps": [
     {
@@ -43,7 +43,7 @@
           }
         ]
       },
-      "why": "Parts only go in through bulk-create-posts, as a nested contents list; each part is checked against the limit on its own. Media inside a part is media_url (a url key there is dropped). Poll bulk-create-status for the created_post_id."
+      "why": "The decision: a thread, not one post, because there are three separate points and each part stands alone; 3 parts, hook first, the screenshot where it pays off. Parts only go in through bulk-create-posts as a nested contents list; media inside a part is media_url. Poll bulk-create-status for the created_post_id."
     },
     {
       "tool": "update-post-platform-details",
@@ -51,16 +51,25 @@
         "post_id": "<created_post_id from bulk-create-status>",
         "platform": "x",
         "fields": {
-          "reply_settings": "everyone"
+          "reply_settings": "followers"
         }
       },
-      "why": "A bulk-created post has no X settings, and without them Bolta posts parts 2 and 3 as separate posts, not replies. Saving any X setting creates them."
+      "why": "Two jobs in one call. The user's spam worry decides the value: followers means only accounts the brand follows can reply, which suits a launch. And a batch saves no X settings; without any saved, parts 2 and 3 go out as separate posts, not replies. Saving any X setting makes them chain."
+    },
+    {
+      "tool": "get-post-platform-details",
+      "arguments": {
+        "post_id": "<created_post_id from bulk-create-status>",
+        "platform": "x"
+      },
+      "why": "Read back reply_settings before saying the thread is set."
     }
   ],
-  "say": "Saved to Acme as a draft X thread: part 1 is the post, parts 2 and 3 go out as replies, with your screenshot on part 3. Nothing goes out yet. Schedule it, or change a part?",
+  "say": "Saved to Acme as a draft X thread: part 1 is the post, parts 2 and 3 go out as replies, with your screenshot on part 3. Only accounts you follow can reply. Nothing goes out yet. Schedule it, or change a part?",
   "never": [
     "create-post for a thread: it saves part 1 only.",
-    "update-post to change part 2 or 3: it edits part 1 only.",
+    "Leaving the batch-saved thread with no X setting: the parts go out as separate posts.",
+    "A poll in the thread: X drops it.",
     "A video on X: it takes images only."
   ]
 }

@@ -1,0 +1,50 @@
+{
+  "ask": "Yes, send me that every Monday.",
+  "playbook": "routine",
+  "before": "The user asked 'tell me every week what's working'. The summary said: every Monday 8:00 am (Sydney), Bolta emails a report of the week's numbers to the brand's admins and saves it in Reports; it posts nothing and needs no review; Bolta's checks still ask before saving and switching on.",
+  "steps": [
+    {
+      "tool": "create-routine",
+      "arguments": {
+        "workspace_id": "<brand's workspace id>",
+        "name": "Weekly numbers",
+        "goal": "Tell me what worked this week, and what to do more of",
+        "template_key": "performance_digest",
+        "trigger_type": "schedule",
+        "schedule": {
+          "interval": "weekly",
+          "day": "monday",
+          "time": "08:00"
+        },
+        "timezone": "<timezone from get-workspace>",
+        "approval_policy": "inherit",
+        "output_config": {
+          "artifact_type": "report",
+          "count": 1
+        }
+      },
+      "why": "Reports take only inherit. No account to bind: only the account deep dive needs one. No voice, no writing settings."
+    },
+    {
+      "tool": "activate-routine",
+      "arguments": {
+        "workspace_id": "<brand's workspace id>",
+        "routine_id": "<routine id>"
+      },
+      "why": "The yes covered switching on; no posts can result."
+    },
+    {
+      "tool": "get-routine",
+      "arguments": {
+        "workspace_id": "<brand's workspace id>",
+        "routine_id": "<routine id>"
+      },
+      "why": "Read next_run_at back in the brand's clock."
+    }
+  ],
+  "say": "Bolta routine on: Weekly numbers. The first report lands in your inbox and in Reports on Mon Nov 16, 8:00 am (Sydney). It posts nothing.",
+  "never": [
+    "approval_policy review_every_artifact or auto on a report: refused.",
+    "Saying a report will post or needs approving."
+  ]
+}

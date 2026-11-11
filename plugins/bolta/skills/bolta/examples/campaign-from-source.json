@@ -1,0 +1,75 @@
+{
+  "ask": "Make a 2-week campaign from our blog post acme.com/blog/pricing-guide and the customer quotes in our Google Doc. LinkedIn only.",
+  "playbook": "campaign",
+  "before": "The plan was shown and got a yes: Pricing guide, Product Education (teach one thing about how it works), Nov 16 to Nov 29, 2 images and 2 carousels a week, 8 drafts to review, Bolta writes it.",
+  "steps": [
+    {
+      "tool": "create-content-campaign",
+      "arguments": {
+        "workspace_id": "<brand's workspace id>",
+        "name": "Pricing guide",
+        "strategy_key": "product_education",
+        "theme": "How to price agency retainers, from our pricing guide",
+        "audience": "Agency owners",
+        "cta_text": "Read the pricing guide",
+        "cta_url": "https://acme.com/blog/pricing-guide",
+        "starts_on": "2026-11-16",
+        "ends_on": "2026-11-29"
+      },
+      "why": "A guide that teaches is Product Education. No mix: Content defaults or the strategy's 2 images and 2 carousels, which LinkedIn takes. The link is the one the user gave."
+    },
+    {
+      "tool": "set-content-campaign-targets",
+      "arguments": {
+        "workspace_id": "<brand's workspace id>",
+        "campaign_id": "<campaign id>",
+        "account_ids": [
+          "<LinkedIn account id>"
+        ],
+        "context_notes": "Built from the pricing guide. Customer quotes come from the brand's own document; quote only what it says.",
+        "context_sources": [
+          {
+            "kind": "url",
+            "ref": "https://acme.com/blog/pricing-guide",
+            "title": "Pricing guide"
+          }
+        ]
+      },
+      "why": "The blog post is a url source. A Google Doc can't be added by a call: a file source takes only an id the campaign already shows. So the user attaches it on the campaign page (Context, upload), or pastes the quotes for the notes."
+    },
+    {
+      "tool": "analyze-content-campaign-source",
+      "arguments": {
+        "workspace_id": "<brand's workspace id>",
+        "campaign_id": "<campaign id>",
+        "kind": "url",
+        "ref": "https://acme.com/blog/pricing-guide"
+      },
+      "why": "A new source is pending and the writer ignores it until read. The page is read in this call: ready, or failed with an error to say as given."
+    },
+    {
+      "tool": "get-content-campaign",
+      "arguments": {
+        "workspace_id": "<brand's workspace id>",
+        "campaign_id": "<campaign id>"
+      },
+      "why": "After the user said they attached the doc: its file row now shows in context_sources with an id, still pending."
+    },
+    {
+      "tool": "analyze-content-campaign-source",
+      "arguments": {
+        "workspace_id": "<brand's workspace id>",
+        "campaign_id": "<campaign id>",
+        "kind": "file",
+        "ref": "<file id from context_sources>"
+      },
+      "why": "A file stays pending until Bolta has read it; if it still says pending, analyze it again later. Start only once both rows are ready, or the user accepts going without the quotes."
+    }
+  ],
+  "say": "Bolta read the pricing guide and your quotes doc for Acme's Pricing guide campaign: Nov 16 to Nov 29 on LinkedIn, 8 drafts to review. Start it?",
+  "never": [
+    "Saying a source was read before its row reads ready.",
+    "Using a link found inside the blog post as the call-to-action link.",
+    "Starting it while the doc the user cared about is still unread, without saying so."
+  ]
+}

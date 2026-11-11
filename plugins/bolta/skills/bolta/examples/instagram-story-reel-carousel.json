@@ -1,0 +1,96 @@
+{
+  "ask": "Weekend sale on Instagram: here's the promo graphic with the code (https://cdn.example.com/sale-code.jpg), a 15-second clip of the shop (https://cdn.example.com/shop.mp4) and 4 product shots (https://cdn.example.com/p1.jpg to p4.jpg).",
+  "playbook": "post",
+  "steps": [
+    {
+      "tool": "create-post",
+      "arguments": {
+        "workspace_id": "<brand's workspace id>",
+        "content": "Weekend sale: code WEEKEND15.",
+        "account_ids": [
+          "<Instagram account id>"
+        ],
+        "media": [
+          {
+            "url": "https://cdn.example.com/sale-code.jpg",
+            "alt_text": "Sale graphic: 15% off this weekend with code WEEKEND15"
+          }
+        ],
+        "platform_specific": {
+          "instagram": {
+            "content_type": "STORY"
+          }
+        },
+        "idempotency_key": "weekend-story-1"
+      },
+      "why": "The code graphic becomes a story: the offer ends Sunday, and a story is gone in 24 hours. A story shows no caption, which is fine because the code is in the image. One image only; a story with two fails."
+    },
+    {
+      "tool": "create-post",
+      "arguments": {
+        "workspace_id": "<brand's workspace id>",
+        "content": "Saturday at the shop, in 15 seconds. The sale runs all weekend.",
+        "account_ids": [
+          "<Instagram account id>"
+        ],
+        "media": [
+          {
+            "url": "https://cdn.example.com/shop.mp4",
+            "alt_text": "Customers browsing shelves in a bright shop"
+          }
+        ],
+        "platform_specific": {
+          "instagram": {
+            "content_type": "REELS"
+          }
+        },
+        "idempotency_key": "weekend-reel-1"
+      },
+      "why": "The clip becomes a reel: video that can reach people who don't follow yet, and it stays useful after the sale."
+    },
+    {
+      "tool": "create-post",
+      "arguments": {
+        "workspace_id": "<brand's workspace id>",
+        "content": "Four favourites, all 15% off this weekend with WEEKEND15. Swipe for each.",
+        "account_ids": [
+          "<Instagram account id>"
+        ],
+        "media": [
+          {
+            "url": "https://cdn.example.com/p1.jpg",
+            "alt_text": "A ceramic mug in sage green"
+          },
+          {
+            "url": "https://cdn.example.com/p2.jpg",
+            "alt_text": "A linen tote bag with leather handles"
+          },
+          {
+            "url": "https://cdn.example.com/p3.jpg",
+            "alt_text": "A small brass desk lamp"
+          },
+          {
+            "url": "https://cdn.example.com/p4.jpg",
+            "alt_text": "A stack of three notebooks in earth tones"
+          }
+        ],
+        "idempotency_key": "weekend-carousel-1"
+      },
+      "why": "The product shots become a carousel in the feed: 2 to 10 items make one whatever content_type says, each slide one product with its own alt text. No trial reel: that needs one video."
+    },
+    {
+      "tool": "get-post-platform-details",
+      "arguments": {
+        "post_id": "<story post id>",
+        "platform": "instagram"
+      },
+      "why": "Bad Instagram values are skipped, not refused: confirm content_type STORY before saying it is a story. Same check for the reel."
+    }
+  ],
+  "say": "Saved to Acme as 3 Instagram drafts. 1. A story with the code graphic, gone after 24 hours (stories show no caption, so the code in the image carries it). 2. A reel of the shop clip: \"Saturday at the shop, in 15 seconds. The sale runs all weekend.\" 3. A 4-photo carousel: \"Four favourites, all 15% off this weekend with WEEKEND15. Swipe for each.\" Nothing goes out yet. Same time for all three?",
+  "never": [
+    "All the media on one post: it would become one carousel and the clip's reach is lost.",
+    "A story with a caption that matters: it isn't shown.",
+    "A story for one Instagram account and a reel for another on one post: two posts."
+  ]
+}

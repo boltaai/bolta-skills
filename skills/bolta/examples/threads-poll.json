@@ -1,0 +1,65 @@
+{
+  "ask": "Ask our Threads and X followers which flavour we should bring back: lavender, pistachio or black sesame.",
+  "playbook": "post",
+  "steps": [
+    {
+      "tool": "create-post",
+      "arguments": {
+        "workspace_id": "<brand's workspace id>",
+        "content": "Bringing one flavour back for spring. You choose:",
+        "account_ids": [
+          "<Threads account id>"
+        ],
+        "poll": {
+          "options": [
+            "Lavender",
+            "Pistachio",
+            "Black sesame"
+          ]
+        },
+        "platform_specific": {
+          "threads": {
+            "topic_tag": "Ice Cream"
+          }
+        },
+        "idempotency_key": "flavour-poll-threads-1"
+      },
+      "why": "The decision: a Threads poll is the poll field on create-post, on a text post with no media (with media the poll isn't sent). X can't share this post: X ignores the poll field and needs its poll as an X setting, so X gets its own post. 3 options, short enough for both networks."
+    },
+    {
+      "tool": "create-post",
+      "arguments": {
+        "workspace_id": "<brand's workspace id>",
+        "content": "Bringing one flavour back for spring. You choose:",
+        "account_ids": [
+          "<X account id>"
+        ],
+        "idempotency_key": "flavour-poll-x-1"
+      },
+      "why": "X's own post: the question is the text."
+    },
+    {
+      "tool": "update-post-platform-details",
+      "arguments": {
+        "post_id": "<X post id>",
+        "platform": "x",
+        "fields": {
+          "post_type": "POLL",
+          "poll_options": [
+            "Lavender",
+            "Pistachio",
+            "Black sesame"
+          ],
+          "poll_duration_minutes": 1440
+        }
+      },
+      "why": "X's poll is a setting; this call refuses an option over 25 characters or a bad duration instead of dropping it. One day: a quick choice."
+    }
+  ],
+  "say": "Saved to Acme as 2 drafts. 1. Threads: \"Bringing one flavour back for spring. You choose:\" with a poll (Lavender, Pistachio, Black sesame), topic Ice Cream. 2. X: the same question as a one-day poll. Nothing goes out yet. Schedule both for the same time?",
+  "never": [
+    "One post for Threads and X with the poll field: X would go out with no poll.",
+    "An image on the Threads poll post: the poll would be dropped.",
+    "A poll in a batch item: batch items carry no poll."
+  ]
+}

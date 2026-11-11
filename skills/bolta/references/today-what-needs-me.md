@@ -34,3 +34,7 @@
 > Ended: campaign "Spring sale" ended Oct 12.
 >
 > Want to go through the 6 waiting?
+
+## Always
+
+- Follow the house rules in the Bolta skill.

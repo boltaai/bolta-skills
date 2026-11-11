@@ -38,3 +38,7 @@ From `list-workspace-posts` with `status: "published"`, `start_date`, `end_date`
 - Correlation, not cause: "posts that opened with a question averaged 41 (6 posts)", not "questions win".
 - Name the evidence: "the two best were both customer stories". Show each post's first words, network and day.
 - Never invent a benchmark ("the average is 3%") or promise a result. A new or just-reconnected account has no trend yet.
+
+## Always
+
+- Follow the house rules in the Bolta skill.

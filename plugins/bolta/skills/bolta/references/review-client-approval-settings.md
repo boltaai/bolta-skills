@@ -4,7 +4,7 @@ Three settings decide whether a post waits, and for whom. Read with [review-clie
 
 ## The settings
 
-- **Client sign-off required**: nothing on the brand is approved, scheduled or posted without the client's yes. Only the organization owner (the brand owner if there is no organization) changes it, in the brand's settings in Bolta. How it behaves once on: [review-client-details.md](review-client-details.md).
+- **Client sign-off required**: nothing on the brand is approved, scheduled or posted without the client's yes. Only the organization owner (the brand owner if there is no organization) changes it, in the brand's settings in Bolta. How it behaves once on: [review-client-signoff.md](review-client-signoff.md). `get-workspace` doesn't show it; `get-post` `client_signoff.required` does.
 - **Review mode**: every post waits for a team yes before it can be scheduled or posted.
 - **A routine's "ask me first"**: its drafts wait for a yes. A Bolta routine can instead send each run's drafts straight to the client, with no team pass; their yes takes the next open posting time. Setup: [routine-outputs.md](routine-outputs.md).
 

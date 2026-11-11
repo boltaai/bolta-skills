@@ -1,0 +1,46 @@
+{
+  "ask": "Tuesdays and Thursdays at 10, LinkedIn only, one post each time. Save it.",
+  "playbook": "routine",
+  "before": "The user said 'set up something that keeps us posting, you pick'. plan-routine with an empty ask returned status shaping: a working plan (weekly posts about the studio's classes, Monday 9:00, LinkedIn and Instagram, 3 a run), filled saying where each choice came from (the brand's site and best posts), and one question: which days suit them. The reply showed it and asked that one question.",
+  "steps": [
+    {
+      "tool": "revise-plan",
+      "arguments": {
+        "workspace_id": "<brand's workspace id>",
+        "proposal_id": "<plan id from plan-routine>",
+        "changes": {
+          "schedule": {
+            "interval": "weekly",
+            "days": [
+              "tuesday",
+              "thursday"
+            ],
+            "time": "10:00"
+          },
+          "platforms": [
+            "linkedin"
+          ],
+          "account_ids": [
+            "<LinkedIn account id>"
+          ],
+          "count": 1
+        }
+      },
+      "why": "Exact fields the user said, nothing more. The planner's schedule takes days (several weekdays in one routine). It returns a new plan id; the old one can no longer be saved."
+    },
+    {
+      "tool": "confirm-plan",
+      "arguments": {
+        "workspace_id": "<brand's workspace id>",
+        "proposal_id": "<new plan id from revise-plan>"
+      },
+      "why": "'Save it' is a yes to save, not to switch on: no switch_on."
+    }
+  ],
+  "say": "Saved, switched off: Studio classes on LinkedIn, 1 draft every Tuesday and Thursday at 10:00 am (Toronto), each waiting for your yes. Switch it on?",
+  "never": [
+    "Asking what to post about before showing a plan: the site and best posts are the topic.",
+    "Saving the old plan id after a revision: it is refused.",
+    "switch_on true on a yes to save."
+  ]
+}

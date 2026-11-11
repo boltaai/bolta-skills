@@ -72,7 +72,7 @@ here=$(dirname "$0")
 reader="$here/bolta-json.sh"
 
 ok=0 tool="" server="" sid="" prompt="" conn="Bolta" brand=""
-create="" update="" policy="" rid="" action="" bulk="" cid="" items=""
+create="" update="" policy="" rid="" action="" bulk="" cid="" items="" preview=0
 parsed=$(sh "$reader" guard 2>/dev/null) || parsed=""
 oldifs=$IFS
 IFS='
@@ -96,6 +96,7 @@ for kv in $parsed; do
     BULK) bulk=$v ;;
     CID) cid=$v ;;
     ITEMS) items=$v ;;
+    PREVIEW) preview=$v ;;
   esac
 done
 IFS=$oldifs
@@ -274,6 +275,8 @@ case "$tool" in
   update-voice-profile|update-business-dna)
     ask "Check before it changes ($conn): this changes your voice or what Bolta knows about your business. Every future draft uses it. OK only if you have seen the before and after." ;;
   extract-business-dna)
+    # preview: true only reads the site and shows it; nothing is saved.
+    if [ "$preview" = 1 ]; then exit 0; fi
     ask "Check before it changes ($conn): reading this website can replace what Bolta knows about your business. Every future draft uses it. OK only if it is your own site." ;;
   create-routine)
     if [ "$careful" = 0 ] && [ "$policy" = review ]; then exit 0; fi

@@ -8,13 +8,13 @@ Bolta facts for images, video and how text is shown. Which links work, file size
 - `url` works although the listed schema names `download_url` and `file_id`. If a call is refused for lacking them, send the same link as `download_url` with `file_id: "url"`.
 - Media is attached per post, from a public link the user gave, at most 25 items per call; Bolta tries to copy each file into its own storage. The brand's Media Library (bolta.ai/dashboard/media) is browsed and filled in Bolta only.
 - No link yet? Say: "Instagram needs an image or video. Send me a public link to it, or add it to the post in Bolta."
-- Need an image made? Bolta's AI Studio (bolta.ai/dashboard/ai-studio) makes one; the user then attaches it to the post in Bolta. Bolta's post-writing tools make no images.
+- Need an image made? Bolta's AI Studio (bolta.ai/dashboard/ai-studio) makes one; the user then attaches it to the post in Bolta. Bolta's post-writing tools make no images. A one-off video is made there too; for a run of videos, a campaign with `feed_video` (16:9) or `short_video` (9:16) ([campaign](campaign.md)).
 - Images and video made on a schedule come from Bolta routines and campaigns ([routine](routine.md), [campaign](campaign.md)).
 
 ## Alt text
 
 - Write `alt_text` on every image: what it shows, in one plain sentence of 255 characters or fewer, like "Three founders laughing around a laptop in a sunny office."
-- Used by Instagram, Threads and Pinterest. On Pinterest the pin's own `alt_text` setting (500 characters) wins ([TikTok, YouTube, Pinterest](post-networks-video.md)).
+- Used by Instagram, Threads and Pinterest. On Pinterest the pin's own `alt_text` setting (500 characters) wins ([Pinterest](post-settings-pinterest.md)).
 - Not sent to X, LinkedIn, Facebook, Mastodon or Discord. Bluesky always gets an empty alt.
 - Alt text on media already attached can't be changed from here: sending the same link again is skipped. Point the user to the post in Bolta.
 

@@ -6,12 +6,12 @@ About your business (which record a voice reads, a second site, the fields) and 
 
 ## A voice for a person
 
-One brand voice, but a founder or team member can have their own. "Set up a voice for our founder Dana. Her posts should sound like her, not like Acme" is the ask.
+One brand voice, but a founder or team member can have their own ("Her posts should sound like her, not like Acme").
 
 - `create-voice-profile` with the person's `name`, `is_default` false, and a `writing_sample` they wrote themselves, never one you or Bolta wrote. The sample also sets the voice's tone, so it must be theirs.
 - Create doesn't save `speaker_mode`: follow with `update-voice-profile` `speaker_mode` founder so drafts write as "I".
 - Name their accounts in `account_ids` only when they say so: those accounts move off the brand voice. Left out, every account no voice owns yet goes to this voice.
-- Their angle is set in Bolta under Brand > Edit voice.
+- Their angle is set in Bolta under Brand > Edit voice. Moving an account to their voice after both voices exist is in Bolta too ([rules or settings](voice-rules-or-settings.md)).
 
 Then say what changed, and offer the routine that puts the voice to work:
 
@@ -23,10 +23,9 @@ Example: [person-voice](../examples/person-voice.json). One idea written for eac
 
 - Recent reasons given on a no (up to 5 from the last 30 days) shape the next drafts for that voice, sometimes a little late.
 - Overnight, once about 10 new decisions (yeses, edits and no's) build up since the voice last changed, Bolta adds up to 2 DOs, 2 DON'Ts and 1 tone rule. Any change to the voice (rules, tone, audience, name), the user's own included, starts that count again. Bolta never removes a rule. Added rules look like typed ones; the tone rule shows in `get-voice-profile`.
-- Edits teach because Bolta keeps its first version beside the user's. Over a plain API-key connection there is no first version, so edits don't teach ([connect](connect.md)).
+- Only Bolta's own writing teaches: drafts from routines, campaigns, voice batches, Bolta's chat, and posts saved here while signed in to Bolta. Edits teach because Bolta keeps its first version beside the user's. A post saved with `create-post` over a pasted Bolta API key, or typed in Bolta, teaches nothing: not its yes, its no or its edits ([connect](connect.md)).
 - Deleting a draft teaches nothing. A no with a reason does: "Too salesy, we never quote prices" teaches; a silent delete doesn't.
 - `feedback_count` in `get-voice-profile` counts yeses, edits and posts a person published without approving first, and can lag: never say it moved right after a yes given here. A no doesn't raise it.
-- Repeated no's about tone can lead Bolta to propose a tone-dial change in the app.
 - The Learning tab (bolta.ai/dashboard/knowledge-base?tab=memory) shows version history, including overnight changes, what was learned per account, and the brief.
 
 The steadiest teacher is a routine's weekly drafts: a yes, an edit, or a no with one line of why, every week.
@@ -35,7 +34,7 @@ The learning line, once per conversation:
 
 > Every yes, edit and reason for a no is saved. After about 10 new ones, Bolta updates your DOs and DON'Ts overnight. See what changed in the Learning tab.
 
-Asked "what has Bolta learned?": show the DOs and DON'Ts as they stand, say Bolta's additions look the same as typed ones, and point to the Learning tab for what changed when.
+Asked "what has Bolta learned?": show the DOs and DON'Ts as they stand (additions look like typed ones) and point to the Learning tab.
 
 ## Always
 

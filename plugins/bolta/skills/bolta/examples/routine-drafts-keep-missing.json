@@ -1,0 +1,36 @@
+{
+  "ask": "The Monday posts keep coming out too salesy.",
+  "playbook": "routine",
+  "before": "Over two weeks the user turned down 3 of the routine's drafts with reasons like 'reads like an ad', each sent with reject-post and categories too_salesy.",
+  "steps": [
+    {
+      "tool": "get-routine",
+      "arguments": {
+        "workspace_id": "<brand's workspace id>",
+        "routine_id": "<routine id>"
+      },
+      "why": "performance_summary: are drafts being decided, and how many are no's? Here 8 made, 5 decided (2 yes, 3 no), 3 waiting: decided enough to judge the writing."
+    },
+    {
+      "tool": "list-routine-recommendations",
+      "arguments": {
+        "workspace_id": "<brand's workspace id>",
+        "routine_id": "<routine id>"
+      },
+      "why": "Bolta's Monday review of this routine: one row, high_rejection, proposing 2 drafts a run instead of 4."
+    },
+    {
+      "tool": "list-bolta-suggestions",
+      "arguments": {
+        "workspace_id": "<brand's workspace id>"
+      },
+      "why": "Brand-wide suggestions from approvals and rejections; none for this routine yet."
+    }
+  ],
+  "say": "Your last 3 Monday drafts were turned down as too salesy. Bolta recommends 2 drafts a run instead of 4, putting the same effort into fewer. Or I can add one line to its instructions: 'Teach, don't sell: mention an offer only when the post is about it.' Which would you like?",
+  "never": [
+    "Applying a recommendation or editing the routine before the user chooses.",
+    "Changing the voice and the routine for one complaint.",
+    "Counting drafts made as if they were drafts decided."
+  ]
+}

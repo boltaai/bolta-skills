@@ -41,16 +41,16 @@ A refused `run-routine-now` (already running, too many drafts waiting, a daily c
 
 1. `get-routine` and `list-routine-runs`.
 2. Explain in 2-4 plain sentences what went wrong.
-3. Propose one change, only to `name`, `goal`, `instructions`, or `schedule` with `timezone`, and offer to run it once after: "Change it and run it now? Uses credits."
+3. Propose one change, to `goal`, `instructions`, `schedule` with `timezone`, or the one setting the error names (no reply `topics`; `auto` where the routine can't post without asking: back to ask me first). Offer one run after: "Change it and run it now? Uses credits."
 4. On that one yes: `get-routine` again, `update-routine` (an `instructions` change is the current text plus the new sentence, sent whole), `run-routine-now`.
 
 Example, a skipped run: "Monday's run skipped: Bolta doesn't know what the business does yet, and this routine has no topic, so it didn't write generic posts. Add 'Write about our spring workshops' to its instructions and run it once now? Uses credits." Steps: [fix-a-failed-run](../examples/fix-a-failed-run.json).
 
-Anything else (a disconnected account, a source to add, who approves) goes to [connect](connect.md) or the routine's page. Bolta's web Inbox has a Fix Routine button that does the same.
+A disconnected account or an app to connect: [connect](connect.md). Bolta's web Inbox has a Fix Routine button that does the same.
 
-## Bolta's weekly suggestions
+## Bolta's weekly recommendations
 
-On Mondays Bolta may suggest a change on the routine's page, bolta.ai/dashboard/routines/<id> (Performance). Point them there to accept or dismiss it. Deeper results: [results](results.md).
+Read and apply them here, on a yes: [references/routine-improving.md](routine-improving.md). They also show on the routine's page (Performance). Deeper results: [results](results.md).
 
 ## Always
 

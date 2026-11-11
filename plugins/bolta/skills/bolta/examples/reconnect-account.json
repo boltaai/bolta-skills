@@ -1,0 +1,45 @@
+{
+  "ask": "Bolta says my LinkedIn needs reconnecting. Fix it.",
+  "playbook": "connect",
+  "steps": [
+    {
+      "tool": "list-accounts",
+      "arguments": {
+        "workspace_id": "<brand's workspace id>",
+        "platform": "linkedin"
+      },
+      "why": "Which LinkedIn rows are invalid. The company-page rows copy the personal profile's status, so reconnecting the profile fixes them all. A ghost row would be added without connecting, never a reconnect."
+    },
+    {
+      "tool": "get-connect-link",
+      "arguments": {
+        "workspace_id": "<brand's workspace id>",
+        "platform": "linkedin"
+      },
+      "why": "The same link connects and reconnects. It carries no brand: the browser's selected workspace decides, so the user checks it shows Acme first."
+    },
+    {
+      "tool": "list-accounts",
+      "arguments": {
+        "workspace_id": "<brand's workspace id>",
+        "platform": "linkedin"
+      },
+      "why": "Only after the user says done. Valid now: say it's connected. Still invalid: the sign-in went to another brand or a different LinkedIn profile; ask them to check the switcher and try again."
+    },
+    {
+      "tool": "list-scheduled-posts",
+      "arguments": {
+        "workspace_id": "<brand's workspace id>",
+        "start_date": "<now, UTC with Z>",
+        "end_date": "<7 days ahead, UTC with Z>"
+      },
+      "why": "Posts still scheduled for LinkedIn go out at their times on their own after a reconnect: no new yes, no recreating them. Times come back in UTC: show them in the brand clock."
+    }
+  ],
+  "say": "LinkedIn is connected again in Acme, and your 2 company pages with it. Your 3 scheduled LinkedIn posts go out as planned, starting Tuesday 9:00 am.",
+  "never": [
+    "Saying it's connected before the second read shows it.",
+    "Recreating or re-approving posts that were already scheduled.",
+    "Retrying a call that said the key is invalid or expired: that is a reconnect of Bolta itself, not of LinkedIn."
+  ]
+}

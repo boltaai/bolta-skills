@@ -45,3 +45,7 @@ Comparing two campaigns, or clicks from a campaign's links: read [campaigns-and-
 - Counts are per post: one out on only some accounts, or approved then failed to send, may show as scheduled. If "went out" looks low, check the posts.
 - Engagement per Bolta routine isn't readable from here. One line, one link: Performance on its page, bolta.ai/dashboard/routines/<id>, which also shows Bolta's suggested changes.
 - No run when one was due: [routine](routine.md). Drafts waiting now: [review](review.md).
+
+## Always
+
+- Follow the house rules in the Bolta skill.

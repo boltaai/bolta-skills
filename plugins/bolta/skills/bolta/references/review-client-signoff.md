@@ -6,7 +6,8 @@ A brand setting: no post is approved, scheduled or posted without a current clie
 
 - Turning it on pulls every scheduled or approved post without a current client yes back to waiting. The calendar shrinks; that is the setting working, not a fault.
 - A post can also be held at the moment it would go out, if it has no current client yes. It returns to waiting.
-- An edit to the text, media, destination, or the Pinterest, YouTube or Reddit details after the client said yes voids the yes. So does any change to the post's per-network text or settings (`platform_specific`); sending the same values again does not. A time change does not.
+- An edit to the text, media, destination, or the Pinterest, YouTube or Reddit details after the client said yes voids the yes. So does any change to the post's per-network text or settings (`platform_specific`); sending the same values again does not. A time change after the client's yes does not.
+- **Before** the client answers, any change, a new time included, makes the request stale: the client's Approve is refused and the post has to be sent again.
 - The refusal code `CLIENT_SIGNOFF_REQUIRED` is not retryable. The fix is to send the post to the client, never to approve again.
 - Only the organization owner (the brand owner if there is no organization) can turn it on or off, in the brand's settings in Bolta. Turning it off releases nothing that was held.
 - Library posts the team put live directly, without a client review, are exempt.
@@ -15,7 +16,8 @@ A brand setting: no post is approved, scheduled or posted without a current clie
 
 - The calendar shrank after it was turned on: "Turning on client sign-off pulled the scheduled posts without a client yes back to waiting. That's the setting working. Send them to the client from Approvals in Bolta."
 - A yes was voided by an edit: "The post changed after the client approved, so their yes no longer counts. Send it to them again."
-- Only the time moved: "Moving the time doesn't need a new client yes."
+- Only the time moved, after the client's yes: "Moving the time doesn't need a new client yes."
+- Moving the time while the client hasn't answered: "The client saw the old time, so this request no longer counts. Send it to them again from Approvals." Say it before moving, and move only on a yes.
 
 ## Always
 

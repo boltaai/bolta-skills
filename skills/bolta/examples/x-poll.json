@@ -12,7 +12,7 @@
         ],
         "idempotency_key": "next-feature-poll-1"
       },
-      "why": "The question is the post's text; the options are a setting on the post. Bolta refuses media-only posts to X, so the text is always there."
+      "why": "The question is the post's text; the options are an X setting. Not the poll field: that one is for Threads, and X ignores it."
     },
     {
       "tool": "update-post-platform-details",
@@ -29,13 +29,13 @@
           "poll_duration_minutes": 1440
         }
       },
-      "why": "On X a poll is post_type POLL: 2 to 4 options of 25 characters, 5 minutes to 7 days (poll_duration_minutes 5 to 10080, default 1440). Bolta refuses values outside these when it saves the setting; without post_type POLL the options are not sent and the post goes out plain."
+      "why": "The decision: the details call, not platform_specific, because it refuses a bad poll with the reason (2 to 4 options of 25 characters at most, 5 minutes to 7 days), while platform_specific drops a bad one without a word. One day suits a quick product pulse. Without post_type POLL the options are not sent."
     }
   ],
   "say": "Saved to Acme as an X draft: a one-day poll with Dark mode, Exports and iPad app. Nothing goes out yet. Schedule it?",
   "never": [
     "A poll option over 25 characters.",
-    "Sending the poll in the poll field of the post: that one is for Threads.",
+    "Sending the poll in the poll field of the post: X goes out with no poll.",
     "A poll on a post with several parts: in a thread the poll is dropped."
   ]
 }

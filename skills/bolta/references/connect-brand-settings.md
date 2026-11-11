@@ -15,3 +15,7 @@
 - All change only at bolta.ai/dashboard/settings, by an owner or admin: the time zone under the brand's Overview, Safe Mode under Rules. Nothing here changes them; name the page, never claim a change was made.
 - Never suggest turning review mode off to get past a refusal.
 - More on clock, review mode and "Is everything set up?": [team-and-integrations](connect-team-and-integrations.md).
+
+## Always
+
+- Follow the house rules in the Bolta skill.

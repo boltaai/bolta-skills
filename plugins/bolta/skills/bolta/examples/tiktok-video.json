@@ -36,6 +36,6 @@
   "say": "Saved to Acme as a TikTok draft: followers only, duets off. Nothing goes out yet. Schedule it?",
   "never": [
     "Assuming public when the user didn't say: ask.",
-    "Saying a paid or brand video is disclosed: that switch is set in Bolta's composer."
+    "Saying a paid or brand video is disclosed without setting it: brand_organic_toggle or brand_content_toggle in platform_specific (see tiktok-brand-disclosure)."
   ]
 }

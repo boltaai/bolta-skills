@@ -386,6 +386,8 @@ function guard_main(   ok, ti) {
   emit("CID", campaign_id(ti))
   if (TOOL == "approve-many-posts") emit("ITEMS", item_count(ti))
   if (TOOL == "bulk-create-posts") emit("BULK", bulk_verdict(ti))
+  # A website read with preview: true (the JSON literal, never the string) saves nothing.
+  if (TOOL == "extract-business-dna") emit("PREVIEW", jtype(ti, "preview") == "t" ? 1 : 0)
 }
 
 # --- mark: did the call succeed? -------------------------------------------------

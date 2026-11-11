@@ -38,6 +38,7 @@ One line and one link each; you can't read these.
 
 ## Always
 
+- Follow the house rules in the Bolta skill.
 - Re-rank by one network before naming a best post on it.
 - Leave unsynced and numberless posts out of rankings, and say how many.
 - Never invent a link, a competitor number or an approval speed.

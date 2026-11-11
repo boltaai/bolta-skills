@@ -1,0 +1,36 @@
+{
+  "ask": "Post about what we ship. Every merged PR, LinkedIn only, one post each.",
+  "playbook": "routine",
+  "before": "Bolta's planner is offered. GitHub is not connected to this brand in Bolta yet.",
+  "steps": [
+    {
+      "tool": "plan-routine",
+      "arguments": {
+        "workspace_id": "<brand's workspace id>",
+        "ask": "Post about what we ship. Every merged PR, LinkedIn only, one post each.",
+        "context": "Developer tool for small teams; the founder posts on LinkedIn."
+      },
+      "why": "The planner can plan routines fed by an app; create-routine can't find a GitHub connection. It returned a plan for each merged pull request with LinkedIn and X, 2 posts each, and needs: 'Connect GitHub' with a link to bolta.ai/dashboard/connections."
+    },
+    {
+      "tool": "revise-plan",
+      "arguments": {
+        "workspace_id": "<brand's workspace id>",
+        "proposal_id": "<plan id from plan-routine>",
+        "changes": {
+          "platforms": [
+            "linkedin"
+          ],
+          "count": 1
+        }
+      },
+      "why": "The user already said LinkedIn only and one post each: exact fields, no guessing. It returns a new plan id; the old one can no longer be saved."
+    }
+  ],
+  "say": "Here's the plan: each time a pull request is merged, Bolta writes 1 LinkedIn post about what changed and why it matters; dependency bumps and other routine merges are skipped. Each waits for your yes and uses credits. First connect GitHub here: bolta.ai/dashboard/connections. Tell me when it's done and I'll save it, switched off.",
+  "never": [
+    "confirm-plan before GitHub is connected: it is refused as plan_not_ready.",
+    "Inventing a connection id in create-routine source_bindings.",
+    "Saying it runs every week: it runs on each merge."
+  ]
+}

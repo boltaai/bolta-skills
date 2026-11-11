@@ -1,0 +1,55 @@
+{
+  "ask": "Post our pricing teardown to the same subreddit as last month's one. They remove posts without the Case Study flair.",
+  "playbook": "post",
+  "steps": [
+    {
+      "tool": "get-post-platform-details",
+      "arguments": {
+        "post_id": "<last month's Reddit post id>",
+        "platform": "reddit"
+      },
+      "why": "Subreddit and flair from the post the user pointed at: no tool lists subreddits or flairs. Copy its selected_subreddit_id and flair_id; never guess either."
+    },
+    {
+      "tool": "create-post",
+      "arguments": {
+        "workspace_id": "<brand's workspace id>",
+        "content": "We changed our pricing three times this year. Here is what each change did to signups, with the numbers.\n\n**Round 1:** ...",
+        "account_ids": [
+          "<Reddit account id>"
+        ],
+        "idempotency_key": "pricing-teardown-reddit-1"
+      },
+      "why": "No media: an image would make it an image post and only the title would go out. Markdown shows as written on Reddit; no hashtags, no pitch."
+    },
+    {
+      "tool": "update-post-platform-details",
+      "arguments": {
+        "post_id": "<post id>",
+        "platform": "reddit",
+        "fields": {
+          "title": "Pricing teardown: three changes in a year and what each did to signups",
+          "selected_subreddit_id": "<selected_subreddit_id from last month's post>",
+          "flair_id": "<flair_id from last month's post>",
+          "nsfw": false,
+          "spoiler": false
+        }
+      },
+      "why": "The decision: flair set because the subreddit removes posts without it, using the id from the earlier post (flair_text alone may not satisfy a required flair). Not NSFW, not a spoiler: the content is neither, and marking it wrongly hides it. Subreddit and title are required before it can be approved."
+    },
+    {
+      "tool": "get-post-platform-details",
+      "arguments": {
+        "post_id": "<post id>",
+        "platform": "reddit"
+      },
+      "why": "Unknown keys are ignored with a success reply: confirm title, subreddit and flair saved."
+    }
+  ],
+  "say": "Saved to Acme as a Reddit draft for the same subreddit as last month's post, with the Case Study flair, titled \"Pricing teardown: three changes in a year and what each did to signups\". Nothing goes out yet. Schedule it?",
+  "never": [
+    "A flair or subreddit id the user didn't point to.",
+    "An image on a post whose body matters: only the title would go out.",
+    "Marking NSFW or spoiler when the content isn't."
+  ]
+}

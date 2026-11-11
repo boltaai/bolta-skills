@@ -1,0 +1,79 @@
+{
+  "ask": "Have David, Maria and Procurement each post about our new Leeds warehouse opening on March 3.",
+  "playbook": "review",
+  "steps": [
+    {
+      "tool": "list-voice-profiles",
+      "arguments": {
+        "workspace_id": "<brand's workspace id>"
+      },
+      "why": "Who has a person voice. David and Maria each need one; Procurement is a function, written in the brand voice. A person with no voice: offer to make one first (voice playbook) rather than write them in the brand voice by guess."
+    },
+    {
+      "tool": "propose-cascade",
+      "arguments": {
+        "workspace_id": "<brand's workspace id>",
+        "idea": "Our new Leeds warehouse opens on March 3 and cuts delivery times in the North by a day.",
+        "participants": [
+          {
+            "name": "David"
+          },
+          {
+            "name": "Maria"
+          },
+          {
+            "name": "Procurement"
+          }
+        ]
+      },
+      "why": "Only the three the user named; Bolta never adds a person. The idea holds every fact the drafts may use (the date, the city, the one-day claim the user gave), because drafts take facts only from it. Saves a plan: nothing written or charged."
+    },
+    {
+      "tool": "update-cascade",
+      "arguments": {
+        "workspace_id": "<brand's workspace id>",
+        "cascade_id": "<id from propose-cascade>",
+        "revision": "<revision the user saw>",
+        "change": [
+          {
+            "slot_id": "<Maria's row slot_id>",
+            "account_id": "<Maria's LinkedIn account id>"
+          }
+        ]
+      },
+      "why": "The plan came back with Maria's row unresolved: her voice is on LinkedIn and X. The user was asked and said LinkedIn. A voice writes one row here, so she gets one version; a version per account would need Bolta's own chat. The revision is the one the user saw, so a plan changed in between is refused, not overwritten."
+    },
+    {
+      "tool": "start-cascade",
+      "arguments": {
+        "workspace_id": "<brand's workspace id>",
+        "cascade_id": "<id from propose-cascade>",
+        "revision": "<revision from update-cascade, the plan the user said yes to>"
+      },
+      "why": "Only after the user saw the three rows (who, voice, account, angle) and said yes. Drafts only; each costs credits when approved. It returns before any draft is written."
+    },
+    {
+      "tool": "get-cascade",
+      "arguments": {
+        "workspace_id": "<brand's workspace id>",
+        "cascade_id": "<id from propose-cascade>"
+      },
+      "why": "Poll until every row is saved, held back or failed. A held-back row means its account isn't connected: say which and give the connect link. Say written only for saved rows."
+    },
+    {
+      "tool": "list-inbox-items",
+      "arguments": {
+        "workspace_id": "<brand's workspace id>",
+        "source": "team"
+      },
+      "why": "Show the three saved drafts in full, grouped as one team version, ready for the yes move."
+    }
+  ],
+  "say": "Saved to Acme: three drafts about the Leeds warehouse, David's and Maria's in their own voices on their LinkedIn, Procurement's in the Acme voice. They wait for your yes and cost credits only when approved. Want to go through them?",
+  "never": [
+    "Adding a person or a function the user didn't name.",
+    "Picking Maria's account for her.",
+    "Starting it before a yes to the plan, or saying the drafts are written before get-cascade shows them saved.",
+    "On an app without these steps, faking a team version with separate posts: point to Bolta's own chat instead."
+  ]
+}

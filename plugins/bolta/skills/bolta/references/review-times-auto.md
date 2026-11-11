@@ -4,7 +4,7 @@ Read with [review-times.md](review-times.md) when a yes names no time, or someon
 
 ## Where a yes with no time lands
 
-`approve_only` on a draft you, a Bolta routine, a campaign or Bolta's chat wrote gets a time, in this order:
+`approve_only` on a draft you saved while signed in to Bolta, or one a Bolta routine, a campaign or Bolta's chat wrote, gets a time, in this order:
 
 1. The time in a plan made in Bolta's chat, if still ahead.
 2. The saved posting schedule. A schedule for the group or account beats the brand default.
@@ -16,7 +16,7 @@ Read with [review-times.md](review-times.md) when a yes names no time, or someon
 Steps 4 and 5 space posts about 4 hours apart, skip weekends and use odd minutes (9:07, 12:23). `audience_timezone`, when set, steers them.
 
 - Review mode doesn't stop those drafts getting a time.
-- A post typed in Bolta's own composer, with review mode on, is approved but not scheduled ("Ready for Scheduling"). Ask for a time, then follow [review-times.md](review-times.md).
+- A post typed in Bolta's own composer, or saved with `create-post` over a pasted Bolta API key (not a sign-in), is not Bolta's writing: with review mode on, or the approver's own setting to approve without scheduling, a yes leaves it "Ready for Scheduling" with no time. Ask for a time, then follow [review-times.md](review-times.md).
 - A draft written before any account was connected, or bound only to unconnected accounts: approved, held as "Ready for Scheduling" until one is connected.
 - Never promise a day or office-hours rule: a saved schedule can use weekends, and some networks' usual hours are in the evening. Read the time back instead.
 - Library posts never get a time ([review-more-decisions.md](review-more-decisions.md)).

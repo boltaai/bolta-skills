@@ -7,3 +7,8 @@ What to do when making or changing an account group is refused. Back to [connect
 - "Accounts not found" or "Bucket not found": a stale read, or another client's connection. Read again.
 - A create timed out: read groups before retrying, so you don't make it twice.
 - A permission refusal: see [connect-connections.md](connect-connections.md).
+
+## Always
+
+- Follow the house rules in the Bolta skill.
+- Read the groups again before any retry.

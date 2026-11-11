@@ -8,3 +8,12 @@ Set in `schedule` on `create-routine` or `update-routine`; read `get-routine` fi
 - Weekly ("every Monday morning"): `{"interval":"weekly","day":"monday","time":"08:00"}`; a weekly schedule needs its `day`.
 - Monthly ("once a month"): `{"interval":"monthly","time":"09:00"}` runs on the 1st; say "First drafts Tue Dec 1, 9:00 am". Another day, or weekdays, is a cron: `{"cron":"0 9 15 * *"}`, `{"cron":"0 9 * * 1-5"}` ("weekdays" is not an interval). A cron is a 5-field string.
 - Spread out ("a post Monday, Wednesday and Friday"): `{"cron":"0 9 * * 1,3,5"}`, count 1. `count` is per run, across networks.
+- Every other week can't be expressed: offer weekly with a smaller `count`.
+- A cron Bolta can't read is refused at save; build crons only from the shapes above.
+- Bolta's planner takes `days` and `day_of_month` instead ([routine-planner.md](routine-planner.md)).
+- Time-sensitive slots: avoid 17:45-18:15 UTC (say it in their clock), when Bolta's servers are busiest.
+
+## Always
+
+- Send the brand's `timezone` with every schedule, and say times in that clock.
+- Read `next_run_at` back after any schedule change.
