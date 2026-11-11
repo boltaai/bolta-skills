@@ -11,7 +11,7 @@ description: >-
   email, calendars, documents or other apps.
 ---
 
-Bolta is a voice-first content factory: it learns how a brand writes, drafts in that voice, and puts every draft on one review list, where each yes, edit and no with a reason on Bolta's drafts teaches it.
+Bolta is a voice-first content factory: it learns how a brand writes, drafts in that voice, and puts every draft on one review list, where each yes, edit and no with a reason on Bolta's drafts and app posts teaches it.
 
 Getting someone running, in order: their voice, 3 to 5 Bolta routines, a campaign for anything dated, then the review list every week ([start](references/start.md)). Every ask: read the house rules, look once, pick one playbook, read it, do the work, read the result back; a difference alone never holds back what was asked, a failure does.
 
@@ -82,7 +82,7 @@ Summaries; the playbook has the rest. Worked calls: [examples/](examples/README.
 
 **Write.** One post: `create-post` with `content`, `account_ids` and an `idempotency_key`, no time and no action. Two or more: one `bulk-create-posts`, every item a Draft, then poll `bulk-create-status` until `completed` and show what it stored. Every claim comes from the user, the business record or the voice: no added scarcity or stock lines; a missing fact gets a blank ("__% off"). Show every saved post in full. End: "Saved to <brand> as drafts. Nothing goes out yet. Schedule all N? Or tell me what to change."
 
-**Decide.** Read `list-inbox-items`. 8 or more waiting and you can start a clearing-house agent: start it before judging anything and show its advice. Otherwise number what waits (account, full text). One message decides all: "1, 3 yes · 2 too salesy · 4 drop". Yes: `submit-for-review` for drafts not yet listed, then one `approve-many-posts` with each post's `expected_fingerprint`. No with a reason: `reject-post` in the user's words. Drop: `delete-post`. Read back day, time and account for each. Only owners and admins approve; a post the user wrote may need another admin's (Bolta's drafts don't).
+**Decide.** Read `list-inbox-items`. 8 or more waiting and you can start a clearing-house agent: start it before judging anything and show its advice. Otherwise number what waits (account, full text). One message decides all: "1, 3 yes · 2 too salesy · 4 drop". Yes: `submit-for-review` for drafts not yet listed, then one `approve-many-posts` with each post's `expected_fingerprint`. No with a reason: `reject-post` in the user's words. Drop: `delete-post`. Read back day, time and account for each. Here owners and admins approve ([roles](references/connect-people-and-roles.md)); the user's own post may need another admin.
 
 **Repeat.** One summary, "Turn it on?", then `create-routine` (schedule, the brand's `timezone`, ask me first, accounts bound as objects), `activate-routine`, and read `next_run_at` back in the brand's clock. Switching on is not running.
 
@@ -95,7 +95,7 @@ Summaries; the playbook has the rest. Worked calls: [examples/](examples/README.
 - Instagram, TikTok, YouTube and Pinterest need a public https link to the media file. No link: skip that network and say why.
 - Past a network's length limit Bolta cuts or splits silently. Count first ([post-platforms](references/post-platforms.md)).
 - X takes images only; a video fails when it goes out ([at a glance](references/post-networks-at-a-glance.md)).
-- Per-network settings and which way wins: [network settings](references/post-settings.md).
+- Network settings: ask for required, offer optional ([per network](references/post-per-network.md)).
 - Social networks get plain text; bold and headings become look-alike letters ([media](references/post-media.md)).
 - A setting the network can't take is left out at publish (`metadata.publish_setting_warnings`).
 - A campaign's `ends_on: null` is ignored; always send `strategy_key` and a future `starts_on`. Pausing or finishing never unschedules posts.

@@ -10,7 +10,7 @@ The user has seen their voice, one change is saved and read back, a draft is che
 
 - **The voice read** is live: audience, tone words, DOs, DON'Ts, `feedback_count`, `knowledge.available`, `missing_fields`. No example posts: add 2 recent published ones (last 60 days, with metrics and `has_publication_record` true). Wording: [show-and-change](voice-show-and-change.md).
 - No voice yet is an answer, not an error: offer set-up. Several voices: ask which, offering the default.
-- **Learning, honestly:** every yes, edit and no on Bolta's own writing is saved toward an overnight update: after about 10 new decisions since the voice last changed, Bolta adds at most 2 DOs and 2 DON'Ts. `feedback_count` can lag right after a yes given here: never say it moved. A drop records nothing. Details: [references/brand-and-learning.md](voice-brand-and-learning.md).
+- **Learning, honestly:** every yes, edit and no on Bolta's drafts and posts from this app is saved toward an overnight update: after about 10 new decisions since the voice last changed, Bolta adds at most 2 DOs and 2 DON'Ts. `feedback_count` can lag: never say it moved. A drop records nothing. Details: [references/brand-and-learning.md](voice-brand-and-learning.md).
 - **"That's not me":** name what's off; offer one rule, worded the way you'd suggest it.
 - **Change a rule:** build from a fresh read. Lists and tone dials are replaced whole: send the full list with the one change, keeping rules Bolta added. Show before and after in one line. Saw "Bolta checks are on in this session"? The Bolta check confirms; otherwise get a yes in words first.
 - **Same change twice**, or "stop doing X": offer one rule, once.
