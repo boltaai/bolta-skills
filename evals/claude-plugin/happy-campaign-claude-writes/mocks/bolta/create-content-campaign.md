@@ -16,7 +16,7 @@
           "\"The spring bundle closes Sunday.\""
         ]
       },
-      "theme": "20% off, ending Friday",
+      "theme": "20% off, ending Friday, Nov 20",
       "audience": "Northwind customers on LinkedIn",
       "cta_text": "{{input.cta_text}}",
       "cta_url": "{{input.cta_url}}",

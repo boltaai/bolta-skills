@@ -16,13 +16,13 @@
           "\"The spring bundle closes Sunday.\""
         ]
       },
-      "theme": "20% off, ending Friday",
+      "theme": "20% off, ending Friday, Nov 20",
       "audience": "Northwind customers on LinkedIn",
       "cta_text": "",
       "cta_url": "",
       "cover_image_url": "",
-      "starts_on": "2026-10-19",
-      "ends_on": "2026-10-23",
+      "starts_on": "2026-11-16",
+      "ends_on": "2026-11-20",
       "duration_weeks": 1,
       "content_mix": {
         "text": 5

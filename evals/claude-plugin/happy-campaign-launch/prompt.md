@@ -7,4 +7,4 @@ max_turns: 25
 timeout_seconds: 300
 allowed_tools: [Skill, Read]
 ---
-We launch new pricing on Dec 8. Get people on the waitlist: bolta.ai/waitlist. Start the campaign.
+We launch new pricing on Dec 8. Get people on the waitlist: northwind.example/waitlist. Start the campaign.
