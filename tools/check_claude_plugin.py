@@ -79,7 +79,8 @@ PENDING_TOOLS = ("approve-many-posts", "reject-post", "set-content-campaign-targ
                  "recommend-routines", "plan-routine", "plan-campaign", "revise-plan", "confirm-plan")
 #: Live tools whose saved schema adds arguments production does not take yet. Until it does,
 #: the saved arguments are accepted too. Delete a name once the live list has them (the checker says when).
-PENDING_UPDATES = ("create-routine", "update-routine", "extract-business-dna", "voice-generate")
+PENDING_UPDATES = ("create-routine", "update-routine", "extract-business-dna", "voice-generate",
+                   "create-post", "update-post")  # platform_specific (server Release 1)
 #: Claude Code sends "claude-code/<version> (<entrypoint>)" on its MCP requests,
 #: and the server matches "claude" in it. Without it the list lacks the tools made for Claude.
 CLAUDE_USER_AGENT = "claude-code/2.1.302 (cli; bolta-plugin-check)"
@@ -298,8 +299,9 @@ def with_pending(live: dict[str, dict], fixture: pathlib.Path | None, from_serve
         info(f"pending, not in the list: {', '.join(absent)} (schemas from the saved list); "
              f"run with --no-pending after the server change is deployed")
     for n in present:
-        a = set((live[n].get("inputSchema") or {}).get("properties", {}))
-        b = set((saved.get(n, {}).get("inputSchema") or {}).get("properties", {}))
+        # workspace_id is accepted on every tool (UNIVERSAL_PARAMS), listed or not.
+        a = set((live[n].get("inputSchema") or {}).get("properties", {})) - UNIVERSAL_PARAMS
+        b = set((saved.get(n, {}).get("inputSchema") or {}).get("properties", {})) - UNIVERSAL_PARAMS
         if saved and a != b:
             warn("tools", f"{n} is live now with different arguments than the saved list "
                           f"(live only: {sorted(a - b) or '-'}; saved only: {sorted(b - a) or '-'}); refresh the saved list")

@@ -1,0 +1,51 @@
+{
+  "ask": "Same launch post on my LinkedIn and the Acme company page, and on both our Facebook Pages, but the company page and the Lisbon Page should sound like the company, not me.",
+  "playbook": "post",
+  "steps": [
+    {
+      "tool": "list-accounts",
+      "arguments": {
+        "workspace_id": "<brand's workspace id>"
+      },
+      "why": "The profile row, the company page (linkedin_org_<id>, is_organization) and each Facebook Page (facebook_page_<id>, is_page). No row for a Page means it isn't connected: say so, never guess an id."
+    },
+    {
+      "tool": "create-post",
+      "arguments": {
+        "workspace_id": "<brand's workspace id>",
+        "content": "I've spent a year building this. Today Acme Scheduling is live, and I'd love your honest take.",
+        "account_ids": [
+          "<LinkedIn profile account id>",
+          "<linkedin_org_ id>",
+          "<facebook_page_ id for Acme>",
+          "<facebook_page_ id for Acme Lisbon>"
+        ],
+        "platform_specific": {
+          "linkedin": {
+            "accounts": {
+              "<linkedin_org_ id>": {
+                "text": "Acme Scheduling is live today: book, move and confirm appointments in one place. Try it free for 14 days."
+              }
+            }
+          },
+          "facebook": {
+            "text": "Acme Scheduling is live: book, move and confirm appointments in one place.",
+            "accounts": {
+              "<facebook_page_ id for Acme Lisbon>": {
+                "text": "Acme Scheduling is live, and our Lisbon team is here to help you set it up."
+              }
+            }
+          }
+        },
+        "idempotency_key": "launch-pages-1"
+      },
+      "why": "Ids exactly as list-accounts gave them; Bolta stores them under the page names. The profile has no entry, so it gets the main text in the founder's voice. The company page gets its own. The Acme Page gets the Facebook text, the Lisbon Page its own. Saved as a draft; scheduling a page post is a second call after the yes."
+    }
+  ],
+  "say": "Saved to Acme as one draft for 4 destinations. 1. LinkedIn, you: (full text) 2. LinkedIn, Acme company page: (full text) 3. Facebook, Acme Page: (full text) 4. Facebook, Acme Lisbon Page: (full text). Nothing goes out yet. Schedule it?",
+  "never": [
+    "A page id that didn't come from list-accounts, or a page name in its place.",
+    "Leaving out which text goes where: name every destination with its own text.",
+    "Scheduling in the same call that creates a page post."
+  ]
+}

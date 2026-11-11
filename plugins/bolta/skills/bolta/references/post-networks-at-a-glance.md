@@ -13,7 +13,7 @@ One row per network. The live limits come first; trust them over this page. A bl
 | Mastodon | 500, or the server's own; cut | Optional | Joined into one post | `visibility`, content warning | |
 | Facebook | | Text, one video, or images; never a video with images | Comments by the Page, each with at most one image | Which Page (`list-accounts`) | Feeling, activity, place, privacy, comment settings (saved, not sent) |
 | Instagram | 2,200; cut | Image or video; 2 to 10 make a carousel | | Feed, reel or story; trial reel; cover | Text only; collaborators |
-| TikTok | 2,200; cut | One video | | `privacy_level` (public if unset; ask), comments, duet, stitch | Paid or brand disclosure (Bolta's composer only) |
+| TikTok | 2,200; cut | One video | | `privacy_level` (public if unset; ask), comments, duet, stitch, brand disclosure | |
 | YouTube | Title unchecked; blank uses the text's start | One video | | Title, `privacy_status` (default private), made for kids, thumbnail | Made-for-kids except `self_declared_made_for_kids`; playlists, comments, chapters, language (saved, not sent) |
 | Pinterest | Title 100, description 500 | One image or one video | | Board (picked in Bolta; else latest synced), link, alt text | Listing boards from here |
 | Reddit | Title 256 | None | | Subreddit and title (both required), flair | Video (images only); text beside images (only the title goes out) |

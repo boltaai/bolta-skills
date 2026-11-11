@@ -10,6 +10,7 @@ Set with `update-post-platform-details` (network `linkedin`), only the keys that
 - If the personal profile row is missing, it's hidden for this brand. Don't offer "the personal one".
 - **Also on other pages**: `cross_post_organizations`, a list of the rows' `organization_id` values, with `cross_post_enabled: true`. Each page gets the same post when it goes out.
 - **Who sees it**: `visibility` `PUBLIC` (default) or `CONNECTIONS`.
+- **Its own text per page** (or for the profile): one post, with `platform_specific` `linkedin.accounts` keyed by the `linkedin_org_` id or the profile's account id, each with its own `text` and, if wanted, `visibility`. A page without an entry gets the LinkedIn `text`, or the main text. That holds for pages added with `cross_post_organizations` too, never the profile's own text. More: [per network](post-per-network.md).
 - Don't offer `cross_post_delay`, `enable_comments` or `enable_resharing`: they're saved, not sent.
 - Up to 3,000 characters. A few hashtags at the end, at most.
 

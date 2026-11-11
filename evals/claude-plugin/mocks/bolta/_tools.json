@@ -3,7 +3,7 @@
     {
       "name": "list-workspaces",
       "title": "List Workspaces",
-      "description": "List all workspaces accessible by your API key",
+      "description": "List all workspaces accessible by your API key. Each workspace is one brand: `user_role` is your role on that brand, and `organization` ({id, name, role}) is the organization the brand belongs to with your role there (role is null for a guest). Brands come grouped by organization. One connection is one organization; it reaches the brands ticked when connecting. When it reaches more than one brand, pass workspace_id on every other call; ask the user which brand if unclear.",
       "inputSchema": {
         "type": "object",
         "properties": {},
@@ -46,7 +46,7 @@
     {
       "name": "get-my-capabilities",
       "title": "Get My Capabilities",
-      "description": "Check what the current API key or agent is allowed to do in a workspace. `permissions` is the caller's role intersected with the scopes this key actually carries; `denied_by` says why each denied action is denied (`role`, `workspace_plan`, or `key_scope`).",
+      "description": "Check what the current API key or agent is allowed to do in a workspace. `permissions` is the caller's role intersected with the scopes this key actually carries; `denied_by` says why each denied action is denied (`role`, `workspace_plan`, or `key_scope`). `role` (also `brand_role`) is your role on this brand and decides `permissions`; `organization` ({id, name, role}) is the brand's organization and your role there, which grants nothing on its own.",
       "inputSchema": {
         "type": "object",
         "properties": {
@@ -186,11 +186,11 @@
           },
           "start_date": {
             "type": "string",
-            "description": "Only posts scheduled/created on or after this datetime"
+            "description": "Only posts on or after this datetime. The window is read from each post's scheduled time, or its created time when it has none, not from the moment it went live: a post scheduled late on the last day of a month and published just after midnight counts in the earlier month."
           },
           "end_date": {
             "type": "string",
-            "description": "Only posts scheduled/created on or before this datetime"
+            "description": "Only posts on or before this datetime (same scheduled-or-created basis as start_date)"
           },
           "include_metrics": {
             "type": "boolean",
@@ -210,7 +210,7 @@
           },
           "sort_by": {
             "type": "string",
-            "description": "Sort field: created_at | updated_at | scheduled_time (default updated_at)"
+            "description": "Sort field: created_at | updated_at | scheduled_time | engagement (default updated_at). Use engagement with sort_order=desc, status=published and include_metrics=true for \"best / top performing posts\": it ranks the WHOLE date window by total engagement, so a small limit (10) is enough."
           },
           "sort_order": {
             "type": "string",
@@ -257,6 +257,11 @@
           "end_date": {
             "type": "string",
             "description": "Only posts scheduled at/before this time"
+          },
+          "account_ids": {
+            "type": "string",
+            "format": "uuid",
+            "description": "Only posts that go to at least one of these accounts"
           }
         },
         "additionalProperties": false,
@@ -279,6 +284,11 @@
       "inputSchema": {
         "type": "object",
         "properties": {
+          "workspace_id": {
+            "type": "string",
+            "format": "uuid",
+            "description": "The brand (workspace) to act on, from list-workspaces. Required when this connection reaches more than one brand; otherwise its one brand is used."
+          },
           "post_id": {
             "type": "string",
             "format": "uuid",
@@ -376,6 +386,10 @@
             "type": "object",
             "description": "Optional poll to attach to the post content (Threads/X). Object shape, e.g. {\"options\": [\"Option A\", \"Option B\"]}. Platform-specific settings like Threads reply controls or topic tags are set separately via update-post-platform-details."
           },
+          "platform_specific": {
+            "type": "object",
+            "description": "Per-network settings, and per-account overrides, as an object keyed by network: x, threads, instagram, facebook, linkedin, tiktok, youtube, pinterest, bluesky, mastodon, reddit, discord, wordpress. Each network holds its own fields plus optional accounts: {<id from list-accounts>: {...same fields...}}. At publish an account's entry wins, then the network's fields, then update-post-platform-details. text on a network or account replaces the post text there (different text per network on ONE post). Examples: {\"x\": {\"text\": \"Short version for X\"}}; {\"threads\": {\"topic_tag\": \"launch\"}}; {\"instagram\": {\"content_type\": \"REELS\", \"trialReelEnabled\": true, \"trialGraduationStrategy\": \"SS_PERFORMANCE\"}} (a trial reel: one setting per post, REELS with a video); {\"linkedin\": {\"text\": \"Long version\", \"accounts\": {\"linkedin_org_123\": {\"text\": \"Company version\", \"visibility\": \"PUBLIC\"}}}}; {\"facebook\": {\"accounts\": {\"facebook_page_456\": {\"text\": \"Page version\"}}}}; {\"wordpress\": {\"title\": \"Headline\", \"meta_description\": \"...\"}}."
+          },
           "idempotency_key": {
             "type": "string",
             "description": "Optional dedupe key. Pass a stable value to make retries safe — repeating a create with the same key returns the already-created post instead of duplicating it (24h window)."
@@ -392,7 +406,7 @@
         "readOnlyHint": false,
         "destructiveHint": false,
         "idempotentHint": false,
-        "openWorldHint": false
+        "openWorldHint": true
       }
     },
     {
@@ -402,6 +416,11 @@
       "inputSchema": {
         "type": "object",
         "properties": {
+          "workspace_id": {
+            "type": "string",
+            "format": "uuid",
+            "description": "The brand (workspace) to act on, from list-workspaces. Required when this connection reaches more than one brand; otherwise its one brand is used."
+          },
           "post_id": {
             "type": "string",
             "format": "uuid",
@@ -459,6 +478,10 @@
             "type": "string",
             "description": "'Draft' or 'Pending Approval'. Setting 'Draft' unschedules the post in place — it keeps its id, content, and activity history, and its scheduled time is cleared. Assistants cannot set 'Scheduled' or 'Published' here; use schedule-post or publish-post after approval."
           },
+          "platform_specific": {
+            "type": "object",
+            "description": "Per-network settings, and per-account overrides, as an object keyed by network: x, threads, instagram, facebook, linkedin, tiktok, youtube, pinterest, bluesky, mastodon, reddit, discord, wordpress. Each network holds its own fields plus optional accounts: {<id from list-accounts>: {...same fields...}}. At publish an account's entry wins, then the network's fields, then update-post-platform-details. text on a network or account replaces the post text there (different text per network on ONE post). Examples: {\"x\": {\"text\": \"Short version for X\"}}; {\"threads\": {\"topic_tag\": \"launch\"}}; {\"instagram\": {\"content_type\": \"REELS\", \"trialReelEnabled\": true, \"trialGraduationStrategy\": \"SS_PERFORMANCE\"}} (a trial reel: one setting per post, REELS with a video); {\"linkedin\": {\"text\": \"Long version\", \"accounts\": {\"linkedin_org_123\": {\"text\": \"Company version\", \"visibility\": \"PUBLIC\"}}}}; {\"facebook\": {\"accounts\": {\"facebook_page_456\": {\"text\": \"Page version\"}}}}; {\"wordpress\": {\"title\": \"Headline\", \"meta_description\": \"...\"}}. Merged into what the post already has: the fields you send replace those fields, everything else stays; accounts merge per account; null removes a network, a field or an account entry."
+          },
           "accounts": {
             "type": "array",
             "items": {
@@ -477,7 +500,7 @@
         "readOnlyHint": false,
         "destructiveHint": true,
         "idempotentHint": true,
-        "openWorldHint": false
+        "openWorldHint": true
       }
     },
     {
@@ -487,6 +510,11 @@
       "inputSchema": {
         "type": "object",
         "properties": {
+          "workspace_id": {
+            "type": "string",
+            "format": "uuid",
+            "description": "The brand (workspace) to act on, from list-workspaces. Required when this connection reaches more than one brand; otherwise its one brand is used."
+          },
           "post_id": {
             "type": "string",
             "format": "uuid",
@@ -541,7 +569,7 @@
         "readOnlyHint": false,
         "destructiveHint": false,
         "idempotentHint": false,
-        "openWorldHint": false
+        "openWorldHint": true
       }
     },
     {
@@ -551,6 +579,11 @@
       "inputSchema": {
         "type": "object",
         "properties": {
+          "workspace_id": {
+            "type": "string",
+            "format": "uuid",
+            "description": "The brand (workspace) to act on, from list-workspaces. Required when this connection reaches more than one brand; otherwise its one brand is used."
+          },
           "task_id": {
             "type": "string",
             "description": "The task ID returned by bulk-create-posts"
@@ -610,7 +643,7 @@
     {
       "name": "approve-post",
       "title": "Approve Post",
-      "description": "Approve a post that is pending review. Requires admin or owner role. Supports scheduling modes: approve_only, use_suggested_time, or set_fixed_time.",
+      "description": "Approve a post that is pending review. Requires admin or owner role. Supports scheduling modes: approve_only, use_suggested_time, or set_fixed_time. To approve several posts the user said yes to, use approve-many-posts. To turn one down with the user's reason, use reject-post.",
       "inputSchema": {
         "type": "object",
         "properties": {
@@ -735,7 +768,7 @@
     {
       "name": "list-inbox-items",
       "title": "List Inbox Items",
-      "description": "Everything waiting on the customer, in one call — the dashboard hub's full inbox. THIS IS ALSO WHERE COMMENTS AND MENTIONS ON OUR OWN CONTENT ARRIVE. When the user mentions a comment left on their post, a mention, or a reply they need to answer, look HERE: the row carries the platform, the account, the target id/url and the comment text — exactly what a drafting tool needs. Do NOT go hunting through list-workspace-posts for it; that lists OUR posts, not the comments people left on them. Rows are labeled by source: posts awaiting team review (source=team), recurring AI-generated posts (source=recurring), engagement reply drafts and mentions such as Threads (source=hunter), and reports (source=report). Use this when the user asks what's waiting for them, what was produced for them, or about replies/mentions to review. For ONLY the recurring queue use list-recurring-reviews. \n\nThe total_team/total_recurring/total_hunter/total_report counts are always workspace-wide — they do NOT shrink when you pass source, so an empty filtered result can still show work pending in the other buckets. \n\nA row here is the INPUT to acting on it, not the act. In particular, a row carrying comment text is not permission to answer it yourself: a reply you compose directly is in YOUR voice and skips the Voice Profile and Business DNA entirely. To reply to a comment or mention on our own content, call draft-inbound-reply. To revise or send a reply Bolta already drafted (source=hunter), use update-outreach-reply / send-outreach-reply. To approve a post, approve-post.",
+      "description": "Everything waiting on the customer, in one call — the dashboard hub's full inbox. Comments people leave on the workspace's own posts are NOT here: they are only in the Bolta dashboard inbox, so ask the user for the comment's link and use draft-inbound-reply. Rows are labeled by source: posts waiting for review (source=team), which includes every draft a Bolta routine or campaign wrote (workflow_run_id is set) and carries the content_fingerprint to pass when approving; the older recurring-template queue (source=recurring); replies Bolta drafted to posts it found for you, with that post's text and link (source=hunter); and reports (source=report). Use this when the user asks what's waiting for them, what was produced for them, or about replies/mentions to review. For ONLY the recurring queue use list-recurring-reviews. \n\nThe total_team/total_recurring/total_hunter/total_report counts are always workspace-wide — they do NOT shrink when you pass source, so an empty filtered result can still show work pending in the other buckets. \n\nA row here is the INPUT to acting on it, not the act. In particular, a row carrying comment text is not permission to answer it yourself: a reply you compose directly is in YOUR voice and skips the Voice Profile and Business DNA entirely. To reply to a comment or mention on our own content, call draft-inbound-reply. To revise or send a reply Bolta already drafted (source=hunter), use update-outreach-reply / send-outreach-reply. To approve a post, approve-post (several at once: approve-many-posts). To turn a source=team draft down with the user's reason, reject-post.",
       "inputSchema": {
         "type": "object",
         "properties": {
@@ -1209,6 +1242,11 @@
       "inputSchema": {
         "type": "object",
         "properties": {
+          "workspace_id": {
+            "type": "string",
+            "format": "uuid",
+            "description": "The brand (workspace) to act on, from list-workspaces. Required when this connection reaches more than one brand; otherwise its one brand is used."
+          },
           "status": {
             "type": "string",
             "description": "Comma-separated statuses to include: draft, active, paused, archived. Default: everything except archived."
@@ -1235,10 +1273,15 @@
     {
       "name": "get-routine",
       "title": "Get Routine",
-      "description": "Get one routine's full configuration: outcome, trigger and schedule, instructions, capabilities, approval policy, source bindings, recent runs and performance summary. Read-only.",
+      "description": "Get one routine's full configuration: outcome, trigger and schedule, instructions, capabilities, approval policy, source bindings, recent runs and performance summary. Read-only. For routines whose output_config.artifact_type is reply or report, review_queue is always empty; pending drafts for reply routines are in list-engagements status=pending (web: Hub > Approvals).",
       "inputSchema": {
         "type": "object",
         "properties": {
+          "workspace_id": {
+            "type": "string",
+            "format": "uuid",
+            "description": "The brand (workspace) to act on, from list-workspaces. Required when this connection reaches more than one brand; otherwise its one brand is used."
+          },
           "routine_id": {
             "type": "string",
             "format": "uuid",
@@ -1261,10 +1304,15 @@
     {
       "name": "activate-routine",
       "title": "Activate Routine",
-      "description": "Arm a routine so its trigger fires. A scheduled routine starts running on its schedule from this point; a source-driven one starts reacting to events. The server re-validates the whole definition against current workspace state here, so activation can fail with a typed reason (missing source, disconnected account, plan gate) even though saving succeeded. Tell the user what will now happen and when the first run is due.",
+      "description": "Arm a routine so its trigger fires. A scheduled routine starts running on its schedule from this point; a source-driven one starts reacting to events. The server re-validates the whole definition against current workspace state here, so activation can fail with a typed reason (missing source, disconnected account, plan gate) even though saving succeeded. It does not run anything now: the first run is at next_run_at (read it with get-routine). run-routine-now runs it immediately and spends credits. Tell the user what will now happen and when the first run is due.",
       "inputSchema": {
         "type": "object",
         "properties": {
+          "workspace_id": {
+            "type": "string",
+            "format": "uuid",
+            "description": "The brand (workspace) to act on, from list-workspaces. Required when this connection reaches more than one brand; otherwise its one brand is used."
+          },
           "routine_id": {
             "type": "string",
             "format": "uuid",
@@ -1287,10 +1335,15 @@
     {
       "name": "run-routine-now",
       "title": "Run Routine Now",
-      "description": "Dispatch an active routine immediately, off-schedule. Identical execution to a scheduled run — same runtime, same approval policy, same idempotency — differing only in the recorded trigger. Replays rather than duplicates: if a run is already in flight it returns that one with started=false, so say 'it's already running' rather than claiming you started it. Drafts and paused routines cannot be run; arm them first. Returns immediately with the run inline — `run.id` plus `run.status`, derived on every read — and `started`. Call list-routine-runs for that routine to see how the run progressed; there is no per-run polling tool.",
+      "description": "Dispatch an active routine immediately, off-schedule. Identical execution to a scheduled run — same runtime, same approval policy, same idempotency — differing only in the recorded trigger. A second call within 30 seconds returns the same run with started=false. A call while a run is still going is refused with 409 workflow_already_running: say it is already running. Each run spends credits. Drafts and paused routines cannot be run; arm them first. Returns immediately with the run inline — `run.id` plus `run.status`, derived on every read — and `started`. Call list-routine-runs for that routine to see how the run progressed; there is no per-run polling tool.",
       "inputSchema": {
         "type": "object",
         "properties": {
+          "workspace_id": {
+            "type": "string",
+            "format": "uuid",
+            "description": "The brand (workspace) to act on, from list-workspaces. Required when this connection reaches more than one brand; otherwise its one brand is used."
+          },
           "routine_id": {
             "type": "string",
             "format": "uuid",
@@ -1313,10 +1366,15 @@
     {
       "name": "create-content-campaign",
       "title": "Create Content Campaign",
-      "description": "Start a themed, time-boxed body of content — \"our spring launch\", \"Q3 thought-leadership push\". Always lands in DRAFT: creating a campaign never arms it, exactly as with a routine. Call set-content-campaign-status with action=activate when the user is ready, which is also what starts generation. \n\nA campaign is the BRIEF — what the content is about and when it runs. If the user instead wants something to repeat on a schedule, that is a routine (create-routine); the two compose.",
+      "description": "Start a themed, time-boxed body of content — \"our spring launch\", \"Q3 thought-leadership push\". Always lands in DRAFT: creating a campaign never arms it, exactly as with a routine. Call set-content-campaign-status with action=activate when the user is ready, which is also what starts generation. Before activating, give it accounts, a length in weeks, notes, sources and a voice with set-content-campaign-targets; this tool cannot set them. If the workspace has connected accounts and the campaign names none, activating it can switch it on and then refuse with no_accounts, making nothing. \n\nA campaign is the BRIEF — what the content is about and when it runs. If the user instead wants something to repeat on a schedule, that is a routine (create-routine); the two compose.",
       "inputSchema": {
         "type": "object",
         "properties": {
+          "workspace_id": {
+            "type": "string",
+            "format": "uuid",
+            "description": "The brand (workspace) to act on, from list-workspaces. Required when this connection reaches more than one brand; otherwise its one brand is used."
+          },
           "name": {
             "type": "string",
             "description": "What the customer calls this campaign. Required — a campaign with no name is unfindable on every surface.",
@@ -1353,15 +1411,15 @@
           },
           "starts_on": {
             "type": "string",
-            "description": "The window opens. A DATE, not a datetime — per-run scheduling times live on the routine, which owns a timezone. The window is advisory context, not a gate."
+            "description": "First day of the campaign (YYYY-MM-DD, a date). It is not just a label: Bolta writes each week's drafts a few days (2 by default) before that week starts, beginning with this date's week, and the end date is worked out from it. Leave it out only for an undated campaign, which generates once with no weekly rhythm."
           },
           "ends_on": {
             "type": "string",
-            "description": "The window closes. Omit or send null for open-ended, which is a first-class answer and not an incomplete one — \"run this until I stop it\" is not an error case."
+            "description": "Last day of the campaign (YYYY-MM-DD). Needs starts_on. Bolta turns the window into whole weeks from starts_on, rounding up, and refuses more than 4 weeks (invalid_duration_weeks). Leave it out for a 1-week campaign. There is no open-ended campaign, and null is ignored. To set the length in weeks directly, use set-content-campaign-targets with duration_weeks."
           },
           "content_mix": {
             "type": "object",
-            "description": "How much of each format to produce, as {content_type: count}. Keys MUST come from the fixed format registry: text, still_image, carousel, blog. A key outside it is dropped, silently making the mix smaller — so do not invent formats and do not put editorial angles here (\"punchy problem post\" is a strategy, not a format). Omit to inherit the strategy's suggested mix.",
+            "description": "How many of each format to make PER WEEK, as {content_type: count}. Formats Bolta can make: text, still_image, carousel, feed_video, short_video, blog (needs a connected WordPress site), email. story and avatar_video are known but Bolta cannot make them in a campaign yet: they are kept and never produced. Any other key is dropped silently, making the mix smaller, so do not invent formats or put editorial angles here (\"punchy problem post\" is a strategy, not a format). Omit it to use the workspace's Content defaults if it has them, otherwise the strategy's suggested mix.",
             "examples": [
               {
                 "still_image": 3,
@@ -1390,6 +1448,11 @@
       "inputSchema": {
         "type": "object",
         "properties": {
+          "workspace_id": {
+            "type": "string",
+            "format": "uuid",
+            "description": "The brand (workspace) to act on, from list-workspaces. Required when this connection reaches more than one brand; otherwise its one brand is used."
+          },
           "status": {
             "type": "string",
             "description": "Comma-separated statuses to include: draft, scheduled, active, paused, completed, archived. Default: all."
@@ -1416,6 +1479,11 @@
       "inputSchema": {
         "type": "object",
         "properties": {
+          "workspace_id": {
+            "type": "string",
+            "format": "uuid",
+            "description": "The brand (workspace) to act on, from list-workspaces. Required when this connection reaches more than one brand; otherwise its one brand is used."
+          },
           "review_id": {
             "type": "string",
             "format": "uuid",
@@ -1567,6 +1635,11 @@
       "inputSchema": {
         "type": "object",
         "properties": {
+          "workspace_id": {
+            "type": "string",
+            "format": "uuid",
+            "description": "The brand (workspace) to act on, from list-workspaces. Required when this connection reaches more than one brand; otherwise its one brand is used."
+          },
           "routine_id": {
             "type": "string",
             "format": "uuid",
@@ -1593,6 +1666,11 @@
       "inputSchema": {
         "type": "object",
         "properties": {
+          "workspace_id": {
+            "type": "string",
+            "format": "uuid",
+            "description": "The brand (workspace) to act on, from list-workspaces. Required when this connection reaches more than one brand; otherwise its one brand is used."
+          },
           "routine_id": {
             "type": "string",
             "format": "uuid",
@@ -1615,10 +1693,15 @@
     {
       "name": "set-content-campaign-status",
       "title": "Set Content Campaign Status",
-      "description": "Move a content campaign through its lifecycle. One tool, five actions, because the legal move depends on where the campaign is now:\n- activate — draft or scheduled -> active. THIS IS WHAT STARTS GENERATION for a campaign that has never run; it is not a bookkeeping flag.\n- pause — active or scheduled -> paused.\n- resume — paused -> active. A campaign that already produced content resumes as a pure lifecycle move and does not regenerate.\n- complete — active -> completed. It ran its course; reporting still reads it and nothing new attaches. Does not lead back.\n- archive — TERMINAL from any state. Non-destructive: the campaign and its posts are preserved, and restoring means cloning. Confirm with the user first; pause is almost always what they meant.\n\nAn illegal transition is refused with the legal targets named, so read the campaign's current status first if unsure.",
+      "description": "Move a content campaign through its lifecycle. One tool, five actions, because the legal move depends on where the campaign is now:\n- activate — draft or scheduled -> active. THIS IS WHAT STARTS GENERATION for a campaign that has never run; it is not a bookkeeping flag. Give the campaign accounts first (set-content-campaign-targets): if the workspace has connected accounts and the campaign names none, it still switches to active but can then refuse with no_accounts and make nothing until accounts are set.\n- pause — active or scheduled -> paused.\n- resume — paused -> active. A campaign that already produced content resumes as a pure lifecycle move and does not regenerate.\n- complete — active -> completed. It ran its course; reporting still reads it and nothing new attaches. Does not lead back.\n- archive — TERMINAL from any state. Non-destructive: the campaign and its posts are preserved, and restoring means cloning. Confirm with the user first; pause is almost always what they meant.\n\nAn illegal transition is refused with the legal targets named, so read the campaign's current status first if unsure.",
       "inputSchema": {
         "type": "object",
         "properties": {
+          "workspace_id": {
+            "type": "string",
+            "format": "uuid",
+            "description": "The brand (workspace) to act on, from list-workspaces. Required when this connection reaches more than one brand; otherwise its one brand is used."
+          },
           "campaign_id": {
             "type": "string",
             "format": "uuid",
@@ -1820,7 +1903,7 @@
         "readOnlyHint": false,
         "destructiveHint": false,
         "idempotentHint": false,
-        "openWorldHint": false
+        "openWorldHint": true
       }
     },
     {
@@ -1830,6 +1913,11 @@
       "inputSchema": {
         "type": "object",
         "properties": {
+          "workspace_id": {
+            "type": "string",
+            "format": "uuid",
+            "description": "The brand (workspace) to act on, from list-workspaces. Required when this connection reaches more than one brand; otherwise its one brand is used."
+          },
           "campaign_id": {
             "type": "string",
             "format": "uuid",
@@ -1865,6 +1953,11 @@
       "inputSchema": {
         "type": "object",
         "properties": {
+          "workspace_id": {
+            "type": "string",
+            "format": "uuid",
+            "description": "The brand (workspace) to act on, from list-workspaces. Required when this connection reaches more than one brand; otherwise its one brand is used."
+          },
           "name": {
             "type": "string",
             "description": "Short human name, e.g. 'Weekday Reddit engagement'"
@@ -1891,7 +1984,7 @@
           },
           "schedule": {
             "type": "object",
-            "description": "When to run. Either {\"interval\": \"daily\"|\"weekly\"|\"monthly\", \"time\": \"HH:MM\"} — `day` (\"monday\"..\"sunday\") is REQUIRED for \"weekly\" and rejected for any other interval — or {\"cron\": \"0 10 * * 1-5\"}, a 5-field cron expression, which is the ONLY way to express weekdays-only. No other interval words and no other fields are accepted. `time` is 24-hour WALL CLOCK, resolved in the routine's own `timezone` — send the workspace's timezone there unless the user named another. Never send a UTC offset and never convert the user's stated time yourself."
+            "description": "When to run. Either {\"interval\": \"daily\"|\"weekly\"|\"monthly\", \"time\": \"HH:MM\"} — `day` (\"monday\"..\"sunday\") is REQUIRED for \"weekly\" and rejected for any other interval; \"monthly\" runs on the 1st of each month — or {\"cron\": \"0 10 * * 1-5\"}, a 5-field cron expression, which is the ONLY way to express weekdays-only or another day of the month (\"0 9 15 * *\"). No other interval words and no other fields are accepted. `time` is 24-hour WALL CLOCK, resolved in the routine's own `timezone` — send the workspace's timezone there unless the user named another. Never send a UTC offset and never convert the user's stated time yourself. Read next_run_at back from get-routine."
           },
           "timezone": {
             "type": "string",
@@ -1907,10 +2000,33 @@
           },
           "source_bindings": {
             "type": "array",
+            "maxItems": 25,
             "items": {
-              "type": "string"
+              "type": "object",
+              "properties": {
+                "provider": {
+                  "type": "string"
+                },
+                "ref": {
+                  "type": "string"
+                },
+                "filters": {
+                  "type": "object"
+                },
+                "kind": {
+                  "type": "string"
+                },
+                "meeting_category": {
+                  "type": "string"
+                }
+              },
+              "required": [
+                "provider",
+                "ref"
+              ],
+              "additionalProperties": false
             },
-            "description": "[{provider, ref, filters}] references for source-driven templates. Credentials are never sent here."
+            "description": "Where the routine reads from and posts to, as objects, never strings: [{\"provider\": \"social_account\", \"ref\": \"<id from list-accounts>\"}]. Always bind the account(s) to post from: with no social_account binding Bolta may pick any connected account. Other providers (for example github or google_drive) take the id of a connection made in Bolta. At most 25."
           },
           "capability_keys": {
             "type": "array",
@@ -1922,6 +2038,24 @@
           "output_config": {
             "type": "object",
             "description": "Template-specific output settings (platforms, counts)."
+          },
+          "destination_config": {
+            "type": "object",
+            "properties": {
+              "voice_profile_id": {
+                "type": "string"
+              }
+            },
+            "additionalProperties": false,
+            "description": "Which voice writes the drafts: {\"voice_profile_id\": \"<id from list-voice-profiles>\"}. The voice must be this brand's. Routines that write posts accept it; others refuse it. Leave it out to use the brand's default voice."
+          },
+          "default_reviewer_ids": {
+            "type": "array",
+            "maxItems": 20,
+            "items": {
+              "type": "string"
+            },
+            "description": "Who reviews this routine's drafts: ids from list-workspace-members. Each must be on the brand's team; client reviewers are refused. Leave it out to use the brand's default reviewer."
           }
         },
         "additionalProperties": false,
@@ -1945,6 +2079,11 @@
       "inputSchema": {
         "type": "object",
         "properties": {
+          "workspace_id": {
+            "type": "string",
+            "format": "uuid",
+            "description": "The brand (workspace) to act on, from list-workspaces. Required when this connection reaches more than one brand; otherwise its one brand is used."
+          },
           "campaign_id": {
             "type": "string",
             "format": "uuid",
@@ -1977,10 +2116,10 @@
             "description": "The workspace ID"
           }
         },
+        "additionalProperties": false,
         "required": [
           "workspace_id"
-        ],
-        "additionalProperties": false
+        ]
       },
       "annotations": {
         "title": "List Voice Profiles",
@@ -2055,6 +2194,11 @@
       "inputSchema": {
         "type": "object",
         "properties": {
+          "workspace_id": {
+            "type": "string",
+            "format": "uuid",
+            "description": "The brand (workspace) to act on, from list-workspaces. Required when this connection reaches more than one brand; otherwise its one brand is used."
+          },
           "campaign_id": {
             "type": "string",
             "format": "uuid",
@@ -2062,11 +2206,11 @@
           },
           "status": {
             "type": "string",
-            "description": "Comma-separated post statuses to include. Default: all."
+            "description": "Ignored today: every post in the campaign is returned whatever you send. Filter the rows yourself by status or has_pending_review."
           },
           "limit": {
             "type": "integer",
-            "description": "Maximum posts to return. Default 50, max 200."
+            "description": "Ignored today: there is no cap and no paging; every post in the campaign is returned."
           }
         },
         "additionalProperties": false,
@@ -2137,6 +2281,11 @@
       "inputSchema": {
         "type": "object",
         "properties": {
+          "workspace_id": {
+            "type": "string",
+            "format": "uuid",
+            "description": "The brand (workspace) to act on, from list-workspaces. Required when this connection reaches more than one brand; otherwise its one brand is used."
+          },
           "routine_id": {
             "type": "string",
             "format": "uuid",
@@ -2144,7 +2293,7 @@
           },
           "limit": {
             "type": "integer",
-            "description": "Maximum runs to return"
+            "description": "Maximum runs to return: default 50, at most 50 (larger values are capped). Runs carry counts, not post ids: find a run's drafts in list-inbox-items(source=team) by matching workflow_run_id."
           }
         },
         "additionalProperties": false,
@@ -2167,6 +2316,11 @@
       "inputSchema": {
         "type": "object",
         "properties": {
+          "workspace_id": {
+            "type": "string",
+            "format": "uuid",
+            "description": "The brand (workspace) to act on, from list-workspaces. Required when this connection reaches more than one brand; otherwise its one brand is used."
+          },
           "outcome_goal": {
             "type": "string",
             "description": "Narrow the library to one outcome goal."
@@ -2193,6 +2347,11 @@
       "inputSchema": {
         "type": "object",
         "properties": {
+          "workspace_id": {
+            "type": "string",
+            "format": "uuid",
+            "description": "The brand (workspace) to act on, from list-workspaces. Required when this connection reaches more than one brand; otherwise its one brand is used."
+          },
           "routine_id": {
             "type": "string",
             "format": "uuid",
@@ -2219,6 +2378,11 @@
       "inputSchema": {
         "type": "object",
         "properties": {
+          "workspace_id": {
+            "type": "string",
+            "format": "uuid",
+            "description": "The brand (workspace) to act on, from list-workspaces. Required when this connection reaches more than one brand; otherwise its one brand is used."
+          },
           "review_id": {
             "type": "string",
             "format": "uuid",
@@ -2233,7 +2397,7 @@
             "items": {
               "type": "string"
             },
-            "description": "Structured rejection category codes — these feed voice learning far better than free text; pass alongside rejectionReason whenever the objection fits. Valid codes (anything else is silently dropped): too_casual, too_formal, wrong_tone, off_brand, too_long, too_short, wrong_format, factual_error, spelling_grammar, missing_cta, wrong_cta, wrong_emoji, wrong_hashtag, not_engaging, platform_mismatch, too_salesy, off_topic, repetitive, other"
+            "description": "Structured rejection category codes — these feed voice learning far better than free text; pass alongside rejectionReason whenever the objection fits. Valid codes (anything else is silently dropped): too_casual, too_formal, wrong_tone, off_brand, too_long, too_short, wrong_format, factual_error, spelling_grammar, missing_cta, wrong_cta, wrong_emoji, wrong_hashtag, not_engaging, platform_mismatch, too_salesy, off_topic, repetitive, no_substance, other"
           }
         },
         "additionalProperties": false,
@@ -2252,10 +2416,15 @@
     {
       "name": "update-content-campaign",
       "title": "Update Content Campaign",
-      "description": "Edit a content campaign's brief — any of name, strategy_key, theme, audience, cta_text, cta_url, starts_on, ends_on, content_mix. Send only what changes. \n\nStatus is NOT writable here: lifecycle moves are set-content-campaign-status, and results are derived, never set. Sending either is rejected by name rather than ignored.",
+      "description": "Edit a content campaign's brief — any of name, strategy_key, theme, audience, cta_text, cta_url, starts_on, ends_on, content_mix. Send only what changes. Accounts, length in weeks, notes, sources and voice are set with set-content-campaign-targets instead. \n\nStatus is NOT writable here: lifecycle moves are set-content-campaign-status, and results are derived, never set. Sending either is rejected by name rather than ignored.",
       "inputSchema": {
         "type": "object",
         "properties": {
+          "workspace_id": {
+            "type": "string",
+            "format": "uuid",
+            "description": "The brand (workspace) to act on, from list-workspaces. Required when this connection reaches more than one brand; otherwise its one brand is used."
+          },
           "campaign_id": {
             "type": "string",
             "format": "uuid",
@@ -2288,15 +2457,15 @@
           },
           "starts_on": {
             "type": "string",
-            "description": "The window opens. Send null to clear."
+            "description": "New first day (YYYY-MM-DD). The campaign keeps its number of weeks, so the end date moves with it. It cannot be cleared from here: null is ignored."
           },
           "ends_on": {
             "type": "string",
-            "description": "The window closes. Send null to clear, which means open-ended rather than unset."
+            "description": "New last day (YYYY-MM-DD), turned into 1-4 whole weeks from starts_on (rounded up; more than 4 weeks is refused). It cannot be cleared: null is ignored and there is no open-ended campaign. To set the length in weeks directly, use set-content-campaign-targets with duration_weeks."
           },
           "content_mix": {
             "type": "object",
-            "description": "{content_type: count}. Keys must be from the fixed registry: text, still_image, carousel, blog. Replaces the whole mix rather than merging into it."
+            "description": "{content_type: count} PER WEEK. Formats Bolta can make: text, still_image, carousel, feed_video, short_video, blog, email (story and avatar_video are kept but never produced; any other key is dropped silently). Replaces the whole mix rather than merging into it."
           }
         },
         "additionalProperties": false,
@@ -2356,6 +2525,11 @@
       "inputSchema": {
         "type": "object",
         "properties": {
+          "workspace_id": {
+            "type": "string",
+            "format": "uuid",
+            "description": "The brand (workspace) to act on, from list-workspaces. Required when this connection reaches more than one brand; otherwise its one brand is used."
+          },
           "routine_id": {
             "type": "string",
             "format": "uuid",
@@ -2375,7 +2549,7 @@
           },
           "schedule": {
             "type": "object",
-            "description": "Wall-clock schedule object. The time resolves to the workspace's timezone unless `timezone` overrides it; never send a UTC offset."
+            "description": "Same shape as create-routine's schedule: {\"interval\": \"daily\"|\"weekly\"|\"monthly\", \"time\": \"HH:MM\"} (`day` required for weekly; monthly runs on the 1st) or {\"cron\": \"...\"}. `time` is wall clock in the routine's own `timezone` (the stored one, or the one you send with it), not automatically the workspace's timezone. Never send a UTC offset."
           },
           "timezone": {
             "type": "string",
@@ -2402,10 +2576,65 @@
           },
           "source_bindings": {
             "type": "array",
+            "maxItems": 25,
+            "items": {
+              "type": "object",
+              "properties": {
+                "provider": {
+                  "type": "string"
+                },
+                "ref": {
+                  "type": "string"
+                },
+                "filters": {
+                  "type": "object"
+                },
+                "kind": {
+                  "type": "string"
+                },
+                "meeting_category": {
+                  "type": "string"
+                }
+              },
+              "required": [
+                "provider",
+                "ref"
+              ],
+              "additionalProperties": false
+            },
+            "description": "Where the routine reads from and posts to, as objects, never strings: [{\"provider\": \"social_account\", \"ref\": \"<id from list-accounts>\"}]. Always bind the account(s) to post from: with no social_account binding Bolta may pick any connected account. Other providers (for example github or google_drive) take the id of a connection made in Bolta. At most 25. Replaces the whole list."
+          },
+          "destination_config": {
+            "type": "object",
+            "properties": {
+              "voice_profile_id": {
+                "type": "string"
+              },
+              "account_refs": {
+                "type": "array",
+                "items": {
+                  "type": "string"
+                },
+                "maxItems": 25
+              },
+              "behavior": {
+                "type": "string",
+                "enum": [
+                  "save_draft",
+                  "schedule"
+                ]
+              }
+            },
+            "additionalProperties": false,
+            "description": "Which voice writes the drafts: {\"voice_profile_id\": \"<id from list-voice-profiles>\"}, a voice of this brand. Replaces the whole object: read destination_config from get-routine first and send its account_refs and behavior back with the new voice, or they are cleared (behavior returns to save_draft)."
+          },
+          "default_reviewer_ids": {
+            "type": "array",
+            "maxItems": 20,
             "items": {
               "type": "string"
             },
-            "description": "[{provider, ref, filters}] source references"
+            "description": "Who reviews this routine's drafts: ids from list-workspace-members, each on the brand's team. Replaces the list; [] goes back to the brand's default reviewer."
           }
         },
         "additionalProperties": false,
@@ -2518,6 +2747,11 @@
       "inputSchema": {
         "type": "object",
         "properties": {
+          "workspace_id": {
+            "type": "string",
+            "format": "uuid",
+            "description": "The brand (workspace) to act on, from list-workspaces. Required when this connection reaches more than one brand; otherwise its one brand is used."
+          },
           "items": {
             "type": "array",
             "minItems": 1,
@@ -2577,10 +2811,15 @@
     {
       "name": "reject-post",
       "title": "Reject Post",
-      "description": "Turn down a post that is waiting for review, with the user's reason, so Bolta learns what not to write. Works for drafts a Bolta routine or campaign wrote and for posts sent for review (list-inbox-items source=team rows). The post is kept and marked Rejected: never deleted, scheduled or published. In a campaign it stays in the campaign and counts as rejected. Use the user's own words as the reason and add the categories that fit. source=recurring rows use reject-recurring-review instead. Needs an admin or owner. Repeating the call is safe.",
+      "description": "Turn down a post that is waiting for review, with the user's reason, so Bolta learns what not to write. Works for drafts a Bolta routine or campaign wrote and for posts sent for review (list-inbox-items source=team rows). The post is kept and marked Rejected: never deleted, scheduled or published. In a campaign it stays in the campaign and counts as rejected. Use the user's own words as the reason and add the categories that fit. If the user has not said why, ask them first and offer the reasons Bolta uses: Too salesy (too_salesy), Wrong tone (wrong_tone), Not engaging (not_engaging), Too formal (too_formal), Too casual (too_casual), Wrong format (wrong_format), Off-topic (off_topic), Says nothing (no_substance), Too long (too_long), Repetitive (repetitive), Other (other). Their answer is what Bolta learns from, and it cannot be added after the post is rejected. source=recurring rows use reject-recurring-review instead. Needs an admin or owner. Repeating the call is safe.",
       "inputSchema": {
         "type": "object",
         "properties": {
+          "workspace_id": {
+            "type": "string",
+            "format": "uuid",
+            "description": "The brand (workspace) to act on, from list-workspaces. Required when this connection reaches more than one brand; otherwise its one brand is used."
+          },
           "post_id": {
             "type": "string",
             "format": "uuid",
@@ -2644,6 +2883,11 @@
       "inputSchema": {
         "type": "object",
         "properties": {
+          "workspace_id": {
+            "type": "string",
+            "format": "uuid",
+            "description": "The brand (workspace) to act on, from list-workspaces. Required when this connection reaches more than one brand; otherwise its one brand is used."
+          },
           "campaign_id": {
             "type": "string",
             "format": "uuid",
@@ -2723,6 +2967,11 @@
       "inputSchema": {
         "type": "object",
         "properties": {
+          "workspace_id": {
+            "type": "string",
+            "format": "uuid",
+            "description": "The brand (workspace) to act on, from list-workspaces. Required when this connection reaches more than one brand; otherwise its one brand is used."
+          },
           "campaign_id": {
             "type": "string",
             "format": "uuid",
@@ -2767,7 +3016,7 @@
           "workspace_id": {
             "type": "string",
             "format": "uuid",
-            "description": "The workspace ID. Defaults to the connected workspace."
+            "description": "The workspace ID"
           },
           "url": {
             "type": "string",
@@ -2788,6 +3037,7 @@
         },
         "additionalProperties": false,
         "required": [
+          "workspace_id",
           "url"
         ]
       },
@@ -2809,7 +3059,7 @@
           "workspace_id": {
             "type": "string",
             "format": "uuid",
-            "description": "The workspace ID. Defaults to the connected workspace."
+            "description": "The brand to act on (an id from list-workspaces). Needed when the connection reaches more than one brand."
           }
         },
         "additionalProperties": false
@@ -2832,7 +3082,7 @@
           "workspace_id": {
             "type": "string",
             "format": "uuid",
-            "description": "The workspace ID. Defaults to the connected workspace."
+            "description": "The brand to act on (an id from list-workspaces). Needed when the connection reaches more than one brand."
           },
           "routine_id": {
             "type": "string",
@@ -2860,7 +3110,7 @@
           "workspace_id": {
             "type": "string",
             "format": "uuid",
-            "description": "The workspace ID. Defaults to the connected workspace."
+            "description": "The brand to act on (an id from list-workspaces). Needed when the connection reaches more than one brand."
           },
           "routine_id": {
             "type": "string",
@@ -2892,8 +3142,8 @@
       "annotations": {
         "title": "Decide Routine Recommendation",
         "readOnlyHint": false,
-        "destructiveHint": false,
-        "idempotentHint": false,
+        "destructiveHint": true,
+        "idempotentHint": true,
         "openWorldHint": false
       }
     },
@@ -2907,7 +3157,7 @@
           "workspace_id": {
             "type": "string",
             "format": "uuid",
-            "description": "The workspace ID. Defaults to the connected workspace."
+            "description": "The brand to act on (an id from list-workspaces). Needed when the connection reaches more than one brand."
           }
         },
         "additionalProperties": false
@@ -2930,7 +3180,7 @@
           "workspace_id": {
             "type": "string",
             "format": "uuid",
-            "description": "The workspace ID. Defaults to the connected workspace."
+            "description": "The brand to act on (an id from list-workspaces). Needed when the connection reaches more than one brand."
           },
           "suggestion_id": {
             "type": "string",
@@ -2956,9 +3206,9 @@
       "annotations": {
         "title": "Decide Bolta Suggestion",
         "readOnlyHint": false,
-        "destructiveHint": false,
-        "idempotentHint": false,
-        "openWorldHint": false
+        "destructiveHint": true,
+        "idempotentHint": true,
+        "openWorldHint": true
       }
     },
     {
@@ -2971,7 +3221,7 @@
           "workspace_id": {
             "type": "string",
             "format": "uuid",
-            "description": "The workspace ID. Defaults to the connected workspace."
+            "description": "The brand to act on (an id from list-workspaces). Needed when the connection reaches more than one brand."
           },
           "ask": {
             "type": "string",
@@ -3002,7 +3252,7 @@
           "workspace_id": {
             "type": "string",
             "format": "uuid",
-            "description": "The workspace ID. Defaults to the connected workspace."
+            "description": "The brand to act on (an id from list-workspaces). Needed when the connection reaches more than one brand."
           },
           "ask": {
             "type": "string",
@@ -3037,14 +3287,14 @@
     {
       "name": "recommend-routines",
       "title": "Recommend Routines",
-      "description": "Have Bolta recommend 3 to 5 routines for this brand, best fit first: each a different job (posts, articles, founder stories, customer wins, reusing top posts), none repeating a routine the brand already runs, each with one line on why it fits from the brand's own posts, routines and sources. Each comes back as a plan card with its own id; nothing is created. skipped says what was left out and why. Show them and ask which to save; save each with confirm-plan.",
+      "description": "Have Bolta recommend 3 to 5 routines for this brand, best fit first: each a different job (posts, articles, founder stories, customer wins, reusing top posts, replies, reports, routines fed by a connected source), none repeating a routine the brand already runs, each with one line on why it fits from the brand's own posts, routines and sources. Sized to review_load (drafts per week, waiting, decided lately): a full review queue gets fewer, smaller routines and why says so. Each comes back as a plan card with its own id; nothing is created. skipped says what was left out and why. Show them and ask which to save; save each with confirm-plan.",
       "inputSchema": {
         "type": "object",
         "properties": {
           "workspace_id": {
             "type": "string",
             "format": "uuid",
-            "description": "The workspace ID. Defaults to the connected workspace."
+            "description": "The brand to act on (an id from list-workspaces). Needed when the connection reaches more than one brand."
           },
           "goals": {
             "type": "string",
@@ -3081,7 +3331,7 @@
           "workspace_id": {
             "type": "string",
             "format": "uuid",
-            "description": "The workspace ID. Defaults to the connected workspace."
+            "description": "The brand to act on (an id from list-workspaces). Needed when the connection reaches more than one brand."
           },
           "proposal_id": {
             "type": "string",
@@ -3094,7 +3344,7 @@
           },
           "changes": {
             "type": "object",
-            "description": "Exact fields to set. Routine: goal, instructions, name, count (1-10), platforms, account_ids, schedule ({interval: daily|weekly|monthly, days, time HH:MM, day_of_month} or {cron}), timezone, media_mode (none|image|video|carousel), media_prompt, visual_style, carousel_config, voice_profile_id, default_reviewer_ids, approval_policy, source_urls, template_key (switch to a suggested_switch). Campaign: goal, instructions, name, platforms, account_ids, voice_profile_id, source_urls."
+            "description": "Exact fields to set. Routine: goal, instructions, name, count (1 to the template's max: 10 posts, 5 deep dives, 8 repurposed, 2 articles), platforms, account_ids, schedule ({interval: daily|weekly|monthly, days, time HH:MM, day_of_month} or {cron}), timezone, media_mode (none|image|video|carousel), media_prompt, visual_style, carousel_config ({slideCount 2-10, visualStyle, aspectRatio, continuity, useBrand}), voice_profile_id, default_reviewer_ids, approval_policy, source_urls, template_key (any routine template from list-routine-templates except product_launch_sequence; a source-driven one stays unsaved until its source is connected), topics and subreddits (reply routines), keywords and subreddits (outreach_listening). Campaign: goal, instructions, name, platforms, account_ids, voice_profile_id, source_urls."
           }
         },
         "additionalProperties": false,
@@ -3113,14 +3363,14 @@
     {
       "name": "confirm-plan",
       "title": "Confirm Plan",
-      "description": "Save a plan the user said yes to, exactly as Bolta planned it (by its id). switch_on false (default): a routine is saved and off, a campaign is saved as a draft; nothing runs. switch_on true: saved, switched on and the first run or generation starts, which uses credits and leads to posts. Ask first, and ask separately before switch_on true. Confirming the same id again returns what was saved and runs nothing.",
+      "description": "Save a plan the user said yes to, exactly as Bolta planned it (by its id). switch_on false (default): a routine is saved and off, a campaign is saved as a draft; nothing runs. switch_on true: saved, switched on and the first run or generation starts, which uses credits and leads to posts. Ask first, and ask separately before switch_on true. Confirming the same id again returns what was saved and runs nothing. A plan that still needs something (a connection, reply topics, keywords, the real material) is refused as plan_not_ready, naming what is missing.",
       "inputSchema": {
         "type": "object",
         "properties": {
           "workspace_id": {
             "type": "string",
             "format": "uuid",
-            "description": "The workspace ID. Defaults to the connected workspace."
+            "description": "The brand to act on (an id from list-workspaces). Needed when the connection reaches more than one brand."
           },
           "proposal_id": {
             "type": "string",
@@ -3140,9 +3390,9 @@
       "annotations": {
         "title": "Confirm Plan",
         "readOnlyHint": false,
-        "destructiveHint": false,
-        "idempotentHint": false,
-        "openWorldHint": false
+        "destructiveHint": true,
+        "idempotentHint": true,
+        "openWorldHint": true
       }
     }
   ]

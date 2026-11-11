@@ -6,7 +6,7 @@
    {
     "name": "list-workspaces",
     "title": "List Workspaces",
-    "description": "List all workspaces accessible by your API key",
+    "description": "List all workspaces accessible by your API key. Each workspace is one brand: `user_role` is your role on that brand, and `organization` ({id, name, role}) is the organization the brand belongs to with your role there (role is null for a guest). Brands come grouped by organization. One connection is one organization; it reaches the brands ticked when connecting. When it reaches more than one brand, pass workspace_id on every other call; ask the user which brand if unclear.",
     "inputSchema": {
      "type": "object",
      "properties": {},
@@ -49,7 +49,7 @@
    {
     "name": "get-my-capabilities",
     "title": "Get My Capabilities",
-    "description": "Check what the current API key or agent is allowed to do in a workspace. `permissions` is the caller's role intersected with the scopes this key actually carries; `denied_by` says why each denied action is denied (`role`, `workspace_plan`, or `key_scope`).",
+    "description": "Check what the current API key or agent is allowed to do in a workspace. `permissions` is the caller's role intersected with the scopes this key actually carries; `denied_by` says why each denied action is denied (`role`, `workspace_plan`, or `key_scope`). `role` (also `brand_role`) is your role on this brand and decides `permissions`; `organization` ({id, name, role}) is the brand's organization and your role there, which grants nothing on its own.",
     "inputSchema": {
      "type": "object",
      "properties": {
@@ -126,6 +126,53 @@
     },
     "annotations": {
      "title": "Get Social Connect Link",
+     "readOnlyHint": true,
+     "destructiveHint": false,
+     "idempotentHint": true,
+     "openWorldHint": false
+    }
+   },
+   {
+    "name": "get-posting-rules",
+    "title": "Get Posting Rules",
+    "description": "Read the rules a post must meet BEFORE you write or save it, for this workspace's connected accounts or one platform: character limit and what happens to longer text, required media, fields you must set (Reddit subreddit and title, Pinterest board, YouTube video), TikTok privacy default, threads, carousels, markdown and link handling, scheduling. Call it once before drafting for a platform you have not written for in this conversation and write to the tightest limit. It only reads: it never saves, schedules or publishes anything.",
+    "inputSchema": {
+     "type": "object",
+     "properties": {
+      "workspace_id": {
+       "type": "string",
+       "format": "uuid",
+       "description": "The workspace ID"
+      },
+      "platform": {
+       "type": "string",
+       "enum": [
+        "bluesky",
+        "discord",
+        "facebook",
+        "instagram",
+        "linkedin",
+        "mastodon",
+        "pinterest",
+        "reddit",
+        "threads",
+        "tiktok",
+        "wordpress",
+        "x",
+        "youtube",
+        "substack",
+        "telegram"
+       ],
+       "description": "One platform to read: bluesky, discord, facebook, instagram, linkedin, mastodon, pinterest, reddit, threads, tiktok, wordpress, x, youtube, substack, telegram. Leave out to read every platform this workspace has an account on."
+      }
+     },
+     "additionalProperties": false,
+     "required": [
+      "workspace_id"
+     ]
+    },
+    "annotations": {
+     "title": "Get Posting Rules",
      "readOnlyHint": true,
      "destructiveHint": false,
      "idempotentHint": true,
@@ -261,11 +308,11 @@
       },
       "start_date": {
        "type": "string",
-       "description": "Only posts scheduled/created on or after this datetime"
+       "description": "Only posts on or after this datetime. The window is read from each post's scheduled time, or its created time when it has none, not from the moment it went live: a post scheduled late on the last day of a month and published just after midnight counts in the earlier month."
       },
       "end_date": {
        "type": "string",
-       "description": "Only posts scheduled/created on or before this datetime"
+       "description": "Only posts on or before this datetime (same scheduled-or-created basis as start_date)"
       },
       "include_metrics": {
        "type": "boolean",
@@ -285,7 +332,7 @@
       },
       "sort_by": {
        "type": "string",
-       "description": "Sort field: created_at | updated_at | scheduled_time (default updated_at)"
+       "description": "Sort field: created_at | updated_at | scheduled_time | engagement (default updated_at). Use engagement with sort_order=desc, status=published and include_metrics=true for \"best / top performing posts\": it ranks the WHOLE date window by total engagement, so a small limit (10) is enough."
       },
       "sort_order": {
        "type": "string",
@@ -332,6 +379,11 @@
       "end_date": {
        "type": "string",
        "description": "Only posts scheduled at/before this time"
+      },
+      "account_ids": {
+       "type": "string",
+       "format": "uuid",
+       "description": "Only posts that go to at least one of these accounts"
       }
      },
      "additionalProperties": false,
@@ -354,6 +406,11 @@
     "inputSchema": {
      "type": "object",
      "properties": {
+      "workspace_id": {
+       "type": "string",
+       "format": "uuid",
+       "description": "The brand (workspace) to act on, from list-workspaces. Required when this connection reaches more than one brand; otherwise its one brand is used."
+      },
       "post_id": {
        "type": "string",
        "format": "uuid",
@@ -451,6 +508,10 @@
        "type": "object",
        "description": "Optional poll to attach to the post content (Threads/X). Object shape, e.g. {\"options\": [\"Option A\", \"Option B\"]}. Platform-specific settings like Threads reply controls or topic tags are set separately via update-post-platform-details."
       },
+      "platform_specific": {
+       "type": "object",
+       "description": "Per-network settings, and per-account overrides, as an object keyed by network: x, threads, instagram, facebook, linkedin, tiktok, youtube, pinterest, bluesky, mastodon, reddit, discord, wordpress. Each network holds its own fields plus optional accounts: {<id from list-accounts>: {...same fields...}}. At publish an account's entry wins, then the network's fields, then update-post-platform-details. text on a network or account replaces the post text there (different text per network on ONE post). Examples: {\"x\": {\"text\": \"Short version for X\"}}; {\"threads\": {\"topic_tag\": \"launch\"}}; {\"instagram\": {\"content_type\": \"REELS\", \"trialReelEnabled\": true, \"trialGraduationStrategy\": \"SS_PERFORMANCE\"}} (a trial reel: one setting per post, REELS with a video); {\"linkedin\": {\"text\": \"Long version\", \"accounts\": {\"linkedin_org_123\": {\"text\": \"Company version\", \"visibility\": \"PUBLIC\"}}}}; {\"facebook\": {\"accounts\": {\"facebook_page_456\": {\"text\": \"Page version\"}}}}; {\"wordpress\": {\"title\": \"Headline\", \"meta_description\": \"...\"}}."
+      },
       "idempotency_key": {
        "type": "string",
        "description": "Optional dedupe key. Pass a stable value to make retries safe — repeating a create with the same key returns the already-created post instead of duplicating it (24h window)."
@@ -467,7 +528,7 @@
      "readOnlyHint": false,
      "destructiveHint": false,
      "idempotentHint": false,
-     "openWorldHint": false
+     "openWorldHint": true
     }
    },
    {
@@ -477,6 +538,11 @@
     "inputSchema": {
      "type": "object",
      "properties": {
+      "workspace_id": {
+       "type": "string",
+       "format": "uuid",
+       "description": "The brand (workspace) to act on, from list-workspaces. Required when this connection reaches more than one brand; otherwise its one brand is used."
+      },
       "post_id": {
        "type": "string",
        "format": "uuid",
@@ -534,6 +600,10 @@
        "type": "string",
        "description": "'Draft' or 'Pending Approval'. Setting 'Draft' unschedules the post in place — it keeps its id, content, and activity history, and its scheduled time is cleared. Assistants cannot set 'Scheduled' or 'Published' here; use schedule-post or publish-post after approval."
       },
+      "platform_specific": {
+       "type": "object",
+       "description": "Per-network settings, and per-account overrides, as an object keyed by network: x, threads, instagram, facebook, linkedin, tiktok, youtube, pinterest, bluesky, mastodon, reddit, discord, wordpress. Each network holds its own fields plus optional accounts: {<id from list-accounts>: {...same fields...}}. At publish an account's entry wins, then the network's fields, then update-post-platform-details. text on a network or account replaces the post text there (different text per network on ONE post). Examples: {\"x\": {\"text\": \"Short version for X\"}}; {\"threads\": {\"topic_tag\": \"launch\"}}; {\"instagram\": {\"content_type\": \"REELS\", \"trialReelEnabled\": true, \"trialGraduationStrategy\": \"SS_PERFORMANCE\"}} (a trial reel: one setting per post, REELS with a video); {\"linkedin\": {\"text\": \"Long version\", \"accounts\": {\"linkedin_org_123\": {\"text\": \"Company version\", \"visibility\": \"PUBLIC\"}}}}; {\"facebook\": {\"accounts\": {\"facebook_page_456\": {\"text\": \"Page version\"}}}}; {\"wordpress\": {\"title\": \"Headline\", \"meta_description\": \"...\"}}. Merged into what the post already has: the fields you send replace those fields, everything else stays; accounts merge per account; null removes a network, a field or an account entry."
+      },
       "accounts": {
        "type": "array",
        "items": {
@@ -552,7 +622,7 @@
      "readOnlyHint": false,
      "destructiveHint": true,
      "idempotentHint": true,
-     "openWorldHint": false
+     "openWorldHint": true
     }
    },
    {
@@ -562,6 +632,11 @@
     "inputSchema": {
      "type": "object",
      "properties": {
+      "workspace_id": {
+       "type": "string",
+       "format": "uuid",
+       "description": "The brand (workspace) to act on, from list-workspaces. Required when this connection reaches more than one brand; otherwise its one brand is used."
+      },
       "post_id": {
        "type": "string",
        "format": "uuid",
@@ -588,6 +663,11 @@
     "inputSchema": {
      "type": "object",
      "properties": {
+      "workspace_id": {
+       "type": "string",
+       "format": "uuid",
+       "description": "The brand (workspace) to act on, from list-workspaces. Required when this connection reaches more than one brand; otherwise its one brand is used."
+      },
       "post_id": {
        "type": "string",
        "format": "uuid",
@@ -619,6 +699,11 @@
     "inputSchema": {
      "type": "object",
      "properties": {
+      "workspace_id": {
+       "type": "string",
+       "format": "uuid",
+       "description": "The brand (workspace) to act on, from list-workspaces. Required when this connection reaches more than one brand; otherwise its one brand is used."
+      },
       "post_id": {
        "type": "string",
        "format": "uuid",
@@ -683,7 +768,7 @@
      "readOnlyHint": false,
      "destructiveHint": false,
      "idempotentHint": false,
-     "openWorldHint": false
+     "openWorldHint": true
     }
    },
    {
@@ -693,6 +778,11 @@
     "inputSchema": {
      "type": "object",
      "properties": {
+      "workspace_id": {
+       "type": "string",
+       "format": "uuid",
+       "description": "The brand (workspace) to act on, from list-workspaces. Required when this connection reaches more than one brand; otherwise its one brand is used."
+      },
       "task_id": {
        "type": "string",
        "description": "The task ID returned by bulk-create-posts"
@@ -958,7 +1048,7 @@
      "readOnlyHint": false,
      "destructiveHint": false,
      "idempotentHint": false,
-     "openWorldHint": false
+     "openWorldHint": true
     }
    },
    {
@@ -1121,6 +1211,11 @@
     "inputSchema": {
      "type": "object",
      "properties": {
+      "workspace_id": {
+       "type": "string",
+       "format": "uuid",
+       "description": "The brand (workspace) to act on, from list-workspaces. Required when this connection reaches more than one brand; otherwise its one brand is used."
+      },
       "items": {
        "type": "array",
        "minItems": 1,
@@ -1180,10 +1275,15 @@
    {
     "name": "reject-post",
     "title": "Reject Post",
-    "description": "Turn down a post that is waiting for review, with the user's reason, so Bolta learns what not to write. Works for drafts a Bolta routine or campaign wrote and for posts sent for review (list-inbox-items source=team rows). The post is kept and marked Rejected: never deleted, scheduled or published. In a campaign it stays in the campaign and counts as rejected. Use the user's own words as the reason and add the categories that fit. source=recurring rows use reject-recurring-review instead. Needs an admin or owner. Repeating the call is safe.",
+    "description": "Turn down a post that is waiting for review, with the user's reason, so Bolta learns what not to write. Works for drafts a Bolta routine or campaign wrote and for posts sent for review (list-inbox-items source=team rows). The post is kept and marked Rejected: never deleted, scheduled or published. In a campaign it stays in the campaign and counts as rejected. Use the user's own words as the reason and add the categories that fit. If the user has not said why, ask them first and offer the reasons Bolta uses: Too salesy (too_salesy), Wrong tone (wrong_tone), Not engaging (not_engaging), Too formal (too_formal), Too casual (too_casual), Wrong format (wrong_format), Off-topic (off_topic), Says nothing (no_substance), Too long (too_long), Repetitive (repetitive), Other (other). Their answer is what Bolta learns from, and it cannot be added after the post is rejected. source=recurring rows use reject-recurring-review instead. Needs an admin or owner. Repeating the call is safe.",
     "inputSchema": {
      "type": "object",
      "properties": {
+      "workspace_id": {
+       "type": "string",
+       "format": "uuid",
+       "description": "The brand (workspace) to act on, from list-workspaces. Required when this connection reaches more than one brand; otherwise its one brand is used."
+      },
       "post_id": {
        "type": "string",
        "format": "uuid",
@@ -1243,7 +1343,7 @@
    {
     "name": "list-reviews",
     "title": "List Reviews",
-    "description": "List all posts pending review in a workspace. Supports filtering by reviewer and workflow type.",
+    "description": "List all POSTS pending review in a workspace (team + recurring post reviews). Drafted outreach/engagement replies awaiting approval are NOT posts: list them with list-engagements status=pending (needs_approval=true) and approve/send them with publish-engagement-reply.",
     "inputSchema": {
      "type": "object",
      "properties": {
@@ -1384,6 +1484,11 @@
     "inputSchema": {
      "type": "object",
      "properties": {
+      "workspace_id": {
+       "type": "string",
+       "format": "uuid",
+       "description": "The brand (workspace) to act on, from list-workspaces. Required when this connection reaches more than one brand; otherwise its one brand is used."
+      },
       "review_id": {
        "type": "string",
        "format": "uuid",
@@ -1438,6 +1543,11 @@
     "inputSchema": {
      "type": "object",
      "properties": {
+      "workspace_id": {
+       "type": "string",
+       "format": "uuid",
+       "description": "The brand (workspace) to act on, from list-workspaces. Required when this connection reaches more than one brand; otherwise its one brand is used."
+      },
       "review_id": {
        "type": "string",
        "format": "uuid",
@@ -2519,7 +2629,7 @@
      "readOnlyHint": false,
      "destructiveHint": false,
      "idempotentHint": false,
-     "openWorldHint": false
+     "openWorldHint": true
     }
    },
    {
@@ -2872,6 +2982,11 @@
     "inputSchema": {
      "type": "object",
      "properties": {
+      "workspace_id": {
+       "type": "string",
+       "format": "uuid",
+       "description": "The brand (workspace) to act on, from list-workspaces. Required when this connection reaches more than one brand; otherwise its one brand is used."
+      },
       "outcome_goal": {
        "type": "string",
        "description": "Narrow the library to one outcome goal."
@@ -2898,6 +3013,11 @@
     "inputSchema": {
      "type": "object",
      "properties": {
+      "workspace_id": {
+       "type": "string",
+       "format": "uuid",
+       "description": "The brand (workspace) to act on, from list-workspaces. Required when this connection reaches more than one brand; otherwise its one brand is used."
+      },
       "status": {
        "type": "string",
        "description": "Comma-separated statuses to include: draft, active, paused, archived. Default: everything except archived."
@@ -2924,10 +3044,15 @@
    {
     "name": "get-routine",
     "title": "Get Routine",
-    "description": "Get one routine's full configuration: outcome, trigger and schedule, instructions, capabilities, approval policy, source bindings, recent runs and performance summary. Read-only.",
+    "description": "Get one routine's full configuration: outcome, trigger and schedule, instructions, capabilities, approval policy, source bindings, recent runs and performance summary. Read-only. For routines whose output_config.artifact_type is reply or report, review_queue is always empty; pending drafts for reply routines are in list-engagements status=pending (web: Hub > Approvals).",
     "inputSchema": {
      "type": "object",
      "properties": {
+      "workspace_id": {
+       "type": "string",
+       "format": "uuid",
+       "description": "The brand (workspace) to act on, from list-workspaces. Required when this connection reaches more than one brand; otherwise its one brand is used."
+      },
       "routine_id": {
        "type": "string",
        "format": "uuid",
@@ -2954,6 +3079,11 @@
     "inputSchema": {
      "type": "object",
      "properties": {
+      "workspace_id": {
+       "type": "string",
+       "format": "uuid",
+       "description": "The brand (workspace) to act on, from list-workspaces. Required when this connection reaches more than one brand; otherwise its one brand is used."
+      },
       "name": {
        "type": "string",
        "description": "Short human name, e.g. 'Weekday Reddit engagement'"
@@ -3075,6 +3205,11 @@
     "inputSchema": {
      "type": "object",
      "properties": {
+      "workspace_id": {
+       "type": "string",
+       "format": "uuid",
+       "description": "The brand (workspace) to act on, from list-workspaces. Required when this connection reaches more than one brand; otherwise its one brand is used."
+      },
       "routine_id": {
        "type": "string",
        "format": "uuid",
@@ -3202,6 +3337,11 @@
     "inputSchema": {
      "type": "object",
      "properties": {
+      "workspace_id": {
+       "type": "string",
+       "format": "uuid",
+       "description": "The brand (workspace) to act on, from list-workspaces. Required when this connection reaches more than one brand; otherwise its one brand is used."
+      },
       "routine_id": {
        "type": "string",
        "format": "uuid",
@@ -3228,6 +3368,11 @@
     "inputSchema": {
      "type": "object",
      "properties": {
+      "workspace_id": {
+       "type": "string",
+       "format": "uuid",
+       "description": "The brand (workspace) to act on, from list-workspaces. Required when this connection reaches more than one brand; otherwise its one brand is used."
+      },
       "routine_id": {
        "type": "string",
        "format": "uuid",
@@ -3254,6 +3399,11 @@
     "inputSchema": {
      "type": "object",
      "properties": {
+      "workspace_id": {
+       "type": "string",
+       "format": "uuid",
+       "description": "The brand (workspace) to act on, from list-workspaces. Required when this connection reaches more than one brand; otherwise its one brand is used."
+      },
       "routine_id": {
        "type": "string",
        "format": "uuid",
@@ -3280,6 +3430,11 @@
     "inputSchema": {
      "type": "object",
      "properties": {
+      "workspace_id": {
+       "type": "string",
+       "format": "uuid",
+       "description": "The brand (workspace) to act on, from list-workspaces. Required when this connection reaches more than one brand; otherwise its one brand is used."
+      },
       "routine_id": {
        "type": "string",
        "format": "uuid",
@@ -3306,6 +3461,11 @@
     "inputSchema": {
      "type": "object",
      "properties": {
+      "workspace_id": {
+       "type": "string",
+       "format": "uuid",
+       "description": "The brand (workspace) to act on, from list-workspaces. Required when this connection reaches more than one brand; otherwise its one brand is used."
+      },
       "routine_id": {
        "type": "string",
        "format": "uuid",
@@ -3332,6 +3492,11 @@
     "inputSchema": {
      "type": "object",
      "properties": {
+      "workspace_id": {
+       "type": "string",
+       "format": "uuid",
+       "description": "The brand (workspace) to act on, from list-workspaces. Required when this connection reaches more than one brand; otherwise its one brand is used."
+      },
       "routine_id": {
        "type": "string",
        "format": "uuid",
@@ -3362,6 +3527,11 @@
     "inputSchema": {
      "type": "object",
      "properties": {
+      "workspace_id": {
+       "type": "string",
+       "format": "uuid",
+       "description": "The brand (workspace) to act on, from list-workspaces. Required when this connection reaches more than one brand; otherwise its one brand is used."
+      },
       "status": {
        "type": "string",
        "description": "Comma-separated statuses to include: draft, scheduled, active, paused, completed, archived. Default: all."
@@ -3388,6 +3558,11 @@
     "inputSchema": {
      "type": "object",
      "properties": {
+      "workspace_id": {
+       "type": "string",
+       "format": "uuid",
+       "description": "The brand (workspace) to act on, from list-workspaces. Required when this connection reaches more than one brand; otherwise its one brand is used."
+      },
       "campaign_id": {
        "type": "string",
        "format": "uuid",
@@ -3414,6 +3589,11 @@
     "inputSchema": {
      "type": "object",
      "properties": {
+      "workspace_id": {
+       "type": "string",
+       "format": "uuid",
+       "description": "The brand (workspace) to act on, from list-workspaces. Required when this connection reaches more than one brand; otherwise its one brand is used."
+      },
       "name": {
        "type": "string",
        "description": "What the customer calls this campaign. Required — a campaign with no name is unfindable on every surface.",
@@ -3487,6 +3667,11 @@
     "inputSchema": {
      "type": "object",
      "properties": {
+      "workspace_id": {
+       "type": "string",
+       "format": "uuid",
+       "description": "The brand (workspace) to act on, from list-workspaces. Required when this connection reaches more than one brand; otherwise its one brand is used."
+      },
       "campaign_id": {
        "type": "string",
        "format": "uuid",
@@ -3550,6 +3735,11 @@
     "inputSchema": {
      "type": "object",
      "properties": {
+      "workspace_id": {
+       "type": "string",
+       "format": "uuid",
+       "description": "The brand (workspace) to act on, from list-workspaces. Required when this connection reaches more than one brand; otherwise its one brand is used."
+      },
       "campaign_id": {
        "type": "string",
        "format": "uuid",
@@ -3629,6 +3819,11 @@
     "inputSchema": {
      "type": "object",
      "properties": {
+      "workspace_id": {
+       "type": "string",
+       "format": "uuid",
+       "description": "The brand (workspace) to act on, from list-workspaces. Required when this connection reaches more than one brand; otherwise its one brand is used."
+      },
       "campaign_id": {
        "type": "string",
        "format": "uuid",
@@ -3670,6 +3865,11 @@
     "inputSchema": {
      "type": "object",
      "properties": {
+      "workspace_id": {
+       "type": "string",
+       "format": "uuid",
+       "description": "The brand (workspace) to act on, from list-workspaces. Required when this connection reaches more than one brand; otherwise its one brand is used."
+      },
       "campaign_id": {
        "type": "string",
        "format": "uuid",
@@ -3704,6 +3904,11 @@
     "inputSchema": {
      "type": "object",
      "properties": {
+      "workspace_id": {
+       "type": "string",
+       "format": "uuid",
+       "description": "The brand (workspace) to act on, from list-workspaces. Required when this connection reaches more than one brand; otherwise its one brand is used."
+      },
       "campaign_id": {
        "type": "string",
        "format": "uuid",
@@ -3738,6 +3943,11 @@
     "inputSchema": {
      "type": "object",
      "properties": {
+      "workspace_id": {
+       "type": "string",
+       "format": "uuid",
+       "description": "The brand (workspace) to act on, from list-workspaces. Required when this connection reaches more than one brand; otherwise its one brand is used."
+      },
       "campaign_id": {
        "type": "string",
        "format": "uuid",
@@ -3773,6 +3983,11 @@
     "inputSchema": {
      "type": "object",
      "properties": {
+      "workspace_id": {
+       "type": "string",
+       "format": "uuid",
+       "description": "The brand (workspace) to act on, from list-workspaces. Required when this connection reaches more than one brand; otherwise its one brand is used."
+      },
       "idea": {
        "type": "string",
        "description": "What every version is about, in the user's words: a sentence or two, at most 600 characters. Facts, numbers and names in the drafts come from here."
@@ -3829,6 +4044,11 @@
     "inputSchema": {
      "type": "object",
      "properties": {
+      "workspace_id": {
+       "type": "string",
+       "format": "uuid",
+       "description": "The brand (workspace) to act on, from list-workspaces. Required when this connection reaches more than one brand; otherwise its one brand is used."
+      },
       "cascade_id": {
        "type": "string",
        "format": "uuid",
@@ -3912,6 +4132,11 @@
     "inputSchema": {
      "type": "object",
      "properties": {
+      "workspace_id": {
+       "type": "string",
+       "format": "uuid",
+       "description": "The brand (workspace) to act on, from list-workspaces. Required when this connection reaches more than one brand; otherwise its one brand is used."
+      },
       "cascade_id": {
        "type": "string",
        "format": "uuid",
@@ -3943,6 +4168,11 @@
     "inputSchema": {
      "type": "object",
      "properties": {
+      "workspace_id": {
+       "type": "string",
+       "format": "uuid",
+       "description": "The brand (workspace) to act on, from list-workspaces. Required when this connection reaches more than one brand; otherwise its one brand is used."
+      },
       "cascade_id": {
        "type": "string",
        "format": "uuid",
@@ -4134,7 +4364,7 @@
       "workspace_id": {
        "type": "string",
        "format": "uuid",
-       "description": "The workspace ID. Defaults to the connected workspace."
+       "description": "The brand to act on (an id from list-workspaces). Needed when the connection reaches more than one brand."
       },
       "ask": {
        "type": "string",
@@ -4165,7 +4395,7 @@
       "workspace_id": {
        "type": "string",
        "format": "uuid",
-       "description": "The workspace ID. Defaults to the connected workspace."
+       "description": "The brand to act on (an id from list-workspaces). Needed when the connection reaches more than one brand."
       },
       "ask": {
        "type": "string",
@@ -4200,14 +4430,14 @@
    {
     "name": "recommend-routines",
     "title": "Recommend Routines",
-    "description": "Have Bolta recommend 3 to 5 routines for this brand, best fit first: each a different job (posts, articles, founder stories, customer wins, reusing top posts), none repeating a routine the brand already runs, each with one line on why it fits from the brand's own posts, routines and sources. Each comes back as a plan card with its own id; nothing is created. skipped says what was left out and why. Show them and ask which to save; save each with confirm-plan.",
+    "description": "Have Bolta recommend 3 to 5 routines for this brand, best fit first: each a different job (posts, articles, founder stories, customer wins, reusing top posts, replies, reports, routines fed by a connected source), none repeating a routine the brand already runs, each with one line on why it fits from the brand's own posts, routines and sources. Sized to review_load (drafts per week, waiting, decided lately): a full review queue gets fewer, smaller routines and why says so. Each comes back as a plan card with its own id; nothing is created. skipped says what was left out and why. Show them and ask which to save; save each with confirm-plan.",
     "inputSchema": {
      "type": "object",
      "properties": {
       "workspace_id": {
        "type": "string",
        "format": "uuid",
-       "description": "The workspace ID. Defaults to the connected workspace."
+       "description": "The brand to act on (an id from list-workspaces). Needed when the connection reaches more than one brand."
       },
       "goals": {
        "type": "string",
@@ -4244,7 +4474,7 @@
       "workspace_id": {
        "type": "string",
        "format": "uuid",
-       "description": "The workspace ID. Defaults to the connected workspace."
+       "description": "The brand to act on (an id from list-workspaces). Needed when the connection reaches more than one brand."
       },
       "proposal_id": {
        "type": "string",
@@ -4257,7 +4487,7 @@
       },
       "changes": {
        "type": "object",
-       "description": "Exact fields to set. Routine: goal, instructions, name, count (1-10), platforms, account_ids, schedule ({interval: daily|weekly|monthly, days, time HH:MM, day_of_month} or {cron}), timezone, media_mode (none|image|video|carousel), media_prompt, visual_style, carousel_config, voice_profile_id, default_reviewer_ids, approval_policy, source_urls, template_key (switch to a suggested_switch). Campaign: goal, instructions, name, platforms, account_ids, voice_profile_id, source_urls."
+       "description": "Exact fields to set. Routine: goal, instructions, name, count (1 to the template's max: 10 posts, 5 deep dives, 8 repurposed, 2 articles), platforms, account_ids, schedule ({interval: daily|weekly|monthly, days, time HH:MM, day_of_month} or {cron}), timezone, media_mode (none|image|video|carousel), media_prompt, visual_style, carousel_config ({slideCount 2-10, visualStyle, aspectRatio, continuity, useBrand}), voice_profile_id, default_reviewer_ids, approval_policy, source_urls, template_key (any routine template from list-routine-templates except product_launch_sequence; a source-driven one stays unsaved until its source is connected), topics and subreddits (reply routines), keywords and subreddits (outreach_listening). Campaign: goal, instructions, name, platforms, account_ids, voice_profile_id, source_urls."
       }
      },
      "additionalProperties": false,
@@ -4276,14 +4506,14 @@
    {
     "name": "confirm-plan",
     "title": "Confirm Plan",
-    "description": "Save a plan the user said yes to, exactly as Bolta planned it (by its id). switch_on false (default): a routine is saved and off, a campaign is saved as a draft; nothing runs. switch_on true: saved, switched on and the first run or generation starts, which uses credits and leads to posts. Ask first, and ask separately before switch_on true. Confirming the same id again returns what was saved and runs nothing.",
+    "description": "Save a plan the user said yes to, exactly as Bolta planned it (by its id). switch_on false (default): a routine is saved and off, a campaign is saved as a draft; nothing runs. switch_on true: saved, switched on and the first run or generation starts, which uses credits and leads to posts. Ask first, and ask separately before switch_on true. Confirming the same id again returns what was saved and runs nothing. A plan that still needs something (a connection, reply topics, keywords, the real material) is refused as plan_not_ready, naming what is missing.",
     "inputSchema": {
      "type": "object",
      "properties": {
       "workspace_id": {
        "type": "string",
        "format": "uuid",
-       "description": "The workspace ID. Defaults to the connected workspace."
+       "description": "The brand to act on (an id from list-workspaces). Needed when the connection reaches more than one brand."
       },
       "proposal_id": {
        "type": "string",
@@ -4303,9 +4533,9 @@
     "annotations": {
      "title": "Confirm Plan",
      "readOnlyHint": false,
-     "destructiveHint": false,
-     "idempotentHint": false,
-     "openWorldHint": false
+     "destructiveHint": true,
+     "idempotentHint": true,
+     "openWorldHint": true
     }
    }
   ]

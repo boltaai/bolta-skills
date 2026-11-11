@@ -6,7 +6,7 @@ A brand setting: no post is approved, scheduled or posted without a current clie
 
 - Turning it on pulls every scheduled or approved post without a current client yes back to waiting. The calendar shrinks; that is the setting working, not a fault.
 - A post can also be held at the moment it would go out, if it has no current client yes. It returns to waiting.
-- An edit to the text, media, destination, or the Pinterest, YouTube or Reddit details after the client said yes voids the yes. A time change does not.
+- An edit to the text, media, destination, or the Pinterest, YouTube or Reddit details after the client said yes voids the yes. So does any change to the post's per-network text or settings (`platform_specific`); sending the same values again does not. A time change does not.
 - The refusal code `CLIENT_SIGNOFF_REQUIRED` is not retryable. The fix is to send the post to the client, never to approve again.
 - Only the organization owner (the brand owner if there is no organization) can turn it on or off, in the brand's settings in Bolta. Turning it off releases nothing that was held.
 - Library posts the team put live directly, without a client review, are exempt.

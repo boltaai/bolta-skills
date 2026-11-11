@@ -17,6 +17,7 @@ Each file is one ask from start to finish: the calls in order, why each one is s
 | [schedule-my-text.json](schedule-my-text.json) | The user's own text with a day and time | [review](../references/review.md) |
 | [waiting-on-the-client.json](waiting-on-the-client.json) | A yes where one post still needs the client | [review](../references/review.md) |
 | [move-a-time.json](move-a-time.json) | Move a scheduled post's time, keeping its yes | [review](../references/review.md) |
+| [settings-change-needs-yes.json](settings-change-needs-yes.json) | Change one network's text on a scheduled post: it needs a yes again | [review](../references/review.md) |
 | [approve-library-post.json](approve-library-post.json) | A yes to a Library post, which takes no time | [review](../references/review.md) |
 | [one-post.json](one-post.json) | One LinkedIn post, saved as a draft | [post](../references/post.md) |
 | [week-of-posts.json](week-of-posts.json) | A week of posts in one batch, then the status poll | [post](../references/post.md) |
@@ -27,7 +28,10 @@ Each file is one ask from start to finish: the calls in order, why each one is s
 | [linkedin-company-page.json](linkedin-company-page.json) | LinkedIn as the company page, by its page id from the account list | [post](../references/post.md) |
 | [youtube-video.json](youtube-video.json) | A YouTube video: title, privacy, the self-declared kids flag, a thumbnail | [post](../references/post.md) |
 | [tiktok-video.json](tiktok-video.json) | A TikTok video: privacy and duets | [post](../references/post.md) |
-| [one-idea-three-networks.json](one-idea-three-networks.json) | One idea on LinkedIn, X and Threads | [post](../references/post.md) |
+| [one-idea-three-networks.json](one-idea-three-networks.json) | One idea on four networks as separate posts, because Facebook gets a first comment | [post](../references/post.md) |
+| [one-post-text-per-network.json](one-post-text-per-network.json) | One post, its own text on LinkedIn, X and Threads | [post](../references/post.md) |
+| [text-per-page.json](text-per-page.json) | Its own text for a LinkedIn company page and one Facebook Page | [post](../references/post.md) |
+| [instagram-trial-reel.json](instagram-trial-reel.json) | An Instagram trial reel, set when it is saved | [post](../references/post.md) |
 | [x-thread.json](x-thread.json) | An X thread: parts in one batch item, an image on part 3 | [post](../references/post.md) |
 | [facebook-first-comment.json](facebook-first-comment.json) | A Facebook Page post with the link as its first comment | [post](../references/post.md) |
 | [undo-a-delete.json](undo-a-delete.json) | Bring a deleted post back | [fix](../references/fix.md) |

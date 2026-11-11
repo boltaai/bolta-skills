@@ -16,7 +16,7 @@ Drafts are saved and shown in full (number, account, text; no day), ending: "Sav
 - At most 12 posts a sitting: cut posts per week, not weeks.
 - **No time named:** "Approved without a time, Bolta picks one from your posting schedule."
 - **One idea, several networks:** read [cross-posting](post-cross-posting.md) first: each version fresh, first lines varied.
-- **Network settings** (a Threads topic or ghost post, a Reel, an X poll, YouTube privacy): set after saving; keys: [platforms](post-platforms.md), [at a glance](post-networks-at-a-glance.md).
+- **Network settings and text per network or Page:** `platform_specific` in the saving call ([per network](post-per-network.md)); an X poll or subreddit after saving ([platforms](post-platforms.md)).
 - **Changes:** `update-post` with new content and `status: "Draft"` together.
 - **Quality Blocked** ("Held back") isn't final: `update-post` with new content only, no status; a pass returns it to Draft.
 - Instagram and Pinterest need an image or video, TikTok and YouTube a video (public http(s) link or file); else skip them, saying why.

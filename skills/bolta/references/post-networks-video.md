@@ -8,7 +8,7 @@ All three need media attached to the post (a public https link): a video for Tik
 
 - **Who sees it**: `privacy_level` `PUBLIC_TO_EVERYONE` (the default), `MUTUAL_FOLLOW_FRIEND`, `FOLLOWER_OF_CREATOR` or `SELF_ONLY`. TikTok may narrow it to what the account allows. The user didn't say? Ask; never assume public.
 - **Interactions**: `disable_comments`, `disable_duet`, `disable_stitch` (each true or false).
-- **Paid or brand content**: the disclosure switches are set in Bolta's composer only. If the video promotes the user's own business or a paid partner, say so and send them there before it goes out.
+- **Paid or brand content**: `brand_organic_toggle: true` (it promotes the user's own business) or `brand_content_toggle: true` (a paid partner), only through `platform_specific` ([per network](post-per-network.md)). If the video promotes either, ask and set it before it goes out.
 - Caption up to 2,200 characters; longer text is cut off at that point.
 
 ## YouTube
@@ -25,7 +25,7 @@ All three need media attached to the post (a public https link): a video for Tik
 
 ## Pinterest
 
-- **Board**: picked in Bolta. With none picked, Bolta uses the most recently synced board, which may be the wrong one; with no board at all the pin fails. Say which board will be used if known, or ask the user to pick it. The board id a read returns can't be copied into a change.
+- **Board**: picked in Bolta. With none picked, Bolta uses the most recently synced board, which may be the wrong one; with no board at all the pin fails. Say which board will be used if known, or ask the user to pick it. `update-post-platform-details` takes Bolta's board id; `platform_specific` takes Pinterest's own ([keys](post-per-network-keys.md)). Never copy one into the other.
 - **Pin**: `title` (100 characters; empty, the description is used), `description` (500; empty, the post's text), `link` (the page the pin opens, only one the user gave), `alt_text` (500).
 
 ## Having Bolta make the video
@@ -34,7 +34,7 @@ No tool here makes a video for a single post. For a run of videos, use a campaig
 
 ## Always
 
-- Options set earlier in Bolta's composer for that account win over the same keys set here (except YouTube's thumbnail, where this tool wins). Read back with `get-post-platform-details` and say what will actually be used.
+- Keys in `platform_specific` (from here or Bolta's composer) win over the same keys set with `update-post-platform-details`, except YouTube's thumbnail. Change a key where it was set; read back and say what will be used.
 - Say every setting you changed in plain words, with the post it's on: "YouTube: titled 'Spring menu tour', unlisted, not for kids."
 - Privacy defaults differ: TikTok public, YouTube private. Name the one that applies before saving: "On YouTube this goes up private unless you say otherwise. Public or unlisted?"
 - A setting on an approved or scheduled post sends it back for review. Say so before changing it.
