@@ -13,7 +13,7 @@ Who can do what in an organization and on a brand, and how to name a teammate. N
 | Role | Can |
 |-|-|
 | owner, admin | everything on the brand: write, approve, turn down, post now, connect accounts, invite, change settings |
-| creator | write, change and delete drafts, send for review, schedule when review mode allows it; in Bolta, approve Bolta's drafts and posts they are a named reviewer on |
+| creator | write, change and delete drafts, send for review, schedule when review mode allows it; approve Bolta's drafts and posts they are a named reviewer on |
 | viewer | read |
 | reviewer | a client: decides client requests sent to them, nothing else; no seat, no AI app |
 
