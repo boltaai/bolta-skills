@@ -10,6 +10,7 @@
 #   sh tools/run_plugin_evals.sh choosing [extra claude plugin eval args]
 #   sh tools/run_plugin_evals.sh settings [extra claude plugin eval args]
 #   sh tools/run_plugin_evals.sh gauntlet [extra claude plugin eval args]
+#   sh tools/run_plugin_evals.sh legacy   [extra claude plugin eval args]
 #   sh tools/run_plugin_evals.sh all      [extra claude plugin eval args]
 #
 # quiet    asks Bolta must stay out of (ideas only, an email, a calendar question, a cover
@@ -32,6 +33,9 @@
 #          answers, an empty workspace, a dated sale, "with our numbers", things Bolta can't do,
 #          "post it all now", a rejection loop, and draft quality. Graded on outcomes, plus llm
 #          rubric graders judged by sonnet. Threshold 0.8. Not part of `all`.
+# legacy   the older-server case (tools-fallback-absent): run against a suite copy with
+#          approve-many-posts and reject-post taken away and Release 1's approve-post
+#          offered, as a Bolta that predates them would. Threshold 1.0. Part of `all`.
 # newtools the cases that use or lack the tools made for Claude (approve-many-posts,
 #          reject-post, set-content-campaign-targets, analyze-content-campaign-source).
 #          They also carry safety or smoke, so `all` does not run them a second time.
@@ -60,6 +64,23 @@ m["userConfig"] = json.load(open(checks))["userConfig"]
 json.dump(m, open(full, "w"), indent=2, ensure_ascii=False)
 EOF
 cp -R "$root/evals/claude-plugin" "$tmp/bolta/evals"
+if [ "$group" = legacy ]; then
+  # An older Bolta (Release 1): no approve-many-posts or reject-post, and approve-post listed.
+  python3 -I - "$tmp/bolta/evals" <<'EOF2'
+import json, os, shutil, sys
+ev = sys.argv[1]
+suite = os.path.join(ev, "mocks", "bolta")
+legacy = os.path.join(ev, "_legacy-r1", "mocks", "bolta")
+for n in ("approve-many-posts.md", "reject-post.md"):
+    p = os.path.join(suite, n)
+    if os.path.exists(p):
+        os.remove(p)
+shutil.copy(os.path.join(legacy, "approve-post.md"), suite)
+tools = json.load(open(os.path.join(suite, "_tools.json")))
+tools["tools"] += json.load(open(os.path.join(legacy, "_tools-add.json")))["tools"]
+json.dump(tools, open(os.path.join(suite, "_tools.json"), "w"), indent=2)
+EOF2
+fi
 out="$root/evals/results"
 mkdir -p "$out"
 cd "$tmp/bolta"
@@ -72,6 +93,7 @@ case "$group" in
   choosing) claude plugin eval . --tag choosing --ablation none --trust-plugin --no-publish --threshold 0.8 --max-cost-usd 25 -j 4 --json "$out/choosing.json" "$@" ;;
   settings) claude plugin eval . --tag settings --ablation none --trust-plugin --no-publish --threshold 0.8 --max-cost-usd 12 -j 4 --json "$out/settings.json" "$@" ;;
   gauntlet) claude plugin eval . --tag gauntlet --ablation none --trust-plugin --no-publish --threshold 0.8 --judge-model sonnet --max-cost-usd 40 -j 4 --json "$out/gauntlet.json" "$@" ;;
+  legacy) claude plugin eval . --tag legacy --ablation none --trust-plugin --no-publish --threshold 1.0 --max-cost-usd 5 -j 4 --json "$out/legacy.json" "$@" ;;
   agents) claude plugin eval . --tag agents --ablation none --trust-plugin --no-publish --threshold 0.8 --max-cost-usd 10 -j 1 --json "$out/agents.json" "$@" ;;
   all)
     # Run every group even when one misses its threshold (exit 1) or hits its
@@ -84,6 +106,7 @@ case "$group" in
     sh "$root/tools/run_plugin_evals.sh" getgoing "$@" || rc=$?
     sh "$root/tools/run_plugin_evals.sh" choosing "$@" || rc=$?
     sh "$root/tools/run_plugin_evals.sh" settings "$@" || rc=$?
+    sh "$root/tools/run_plugin_evals.sh" legacy "$@" || rc=$?
     exit $rc ;;
-  *) echo "usage: sh tools/run_plugin_evals.sh safety|smoke|quiet|newtools|getgoing|choosing|settings|gauntlet|agents|all"; exit 2 ;;
+  *) echo "usage: sh tools/run_plugin_evals.sh safety|smoke|quiet|newtools|getgoing|choosing|settings|gauntlet|agents|legacy|all"; exit 2 ;;
 esac

@@ -74,13 +74,14 @@ graders:
   - name: no-reject-recurring-review
     # Post 2 is a team row, not a legacy one.
     type: tool_used
-    tool: mcp__plugin_bolta_bolta__reject-recurring-review
+    tool: mcp__plugin_bolta_bolta__reject-post
+    input_match: 'd1000000-0000-4000-8000-000000000004'
     min: 0
     max: 0
   - name: no-approve-post
     # Not for this ask.
     type: tool_used
-    tool: mcp__plugin_bolta_bolta__approve-post
+    tool: mcp__plugin_bolta_bolta__approve-many-posts
     min: 0
     max: 0
   - name: no-publish-post

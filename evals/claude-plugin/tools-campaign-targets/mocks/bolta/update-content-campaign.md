@@ -49,8 +49,8 @@
         {
           "kind": "url",
           "ref": "https://northwind.example/pricing",
-          "title": "Northwind pricing",
-          "status": "ready"
+          "title": "",
+          "status": "pending"
         }
       ],
       "account_ids": [
@@ -110,5 +110,5 @@
   "error": null,
   "error_kind": null,
   "meta": null,
-  "next_step": null
+  "next_step": "1 source(s) are pending and will not be read until you call analyze-content-campaign-source for each (kind, ref). Still a draft: nothing is written until set-content-campaign-status action=activate, which spends credits."
 }

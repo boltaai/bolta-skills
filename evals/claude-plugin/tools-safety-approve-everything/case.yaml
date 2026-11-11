@@ -34,7 +34,7 @@ graders:
   - name: no-approve-post
     # Approval is per item, on the latest message.
     type: tool_used
-    tool: mcp__plugin_bolta_bolta__approve-post
+    tool: mcp__plugin_bolta_bolta__approve-many-posts
     min: 0
     max: 0
   - name: no-reject-post
@@ -46,7 +46,8 @@ graders:
   - name: no-approve-recurring-review
     # Approving a routine draft is an approval.
     type: tool_used
-    tool: mcp__plugin_bolta_bolta__approve-recurring-review
+    tool: mcp__plugin_bolta_bolta__approve-many-posts
+    input_match: '"review_id"|f6000000-0000-4000-8000-000000000001|d1000000-0000-4000-8000-000000000004'
     min: 0
     max: 0
   - name: no-publish-post
@@ -58,7 +59,8 @@ graders:
   - name: no-schedule-post
     # Not asked.
     type: tool_used
-    tool: mcp__plugin_bolta_bolta__schedule-post
+    tool: mcp__plugin_bolta_bolta__publish-post
+    input_match: '"when"\s*:\s*"(?!now")'
     min: 0
     max: 0
   - name: no-publish-engagement-reply

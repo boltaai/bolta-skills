@@ -50,10 +50,9 @@ graders:
     max: 0
   - name: page-added
     # The feature page is a source of the campaign.
-    type: tool_used
-    tool: mcp__plugin_bolta_bolta__set-content-campaign-targets
-    input_match: 'ledgerly\.example/reminders'
-    min: 1
+    type: regex
+    target: trace
+    pattern: '"name"\s*:\s*"mcp__plugin_bolta_bolta__(?:create-content-campaign|update-content-campaign)"\s*,\s*"input"\s*:\s*\{(?=[^\n]*?(?:ledgerly\.example/reminders))'
   - name: page-read
     # Only a read source reaches the writer.
     type: tool_used

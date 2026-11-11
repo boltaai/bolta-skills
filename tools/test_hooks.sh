@@ -358,7 +358,15 @@ for lvl in standard careful; do
   for k in duration_weeks context_notes context_sources voice_profile_id; do
     check_guard "table: update-content-campaign with $k asks ($lvl)" ask "$lvl" "$(pre "${P}update-content-campaign" "{\"campaign_id\":\"$CID1\",\"$k\":null}")"
   done
-  check_guard "table: update-content-campaign attaching posts is silent ($lvl)" silent "$lvl" "$(pre "${P}update-content-campaign" "{\"campaign_id\":\"$CID1\",\"post_ids\":[\"$PID\"]}")"
+  # Allow-list: only a brief-only change is silent; dates, attached posts and unknown keys are checked.
+  for k in post_ids starts_on ends_on surprise; do
+    check_guard "table: update-content-campaign with $k on a campaign not made here asks ($lvl)" ask "$lvl" "$(pre "${P}update-content-campaign" "{\"campaign_id\":\"$CID1\",\"$k\":null}")"
+  done
+  check_guard "table: update-content-campaign brief fields only stay silent ($lvl)" silent "$lvl" "$(pre "${P}update-content-campaign" "{\"workspace_id\":\"$WS\",\"campaign_id\":\"$CID1\",\"name\":\"n\",\"strategy_key\":\"problem_solution\",\"theme\":\"t\",\"audience\":\"a\",\"cta_text\":\"c\",\"cta_url\":\"https://acme.example\",\"content_mix\":{\"text\":2}}")"
+  # save-post on an existing post: per-network text or settings get the stronger wording.
+  check_guard "table: save-post per-network text on a post asks about settings ($lvl)" ask "$lvl" "$(pre "${P}save-post" "{\"workspace_id\":\"$WS\",\"post_id\":\"$PID\",\"platform_specific\":{\"x\":{\"text\":\"t\"}}}")" "network settings"
+  check_guard "table: save-post text plus details asks about settings ($lvl)" ask "$lvl" "$(pre "${P}save-post" "{\"workspace_id\":\"$WS\",\"post_id\":\"$PID\",\"content\":\"c\",\"platform_details\":{\"reddit\":{\"title\":\"t\"}}}")" "network settings"
+  check_guard "table: save-post unknown key on a post asks ($lvl)" ask "$lvl" "$(pre "${P}save-post" "{\"workspace_id\":\"$WS\",\"post_id\":\"$PID\",\"content\":\"c\",\"surprise\":1}")" "can't tell"
 done
 check_guard "confirm-plan switched on says it uses credits" ask standard "$(pre "${P}confirm-plan" "{\"proposal_id\":\"p1\",\"switch_on\":true}")" "Uses credits now"
 check_guard "decide-bolta-suggestion accept names what it can change" ask standard "$(pre "${P}decide-bolta-suggestion" "{\"suggestion_id\":\"s1\",\"decision\":\"accept\"}")" "switch a Bolta routine on"
@@ -881,6 +889,7 @@ assert "campaign: the marker is written" test -f "$(mdir)/campaign-$SP-$CID1"
 check_guard "campaign: setting targets on the draft made here is silent" silent standard "$(pre "${P}set-content-campaign-targets" "$T1")"
 check_guard "campaign: Release 2 accounts on the draft made here are silent" silent standard "$(pre "${P}update-content-campaign" "$T1")"
 check_guard "campaign: Release 2 accounts on another campaign ask" ask standard "$(pre "${P}update-content-campaign" "$T2")"
+check_guard "campaign: Release 2 posts attached to the draft made here are silent" silent standard "$(pre "${P}update-content-campaign" "{\"campaign_id\":\"$CID1\",\"post_ids\":[\"$PID\"]}")"
 check_guard "campaign: same id in capitals is the same campaign" silent standard "$(pre "${P}set-content-campaign-targets" "{\"campaign_id\":\"$CID1UP\",\"duration_weeks\":2}")"
 check_guard "campaign: careful asks even for the draft made here" ask careful "$(pre "${P}set-content-campaign-targets" "$T1")"
 check_guard "campaign: another campaign asks" ask standard "$(pre "${P}set-content-campaign-targets" "$T2")"

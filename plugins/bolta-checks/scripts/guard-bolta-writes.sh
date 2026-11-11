@@ -274,7 +274,8 @@ case "$tool" in
     case $save in
       # A new post is always a Draft (save-post refuses a time or an action), as a plain create-post was.
       create) exit 0 ;;
-      edit) ask "Check before it changes ($conn): this edits a post, its text per network or its settings. An approved post goes back for a fresh yes. OK only if you have seen it." ;;
+      edit) ask "Check before it changes ($conn): this edits a post. An approved or scheduled post goes back for a fresh yes. OK only if you have seen it." ;;
+      settings) ask "Check before it changes ($conn): this changes a post's network settings or its text per network. An approved post goes back for a fresh yes." ;;
       unschedule) ask "Check before it changes ($conn): this takes a scheduled post off the schedule. It goes back to draft and will not go out." ;;
     esac
     ask "Bolta check ($conn): the plugin can't tell what this save does. OK it only if you expected it." ;;
@@ -348,14 +349,14 @@ case "$tool" in
     esac
     ask "Bolta check ($conn): the plugin can't tell what this answer to Bolta does. OK it only if you expected it." ;;
   update-content-campaign)
-    # Only the fields that decide who a campaign posts from and what Bolta reads
-    # for it are checked; the brief and attaching posts change nothing that runs.
+    # Silent only for a brief-only change (an allow-list in bolta-json.sh); accounts,
+    # notes, sources, voice, dates, attached posts and unknown keys are checked.
     if [ "$targets" != targets ]; then exit 0; fi
     if [ "$careful" = 1 ]; then
-      ask "Bolta check, careful mode ($conn): this sets a campaign's accounts, weeks, notes, sources or voice."
+      ask "Bolta check, careful mode ($conn): this changes a campaign's accounts, dates, posts, notes, sources or voice."
     fi
     if campaign_marked; then exit 0; fi
-    ask "Check before it changes ($conn): this sets who a campaign posts from and what Bolta reads for it. A running campaign writes its next weeks from it." ;;
+    ask "Check before it changes ($conn): this changes a campaign's accounts, dates or sources. A running campaign writes its next weeks from it." ;;
   set-content-campaign-targets)
     if [ "$careful" = 1 ]; then
       ask "Bolta check, careful mode ($conn): this sets a campaign's accounts, weeks, notes, sources or voice."

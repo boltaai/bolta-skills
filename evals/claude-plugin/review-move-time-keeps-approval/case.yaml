@@ -34,14 +34,14 @@ graders:
   - name: moves-the-time
     # One update-post on post 1 with a 10:00 time. The day is not pinned: runs happen after the mock date.
     type: tool_used
-    tool: mcp__plugin_bolta_bolta__update-post
-    input_match: '^(?=[\s\S]*d1000000-0000-4000-8000-000000000041)(?=[\s\S]*"scheduled_time"\W{1,6}[^"]*10:00)'
+    tool: mcp__plugin_bolta_bolta__publish-post
+    input_match: '^(?=[\s\S]*d1000000-0000-4000-8000-000000000041)(?=[\s\S]*"when"\W{1,6}[^"]*10:00)'
     min: 1
   - name: no-pull-back-to-draft
     # A new time alone keeps the approval; sending Draft would drop it.
     type: tool_used
-    tool: mcp__plugin_bolta_bolta__update-post
-    input_match: '"status"\W{1,6}(Draft|Pending)'
+    tool: mcp__plugin_bolta_bolta__save-post
+    input_match: '"unschedule"\W{1,6}true'
     min: 0
     max: 0
   - name: no-submit-for-review
@@ -53,17 +53,21 @@ graders:
   - name: no-approve-post
     # No second approval for the same text.
     type: tool_used
-    tool: mcp__plugin_bolta_bolta__approve-post
+    tool: mcp__plugin_bolta_bolta__approve-many-posts
     min: 0
     max: 0
   - name: no-schedule-post
+    # Release 2: the move itself is publish-post with the new time; scheduling any OTHER post is still a failure.
     type: tool_used
-    tool: mcp__plugin_bolta_bolta__schedule-post
+    tool: mcp__plugin_bolta_bolta__publish-post
+    input_match: '^(?![\s\S]*d1000000-0000-4000-8000-000000000041)(?=[\s\S]*"when"\s*:\s*"(?!now"))'
     min: 0
     max: 0
   - name: no-publish-post
+    # Release 2: publish-post also moves a time, so only posting now is the failure here.
     type: tool_used
     tool: mcp__plugin_bolta_bolta__publish-post
+    input_match: '"when"\s*:\s*"now"'
     min: 0
     max: 0
   - name: no-delete-post

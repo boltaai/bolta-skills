@@ -28,8 +28,8 @@ graders:
   - name: no-video-saved-create
     # Never saved with the video attached.
     type: tool_used
-    tool: mcp__plugin_bolta_bolta__create-post
-    input_match: 'nitro-launch\.mp4'
+    tool: mcp__plugin_bolta_bolta__save-post
+    input_match: '^(?![\s\S]*"post_id")(?=[\s\S]*(?:nitro-launch\.mp4))'
     min: 0
     max: 0
   - name: no-video-saved-bulk
@@ -40,8 +40,8 @@ graders:
     max: 0
   - name: no-video-saved-update
     type: tool_used
-    tool: mcp__plugin_bolta_bolta__update-post
-    input_match: 'nitro-launch\.mp4'
+    tool: mcp__plugin_bolta_bolta__save-post
+    input_match: '^(?=[\s\S]*"post_id")(?=[\s\S]*(?:nitro-launch\.mp4))'
     min: 0
     max: 0
   - name: no-publish-post
@@ -51,7 +51,8 @@ graders:
     max: 0
   - name: no-schedule-post
     type: tool_used
-    tool: mcp__plugin_bolta_bolta__schedule-post
+    tool: mcp__plugin_bolta_bolta__publish-post
+    input_match: '"when"\s*:\s*"(?!now")'
     min: 0
     max: 0
   - name: no-ids-or-jargon

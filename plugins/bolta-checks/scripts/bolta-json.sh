@@ -313,33 +313,39 @@ function update_verdict(ti) {
 }
 
 # save-post (Release 2: create-post, update-post and update-post-platform-details
-# in one tool). An allow-list: every key must be one save-post takes, and the
+# in one tool). Allow-lists only: every key must be one save-post takes, and the
 # server refuses a time, a status or an action, so any of those (or anything
-# unknown) is "other". create = no post_id (always a new Draft, platform
-# settings included); unschedule = a Scheduled post goes back to Draft; edit =
-# any change to an existing post (text, media, accounts, settings), which sends
-# an approved or scheduled post back for a fresh yes.
-function save_verdict(ti,   i, k) {
+# unknown) is "other". create = no post_id: always a new Draft that goes
+# nowhere, network settings included (as a plain create-post was). On an
+# existing post: edit = only text, media, accounts or a poll (the lighter
+# check); settings = per-network text or settings (platform_specific,
+# platform_details), which can change where and how it goes out; unschedule =
+# a Scheduled post goes back to Draft.
+function save_verdict(ti,   i, k, has_post, unsched, settings) {
+  has_post = jhas(ti, "post_id") && jtype(ti, "post_id") != "n"
+  unsched = jhas(ti, "unschedule") && jtype(ti, "unschedule") != "f" && jtype(ti, "unschedule") != "n"
+  settings = 0
   for (i = 1; i <= JC[ti]; i++) {
     k = JK[ti SUBSEP i]
-    if (k !~ /^(workspace_id|post_id|content|parts|media|account_ids|social_buckets|poll|platform_specific|unschedule|platform_details|idempotency_key)$/) return "other"
+    if (k ~ /^(platform_specific|platform_details)$/) { settings = 1; continue }
+    if (k !~ /^(workspace_id|post_id|content|parts|media|account_ids|social_buckets|poll|unschedule|idempotency_key)$/) return "other"
   }
-  if (!jhas(ti, "post_id") || jtype(ti, "post_id") == "n") {
-    if (jhas(ti, "unschedule") && jtype(ti, "unschedule") != "f" && jtype(ti, "unschedule") != "n") return "other"
-    return "create"
-  }
-  if (jhas(ti, "unschedule") && jtype(ti, "unschedule") != "f" && jtype(ti, "unschedule") != "n") return "unschedule"
+  if (!has_post) return unsched ? "other" : "create"
+  if (unsched) return "unschedule"
+  if (settings) return "settings"
   return "edit"
 }
 
-# create-/update-content-campaign: "targets" when the call sets who the
-# campaign posts from or what Bolta reads for it (the fields Release 1
-# set-content-campaign-targets carried); a running campaign writes its next
-# weeks from them. Anything else ("brief") changes only the brief or attaches
-# posts.
-function campaign_targets(ti) {
-  if (jhas(ti, "account_ids") || jhas(ti, "duration_weeks") || jhas(ti, "context_notes") \
-      || jhas(ti, "context_sources") || jhas(ti, "voice_profile_id")) return "targets"
+# update-content-campaign: "brief" only when every key is one that changes the
+# brief alone (an allow-list); anything else, including dates, posts to attach
+# and keys this script does not know, is "targets": who the campaign posts
+# from, what Bolta reads for it, or when it runs, which a running campaign
+# writes its next weeks from.
+function campaign_targets(ti,   i, k) {
+  for (i = 1; i <= JC[ti]; i++) {
+    k = JK[ti SUBSEP i]
+    if (k !~ /^(workspace_id|campaign_id|name|strategy_key|theme|audience|cta_text|cta_url|content_mix)$/) return "targets"
+  }
   return "brief"
 }
 

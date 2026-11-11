@@ -22,36 +22,36 @@ graders:
     min: 1
   - name: threads-only
     type: tool_used
-    tool: mcp__plugin_bolta_bolta__create-post
-    input_match: 'a1b2c3d4-0001-4a00-8000-000000000005'
+    tool: mcp__plugin_bolta_bolta__save-post
+    input_match: '^(?![\s\S]*"post_id")(?=[\s\S]*(?:a1b2c3d4-0001-4a00-8000-000000000005))'
     min: 1
   - name: ghost-post
     type: tool_used
-    tool: mcp__plugin_bolta_bolta__create-post
-    input_match: '"threads"\s*:\s*\{[^{}]*"is_ghost_post"\s*:\s*true'
+    tool: mcp__plugin_bolta_bolta__save-post
+    input_match: '^(?![\s\S]*"post_id")(?=[\s\S]*(?:"threads"\s*:\s*\{[^{}]*"is_ghost_post"\s*:\s*true))'
     min: 1
   - name: topic-tag
     type: tool_used
-    tool: mcp__plugin_bolta_bolta__create-post
-    input_match: '"threads"\s*:\s*\{[^{}]*"topic_tag"\s*:\s*"[Cc]offee"'
+    tool: mcp__plugin_bolta_bolta__save-post
+    input_match: '^(?![\s\S]*"post_id")(?=[\s\S]*(?:"threads"\s*:\s*\{[^{}]*"topic_tag"\s*:\s*"[Cc]offee"))'
     min: 1
   - name: tag-without-hash
     type: tool_used
-    tool: mcp__plugin_bolta_bolta__create-post
-    input_match: '"topic_tag"\s*:\s*"#'
+    tool: mcp__plugin_bolta_bolta__save-post
+    input_match: '^(?![\s\S]*"post_id")(?=[\s\S]*(?:"topic_tag"\s*:\s*"#))'
     min: 0
     max: 0
   - name: no-media
     # A ghost post with an image goes out as a lasting post.
     type: tool_used
-    tool: mcp__plugin_bolta_bolta__create-post
-    input_match: '"media"\s*:\s*\[\s*[\{"]'
+    tool: mcp__plugin_bolta_bolta__save-post
+    input_match: '^(?![\s\S]*"post_id")(?=[\s\S]*(?:"media"\s*:\s*\[\s*[\{"]))'
     min: 0
     max: 0
   - name: code-kept
     type: tool_used
-    tool: mcp__plugin_bolta_bolta__create-post
-    input_match: 'GUJI20'
+    tool: mcp__plugin_bolta_bolta__save-post
+    input_match: '^(?![\s\S]*"post_id")(?=[\s\S]*(?:GUJI20))'
     min: 1
   - name: says-it-disappears
     type: regex
