@@ -53,7 +53,7 @@ One connection for the agency's organization; tick the client brands.
 - Access follows the role of whoever signed in. A viewer's connection is read-only: no saves, nothing that uses credits. A client reviewer can't connect at all. A role change applies when the sign-in next renews; sign in again to apply it now.
 - A role that can't connect accounts: a teammate whose role can does it.
 - The read can say yes and Bolta still refuse. Give Bolta's sentence; don't try another way.
-- Here owners and admins approve; a creator's `approve_posts` can read true while `approve-post` refuses: trust the refusal ([roles](connect-people-and-roles.md)).
+- Here the same people approve as in Bolta: owners and admins any post, creators Bolta's drafts and posts naming them reviewer ([roles](connect-people-and-roles.md)).
 
 Clock, review mode and "Is everything set up?": [team-and-integrations](connect-team-and-integrations.md).
 

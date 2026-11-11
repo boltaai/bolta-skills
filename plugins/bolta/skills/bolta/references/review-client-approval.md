@@ -5,7 +5,7 @@ Agencies and teams often need a client's yes before a post goes out. Two things 
 ## Who is who
 
 - **The organization** is the agency or company. Its owners and admins reach every brand in it; a member reaches only the brands they were given.
-- **On a brand:** owners and admins write, approve, turn down and post now; creators write, send for review, schedule with review mode off, and in Bolta approve its drafts and posts naming them reviewer; a viewer only looks. Here a team yes is owners and admins only ([roles](connect-people-and-roles.md)).
+- **On a brand:** owners and admins write, approve, turn down and post now; creators write, send for review, schedule with review mode off, and in Bolta approve its drafts and posts naming them reviewer; a viewer only looks. Here a team yes follows the same rule ([roles](connect-people-and-roles.md)).
 - **A client reviewer** decides posts sent to them, takes no paid seat and can't connect an AI app. Invited from the brand's People & access. A brand creator can also be sent a client request, and their yes counts as the client's. More: [review-client-details.md](review-client-details.md).
 
 ## What reaches a client from here
