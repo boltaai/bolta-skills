@@ -3,8 +3,7 @@
 # new-message reset, the house rules and the auth notice), including the tools
 # made for Claude (approve-many-posts, reject-post, set-content-campaign-targets,
 # analyze-content-campaign-source). The hooks live in plugins/bolta-checks, a
-# plugin of their own; the two listed plugins (plugins/bolta and the generated
-# plugins/bolta-skills) carry none, and section 9 checks that. The matchers fit
+# plugin of their own; the listed plugin (plugins/bolta) carries none, and section 9 checks that. The matchers fit
 # any server name. Plain POSIX shell.
 #
 #   sh tools/test_hooks.sh                 every awk found: the default awk,
@@ -1141,7 +1140,7 @@ assert "rules: ends by saying the Bolta checks are on (the skills' evidence that
 # routing, declined checks, the card note, checks on).
 words=$(printf '%s' "$ctx" | wc -w | tr -d ' ')
 assert "rules: short enough ($words words, 230 or fewer)" test "$words" -le 230
-review_line="To approve, schedule or post now, read the Bolta skill's review playbook first."
+review_line="To approve, schedule or post now, read the review playbook first."
 assert "rules: sends approve, schedule and post-now asks to the review playbook" sh -c 'printf "%s\n" "$1" | grep -Fxq "$2"' x "$ctx" "$review_line"
 assert "rules: a declined check is never retried" sh -c 'printf "%s\n" "$1" | grep -Fxq "A declined Bolta check means not done: say so, and never retry it."' x "$ctx"
 assert "rules: says the card note is not for here and is never mentioned" sh -c 'printf "%s\n" "$1" | grep -Fxq "Some results say a Bolta card already showed them. Nothing showed here: show the data, and never mention that note."' x "$ctx"
@@ -1238,13 +1237,12 @@ assert "wiring: the scripts folder holds only .sh files${odd:+ (found: $odd)}" t
 # 9. The listed plugins carry no hooks; the checks fit any connection name
 # =====================================================================================
 # Anthropic's directory accepts command hooks and shell scripts only from Verified
-# organizations, so plugins/bolta and the generated plugins/bolta-skills ship none:
-# the checks are this plugin, installed next to either. A connector or a server
+# organizations, so plugins/bolta ships none:
+# the checks are this plugin, installed next to it. A connector or a server
 # someone added can carry any name. Claude Code calls a claude.ai connector's tools
 # mcp__claude_ai_<name>__<tool> and a server added by hand mcp__<name>__<tool>.
-bplugin="$here/../plugins/bolta-skills"
 bscripts="$scripts"
-for lp in "$full" "$bplugin"; do
+for lp in "$full"; do
   lname=$(basename "$lp")
   assert "listed: $lname has no hooks/" no_file "$lp/hooks/hooks.json"
   assert "listed: $lname has no scripts/" test ! -d "$lp/scripts"
@@ -1253,42 +1251,36 @@ for lp in "$full" "$bplugin"; do
   assert "listed: $lname has no userConfig (the guard reads it from this plugin)" sh -c '! sh "$1" field userConfig < "$2" >/dev/null' x "$reader" "$lp/.claude-plugin/plugin.json"
 done
 assert "checks: this plugin has no skills, agents or .mcp.json" test ! -d "$plugin/skills" -a ! -d "$plugin/agents" -a ! -f "$plugin/.mcp.json"
-if [ -d "$bplugin" ]; then
-  assert "bundle: it starts no connection of its own (no .mcp.json)" no_file "$bplugin/.mcp.json"
-  assert "bundle: plugin.json is named bolta-skills" test "$(jfield name < "$bplugin/.claude-plugin/plugin.json")" = bolta-skills
-  # Run the scripts on a connector with a name that has no "bolta" in it.
-  save_guard=$guard save_mark=$markh save_new=$newturn
-  guard="$bscripts/guard-bolta-writes.sh" markh="$bscripts/bolta-mark.sh" newturn="$bscripts/bolta-new-turn.sh"
-  S=mcp__claude_ai_Social_posts__
-  fresh
-  new_turn "yes to 1 and 3, no to 2"
-  check_guard "bundle: a batch approve on a connector named Social posts asks" ask standard "$(pre "${S}approve-many-posts" "$(input_for approve-many-posts)")" "(Social_posts)"
-  check_guard "bundle: a post now on that connector asks" ask standard "$(pre "${S}publish-post" "$(input_for publish-post)")"
-  check_guard "bundle: a no on that connector asks" ask standard "$(pre "${S}reject-post" "$(input_for reject-post)")"
-  check_guard "bundle: a campaign change on that connector asks" ask standard "$(pre "${S}set-content-campaign-targets" "$(input_for set-content-campaign-targets)")"
-  check_guard "bundle: a plain draft on that connector is silent" silent standard "$(pre "${S}create-post" "{\"content\":\"Hello\",\"account_ids\":[\"$ACC\"]}")"
-  mark "${S}approve-many-posts" "$(input_for approve-many-posts)" "$OK_MANY"
-  assert "bundle: the batch window opens for that connection" test -f "$(mdir)/win-go-mcp__claude_ai_Social_posts"
-  check_guard "bundle: a second approval on that connector is silent" silent standard "$(pre "${S}approve-post" "$(input_for approve-post)")"
-  check_guard "bundle: a no on that connector is silent" silent standard "$(pre "${S}reject-post" "$(input_for reject-post)")"
-  check_guard "bundle: post now is never covered" ask standard "$(pre "${S}publish-post" "$(input_for publish-post)")"
-  check_guard "bundle: another connection still asks" ask standard "$(pre "mcp__social__approve-post" "$(input_for approve-post)")"
-  check_guard "bundle: careful mode asks on every batch" ask careful "$(pre "${S}approve-many-posts" "$(input_for approve-many-posts)")" "Careful mode"
-  fresh
-  new_turn
-  check_guard "bundle: a server added by hand under a plain name asks" ask standard "$(pre "mcp__social__schedule-post" "$(input_for schedule-post)")" "(social)"
-  check_guard "bundle: a connector named by its id asks, and the check just says Bolta" ask standard "$(pre "mcp__0a1b2c3d-4e5f-4a6b-8c7d-9e0f1a2b3c4d__publish-post" "$(input_for publish-post)")" "(Bolta)"
-  mark "mcp__social__create-content-campaign" "$CC_IN" "$(campaign_resp "$CID1" draft)"
-  assert "bundle: a campaign made through a hand-added server leaves its marker" test -f "$(mdir)/campaign-mcp__social-$CID1"
-  check_guard "bundle: filling that campaign in is silent" silent standard "$(pre "mcp__social__set-content-campaign-targets" "$T1")"
-  check_guard "bundle: another campaign on that server asks" ask standard "$(pre "mcp__social__set-content-campaign-targets" "$T2")"
-  guard=$save_guard markh=$save_mark newturn=$save_new
-  # The reconnect notice also fires for a connector under any name.
-  out=$(printf '%s' '{"hook_event_name":"PostToolUse","tool_name":"mcp__claude_ai_Social_posts__list-accounts","tool_response":[{"type":"text","text":"{\"ok\": false, \"data\": null, \"error\": \"Invalid API key\", \"error_kind\": \"denied\", \"meta\": {}, \"next_step\": null}"}]}' | sh "$bscripts/bolta-auth-notice.sh")
-  case $out in *"Do not retry the call"*) pass "bundle: the reconnect notice works for any connection name" ;; *) bad "bundle: the reconnect notice works for any connection name" "output: $out" ;; esac
-else
-  bad "bundle: plugins/bolta-skills exists" "run python3 -I tools/build_skills_bundle.py"
-fi
+# Run the scripts on a connector with a name that has no "bolta" in it.
+save_guard=$guard save_mark=$markh save_new=$newturn
+guard="$bscripts/guard-bolta-writes.sh" markh="$bscripts/bolta-mark.sh" newturn="$bscripts/bolta-new-turn.sh"
+S=mcp__claude_ai_Social_posts__
+fresh
+new_turn "yes to 1 and 3, no to 2"
+check_guard "any name: a batch approve on a connector named Social posts asks" ask standard "$(pre "${S}approve-many-posts" "$(input_for approve-many-posts)")" "(Social_posts)"
+check_guard "any name: a post now on that connector asks" ask standard "$(pre "${S}publish-post" "$(input_for publish-post)")"
+check_guard "any name: a no on that connector asks" ask standard "$(pre "${S}reject-post" "$(input_for reject-post)")"
+check_guard "any name: a campaign change on that connector asks" ask standard "$(pre "${S}set-content-campaign-targets" "$(input_for set-content-campaign-targets)")"
+check_guard "any name: a plain draft on that connector is silent" silent standard "$(pre "${S}create-post" "{\"content\":\"Hello\",\"account_ids\":[\"$ACC\"]}")"
+mark "${S}approve-many-posts" "$(input_for approve-many-posts)" "$OK_MANY"
+assert "any name: the batch window opens for that connection" test -f "$(mdir)/win-go-mcp__claude_ai_Social_posts"
+check_guard "any name: a second approval on that connector is silent" silent standard "$(pre "${S}approve-post" "$(input_for approve-post)")"
+check_guard "any name: a no on that connector is silent" silent standard "$(pre "${S}reject-post" "$(input_for reject-post)")"
+check_guard "any name: post now is never covered" ask standard "$(pre "${S}publish-post" "$(input_for publish-post)")"
+check_guard "any name: another connection still asks" ask standard "$(pre "mcp__social__approve-post" "$(input_for approve-post)")"
+check_guard "any name: careful mode asks on every batch" ask careful "$(pre "${S}approve-many-posts" "$(input_for approve-many-posts)")" "Careful mode"
+fresh
+new_turn
+check_guard "any name: a server added by hand under a plain name asks" ask standard "$(pre "mcp__social__schedule-post" "$(input_for schedule-post)")" "(social)"
+check_guard "any name: a connector named by its id asks, and the check just says Bolta" ask standard "$(pre "mcp__0a1b2c3d-4e5f-4a6b-8c7d-9e0f1a2b3c4d__publish-post" "$(input_for publish-post)")" "(Bolta)"
+mark "mcp__social__create-content-campaign" "$CC_IN" "$(campaign_resp "$CID1" draft)"
+assert "any name: a campaign made through a hand-added server leaves its marker" test -f "$(mdir)/campaign-mcp__social-$CID1"
+check_guard "any name: filling that campaign in is silent" silent standard "$(pre "mcp__social__set-content-campaign-targets" "$T1")"
+check_guard "any name: another campaign on that server asks" ask standard "$(pre "mcp__social__set-content-campaign-targets" "$T2")"
+guard=$save_guard markh=$save_mark newturn=$save_new
+# The reconnect notice also fires for a connector under any name.
+out=$(printf '%s' '{"hook_event_name":"PostToolUse","tool_name":"mcp__claude_ai_Social_posts__list-accounts","tool_response":[{"type":"text","text":"{\"ok\": false, \"data\": null, \"error\": \"Invalid API key\", \"error_kind\": \"denied\", \"meta\": {}, \"next_step\": null}"}]}' | sh "$bscripts/bolta-auth-notice.sh")
+case $out in *"Do not retry the call"*) pass "any name: the reconnect notice works for any connection name" ;; *) bad "any name: the reconnect notice works for any connection name" "output: $out" ;; esac
 
 printf '\n%s: %s cases, %s\n' "$awkname" "$n" "$([ "$fail" -eq 0 ] && echo 'all passed' || echo 'FAILURES')"
 exit "$fail"

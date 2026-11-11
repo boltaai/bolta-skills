@@ -27,7 +27,7 @@ Then `/mcp`, pick `bolta`, sign in, tick the brands.
 
 claude.ai and Cowork (untested): add this repository as a marketplace, install BOLTA, connect Bolta under Customize > Connectors. In chat, keep approve, schedule, publish and reject on "Needs approval".
 
-Added Bolta yourself (connector, or `claude mcp add`)? Install `bolta-skills` instead: same skills, no second connection.
+Added Bolta yourself (a connector, or `claude mcp add`)? Keep that one connection and add only the skill: `npx skills add boltaai/bolta-skills --skill bolta`.
 
 ## What Bolta checks
 
@@ -44,9 +44,8 @@ Drafts need none. **Bolta checks** `careful` in `/config` checks every approval.
 ## Limits
 
 - No media upload: Instagram, TikTok, YouTube and Pinterest need a public link.
-- Until Bolta's newer tools reach your server, a "no" with a reason and a campaign's accounts are set in Bolta.
 - One connection reaches the brands you tick; agencies tick their clients. New brand: reconnect.
-- The checks need `sh` and `awk` (Windows: [Git for Windows](https://git-scm.com/downloads/win) first); their README has the rest.
+- The checks need `sh` and `awk` (Windows: [Git for Windows](https://git-scm.com/downloads/win) first).
 
 ## Sent and stored
 

@@ -15,7 +15,8 @@
 # allow-lists: a value is safe only if it is exactly a safe word. If the call
 # cannot be read, the guard asks (fail closed).
 #
-# First argument (the confirm_level setting, passed in hooks.json):
+# The confirm_level setting (CLAUDE_PLUGIN_OPTION_CONFIRM_LEVEL in the hook's
+# environment, or the first argument):
 #   standard (default)  drafts and sending for review pass; the first approval,
 #                       schedule or delete in a reply asks, and later ones in
 #                       the same reply on the same connection pass (see the
@@ -101,7 +102,12 @@ IFS=$oldifs
 set +f
 
 careful=1
-if [ "${1:-standard}" = standard ]; then careful=0; fi
+# Claude Code refuses a hook whose shell command embeds ${user_config.*} (the
+# value would be re-parsed by the shell) and blocks the call, so hooks.json no
+# longer passes the setting. It arrives in the environment instead; $1 still
+# wins, for the tests and for anyone calling the script by hand.
+level=${1:-${CLAUDE_PLUGIN_OPTION_CONFIRM_LEVEL:-${CLAUDE_PLUGIN_OPTION_confirm_level:-standard}}}
+if [ "$level" = standard ]; then careful=0; fi
 
 base="${TMPDIR:-/tmp}/bolta-plugin"
 dir="$base/$sid"

@@ -33,7 +33,7 @@ rules='Bolta house rules:
 8. When nobody is watching (a scheduled run): save drafts or send for review only. Everything else becomes a suggestion.
 9. Use the plain words in the Bolta skill'\''s plain-words list. Never show ids, tool names or error codes.
 10. If it can'\''t be done from here: one line, one link.
-To approve, schedule or post now, read the Bolta skill'\''s review playbook first.
+To approve, schedule or post now, read the review playbook first.
 A declined Bolta check means not done: say so, and never retry it.
 Some results say a Bolta card already showed them. Nothing showed here: show the data, and never mention that note.
 Bolta checks are on in this session.'

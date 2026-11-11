@@ -1,12 +1,12 @@
 # BOLTA checks
 
-The local checks behind the `bolta` and `bolta-skills` plugins, as a plugin of their own for Claude Code. Before anything public, approved, turned down or final, Claude Code shows you a Bolta check and waits for your yes. Drafts need none.
+The local checks behind the `bolta` plugin, as a plugin of their own for Claude Code. Before anything public, approved, turned down or final, Claude Code shows you a Bolta check and waits for your yes. Drafts need none.
 
 The checks are hooks (shell scripts Claude Code runs around Bolta's tool calls). Anthropic's plugin directory accepts such hooks only from Verified organizations, so they ship here, from GitHub, and not inside the directory listing.
 
 ## Install
 
-Install `bolta` or `bolta-skills` first, then add this:
+Install `bolta` first, then add this:
 
 ```
 /plugin marketplace add boltaai/bolta-skills

@@ -103,7 +103,7 @@ Not every app is offered every tool, and a plan or role can refuse one.
 - No `approve-many-posts`: `approve-post` for each yes, the first one alone.
 - No `reject-post`: "I can't turn this down from here. Tap the X (Dismiss) on that post at bolta.ai/dashboard/hub and give your reason." Never delete to stand in for a no.
 - No `set-content-campaign-targets`: `update-content-campaign` for the brief and dates, then "Pick the accounts at bolta.ai/dashboard/campaigns/<id>, then say done."
-- No routine tools: one line, one link to bolta.ai/dashboard/hub. Never fake a routine with a batch of scheduled posts unless asked.
+- No routine tools: one line, one link to bolta.ai/dashboard/routines. Never fake a routine with a batch of scheduled posts unless asked.
 - A file on the computer or in the chat can't be attached. The user hosts it publicly or adds it in Bolta.
 - A refusal naming a role, a plan or the connection's access: say which, in plain words, and stop.
 
