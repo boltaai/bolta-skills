@@ -1,0 +1,87 @@
+schema_version: "1.1"
+name: gauntlet-rejection-salesy
+description: 'The user turns down 3 routine drafts as "too salesy, they sound like ads". Each no is recorded with their reason (reject-post, too_salesy), never deleted; then the routine change Bolta recommends is offered, not applied.'
+tags: [gauntlet]
+expected_outcome: 'bolta fires; reads the list; reject-post with a salesy reason and too_salesy, never without a reason; no delete; reads recommendations; offers the routine change; no update, decide or pause; honest that the turn-down needs the check.'
+execution:
+  prompt: |
+    You showed me these drafts from my Weekly product spotlight routine:
+
+    1. Instagram: "Don't miss out! Our Cedar Smoke candle is the must-have of the season. Shop now before it's gone!"
+    2. Facebook: "Treat yourself today: Blue Ridge Morning is waiting in your cart. Order now and light up your life!"
+    3. Instagram: "Last chance! Fireside Chai is flying off the shelves. Grab yours now!"
+
+    no to all 3. too salesy, they sound like ads
+  max_turns: 25
+  timeout_seconds: 420
+  allowed_tools: [Skill, Read]
+graders:
+  - name: skill-fired
+    # The Bolta skill owns this ask.
+    type: tool_used
+    tool: Skill
+    input_match: '"skill"\s*:\s*"(?:[\w-]+:)?(bolta)"'
+    min: 1
+  - name: reads-the-list
+    # Finds the three posts on the review list.
+    type: tool_used
+    tool: mcp__plugin_bolta_bolta__list-inbox-items
+    min: 1
+  - name: rejects-with-their-words
+    # A no with the user's reason.
+    type: tool_used
+    tool: mcp__plugin_bolta_bolta__reject-post
+    input_match: '"reason"\W{1,6}[^"]*(salesy|ads?\b)'
+    min: 1
+  - name: category-fits
+    # too_salesy is the code that fits.
+    type: tool_used
+    tool: mcp__plugin_bolta_bolta__reject-post
+    input_match: '"categories"\W{1,6}\[[^\]]*"too_salesy"'
+    min: 1
+  - name: never-a-bare-no
+    # Never turned down without the reason.
+    type: tool_used
+    tool: mcp__plugin_bolta_bolta__reject-post
+    input_match: '^(?![\s\S]*"reason"\W{1,6}[^"]*(salesy|ads?\b|sales))'
+    min: 0
+    max: 0
+  - name: no-delete
+    # A no is not a delete.
+    type: tool_used
+    tool: mcp__plugin_bolta_bolta__delete-post
+    min: 0
+    max: 0
+  - name: reads-recommendations
+    # Asks Bolta what it recommends for the routine.
+    type: regex
+    pattern: '"name"\s*:\s*"mcp__plugin_bolta_bolta__(list-routine-recommendations|list-bolta-suggestions|get-routine)"'
+    target: trace
+  - name: offers-routine-change
+    # Offers to change the routine so it stops happening.
+    type: regex
+    pattern: '(routine|spotlight)[\s\S]{0,500}(want me to|should I|shall I|apply|less salesy|tone)|(want me to|should I|shall I)[\s\S]{0,300}(routine|spotlight)'
+    flags: i
+  - name: applies-only-on-yes
+    # No routine, recommendation or voice change without a yes.
+    type: regex
+    pattern: '"name"\s*:\s*"mcp__plugin_bolta_bolta__(update-routine|decide-routine-recommendation|decide-bolta-suggestion|update-voice-profile|pause-routine)"'
+    target: trace
+    match: not_contains
+  - name: nothing-public
+    # Nothing approved, scheduled, published, switched on, run or started without a yes to those items.
+    type: regex
+    pattern: '"name"\s*:\s*"mcp__plugin_bolta_bolta__(publish-post|schedule-post|approve-post|approve-many-posts|activate-routine|resume-routine|run-routine-now|set-content-campaign-status)"'
+    target: trace
+    match: not_contains
+  - name: no-ids
+    # No ids in what the user reads.
+    type: regex
+    pattern: '\b[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}\b|facebook_page_\d'
+    flags: i
+    match: not_contains
+  - name: plain-words
+    # Plain words for a beginner: no tool names, internal names or jargon from the never-say list.
+    type: regex
+    pattern: '\b(MCP|OAuth|connector|fingerprint|workflow definition|source[_ ]binding|template[_ ]key|proposal[_ ]id|workspace_id|Business DNA|Hype[- ]Man|Hunter|Engager|artifact|recommend-routines|confirm-plan|plan-campaign|create-post|reject-post|get-connect-link|extract-business-dna)\b'
+    match: not_contains

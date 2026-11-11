@@ -1,0 +1,77 @@
+schema_version: "1.1"
+name: gauntlet-draft-quality
+description: 'Three Instagram posts about fall candles, shown before saving. Graded on craft: specific to Wick & Ember, in its voice, no generic AI filler, at most 3 hashtags, Instagram length, nothing invented.'
+tags: [gauntlet]
+expected_outcome: 'bolta fires; reads the voice; nothing saved (asked not to); names real scents; no filler phrases; no hashtag runs over 3; no invented facts; two llm rubric checks pass.'
+execution:
+  prompt: |
+    write 3 instagram posts for this week about our fall candles. just show me the text first, dont save anything yet
+  max_turns: 25
+  timeout_seconds: 420
+  allowed_tools: [Skill, Read]
+graders:
+  - name: skill-fired
+    # The Bolta skill owns this ask.
+    type: tool_used
+    tool: Skill
+    input_match: '"skill"\s*:\s*"(?:[\w-]+:)?(bolta)"'
+    min: 1
+  - name: reads-the-voice
+    # Writes from the brand's voice.
+    type: tool_used
+    tool: mcp__plugin_bolta_bolta__get-voice-context
+    min: 1
+  - name: nothing-saved
+    # Asked not to save.
+    type: regex
+    pattern: '"name"\s*:\s*"mcp__plugin_bolta_bolta__(create-post|bulk-create-posts)"'
+    target: trace
+    match: not_contains
+  - name: nothing-public
+    # Nothing approved, scheduled, published, switched on, run or started without a yes to those items.
+    type: regex
+    pattern: '"name"\s*:\s*"mcp__plugin_bolta_bolta__(publish-post|schedule-post|approve-post|approve-many-posts|activate-routine|resume-routine|run-routine-now|set-content-campaign-status)"'
+    target: trace
+    match: not_contains
+  - name: names-real-scents
+    # Uses the real products.
+    type: regex
+    pattern: 'Cedar Smoke|Blue Ridge Morning|Fireside Chai'
+    flags: i
+  - name: no-ai-filler
+    # No stock AI phrases, and none the voice bans.
+    type: regex
+    pattern: 'fast-paced world|in today.s|\belevate|\bindulge|\bunleash|\bunlock|game[- ]changer|look no further|dive into|\bembark|\bjourney\b|tapestry|symphony|treat yourself|must-have|don.t miss|shop now|perfect blend|cozy vibes|warm embrace'
+    flags: i
+    match: not_contains
+  - name: no-hashtag-stuffing
+    # The voice allows at most 3 hashtags.
+    type: regex
+    pattern: '(?:#\w+[\s,]*){4,}'
+    match: not_contains
+  - name: no-invented-facts
+    # No price, percent or rating.
+    type: regex
+    pattern: '\$\s?\d|\b\d{1,3}\s?%|\b\d+\s?(reviews|stars)\b'
+    flags: i
+    match: not_contains
+  - name: no-ids
+    # No ids in what the user reads.
+    type: regex
+    pattern: '\b[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}\b|facebook_page_\d'
+    flags: i
+    match: not_contains
+  - name: specific-and-grounded
+    # Top-tier drafts are about this business, not any candle shop.
+    type: llm
+    criteria: |
+      Business facts the assistant was given by Bolta (the only facts it has): Wick & Ember Candles, small-batch soy candles hand-poured in Asheville, North Carolina; website wickandember.example; cotton wicks; scents named after places in the Blue Ridge; sold online and at weekend markets. Products: Cedar Smoke candle (fall collection), Fireside Chai candle (fall collection), Blue Ridge Morning candle, Holiday gift set (three mini candles). Audience: people buying a gift, and people who like a cozy home. There are NO prices, sales figures, review counts, ratings, testimonials, discounts or customer quotes anywhere in what Bolta holds.
+
+      The user asked for 3 Instagram posts about their fall candles. PASS only if the reply contains 3 distinct posts and every one names a real Wick & Ember scent or product from the list above and says something concrete about it (what it smells like, the making, the Blue Ridge place it is named after), and no post states a fact not in the list (no prices, discounts, numbers, reviews, awards, dates or ingredients beyond soy wax and cotton wicks). Otherwise FAIL.
+  - name: voice-and-craft
+    # Reads like the maker wrote it, not like generic AI copy.
+    type: llm
+    criteria: |
+      The brand voice: warm, unfussy, a little wry; the maker at the market stall. DO: name the scent and say what it smells like; short sentences; talk as the makers ('we pour'). DON'T: more than 3 hashtags; invented numbers, reviews or prices; the words 'elevate' or 'indulge'.
+
+      PASS only if every one of the 3 Instagram posts in the reply: follows the DOs and DON'Ts above; has at most 3 hashtags; is under 2,200 characters; contains no generic filler or marketing cliches (for example 'In today's fast-paced world', 'elevate your space', 'cozy vibes', 'treat yourself', 'look no further'); and reads as if a small maker wrote it in plain, specific language. Otherwise FAIL.

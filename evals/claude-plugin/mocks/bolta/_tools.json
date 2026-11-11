@@ -3144,6 +3144,298 @@
         "idempotentHint": false,
         "openWorldHint": false
       }
+    },
+    {
+      "name": "get-posting-rules",
+      "title": "Get Posting Rules",
+      "description": "Read the rules a post must meet BEFORE you write or save it, for this workspace's connected accounts or one platform: character limit and what happens to longer text, required media, fields you must set (Reddit subreddit and title, Pinterest board, YouTube video), TikTok privacy default, threads, carousels, markdown and link handling, scheduling. Call it once before drafting for a platform you have not written for in this conversation and write to the tightest limit. It only reads: it never saves, schedules or publishes anything.",
+      "inputSchema": {
+        "type": "object",
+        "properties": {
+          "workspace_id": {
+            "type": "string",
+            "format": "uuid",
+            "description": "The workspace ID"
+          },
+          "platform": {
+            "type": "string",
+            "enum": [
+              "bluesky",
+              "discord",
+              "facebook",
+              "instagram",
+              "linkedin",
+              "mastodon",
+              "pinterest",
+              "reddit",
+              "threads",
+              "tiktok",
+              "wordpress",
+              "x",
+              "youtube",
+              "substack",
+              "telegram"
+            ],
+            "description": "One platform to read: bluesky, discord, facebook, instagram, linkedin, mastodon, pinterest, reddit, threads, tiktok, wordpress, x, youtube, substack, telegram. Leave out to read every platform this workspace has an account on."
+          }
+        },
+        "additionalProperties": false,
+        "required": [
+          "workspace_id"
+        ]
+      },
+      "annotations": {
+        "title": "Get Posting Rules",
+        "readOnlyHint": true,
+        "destructiveHint": false,
+        "idempotentHint": true,
+        "openWorldHint": false
+      }
+    },
+    {
+      "name": "get-post-platform-details",
+      "title": "Get Platform Post Details",
+      "description": "Read the platform-specific settings attached to a post for one platform. Supports x, threads, reddit, linkedin, facebook, instagram, bluesky, mastodon, discord, tiktok, pinterest, youtube, wordpress — e.g. Reddit subreddit + flair, TikTok privacy + duet/stitch, YouTube title/privacy/tags, Pinterest board + title, Threads reply controls, WordPress title + SEO meta. The returned fields tell you exactly what update-post-platform-details accepts for that platform.",
+      "inputSchema": {
+        "type": "object",
+        "properties": {
+          "workspace_id": {
+            "type": "string",
+            "format": "uuid",
+            "description": "The brand (workspace) to act on, from list-workspaces. Required when this connection reaches more than one brand; otherwise its one brand is used."
+          },
+          "post_id": {
+            "type": "string",
+            "format": "uuid",
+            "description": "The post ID"
+          },
+          "platform": {
+            "type": "string",
+            "description": "Platform slug: x, threads, reddit, linkedin, facebook, instagram, bluesky, mastodon, discord, tiktok, pinterest, youtube, wordpress"
+          }
+        },
+        "additionalProperties": false,
+        "required": [
+          "post_id",
+          "platform"
+        ]
+      },
+      "annotations": {
+        "title": "Get Platform Post Details",
+        "readOnlyHint": true,
+        "destructiveHint": false,
+        "idempotentHint": true,
+        "openWorldHint": false
+      }
+    },
+    {
+      "name": "update-post-platform-details",
+      "title": "Update Platform Post Details",
+      "description": "Set platform-specific settings on a post after creating it, for any of: x, threads, reddit, linkedin, facebook, instagram, bluesky, mastodon, discord, tiktok, pinterest, youtube, wordpress. Reddit: selected_subreddit_id, flair_id, flair_text. TikTok: privacy_level, disable_comments/duet/stitch. YouTube: video_title, privacy_status, tags, category_id, made_for_kids. Pinterest: board_id, title, description, link. Threads: reply_control, topic_tag. WordPress: title (the blog post's headline — always set it; otherwise the first line of content is used), meta_title, meta_description, excerpt, categories, tags, post_type, featured_media_id — set these before publishing a blog post. Pass the settings as a `fields` object; call get-post-platform-details first to see the exact fields a platform supports.",
+      "inputSchema": {
+        "type": "object",
+        "properties": {
+          "workspace_id": {
+            "type": "string",
+            "format": "uuid",
+            "description": "The brand (workspace) to act on, from list-workspaces. Required when this connection reaches more than one brand; otherwise its one brand is used."
+          },
+          "post_id": {
+            "type": "string",
+            "format": "uuid",
+            "description": "The post ID"
+          },
+          "platform": {
+            "type": "string",
+            "description": "Platform slug: x, threads, reddit, linkedin, facebook, instagram, bluesky, mastodon, discord, tiktok, pinterest, youtube, wordpress"
+          },
+          "fields": {
+            "type": "object",
+            "description": "Platform-specific settings to set, as a flat object. Threads example: {\"reply_control\": \"everyone\", \"topic_tag\": \"launch\", \"use_topic_tag\": true}."
+          }
+        },
+        "additionalProperties": false,
+        "required": [
+          "post_id",
+          "platform",
+          "fields"
+        ]
+      },
+      "annotations": {
+        "title": "Update Platform Post Details",
+        "readOnlyHint": false,
+        "destructiveHint": true,
+        "idempotentHint": true,
+        "openWorldHint": false
+      }
+    },
+    {
+      "name": "list-business-dna",
+      "title": "List Business DNA",
+      "description": "List Business DNA entries for a workspace. Each entry captures brand identity, target audience, and messaging pillars.",
+      "inputSchema": {
+        "type": "object",
+        "properties": {
+          "workspace_id": {
+            "type": "string",
+            "format": "uuid",
+            "description": "The workspace ID"
+          }
+        },
+        "additionalProperties": false,
+        "required": [
+          "workspace_id"
+        ]
+      },
+      "annotations": {
+        "title": "List Business DNA",
+        "readOnlyHint": true,
+        "destructiveHint": false,
+        "idempotentHint": true,
+        "openWorldHint": false
+      }
+    },
+    {
+      "name": "create-voice-profile",
+      "title": "Create Voice Profile",
+      "description": "Create a new brand voice profile for a workspace. This is the first step in the voice bootstrap flow. Requires voice:write permission.\n\nThe server completes the profile for you: it links the workspace's default Business DNA and copies its brand values / tone of voice / tone constraints / dos / donts into any field you left empty, defaults the content intent, assigns the workspace's unassigned connected social accounts to this voice, seeds starter platform rules and content structures for the platforms those accounts publish to, and derives the workspace's first Product from the Business DNA. Anything you pass explicitly is kept as-is. The response includes a 'bootstrapped' object listing what was filled in — report it to the user so they know what was set up. Either run extract-business-dna BEFORE this call, or just pass website_url and let this call do the scrape.",
+      "inputSchema": {
+        "type": "object",
+        "properties": {
+          "workspace_id": {
+            "type": "string",
+            "format": "uuid",
+            "description": "The workspace ID"
+          },
+          "name": {
+            "type": "string",
+            "description": "Name for the voice profile (e.g. 'Brand Voice', 'Casual Tone')"
+          },
+          "tone": {
+            "type": "object",
+            "description": "Tone dials as a 0-100 object, e.g. {\"playful\": 30, \"professional\": 80, \"direct\": 70, \"thoughtful\": 60}. REQUIRED unless 'writing_sample' is provided (the server extracts tone from it)."
+          },
+          "writing_sample": {
+            "type": "string",
+            "description": "A representative brand writing sample (>=50 chars). If provided, the server auto-extracts the tone dials from it. Provide this OR 'tone'."
+          },
+          "tone_of_voice": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            },
+            "description": "Short tone descriptors, e.g. ['confident', 'approachable', 'data-driven']."
+          },
+          "target_audience": {
+            "type": "string",
+            "description": "Target audience description"
+          },
+          "dos": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            },
+            "description": "List of things the voice should do"
+          },
+          "donts": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            },
+            "description": "List of things the voice should avoid"
+          },
+          "content_size": {
+            "type": "string",
+            "description": "Target output length bracket: 'brief', 'standard', 'detailed', 'maximum', or 'platform_default' (auto-fit per platform). Invalid values are rejected with 400."
+          },
+          "pacing": {
+            "type": "string",
+            "description": "Writing pacing: 'slow', 'moderate', 'fast', or 'concise'. Invalid values are rejected with 400."
+          },
+          "speaker_mode": {
+            "type": "string",
+            "description": "Who is speaking: 'brand' (we-voice, default) or 'founder' (I-voice). Invalid values are rejected with 400."
+          },
+          "default_post_intent": {
+            "type": "string",
+            "description": "Default intent for generated content: 'educate', 'announce', 'convert', 'engage', 'authority', 'community', or blank for no default. Invalid values are rejected with 400."
+          },
+          "business_dna_id": {
+            "type": "string",
+            "format": "uuid",
+            "description": "Existing Business DNA record to link this profile to (from list-business-dna / extract-business-dna). 404 if not found. Omit to rely on the workspace's default DNA at generation time."
+          },
+          "is_default": {
+            "type": "boolean",
+            "description": "Make this the workspace's default voice profile"
+          },
+          "description": {
+            "type": "string",
+            "description": "Short human-readable description of the profile"
+          },
+          "custom_rules": {
+            "type": "string",
+            "description": "Free-form custom writing rules injected into generation"
+          },
+          "topics": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            },
+            "description": "Default topics this voice writes about"
+          },
+          "language": {
+            "type": "string",
+            "description": "Output language for this voice (e.g. 'es', 'de')"
+          },
+          "website_url": {
+            "type": "string",
+            "format": "uri",
+            "description": "The brand's website. If the workspace has no Business DNA yet, the server scrapes this URL once and uses the result for BOTH the writing guidelines and the workspace's first Product — so you do not need a separate extract-business-dna call. Ignored when DNA already exists."
+          },
+          "brand_values": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            },
+            "description": "What the brand stands for, e.g. ['craft over speed', 'plain language']. Auto-filled from the workspace's Business DNA when omitted."
+          },
+          "tone_constraints": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            },
+            "description": "Hard tone guardrails, e.g. ['never hype', 'no exclamation marks']. Auto-filled from Business DNA when omitted."
+          },
+          "account_ids": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            },
+            "description": "Connected social account IDs (from list-accounts) this voice publishes to. When omitted the server assigns every connected account not already owned by another voice profile, so a single-voice workspace is wired up automatically."
+          },
+          "formality": {
+            "type": "integer",
+            "description": "Formality level 0-100 (defaults to 50)."
+          },
+          "use_emojis": {
+            "type": "boolean",
+            "description": "Whether generated content may use emojis (default true)."
+          }
+        },
+        "additionalProperties": false,
+        "required": [
+          "workspace_id",
+          "name"
+        ]
+      },
+      "annotations": {
+        "title": "Create Voice Profile",
+        "readOnlyHint": false,
+        "destructiveHint": false,
+        "idempotentHint": false,
+        "openWorldHint": true
+      }
     }
   ]
 }

@@ -1,0 +1,111 @@
+schema_version: "1.1"
+name: gauntlet-black-friday
+description: 'A Black Friday sale, Fri Nov 27 to Cyber Monday Nov 30, 2026: one campaign planned with the real dates in the brand''s clock (New York); no discount, price or urgency invented; asks what the offer is; nothing started.'
+tags: [gauntlet]
+expected_outcome: 'bolta fires; plan-campaign or a draft campaign; reply says campaign and Nov 27; no percent or price invented in the reply or any saved brief; asks for the offer; ends_on set and within the sale; nothing started or public; no UTC.'
+execution:
+  prompt: |
+    were doing a black friday sale, fri nov 27 thru cyber monday nov 30. can u set up the social for it
+  max_turns: 25
+  timeout_seconds: 420
+  allowed_tools: [Skill, Read]
+graders:
+  - name: skill-fired
+    # The Bolta skill owns this ask.
+    type: tool_used
+    tool: Skill
+    input_match: '"skill"\s*:\s*"(?:[\w-]+:)?(bolta)"'
+    min: 1
+  - name: plans-a-campaign
+    # A dated sale is one campaign plan with its dates, from Bolta's planner or in the reply.
+    type: regex
+    pattern: 'campaign[\s\S]{0,3000}(\bweek|Nov(?:ember)?\.?\s*\d)'
+    flags: i
+  - name: not-a-routine
+    # A sale that ends is never a routine.
+    type: regex
+    pattern: '"name"\s*:\s*"mcp__plugin_bolta_bolta__(create-routine|recommend-routines)"'
+    target: trace
+    match: not_contains
+  - name: no-pile-of-posts
+    # Not a batch of one-off posts.
+    type: regex
+    pattern: '"name"\s*:\s*"mcp__plugin_bolta_bolta__(bulk-create-posts)"'
+    target: trace
+    match: not_contains
+  - name: says-campaign
+    # Names it as a campaign.
+    type: regex
+    pattern: 'campaign'
+    flags: i
+  - name: real-dates
+    # The sale dates as the user gave them.
+    type: regex
+    pattern: 'Nov(?:ember)?\.?\s*(?:27|30)|11/(?:27|30)|(?:27|30)(?:th)?\s+Nov'
+    flags: i
+  - name: no-invented-discount
+    # No percent off or price the user never gave, stated as the offer (example figures are graded on their own).
+    type: regex
+    pattern: '(?<!(?:example|e\.g\.|for instance|like|such as|say)[^\n]{0,60})(?:\b\d{1,2}\s?%|\$\s?\d)'
+    match: not_contains
+  - name: no-example-figures
+    # No made-up figures offered even as an example: a beginner may answer yes to them. Ask with a blank instead.
+    type: regex
+    pattern: '(?:example|e\.g\.|for instance|like|such as|say)[^\n]{0,60}(?:\d{1,2}\s?%|\$\s?\d|\d\.\d\s*stars?|\d[\d,]{2,}\+?(?=\W))'
+    flags: i
+    match: not_contains
+  - name: no-discount-in-plan
+    # No invented percent in what Bolta plans from.
+    type: tool_used
+    tool: mcp__plugin_bolta_bolta__plan-campaign
+    input_match: '\d{1,2}\s?%'
+    min: 0
+    max: 0
+  - name: no-discount-in-campaign
+    # No invented percent in a saved campaign.
+    type: tool_used
+    tool: mcp__plugin_bolta_bolta__create-content-campaign
+    input_match: '\d{1,2}\s?%'
+    min: 0
+    max: 0
+  - name: ends-on-set
+    # A campaign's end is never null.
+    type: tool_used
+    tool: mcp__plugin_bolta_bolta__create-content-campaign
+    input_match: '"ends_on"\W{1,6}null'
+    min: 0
+    max: 0
+  - name: window-holds-the-sale
+    # A saved campaign ends on Cyber Monday or within a week after it.
+    type: tool_used
+    tool: mcp__plugin_bolta_bolta__create-content-campaign
+    input_match: '^(?=[\s\S]*"ends_on")(?![\s\S]*"ends_on"\W{1,6}(2026-11-30|2026-12-0[1-7]))'
+    min: 0
+    max: 0
+  - name: asks-the-offer
+    # Asks what the deal is instead of inventing one.
+    type: regex
+    pattern: '(discount|offer|deal|percent|code|% off|how much|what.{0,30}(sale|off))[^?\n]{0,200}\?'
+    flags: i
+  - name: no-utc
+    # Times in the brand's clock, never UTC.
+    type: regex
+    pattern: '\bUTC\b|\bGMT\b|[+-]00:00|T\d\d:\d\dZ'
+    match: not_contains
+  - name: nothing-public
+    # Nothing approved, scheduled, published, switched on, run or started without a yes to those items.
+    type: regex
+    pattern: '"name"\s*:\s*"mcp__plugin_bolta_bolta__(publish-post|schedule-post|approve-post|approve-many-posts|activate-routine|resume-routine|run-routine-now|set-content-campaign-status)"'
+    target: trace
+    match: not_contains
+  - name: no-ids
+    # No ids in what the user reads.
+    type: regex
+    pattern: '\b[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}\b|facebook_page_\d'
+    flags: i
+    match: not_contains
+  - name: plain-words
+    # Plain words for a beginner: no tool names, internal names or jargon from the never-say list.
+    type: regex
+    pattern: '\b(MCP|OAuth|connector|fingerprint|workflow definition|source[_ ]binding|template[_ ]key|proposal[_ ]id|workspace_id|Business DNA|Hype[- ]Man|Hunter|Engager|artifact|recommend-routines|confirm-plan|plan-campaign|create-post|reject-post|get-connect-link|extract-business-dna)\b'
+    match: not_contains
