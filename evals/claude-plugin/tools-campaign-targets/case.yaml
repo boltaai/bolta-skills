@@ -5,7 +5,7 @@ tags: [smoke, newtools]
 expected_outcome: 'campaign fires; one create (Problem / Solution, dated, waitlist link); set-content-campaign-targets with LinkedIn and X and the pricing page as a url source; analyze for that source after it; start attempted only after the accounts are set; no dashboard hand-off; no drafts saved into it; never says it is running.'
 execution:
   prompt: |
-    We launch new pricing on Nov 3. Run it for 3 weeks from Oct 19 and get people on the waitlist: bolta.ai/waitlist. Post it on LinkedIn and X, and have Bolta read https://northwind.example/pricing for the details. Start the campaign.
+    We launch new pricing on Dec 8. Run it for 3 weeks from Nov 23 and get people on the waitlist: bolta.ai/waitlist. Post it on LinkedIn and X, and have Bolta read https://northwind.example/pricing for the details. Start the campaign.
   max_turns: 30
   timeout_seconds: 300
   allowed_tools: [Skill, Read]

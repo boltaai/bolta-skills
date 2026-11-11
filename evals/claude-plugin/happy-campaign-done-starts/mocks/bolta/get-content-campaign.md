@@ -16,13 +16,13 @@
           "\"Three tools, four tabs, and nobody knows which caption is final.\""
         ]
       },
-      "theme": "New pricing launches Nov 3",
+      "theme": "New pricing launches Dec 8",
       "audience": "",
       "cta_text": "Join the waitlist",
       "cta_url": "https://bolta.ai/waitlist",
       "cover_image_url": "",
-      "starts_on": "2026-10-19",
-      "ends_on": "2026-11-08",
+      "starts_on": "2026-11-23",
+      "ends_on": "2026-12-13",
       "duration_weeks": 3,
       "content_mix": {
         "still_image": 3,
@@ -44,7 +44,7 @@
       ],
       "carousel_config": {},
       "settings": {},
-      "context_notes": "Week 1: the problem (paying for coffee you don't drink), no product. Week 2: the fix. Week 3: what changes on Nov 3. Waitlist link in every post.",
+      "context_notes": "Week 1: the problem (paying for coffee you don't drink), no product. Week 2: the fix. Week 3: what changes on Dec 8. Waitlist link in every post.",
       "context_sources": [],
       "account_ids": [
         "a1b2c3d4-0001-4a00-8000-000000000001",
