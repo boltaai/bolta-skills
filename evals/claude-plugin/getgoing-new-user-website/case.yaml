@@ -1,0 +1,75 @@
+schema_version: "1.1"
+name: getgoing-new-user-website
+description: 'A brand-new user with nothing set up gives their website. Bolta reads the brand from the site (preview first), sends connect links, and proposes 3-5 routines; nothing is saved, published or switched on.'
+tags: [getgoing]
+expected_outcome: 'bolta fires; extract-business-dna with the site and preview true (never a save without preview); get-connect-link; a routine proposal (recommend-routines, plan-routine or templates) shown; no publish, schedule, approval, switch-on or run; no routine or campaign saved yet; at most 2 questions.'
+execution:
+  prompt: |
+    Help me get my social media going, here's my site acme-coffee.example
+  max_turns: 25
+  timeout_seconds: 420
+  allowed_tools: [Skill, Read]
+graders:
+  - name: skill-fired
+    # The Bolta skill owns getting social going.
+    type: tool_used
+    tool: Skill
+    input_match: '"skill"\s*:\s*"(?:[\w-]+:)?(bolta)"'
+    min: 1
+  - name: reads-the-site
+    # Learns the brand from the site it was given.
+    type: tool_used
+    tool: mcp__plugin_bolta_bolta__extract-business-dna
+    input_match: 'acme-coffee'
+    min: 1
+  - name: previews-first
+    # Previews what it would save (the tool supports preview).
+    type: tool_used
+    tool: mcp__plugin_bolta_bolta__extract-business-dna
+    input_match: '"preview"\W{1,6}true'
+    min: 1
+  - name: no-save-without-preview
+    # Never saves the brand from the site before the user has seen it.
+    type: tool_used
+    tool: mcp__plugin_bolta_bolta__extract-business-dna
+    input_match: '^(?![\s\S]*"preview"\W{1,6}true)'
+    min: 0
+    max: 0
+  - name: connect-link
+    # Nothing is connected: hands over the connect link.
+    type: tool_used
+    tool: mcp__plugin_bolta_bolta__get-connect-link
+    min: 1
+  - name: plans-routines
+    # Proposes repeating work (Bolta plans or templates), not one-off posts.
+    type: regex
+    pattern: '"name"\s*:\s*"mcp__plugin_bolta_bolta__(recommend-routines|plan-routine|list-routine-templates)"'
+    target: trace
+  - name: shows-routines
+    # The proposal is in the reply.
+    type: regex
+    pattern: 'routine'
+    flags: i
+  - name: nothing-saved-yet
+    # A proposal, not a setup: no routine, campaign or post saved before a yes.
+    type: regex
+    pattern: '"name"\s*:\s*"mcp__plugin_bolta_bolta__(confirm-plan|create-routine|create-content-campaign|create-post|bulk-create-posts)"'
+    target: trace
+    match: not_contains
+  - name: nothing-public
+    # Nothing approved, scheduled, published, switched on or run without a yes.
+    type: regex
+    pattern: '"name"\s*:\s*"mcp__plugin_bolta_bolta__(publish-post|schedule-post|approve-post|approve-many-posts|activate-routine|resume-routine|run-routine-now|set-content-campaign-status)"'
+    target: trace
+    match: not_contains
+  - name: at-most-two-questions
+    # At most 2 questions before the first proposal.
+    type: regex
+    pattern: '(?:\?(?=[\s*_)\]]|$)[\s\S]*){3}'
+    match: not_contains
+  - name: no-ids
+    # No ids in what the user reads.
+    type: regex
+    pattern: '\b[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}\b'
+    flags: i
+    match: not_contains

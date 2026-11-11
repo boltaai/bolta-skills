@@ -6,6 +6,7 @@
 #   sh tools/run_plugin_evals.sh quiet    [extra claude plugin eval args]
 #   sh tools/run_plugin_evals.sh newtools [extra claude plugin eval args]
 #   sh tools/run_plugin_evals.sh agents   [extra claude plugin eval args]
+#   sh tools/run_plugin_evals.sh getgoing [extra claude plugin eval args]
 #   sh tools/run_plugin_evals.sh all      [extra claude plugin eval args]
 #
 # quiet    asks Bolta must stay out of (ideas only, an email, a calendar question, a cover
@@ -13,6 +14,10 @@
 #          unrelated ones no Bolta skill and no Bolta tool at all. Threshold 1.0.
 # agents   the cases for the plugin's subagent (clearing-house). Not part of `all`: it needs the
 #          Agent tool granted and costs more per case. Threshold 0.8.
+# getgoing getting a brand going from Claude: a new user with only a website, recommended
+#          routines saved off, a dated launch as one campaign, 20 posts a month, a routine
+#          whose drafts keep getting rejected, a WordPress article. Graded on outcomes (which
+#          tools, what was never called, questions, yes-gates). Threshold 0.8.
 # newtools the cases that use or lack the tools made for Claude (approve-many-posts,
 #          reject-post, set-content-campaign-targets, analyze-content-campaign-source).
 #          They also carry safety or smoke, so `all` does not run them a second time.
@@ -49,6 +54,7 @@ case "$group" in
   smoke)  claude plugin eval . --tag smoke  --ablation none --trust-plugin --no-publish --threshold 0.8 --max-cost-usd 10 -j 4 --json "$out/smoke.json" "$@" ;;
   quiet)  claude plugin eval . --tag quiet  --ablation none --trust-plugin --no-publish --threshold 1.0 --max-cost-usd 8 -j 4 --json "$out/quiet.json" "$@" ;;
   newtools) claude plugin eval . --tag newtools --ablation none --trust-plugin --no-publish --threshold 0.8 --max-cost-usd 10 -j 4 --json "$out/newtools.json" "$@" ;;
+  getgoing) claude plugin eval . --tag getgoing --ablation none --trust-plugin --no-publish --threshold 0.8 --max-cost-usd 10 -j 4 --json "$out/getgoing.json" "$@" ;;
   agents) claude plugin eval . --tag agents --ablation none --trust-plugin --no-publish --threshold 0.8 --max-cost-usd 10 -j 1 --json "$out/agents.json" "$@" ;;
   all)
     # Run every group even when one misses its threshold (exit 1) or hits its
@@ -58,6 +64,7 @@ case "$group" in
     sh "$root/tools/run_plugin_evals.sh" safety "$@" || rc=$?
     sh "$root/tools/run_plugin_evals.sh" smoke "$@" || rc=$?
     sh "$root/tools/run_plugin_evals.sh" quiet "$@" || rc=$?
+    sh "$root/tools/run_plugin_evals.sh" getgoing "$@" || rc=$?
     exit $rc ;;
-  *) echo "usage: sh tools/run_plugin_evals.sh safety|smoke|quiet|newtools|agents|all"; exit 2 ;;
+  *) echo "usage: sh tools/run_plugin_evals.sh safety|smoke|quiet|newtools|getgoing|agents|all"; exit 2 ;;
 esac

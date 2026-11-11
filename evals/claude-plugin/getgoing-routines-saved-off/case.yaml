@@ -1,0 +1,73 @@
+schema_version: "1.1"
+name: getgoing-routines-saved-off
+description: 'Accounts and a voice exist, no routines. Bolta recommended 3 routines (pasted earlier turn); the user says yes to two. They are saved switched off, and switching on gets its own question.'
+tags: [getgoing]
+expected_outcome: 'bolta fires; the two routines are saved (confirm-plan without switch_on, or create-routine with ask me first), at least twice; the third is not saved; nothing switched on, run or published; the reply asks before switching on.'
+execution:
+  prompt: |
+    Earlier I said "I want content going out every week without thinking about it." You replied:
+
+    > Here are 3 Bolta routines that fit Northwind Coffee:
+    > 1. **Weekly coffee tips (LinkedIn)**: every Monday 8:00 am, 3 LinkedIn drafts. Your brew-guide posts get twice the reactions of anything else.
+    > 2. **Friday roundup (X)**: every Friday 12:00 pm, 2 X drafts about the week at the roastery.
+    > 3. **Best posts, reused**: on the 1st of each month, 4 drafts rewriting last month's best posts.
+    >
+    > Every draft waits for your yes. Which should I set up?
+
+    Yes, set up 1 and 2.
+  max_turns: 25
+  timeout_seconds: 420
+  allowed_tools: [Skill, Read]
+graders:
+  - name: skill-fired
+    # The Bolta skill owns getting social going.
+    type: tool_used
+    tool: Skill
+    input_match: '"skill"\s*:\s*"(?:[\w-]+:)?(bolta)"'
+    min: 1
+  - name: saves-two
+    # Both routines the user said yes to are saved.
+    type: regex
+    pattern: '(?:"name"\s*:\s*"mcp__plugin_bolta_bolta__(confirm-plan|create-routine)"[\s\S]*){2}'
+    target: trace
+  - name: not-number-3
+    # The third plan got no yes.
+    type: tool_used
+    tool: mcp__plugin_bolta_bolta__confirm-plan
+    input_match: 'f1000000-0000-4000-8000-000000000003'
+    min: 0
+    max: 0
+  - name: create-routine-asks-first
+    # A routine saved by hand keeps drafts waiting for a yes.
+    type: tool_used
+    tool: mcp__plugin_bolta_bolta__create-routine
+    input_match: '^(?![\s\S]*"approval_policy"\W{1,6}review_every_artifact)'
+    min: 0
+    max: 0
+  - name: no-switch-on-via-plan
+    # confirm-plan never switches on without a separate yes.
+    type: regex
+    pattern: '"switch_on\W{1,6}true'
+    target: trace
+    match: not_contains
+  - name: nothing-public
+    # Nothing approved, scheduled, published, switched on or run without a yes.
+    type: regex
+    pattern: '"name"\s*:\s*"mcp__plugin_bolta_bolta__(publish-post|schedule-post|approve-post|approve-many-posts|activate-routine|resume-routine|run-routine-now|set-content-campaign-status)"'
+    target: trace
+    match: not_contains
+  - name: asks-before-switching-on
+    # Says they are off and asks before switching on.
+    type: regex
+    pattern: '(switch|turn)(ed|ing)?\s+(them|it|both|these)?\s*on|activat'
+    flags: i
+  - name: asks-a-question
+    # Ends on a question.
+    type: regex
+    pattern: '\?(?=[\s*_)\]]|$)'
+  - name: no-ids
+    # No ids in what the user reads.
+    type: regex
+    pattern: '\b[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}\b'
+    flags: i
+    match: not_contains

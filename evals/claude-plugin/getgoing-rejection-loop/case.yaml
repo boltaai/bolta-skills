@@ -1,0 +1,57 @@
+schema_version: "1.1"
+name: getgoing-rejection-loop
+description: 'The last 3 drafts of a Bolta routine were rejected as too long. The user says they keep missing: the pattern is named, Bolta''s recommendation is offered, and nothing changes without a yes.'
+tags: [getgoing]
+expected_outcome: 'bolta fires; reads Bolta''s recommendations (list-routine-recommendations or list-bolta-suggestions); names the too-long pattern; offers the change and asks; no decide, no update-routine, no voice edit, nothing public.'
+execution:
+  prompt: |
+    Earlier you showed me the drafts from my Monday LinkedIn tips routine. I rejected the last three, each time with "too long".
+
+    These keep missing.
+  max_turns: 25
+  timeout_seconds: 420
+  allowed_tools: [Skill, Read]
+graders:
+  - name: skill-fired
+    # The Bolta skill owns getting social going.
+    type: tool_used
+    tool: Skill
+    input_match: '"skill"\s*:\s*"(?:[\w-]+:)?(bolta)"'
+    min: 1
+  - name: reads-recommendations
+    # Asks Bolta what it recommends from the rejections.
+    type: regex
+    pattern: '"name"\s*:\s*"mcp__plugin_bolta_bolta__(list-routine-recommendations|list-bolta-suggestions)"'
+    target: trace
+  - name: names-the-pattern
+    # Names the pattern: too long.
+    type: regex
+    pattern: 'too long|length|shorter|\b1[0-9]{2} words|word (count|limit)'
+    flags: i
+  - name: offers-the-change
+    # Offers the change for a yes.
+    type: regex
+    pattern: '(want|shall|should|like) (me|bolta) to|apply|go ahead|make (that|this|the) change'
+    flags: i
+  - name: asks-a-question
+    # Ends on a question.
+    type: regex
+    pattern: '\?(?=[\s*_)\]]|$)'
+  - name: applies-only-on-yes
+    # No recommendation applied, suggestion accepted, routine or voice changed without a yes.
+    type: regex
+    pattern: '"name"\s*:\s*"mcp__plugin_bolta_bolta__(decide-routine-recommendation|decide-bolta-suggestion|update-routine|update-voice-profile)"'
+    target: trace
+    match: not_contains
+  - name: nothing-public
+    # Nothing approved, scheduled, published, switched on or run without a yes.
+    type: regex
+    pattern: '"name"\s*:\s*"mcp__plugin_bolta_bolta__(publish-post|schedule-post|approve-post|approve-many-posts|activate-routine|resume-routine|run-routine-now|set-content-campaign-status)"'
+    target: trace
+    match: not_contains
+  - name: no-ids
+    # No ids in what the user reads.
+    type: regex
+    pattern: '\b[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}\b'
+    flags: i
+    match: not_contains

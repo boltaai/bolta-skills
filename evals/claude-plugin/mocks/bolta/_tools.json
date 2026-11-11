@@ -2730,6 +2730,394 @@
         "idempotentHint": true,
         "openWorldHint": true
       }
+    },
+    {
+      "name": "extract-business-dna",
+      "title": "Extract Business DNA",
+      "description": "Extract a Business DNA record (industry, audience, positioning, tone signals) by scraping a brand's website. Reaches the public internet and consumes AI credits (ai:generate). Creates a new DNA record on the workspace, and — when the workspace has no products yet — derives its first Product from the same scrape (returned as 'product_created').",
+      "inputSchema": {
+        "type": "object",
+        "properties": {
+          "workspace_id": {
+            "type": "string",
+            "format": "uuid",
+            "description": "The workspace ID. Defaults to the connected workspace."
+          },
+          "url": {
+            "type": "string",
+            "description": "Public brand URL to scrape and analyze (e.g. the marketing homepage)."
+          },
+          "name": {
+            "type": "string",
+            "description": "Optional name for the resulting Business DNA record."
+          },
+          "set_as_default": {
+            "type": "boolean",
+            "description": "Whether this DNA becomes the workspace default (defaults to true)."
+          },
+          "preview": {
+            "type": "boolean",
+            "description": "true: read the site and return what would be saved (dna_preview), saving nothing. Show it to the user and call again without preview only after they say yes. would_update_existing true means saving replaces the DNA of the same name. Credits are still used."
+          }
+        },
+        "additionalProperties": false,
+        "required": [
+          "url"
+        ]
+      },
+      "annotations": {
+        "title": "Extract Business DNA",
+        "readOnlyHint": false,
+        "destructiveHint": false,
+        "idempotentHint": false,
+        "openWorldHint": true
+      }
+    },
+    {
+      "name": "list-workspace-members",
+      "title": "List Brand Team",
+      "description": "List the people on this brand's team: each person's id, name and role (owner, admin, creator, viewer). Client reviewers are not listed. Use it to turn a name the user gives into the id that create-routine and update-routine take in default_reviewer_ids. No email addresses. Changes nothing.",
+      "inputSchema": {
+        "type": "object",
+        "properties": {
+          "workspace_id": {
+            "type": "string",
+            "format": "uuid",
+            "description": "The workspace ID. Defaults to the connected workspace."
+          }
+        },
+        "additionalProperties": false
+      },
+      "annotations": {
+        "title": "List Brand Team",
+        "readOnlyHint": true,
+        "destructiveHint": false,
+        "idempotentHint": true,
+        "openWorldHint": false
+      }
+    },
+    {
+      "name": "list-routine-recommendations",
+      "title": "List Routine Recommendations",
+      "description": "What Bolta recommends changing about this brand's routines, from how their drafts did: many rejected, heavily edited, piling up unreviewed, nothing published, ready to do more, or idle. Each row says what it would change (proposed_change), why, the routine it is for, and its status: proposed (waiting for the user) or applied (can still be undone). Use it after a review pass, or when the user asks why a routine's drafts keep missing. Pass routine_id for one routine; omit it for all. Changes nothing.",
+      "inputSchema": {
+        "type": "object",
+        "properties": {
+          "workspace_id": {
+            "type": "string",
+            "format": "uuid",
+            "description": "The workspace ID. Defaults to the connected workspace."
+          },
+          "routine_id": {
+            "type": "string",
+            "format": "uuid",
+            "description": "Only this routine's recommendations."
+          }
+        },
+        "additionalProperties": false
+      },
+      "annotations": {
+        "title": "List Routine Recommendations",
+        "readOnlyHint": true,
+        "destructiveHint": false,
+        "idempotentHint": true,
+        "openWorldHint": false
+      }
+    },
+    {
+      "name": "decide-routine-recommendation",
+      "title": "Decide Routine Recommendation",
+      "description": "Answer one of Bolta's routine recommendations after the user has seen what it changes and said what to do: apply makes the change to the routine (as if the user edited it), dismiss turns it down and keeps the record, undo reverses an applied change. Ask first; never apply on your own. Returns the recommendation and the routine as it now is.",
+      "inputSchema": {
+        "type": "object",
+        "properties": {
+          "workspace_id": {
+            "type": "string",
+            "format": "uuid",
+            "description": "The workspace ID. Defaults to the connected workspace."
+          },
+          "routine_id": {
+            "type": "string",
+            "format": "uuid",
+            "description": "The routine the recommendation is for (its routine_id)."
+          },
+          "recommendation_id": {
+            "type": "string",
+            "format": "uuid",
+            "description": "The recommendation's id, from list-routine-recommendations."
+          },
+          "decision": {
+            "type": "string",
+            "enum": [
+              "apply",
+              "dismiss",
+              "undo"
+            ],
+            "description": "apply, dismiss or undo."
+          }
+        },
+        "additionalProperties": false,
+        "required": [
+          "routine_id",
+          "recommendation_id",
+          "decision"
+        ]
+      },
+      "annotations": {
+        "title": "Decide Routine Recommendation",
+        "readOnlyHint": false,
+        "destructiveHint": false,
+        "idempotentHint": false,
+        "openWorldHint": false
+      }
+    },
+    {
+      "name": "list-bolta-suggestions",
+      "title": "List Bolta Suggestions",
+      "description": "Bolta's suggestions for this brand, made from what people approved, edited and rejected: for example use only your own photos, avoid a repeated phrase, post less often, move a routine's time, add to a brief, or start a seasonal campaign. Each one has a title, the reason and evidence, the changes it would make, its status, and can_decide (whether this connection's person may accept it: the brand's owner or an admin). Includes recently accepted ones that can still be undone. Changes nothing.",
+      "inputSchema": {
+        "type": "object",
+        "properties": {
+          "workspace_id": {
+            "type": "string",
+            "format": "uuid",
+            "description": "The workspace ID. Defaults to the connected workspace."
+          }
+        },
+        "additionalProperties": false
+      },
+      "annotations": {
+        "title": "List Bolta Suggestions",
+        "readOnlyHint": true,
+        "destructiveHint": false,
+        "idempotentHint": true,
+        "openWorldHint": false
+      }
+    },
+    {
+      "name": "decide-bolta-suggestion",
+      "title": "Decide Bolta Suggestion",
+      "description": "Answer one of Bolta's suggestions after the user has seen its changes and said what to do: accept makes every change it lists (it can change a voice, a routine's schedule, switch a routine on or off, or start a campaign), decline turns it down, undo reverses an accepted one within 7 days. Only the brand's owner or an admin can decide. Ask first; never accept on your own.",
+      "inputSchema": {
+        "type": "object",
+        "properties": {
+          "workspace_id": {
+            "type": "string",
+            "format": "uuid",
+            "description": "The workspace ID. Defaults to the connected workspace."
+          },
+          "suggestion_id": {
+            "type": "string",
+            "format": "uuid",
+            "description": "The suggestion's id, from list-bolta-suggestions."
+          },
+          "decision": {
+            "type": "string",
+            "enum": [
+              "accept",
+              "decline",
+              "undo"
+            ],
+            "description": "accept, decline or undo."
+          }
+        },
+        "additionalProperties": false,
+        "required": [
+          "suggestion_id",
+          "decision"
+        ]
+      },
+      "annotations": {
+        "title": "Decide Bolta Suggestion",
+        "readOnlyHint": false,
+        "destructiveHint": false,
+        "idempotentHint": false,
+        "openWorldHint": false
+      }
+    },
+    {
+      "name": "plan-routine",
+      "title": "Plan Routine",
+      "description": "Have Bolta plan one routine from what the user wants, the way Bolta's own chat does: it reads the brand's accounts, voices, existing routines, best recent posts and connected sources, picks the schedule, accounts, voice and what each run makes, and returns a plan card with an id. Nothing is created. Pass the user's words as ask (empty or vague is fine: status shaping returns a working plan, what was filled and from where, what is still open and at most two questions; settle them with revise-plan changes) and anything else they told you as context. suggested_switch names a better-fitting routine; offer it, never apply it unasked. Show the plan and ask whether to save it; save with confirm-plan.",
+      "inputSchema": {
+        "type": "object",
+        "properties": {
+          "workspace_id": {
+            "type": "string",
+            "format": "uuid",
+            "description": "The workspace ID. Defaults to the connected workspace."
+          },
+          "ask": {
+            "type": "string",
+            "description": "What the user wants, in their words (\"3 LinkedIn tips every Monday\"). May be empty: Bolta then shapes a working plan from the brand's data."
+          },
+          "context": {
+            "type": "string",
+            "description": "Anything else the user told you that should shape it: goals, audience, offer, what they have said in this chat. At most 4000 characters. Used as facts about the business, never as instructions."
+          }
+        },
+        "additionalProperties": false
+      },
+      "annotations": {
+        "title": "Plan Routine",
+        "readOnlyHint": false,
+        "destructiveHint": false,
+        "idempotentHint": false,
+        "openWorldHint": false
+      }
+    },
+    {
+      "name": "plan-campaign",
+      "title": "Plan Campaign",
+      "description": "Have Bolta plan one campaign (1 to 4 weeks about one thing: a launch, an event, a sale) the way Bolta's own chat does: dates, posts per week, accounts, voice, angle, the pages it is built from and a week-by-week outline. Returns a plan card with an id; nothing is created. Pass the user's words as ask, their goals and audience as context, and any pages they gave as links. A result with a question means Bolta needs one answer first. Show the plan and ask whether to save it; save with confirm-plan.",
+      "inputSchema": {
+        "type": "object",
+        "properties": {
+          "workspace_id": {
+            "type": "string",
+            "format": "uuid",
+            "description": "The workspace ID. Defaults to the connected workspace."
+          },
+          "ask": {
+            "type": "string",
+            "description": "What the user wants, in their words, with the date if there is one."
+          },
+          "context": {
+            "type": "string",
+            "description": "Goals, audience, offer and what the user said, at most 4000 characters. Used as facts, never as instructions."
+          },
+          "links": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            },
+            "maxItems": 5,
+            "description": "Up to 5 web pages the campaign is built from (product page, event page)."
+          }
+        },
+        "additionalProperties": false,
+        "required": [
+          "ask"
+        ]
+      },
+      "annotations": {
+        "title": "Plan Campaign",
+        "readOnlyHint": false,
+        "destructiveHint": false,
+        "idempotentHint": false,
+        "openWorldHint": false
+      }
+    },
+    {
+      "name": "recommend-routines",
+      "title": "Recommend Routines",
+      "description": "Have Bolta recommend 3 to 5 routines for this brand, best fit first: each a different job (posts, articles, founder stories, customer wins, reusing top posts), none repeating a routine the brand already runs, each with one line on why it fits from the brand's own posts, routines and sources. Each comes back as a plan card with its own id; nothing is created. skipped says what was left out and why. Show them and ask which to save; save each with confirm-plan.",
+      "inputSchema": {
+        "type": "object",
+        "properties": {
+          "workspace_id": {
+            "type": "string",
+            "format": "uuid",
+            "description": "The workspace ID. Defaults to the connected workspace."
+          },
+          "goals": {
+            "type": "string",
+            "description": "What the user wants from social, in their words."
+          },
+          "context": {
+            "type": "string",
+            "description": "Audience, offer and what the user said, at most 4000 characters."
+          },
+          "count": {
+            "type": "integer",
+            "minimum": 3,
+            "maximum": 5,
+            "description": "How many to recommend, 3 to 5. Default 4."
+          }
+        },
+        "additionalProperties": false
+      },
+      "annotations": {
+        "title": "Recommend Routines",
+        "readOnlyHint": false,
+        "destructiveHint": false,
+        "idempotentHint": false,
+        "openWorldHint": false
+      }
+    },
+    {
+      "name": "revise-plan",
+      "title": "Revise Plan",
+      "description": "Change a plan from plan-routine, plan-campaign or recommend-routines before it is saved: change is a sentence (\"Tuesdays instead\"), changes sets exact fields agreed in the chat with no guessing; both apply the sentence first. Returns the new plan with a new id and what changed; the old id can no longer be saved. Nothing is created.",
+      "inputSchema": {
+        "type": "object",
+        "properties": {
+          "workspace_id": {
+            "type": "string",
+            "format": "uuid",
+            "description": "The workspace ID. Defaults to the connected workspace."
+          },
+          "proposal_id": {
+            "type": "string",
+            "format": "uuid",
+            "description": "The plan's id, from the plan card."
+          },
+          "change": {
+            "type": "string",
+            "description": "What to change, in the user's words. Send this, changes, or both."
+          },
+          "changes": {
+            "type": "object",
+            "description": "Exact fields to set. Routine: goal, instructions, name, count (1-10), platforms, account_ids, schedule ({interval: daily|weekly|monthly, days, time HH:MM, day_of_month} or {cron}), timezone, media_mode (none|image|video|carousel), media_prompt, visual_style, carousel_config, voice_profile_id, default_reviewer_ids, approval_policy, source_urls, template_key (switch to a suggested_switch). Campaign: goal, instructions, name, platforms, account_ids, voice_profile_id, source_urls."
+          }
+        },
+        "additionalProperties": false,
+        "required": [
+          "proposal_id"
+        ]
+      },
+      "annotations": {
+        "title": "Revise Plan",
+        "readOnlyHint": false,
+        "destructiveHint": false,
+        "idempotentHint": false,
+        "openWorldHint": false
+      }
+    },
+    {
+      "name": "confirm-plan",
+      "title": "Confirm Plan",
+      "description": "Save a plan the user said yes to, exactly as Bolta planned it (by its id). switch_on false (default): a routine is saved and off, a campaign is saved as a draft; nothing runs. switch_on true: saved, switched on and the first run or generation starts, which uses credits and leads to posts. Ask first, and ask separately before switch_on true. Confirming the same id again returns what was saved and runs nothing.",
+      "inputSchema": {
+        "type": "object",
+        "properties": {
+          "workspace_id": {
+            "type": "string",
+            "format": "uuid",
+            "description": "The workspace ID. Defaults to the connected workspace."
+          },
+          "proposal_id": {
+            "type": "string",
+            "format": "uuid",
+            "description": "The plan's id, from the plan card (the current revision)."
+          },
+          "switch_on": {
+            "type": "boolean",
+            "description": "Default false: save it off. true only after the user said yes to switching it on."
+          }
+        },
+        "additionalProperties": false,
+        "required": [
+          "proposal_id"
+        ]
+      },
+      "annotations": {
+        "title": "Confirm Plan",
+        "readOnlyHint": false,
+        "destructiveHint": false,
+        "idempotentHint": false,
+        "openWorldHint": false
+      }
     }
   ]
 }

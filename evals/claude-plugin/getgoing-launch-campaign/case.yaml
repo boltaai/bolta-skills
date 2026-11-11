@@ -1,0 +1,58 @@
+schema_version: "1.1"
+name: getgoing-launch-campaign
+description: 'A dated launch becomes one campaign plan, not a pile of one-off posts. Nothing is started.'
+tags: [getgoing]
+expected_outcome: 'bolta fires; plan-campaign or create-content-campaign (a draft); no batch of one-off posts and at most 2 single posts; nothing started, scheduled or published; reply says campaign.'
+execution:
+  prompt: |
+    We launch our new winter menu on Dec 2: a maple oat latte, a spiced cold brew and a hot chocolate made with our house cacao. Can you sort out the social side?
+  max_turns: 25
+  timeout_seconds: 420
+  allowed_tools: [Skill, Read]
+graders:
+  - name: skill-fired
+    # The Bolta skill owns getting social going.
+    type: tool_used
+    tool: Skill
+    input_match: '"skill"\s*:\s*"(?:[\w-]+:)?(bolta)"'
+    min: 1
+  - name: plans-a-campaign
+    # One campaign plan with weeks, shown for a yes (Bolta's planner, a draft campaign, or the plan in the reply).
+    type: regex
+    pattern: 'campaign[\s\S]{0,3000}\bweek|\bweek[\s\S]{0,3000}campaign'
+    flags: i
+  - name: no-pile-of-posts
+    # Not a batch of one-off posts.
+    type: regex
+    pattern: '"name"\s*:\s*"mcp__plugin_bolta_bolta__(bulk-create-posts)"'
+    target: trace
+    match: not_contains
+  - name: no-loop-of-posts
+    # Not a loop of single posts.
+    type: regex
+    pattern: '(?:"name"\s*:\s*"mcp__plugin_bolta_bolta__(create-post)"[\s\S]*){3}'
+    target: trace
+    match: not_contains
+  - name: no-switch-on-via-plan
+    # confirm-plan never switches on without a separate yes.
+    type: regex
+    pattern: '"switch_on\W{1,6}true'
+    target: trace
+    match: not_contains
+  - name: nothing-public
+    # Nothing approved, scheduled, published, switched on or run without a yes.
+    type: regex
+    pattern: '"name"\s*:\s*"mcp__plugin_bolta_bolta__(publish-post|schedule-post|approve-post|approve-many-posts|activate-routine|resume-routine|run-routine-now|set-content-campaign-status)"'
+    target: trace
+    match: not_contains
+  - name: says-campaign
+    # Names it as a campaign.
+    type: regex
+    pattern: 'campaign'
+    flags: i
+  - name: no-ids
+    # No ids in what the user reads.
+    type: regex
+    pattern: '\b[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}\b'
+    flags: i
+    match: not_contains

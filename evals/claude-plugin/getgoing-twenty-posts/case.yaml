@@ -1,0 +1,54 @@
+schema_version: "1.1"
+name: getgoing-twenty-posts
+description: '20 posts a month for LinkedIn and Instagram: a repeating setup or one batch of drafts, never 20 separate calls; nothing public. Instagram is disconnected in the mock world.'
+tags: [getgoing]
+expected_outcome: 'bolta fires; a routine or campaign plan, or one all-draft bulk-create-posts; never 3+ single create/schedule/publish calls; nothing approved, scheduled, published or switched on.'
+execution:
+  prompt: |
+    I need 20 posts this month for LinkedIn and Instagram.
+  max_turns: 25
+  timeout_seconds: 420
+  allowed_tools: [Skill, Read]
+graders:
+  - name: skill-fired
+    # The Bolta skill owns getting social going.
+    type: tool_used
+    tool: Skill
+    input_match: '"skill"\s*:\s*"(?:[\w-]+:)?(bolta)"'
+    min: 1
+  - name: repeating-or-batch
+    # Proposes or makes a routine, a campaign or batches of drafts (a question first is fine).
+    type: regex
+    pattern: 'routine|campaign|\bbatch'
+    flags: i
+  - name: no-loop-of-posts
+    # Never a call per post.
+    type: regex
+    pattern: '(?:"name"\s*:\s*"mcp__plugin_bolta_bolta__(create-post|schedule-post|publish-post)"[\s\S]*){3}'
+    target: trace
+    match: not_contains
+  - name: bulk-is-drafts
+    # A batch, if any, holds drafts only (no time, no other status).
+    type: tool_used
+    tool: mcp__plugin_bolta_bolta__bulk-create-posts
+    input_match: '"(scheduled_time|scheduled_at)"\W{1,6}\d|"status"\W{1,6}(?!draft)\w'
+    min: 0
+    max: 0
+  - name: no-switch-on-via-plan
+    # confirm-plan never switches on without a separate yes.
+    type: regex
+    pattern: '"switch_on\W{1,6}true'
+    target: trace
+    match: not_contains
+  - name: nothing-public
+    # Nothing approved, scheduled, published, switched on or run without a yes.
+    type: regex
+    pattern: '"name"\s*:\s*"mcp__plugin_bolta_bolta__(publish-post|schedule-post|approve-post|approve-many-posts|activate-routine|resume-routine|run-routine-now|set-content-campaign-status)"'
+    target: trace
+    match: not_contains
+  - name: no-ids
+    # No ids in what the user reads.
+    type: regex
+    pattern: '\b[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}\b'
+    flags: i
+    match: not_contains
