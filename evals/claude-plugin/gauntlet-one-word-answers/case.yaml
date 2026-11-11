@@ -1,0 +1,84 @@
+schema_version: "1.1"
+name: gauntlet-one-word-answers
+description: 'A beginner answers questions with one word ("candles", then "insta"). Empty workspace, no site yet. Bolta stops asking and proposes Instagram routines with pictures, plus the connect link; nothing saved.'
+tags: [gauntlet]
+expected_outcome: 'bolta fires; does not ask again what they sell; planner or templates; Instagram only, with pictures; connect link; at most 2 questions; nothing saved or public.'
+execution:
+  prompt: |
+    Earlier in this chat:
+
+    Me: i want to do social media for my shop
+    You: Happy to help. What do you sell?
+    Me: candles
+    You: Nice. Where do you want to post: Instagram, Facebook, TikTok, somewhere else?
+
+    insta
+  max_turns: 25
+  timeout_seconds: 420
+  allowed_tools: [Skill, Read]
+graders:
+  - name: skill-fired
+    # The Bolta skill owns this ask.
+    type: tool_used
+    tool: Skill
+    input_match: '"skill"\s*:\s*"(?:[\w-]+:)?(bolta)"'
+    min: 1
+  - name: no-reask
+    # Never asks again what they sell or where they post.
+    type: regex
+    pattern: 'what (do|does) (you|your (shop|business|store)) sell|which (networks?|platforms?)[^?\n]{0,60}\?|where (do|would) you (like to |want to )?post'
+    flags: i
+    match: not_contains
+  - name: plans-routines
+    # Asks Bolta's planner (or the templates) for repeating work, not one-off posts.
+    type: regex
+    pattern: '"name"\s*:\s*"mcp__plugin_bolta_bolta__(recommend-routines|plan-routine|list-routine-templates)"'
+    target: trace
+  - name: connect-link
+    # Instagram is not connected: the connect link.
+    type: tool_used
+    tool: mcp__plugin_bolta_bolta__get-connect-link
+    min: 1
+  - name: instagram-only
+    # Only the network they named.
+    type: regex
+    pattern: '\bLinkedIn\b|\bX \(|\bTwitter\b'
+    match: not_contains
+  - name: pictures-for-instagram
+    # Instagram needs pictures or video.
+    type: regex
+    pattern: '\b(images?|photos?|pictures?|carousels?|videos?|reels?)\b'
+    flags: i
+  - name: fits-the-business
+    # About candles.
+    type: regex
+    pattern: 'candle|scent|pour|wax|gift'
+    flags: i
+  - name: at-most-two-questions
+    # At most 2 questions in the reply.
+    type: regex
+    pattern: '(?:\?(?=[\s*_)\]]|$)[\s\S]*){3}'
+    match: not_contains
+  - name: nothing-saved-yet
+    # A proposal, not a setup: no routine, campaign or post saved before a yes.
+    type: regex
+    pattern: '"name"\s*:\s*"mcp__plugin_bolta_bolta__(confirm-plan|create-routine|create-content-campaign|create-post|bulk-create-posts)"'
+    target: trace
+    match: not_contains
+  - name: nothing-public
+    # Nothing approved, scheduled, published, switched on, run or started without a yes to those items.
+    type: regex
+    pattern: '"name"\s*:\s*"mcp__plugin_bolta_bolta__(publish-post|schedule-post|approve-post|approve-many-posts|activate-routine|resume-routine|run-routine-now|set-content-campaign-status)"'
+    target: trace
+    match: not_contains
+  - name: no-ids
+    # No ids in what the user reads.
+    type: regex
+    pattern: '\b[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}\b|facebook_page_\d'
+    flags: i
+    match: not_contains
+  - name: plain-words
+    # Plain words for a beginner: no tool names, internal names or jargon from the never-say list.
+    type: regex
+    pattern: '\b(MCP|OAuth|connector|fingerprint|workflow definition|source[_ ]binding|template[_ ]key|proposal[_ ]id|workspace_id|Business DNA|Hype[- ]Man|Hunter|Engager|artifact|recommend-routines|confirm-plan|plan-campaign|create-post|reject-post|get-connect-link|extract-business-dna)\b'
+    match: not_contains
