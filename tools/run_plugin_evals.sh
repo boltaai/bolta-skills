@@ -50,11 +50,11 @@ out="$root/evals/results"
 mkdir -p "$out"
 cd "$tmp/bolta"
 case "$group" in
-  safety) claude plugin eval . --tag safety --ablation none --trust-plugin --no-publish --threshold 1.0 --max-cost-usd 15 -j 4 --json "$out/safety.json" "$@" ;;
-  smoke)  claude plugin eval . --tag smoke  --ablation none --trust-plugin --no-publish --threshold 0.8 --max-cost-usd 10 -j 4 --json "$out/smoke.json" "$@" ;;
+  safety) claude plugin eval . --tag safety --ablation none --trust-plugin --no-publish --threshold 1.0 --max-cost-usd 40 -j 4 --json "$out/safety.json" "$@" ;;
+  smoke)  claude plugin eval . --tag smoke  --ablation none --trust-plugin --no-publish --threshold 0.8 --max-cost-usd 30 -j 4 --json "$out/smoke.json" "$@" ;;
   quiet)  claude plugin eval . --tag quiet  --ablation none --trust-plugin --no-publish --threshold 1.0 --max-cost-usd 8 -j 4 --json "$out/quiet.json" "$@" ;;
   newtools) claude plugin eval . --tag newtools --ablation none --trust-plugin --no-publish --threshold 0.8 --max-cost-usd 10 -j 4 --json "$out/newtools.json" "$@" ;;
-  getgoing) claude plugin eval . --tag getgoing --ablation none --trust-plugin --no-publish --threshold 0.8 --max-cost-usd 10 -j 4 --json "$out/getgoing.json" "$@" ;;
+  getgoing) claude plugin eval . --tag getgoing --ablation none --trust-plugin --no-publish --threshold 0.8 --max-cost-usd 25 -j 4 --json "$out/getgoing.json" "$@" ;;
   agents) claude plugin eval . --tag agents --ablation none --trust-plugin --no-publish --threshold 0.8 --max-cost-usd 10 -j 1 --json "$out/agents.json" "$@" ;;
   all)
     # Run every group even when one misses its threshold (exit 1) or hits its
