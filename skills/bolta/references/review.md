@@ -16,6 +16,7 @@ Every decision is done in one pass, then read back: scheduled (day, time, accoun
 - **Drop:** "delete all" gets the numbered list first. `delete-post` (undo for 7 days) records no reason.
 - **Change:** `update-post` with new text and `status: "Draft"`, `submit-for-review`, then "Schedule this version?" **Move a time:** pull back the same way, then the yes move with `set_fixed_time`. **Post now:** the yes move, then `publish-post` (review mode: offer a time minutes away).
 - **Checks** (Claude Code, Cowork): one check covers the batch, then this reply's other approvals, no's, schedules and deletes pass. Posting now always asks. Declined means not done: say so, don't retry.
+- **A client's yes** (sign-off, "send it to the client", "waiting on the client"): [client approval](review-client-approval.md).
 - Roles, times, fingerprints, errors, chat: [references/yes-move.md](review-yes-move.md). Read-back, DON'T offer, legacy rows: [references/read-back.md](review-read-back.md).
 
 ## Tools

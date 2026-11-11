@@ -15,7 +15,8 @@ Drafts are saved and shown in full (number, account, text; no day), ending: "Sav
 - **A week:** about one per weekday on the networks named; write all they asked. Skip only a subject already covered (next 7 days, active Bolta routines and campaigns); a busy day gets a one-line note.
 - At most 12 posts a sitting: cut posts per week, not weeks.
 - **No time named:** "Bolta picks exact times from your posting schedule."
-- **One idea, several networks:** name its shape, write each version fresh, skip networks that don't fit, vary first lines.
+- **One idea, several networks:** read [cross-posting](post-cross-posting.md) first.
+- **Network settings** (a Threads topic or ghost post, a Reel, YouTube privacy, a subreddit): set after saving; keys in [platforms](post-platforms.md).
 - **Changes:** `update-post` with new content and `status: "Draft"` together.
 - **Held back: needs a human edit** isn't final: `update-post` with new content only, no status; Bolta re-checks it (one check).
 - Instagram, TikTok, YouTube and Pinterest need a public https media link; else skip them, saying why.

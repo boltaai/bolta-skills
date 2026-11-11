@@ -37,6 +37,7 @@ Bolta house rules:
 - **Bolta routine**: work Bolta repeats with no end, even when this app is closed ("3 LinkedIn drafts every Monday").
 - **Campaign**: 1 to 4 weeks about one thing that ends (a launch, a sale, an event), with a verdict.
 - **Review list**: everything waiting for a yes, whoever wrote it: the user, a teammate, a Bolta routine or a campaign.
+- **Client reviewer**: an outside person who only answers the posts sent to them. A brand can require their yes before anything goes out.
 
 Bolta's own writers do the work behind routines and campaigns. Never name them or set them up; the user asks for outcomes.
 
@@ -58,7 +59,7 @@ Read exactly one before acting, plus the references it names. Never act from thi
 | What needs me, catch me up, anything vague | [today](references/today.md) |
 | Set me up, first session, no accounts or voice yet | [start](references/start.md) |
 | Write a post, a week of posts, an article; turn this into posts | [post](references/post.md) |
-| What's waiting, yes to 1 and 3, schedule this Tuesday 9am, post now, delete drafts, move a time | [review](references/review.md) |
+| What's waiting, yes to 1 and 3, schedule this Tuesday 9am, post now, delete drafts, move a time, the client's yes | [review](references/review.md) |
 | Every week, keep me posting, each new blog post, pause or run my routine | [routine](references/routine.md) |
 | A launch, sale or event, "for 3 weeks", how did the campaign do | [campaign](references/campaign.md) |
 | How did it do, what's working, which post did best | [results](references/results.md) |
