@@ -8,10 +8,10 @@ They saw their brand, have the connect link or accounts, and answered a proposal
 
 ## Know this
 
-**The first reply does it all.** Run the reads together, then answer once:
+**The first reply does it all.** Read together, then answer once:
 
 1. **Look once** (the Bolta skill), plus `list-routines`, `list-content-campaigns` and the pending count from `list-inbox-items`. Routines on and drafts flowing: [today](today.md).
-2. **Brand from their site.** A site given and no business record: `extract-business-dna` with `url` and `preview: true`, now, before accounts. Show what it read in 3-4 lines. Save it (`preview: false`) only after they say it's right. A record exists: reuse it. No site and no record: ask for it.
+2. **Brand from their site.** A site given and no business record: `extract-business-dna` with `url` and `preview: true`, now, before accounts. Show what it read in 3-4 lines. Save it (`preview: false`) only after they say it's right. The read declined or failed: say so in one line and still propose. A record exists: reuse it. Neither: ask for the site.
 3. **Accounts.** None: `get-connect-link` in the same reply. Never wait for them: plans work without accounts, which are bound once connected.
 4. **Propose 3-5 Bolta routines**, each a different job, best fit first.
    - Bolta's planner offered (`recommend-routines`): call it with their words as `goals`. Show each plan's name, day and time, networks, drafts per run and why it fits.
