@@ -1140,7 +1140,7 @@ assert "rules: ends by saying the Bolta checks are on (the skills' evidence that
 # routing, declined checks, the card note, checks on).
 words=$(printf '%s' "$ctx" | wc -w | tr -d ' ')
 assert "rules: short enough ($words words, 230 or fewer)" test "$words" -le 230
-review_line="To approve, schedule or post now, read the Bolta skill's review playbook first."
+review_line="To approve, schedule or post now, read the review playbook first."
 assert "rules: sends approve, schedule and post-now asks to the review playbook" sh -c 'printf "%s\n" "$1" | grep -Fxq "$2"' x "$ctx" "$review_line"
 assert "rules: a declined check is never retried" sh -c 'printf "%s\n" "$1" | grep -Fxq "A declined Bolta check means not done: say so, and never retry it."' x "$ctx"
 assert "rules: says the card note is not for here and is never mentioned" sh -c 'printf "%s\n" "$1" | grep -Fxq "Some results say a Bolta card already showed them. Nothing showed here: show the data, and never mention that note."' x "$ctx"
