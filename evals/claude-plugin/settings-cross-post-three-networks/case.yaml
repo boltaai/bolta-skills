@@ -1,0 +1,94 @@
+schema_version: "1.1"
+name: settings-cross-post-three-networks
+description: 'One idea for X, the LinkedIn company page and Threads, with its own wording on each. Bolta holds that as ONE post: the three destinations in account_ids and the text per network in platform_specific (create-post), approved once. Never three separate posts, never a network key Bolta refuses (twitter). A plain draft create-post passes the check, so it reaches the mock.'
+tags: [settings]
+expected_outcome: 'post fires; reads the accounts; one create-post with X, Threads and the company page and its own text for x, threads and linkedin in platform_specific; no batch; nothing approved or scheduled; shows each network and says it is a draft.'
+execution:
+  prompt: |
+    Our single-origin Ethiopia Guji is back in both Northwind cafes from today, $6.50 a cup. Post it on X, Threads and the Northwind company page on LinkedIn, as one post I can approve once, but with its own wording on each network: punchy on X, a bit of the story on LinkedIn, chatty on Threads. Just save it as a draft.
+  max_turns: 20
+  timeout_seconds: 300
+  allowed_tools: [Skill, Read]
+graders:
+  - name: skill-fired
+    type: tool_used
+    tool: Skill
+    input_match: '"skill"\s*:\s*"(?:[\w-]+:)?(bolta)"'
+    min: 1
+  - name: playbook-read
+    type: tool_used
+    tool: Read
+    input_match: 'references/(post)\.md'
+    min: 1
+  - name: reads-accounts
+    # The account and page ids are only in Bolta.
+    type: regex
+    target: mock_calls
+    pattern: '"tool":"[^"]*list-accounts"'
+  - name: one-post-three-destinations
+    # One create-post that names all three destinations.
+    type: tool_used
+    tool: mcp__plugin_bolta_bolta__create-post
+    input_match: '^(?=[\s\S]*a1b2c3d4-0001-4a00-8000-000000000002)(?=[\s\S]*a1b2c3d4-0001-4a00-8000-000000000005)(?=[\s\S]*linkedin_org_80412377)'
+    min: 1
+  - name: x-own-text-any-route
+    # X's own text, by any route: in the saving create-post, or after it with update-post or the
+    # details tool (the skill sends X settings after the post exists while platform_specific on a
+    # new post saves no X settings). Those two are checked, so under -p the attempt is graded.
+    type: regex
+    target: trace
+    pattern: '"name":"mcp__plugin_bolta_bolta__(create-post|update-post)"[\s\S]{0,6000}?\W"x\W{1,6}\{[^{}]*\Wtext\W|"name":"mcp__plugin_bolta_bolta__update-post-platform-details"[\s\S]{0,600}?\Wplatform\W{1,6}x\W'
+  - name: threads-own-text
+    type: tool_used
+    tool: mcp__plugin_bolta_bolta__create-post
+    input_match: '"threads"\s*:\s*\{[^{}]*"text"\s*:'
+    min: 1
+  - name: linkedin-own-text
+    # On the network or under the page's own entry.
+    type: tool_used
+    tool: mcp__plugin_bolta_bolta__create-post
+    input_match: '"linkedin"\s*:\s*\{[\s\S]*?"text"\s*:'
+    min: 1
+  - name: one-create-only
+    # One post, not one per network.
+    type: tool_used
+    tool: mcp__plugin_bolta_bolta__create-post
+    min: 0
+    max: 1
+  - name: no-separate-posts
+    type: tool_used
+    tool: mcp__plugin_bolta_bolta__bulk-create-posts
+    min: 0
+    max: 0
+  - name: no-twitter-key
+    # Bolta refuses any network name but its own (x, not twitter).
+    type: tool_used
+    tool: mcp__plugin_bolta_bolta__create-post
+    input_match: '"twitter"\s*:'
+    min: 0
+    max: 0
+  - name: shows-each-network
+    # Every destination and its own text, not just the main text.
+    type: regex
+    pattern: '^(?=[\s\S]*\bX\b)(?=[\s\S]*LinkedIn)(?=[\s\S]*Threads)'
+  - name: says-draft
+    type: regex
+    pattern: 'draft|nothing (goes|has gone|will go) out|not (posted|scheduled|published)'
+    flags: i
+  - name: price-kept
+    # The price the user gave, never another.
+    type: tool_used
+    tool: mcp__plugin_bolta_bolta__create-post
+    input_match: '\$6\.50'
+    min: 1
+  - name: no-approve-schedule-publish
+    # Drafts only: nothing approved, scheduled or posted.
+    type: regex
+    target: trace
+    pattern: '"name":"mcp__plugin_bolta_bolta__(approve-post|approve-many-posts|schedule-post|publish-post)"'
+    match: not_contains
+  - name: no-ids-or-jargon
+    type: regex
+    pattern: '[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-|linkedin_org_|platform_specific|\bcreate-post\b|\bupdate-post\b|\bMCP\b'
+    flags: i
+    match: not_contains

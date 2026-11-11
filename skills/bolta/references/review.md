@@ -21,16 +21,17 @@ All decisions in one pass, then read back: scheduled (day, time, account), chang
 ## Tools
 
 - `list-inbox-items`, `list-workspace-posts`, `get-post`: read.
-- `create-post`, `update-post`, `submit-for-review`: draft, change, send for review.
-- `approve-many-posts`: every yes. `approve-post`: one yes, or the fallback.
+- `create-post`, `update-post`, `submit-for-review`: draft, change, submit.
+- `approve-many-posts`: every yes. `approve-post`: one yes, or fallback.
 - `reject-post`: a no with a reason.
-- `delete-post`, `schedule-post`, `publish-post`, `list-scheduled-posts`: drop, time, post now, read back.
+- `delete-post`, `schedule-post`, `publish-post`, `list-scheduled-posts`: drop, time, now, read back.
 - `get-voice-profile`, `update-voice-profile`: one DON'T.
 - `list-recurring-reviews`, `approve-recurring-review`, `reject-recurring-review`: legacy rows.
+- `propose-cascade`, `update-cascade`, `start-cascade`, `get-cascade`: team versions.
 
 ## Hand off
 
-[post](post.md): new posts. [fix](fix.md): undo, why nothing went out. [voice](voice.md): "not me". [replies](replies.md): reply drafts. [routine](routine.md), [campaign](campaign.md): too many drafts. [connect](connect.md): access.
+[post](post.md): new posts. [fix](fix.md): undo, nothing went out. [voice](voice.md): "not me". [replies](replies.md): replies. [routine](routine.md), [campaign](campaign.md): too many drafts. [connect](connect.md): access.
 
 ## Always
 

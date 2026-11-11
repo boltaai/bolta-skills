@@ -25,8 +25,8 @@ Drafts are saved and shown in full (number, account, text; no day), ending: "Sav
 
 ## Tools
 
-- `list-workspaces`, `get-workspace`, `get-voice-context`: name, clock, voice.
-- `list-accounts`, `list-buckets`, `get-connect-link`: accounts, groups; a connect link (WordPress too).
+- `list-workspaces`, `get-workspace`, `get-voice-context`, `get-posting-rules`: name, clock, voice, limits.
+- `list-accounts`, `list-buckets`, `get-connect-link`: accounts, groups; a connect link.
 - `list-workspace-posts`: best posts; drafts before a retry.
 - `list-scheduled-posts`, `list-routines`, `list-content-campaigns`: covered.
 - `create-post`, `bulk-create-posts`, `bulk-create-status`, `update-post`: save, check, change.

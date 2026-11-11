@@ -255,6 +255,21 @@ function campaign_id(ti,   v) {
   return is_uuid(v) ? v : ""
 }
 
+# confirm-plan: off when switch_on is missing or the JSON literal false (the
+# plan is saved and nothing runs); anything else is on.
+function switch_on(ti) {
+  if (!jhas(ti, "switch_on") || jtype(ti, "switch_on") == "f") return "off"
+  return "on"
+}
+
+# decide-routine-recommendation and decide-bolta-suggestion: the decision word,
+# else other.
+function decision(ti,   v) {
+  if (jtype(ti, "decision") != "s") return "other"
+  v = jstr(ti, "decision")
+  return (v ~ /^(apply|dismiss|undo|accept|decline)$/) ? v : "other"
+}
+
 # How many posts an approve-many-posts call carries (digits only, 0 when the
 # items are missing or not a list).
 function item_count(ti,   n) {
@@ -285,13 +300,14 @@ function create_verdict(ti) {
   return "safe"
 }
 
-# update-post (unchanged from v0.1): timing = a time, or a status other than
-# Draft; edit = new content, media, accounts or poll without the same call
-# returning the post to Draft (an edit keeps the post'\''s approval).
+# update-post: timing = a time, or a status other than Draft; edit = new
+# content, media, accounts, poll or per-network text and settings
+# (platform_specific, which can replace the text a network gets) without the
+# same call returning the post to Draft.
 function update_verdict(ti) {
   if (has_time(ti)) return "timing"
   if (jhas(ti, "status") && !is_draft_status(ti)) return "timing"
-  if ((jhas(ti, "content") || jhas(ti, "contents") || jhas(ti, "media") || jhas(ti, "accounts") || jhas(ti, "poll")) && !is_draft_status(ti)) return "edit"
+  if ((jhas(ti, "content") || jhas(ti, "contents") || jhas(ti, "media") || jhas(ti, "accounts") || jhas(ti, "poll") || jhas(ti, "platform_specific")) && !is_draft_status(ti)) return "edit"
   return "safe"
 }
 
@@ -386,6 +402,8 @@ function guard_main(   ok, ti) {
   emit("CID", campaign_id(ti))
   if (TOOL == "approve-many-posts") emit("ITEMS", item_count(ti))
   if (TOOL == "bulk-create-posts") emit("BULK", bulk_verdict(ti))
+  if (TOOL == "confirm-plan") emit("SWITCHON", switch_on(ti))
+  if (TOOL == "decide-routine-recommendation" || TOOL == "decide-bolta-suggestion") emit("DECISION", decision(ti))
   # A website read with preview: true (the JSON literal, never the string) saves nothing.
   if (TOOL == "extract-business-dna") emit("PREVIEW", jtype(ti, "preview") == "t" ? 1 : 0)
 }

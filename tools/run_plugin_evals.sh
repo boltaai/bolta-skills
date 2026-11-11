@@ -8,6 +8,7 @@
 #   sh tools/run_plugin_evals.sh agents   [extra claude plugin eval args]
 #   sh tools/run_plugin_evals.sh getgoing [extra claude plugin eval args]
 #   sh tools/run_plugin_evals.sh choosing [extra claude plugin eval args]
+#   sh tools/run_plugin_evals.sh settings [extra claude plugin eval args]
 #   sh tools/run_plugin_evals.sh gauntlet [extra claude plugin eval args]
 #   sh tools/run_plugin_evals.sh all      [extra claude plugin eval args]
 #
@@ -23,6 +24,10 @@
 # choosing what to set up for a kind of business: a cafe on Instagram and Facebook, a SaaS
 #          feature launch with a page to read, 40 drafts already waiting, a founder writing as
 #          herself, an agency whose client signs off. Graded on outcomes. Threshold 0.8.
+# settings per-network text and settings on one post (platform_specific): X + LinkedIn +
+#          Threads with their own text, a LinkedIn profile plus company page, a Threads ghost
+#          post with a topic tag, an Instagram trial reel, Threads who-can-reply (not sent:
+#          honest), a setting on a scheduled post (back for a yes: asks). Threshold 0.8.
 # gauntlet a total beginner in a new brand (Wick & Ember Candles): vague asks, typos, one-word
 #          answers, an empty workspace, a dated sale, "with our numbers", things Bolta can't do,
 #          "post it all now", a rejection loop, and draft quality. Graded on outcomes, plus llm
@@ -65,6 +70,7 @@ case "$group" in
   newtools) claude plugin eval . --tag newtools --ablation none --trust-plugin --no-publish --threshold 0.8 --max-cost-usd 10 -j 4 --json "$out/newtools.json" "$@" ;;
   getgoing) claude plugin eval . --tag getgoing --ablation none --trust-plugin --no-publish --threshold 0.8 --max-cost-usd 25 -j 4 --json "$out/getgoing.json" "$@" ;;
   choosing) claude plugin eval . --tag choosing --ablation none --trust-plugin --no-publish --threshold 0.8 --max-cost-usd 25 -j 4 --json "$out/choosing.json" "$@" ;;
+  settings) claude plugin eval . --tag settings --ablation none --trust-plugin --no-publish --threshold 0.8 --max-cost-usd 12 -j 4 --json "$out/settings.json" "$@" ;;
   gauntlet) claude plugin eval . --tag gauntlet --ablation none --trust-plugin --no-publish --threshold 0.8 --judge-model sonnet --max-cost-usd 40 -j 4 --json "$out/gauntlet.json" "$@" ;;
   agents) claude plugin eval . --tag agents --ablation none --trust-plugin --no-publish --threshold 0.8 --max-cost-usd 10 -j 1 --json "$out/agents.json" "$@" ;;
   all)
@@ -77,6 +83,7 @@ case "$group" in
     sh "$root/tools/run_plugin_evals.sh" quiet "$@" || rc=$?
     sh "$root/tools/run_plugin_evals.sh" getgoing "$@" || rc=$?
     sh "$root/tools/run_plugin_evals.sh" choosing "$@" || rc=$?
+    sh "$root/tools/run_plugin_evals.sh" settings "$@" || rc=$?
     exit $rc ;;
-  *) echo "usage: sh tools/run_plugin_evals.sh safety|smoke|quiet|newtools|getgoing|choosing|gauntlet|agents|all"; exit 2 ;;
+  *) echo "usage: sh tools/run_plugin_evals.sh safety|smoke|quiet|newtools|getgoing|choosing|settings|gauntlet|agents|all"; exit 2 ;;
 esac

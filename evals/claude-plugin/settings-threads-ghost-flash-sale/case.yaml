@@ -1,0 +1,74 @@
+schema_version: "1.1"
+name: settings-threads-ghost-flash-sale
+description: 'A today-only flash sale on Threads as a ghost post (gone after 24 hours) with the topic tag Coffee. Both are Threads settings in platform_specific on the saving create-post: is_ghost_post true and topic_tag without the # (in platform_specific the tag alone is enough). A ghost post is one short text part with no image, so no media; the skill keeps the link out. Said before the yes that it disappears.'
+tags: [settings]
+expected_outcome: 'post fires; one create-post to the Threads account with is_ghost_post true and topic_tag Coffee, no media; says it disappears after 24 hours; code kept as given; nothing approved or scheduled.'
+execution:
+  prompt: |
+    Flash sale for Northwind on Threads: 20% off every retail bag today only, code GUJI20 at the till or online. Make it one of those Threads posts that disappears after 24 hours, and give it the topic tag Coffee. Save it as a draft for me to check.
+  max_turns: 20
+  timeout_seconds: 300
+  allowed_tools: [Skill, Read]
+graders:
+  - name: skill-fired
+    type: tool_used
+    tool: Skill
+    input_match: '"skill"\s*:\s*"(?:[\w-]+:)?(bolta)"'
+    min: 1
+  - name: playbook-read
+    type: tool_used
+    tool: Read
+    input_match: 'references/(post)\.md'
+    min: 1
+  - name: threads-only
+    type: tool_used
+    tool: mcp__plugin_bolta_bolta__create-post
+    input_match: 'a1b2c3d4-0001-4a00-8000-000000000005'
+    min: 1
+  - name: ghost-post
+    type: tool_used
+    tool: mcp__plugin_bolta_bolta__create-post
+    input_match: '"threads"\s*:\s*\{[^{}]*"is_ghost_post"\s*:\s*true'
+    min: 1
+  - name: topic-tag
+    type: tool_used
+    tool: mcp__plugin_bolta_bolta__create-post
+    input_match: '"threads"\s*:\s*\{[^{}]*"topic_tag"\s*:\s*"[Cc]offee"'
+    min: 1
+  - name: tag-without-hash
+    type: tool_used
+    tool: mcp__plugin_bolta_bolta__create-post
+    input_match: '"topic_tag"\s*:\s*"#'
+    min: 0
+    max: 0
+  - name: no-media
+    # A ghost post with an image goes out as a lasting post.
+    type: tool_used
+    tool: mcp__plugin_bolta_bolta__create-post
+    input_match: '"media"\s*:\s*\[\s*[\{"]'
+    min: 0
+    max: 0
+  - name: code-kept
+    type: tool_used
+    tool: mcp__plugin_bolta_bolta__create-post
+    input_match: 'GUJI20'
+    min: 1
+  - name: says-it-disappears
+    type: regex
+    pattern: '(disappear|vanish|gone|expire|delete)[^.\n]{0,60}(24|twenty.four)\s*h|(24|twenty.four)[- ]hours?[^.\n]{0,60}(disappear|vanish|gone|expire|delete)'
+    flags: i
+  - name: says-draft
+    type: regex
+    pattern: 'draft|nothing (goes|has gone|will go) out|not (posted|scheduled|published)'
+    flags: i
+  - name: no-approve-schedule-publish
+    # Drafts only: nothing approved, scheduled or posted.
+    type: regex
+    target: trace
+    pattern: '"name":"mcp__plugin_bolta_bolta__(approve-post|approve-many-posts|schedule-post|publish-post)"'
+    match: not_contains
+  - name: no-ids-or-jargon
+    type: regex
+    pattern: '[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-|linkedin_org_|platform_specific|\bcreate-post\b|\bupdate-post\b|is_ghost_post|topic_tag|\bMCP\b'
+    flags: i
+    match: not_contains
