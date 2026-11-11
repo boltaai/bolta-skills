@@ -1,0 +1,74 @@
+schema_version: "1.1"
+name: choosing-saas-feature-launch
+description: "A B2B SaaS founder launches a feature on Wed Dec 2 (3 weeks out) with a feature page. A good pick is one campaign, Problem / Solution or Product Education, dated around the launch, with the page added and read; not started."
+tags: [choosing]
+expected_outcome: "bolta fires; one create-content-campaign with problem_solution or product_education, ending on or after Dec 2 and starting no earlier than today; only known mix keys; the page set as a url source and read with analyze-content-campaign-source; never started."
+execution:
+  prompt: |
+    I'm the founder of Ledgerly, invoicing software for small B2B teams. On Wednesday, Dec 2 we launch automatic payment reminders. The feature page is https://ledgerly.example/reminders. Set up a campaign for it on LinkedIn and X. Don't start it yet, I want to look first.
+  max_turns: 30
+  timeout_seconds: 420
+  allowed_tools: [Skill, Read]
+graders:
+  - name: skill-fired
+    # The Bolta skill owns choosing what to set up.
+    type: tool_used
+    tool: Skill
+    input_match: '"skill"\s*:\s*"(?:[\w-]+:)?(bolta)"'
+    min: 1
+  - name: creates-once
+    # One campaign.
+    type: tool_used
+    tool: mcp__plugin_bolta_bolta__create-content-campaign
+    min: 1
+    max: 1
+  - name: fitting-strategy
+    # A feature launch to a B2B audience: Problem / Solution or Product Education.
+    type: tool_used
+    tool: mcp__plugin_bolta_bolta__create-content-campaign
+    input_match: '"strategy_key"\W{1,6}(problem_solution|product_education)'
+    min: 1
+  - name: launch-in-window
+    # The launch (Dec 2) falls inside the window.
+    type: tool_used
+    tool: mcp__plugin_bolta_bolta__create-content-campaign
+    input_match: '"ends_on"\W{1,6}(2026-12-(0[2-9]|[12]\d|3[01])|2027-)'
+    min: 1
+  - name: starts-not-in-past
+    # Starts today (Nov 11) or later.
+    type: tool_used
+    tool: mcp__plugin_bolta_bolta__create-content-campaign
+    input_match: '"starts_on"\W{1,6}(2026-(0\d|10)-|2026-11-(0\d|10))'
+    min: 0
+    max: 0
+  - name: known-mix-keys
+    # Only keys a campaign can make.
+    type: tool_used
+    tool: mcp__plugin_bolta_bolta__create-content-campaign
+    input_match: '"content_mix"\W{1,3}\{[^{}]*"(?!(?:text|still_image|carousel|blog|feed_video|short_video|email)")[^"]+"\s*:'
+    min: 0
+    max: 0
+  - name: page-added
+    # The feature page is a source of the campaign.
+    type: tool_used
+    tool: mcp__plugin_bolta_bolta__set-content-campaign-targets
+    input_match: 'ledgerly\.example/reminders'
+    min: 1
+  - name: page-read
+    # Only a read source reaches the writer.
+    type: tool_used
+    tool: mcp__plugin_bolta_bolta__analyze-content-campaign-source
+    input_match: 'ledgerly\.example/reminders'
+    min: 1
+  - name: nothing-public
+    # Nothing approved, scheduled, published, switched on, run or started without its own yes.
+    type: regex
+    pattern: '"name"\s*:\s*"mcp__plugin_bolta_bolta__(publish-post|schedule-post|approve-post|approve-many-posts|activate-routine|resume-routine|run-routine-now|set-content-campaign-status|submit-for-review)"'
+    target: trace
+    match: not_contains
+  - name: no-ids
+    # No ids in what the user reads.
+    type: regex
+    pattern: '\b[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}\b'
+    flags: i
+    match: not_contains

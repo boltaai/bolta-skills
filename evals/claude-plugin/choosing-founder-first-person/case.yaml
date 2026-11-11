@@ -1,0 +1,60 @@
+schema_version: "1.1"
+name: choosing-founder-first-person
+description: "The founder wants first-person posts on her own LinkedIn. A good pick is founder_story_series bound to her account, which her person voice writes for, not the brand page and brand voice."
+tags: [choosing]
+expected_outcome: "bolta fires; founder_story_series (if saved) bound to Maya's LinkedIn, never the company page; count 2; reply names Maya's own voice; nothing switched on."
+execution:
+  prompt: |
+    I'm Maya Chen, Northwind's founder. I want two posts a week on my own LinkedIn, first person, as me: what I'm learning building the roastery. Set it up, but don't switch it on yet.
+  max_turns: 25
+  timeout_seconds: 420
+  allowed_tools: [Skill, Read]
+graders:
+  - name: skill-fired
+    # The Bolta skill owns choosing what to set up.
+    type: tool_used
+    tool: Skill
+    input_match: '"skill"\s*:\s*"(?:[\w-]+:)?(bolta)"'
+    min: 1
+  - name: founder-stories
+    # First person from the founder is the founder story writer.
+    type: tool_used
+    tool: mcp__plugin_bolta_bolta__create-routine
+    input_match: '"template_key"\W{1,6}founder_story_series'
+    min: 1
+  - name: binds-her-account
+    # Her own LinkedIn, which her voice writes for.
+    type: tool_used
+    tool: mcp__plugin_bolta_bolta__create-routine
+    input_match: 'a1b2c3d4-0001-4a00-8000-000000000006'
+    min: 1
+  - name: not-the-company-page
+    # Never the brand's LinkedIn page (brand voice).
+    type: tool_used
+    tool: mcp__plugin_bolta_bolta__create-routine
+    input_match: 'a1b2c3d4-0001-4a00-8000-000000000001'
+    min: 0
+    max: 0
+  - name: two-a-week
+    # Two a week: 2 a run weekly, or 1 a run on two days.
+    type: tool_used
+    tool: mcp__plugin_bolta_bolta__create-routine
+    input_match: '"count"\W{1,3}2\b|"cron"\W{1,6}[^"]*\d,\d"[\s\S]*"count"\W{1,3}1\b|"count"\W{1,3}1\b[\s\S]*"cron"\W{1,6}[^"]*\d,\d"'
+    min: 1
+  - name: names-her-voice
+    # Says her own voice writes it.
+    type: regex
+    pattern: "Maya(?:\\s+Chen)?(?:'|’)s voice|voice[^.\\n]{0,40}\\bMaya|Maya[^.\\n]{0,40}\\bvoice|your (own )?voice"
+    flags: i
+  - name: nothing-public
+    # Nothing approved, scheduled, published, switched on, run or started without its own yes.
+    type: regex
+    pattern: '"name"\s*:\s*"mcp__plugin_bolta_bolta__(publish-post|schedule-post|approve-post|approve-many-posts|activate-routine|resume-routine|run-routine-now|set-content-campaign-status|submit-for-review)"'
+    target: trace
+    match: not_contains
+  - name: no-ids
+    # No ids in what the user reads.
+    type: regex
+    pattern: '\b[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}\b'
+    flags: i
+    match: not_contains
