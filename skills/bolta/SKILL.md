@@ -52,15 +52,15 @@ On the first Bolta ask, read together and reuse all conversation: `list-workspac
 
 ## Pick the playbook
 
-Read exactly one before acting, plus the references it names. Never act from this page alone on anything that approves, schedules, publishes, switches on or deletes.
+Read exactly one before acting, plus what it names. Never act from this page alone on anything that approves, schedules, publishes, switches on or deletes.
 
 | The ask | Read |
 |-|-|
 | What needs me, catch me up, anything vague | [today](references/today.md) |
-| Set me up, first session, no accounts or voice yet | [start](references/start.md) |
+| Set me up, get going, I have nothing set up, keep me posting with nothing running yet, no accounts | [start](references/start.md) |
 | Write a post, a week of posts, an article; turn this into posts | [post](references/post.md) |
 | What's waiting, yes to 1 and 3, schedule this Tuesday 9am, post now, delete drafts, move a time, the client's yes | [review](references/review.md) |
-| Every week, keep me posting, images or video every week, each new blog post, pause or run my routine | [routine](references/routine.md) |
+| Every week, images or video every week, each new blog post, pause or run my routine, its drafts keep missing | [routine](references/routine.md) |
 | A launch, sale or event, "for 3 weeks", a post per teammate, how did the campaign do | [campaign](references/campaign.md) |
 | How did it do, what's working, which post did best | [results](references/results.md) |
 | That's not me, show my voice, add a rule | [voice](references/voice.md) |

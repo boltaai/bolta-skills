@@ -75,7 +75,8 @@ PENDING_TOOLS = ("approve-many-posts", "reject-post", "set-content-campaign-targ
                  "analyze-content-campaign-source",
                  "propose-cascade", "update-cascade", "start-cascade", "get-cascade",
                  "list-workspace-members", "list-routine-recommendations",
-                 "decide-routine-recommendation", "list-bolta-suggestions", "decide-bolta-suggestion")
+                 "decide-routine-recommendation", "list-bolta-suggestions", "decide-bolta-suggestion",
+                 "recommend-routines", "plan-routine", "plan-campaign", "revise-plan", "confirm-plan")
 #: Live tools whose saved schema adds arguments production does not take yet. Until it does,
 #: the saved arguments are accepted too. Delete a name once the live list has them (the checker says when).
 PENDING_UPDATES = ("create-routine", "update-routine", "extract-business-dna", "voice-generate")

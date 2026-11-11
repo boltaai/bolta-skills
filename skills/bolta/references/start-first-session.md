@@ -1,57 +1,65 @@
 # First session: what to show and say
 
-Use real names, counts and times. Skip what's done. At most one question per moment. Dates are examples.
+Use real names, counts and times. Skip what's done. Moments 1 to 3 are one reply; it ends on one question. Dates are examples.
 
-## 1. You're in
+## 1. You're in, and this is you
 
-> You're in **Acme** (New York time). Connected: LinkedIn (Jane), X (@acme). Instagram is disconnected: reconnect here <link>.
+> You're in **Acme Coffee** (Sydney time). Nothing is connected yet: connect your accounts here <link>, with Acme Coffee selected in Bolta.
+>
+> **From your site:** a neighbourhood cafe that roasts its own beans and sells brew kits. For locals, commuters and home brewers. Tone: friendly, practical.
 
-- No accounts: "Connect an account here: <link>. First check Acme is the brand selected in Bolta. Say 'done' when finished."
+- The site part is the preview read; it is saved only once they say it's right.
 - Discord or Skool, or YouTube and Pinterest off the Team plan: no connect window opens; say so. WordPress: Settings, Integrations.
-- UTC: "Which city are you in? I'll use it for times; set it in Bolta Settings, Brand, Overview, to keep it."
+- UTC: ask their city once; set it in Bolta Settings, Brand, Overview, to keep it.
 
 ## 2. It already knows me
 
-Show the voice Bolta already has and what it has learned: [what to show and say](start-first-session-voice.md).
+Accounts connected and a voice there: show it ([what to show and say](start-first-session-voice.md)). Otherwise skip; the brand from moment 1 is enough to plan.
 
-## 3. A week, done
+## 3. It keeps going without me
 
-[post](post.md) writes 4-5 drafts, one batch, no question first, skipping (and naming) networks that need an image or video. One table: #, account, full text (no days: Bolta picks them). Then:
+Skip if Bolta routines are on. 3-5, each a different job, sized to their review time:
 
-> Saved to Acme as drafts; nothing goes out yet. Bolta will pick exact times from your posting schedule. Schedule all 5, or tell me what to change.
+> Here are 3 Bolta routines that fit Acme Coffee:
+> 1. **Weekly coffee tips**: Tuesdays 8:00 am, 2 Instagram and LinkedIn drafts. Your brew guides are your strongest material.
+> 2. **New on the menu**: Thursdays 10:00 am, 1 Instagram draft.
+> 3. **Monthly recap**: the 1st, a report by email. No drafts to review.
+>
+> About 3 drafts a week, each waiting for your yes. They run on Bolta even with this app closed, and use credits each run. Which should I set up? They're saved switched off.
 
-## 4. Yes in one line
+Name only networks they post on; unconnected ones are bound once connected. Anything dated coming up: add one campaign as its own numbered line.
 
-They say: "Yes to 1, 3, 4. Make 2 shorter. Drop 5, too salesy." [review](review.md) does it all in one reply (one Bolta check, in apps that have the Bolta checks plugin).
+## 4. Saved off, then on
 
-> Scheduled: Mon Oct 19, 9:00 am, LinkedIn; Wed Oct 21, 12:00 pm, X; Fri Oct 23, 9:00 am, LinkedIn. Post 2 is ready: schedule this version?
+They say "set up 1 and 2": save both, switched off, no question first.
 
-A drop with a reason: offer the rule once:
+> Saved to Acme Coffee, switched off: Weekly coffee tips, New on the menu. Switch both on? First drafts would come Tuesday.
 
-> Want me to add "no hard sell" to your DON'Ts so this stops? Every yes, edit and no is saved; after about 10 new ones, Bolta updates your DOs and DON'Ts overnight.
+On yes, switch each on and read the first-drafts time back; never work it out.
 
-## 5. It keeps going without me
+> On. First drafts Tue Nov 17, 8:00 am (Sydney). On Tuesday, say "what's waiting".
 
-Skip if a Bolta routine is on.
+## 5. Launch in a sentence
 
-> Want Bolta to write 5 LinkedIn and X drafts every Monday at 8 am, about what Acme does? They wait for your yes. It runs on Bolta even with this app closed, and uses credits each run.
-
-Name the networks they post on. On yes, [routine](routine.md) sets it up from the offer's words, not this week's topic (ask me first, no check). Read the first-drafts date back; never work it out.
-
-> On. First drafts Mon Oct 26, 8:00 am (New York). On Monday, say "what's waiting".
-
-## 6. Launch in a sentence
-
-Skip if a campaign is on.
+Skip if a campaign is on or already proposed.
 
 > Anything coming up in the next month: a launch, an offer, an event?
 
 - Yes: hand to [campaign](campaign.md).
 - No, a founder, and GitHub listed in Bolta Settings, Integrations: "If you connect GitHub in Bolta, each merged pull request or published release can become a build-in-public draft for LinkedIn and X." Then [routine](routine.md).
-- No: close.
+
+## 6. Yes in one line
+
+When drafts arrive: "Yes to 1, 3. Make 2 shorter. No to 4, too salesy." [review](review.md) does it all in one reply.
+
+> Scheduled: Tue Nov 17, 9:00 am, LinkedIn; Thu Nov 19, 10:00 am, Instagram. Post 2 is ready: schedule this version?
+
+A no with a reason teaches Bolta: "Every yes, edit and no is saved; after about 10 new ones, Bolta updates your DOs and DON'Ts overnight." A drop teaches nothing.
+
+Want posts this week too, before the first run? [post](post.md) writes them as drafts.
 
 ## Close
 
-> Your week: 3 posts scheduled, 1 waiting for your yes, 1 Bolta routine on (next drafts Monday). Ask "what needs me?" any time.
+> Acme Coffee: 2 Bolta routines on (first drafts Tuesday), accounts connected. Ask "what needs me?" any time.
 
 Count only what happened; stopping early, give the state so far. Never promise to check in later.
