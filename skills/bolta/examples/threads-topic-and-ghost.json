@@ -1,0 +1,73 @@
+{
+  "ask": "Two Threads posts for tomorrow's flash sale: one that stays up with the Small Business topic, and a 24-hour one that says the sale ends tonight.",
+  "playbook": "post",
+  "steps": [
+    {
+      "tool": "get-posting-rules",
+      "arguments": {
+        "workspace_id": "<brand's workspace id>",
+        "platform": "threads"
+      },
+      "why": "Limits and defaults first: 500 characters, longer becomes a reply chain, which a ghost post can't be."
+    },
+    {
+      "tool": "bulk-create-posts",
+      "arguments": {
+        "workspace_id": "<brand's workspace id>",
+        "posts": [
+          {
+            "content": "Flash sale tomorrow: 30% off every candle, one day only.",
+            "account_ids": [
+              "<Threads account id>"
+            ],
+            "status": "Draft"
+          },
+          {
+            "content": "Last call: the 30% candle sale ends tonight at midnight.",
+            "account_ids": [
+              "<Threads account id>"
+            ],
+            "status": "Draft"
+          }
+        ]
+      },
+      "why": "Two posts: one bulk call, every item a Draft. Then poll bulk-create-status until completed for the two post ids."
+    },
+    {
+      "tool": "update-post-platform-details",
+      "arguments": {
+        "post_id": "<first post id>",
+        "platform": "threads",
+        "fields": {
+          "topic_tag": "Small Business",
+          "use_topic_tag": true
+        }
+      },
+      "why": "The topic is a setting, not a hashtag. Without use_topic_tag it is saved and not sent."
+    },
+    {
+      "tool": "update-post-platform-details",
+      "arguments": {
+        "post_id": "<second post id>",
+        "platform": "threads",
+        "fields": {
+          "is_ghost_post": true
+        }
+      },
+      "why": "A ghost post: text only, gone after 24 hours. Short, one part, no image or poll, or it goes out as a normal post."
+    },
+    {
+      "tool": "get-post-platform-details",
+      "arguments": {
+        "post_id": "<second post id>",
+        "platform": "threads"
+      },
+      "why": "Unknown keys are ignored with a success reply: read back before saying it is set."
+    }
+  ],
+  "say": "Saved to Acme as 2 Threads drafts. 1 stays up, topic Small Business. 2 disappears 24 hours after it goes out. Nothing goes out yet. Schedule both?",
+  "never": [
+    "Typing the topic as a #hashtag in the text.",
+    "Adding an image to the ghost post: it would go out as a lasting post."
+  ]
+}

@@ -1,0 +1,60 @@
+{
+  "ask": "Announce our new store hours on LinkedIn, X and Threads.",
+  "playbook": "post",
+  "steps": [
+    {
+      "tool": "get-posting-rules",
+      "arguments": {
+        "workspace_id": "<brand's workspace id>"
+      },
+      "why": "Limits and needs for every network named, once."
+    },
+    {
+      "tool": "bulk-create-posts",
+      "arguments": {
+        "workspace_id": "<brand's workspace id>",
+        "posts": [
+          {
+            "content": "From Monday we open at 7 am. Earlier coffee for the commute crowd, same team behind the counter.",
+            "account_ids": [
+              "<LinkedIn account id>"
+            ],
+            "status": "Draft"
+          },
+          {
+            "content": "New hours from Monday: open 7 am.",
+            "account_ids": [
+              "<X account id>"
+            ],
+            "status": "Draft"
+          },
+          {
+            "content": "Early birds, this one's for you: we open at 7 from Monday.",
+            "account_ids": [
+              "<Threads account id>"
+            ],
+            "status": "Draft"
+          }
+        ]
+      },
+      "why": "Each network wants its own shape, so one post per network, written fresh, in one bulk call. Then poll bulk-create-status."
+    },
+    {
+      "tool": "update-post-platform-details",
+      "arguments": {
+        "post_id": "<Threads post id>",
+        "platform": "threads",
+        "fields": {
+          "topic_tag": "Coffee",
+          "use_topic_tag": true
+        }
+      },
+      "why": "A setting only where it adds something; the user agreed to the topic."
+    }
+  ],
+  "say": "Saved to Acme as 3 drafts: 1 LinkedIn, 2 X, 3 Threads (topic Coffee). Nothing goes out yet. Schedule all 3 for Monday 7 am?",
+  "never": [
+    "Pasting one text and trimming it per network.",
+    "Claiming the posts will look the same everywhere."
+  ]
+}

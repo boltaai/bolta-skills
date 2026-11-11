@@ -1,0 +1,43 @@
+{
+  "ask": "Approve the three Lisbon posts.",
+  "playbook": "review",
+  "before": "The numbered list showed three posts; the user said yes to all three.",
+  "steps": [
+    {
+      "tool": "approve-many-posts",
+      "arguments": {
+        "workspace_id": "<brand's workspace id>",
+        "items": [
+          {
+            "post_id": "<post 1 id>",
+            "expected_fingerprint": "<fingerprint from the list>",
+            "schedule_mode": "approve_only"
+          },
+          {
+            "post_id": "<post 2 id>",
+            "expected_fingerprint": "<fingerprint from the list>",
+            "schedule_mode": "approve_only"
+          },
+          {
+            "post_id": "<post 3 id>",
+            "expected_fingerprint": "<fingerprint from the list>",
+            "schedule_mode": "approve_only"
+          }
+        ]
+      },
+      "why": "One call for every yes. Read each item's result, not only the overall one."
+    },
+    {
+      "tool": "get-post",
+      "arguments": {
+        "post_id": "<post 2 id>"
+      },
+      "why": "Post 2 was refused as awaiting client sign-off. client_signoff.state says where it stands."
+    }
+  ],
+  "say": "Approved 1 and 3: they go out Tuesday 9 am and Thursday 9 am on LinkedIn. 2 is waiting on the client's yes; it goes out once they approve it. Nothing else to do here.",
+  "never": [
+    "Retrying, deleting or publishing post 2 to get round the client.",
+    "Saying all three are approved."
+  ]
+}

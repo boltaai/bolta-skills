@@ -1,0 +1,41 @@
+{
+  "ask": "Post this behind-the-scenes clip to TikTok, followers only, no duets: https://cdn.example.com/bts.mp4",
+  "playbook": "post",
+  "steps": [
+    {
+      "tool": "create-post",
+      "arguments": {
+        "workspace_id": "<brand's workspace id>",
+        "content": "Ever wondered how a candle gets its swirl?",
+        "account_ids": [
+          "<TikTok account id>"
+        ],
+        "media": [
+          {
+            "url": "https://cdn.example.com/bts.mp4",
+            "alt_text": "Hands pouring wax into a jar"
+          }
+        ],
+        "idempotency_key": "bts-tiktok-1"
+      },
+      "why": "TikTok needs one video from a public link the user gave."
+    },
+    {
+      "tool": "update-post-platform-details",
+      "arguments": {
+        "post_id": "<post id>",
+        "platform": "tiktok",
+        "fields": {
+          "privacy_level": "FOLLOWER_OF_CREATOR",
+          "disable_duet": true
+        }
+      },
+      "why": "Privacy defaults to public, so set what the user asked. Only the switches they named."
+    }
+  ],
+  "say": "Saved to Acme as a TikTok draft: followers only, duets off. Nothing goes out yet. Schedule it?",
+  "never": [
+    "Assuming public when the user didn't say: ask.",
+    "Saying a paid or brand video is disclosed: that switch is set in Bolta's composer."
+  ]
+}

@@ -1,0 +1,40 @@
+{
+  "ask": "Ask our X followers which feature we should build next: dark mode, exports or an iPad app.",
+  "playbook": "post",
+  "steps": [
+    {
+      "tool": "create-post",
+      "arguments": {
+        "workspace_id": "<brand's workspace id>",
+        "content": "What should we build next?",
+        "account_ids": [
+          "<X account id>"
+        ],
+        "idempotency_key": "next-feature-poll-1"
+      },
+      "why": "The question is the post's text. X refuses media-only posts, so text is always there."
+    },
+    {
+      "tool": "update-post-platform-details",
+      "arguments": {
+        "post_id": "<post id>",
+        "platform": "x",
+        "fields": {
+          "post_type": "POLL",
+          "poll_options": [
+            "Dark mode",
+            "Exports",
+            "iPad app"
+          ],
+          "poll_duration_minutes": 1440
+        }
+      },
+      "why": "On X a poll is a setting: 2 to 4 options of 25 characters, 5 minutes to 7 days. Without it the post goes out plain."
+    }
+  ],
+  "say": "Saved to Acme as an X draft: a one-day poll with Dark mode, Exports and iPad app. Nothing goes out yet. Schedule it?",
+  "never": [
+    "A poll option over 25 characters.",
+    "Sending the poll in the poll field of the post: that one is for Threads."
+  ]
+}
