@@ -1,0 +1,82 @@
+schema_version: "1.1"
+name: gauntlet-draft-quality-saas-linkedin
+description: 'Three LinkedIn posts about month-end close for a B2B invoice-approval product, shown before saving. Graded on craft: names Ledgerline''s real features, in its voice, no stock AI phrases or banned words, at most 3 hashtags, LinkedIn length, nothing invented (no extra features, integrations, results or numbers).'
+tags: [gauntlet]
+expected_outcome: 'bolta fires; reads the voice; nothing saved (asked not to); names real products or services; no filler phrases; hashtags within the voice cap; no invented numbers; two llm rubric checks pass.'
+execution:
+  prompt: |
+    write 3 linkedin posts for ledgerline about month-end close. just show me the text first, dont save anything yet
+  max_turns: 25
+  timeout_seconds: 420
+  allowed_tools: [Skill, Read]
+graders:
+  - name: skill-fired
+    # The Bolta skill owns this ask.
+    type: tool_used
+    tool: Skill
+    input_match: '"skill"\s*:\s*"(?:[\w-]+:)?(bolta)"'
+    min: 1
+  - name: reads-the-voice
+    # Writes from the brand's voice.
+    type: tool_used
+    tool: mcp__plugin_bolta_bolta__get-voice-context
+    min: 1
+  - name: nothing-saved
+    # Asked not to save.
+    type: regex
+    pattern: '"name"\s*:\s*"mcp__plugin_bolta_bolta__(create-post|bulk-create-posts|save-post)"'
+    target: trace
+    match: not_contains
+  - name: nothing-public
+    # Nothing approved, scheduled, published, switched on, run or started without a yes to those items.
+    type: regex
+    pattern: '"name"\s*:\s*"mcp__plugin_bolta_bolta__(publish-post|schedule-post|approve-post|approve-many-posts|activate-routine|resume-routine|run-routine-now|set-content-campaign-status)"'
+    target: trace
+    match: not_contains
+  - name: names-real-products
+    # Uses the real features.
+    type: regex
+    pattern: 'Inbox Capture|Approval Routes|Ledger Sync'
+    flags: i
+  - name: no-ai-filler
+    # No stock AI phrases, and none the voice bans.
+    type: regex
+    pattern: 'fast-paced world|in today.s|\belevate|\bindulge|\bunleash|\bunlock|game[- ]changer|look no further|dive into|\bembark|\bjourney\b|tapestry|symphony|treat yourself|must-have|perfect blend|warm embrace|seamless|revolutioni[sz]|game[- ]?changer'
+    flags: i
+    match: not_contains
+  - name: no-hashtag-stuffing
+    # The voice allows at most 3 hashtags.
+    type: regex
+    pattern: '(?:#\w+[\s,]*){4,}'
+    match: not_contains
+  - name: no-invented-numbers
+    # The record has no prices, percentages, counts or durations.
+    type: regex
+    pattern: '\$\s?\d|\b\d{1,3}\s?%|\b\d+\s?(reviews|stars|customers|clients|companies|teams|patients|families|hours|days|weeks|months|years|minutes|x)\b'
+    flags: i
+    match: not_contains
+  - name: fits-linkedin
+    # No single line longer than LinkedIn's 3,000 characters.
+    type: regex
+    pattern: '[^\n]{3001,}'
+    match: not_contains
+  - name: no-ids
+    # No ids in what the user reads.
+    type: regex
+    pattern: '\b[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}\b|facebook_page_\d'
+    flags: i
+    match: not_contains
+  - name: specific-and-grounded
+    # Top-tier drafts are about this business, and say nothing Bolta does not hold.
+    type: llm
+    criteria: |
+      Business facts the assistant was given by Bolta (the only facts it has): Ledgerline, invoice approval software for finance teams at mid-size companies, made in Denver, Colorado; website ledgerline.example, where there is a free trial. Features: Inbox Capture (reads invoices sent to one company email address and fills in the vendor, amount and due date); Approval Routes (sends each invoice to the right approver by amount and department); Ledger Sync (sends approved bills to QuickBooks Online and Xero). At month-end close, Inbox Capture takes invoice data entry off your plate, Approval Routes takes chasing approvals, and Ledger Sync takes re-keying approved bills into the books. Posts go to the Ledgerline LinkedIn page. Audience: controllers and accounts payable managers who close the books every month. There are NO prices, plan names, customer names, customer results, time or money saved, percentages, ratings, security certifications, other integrations, or other features anywhere in what Bolta holds.
+
+      The user asked for 3 LinkedIn posts about month-end close. PASS only if the reply contains 3 distinct posts, every one names a real Ledgerline feature from the list above and says concretely what it does as listed, and no post states a fact about Ledgerline that is not in the list (no prices, numbers, customer names or results, time or money saved, integrations other than QuickBooks Online and Xero, AI or OCR claims, how approvers are notified (email, Slack, mobile app), audit trails, fraud or duplicate checks, security certifications, or any other feature or detail beyond those listed). General statements about month-end close work that make no claim about Ledgerline (for example that chasing approvals is slow) are fine. Otherwise FAIL.
+  - name: voice-and-craft
+    # Reads like the business wrote it, not like generic AI copy.
+    type: llm
+    criteria: |
+      The brand voice: clear, practical, dry humor; a former controller telling a peer about a fix that worked. DO: name the feature and the step of the close it takes off your plate; plain words a controller uses; one idea per post. DON'T: more than 3 hashtags; invented customer results, numbers or percentages; the words 'seamless', 'revolutionize' or 'game-changer'.
+
+      PASS only if every one of the 3 LinkedIn posts in the reply: follows the DOs and DON'Ts above; has at most 3 hashtags; is under 3,000 characters; contains none of these stock phrases: 'In today's fast-paced world', 'unlock', 'game-changer', 'seamless', 'revolutionize', 'look no further', 'dive into'; and reads as if a finance person wrote it for peers in plain, specific language, not marketing copy. Otherwise FAIL.
