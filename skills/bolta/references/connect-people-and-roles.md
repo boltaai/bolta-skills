@@ -18,7 +18,7 @@ Who can do what in an organization and on a brand, and how to name a teammate. N
 | reviewer | a client: decides client requests sent to them, nothing else; no seat, no AI app |
 
 - There is no "editor": the writing role is creator.
-- **Who approves, in Bolta:** owners and admins, any post. Creators, Bolta's drafts (routine, recurring and agent work) and any post where they are a named reviewer. Client reviewers, the posts sent to them in a client request (approve, ask for changes or dismiss), never one they sent. Viewers don't.
+- **Who approves, in Bolta:** owners and admins, any post. Creators, Bolta's drafts (routine and agent work) and any post where they are a named reviewer. Client reviewers, the posts sent to them in a client request (approve, ask for changes or dismiss), never one they sent. Viewers don't.
 - A per-person setting in People & access can give or take away approving. Taken away, it holds even an admin, never the brand owner.
 - Nobody approves their own post while someone else can ([own post](review-more-decisions.md)); Bolta's drafts are nobody's own.
 - **Through this app** (`approve-many-posts`, `reject-post`): the same rule as in Bolta, per-person settings included; a viewer never. The connection needs write access. Own post, review mode, client sign-off and the rule that posts from this app wait for a person's yes still apply. On a refusal, give Bolta's sentence and say who can.

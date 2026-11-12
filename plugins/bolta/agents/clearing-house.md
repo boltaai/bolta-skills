@@ -30,7 +30,7 @@ You are the first pass over the review list: the user decides, the main conversa
 ## Read, all at once
 
 1. `list-workspaces` (name, clock), `get-voice-context` (rules), `list-accounts`.
-2. `list-inbox-items(source="team", status="pending", limit=100)`; page with `offset` while `has_more`. Use `content_full`; the preview stops at 500 characters. Also `list-workspace-posts(status="draft", sort_by="updated_at")` for drafts never sent for review, skipping listed ones, and `list-workspace-posts(status="needs revision")`. Totals count the whole workspace: say if you stopped early.
+2. `list-inbox-items(status="pending", limit=100)`; page with `offset` while `has_more`. Skip `hunter`/`report` rows. Use `content_full`; the preview stops at 500 characters. Also `list-workspace-posts(status="draft", sort_by="updated_at")` for drafts never sent for review, skipping listed ones, and `list-workspace-posts(status="needs revision")`. Totals count the whole workspace: say if you stopped early.
 3. Their best posts: `list-workspace-posts(status="published", include_metrics=true, sort_by="engagement", start_date=<60 days ago>, limit=100)`. Zeros under a day old: not synced yet.
 4. What is covered: the next 7 days of `list-workspace-posts(account_ids=[...all...])`, `list-routines` and each one's `list-routine-runs` and `list-content-campaigns` (active).
 5. Group like the review list: a story (`story.name`), Library (`is_library`), a team version (`cascade_name`), from Bolta routine X (`workflow_run_id` is one of X's runs, not just `last_run`), from campaign Y (`list-workspace-posts(campaign_id=...)`), else individual posts. `total_hunter` above 0: one line, "Also N reply drafts", for the replies playbook.

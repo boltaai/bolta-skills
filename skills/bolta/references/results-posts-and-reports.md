@@ -16,7 +16,6 @@ Say it like this: "Your best post in the last 30 days: 'We almost shut down in M
 ## A link to the live post
 
 - Any post, including Bolta routine and campaign drafts that went out: `get-post`, then `<network>_metrics.permalink`. X has none, and it may lag.
-- The older recurring-template queue only: `list-inbox-items` with `template_id` (a recurring row's `template.id`) and `status: "approved"` also gives `publication_statuses[].platform_post_url`.
 - Never build a link from an id. No link: say so plainly: "Bolta doesn't have a link for the X version; it went out on your X profile on <day>."
 
 ## Reports Bolta made

@@ -16,14 +16,14 @@ All decisions in one pass, then read back: scheduled (day, time, account), chang
 - **Drop:** "delete all" gets the numbered list first. `delete-post` (undo for 7 days) records no reason; at most 20 per 5 minutes.
 - **Change a post, move a time, post now, Bolta checks:** read [change, move, post now](review-change-move-post-now.md) first. A changed post needs a new yes; a declined check means not done.
 - **A client's yes** (sign-off, "send it to the client", "waiting on the client"): [client approval](review-client-approval.md), [details](review-client-details.md), [set it up for an agency](review-client-howto.md). **One idea, a version per teammate:** [team version](review-team-version.md).
-- Roles, fingerprints, errors, chat: [references/yes-move.md](review-yes-move.md). Library posts, send-backs, credits: [references/more-decisions.md](review-more-decisions.md). Read-back, DON'T offer, legacy rows: [references/read-back.md](review-read-back.md).
+- Roles, fingerprints, errors, chat: [references/yes-move.md](review-yes-move.md). Library posts, send-backs, credits: [references/more-decisions.md](review-more-decisions.md). Read-back, DON'T offer: [references/read-back.md](review-read-back.md).
 
 ## Tools
 
 - `list-inbox-items`, `list-workspace-posts`, `get-post`: read.
 - `save-post`, `submit-for-review`: draft, change, submit.
-- `approve-many-posts`: every yes, one post or many; legacy rows by `review_id`.
-- `reject-post`: a no with a reason, legacy rows too.
+- `approve-many-posts`: every yes, one post or many.
+- `reject-post`: a no with a reason.
 - `list-suggestions`: after repeated no's.
 - `delete-post`: drop. `publish-post` with `when`: a time, a new time, or `"now"`.
 - `get-voice-profile`, `update-voice-profile`: one DON'T.
