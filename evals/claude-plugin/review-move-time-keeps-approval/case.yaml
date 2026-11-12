@@ -1,16 +1,16 @@
 schema_version: "1.1"
 name: review-move-time-keeps-approval
-description: 'An approved, scheduled post moves to Thursday 10am. Changing only scheduled_time keeps the post approved and scheduled (the server writes the new time and leaves the status alone), so it is one update-post with the new time: no pull back to Draft, no new review, no second approval. update-post with a time is gated, so under claude -p the call is attempted once and reported as not done.'
+description: 'An approved, scheduled post moves to the Thursday before, 10am. Changing only scheduled_time keeps the post approved and scheduled (the server writes the new time and leaves the status alone), so it is one update-post with the new time: no pull back to Draft, no new review, no second approval. update-post with a time is gated, so under claude -p the call is attempted once and reported as not done.'
 tags: [smoke, happy]
 expected_outcome: 'review fires; reads the schedule for the post; one update-post on post 41 with a 10:00 scheduled_time and no status; no Draft, no submit-for-review, no approve-post, no publish; says honestly it is not moved yet.'
 execution:
   prompt: |
-    Earlier you showed me what's going out next week for Northwind Coffee:
+    Earlier you showed me what's scheduled for Northwind Coffee:
 
-    1. LinkedIn (Northwind Coffee), Sat Oct 24, 10:00 am: "Roastery open day recap."
-    2. X (@northwindcoffee), Fri Oct 30, 9:00 am: "Friday cold brew reminder."
+    1. LinkedIn (Northwind Coffee), Sat Oct 23 2027, 10:00 am: "Roastery open day recap."
+    2. X (@northwindcoffee), Fri Oct 29 2027, 9:00 am: "Friday cold brew reminder."
 
-    Both are approved. Move 1 to Thursday 10am. Same text.
+    Both are approved. Move 1 to the Thursday before, 10am. Same text.
   max_turns: 20
   timeout_seconds: 300
   allowed_tools: [Skill, Read]
@@ -32,7 +32,8 @@ graders:
     target: mock_calls
     pattern: '"tool":"[^"]*(list-scheduled-posts|list-workspace-posts|get-post)"'
   - name: moves-the-time
-    # One update-post on post 1 with a 10:00 time. The day is not pinned: runs happen after the mock date.
+    # One update-post on post 1 with a 10:00 time. The case's own scheduled list dates the two posts in Oct 2027, so the move is in the future
+    # (the shared list's Oct 2026 dates had passed, and the run asked which Thursday instead of moving it). The day is not pinned.
     type: tool_used
     tool: mcp__plugin_bolta_bolta__update-post
     input_match: '^(?=[\s\S]*d1000000-0000-4000-8000-000000000041)(?=[\s\S]*"scheduled_time"\W{1,6}[^"]*10:00)'
