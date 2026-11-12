@@ -97,7 +97,7 @@ Summaries; the playbook has the rest. Worked calls: [examples/](examples/README.
 - Social networks get plain text; bold and headings become look-alike letters ([media](references/post-media.md)).
 - A setting the network can't take is left out at publish (`metadata.publish_setting_warnings`).
 - A campaign's `ends_on: null` is ignored; always send `strategy_key` and a future `starts_on`. Pausing or finishing never unschedules posts.
-- Monitor Auto Reply, Loops, auto-repost and auto-plug can send once switched on in Bolta. Never suggest them.
+- Monitor Auto Reply, repeat posts, auto-repost and auto-plug can send once switched on in Bolta. Never suggest them.
 - `update-voice-profile` replaces `dos` and `donts` whole: send the full list.
 - A stale review: its text, media, accounts or time changed. Show it, ask again.
 - A declined check means not done. Say so. Never retry it or route around it.

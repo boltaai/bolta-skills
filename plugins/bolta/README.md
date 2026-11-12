@@ -54,4 +54,4 @@ Saving drafts needs none. **Bolta checks** `careful` in `/config` checks every a
 
 Bolta (mcp.bolta.ai) gets your requests and decisions. Sign-in is your AI app's: the plugin never sees a password and makes no network calls of its own.
 
-v0.5.0 (beta). [Privacy](https://bolta.ai/privacy-policy) · [Terms](https://bolta.ai/tos) · [Support](https://bolta.ai/support) · MIT licence
+v0.5.1 (beta). [Privacy](https://bolta.ai/privacy-policy) · [Terms](https://bolta.ai/tos) · [Support](https://bolta.ai/support) · MIT licence

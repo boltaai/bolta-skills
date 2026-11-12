@@ -1345,10 +1345,10 @@ assert "wiring: the guard's check texts were found ($nasks)" test "$nasks" -ge 3
 long=$(printf '%s\n' "$asks" | awk '{ n = split($0, s, /[.!?]( |$)/); for (i = 1; i <= n; i++) { c = split(s[i], x, " "); if (c >= 20) printf "[%d words] %s\n", c, s[i] } }')
 assert "wiring: every sentence in a check is under 20 words${long:+ (too long: $long)}" test -z "$long"
 assert "wiring: no check text says call" sh -c '! printf "%s\n" "$1" | grep -Eiq "\bcalls?\b"' x "$asks"
-assert "wiring: plugin.json version is 0.5.0" test "$(jfield version < "$pj")" = 0.5.0
+assert "wiring: plugin.json version is 0.5.1" test "$(jfield version < "$pj")" = 0.5.1
 assert "wiring: plugin.json name is bolta-checks" test "$(jfield name < "$pj")" = bolta-checks
 assert "wiring: plugin.json displayName is BOLTA checks" test "$(jfield displayName < "$pj")" = "BOLTA checks"
-assert "wiring: the full plugin is at the same version" test "$(jfield version < "$full/.claude-plugin/plugin.json")" = 0.5.0
+assert "wiring: the full plugin is at the same version" test "$(jfield version < "$full/.claude-plugin/plugin.json")" = 0.5.1
 assert "wiring: confirm_level defaults to standard" test "$(jfield userConfig.confirm_level.default < "$pj")" = standard
 assert "wiring: confirm_level describes both levels, standard and careful" sh -c 'printf "%s\n" "$1" | grep -Fq "standard:" && printf "%s\n" "$1" | grep -Fq "careful:"' x "$(jfield userConfig.confirm_level.description < "$pj")"
 assert "wiring: confirm_level has no third option" sh -c '! sh "$1" field userConfig.confirm_level.options.2 < "$2" >/dev/null' x "$reader" "$pj"

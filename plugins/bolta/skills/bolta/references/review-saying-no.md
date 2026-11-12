@@ -38,7 +38,7 @@ A client asks for changes with their own button ([client approval](review-client
 
 ## In Bolta instead
 
-No `reject-post` on this app: "Tap the X (Dismiss) on that post at bolta.ai/dashboard/approvals and give your reason." On an older recurring row the button reads Reject. It is greyed out while the client decides and hidden on expired rows.
+No `reject-post` on this app: "Tap the X (Dismiss) on that post at bolta.ai/dashboard/approvals and give your reason." It is greyed out while the client decides and hidden on expired rows.
 
 ## Dropping many
 

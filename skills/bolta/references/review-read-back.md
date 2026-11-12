@@ -1,6 +1,6 @@
-# The read-back, the learn line, legacy rows
+# The read-back and the learn line
 
-Read when reporting decisions, or when a legacy row is on the list.
+Read when reporting decisions.
 
 ## The read-back
 
@@ -25,13 +25,6 @@ Read when reporting decisions, or when a legacy row is on the list.
 - A reason given ("drop 5, too salesy"), or the same change twice: offer once, "Add 'no hard sell' to your DON'Ts?" On yes: `get-voice-profile` (profile id from the voice read), then `update-voice-profile` with the full DON'T list plus the new rule. Saw "Bolta checks are on in this session" at the start? Its Bolta check is the confirmation. Otherwise get a yes in words first.
 - The same reason on several no's for one Bolta routine's drafts: read Bolta's recommendation first (`list-suggestions`, `kind: "routine"` with `routine_id`, or `kind: "brand"`), name the pattern, offer the fix and apply it only on a yes ([routine](routine.md)). Those not on this app: propose one `update-routine` change yourself, or "Bolta's suggestions are in Bolta's Inbox: bolta.ai/dashboard/inbox."
 - No `reject-post` here, and asked how to record why: "Tap the X (Dismiss) on that post at bolta.ai/dashboard/approvals and give your reason. I can't do that from here."
-
-## Legacy rows (`source` recurring)
-
-Older automations only; Bolta routines never land here. The row's `id` is the `review_id`.
-- Yes: `approve-many-posts` with an item `{review_id, schedule_mode}`: `set_fixed_time` with `fixed_time` (wall clock), or `use_suggested_time`; `account_ids` only to change where it goes. No fingerprint. Without `schedule_mode`, Bolta picks a slot; `approve_only` approves without a time.
-- No: `reject-post` with the row's `post_id`, `reason` in the user's words and only `categories` that truly fit (too_salesy, too_long, wrong_tone, off_brand, factual_error, and the others listed for that call). This one records why. It can't be undone, so each gets its own Bolta check.
-- `list-inbox-items` with `template_id` (the row's `template.id`) lists the same rows if you need more detail.
 
 ## Always
 

@@ -29,7 +29,7 @@ Read for changes, pausing, stopping, running now and Monday's drafts. Start with
 
 1. `list-routine-runs`: the newest runs (50 at most). Each run's drafts are its `run_details.artifacts[].id`.
 2. Or list them all: `get-routine` `review_queue[].agent_id`, then `list-inbox-items(source="team", status="pending", agent_id=<that id>, limit=100)`, paging with `offset`, keeping rows whose `workflow_run_id` is one of those runs.
-3. Hand the list to [review](review.md). They already wait for a yes: never resend them, or look in the recurring queue.
+3. Hand the list to [review](review.md). They already wait for a yes: never resend them.
 
 Drafts sent straight to the client wait on the client, not the team: `get-routine` `review.waiting`. Report routines post nothing: Bolta emails the report. Reply drafts belong to [replies](replies.md).
 

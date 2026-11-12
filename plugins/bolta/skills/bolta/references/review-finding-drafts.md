@@ -6,9 +6,8 @@ Read when building the numbered list. Run all reads at once; reuse the workspace
 
 ## The reads
 
-- `list-inbox-items(source="team", status="pending", limit=100)`. Page with `offset` while `has_more` is true. Team rows hold posts sent for review by the user or their team, and every draft a Bolta routine or campaign wrote. Those drafts are already waiting: never send them for review again.
+- `list-inbox-items(status="pending", limit=100)`. Page with `offset` while `has_more` is true. Every row whose `source` is not `hunter` or `report` is a post waiting for a yes, decided the same way. Team rows hold posts sent for review by the user or their team, and every draft a Bolta routine or campaign wrote. Those drafts are already waiting: never send them for review again.
 - The totals (`total_team`, `total_recurring`, `total_hunter`, `total_report`) count the whole workspace whatever `source` you pass. Use them, not the page length.
-- `total_recurring` above 0: also `list-inbox-items(source="recurring")`. These are legacy rows from older automations, decided with their own calls (see [read-back.md](review-read-back.md)). Never look here for Bolta routine drafts.
 - `total_hunter` above 0: one line, "Also 3 reply drafts", and leave them to [replies](replies.md). Reports: mention the count only.
 - Any team row with a `workflow_run_id`: in the same pass, the routine and campaign reads in [grouping](review-finding-drafts-grouping.md). They name the groups: never show such a row as just "written by Bolta".
 - "Waiting on me": `list-inbox-items(source="review_status", reviewer_id="me")`.
