@@ -1273,7 +1273,7 @@ assert "wiring: the guard matcher covers all $ngated gated tools under any serve
 extra=""
 # Another server's tool that shares a Bolta tool's name (mcp__github__create-post) gets the check too, by design:
 # the guard can only ask, and the plugin cannot know which server is Bolta.
-for name in "${P}pause-routine" "${P}submit-for-review" "${P}propose-cascade" "${P}update-cascade" "${P}start-cascade" "${P}plan-routine" "${P}plan-campaign" "${P}revise-plan" "${P}recommend-routines" "${P}list-workspace-members" "${P}confirm-plan-x" "${P}list-workspace-posts" "${P}create-content-campaign" "${P}analyze-content-campaign-source" "${P}plan" "${P}list-suggestions" "${P}save-post-x" "${P}approve-many-posts-x" "${P}reject-post-x" "${P}list-business-dna" "${P}update-outreach-reply" mcp__github__search_repositories mcp__social__list-nothing "${P}publish-post-x" "x${P}publish-post" mcp____publish-post; do
+for name in "${P}pause-routine" "${P}submit-for-review" "${P}plan-team-posts" "${P}update-team-post-plan" "${P}generate-team-post-drafts" "${P}plan-routine" "${P}plan-campaign" "${P}revise-plan" "${P}recommend-routines" "${P}list-workspace-members" "${P}confirm-plan-x" "${P}list-workspace-posts" "${P}create-content-campaign" "${P}analyze-content-campaign-source" "${P}plan" "${P}list-suggestions" "${P}save-post-x" "${P}approve-many-posts-x" "${P}reject-post-x" "${P}list-business-dna" "${P}update-outreach-reply" mcp__github__search_repositories mcp__social__list-nothing "${P}publish-post-x" "x${P}publish-post" mcp____publish-post; do
   printf '%s\n' "$name" | grep -Eq -- "$pre_m" && extra="$extra $name"
 done
 assert "wiring: the guard matcher leaves other tools alone${extra:+ (matched:$extra)}" test -z "$extra"
@@ -1297,7 +1297,7 @@ for pfx in "$P" "$U" "$C" mcp__social__ mcp__claude_ai_Social_posts__; do
 done
 assert "wiring: the reconnect notice covers Bolta's tools under any server name${miss:+ (missing:$miss)}" test -z "$miss"
 # The server's tool list (tools/fixtures/claude_tools_list.json, the Release 2
-# golden: 64 listed tools): every tool in it is gated or deliberately not, and the reconnect notice
+# golden: 67 listed tools): every tool in it is gated or deliberately not, and the reconnect notice
 # reaches every one, so a new or renamed tool on the server fails here until
 # someone decides about it.
 fixture="$here/fixtures/claude_tools_list.json"
@@ -1306,10 +1306,10 @@ i=0
 while ft=$(jfield "result.tools.$i.name" < "$fixture" 2>/dev/null) && [ -n "$ft" ]; do
   ftools="$ftools $ft"; i=$((i + 1))
 done
-assert "wiring: the server tool list was read ($i tools, 64 expected)" test "$i" -eq 64
+assert "wiring: the server tool list was read ($i tools, 67 expected)" test "$i" -eq 67
 # Not gated, on purpose: reads, drafts, review sends, planning without saving,
-# saving a team version's plan (start-cascade writes drafts only), campaign briefs.
-UNGATED="add-posts-to-content-campaign analyze-content-campaign-source bulk-create-status create-content-campaign create-engagement-opportunity create-social-bucket create-voice-profile cross-platform-analytics draft-engagement-reply draft-inbound-reply get-account-analytics get-business-dna get-cascade get-connect-link get-content-campaign get-engagement-conversation get-engagement-status get-my-capabilities get-post get-post-platform-details get-posting-rules get-routine get-social-content get-voice-context get-voice-profile get-workspace list-account-insights list-suggestions plan list-accounts list-bolta-suggestions list-buckets list-business-dna list-content-campaign-posts list-content-campaigns list-engagement-capabilities list-engagements list-inbox-items list-recently-deleted list-recurring-reviews list-reviews list-routine-recommendations list-routine-runs list-routine-templates list-routines list-scheduled-posts list-voice-profiles list-workspace-members list-workspace-posts list-workspaces pause-routine plan-campaign plan-routine propose-cascade recommend-routines revise-plan search-engagement-opportunities start-cascade submit-for-review update-cascade update-outreach-reply"
+# saving a team version's plan (generate-team-post-drafts writes drafts only), campaign briefs.
+UNGATED="add-posts-to-content-campaign analyze-content-campaign-source bulk-create-status create-content-campaign create-engagement-opportunity create-social-bucket create-voice-profile cross-platform-analytics draft-engagement-reply draft-inbound-reply get-account-analytics get-business-dna get-team-post-plan get-connect-link get-content-campaign get-engagement-conversation get-engagement-status get-my-capabilities get-post get-post-platform-details get-posting-rules get-routine get-social-content get-voice-context get-voice-profile get-workspace list-account-insights list-suggestions plan list-accounts list-bolta-suggestions list-buckets list-business-dna list-content-campaign-posts list-content-campaigns list-engagement-capabilities list-engagements list-inbox-items list-recently-deleted list-recurring-reviews list-reviews list-routine-recommendations list-routine-runs list-routine-templates list-routines list-scheduled-posts list-voice-profiles list-workspace-members list-workspace-posts list-workspaces pause-routine plan-campaign plan-routine plan-team-posts recommend-routines revise-plan search-engagement-opportunities generate-team-post-drafts submit-for-review update-team-post-plan update-outreach-reply"
 # Release 1 names the Release 2 server no longer lists but still answers by name. The
 # ones that write stay gated (a model can still call them); a name listed here is allowed
 # in GATED or UNGATED without being in the fixture.

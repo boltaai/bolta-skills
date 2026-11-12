@@ -85,8 +85,9 @@ DEFAULT_FIXTURE = REPO / "tools" / "fixtures" / "claude_tools_list.json"
 #: live list lacks one, its schema comes from DEFAULT_FIXTURE. Delete a name here
 #: once the live list has it (the checker says when).
 PENDING_TOOLS = ("approve-many-posts", "reject-post", "analyze-content-campaign-source",
-                 "propose-cascade", "update-cascade", "start-cascade", "get-cascade",
+                 "plan-team-posts", "update-team-post-plan", "generate-team-post-drafts", "get-team-post-plan",
                  "list-workspace-members", "revise-plan", "confirm-plan",
+                 "plan-routine", "plan-campaign", "recommend-routines",
                  # Release 2: the folded catalog's new tools
                  "save-post", "plan", "list-suggestions", "decide-suggestion")
 #: Live tools whose saved schema adds arguments production does not take yet. Until it does,
@@ -122,8 +123,8 @@ LEGACY_TOOLS = frozenset({
     "approve-post", "approve-recurring-review", "list-reviews", "list-recurring-reviews",
     "reject-recurring-review", "get-engagement-conversation", "create-engagement-opportunity",
     "get-engagement-status", "cross-platform-analytics", "list-voice-profiles", "get-business-dna",
-    "resume-routine", "set-content-campaign-targets", "add-posts-to-content-campaign", "plan-routine",
-    "plan-campaign", "recommend-routines", "list-routine-recommendations", "list-bolta-suggestions",
+    "resume-routine", "set-content-campaign-targets", "add-posts-to-content-campaign",
+    "list-routine-recommendations", "list-bolta-suggestions",
     "decide-routine-recommendation", "decide-bolta-suggestion",
 })
 LEGACY_SECTION = "When something is missing"

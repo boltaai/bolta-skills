@@ -6,7 +6,7 @@ Read after [routine-planner.md](routine-planner.md) when the user wants a plan c
 
 - `goal`, `instructions`, `name`, `platforms`, `account_ids` (each a connected account on one of the `platforms`), `timezone`, `approval_policy`, `voice_profile_id`, `default_reviewer_ids`, `source_urls`, `template_key`.
 - `count`: drafts per run, 1 up to the routine's most (10 for posts, 5 for a research series, 8 for reused posts, 2 for articles). Advice: 1-3 to start.
-- `schedule`: `{"interval":"weekly","days":["monday","thursday"],"time":"09:00"}` (several days in one routine; `day` also works); monthly takes `day_of_month` 1-28; or a cron of weekdays or a day of the month.
+- `schedule`: `{"interval":"weekly","days":["monday","thursday"],"time":"09:00"}` (several days in one routine; `day` also works); `interval` also takes `daily` or `monthly` (with `day_of_month` 1-28); `revise-plan` also accepts `schedule` with `cron`, for example `{"cron":"0 9 * * 1,3"}`.
 - Pictures: `media_mode` (`none`, `image`, `video`, `carousel`), `media_prompt` (what to show; required here for image and video), `visual_style`, `carousel_config` (only with `carousel`): [routine-outputs.md](routine-outputs.md).
 - Replies: `topics` (up to 10), `subreddits` (up to 10). Outreach keyword monitor: `keywords` (up to 20), `subreddits`. Refused on other routines.
 

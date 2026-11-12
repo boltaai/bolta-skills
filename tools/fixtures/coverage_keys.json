@@ -1,12 +1,12 @@
 {
  "generated_by": "tools/build_coverage_fixture.py",
- "server_commit": "baf14e83b",
+ "server_commit": "64354f957",
  "golden": "boltathread/tests/fixtures/mcp_tools_list.golden.json",
  "counts": {
-  "tool_param": 243,
+  "tool_param": 274,
   "post_details": 223,
   "platform_specific": 80,
-  "tool": 64
+  "tool": 67
  },
  "keys": [
   {
@@ -6234,24 +6234,24 @@
    "scope": "file"
   },
   {
-   "id": "tool.get-account-analytics",
+   "id": "tool.generate-team-post-drafts",
    "group": "tool",
    "source": "mcp golden",
    "tokens_any": [
     [
-     "get-account-analytics"
+     "generate-team-post-drafts"
     ]
    ],
    "context_any": [],
    "scope": "file"
   },
   {
-   "id": "tool.get-cascade",
+   "id": "tool.get-account-analytics",
    "group": "tool",
    "source": "mcp golden",
    "tokens_any": [
     [
-     "get-cascade"
+     "get-account-analytics"
     ]
    ],
    "context_any": [],
@@ -6324,6 +6324,18 @@
    "tokens_any": [
     [
      "get-social-content"
+    ]
+   ],
+   "context_any": [],
+   "scope": "file"
+  },
+  {
+   "id": "tool.get-team-post-plan",
+   "group": "tool",
+   "source": "mcp golden",
+   "tokens_any": [
+    [
+     "get-team-post-plan"
     ]
    ],
    "context_any": [],
@@ -6546,12 +6558,36 @@
    "scope": "file"
   },
   {
-   "id": "tool.propose-cascade",
+   "id": "tool.plan-campaign",
    "group": "tool",
    "source": "mcp golden",
    "tokens_any": [
     [
-     "propose-cascade"
+     "plan-campaign"
+    ]
+   ],
+   "context_any": [],
+   "scope": "file"
+  },
+  {
+   "id": "tool.plan-routine",
+   "group": "tool",
+   "source": "mcp golden",
+   "tokens_any": [
+    [
+     "plan-routine"
+    ]
+   ],
+   "context_any": [],
+   "scope": "file"
+  },
+  {
+   "id": "tool.plan-team-posts",
+   "group": "tool",
+   "source": "mcp golden",
+   "tokens_any": [
+    [
+     "plan-team-posts"
     ]
    ],
    "context_any": [],
@@ -6588,6 +6624,18 @@
    "tokens_any": [
     [
      "react-to-social-content"
+    ]
+   ],
+   "context_any": [],
+   "scope": "file"
+  },
+  {
+   "id": "tool.recommend-routines",
+   "group": "tool",
+   "source": "mcp golden",
+   "tokens_any": [
+    [
+     "recommend-routines"
     ]
    ],
    "context_any": [],
@@ -6702,18 +6750,6 @@
    "scope": "file"
   },
   {
-   "id": "tool.start-cascade",
-   "group": "tool",
-   "source": "mcp golden",
-   "tokens_any": [
-    [
-     "start-cascade"
-    ]
-   ],
-   "context_any": [],
-   "scope": "file"
-  },
-  {
    "id": "tool.submit-for-review",
    "group": "tool",
    "source": "mcp golden",
@@ -6732,18 +6768,6 @@
    "tokens_any": [
     [
      "update-business-dna"
-    ]
-   ],
-   "context_any": [],
-   "scope": "file"
-  },
-  {
-   "id": "tool.update-cascade",
-   "group": "tool",
-   "source": "mcp golden",
-   "tokens_any": [
-    [
-     "update-cascade"
     ]
    ],
    "context_any": [],
@@ -6780,6 +6804,18 @@
    "tokens_any": [
     [
      "update-routine"
+    ]
+   ],
+   "context_any": [],
+   "scope": "file"
+  },
+  {
+   "id": "tool.update-team-post-plan",
+   "group": "tool",
+   "source": "mcp golden",
+   "tokens_any": [
+    [
+     "update-team-post-plan"
     ]
    ],
    "context_any": [],
@@ -6844,6 +6880,36 @@
    "tokens_any": [
     [
      "favorite_creators"
+    ]
+   ],
+   "context_any": [
+    "extract-business-dna"
+   ],
+   "scope": "file"
+  },
+  {
+   "id": "brand-setup.favorite_creators.platform",
+   "group": "tool_param",
+   "source": "mcp golden schema",
+   "tokens_any": [
+    [
+     "favorite_creators",
+     "platform"
+    ]
+   ],
+   "context_any": [
+    "extract-business-dna"
+   ],
+   "scope": "file"
+  },
+  {
+   "id": "brand-setup.favorite_creators.username",
+   "group": "tool_param",
+   "source": "mcp golden schema",
+   "tokens_any": [
+    [
+     "favorite_creators",
+     "username"
     ]
    ],
    "context_any": [
@@ -8186,6 +8252,36 @@
    "scope": "file"
   },
   {
+   "id": "revise-plan.changes.account_ids",
+   "group": "tool_param",
+   "source": "mcp golden schema",
+   "tokens_any": [
+    [
+     "changes",
+     "account_ids"
+    ]
+   ],
+   "context_any": [
+    "revise-plan"
+   ],
+   "scope": "file"
+  },
+  {
+   "id": "revise-plan.changes.approval_policy",
+   "group": "tool_param",
+   "source": "mcp golden schema",
+   "tokens_any": [
+    [
+     "changes",
+     "approval_policy"
+    ]
+   ],
+   "context_any": [
+    "revise-plan"
+   ],
+   "scope": "file"
+  },
+  {
    "id": "revise-plan.changes.campaign.account_ids",
    "group": "tool_param",
    "source": "plan_shaping.CAMPAIGN_CHANGE_KEYS",
@@ -8283,6 +8379,156 @@
     [
      "changes",
      "voice_profile_id"
+    ]
+   ],
+   "context_any": [
+    "revise-plan"
+   ],
+   "scope": "file"
+  },
+  {
+   "id": "revise-plan.changes.carousel_config",
+   "group": "tool_param",
+   "source": "mcp golden schema",
+   "tokens_any": [
+    [
+     "changes",
+     "carousel_config"
+    ]
+   ],
+   "context_any": [
+    "revise-plan"
+   ],
+   "scope": "file"
+  },
+  {
+   "id": "revise-plan.changes.count",
+   "group": "tool_param",
+   "source": "mcp golden schema",
+   "tokens_any": [
+    [
+     "changes",
+     "count"
+    ]
+   ],
+   "context_any": [
+    "revise-plan"
+   ],
+   "scope": "file"
+  },
+  {
+   "id": "revise-plan.changes.default_reviewer_ids",
+   "group": "tool_param",
+   "source": "mcp golden schema",
+   "tokens_any": [
+    [
+     "changes",
+     "default_reviewer_ids"
+    ]
+   ],
+   "context_any": [
+    "revise-plan"
+   ],
+   "scope": "file"
+  },
+  {
+   "id": "revise-plan.changes.goal",
+   "group": "tool_param",
+   "source": "mcp golden schema",
+   "tokens_any": [
+    [
+     "changes",
+     "goal"
+    ]
+   ],
+   "context_any": [
+    "revise-plan"
+   ],
+   "scope": "file"
+  },
+  {
+   "id": "revise-plan.changes.instructions",
+   "group": "tool_param",
+   "source": "mcp golden schema",
+   "tokens_any": [
+    [
+     "changes",
+     "instructions"
+    ]
+   ],
+   "context_any": [
+    "revise-plan"
+   ],
+   "scope": "file"
+  },
+  {
+   "id": "revise-plan.changes.keywords",
+   "group": "tool_param",
+   "source": "mcp golden schema",
+   "tokens_any": [
+    [
+     "changes",
+     "keywords"
+    ]
+   ],
+   "context_any": [
+    "revise-plan"
+   ],
+   "scope": "file"
+  },
+  {
+   "id": "revise-plan.changes.media_mode",
+   "group": "tool_param",
+   "source": "mcp golden schema",
+   "tokens_any": [
+    [
+     "changes",
+     "media_mode"
+    ]
+   ],
+   "context_any": [
+    "revise-plan"
+   ],
+   "scope": "file"
+  },
+  {
+   "id": "revise-plan.changes.media_prompt",
+   "group": "tool_param",
+   "source": "mcp golden schema",
+   "tokens_any": [
+    [
+     "changes",
+     "media_prompt"
+    ]
+   ],
+   "context_any": [
+    "revise-plan"
+   ],
+   "scope": "file"
+  },
+  {
+   "id": "revise-plan.changes.name",
+   "group": "tool_param",
+   "source": "mcp golden schema",
+   "tokens_any": [
+    [
+     "changes",
+     "name"
+    ]
+   ],
+   "context_any": [
+    "revise-plan"
+   ],
+   "scope": "file"
+  },
+  {
+   "id": "revise-plan.changes.platforms",
+   "group": "tool_param",
+   "source": "mcp golden schema",
+   "tokens_any": [
+    [
+     "changes",
+     "platforms"
     ]
    ],
    "context_any": [
@@ -8579,6 +8825,261 @@
    "id": "revise-plan.changes.routine.voice_profile_id",
    "group": "tool_param",
    "source": "plan_shaping.ROUTINE_CHANGE_KEYS",
+   "tokens_any": [
+    [
+     "changes",
+     "voice_profile_id"
+    ]
+   ],
+   "context_any": [
+    "revise-plan"
+   ],
+   "scope": "file"
+  },
+  {
+   "id": "revise-plan.changes.schedule",
+   "group": "tool_param",
+   "source": "mcp golden schema",
+   "tokens_any": [
+    [
+     "changes",
+     "schedule"
+    ]
+   ],
+   "context_any": [
+    "revise-plan"
+   ],
+   "scope": "file"
+  },
+  {
+   "id": "revise-plan.changes.schedule.cron",
+   "group": "tool_param",
+   "source": "mcp golden schema",
+   "tokens_any": [
+    [
+     "schedule",
+     "cron"
+    ]
+   ],
+   "context_any": [
+    "revise-plan"
+   ],
+   "scope": "file"
+  },
+  {
+   "id": "revise-plan.changes.schedule.day",
+   "group": "tool_param",
+   "source": "mcp golden schema",
+   "tokens_any": [
+    [
+     "schedule",
+     "day"
+    ]
+   ],
+   "context_any": [
+    "revise-plan"
+   ],
+   "scope": "file"
+  },
+  {
+   "id": "revise-plan.changes.schedule.day_of_month",
+   "group": "tool_param",
+   "source": "mcp golden schema",
+   "tokens_any": [
+    [
+     "schedule",
+     "day_of_month"
+    ]
+   ],
+   "context_any": [
+    "revise-plan"
+   ],
+   "scope": "file"
+  },
+  {
+   "id": "revise-plan.changes.schedule.days",
+   "group": "tool_param",
+   "source": "mcp golden schema",
+   "tokens_any": [
+    [
+     "schedule",
+     "days"
+    ]
+   ],
+   "context_any": [
+    "revise-plan"
+   ],
+   "scope": "file"
+  },
+  {
+   "id": "revise-plan.changes.schedule.interval",
+   "group": "tool_param",
+   "source": "mcp golden schema",
+   "tokens_any": [
+    [
+     "schedule",
+     "interval"
+    ]
+   ],
+   "context_any": [
+    "revise-plan"
+   ],
+   "scope": "file"
+  },
+  {
+   "id": "revise-plan.changes.schedule.interval=daily",
+   "group": "tool_param",
+   "source": "mcp golden enum",
+   "tokens_any": [
+    [
+     "interval",
+     "daily"
+    ]
+   ],
+   "context_any": [
+    "revise-plan"
+   ],
+   "scope": "file"
+  },
+  {
+   "id": "revise-plan.changes.schedule.interval=monthly",
+   "group": "tool_param",
+   "source": "mcp golden enum",
+   "tokens_any": [
+    [
+     "interval",
+     "monthly"
+    ]
+   ],
+   "context_any": [
+    "revise-plan"
+   ],
+   "scope": "file"
+  },
+  {
+   "id": "revise-plan.changes.schedule.interval=weekly",
+   "group": "tool_param",
+   "source": "mcp golden enum",
+   "tokens_any": [
+    [
+     "interval",
+     "weekly"
+    ]
+   ],
+   "context_any": [
+    "revise-plan"
+   ],
+   "scope": "file"
+  },
+  {
+   "id": "revise-plan.changes.schedule.time",
+   "group": "tool_param",
+   "source": "mcp golden schema",
+   "tokens_any": [
+    [
+     "schedule",
+     "time"
+    ]
+   ],
+   "context_any": [
+    "revise-plan"
+   ],
+   "scope": "file"
+  },
+  {
+   "id": "revise-plan.changes.source_urls",
+   "group": "tool_param",
+   "source": "mcp golden schema",
+   "tokens_any": [
+    [
+     "changes",
+     "source_urls"
+    ]
+   ],
+   "context_any": [
+    "revise-plan"
+   ],
+   "scope": "file"
+  },
+  {
+   "id": "revise-plan.changes.subreddits",
+   "group": "tool_param",
+   "source": "mcp golden schema",
+   "tokens_any": [
+    [
+     "changes",
+     "subreddits"
+    ]
+   ],
+   "context_any": [
+    "revise-plan"
+   ],
+   "scope": "file"
+  },
+  {
+   "id": "revise-plan.changes.template_key",
+   "group": "tool_param",
+   "source": "mcp golden schema",
+   "tokens_any": [
+    [
+     "changes",
+     "template_key"
+    ]
+   ],
+   "context_any": [
+    "revise-plan"
+   ],
+   "scope": "file"
+  },
+  {
+   "id": "revise-plan.changes.timezone",
+   "group": "tool_param",
+   "source": "mcp golden schema",
+   "tokens_any": [
+    [
+     "changes",
+     "timezone"
+    ]
+   ],
+   "context_any": [
+    "revise-plan"
+   ],
+   "scope": "file"
+  },
+  {
+   "id": "revise-plan.changes.topics",
+   "group": "tool_param",
+   "source": "mcp golden schema",
+   "tokens_any": [
+    [
+     "changes",
+     "topics"
+    ]
+   ],
+   "context_any": [
+    "revise-plan"
+   ],
+   "scope": "file"
+  },
+  {
+   "id": "revise-plan.changes.visual_style",
+   "group": "tool_param",
+   "source": "mcp golden schema",
+   "tokens_any": [
+    [
+     "changes",
+     "visual_style"
+    ]
+   ],
+   "context_any": [
+    "revise-plan"
+   ],
+   "scope": "file"
+  },
+  {
+   "id": "revise-plan.changes.voice_profile_id",
+   "group": "tool_param",
+   "source": "mcp golden schema",
    "tokens_any": [
     [
      "changes",

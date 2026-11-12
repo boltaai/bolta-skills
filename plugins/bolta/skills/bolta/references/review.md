@@ -27,7 +27,7 @@ All decisions in one pass, then read back: scheduled (day, time, account), chang
 - `list-suggestions`: after repeated no's.
 - `delete-post`: drop. `publish-post` with `when`: a time, a new time, or `"now"`.
 - `get-voice-profile`, `update-voice-profile`: one DON'T.
-- `propose-cascade`, `update-cascade`, `start-cascade`, `get-cascade`: team versions.
+- `plan-team-posts`, `update-team-post-plan`, `generate-team-post-drafts`, `get-team-post-plan`: team versions.
 
 ## Hand off
 

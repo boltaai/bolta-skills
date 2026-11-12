@@ -29,7 +29,7 @@ They have the connect link or a connected account, saw their brand and voice, an
 
 - `list-workspaces`, `list-accounts`, `get-voice-context`, `list-business-dna`, `list-routines`, `list-content-campaigns`, `list-inbox-items`.
 - `get-connect-link`, `extract-business-dna`, `create-voice-profile`: accounts, brand, voice.
-- `plan` (`kind` routine, campaign or recommend; left out, Bolta decides from `ask`), `revise-plan`, `confirm-plan`: Bolta's planner.
+- `plan`, `plan-routine`, `plan-campaign`, `recommend-routines`: planning. `revise-plan`: changes. `confirm-plan`: save.
 - `list-routine-templates`, `create-routine`, `activate-routine`: without it, and switching on.
 
 ## Hand off

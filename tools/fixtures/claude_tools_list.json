@@ -61,7 +61,7 @@
    {
     "name": "get-connect-link",
     "title": "Get Social Connect Link",
-    "description": "Get a URL that takes the user to Bolta's social-account connect page. Use this whenever the workspace has no connected account for the platform the user wants to publish to — OAuth cannot run inside the chat, so share this link and ask the user to complete the connection in their browser, then re-check with list-accounts.",
+    "description": "Get a URL that takes the user to Bolta's social-account connect page. Offer it first, before brand setup, when the workspace has no connected account, and say why: drafts need a destination and the voice learns from the account's own posts. OAuth cannot run inside the chat, so share this link and ask the user to complete the connection in their browser, then re-check with list-accounts.",
     "inputSchema": {
      "type": "object",
      "properties": {
@@ -370,7 +370,7 @@
      "readOnlyHint": false,
      "destructiveHint": true,
      "idempotentHint": false,
-     "openWorldHint": false
+     "openWorldHint": true
     }
    },
    {
@@ -419,7 +419,7 @@
       "posts": {
        "type": "array",
        "items": {
-        "type": "string"
+        "type": "object"
        },
        "description": "Array of posts to create. Each item takes the SAME flat keys as a single post: {\"content\": \"post text\", \"account_ids\": [\"account-uuid\"], \"social_buckets\": [\"bucket-uuid\"], \"status\": \"Draft\"|\"Scheduled\", \"requested_action\": \"draft\"|\"schedule\", \"scheduled_time\": \"ISO8601 (required when Scheduled)\", scheduled_time is Local wall-clock time in the workspace's timezone (no trailing Z and no UTC offset). Only include an offset when the user explicitly names a zone; never infer one from your own locale. \"media\": [{\"url\": \"https://...\"}]}. The nested shape ({\"contents\": [{\"content\": ...}]}) is also accepted. Either account_ids or social_buckets is required per item. requested_action='schedule' with a future scheduled_time creates the post as Scheduled (routed to Pending Approval when Safe Mode or the assistant gate requires review), exactly as for one post does; a scheduled_time with no status and no requested_action means schedule it. requested_action='publish' is NOT supported here — create the posts, then publish each with publish-post. An item with a missing, unparseable or past scheduled_time is REJECTED by itself: the rest of the batch is still queued and the response's `rejected` array names each dropped item and why. Those posts do NOT exist — report them to the user."
       },
@@ -475,7 +475,7 @@
    {
     "name": "publish-post",
     "title": "Publish Post",
-    "description": "The ONE tool that makes a post public: publish it now, or schedule it. Every post type, WordPress articles included. Call it only after the user saw the exact post and said yes. when is required, no default: \"now\" publishes immediately; a wall-clock time in the workspace's timezone schedules it. Every call goes through Bolta's approval rules: under Safe Mode, client sign-off or the AI-app approval rule a post that is not approved is refused or sent to review instead (read the result's status, not just ok); approve it first with approve-many-posts. Requires admin or owner role. AFTER SCHEDULING A BATCH: finish with one list-workspace-posts call (status=scheduled) so the card on screen shows the new state.",
+    "description": "The ONE tool that makes a post public: publish it now, or schedule it. Every post type, WordPress articles included. Call it only after the user saw the exact post and said yes. when is required, no default: \"now\" publishes immediately; a wall-clock time in the workspace's timezone schedules it. Every call goes through Bolta's approval rules: under Safe Mode, client sign-off or the AI-app approval rule a post that is not approved is refused or sent to review instead (read the result's status, not just ok); approve it first with approve-many-posts. Publishing itself is for owners and admins (creators approve Bolta's drafts and posts they are a named reviewer on; viewers never). AFTER SCHEDULING A BATCH: finish with one list-workspace-posts call (status=scheduled) so the card on screen shows the new state.",
     "inputSchema": {
      "type": "object",
      "properties": {
@@ -830,7 +830,7 @@
    {
     "name": "approve-many-posts",
     "title": "Approve Many Posts",
-    "description": "Approve several posts the user said yes to, in one call (up to 25). Each item is exactly one single-post approval: same role check, same review rules, same stale-revision check, same scheduling. Every item must carry expected_fingerprint: the content_fingerprint of that post's row in list-inbox-items, so only the version the user saw is approved. Items are handled one by one and do not depend on each other: the result lists every post with ok, its new status and whether it is scheduled, or why it was not approved (stale_review, review_conflict, schedule_time_too_soon, not waiting for review, permission). If none was approved the call fails, with the same per-post list. Tell the user about every failure, and never retry a stale one without re-reading it and showing them the new text. Repeating the call is safe: posts already approved come back with already_decided=true. One post is one item: this is also the tool for approving a single post. A source=recurring row of list-inbox-items is approved by its review_id (the row's id) instead of post_id and expected_fingerprint; it schedules at its suggested time unless schedule_mode says otherwise.",
+    "description": "Approve several posts the user said yes to, in one call (up to 25). Each item is exactly one single-post approval: same role check (owners and admins any post; creators Bolta's own drafts and posts they are a named reviewer on; viewers never), same review rules, same stale-revision check, same scheduling. Every item must carry expected_fingerprint: the content_fingerprint of that post's row in list-inbox-items, so only the version the user saw is approved. Items are handled one by one and do not depend on each other: the result lists every post with ok, its new status and whether it is scheduled, or why it was not approved (stale_review, review_conflict, schedule_time_too_soon, not waiting for review, permission). If none was approved the call fails, with the same per-post list. Tell the user about every failure, and never retry a stale one without re-reading it and showing them the new text. Repeating the call is safe: posts already approved come back with already_decided=true. One post is one item: this is also the tool for approving a single post. A source=recurring row of list-inbox-items is approved by its review_id (the row's id) instead of post_id and expected_fingerprint; it schedules at its suggested time unless schedule_mode says otherwise.",
     "inputSchema": {
      "type": "object",
      "properties": {
@@ -904,7 +904,7 @@
    {
     "name": "reject-post",
     "title": "Reject Post",
-    "description": "Turn down a post that is waiting for review, with the user's reason, so Bolta learns what not to write. Works for drafts a Bolta routine or campaign wrote and for posts sent for review (list-inbox-items source=team rows). The post is kept and marked Rejected: never deleted, scheduled or published. In a campaign it stays in the campaign and counts as rejected. Use the user's own words as the reason and add the categories that fit. If the user has not said why, ask them first and offer the reasons Bolta uses: Too salesy (too_salesy), Wrong tone (wrong_tone), Not engaging (not_engaging), Too formal (too_formal), Too casual (too_casual), Wrong format (wrong_format), Off-topic (off_topic), Says nothing (no_substance), Too long (too_long), Repetitive (repetitive), Other (other). Their answer is what Bolta learns from, and it cannot be added after the post is rejected. source=recurring rows work too: pass the row's post_id and the recurring review is turned down. Needs an admin or owner. Repeating the call is safe.",
+    "description": "Turn down a post that is waiting for review, with the user's reason, so Bolta learns what not to write. Works for drafts a Bolta routine or campaign wrote and for posts sent for review (list-inbox-items source=team rows). The post is kept and marked Rejected: never deleted, scheduled or published. In a campaign it stays in the campaign and counts as rejected. Use the user's own words as the reason and add the categories that fit. If the user has not said why, ask them first and offer the reasons Bolta uses: Too salesy (too_salesy), Wrong tone (wrong_tone), Not engaging (not_engaging), Too formal (too_formal), Too casual (too_casual), Wrong format (wrong_format), Off-topic (off_topic), Says nothing (no_substance), Too long (too_long), Repetitive (repetitive), Other (other). Their answer is what Bolta learns from, and it cannot be added after the post is rejected. source=recurring rows work too: pass the row's post_id and the recurring review is turned down. Owners and admins reject any post; creators reject Bolta's own drafts and posts they are a named reviewer on; viewers never. Repeating the call is safe.",
     "inputSchema": {
      "type": "object",
      "properties": {
@@ -1255,7 +1255,7 @@
      "readOnlyHint": false,
      "destructiveHint": false,
      "idempotentHint": true,
-     "openWorldHint": false
+     "openWorldHint": true
     }
    },
    {
@@ -1742,7 +1742,7 @@
    {
     "name": "create-voice-profile",
     "title": "Create Voice Profile",
-    "description": "Create a new brand voice profile for a workspace. This is the first step in the voice bootstrap flow. Requires voice:write permission.\n\nThe server completes the profile for you: it links the workspace's default Business DNA and copies its brand values / tone of voice / tone constraints / dos / donts into any field you left empty, defaults the content intent, assigns the workspace's unassigned connected social accounts to this voice, seeds starter platform rules and content structures for the platforms those accounts publish to, and derives the workspace's first Product from the Business DNA. Anything you pass explicitly is kept as-is. The response includes a 'bootstrapped' object listing what was filled in — report it to the user so they know what was set up. When the brand has a website, prefer extract-business-dna with setup=true: it makes the voice the way bolta.ai does, from Bolta's own reading of the site. Use this call when there is no website (a writing_sample the user pastes) or for a second voice.",
+    "description": "Create a new brand voice profile for a workspace: for a person's own voice or a second voice. A brand's first voice comes from extract-business-dna setup=true. Requires voice:write permission.\n\nThe server completes the profile for you: it links the workspace's default Business DNA and copies its brand values / tone of voice / tone constraints / dos / donts into any field you left empty, defaults the content intent, assigns the workspace's unassigned connected social accounts to this voice, seeds starter platform rules and content structures for the platforms those accounts publish to, and derives the workspace's first Product from the Business DNA. Anything you pass explicitly is kept as-is. The response includes a 'bootstrapped' object listing what was filled in — report it to the user so they know what was set up. When the brand has a website, prefer extract-business-dna with setup=true: it makes the voice the way bolta.ai does, from Bolta's own reading of the site. Use this call when there is no website (a writing_sample the user pastes) or for a second voice.",
     "inputSchema": {
      "type": "object",
      "properties": {
@@ -2085,11 +2085,11 @@
       },
       "name": {
        "type": "string",
-       "description": "Optional name for the resulting Business DNA record."
+       "description": "Older clients only: a brand keeps one Business DNA. Leave it out."
       },
       "set_as_default": {
        "type": "boolean",
-       "description": "Whether this DNA becomes the workspace default (defaults to true)."
+       "description": "Older clients only: a brand keeps one Business DNA. Leave it out."
       },
       "preview": {
        "type": "boolean",
@@ -2132,15 +2132,52 @@
       },
       "products": {
        "type": "array",
+       "maxItems": 5,
        "items": {
-        "type": "string"
+        "anyOf": [
+         {
+          "type": "string"
+         },
+         {
+          "type": "object",
+          "properties": {
+           "name": {
+            "type": "string"
+           },
+           "description": {
+            "type": "string"
+           },
+           "url": {
+            "type": "string"
+           }
+          },
+          "required": [
+           "name"
+          ],
+          "additionalProperties": false
+         }
+        ]
        },
        "description": "With setup=true: up to 5 products or services the user named, as {name, description?, url?}. Added to the brand."
       },
       "favorite_creators": {
        "type": "array",
+       "maxItems": 10,
        "items": {
-        "type": "string"
+        "type": "object",
+        "properties": {
+         "platform": {
+          "type": "string"
+         },
+         "username": {
+          "type": "string"
+         }
+        },
+        "required": [
+         "platform",
+         "username"
+        ],
+        "additionalProperties": false
        },
        "description": "With setup=true: creators the user said they admire, as {platform, username}. Added as the voice's inspiration."
       }
@@ -2313,7 +2350,7 @@
    {
     "name": "list-routine-templates",
     "title": "List Routine Templates",
-    "description": "Browse the first-party routine library. A RoutineTemplate is the USER-FACING behavior description: what outcome it produces, which triggers it supports, which sources it can consume, which approval policies are legal for it, and the default instructions it seeds. Start here when the user describes an outcome they want to happen repeatedly (\"post a weekly recap\", \"reply to relevant Reddit threads every morning\"), then pass the chosen `key` to create-routine as `template_key`. Read-only. Templates whose `available_in_workspace` is false cannot be created here yet — say so rather than attempting it.",
+    "description": "Read the fixed first-party routine template catalog. Returns configuration data, not new tool definitions or executable operations. Selecting a template does not execute it. Use create-routine to save its configuration, update-routine to edit it, activate-routine to enable future triggers, and run-routine-now to start a run. Browse the first-party routine library. A RoutineTemplate is the USER-FACING behavior description: what outcome it produces, which triggers it supports, which sources it can consume, which approval policies are legal for it, and the default instructions it seeds. Start here when the user describes an outcome they want to happen repeatedly (\"post a weekly recap\", \"reply to relevant Reddit threads every morning\"), then pass the chosen `key` to create-routine as `template_key`. Read-only. Templates whose `available_in_workspace` is false cannot be created here yet — say so rather than attempting it.",
     "inputSchema": {
      "type": "object",
      "properties": {
@@ -2410,7 +2447,7 @@
    {
     "name": "create-routine",
     "title": "Create Routine",
-    "description": "Save a repeatable outcome as a routine. This is the tool for \"do this every weekday morning\", \"run this weekly\", \"keep doing this\". It is the only automation doorway on this surface. Pass a `template_key` from list-routine-templates — that is how routines are made. \n\nThe routine is always created as a DRAFT and never fires until activate-routine is called — creating one is not arming one. `approval_policy` may only ever TIGHTEN the workspace's policy: 'review_every_artifact' always forces human approval, while 'auto' is honoured only where the workspace already allows it. Ask the user whether replies/posts need approval and set it explicitly rather than assuming.",
+    "description": "Create one saved routine configuration from a first-party template; this operation does not run the template or invoke a caller-selected tool. Save a repeatable outcome as a routine. This is the tool for \"do this every weekday morning\", \"run this weekly\", \"keep doing this\". It is the only automation doorway on this surface. Pass a `template_key` from list-routine-templates — that is how routines are made. \n\nThe routine is always created as a DRAFT and never fires until activate-routine is called — creating one is not arming one. `approval_policy` may only ever TIGHTEN the workspace's policy: 'review_every_artifact' always forces human approval, while 'auto' is honoured only where the workspace already allows it. Ask the user whether replies/posts need approval and set it explicitly rather than assuming.",
     "inputSchema": {
      "type": "object",
      "properties": {
@@ -2536,7 +2573,7 @@
    {
     "name": "update-routine",
     "title": "Update Routine",
-    "description": "Change a routine's configuration — schedule, instructions, approval policy, sources, outputs. Partial update: send only what changes. `status` is NOT writable here; use activate-routine / pause-routine / archive-routine so each lifecycle change is audited on its own. `template_key` and `workflow_definition_key` are immutable — create a new routine instead. An archived routine cannot be edited.",
+    "description": "Patch one saved routine configuration; this operation does not execute the routine or change its lifecycle state. An active routine uses the new settings on future runs. Change a routine's configuration — schedule, instructions, approval policy, sources, outputs. Partial update: send only what changes. `status` is NOT writable here; use activate-routine / pause-routine / archive-routine so each lifecycle change is audited on its own. `template_key` and `workflow_definition_key` are immutable — create a new routine instead. An archived routine cannot be edited.",
     "inputSchema": {
      "type": "object",
      "properties": {
@@ -2583,7 +2620,7 @@
        "items": {
         "type": "string"
        },
-       "description": "Narrowed capability subset"
+       "description": "Optional capability taxonomy labels from the selected template; these cannot grant tools or define new operations."
       },
       "output_config": {
        "type": "object",
@@ -2668,7 +2705,7 @@
    {
     "name": "activate-routine",
     "title": "Activate Routine",
-    "description": "Arm a routine so its trigger fires. A scheduled routine starts running on its schedule from this point; a source-driven one starts reacting to events. The server re-validates the whole definition against current workspace state here, so activation can fail with a typed reason (missing source, disconnected account, plan gate) even though saving succeeded. It does not run anything now: the first run is at next_run_at (read it with get-routine). run-routine-now runs it immediately and spends credits. Also the way to resume a paused routine (same call). Tell the user what will now happen and when the first run is due.",
+    "description": "Enable future triggers for one existing routine. This is a fixed lifecycle operation, not a dispatcher accepting operation names or tool definitions. Arm a routine so its trigger fires. A scheduled routine starts running on its schedule from this point; a source-driven one starts reacting to events. The server re-validates the whole definition against current workspace state here, so activation can fail with a typed reason (missing source, disconnected account, plan gate) even though saving succeeded. It does not run anything now: the first run is at next_run_at (read it with get-routine). run-routine-now runs it immediately and spends credits. Also the way to resume a paused routine (same call). Tell the user what will now happen and when the first run is due.",
     "inputSchema": {
      "type": "object",
      "properties": {
@@ -2761,7 +2798,7 @@
    {
     "name": "run-routine-now",
     "title": "Run Routine Now",
-    "description": "Dispatch an active routine immediately, off-schedule. Identical execution to a scheduled run — same runtime, same approval policy, same idempotency — differing only in the recorded trigger. A second call within 30 seconds returns the same run with started=false. A call while a run is still going is refused with 409 workflow_already_running: say it is already running. Each run spends credits. Drafts and paused routines cannot be run; arm them first. Returns immediately with the run inline — `run.id` plus `run.status`, derived on every read — and `started`. Call list-routine-runs for that routine to see how the run progressed; there is no per-run polling tool.",
+    "description": "Start one run of an existing routine with its saved template and configuration. The server executes that bounded automation, which can generate content and, where the workspace permits, schedule posts or send replies. It does not accept a new operation or tool definition. Dispatch an active routine immediately, off-schedule. Identical execution to a scheduled run — same runtime, same approval policy, same idempotency — differing only in the recorded trigger. A second call within 30 seconds returns the same run with started=false. A call while a run is still going is refused with 409 workflow_already_running: say it is already running. Each run spends credits. Drafts and paused routines cannot be run; arm them first. Returns immediately with the run inline — `run.id` plus `run.status`, derived on every read — and `started`. Call list-routine-runs for that routine to see how the run progressed; there is no per-run polling tool.",
     "inputSchema": {
      "type": "object",
      "properties": {
@@ -3232,9 +3269,9 @@
     }
    },
    {
-    "name": "propose-cascade",
+    "name": "plan-team-posts",
     "title": "Plan Team Version",
-    "description": "Plan a team version: one idea written as one post per person or function, each in that person's voice, for the account that voice posts from. Returns the plan as rows (who, voice, account, angle) with an id and a revision. Saves the plan only: nothing is written, charged, scheduled or posted. Put the people and functions the user named in participants; Bolta never adds one. With no participants it uses the workspace's person voices and says so. A row Bolta could not place (a name that matches several voices or none, a voice with several accounts) comes back marked unresolved with the choices: ask the user, never choose for them. Show the plan to the user before start-cascade.",
+    "description": "Plan a team version: one idea written as one post per person or function, each in that person's voice, for the account that voice posts from. Returns the plan as rows (who, voice, account, angle) with an id and a revision. Saves the plan only: nothing is written, charged, scheduled or posted. Put the people and functions the user named in participants; Bolta never adds one. With no participants it uses the workspace's person voices and says so. A row Bolta could not place (a name that matches several voices or none, a voice with several accounts) comes back marked unresolved with the choices: ask the user, never choose for them. Show the plan to the user before generate-team-post-drafts.",
     "inputSchema": {
      "type": "object",
      "properties": {
@@ -3293,7 +3330,7 @@
     }
    },
    {
-    "name": "update-cascade",
+    "name": "update-team-post-plan",
     "title": "Change Team Version",
     "description": "Change a team version that has not been started: give a row another voice or account, remove a row, or add a row for a voice. Pass the revision the user last saw; if the plan changed since, the call is refused and the current plan comes back. Giving a row another voice makes it that person's row. Use it to settle an unresolved row with the user's answer. Saves the plan only: nothing is written, charged, scheduled or posted.",
     "inputSchema": {
@@ -3307,7 +3344,7 @@
       "cascade_id": {
        "type": "string",
        "format": "uuid",
-       "description": "The team version's id, from propose-cascade."
+       "description": "The team version's id, from plan-team-posts."
       },
       "revision": {
        "type": "string",
@@ -3381,9 +3418,9 @@
     }
    },
    {
-    "name": "start-cascade",
+    "name": "generate-team-post-drafts",
     "title": "Write Team Version Drafts",
-    "description": "Write the drafts of a team version the user has seen and said yes to: one draft per row, saved together as one group for review. Drafts only: nothing is approved, scheduled or posted, and Bolta charges for a draft only when it is later approved. Pass the id and the revision the user saw. Refused if the plan changed since, if a row is still unresolved, if the plan or a full review queue blocks writing, or if it was already started (a repeat writes nothing twice). It returns as soon as the drafts are queued, before any is written: call get-cascade to see which drafts are saved, and never say they are written until it shows them.",
+    "description": "Write the drafts of a team version the user has seen and said yes to: one draft per row, saved together as one group for review. Drafts only: nothing is approved, scheduled or posted, and Bolta charges for a draft only when it is later approved. Pass the id and the revision the user saw. Refused if the plan changed since, if a row is still unresolved, if the plan or a full review queue blocks writing, or if it was already started (a repeat writes nothing twice). It returns as soon as the drafts are queued, before any is written: call get-team-post-plan to see which drafts are saved, and never say they are written until it shows them.",
     "inputSchema": {
      "type": "object",
      "properties": {
@@ -3395,7 +3432,7 @@
       "cascade_id": {
        "type": "string",
        "format": "uuid",
-       "description": "The team version's id, from propose-cascade."
+       "description": "The team version's id, from plan-team-posts."
       },
       "revision": {
        "type": "string",
@@ -3417,7 +3454,7 @@
     }
    },
    {
-    "name": "get-cascade",
+    "name": "get-team-post-plan",
     "title": "Get Team Version",
     "description": "Read a team version: its rows, and for each one whether its draft is not started, queued or being written, saved, held back (its account is not connected) or failed, with the reason when Bolta recorded one. Gives the requested and saved counts, the saved posts' ids and where to review them. A row counts as written only when its draft is saved. Changes nothing.",
     "inputSchema": {
@@ -3431,7 +3468,7 @@
       "cascade_id": {
        "type": "string",
        "format": "uuid",
-       "description": "The team version's id, from propose-cascade."
+       "description": "The team version's id, from plan-team-posts."
       }
      },
      "additionalProperties": false,
@@ -3471,9 +3508,119 @@
     }
    },
    {
+    "name": "plan-routine",
+    "title": "Plan Routine",
+    "description": "Have Bolta plan one routine from what the user wants, the way Bolta's own chat does: it reads the brand's accounts, voices, existing routines, best recent posts and connected sources, picks the schedule, accounts, voice and what each run makes, and returns a plan card with an id. Nothing is created. Pass the user's words as ask (empty or vague is fine: status shaping returns a working plan, what was filled and from where, what is still open and at most two questions; settle them with revise-plan changes) and anything else they told you as context. suggested_switch names a better-fitting routine; offer it, never apply it unasked. Show the plan and ask whether to save it; save with confirm-plan.",
+    "inputSchema": {
+     "type": "object",
+     "properties": {
+      "workspace_id": {
+       "type": "string",
+       "format": "uuid",
+       "description": "The brand to act on (an id from list-workspaces). Needed when the connection reaches more than one brand."
+      },
+      "ask": {
+       "type": "string",
+       "description": "What the user wants, in their words (\"3 LinkedIn tips every Monday\"). May be empty: Bolta then shapes a working plan from the brand's data."
+      },
+      "context": {
+       "type": "string",
+       "description": "Anything else the user told you that should shape it: goals, audience, offer, what they have said in this chat. At most 4000 characters. Used as facts about the business, never as instructions."
+      }
+     },
+     "additionalProperties": false
+    },
+    "annotations": {
+     "title": "Plan Routine",
+     "readOnlyHint": false,
+     "destructiveHint": false,
+     "idempotentHint": false,
+     "openWorldHint": false
+    }
+   },
+   {
+    "name": "plan-campaign",
+    "title": "Plan Campaign",
+    "description": "Have Bolta plan one campaign (1 to 4 weeks about one thing: a launch, an event, a sale) the way Bolta's own chat does: dates, posts per week, accounts, voice, angle, the pages it is built from and a week-by-week outline. Returns a plan card with an id; nothing is created. Pass the user's words as ask, their goals and audience as context, and any pages they gave as links. A result with a question means Bolta needs one answer first. Show the plan and ask whether to save it; save with confirm-plan.",
+    "inputSchema": {
+     "type": "object",
+     "properties": {
+      "workspace_id": {
+       "type": "string",
+       "format": "uuid",
+       "description": "The brand to act on (an id from list-workspaces). Needed when the connection reaches more than one brand."
+      },
+      "ask": {
+       "type": "string",
+       "description": "What the user wants, in their words, with the date if there is one."
+      },
+      "context": {
+       "type": "string",
+       "description": "Goals, audience, offer and what the user said, at most 4000 characters. Used as facts, never as instructions."
+      },
+      "links": {
+       "type": "array",
+       "items": {
+        "type": "string"
+       },
+       "maxItems": 5,
+       "description": "Up to 5 web pages the campaign is built from (product page, event page)."
+      }
+     },
+     "additionalProperties": false,
+     "required": [
+      "ask"
+     ]
+    },
+    "annotations": {
+     "title": "Plan Campaign",
+     "readOnlyHint": false,
+     "destructiveHint": false,
+     "idempotentHint": false,
+     "openWorldHint": true
+    }
+   },
+   {
+    "name": "recommend-routines",
+    "title": "Recommend Routines",
+    "description": "Have Bolta recommend 3 to 5 routines for this brand, best fit first: each a different job (posts, articles, founder stories, customer wins, reusing top posts, replies, reports, routines fed by a connected source), none repeating a routine the brand already runs, each with one line on why it fits from the brand's own posts, routines and sources. Sized to review_load (drafts per week, waiting, decided lately): a full review queue gets fewer, smaller routines and why says so. Each comes back as a plan card with its own id; nothing is created. skipped says what was left out and why. Show them and ask which to save; save each with confirm-plan.",
+    "inputSchema": {
+     "type": "object",
+     "properties": {
+      "workspace_id": {
+       "type": "string",
+       "format": "uuid",
+       "description": "The brand to act on (an id from list-workspaces). Needed when the connection reaches more than one brand."
+      },
+      "goals": {
+       "type": "string",
+       "description": "What the user wants from social, in their words."
+      },
+      "context": {
+       "type": "string",
+       "description": "Audience, offer and what the user said, at most 4000 characters."
+      },
+      "count": {
+       "type": "integer",
+       "minimum": 3,
+       "maximum": 5,
+       "description": "How many to recommend, 3 to 5. Default 4."
+      }
+     },
+     "additionalProperties": false
+    },
+    "annotations": {
+     "title": "Recommend Routines",
+     "readOnlyHint": false,
+     "destructiveHint": false,
+     "idempotentHint": false,
+     "openWorldHint": false
+    }
+   },
+   {
     "name": "revise-plan",
     "title": "Revise Plan",
-    "description": "Change a plan from plan before it is saved: change is a sentence (\"Tuesdays instead\"), changes sets exact fields agreed in the chat with no guessing; both apply the sentence first. Returns the new plan with a new id and what changed; the old id can no longer be saved. Nothing is created.",
+    "description": "Revise one stored routine or campaign proposal, identified by proposal_id. This edits the proposal only; it does not create, activate or run a routine or campaign. Change a plan from plan before it is saved: change is a sentence (\"Tuesdays instead\"), changes sets exact fields agreed in the chat with no guessing; both apply the sentence first. Returns the new plan with a new id and what changed; the old id can no longer be saved. Nothing is created.",
     "inputSchema": {
      "type": "object",
      "properties": {
@@ -3492,6 +3639,130 @@
        "description": "What to change, in the user's words. Send this, changes, or both."
       },
       "changes": {
+       "additionalProperties": false,
+       "minProperties": 1,
+       "properties": {
+        "account_ids": {
+         "items": {
+          "type": "string"
+         },
+         "type": "array"
+        },
+        "approval_policy": {
+         "type": "string"
+        },
+        "carousel_config": {
+         "type": "object",
+         "description": "Carousel settings validated by the selected routine template."
+        },
+        "count": {
+         "maximum": 10,
+         "minimum": 1,
+         "type": "integer"
+        },
+        "default_reviewer_ids": {
+         "items": {
+          "type": "string"
+         },
+         "type": "array"
+        },
+        "goal": {
+         "type": "string"
+        },
+        "instructions": {
+         "type": "string"
+        },
+        "keywords": {
+         "items": {
+          "type": "string"
+         },
+         "type": "array"
+        },
+        "media_mode": {
+         "type": "string"
+        },
+        "media_prompt": {
+         "type": "string"
+        },
+        "name": {
+         "type": "string"
+        },
+        "platforms": {
+         "items": {
+          "type": "string"
+         },
+         "type": "array"
+        },
+        "schedule": {
+         "additionalProperties": false,
+         "properties": {
+          "cron": {
+           "type": "string"
+          },
+          "day_of_month": {
+           "type": "integer"
+          },
+          "days": {
+           "oneOf": [
+            {
+             "type": "string"
+            },
+            {
+             "type": "array",
+             "items": {
+              "type": "string"
+             }
+            }
+           ]
+          },
+          "interval": {
+           "enum": [
+            "daily",
+            "weekly",
+            "monthly"
+           ],
+           "type": "string"
+          },
+          "time": {
+           "type": "string"
+          },
+          "day": {
+           "type": "string"
+          }
+         },
+         "type": "object"
+        },
+        "source_urls": {
+         "items": {
+          "type": "string"
+         },
+         "type": "array"
+        },
+        "subreddits": {
+         "items": {
+          "type": "string"
+         },
+         "type": "array"
+        },
+        "template_key": {
+         "type": "string"
+        },
+        "timezone": {
+         "type": "string"
+        },
+        "topics": {
+         "items": {
+          "type": "string"
+         },
+         "type": "array"
+        },
+        "visual_style": {
+         "type": "string"
+        },
+        "voice_profile_id": {
+         "type": "string"
+        }
+       },
        "type": "object",
        "description": "Exact fields to set. Routine: goal, instructions, name, count (1 to the template's max: 10 posts, 5 deep dives, 8 repurposed, 2 articles), platforms, account_ids, schedule ({interval: daily|weekly|monthly, days, time HH:MM, day_of_month} or {cron}), timezone, media_mode (none|image|video|carousel), media_prompt, visual_style, carousel_config ({slideCount 2-10, visualStyle, aspectRatio, continuity, useBrand}), voice_profile_id, default_reviewer_ids, approval_policy, source_urls, template_key (any routine template from list-routine-templates except product_launch_sequence; a source-driven one stays unsaved until its source is connected), topics and subreddits (reply routines), keywords and subreddits (outreach_listening). Campaign: goal, instructions, name, platforms, account_ids, voice_profile_id, source_urls."
       }
@@ -3512,7 +3783,7 @@
    {
     "name": "confirm-plan",
     "title": "Confirm Plan",
-    "description": "Save a plan the user said yes to, exactly as Bolta planned it (by its id). switch_on false (default): a routine is saved and off, a campaign is saved as a draft; nothing runs. switch_on true: saved, switched on and the first run or generation starts, which uses credits and leads to posts. Ask first, and ask separately before switch_on true. Confirming the same id again returns what was saved and runs nothing. A plan that still needs something (a connection, reply topics, keywords, the real material) is refused as plan_not_ready, naming what is missing.",
+    "description": "Accept one stored proposal by proposal_id and materialize its already-previewed routine or campaign configuration. It cannot accept arbitrary operations or tool definitions. Save a plan the user said yes to, exactly as Bolta planned it (by its id). switch_on false (default): a routine is saved and off, a campaign is saved as a draft; nothing runs. switch_on true: saved, switched on and the first run or generation starts, which uses credits and leads to posts. Ask first, and ask separately before switch_on true. Confirming the same id again returns what was saved and runs nothing. A plan that still needs something (a connection, reply topics, keywords, the real material) is refused as plan_not_ready, naming what is missing.",
     "inputSchema": {
      "type": "object",
      "properties": {
@@ -3547,7 +3818,7 @@
    {
     "name": "plan",
     "title": "Plan",
-    "description": "Have Bolta plan the way its own chat does, reading the brand's accounts, voices, existing routines, best recent posts and connected sources. Nothing is created; each plan is a card with an id. Pass the user's words as ask: Bolta decides whether it is a routine (something that repeats) or a campaign (1 to 4 weeks about one thing), as its own chat does. kind only overrides that. kind=routine: one routine from what the user wants (ask may be empty or vague: status shaping returns a working plan, what was filled and from where, what is still open and at most two questions; settle them with revise-plan changes; suggested_switch names a better-fitting routine, offer it, never apply it unasked). kind=campaign: one campaign, 1 to 4 weeks about one thing (a launch, an event, a sale), with dates, posts per week, accounts, voice, angle, the pages it is built from and a week-by-week outline; ask is required, a result with a question means Bolta needs one answer first. kind=recommend: 3 to 5 routines (count), best fit first, each a different job, none repeating one the brand runs, each with why it fits, sized to review_load; skipped says what was left out and why; ask is the user's goals. Show the plan(s) and ask whether to save; save each with confirm-plan.",
+    "description": "Create a routine or campaign proposal, or recommend routine proposals. These operations are also exposed individually as plan-routine, plan-campaign and recommend-routines, each with its own input schema and annotations. Have Bolta plan the way its own chat does, reading the brand's accounts, voices, existing routines, best recent posts and connected sources. Nothing is created; each plan is a card with an id. Pass the user's words as ask: Bolta decides whether it is a routine (something that repeats) or a campaign (1 to 4 weeks about one thing), as its own chat does. kind only overrides that. kind=routine: one routine from what the user wants (ask may be empty or vague: status shaping returns a working plan, what was filled and from where, what is still open and at most two questions; settle them with revise-plan changes; suggested_switch names a better-fitting routine, offer it, never apply it unasked). kind=campaign: one campaign, 1 to 4 weeks about one thing (a launch, an event, a sale), with dates, posts per week, accounts, voice, angle, the pages it is built from and a week-by-week outline; ask is required, a result with a question means Bolta needs one answer first. kind=recommend: 3 to 5 routines (count), best fit first, each a different job, none repeating one the brand runs, each with why it fits, sized to review_load; skipped says what was left out and why; ask is the user's goals. Show the plan(s) and ask whether to save; save each with confirm-plan.",
     "inputSchema": {
      "type": "object",
      "properties": {
@@ -3595,7 +3866,7 @@
      "readOnlyHint": false,
      "destructiveHint": false,
      "idempotentHint": false,
-     "openWorldHint": false
+     "openWorldHint": true
     }
    },
    {
