@@ -1,7 +1,7 @@
 schema_version: "1.1"
 name: ui-routine-recommend-preview
 description: 'The web''s routine prompt (buildAiAppPrompt routine): recommend 3 to 5 routines for DevConsole with output, schedule and timezone, account and voice for each; nothing saved.'
-tags: [uiprompts]
+tags: [uiprompts-screens]
 expected_outcome: 'bolta fires; reads brand, accounts and posts; Bolta''s planner (recommend) or templates; 3-5 numbered routines each with output, schedule, timezone, account, voice; asks which; nothing saved.'
 execution:
   prompt: |

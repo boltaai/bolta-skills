@@ -1,7 +1,7 @@
 schema_version: "1.1"
 name: ui-brand-web-preview-noaccount
 description: 'The web''s own Brand prompt (lib/ai-apps.ts buildAiAppPrompt brand) for Ferro Bikes from ferrobikes.example, nothing connected. Preview read, the five parts, assumptions, the connect link for the account the voice will use; nothing saved.'
-tags: [uiprompts]
+tags: [uiprompts-screens]
 expected_outcome: 'bolta fires; extract-business-dna preview true; no saving read; nothing saved; topics and a sample post shown; assumptions flagged; get-connect-link and its link shown.'
 execution:
   prompt: |
@@ -26,7 +26,7 @@ graders:
     # Never a saving website read before the yes.
     type: 'tool_used'
     tool: 'mcp__plugin_bolta_bolta__extract-business-dna'
-    input_match: '^(?![\s\S]*"preview"\W{1,6}true)'
+    input_match: '^(?![\s\S]*"(?:preview|check)"\W{1,6}true)'
     min: 0
     max: 0
   - name: nothing-saved

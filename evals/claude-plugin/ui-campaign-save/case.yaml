@@ -1,7 +1,7 @@
 schema_version: "1.1"
 name: ui-campaign-save
 description: 'After the outline the user confirms. The campaign is saved as a draft, linked in Bolta, and starting draft generation is asked separately. Never started.'
-tags: [uiprompts]
+tags: [uiprompts-screens]
 expected_outcome: 'bolta fires; confirm-plan without switch_on, or create-content-campaign; never set-content-campaign-status; campaign link; says draft/not started; asks before starting.'
 execution:
   prompt: |

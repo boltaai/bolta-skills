@@ -1,7 +1,7 @@
 schema_version: "1.1"
 name: ui-brand-notes-draft
 description: 'Lumen Dental Studio pastes its notes after the Brand-from-notes prompt. Bolta drafts the profile from the notes only (offer, audience, tone, DOs and DON''Ts, a sample post), names the Facebook page the voice will use, and saves nothing until a yes.'
-tags: [uiprompts]
+tags: [uiprompts-screens]
 expected_outcome: 'bolta fires; nothing saved; no website read; shows the profile with the notes'' rules; names the Facebook page for the voice; asks before saving; no invented facts.'
 execution:
   prompt: |

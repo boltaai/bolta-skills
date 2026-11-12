@@ -1,0 +1,89 @@
+schema_version: "1.1"
+name: ui-final-brand-connect-first
+description: "The final Brand prompt for Ferro Bikes with nothing connected: the connect link leads the reply, before the preview."
+tags: [uiprompts]
+expected_outcome: "bolta fires; get-connect-link; the link appears before the positioning; preview only; nothing saved."
+execution:
+  prompt: |
+    Use Bolta to set up our brand for Ferro Bikes. If no social accounts are connected, give me the link to connect one first. Start from our website, ferrobikes.example, and add what you know about me and our business from our chats and any notes or writing samples I share. Preview before saving: positioning, products, writing rules, topics and a sample post. Flag assumptions. Only after I say yes, save it, assign the voice to our connected accounts, and link me to review it in Bolta.
+  max_turns: 25
+  timeout_seconds: 480
+  allowed_tools: [Skill, Read]
+graders:
+  - name: skill-fired
+    # The Bolta skill owns this ask.
+    type: 'tool_used'
+    tool: 'Skill'
+    input_match: '"skill"\s*:\s*"(?:[\w-]+:)?(bolta)"'
+    min: 1
+  - name: reads-site-in-preview
+    # Website import in preview first.
+    type: 'tool_used'
+    tool: 'mcp__plugin_bolta_bolta__extract-business-dna'
+    input_match: '"preview"\W{1,6}true'
+    min: 1
+  - name: no-saving-read
+    # Never a saving website read before the yes.
+    type: 'tool_used'
+    tool: 'mcp__plugin_bolta_bolta__extract-business-dna'
+    input_match: '^(?![\s\S]*"(?:preview|check)"\W{1,6}true)'
+    min: 0
+    max: 0
+  - name: nothing-saved
+    # Nothing saved before the yes.
+    type: 'regex'
+    pattern: '"name"\s*:\s*"mcp__plugin_bolta_bolta__(create-voice-profile|update-voice-profile|update-business-dna|save-post|bulk-create-posts|create-post|create-routine|confirm-plan|create-content-campaign)"'
+    target: 'trace'
+    match: 'not_contains'
+  - name: nothing-public
+    # Nothing published, scheduled, approved, switched on, run or started.
+    type: 'regex'
+    pattern: '"name"\s*:\s*"mcp__plugin_bolta_bolta__(publish-post|schedule-post|approve-post|approve-many-posts|activate-routine|resume-routine|run-routine-now|set-content-campaign-status|voice-generate)"'
+    target: 'trace'
+    match: 'not_contains'
+  - name: shows-sample-post
+    # One sample post.
+    type: 'regex'
+    pattern: 'sample post|example post|sample \(|\bsample\b'
+    flags: 'i'
+  - name: flags-assumptions
+    # Flags assumptions.
+    type: 'regex'
+    pattern: 'assum|inferred|my (guess|reading)|not (stated|on the site|from the site)|the site (doesn''t|does not)'
+    flags: 'i'
+  - name: connect-link
+    # No account connected: gets the connect link.
+    type: 'tool_used'
+    tool: 'mcp__plugin_bolta_bolta__get-connect-link'
+    min: 1
+  - name: shows-connect-link
+    # Shows the connect link (owner rule: the voice needs an account).
+    type: 'regex'
+    pattern: 'bolta\.ai/dashboard/account/socials'
+    flags: 'i'
+  - name: asks-before-saving
+    # Asks before saving.
+    type: 'regex'
+    pattern: '(save|right|correct|look good|go ahead|shall I|should I|change)[^?\n]{0,100}\?|say \W{0,3}save'
+    flags: 'i'
+  - name: no-ids
+    # No ids in what the user reads (ids inside a Bolta link are fine).
+    type: 'regex'
+    pattern: '(?<![/=])\b[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}\b|(?<![/=])\b(linkedin_org|facebook_page)_\d+'
+    flags: 'i'
+    match: 'not_contains'
+  - name: plain-words
+    # No tool names or internal field names in what the user reads.
+    type: 'regex'
+    pattern: '\b(MCP|workspace_id|proposal_id|source_bindings?|approval_policy|review_every_artifact|extract-business-dna|create-voice-profile|update-voice-profile|confirm-plan|create-routine|activate-routine|plan-campaign|get-connect-link|list-routine-templates|switch_on|is_default)\b'
+    match: 'not_contains'
+  - name: connect-link-first
+    # Owner: the connect link comes first, before the brand preview.
+    type: 'regex'
+    pattern: '^(?:(?!positioning|products?\b|writing rules|sample post)[\s\S]){0,700}bolta\.ai/dashboard/account/socials'
+    flags: 'i'
+  - name: at-most-two-questions
+    # At most 2 questions in the reply.
+    type: 'regex'
+    pattern: '(?:\?(?=[\s*_)\]]|$)[\s\S]*){3}'
+    match: 'not_contains'

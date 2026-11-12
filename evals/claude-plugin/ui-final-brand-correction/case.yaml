@@ -1,0 +1,78 @@
+schema_version: "1.1"
+name: ui-final-brand-correction
+description: "The user corrects a finding (no more rehab plans): the preview and anything passed on use the correction."
+tags: [uiprompts]
+expected_outcome: "bolta fires; preview of harborphysio.example; nothing saved; rehab plans never offered as a current service."
+execution:
+  prompt: |
+    This conversation so far:
+
+    **Me:**
+    > Quick one before Bolta: I run Harbor Physio in Williamstown with Anna Ruiz. Most of our people are weekend runners, tradies and new mums getting back to exercise. We do sports massage, rehab plans and small-group Pilates. I write short and plain, like a friendly coach, never like a medical brochure, and I hate hashtag walls. Our site is harborphysio.example.
+
+    **You:**
+    > Got it: Harbor Physio, Williamstown, for weekend runners, tradies and new mums; sports massage, rehab plans and small-group Pilates; short, plain, friendly-coach writing, no hashtag walls. Site: harborphysio.example.
+
+    **Me:**
+    > Use Bolta to set up our brand for Harbor Physio. If no social accounts are connected, give me the link to connect one first. First, look through what you know about me and our business from our chats and show me what you found: what we do, our website, who we serve, our products and how I write. Ask only for what's missing, our website first if you didn't find it. If we don't have one, build it from what you found plus any notes I share. Preview before saving: positioning, products, writing rules, topics and a sample post. Flag assumptions. Only after I say yes, save it, assign the voice to our connected accounts, and link me to review it in Bolta.
+
+    **You:**
+    > From our chats: you run Harbor Physio in Williamstown with Anna Ruiz, for weekend runners, tradies and new mums; you do sports massage, rehab plans and small-group Pilates; you write short and plain; your site is harborphysio.example. Right?
+
+    **Me now:**
+    Nearly. We stopped the rehab plans in October; it's sports massage and Pilates now. The rest is right.
+  max_turns: 25
+  timeout_seconds: 480
+  allowed_tools: [Skill, Read]
+graders:
+  - name: skill-fired
+    # The Bolta skill owns this ask.
+    type: 'tool_used'
+    tool: 'Skill'
+    input_match: '"skill"\s*:\s*"(?:[\w-]+:)?(bolta)"'
+    min: 1
+  - name: previews-the-site
+    # The site from the history.
+    type: 'tool_used'
+    tool: 'mcp__plugin_bolta_bolta__extract-business-dna'
+    input_match: '"preview"\W{1,6}true'
+    min: 1
+  - name: no-setup-yet
+    # Only a preview (or a status check) before the yes: never a setup or a saving read.
+    type: 'tool_used'
+    tool: 'mcp__plugin_bolta_bolta__extract-business-dna'
+    input_match: '^(?![\s\S]*"(?:preview|check)"\W{1,6}true)'
+    min: 0
+    max: 0
+  - name: nothing-saved
+    # A preview or a question, not a save.
+    type: 'regex'
+    pattern: '"name"\s*:\s*"mcp__plugin_bolta_bolta__(save-post|bulk-create-posts|create-post|create-routine|confirm-plan|create-content-campaign|create-voice-profile|update-voice-profile|update-business-dna)"'
+    target: 'trace'
+    match: 'not_contains'
+  - name: nothing-public
+    # Nothing published, scheduled, approved, switched on, run or started.
+    type: 'regex'
+    pattern: '"name"\s*:\s*"mcp__plugin_bolta_bolta__(publish-post|schedule-post|approve-post|approve-many-posts|activate-routine|resume-routine|run-routine-now|set-content-campaign-status|voice-generate)"'
+    target: 'trace'
+    match: 'not_contains'
+  - name: uses-the-correction
+    type: 'llm'
+    criteria: |
+      The user said Harbor Physio stopped offering rehab plans in October and now offers sports massage and Pilates. PASS if the reply's preview lists the services as sports massage and Pilates (and anything the website read adds, if it marks rehab as no longer offered or leaves it out), and does not present rehab plans as a current service the user offers. FAIL if rehab plans appear as a current service in the positioning, products or sample post.
+  - name: at-most-two-questions
+    # At most 2 questions in the reply.
+    type: 'regex'
+    pattern: '(?:\?(?=[\s*_)\]]|$)[\s\S]*){3}'
+    match: 'not_contains'
+  - name: no-ids
+    # No ids in what the user reads (ids inside a Bolta link are fine).
+    type: 'regex'
+    pattern: '(?<![/=])\b[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}\b|(?<![/=])\b(linkedin_org|facebook_page)_\d+'
+    flags: 'i'
+    match: 'not_contains'
+  - name: plain-words
+    # No tool names or internal field names in what the user reads.
+    type: 'regex'
+    pattern: '\b(MCP|workspace_id|proposal_id|source_bindings?|approval_policy|review_every_artifact|extract-business-dna|create-voice-profile|update-voice-profile|confirm-plan|create-routine|activate-routine|plan-campaign|get-connect-link|list-routine-templates|switch_on|is_default|replace_voice|writing_samples)\b'
+    match: 'not_contains'

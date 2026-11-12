@@ -1,7 +1,7 @@
 schema_version: "1.1"
 name: ui-routine-instagram-preview
 description: 'The routine panel prompt with another network and cadence: Harbor Physio, two Instagram posts each week. Same outcomes, plus Instagram needs a picture or video for every post.'
-tags: [uiprompts]
+tags: [uiprompts-screens]
 expected_outcome: 'bolta fires; reads the voice; plan or templates; shows output, schedule, Melbourne time, the Instagram account, reviewer; says Instagram needs a picture or video; nothing saved.'
 execution:
   prompt: |

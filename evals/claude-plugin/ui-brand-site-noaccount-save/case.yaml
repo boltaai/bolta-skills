@@ -1,8 +1,8 @@
 schema_version: "1.1"
 name: ui-brand-site-noaccount-save
 description: 'Ferro Bikes saw the preview (no accounts connected) and says save. The site read and a voice are saved; since nothing is connected, the reply gives the connect link and says the account will use this voice once connected.'
-tags: [uiprompts]
-expected_outcome: 'bolta fires; one saving extract-business-dna; one create-voice-profile with DOs and DON''Ts; get-connect-link and its link shown; says to connect an account for the voice; Bolta link to the Brand page; nothing public.'
+tags: [uiprompts-screens]
+expected_outcome: 'bolta fires; one extract-business-dna setup:true; no create-voice-profile; connect link fetched and shown; Bolta link; nothing public.'
 execution:
   prompt: |
     This conversation so far:
@@ -45,25 +45,13 @@ graders:
     tool: 'Skill'
     input_match: '"skill"\s*:\s*"(?:[\w-]+:)?(bolta)"'
     min: 1
-  - name: saves-site-read
-    # Saves the website read once.
+  - name: sets-up-on-yes
+    # Bolta-Server #1482: the yes runs Bolta's own setup once.
     type: 'tool_used'
     tool: 'mcp__plugin_bolta_bolta__extract-business-dna'
-    input_match: '^(?![\s\S]*"preview"\W{1,6}true)'
+    input_match: '"setup"\W{1,6}true'
     min: 1
     max: 1
-  - name: makes-voice
-    # Makes one voice.
-    type: 'tool_used'
-    tool: 'mcp__plugin_bolta_bolta__create-voice-profile'
-    min: 1
-    max: 1
-  - name: voice-has-rules
-    # The voice carries DOs and DON'Ts.
-    type: 'tool_used'
-    tool: 'mcp__plugin_bolta_bolta__create-voice-profile'
-    input_match: '"dos"\s*:\s*\[\s*"[\s\S]*"donts"\s*:\s*\[\s*"|"donts"\s*:\s*\[\s*"[\s\S]*"dos"\s*:\s*\[\s*"'
-    min: 1
   - name: connect-link
     # No account connected: gets the connect link.
     type: 'tool_used'
@@ -107,3 +95,9 @@ graders:
     type: 'regex'
     pattern: '\b(MCP|workspace_id|proposal_id|source_bindings?|approval_policy|review_every_artifact|extract-business-dna|create-voice-profile|update-voice-profile|confirm-plan|create-routine|activate-routine|plan-campaign|get-connect-link|list-routine-templates|switch_on|is_default)\b'
     match: 'not_contains'
+  - name: no-separate-voice
+    # The setup makes the voice.
+    type: 'tool_used'
+    tool: 'mcp__plugin_bolta_bolta__create-voice-profile'
+    min: 0
+    max: 0

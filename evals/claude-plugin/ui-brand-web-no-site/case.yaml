@@ -1,7 +1,7 @@
 schema_version: "1.1"
 name: ui-brand-web-no-site
 description: 'The web''s Brand prompt when the brand has no website on file: "...from our website." (Lumen Dental Studio). Bolta must ask for the site, never guess a URL, and save nothing.'
-tags: [uiprompts]
+tags: [uiprompts-screens]
 expected_outcome: 'bolta fires; no extract-business-dna (no URL known); nothing saved; asks for the website address; at most 2 questions.'
 execution:
   prompt: |

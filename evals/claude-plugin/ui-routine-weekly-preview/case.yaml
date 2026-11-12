@@ -1,7 +1,7 @@
 schema_version: "1.1"
 name: ui-routine-weekly-preview
 description: 'The live routine panel prompt for DevConsole: three LinkedIn posts each week, saved voice, a fitting template. Shows each run''s output, the schedule and timezone, the LinkedIn page, who reviews; asks only for what is missing; saves nothing.'
-tags: [uiprompts]
+tags: [uiprompts-screens]
 expected_outcome: 'bolta fires; reads the voice; uses Bolta''s planner or the template list; shows output, schedule, timezone, account, reviewer; at most 2 questions; nothing saved or switched on.'
 execution:
   prompt: |

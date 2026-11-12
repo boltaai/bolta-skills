@@ -1,7 +1,7 @@
 schema_version: "1.1"
 name: ui-campaign-ask
 description: 'The web''s campaign prompt (buildAiAppPrompt campaign) for DevConsole with no launch named. Bolta asks which launch and when, and saves nothing.'
-tags: [uiprompts]
+tags: [uiprompts-screens]
 expected_outcome: 'bolta fires; nothing saved or started; asks which launch/event and the dates; at most 2 questions.'
 execution:
   prompt: |

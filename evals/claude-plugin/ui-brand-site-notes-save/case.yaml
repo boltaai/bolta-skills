@@ -1,8 +1,8 @@
 schema_version: "1.1"
 name: ui-brand-site-notes-save
 description: 'Harbor Physio ran the Brand prompt, saw the preview, then shares notes and an Instagram sample and says save. The brand has a thin Starter Voice (from onboarding) on its Instagram and Facebook. The site read is saved and the existing voice is updated with the notes (full DO and DON''T lists), linked to the new business record; no second brand voice.'
-tags: [uiprompts]
-expected_outcome: 'bolta fires; one saving extract-business-dna; update-voice-profile on the Starter Voice with ''book a session'' in DOs and the no-promises rule in DON''Ts and business_dna_id; never create-voice-profile; names Instagram/Facebook as using the voice; Bolta link.'
+tags: [uiprompts-screens]
+expected_outcome: 'bolta fires; one extract-business-dna setup:true carrying notes (book a session), writing_samples (the sample) and audience; never create-voice-profile; names Instagram/Facebook; Bolta link.'
 execution:
   prompt: |
     This conversation so far:
@@ -50,43 +50,19 @@ graders:
     tool: 'Skill'
     input_match: '"skill"\s*:\s*"(?:[\w-]+:)?(bolta)"'
     min: 1
-  - name: saves-site-read
-    # Saves the website read once.
+  - name: sets-up-on-yes
+    # Bolta-Server #1482: the yes runs Bolta's own setup once; it fills the Starter Voice, never a second.
     type: 'tool_used'
     tool: 'mcp__plugin_bolta_bolta__extract-business-dna'
-    input_match: '^(?![\s\S]*"preview"\W{1,6}true)'
+    input_match: '"setup"\W{1,6}true'
     min: 1
     max: 1
-  - name: updates-existing-voice
-    # Refines the existing voice, not a new one.
-    type: 'tool_used'
-    tool: 'mcp__plugin_bolta_bolta__update-voice-profile'
-    input_match: '9b000000-0000-4000-8000-0000000000a1'
-    min: 1
   - name: no-second-voice
     # No second brand voice.
     type: 'tool_used'
     tool: 'mcp__plugin_bolta_bolta__create-voice-profile'
     min: 0
     max: 0
-  - name: notes-in-dos
-    # The notes' wording rule lands in the DOs.
-    type: 'tool_used'
-    tool: 'mcp__plugin_bolta_bolta__update-voice-profile'
-    input_match: '"dos"[^\]]*book a session'
-    min: 1
-  - name: notes-in-donts
-    # The notes' no-promises rule lands in the DON'Ts.
-    type: 'tool_used'
-    tool: 'mcp__plugin_bolta_bolta__update-voice-profile'
-    input_match: '"donts"[^\]]*(pain[- ]free|promis|before[- ]and[- ]after|before/after)'
-    min: 1
-  - name: links-business-record
-    # Links the voice to the saved business record.
-    type: 'tool_used'
-    tool: 'mcp__plugin_bolta_bolta__update-voice-profile'
-    input_match: '"business_dna_id"'
-    min: 1
   - name: no-content-writes
     # No post, routine or campaign saved.
     type: 'regex'
@@ -120,3 +96,21 @@ graders:
     type: 'regex'
     pattern: '\b(MCP|workspace_id|proposal_id|source_bindings?|approval_policy|review_every_artifact|extract-business-dna|create-voice-profile|update-voice-profile|confirm-plan|create-routine|activate-routine|plan-campaign|get-connect-link|list-routine-templates|switch_on|is_default)\b'
     match: 'not_contains'
+  - name: notes-passed
+    # The user's notes go into the setup (notes), not a later voice edit.
+    type: 'tool_used'
+    tool: 'mcp__plugin_bolta_bolta__extract-business-dna'
+    input_match: '"setup"\W{1,6}true[\s\S]*book a session|book a session[\s\S]*"setup"\W{1,6}true'
+    min: 1
+  - name: sample-passed
+    # The Instagram sample they pasted, verbatim, as writing_samples.
+    type: 'tool_used'
+    tool: 'mcp__plugin_bolta_bolta__extract-business-dna'
+    input_match: '"writing_samples"\s*:\s*\[[^\]]*hamstrings'
+    min: 1
+  - name: audience-passed
+    # Who they said they reach, as audience.
+    type: 'tool_used'
+    tool: 'mcp__plugin_bolta_bolta__extract-business-dna'
+    input_match: '"audience"\s*:\s*"[^"]*(runners|tradies|mums)'
+    min: 1

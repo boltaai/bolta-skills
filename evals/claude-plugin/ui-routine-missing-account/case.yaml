@@ -1,7 +1,7 @@
 schema_version: "1.1"
 name: ui-routine-missing-account
 description: 'The routine panel prompt for a network that isn''t connected: Ferro Bikes, five Threads posts each week, only Instagram connected. The missing detail is the account: connect link, no silent switch to Instagram, nothing saved.'
-tags: [uiprompts]
+tags: [uiprompts-screens]
 expected_outcome: 'bolta fires; reads accounts; get-connect-link with its link; says Threads isn''t connected; never moves it to Instagram unasked; nothing saved; at most 2 questions.'
 execution:
   prompt: |

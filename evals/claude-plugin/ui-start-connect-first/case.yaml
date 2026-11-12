@@ -1,0 +1,68 @@
+schema_version: "1.1"
+name: ui-start-connect-first
+description: "Set me up with nothing connected: the connect link is in the opening lines with why, before the brand and the routines."
+tags: [uiprompts]
+expected_outcome: "bolta fires; get-connect-link; the link in the first lines with a why; nothing saved or public."
+execution:
+  prompt: |
+    Set me up on Bolta. We're Ferro Bikes, ferrobikes.example.
+  max_turns: 25
+  timeout_seconds: 540
+  allowed_tools: [Skill, Read]
+graders:
+  - name: skill-fired
+    # The Bolta skill owns this ask.
+    type: 'tool_used'
+    tool: 'Skill'
+    input_match: '"skill"\s*:\s*"(?:[\w-]+:)?(bolta)"'
+    min: 1
+  - name: connect-link
+    # Nothing connected: the link, unasked.
+    type: 'tool_used'
+    tool: 'mcp__plugin_bolta_bolta__get-connect-link'
+    min: 1
+  - name: connect-link-first
+    # Owner: connect an account FIRST, before brand and routines.
+    type: 'regex'
+    pattern: '^(?:(?!positioning|routine)[\s\S]){0,700}bolta\.ai/dashboard/account/socials'
+    flags: 'i'
+  - name: says-why
+    # One line of why.
+    type: 'regex'
+    pattern: '(drafts?|posts?)[^.\n]{0,80}(somewhere|go|need)|learns? from|voice[^.\n]{0,60}(learn|account)'
+    flags: 'i'
+  - name: no-setup-yet
+    # Only a preview (or a status check) before the yes: never a setup or a saving read.
+    type: 'tool_used'
+    tool: 'mcp__plugin_bolta_bolta__extract-business-dna'
+    input_match: '^(?![\s\S]*"(?:preview|check)"\W{1,6}true)'
+    min: 0
+    max: 0
+  - name: nothing-saved
+    # A preview or a question, not a save.
+    type: 'regex'
+    pattern: '"name"\s*:\s*"mcp__plugin_bolta_bolta__(save-post|bulk-create-posts|create-post|create-routine|confirm-plan|create-content-campaign|create-voice-profile|update-voice-profile|update-business-dna)"'
+    target: 'trace'
+    match: 'not_contains'
+  - name: nothing-public
+    # Nothing published, scheduled, approved, switched on, run or started.
+    type: 'regex'
+    pattern: '"name"\s*:\s*"mcp__plugin_bolta_bolta__(publish-post|schedule-post|approve-post|approve-many-posts|activate-routine|resume-routine|run-routine-now|set-content-campaign-status|voice-generate)"'
+    target: 'trace'
+    match: 'not_contains'
+  - name: at-most-two-questions
+    # At most 2 questions in the reply.
+    type: 'regex'
+    pattern: '(?:\?(?=[\s*_)\]]|$)[\s\S]*){3}'
+    match: 'not_contains'
+  - name: no-ids
+    # No ids in what the user reads (ids inside a Bolta link are fine).
+    type: 'regex'
+    pattern: '(?<![/=])\b[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}\b|(?<![/=])\b(linkedin_org|facebook_page)_\d+'
+    flags: 'i'
+    match: 'not_contains'
+  - name: plain-words
+    # No tool names or internal field names in what the user reads.
+    type: 'regex'
+    pattern: '\b(MCP|workspace_id|proposal_id|source_bindings?|approval_policy|review_every_artifact|extract-business-dna|create-voice-profile|update-voice-profile|confirm-plan|create-routine|activate-routine|plan-campaign|get-connect-link|list-routine-templates|switch_on|is_default|replace_voice|writing_samples)\b'
+    match: 'not_contains'

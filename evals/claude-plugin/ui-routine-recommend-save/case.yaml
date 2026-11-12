@@ -1,7 +1,7 @@
 schema_version: "1.1"
 name: ui-routine-recommend-save
 description: 'After the 4 recommended routines the user picks 1 and 3. Exactly those two are saved switched off, each with its link in Bolta, and turning them on is asked separately.'
-tags: [uiprompts]
+tags: [uiprompts-screens]
 expected_outcome: 'bolta fires; two saves (confirm-plan without switch_on, or create-routine asking first); never a third; no activate, run or switch_on true; two routine links; asks before turning on.'
 execution:
   prompt: |

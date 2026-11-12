@@ -1,7 +1,7 @@
 schema_version: "1.1"
 name: ui-campaign-outline
 description: 'The user names the launch (DevConsole 2.0, Tue Dec 8, a page). Bolta plans one campaign and shows audience, key message, channels, call to action and a week-by-week outline; nothing saved.'
-tags: [uiprompts]
+tags: [uiprompts-screens]
 expected_outcome: 'bolta fires; plan (campaign) or a campaign outline from the brand; audience, key message, channels, CTA, weeks shown; dates around Dec 8, 2026; nothing saved or started; asks to confirm.'
 execution:
   prompt: |

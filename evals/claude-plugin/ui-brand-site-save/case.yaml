@@ -1,8 +1,8 @@
 schema_version: "1.1"
 name: ui-brand-site-save
 description: 'After the DevConsole preview, the user says it looks good and to save. The website read is saved, a voice is made from it (DOs, DON''Ts, audience, topics) as the brand''s voice, the LinkedIn and X accounts are named as using it, and the user gets the place to review it in Bolta.'
-tags: [uiprompts]
-expected_outcome: 'bolta fires; one saving extract-business-dna; one create-voice-profile with dos, donts, target_audience and topics, never website_url, never is_default false; no second voice; names LinkedIn/X as using the voice; Bolta link to the Brand page; nothing public.'
+tags: [uiprompts-screens]
+expected_outcome: 'bolta fires; one extract-business-dna setup:true (check polls allowed); no create-voice-profile; names LinkedIn/X as using the voice; Bolta link to the Brand page; nothing public.'
 execution:
   prompt: |
     This conversation so far:
@@ -45,49 +45,18 @@ graders:
     tool: 'Skill'
     input_match: '"skill"\s*:\s*"(?:[\w-]+:)?(bolta)"'
     min: 1
-  - name: saves-site-read
-    # Saves the website read once (no preview).
+  - name: sets-up-on-yes
+    # Bolta-Server #1482: the yes runs Bolta's own setup (record, voice, accounts) once.
     type: 'tool_used'
     tool: 'mcp__plugin_bolta_bolta__extract-business-dna'
-    input_match: '^(?![\s\S]*"preview"\W{1,6}true)'
+    input_match: '"setup"\W{1,6}true'
     min: 1
     max: 1
-  - name: makes-voice
-    # Makes one voice.
-    type: 'tool_used'
-    tool: 'mcp__plugin_bolta_bolta__create-voice-profile'
-    min: 1
-    max: 1
-  - name: voice-has-rules
-    # The voice carries DOs and DON'Ts.
-    type: 'tool_used'
-    tool: 'mcp__plugin_bolta_bolta__create-voice-profile'
-    input_match: '"dos"\s*:\s*\[\s*"[\s\S]*"donts"\s*:\s*\[\s*"|"donts"\s*:\s*\[\s*"[\s\S]*"dos"\s*:\s*\[\s*"'
-    min: 1
-  - name: voice-has-audience
-    # Who we serve goes in the voice (Business ring: audience).
-    type: 'tool_used'
-    tool: 'mcp__plugin_bolta_bolta__create-voice-profile'
-    input_match: '"target_audience"\s*:\s*"[^"]{8,}'
-    min: 1
-  - name: voice-has-topics
-    # The content topics shown go in the voice (Voice ring: topics).
-    type: 'tool_used'
-    tool: 'mcp__plugin_bolta_bolta__create-voice-profile'
-    input_match: '"topics"\s*:\s*\[\s*"'
-    min: 1
   - name: no-website-url
     # Never website_url on create (it reads and saves the site again, unseen).
     type: 'tool_used'
     tool: 'mcp__plugin_bolta_bolta__create-voice-profile'
     input_match: '"website_url"'
-    min: 0
-    max: 0
-  - name: stays-default
-    # Never made a non-default voice: it is the brand's voice.
-    type: 'tool_used'
-    tool: 'mcp__plugin_bolta_bolta__create-voice-profile'
-    input_match: '"is_default"\W{1,6}false'
     min: 0
     max: 0
   - name: no-other-writes
@@ -128,3 +97,9 @@ graders:
     type: 'regex'
     pattern: '\b(MCP|workspace_id|proposal_id|source_bindings?|approval_policy|review_every_artifact|extract-business-dna|create-voice-profile|update-voice-profile|confirm-plan|create-routine|activate-routine|plan-campaign|get-connect-link|list-routine-templates|switch_on|is_default)\b'
     match: 'not_contains'
+  - name: no-separate-voice
+    # The setup makes and links the voice; a create-voice-profile would be a second voice.
+    type: 'tool_used'
+    tool: 'mcp__plugin_bolta_bolta__create-voice-profile'
+    min: 0
+    max: 0

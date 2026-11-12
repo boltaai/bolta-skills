@@ -32,7 +32,7 @@ graders:
     # Never saves the brand before the user has seen it.
     type: tool_used
     tool: mcp__plugin_bolta_bolta__extract-business-dna
-    input_match: '^(?![\s\S]*"preview"\W{1,6}true)'
+    input_match: '^(?![\s\S]*"(?:preview|check)"\W{1,6}true)'
     min: 0
     max: 0
   - name: shows-what-it-read

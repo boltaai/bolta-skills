@@ -1,7 +1,7 @@
 schema_version: "1.1"
 name: ui-brand-site-preview
 description: 'The live Brand panel prompt (Set up Brand in your AI app) for DevConsole from devconsole.example. LinkedIn and X connected, no voice, no business record. Bolta reads the site in preview, shows positioning, products, writing rules, topics and one sample post, flags assumptions, names the accounts the voice will use, and saves nothing.'
-tags: [uiprompts]
+tags: [uiprompts-screens]
 expected_outcome: 'bolta fires; extract-business-dna with the site and preview true, never a saving read; nothing saved (no voice, no business edit, no post); shows the five parts; flags assumptions; names the connected accounts for the voice; asks before saving.'
 execution:
   prompt: |
@@ -30,7 +30,7 @@ graders:
     # Never a saving website read before the yes.
     type: 'tool_used'
     tool: 'mcp__plugin_bolta_bolta__extract-business-dna'
-    input_match: '^(?![\s\S]*"preview"\W{1,6}true)'
+    input_match: '^(?![\s\S]*"(?:preview|check)"\W{1,6}true)'
     min: 0
     max: 0
   - name: nothing-saved

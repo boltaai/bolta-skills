@@ -12,6 +12,7 @@
 #   sh tools/run_plugin_evals.sh gauntlet [extra claude plugin eval args]
 #   sh tools/run_plugin_evals.sh legacy   [extra claude plugin eval args]
 #   sh tools/run_plugin_evals.sh uiprompts [extra claude plugin eval args]
+#   sh tools/run_plugin_evals.sh uiscreens [extra claude plugin eval args]
 #   sh tools/run_plugin_evals.sh all      [extra claude plugin eval args]
 #
 # quiet    asks Bolta must stay out of (ideas only, an email, a calendar question, a cover
@@ -62,7 +63,7 @@ group=${1:-safety}
 tmp=$(mktemp -d)
 trap 'rm -rf "$tmp"' EXIT
 cp -R "$root/plugins/bolta" "$tmp/bolta"
-if [ "$group" != uiprompts ]; then
+if [ "$group" != uiprompts ] && [ "$group" != uiscreens ]; then
   cp -R "$root/plugins/bolta-checks/hooks" "$tmp/bolta/hooks"
   cp -R "$root/plugins/bolta-checks/scripts" "$tmp/bolta/scripts"
 fi
@@ -104,6 +105,7 @@ case "$group" in
   settings) claude plugin eval . --tag settings --ablation none --trust-plugin --no-publish --threshold 0.8 --max-cost-usd 12 -j 4 --json "$out/settings.json" "$@" ;;
   gauntlet) claude plugin eval . --tag gauntlet --ablation none --trust-plugin --no-publish --threshold 0.8 --judge-model sonnet --max-cost-usd 40 -j 4 --json "$out/gauntlet.json" "$@" ;;
   uiprompts) claude plugin eval . --tag uiprompts --ablation none --trust-plugin --no-publish --threshold 0.8 --judge-model sonnet --max-cost-usd 40 -j 4 --json "$out/uiprompts.json" "$@" ;;
+  uiscreens) claude plugin eval . --tag uiprompts-screens --ablation none --trust-plugin --no-publish --threshold 0.8 --judge-model sonnet --max-cost-usd 40 -j 4 --json "$out/uiscreens.json" "$@" ;;
   legacy) claude plugin eval . --tag legacy --ablation none --trust-plugin --no-publish --threshold 1.0 --max-cost-usd 5 -j 4 --json "$out/legacy.json" "$@" ;;
   agents) claude plugin eval . --tag agents --ablation none --trust-plugin --no-publish --threshold 0.8 --max-cost-usd 10 -j 1 --json "$out/agents.json" "$@" ;;
   all)
@@ -119,5 +121,5 @@ case "$group" in
     sh "$root/tools/run_plugin_evals.sh" settings "$@" || rc=$?
     sh "$root/tools/run_plugin_evals.sh" legacy "$@" || rc=$?
     exit $rc ;;
-  *) echo "usage: sh tools/run_plugin_evals.sh safety|smoke|quiet|newtools|getgoing|choosing|settings|gauntlet|uiprompts|agents|legacy|all"; exit 2 ;;
+  *) echo "usage: sh tools/run_plugin_evals.sh safety|smoke|quiet|newtools|getgoing|choosing|settings|gauntlet|uiprompts|uiscreens|agents|legacy|all"; exit 2 ;;
 esac

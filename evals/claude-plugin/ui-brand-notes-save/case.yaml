@@ -1,7 +1,7 @@
 schema_version: "1.1"
 name: ui-brand-notes-save
 description: 'Lumen Dental Studio says save after seeing the drafted profile. One voice is made from the notes (DOs, DON''Ts, audience, the user''s own sample), no website read, the Facebook page named as using it, and the place to review it in Bolta.'
-tags: [uiprompts]
+tags: [uiprompts-screens]
 expected_outcome: 'bolta fires; one create-voice-profile with the notes'' DOs/DON''Ts and audience, the user''s sample or tone dials, no website_url; no website read; names the Facebook page; Bolta link.'
 execution:
   prompt: |

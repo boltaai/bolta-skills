@@ -1,0 +1,51 @@
+schema_version: "1.1"
+name: ui-final-campaign-ask
+description: "Final Campaign prompt for DevConsole with no event in the chat: one question, which launch and when; nothing saved."
+tags: [uiprompts]
+expected_outcome: "bolta fires; asks which launch and when in one question; nothing saved."
+execution:
+  prompt: |
+    Use Bolta to plan a campaign for DevConsole around our next launch or event. First show me what you're basing this on, from our chats and our brand in Bolta (voice, what's already running, our best posts), then ask only for what's missing. If I haven't said which event or the dates, ask in one question. Show me an outline: audience, key message, channels, call to action and a week-by-week plan. After I say yes, save it as a draft and link me to it in Bolta. Ask separately before starting it, and keep every post for my review.
+  max_turns: 25
+  timeout_seconds: 480
+  allowed_tools: [Skill, Read]
+graders:
+  - name: skill-fired
+    # The Bolta skill owns this ask.
+    type: 'tool_used'
+    tool: 'Skill'
+    input_match: '"skill"\s*:\s*"(?:[\w-]+:)?(bolta)"'
+    min: 1
+  - name: nothing-saved
+    # Nothing saved.
+    type: 'regex'
+    pattern: '"name"\s*:\s*"mcp__plugin_bolta_bolta__(save-post|bulk-create-posts|create-post|create-routine|confirm-plan|create-content-campaign|create-voice-profile|update-voice-profile|update-business-dna|analyze-content-campaign-source)"'
+    target: 'trace'
+    match: 'not_contains'
+  - name: nothing-public
+    # Nothing published, scheduled, approved, switched on, run or started.
+    type: 'regex'
+    pattern: '"name"\s*:\s*"mcp__plugin_bolta_bolta__(publish-post|schedule-post|approve-post|approve-many-posts|activate-routine|resume-routine|run-routine-now|set-content-campaign-status|voice-generate)"'
+    target: 'trace'
+    match: 'not_contains'
+  - name: asks-which-and-when
+    # Asks which launch and the date.
+    type: 'regex'
+    pattern: '(launch|event)[\s\S]{0,200}(date|when)|(date|when)[\s\S]{0,200}(launch|event)'
+    flags: 'i'
+  - name: at-most-two-questions
+    # Asks only for what is missing: at most 2 questions (lines with a question mark; an either/or on one line is one).
+    type: 'regex'
+    pattern: '(?:\?[^\n]*(?:\n|$)[\s\S]*?){3}'
+    match: 'not_contains'
+  - name: no-ids
+    # No ids in what the user reads (ids inside a Bolta link are fine).
+    type: 'regex'
+    pattern: '(?<![/=])\b[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}\b|(?<![/=])\b(linkedin_org|facebook_page)_\d+'
+    flags: 'i'
+    match: 'not_contains'
+  - name: plain-words
+    # No tool names or internal field names in what the user reads.
+    type: 'regex'
+    pattern: '\b(MCP|workspace_id|proposal_id|source_bindings?|approval_policy|review_every_artifact|extract-business-dna|create-voice-profile|update-voice-profile|confirm-plan|create-routine|activate-routine|plan-campaign|get-connect-link|list-routine-templates|switch_on|is_default)\b'
+    match: 'not_contains'

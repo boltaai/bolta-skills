@@ -1,7 +1,7 @@
 schema_version: "1.1"
 name: ui-routine-weekly-save
 description: 'After the DevConsole routine preview the user confirms. One routine saved switched off with review on every post, the link to it in Bolta, and a separate question before switching it on. Never switched on or run.'
-tags: [uiprompts]
+tags: [uiprompts-screens]
 expected_outcome: 'bolta fires; exactly one save (confirm-plan without switch_on, or create-routine with review_every_artifact bound to the LinkedIn page); no activate, run or switch_on true; routine link; says it''s off; asks before turning on.'
 execution:
   prompt: |

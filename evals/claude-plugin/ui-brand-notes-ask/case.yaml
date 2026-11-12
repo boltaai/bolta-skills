@@ -1,7 +1,7 @@
 schema_version: "1.1"
 name: ui-brand-notes-ask
 description: 'The Brand-from-notes prompt (no website) for Lumen Dental Studio, with no notes yet. Bolta asks for the notes and saves nothing.'
-tags: [uiprompts]
+tags: [uiprompts-screens]
 expected_outcome: 'bolta fires; reads the brand; no website read; nothing saved; asks for the notes.'
 execution:
   prompt: |

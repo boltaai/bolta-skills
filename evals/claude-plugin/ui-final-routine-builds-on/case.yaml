@@ -1,0 +1,73 @@
+schema_version: "1.1"
+name: ui-final-routine-builds-on
+description: "Final Routine prompt for DevConsole, which already runs a weekly Release notes routine: says what the plan is based on (the brand in Bolta and what's running), passes it as context, never proposes Release notes again."
+tags: [uiprompts]
+expected_outcome: "bolta fires; reads routines; plan recommend with context; a based-on line; Release notes named as already running, not proposed; nothing saved."
+execution:
+  prompt: |
+    Use Bolta to set up the right routines for DevConsole. First show me what you're basing this on, from our chats and our brand in Bolta (voice, what's already running, our best posts), then ask only for what's missing. Recommend 3 to 5 routines that fit how much I can review each week, with no duplicates of ones already running, and let Bolta pick the template, day, time and topics. For each, show me what it produces, the schedule and timezone, the account, and who reviews (me unless I say otherwise). After I pick, save them switched off with review on every post, link me to each in Bolta, and ask separately before turning any on.
+  max_turns: 25
+  timeout_seconds: 480
+  allowed_tools: [Skill, Read]
+graders:
+  - name: skill-fired
+    # The Bolta skill owns this ask.
+    type: 'tool_used'
+    tool: 'Skill'
+    input_match: '"skill"\s*:\s*"(?:[\w-]+:)?(bolta)"'
+    min: 1
+  - name: reads-routines
+    # What's already running.
+    type: 'regex'
+    pattern: '"name"\s*:\s*"mcp__plugin_bolta_bolta__list-routines"'
+    target: 'trace'
+  - name: plans-with-context
+    # Owner: what Bolta holds and what they said, passed as context.
+    type: 'tool_used'
+    tool: 'mcp__plugin_bolta_bolta__plan'
+    input_match: '"context"\s*:\s*"[^"]{20,}'
+    min: 1
+  - name: says-what-its-based-on
+    # Owner: show what the plan or setup is based on before it.
+    type: 'regex'
+    pattern: 'based on|from (what|everything) you(''ve)? (told|said|shared)|from our chats|what I know|from what I (know|have)|here''?s what I (found|know|have)'
+    flags: 'i'
+  - name: names-running
+    # Says Release notes is already running.
+    type: 'regex'
+    pattern: 'release notes[^.\n]{0,120}(already|running|keep|on)|(already|running)[^.\n]{0,120}release notes'
+    flags: 'i'
+  - name: no-duplicate
+    # Never proposes the running routine again.
+    type: 'regex'
+    pattern: '(?:^|\n)\s*(\*\*)?\d[.)]\s*(\*\*)?release notes'
+    flags: 'i'
+    match: 'not_contains'
+  - name: nothing-saved
+    # A preview or a question, not a save.
+    type: 'regex'
+    pattern: '"name"\s*:\s*"mcp__plugin_bolta_bolta__(save-post|bulk-create-posts|create-post|create-routine|confirm-plan|create-content-campaign|create-voice-profile|update-voice-profile|update-business-dna)"'
+    target: 'trace'
+    match: 'not_contains'
+  - name: nothing-public
+    # Nothing published, scheduled, approved, switched on, run or started.
+    type: 'regex'
+    pattern: '"name"\s*:\s*"mcp__plugin_bolta_bolta__(publish-post|schedule-post|approve-post|approve-many-posts|activate-routine|resume-routine|run-routine-now|set-content-campaign-status|voice-generate)"'
+    target: 'trace'
+    match: 'not_contains'
+  - name: at-most-two-questions
+    # At most 2 questions in the reply.
+    type: 'regex'
+    pattern: '(?:\?(?=[\s*_)\]]|$)[\s\S]*){3}'
+    match: 'not_contains'
+  - name: no-ids
+    # No ids in what the user reads (ids inside a Bolta link are fine).
+    type: 'regex'
+    pattern: '(?<![/=])\b[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}\b|(?<![/=])\b(linkedin_org|facebook_page)_\d+'
+    flags: 'i'
+    match: 'not_contains'
+  - name: plain-words
+    # No tool names or internal field names in what the user reads.
+    type: 'regex'
+    pattern: '\b(MCP|workspace_id|proposal_id|source_bindings?|approval_policy|review_every_artifact|extract-business-dna|create-voice-profile|update-voice-profile|confirm-plan|create-routine|activate-routine|plan-campaign|get-connect-link|list-routine-templates|switch_on|is_default|replace_voice|writing_samples)\b'
+    match: 'not_contains'
