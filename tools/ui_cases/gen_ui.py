@@ -194,6 +194,38 @@ def build():
                   ["Sports massage", "Rehab plans", "Small-group Pilates"], ["Turn on Topic insights", "Add inspiration (favorite creators)"],
                   ["Add brand colors or fonts"], 2, without_website=["colors", "fonts", "logo", "tagline"])})
 
+    # B9 colours after a no-site setup: pasted hex codes saved exactly; B10 none given: nothing invented.
+    saved_reply = ("Harbor Physio is set up from what you told me: about your business, your three services, and your voice "
+                   "(short and plain, like a friendly coach, for weekend runners, tradies and new mums); your Instagram and Facebook use it. "
+                   "Voice setup 82%, business 80%. A website would add your colours, fonts and more detail; share it any time and it only fills gaps.\n\n"
+                   "Have brand colours, fonts or a logo? Paste them, or share an image of your logo.")
+    dna = {"success": True, "dnas": [{"id": "d7a00000-0000-4000-8000-0000000000b2", "name": "Harbor Physio", "website_url": "", "tagline": "",
+            "business_overview": "Harbor Physio in Williamstown for weekend runners, tradies and new mums: sports massage, rehab plans and small-group Pilates.",
+            "colors": [], "fonts": [], "logo_url": "", "visual_aesthetics": [], "is_default": True}], "count": 1}
+    upd = {"success": True, "dna": {**dna["dnas"][0], "colors": ["#0E4D64", "#F4A261"], "fonts": ["Lato"]},
+           "dashboard_url": "https://bolta.ai/dashboard/knowledge-base?tab=overview&workspaceId=5a1d0000-0000-4000-8000-0000000000a2&ref=claude_link"}
+    hist = HARBOR_CHAT + [("Me", harbor_brand), ("You", findings_reply), ("Me", "That's right. We don't have a website."),
+                          ("You", manual_preview), ("Me", "Looks good, save it."), ("You", saved_reply)]
+    case("ui-final-brand-colours-pasted", harbor_src,
+         "After a no-site setup the user pastes two hex codes and a font: saved exactly as given on the brand's record, nothing else changed.",
+         "bolta fires; update-business-dna with colors exactly #0E4D64 and #F4A261 and fonts Lato; no other write.",
+         convo(hist, "Our colours are #0E4D64 and #F4A261, and we use Lato."),
+         [tool_used("saves-colours-exactly", "update-business-dna", r'"colors"\s*:\s*\[\s*"#0E4D64"\s*,\s*"#F4A261"\s*\]', 1, None, "Hex codes saved as given."),
+          tool_used("saves-font", "update-business-dna", r'"fonts"\s*:\s*\[\s*"Lato"\s*\]', 1, None, "The font as given."),
+          regex("no-other-writes", r'"name"\s*:\s*"mcp__plugin_bolta_bolta__(extract-business-dna|create-voice-profile|update-voice-profile|save-post|create-routine|confirm-plan)"', "Only the visuals change.", target="trace", match="not_contains"),
+          PUBLIC, NOIDS, PLAIN],
+         mocks={"list-business-dna": (dna, None), "update-business-dna": (upd, None)})
+    case("ui-final-brand-no-colours", harbor_src,
+         "After a no-site setup the user has no colours, fonts or logo: nothing saved, nothing invented, and where to add them later said once.",
+         "bolta fires; no update-business-dna; no colour or font invented; says they can add them later.",
+         convo(hist, "No, nothing like that yet."),
+         [tool_used("saves-nothing", "update-business-dna", None, 0, 0, "Nothing given, nothing saved."),
+          regex("no-invented-hex", r'#[0-9A-Fa-f]{6}\b', "Never invents a colour.", match="not_contains"),
+          regex("says-later", r"later|any ?time|Brand page|when you (have|do)|whenever", "Says they can add them later.", flags="i"),
+          regex("does-not-ask-again", r"(colou?rs?|fonts?|logo)[^?\n]{0,120}\?", "Asked once already: not again.", flags="i", match="not_contains"),
+          PUBLIC, NOIDS, PLAIN],
+         mocks={"list-business-dna": (dna, None), "update-business-dna": (upd, None)})
+
     # B8 (d) a finding corrected -> the correction is used.
     corrected = convo(HARBOR_SITE_CHAT + [("Me", harbor_brand),
                       ("You", "From our chats: you run Harbor Physio in Williamstown, for weekend runners, tradies and new mums; you do sports massage, rehab plans and small-group Pilates; you write short and plain; your site is harborphysio.example. Right?")],

@@ -1,0 +1,92 @@
+schema_version: "1.1"
+name: ui-final-brand-colours-pasted
+description: "After a no-site setup the user pastes two hex codes and a font: saved exactly as given on the brand's record, nothing else changed."
+tags: [uiprompts]
+expected_outcome: "bolta fires; update-business-dna with colors exactly #0E4D64 and #F4A261 and fonts Lato; no other write."
+execution:
+  prompt: |
+    This conversation so far:
+
+    **Me:**
+    > Quick one before Bolta: I'm Anna Ruiz and I run Harbor Physio in Williamstown. Most of our people are weekend runners, tradies and new mums getting back to exercise. We do sports massage, rehab plans and small-group Pilates. I write short and plain, like a friendly coach, never like a medical brochure, and I hate hashtag walls.
+
+    **You:**
+    > Got it, Anna: Harbor Physio, Williamstown, for weekend runners, tradies and new mums; sports massage, rehab plans and small-group Pilates; short, plain, friendly-coach writing, no hashtag walls.
+
+    **Me:**
+    > Use Bolta to set up our brand for Harbor Physio. If no social accounts are connected, give me the link to connect one first. First, look through what you know about me and our business from our chats and show me what you found: what we do, our website, who we serve, our products and how I write. Ask only for what's missing, our website first if you didn't find it. If we don't have one, build it from what you found plus any notes I share. Preview before saving: positioning, products, writing rules, topics and a sample post. Flag assumptions. Only after I say yes, save it, assign the voice to our connected accounts, and link me to review it in Bolta.
+
+    **You:**
+    > From our chats: you run Harbor Physio in Williamstown, for weekend runners, tradies and new mums; you do sports massage, rehab plans and small-group Pilates; you write short and plain, like a friendly coach, no hashtag walls. Right? What's your website? If you don't have one, I'll build it from what you've told me.
+
+    **Me:**
+    > That's right. We don't have a website.
+
+    **You:**
+    > Here's your brand from what you told me. Nothing is saved yet.
+    >
+    > **Positioning:** a Williamstown physio clinic that gets weekend runners, tradies and new mums moving again.
+    > **Services:** sports massage, rehab plans, small-group Pilates.
+    > **Writing rules** DO: short and plain, like a friendly coach · DON'T: medical-brochure language · hashtag walls
+    > **Topics:** keeping runners running · desk-to-tools recovery for tradies · getting back to exercise after a baby.
+    > **Sample post:** "Long run left your calves tight? Two easy moves tonight, and when it's time to see Anna."
+    >
+    > **Assumptions:** the topics are mine. A website would add your opening hours and booking link.
+    >
+    > Save this to Harbor Physio?
+
+    **Me:**
+    > Looks good, save it.
+
+    **You:**
+    > Harbor Physio is set up from what you told me: about your business, your three services, and your voice (short and plain, like a friendly coach, for weekend runners, tradies and new mums); your Instagram and Facebook use it. Voice setup 82%, business 80%. A website would add your colours, fonts and more detail; share it any time and it only fills gaps.
+    >
+    > Have brand colours, fonts or a logo? Paste them, or share an image of your logo.
+
+    **Me now:**
+    Our colours are #0E4D64 and #F4A261, and we use Lato.
+  max_turns: 25
+  timeout_seconds: 480
+  allowed_tools: [Skill, Read]
+graders:
+  - name: skill-fired
+    # The Bolta skill owns this ask.
+    type: 'tool_used'
+    tool: 'Skill'
+    input_match: '"skill"\s*:\s*"(?:[\w-]+:)?(bolta)"'
+    min: 1
+  - name: saves-colours-exactly
+    # Hex codes saved as given.
+    type: 'tool_used'
+    tool: 'mcp__plugin_bolta_bolta__update-business-dna'
+    input_match: '"colors"\s*:\s*\[\s*"#0E4D64"\s*,\s*"#F4A261"\s*\]'
+    min: 1
+  - name: saves-font
+    # The font as given.
+    type: 'tool_used'
+    tool: 'mcp__plugin_bolta_bolta__update-business-dna'
+    input_match: '"fonts"\s*:\s*\[\s*"Lato"\s*\]'
+    min: 1
+  - name: no-other-writes
+    # Only the visuals change.
+    type: 'regex'
+    pattern: '"name"\s*:\s*"mcp__plugin_bolta_bolta__(extract-business-dna|create-voice-profile|update-voice-profile|save-post|create-routine|confirm-plan)"'
+    target: 'trace'
+    match: 'not_contains'
+  - name: nothing-public
+    # Nothing published, scheduled, approved, switched on, run or started.
+    type: 'regex'
+    pattern: '"name"\s*:\s*"mcp__plugin_bolta_bolta__(publish-post|schedule-post|approve-post|approve-many-posts|activate-routine|resume-routine|run-routine-now|set-content-campaign-status|voice-generate)"'
+    target: 'trace'
+    match: 'not_contains'
+  - name: no-ids
+    # No ids in what the user reads (ids inside a Bolta link are fine).
+    type: 'regex'
+    pattern: '(?<![/=])\b[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}\b|(?<![/=])\b(linkedin_org|facebook_page)_\d+'
+    flags: 'i'
+    match: 'not_contains'
+  - name: plain-words
+    # No tool names or internal field names in what the user reads.
+    type: 'regex'
+    pattern: '\b(MCP|workspace_id|proposal_id|source_bindings?|approval_policy|review_every_artifact|extract-business-dna|create-voice-profile|update-voice-profile|confirm-plan|create-routine|activate-routine|plan-campaign|get-connect-link|list-routine-templates|switch_on|is_default|replace_voice|writing_samples)\b'
+    match: 'not_contains'
