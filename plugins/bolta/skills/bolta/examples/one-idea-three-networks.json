@@ -56,6 +56,13 @@
       "why": "The Facebook first comment is a second part on one network only, and parts are shared by every account on a post, so this is one post per network, each written fresh, in one bulk call (without it, one post with a text per network in platform_specific would do). The Facebook item has two parts: part 2 goes out as a comment from the Page, so it is aimed at the Page alone. Then poll bulk-create-status: its posts list gives the Facebook and Threads post ids for the next steps."
     },
     {
+      "tool": "bulk-create-status",
+      "arguments": {
+        "task_id": "<task_id from bulk-create-posts>"
+      },
+      "why": "Poll until completed: the posts are saved by then, and its posts list gives the Facebook and Threads post ids the next two calls change. Never change a post by an id from bulk-create-posts before this says it exists."
+    },
+    {
       "tool": "save-post",
       "arguments": {
         "post_id": "<Facebook post id from bulk-create-status>",
