@@ -362,6 +362,7 @@ function save_verdict(ti,   i, k, has_post, unsched, settings) {
 # from, what Bolta reads for it, or when it runs, which a running campaign
 # writes its next weeks from.
 function campaign_targets(ti,   i, k) {
+  if (jhas(ti, "autonomy_policy_version") || jhas(ti, "acknowledge_autonomy_migration") || jhas(ti, "approval_policy") || jhas(ti, "autonomy_override")) return "policy"
   for (i = 1; i <= JC[ti]; i++) {
     k = JK[ti SUBSEP i]
     if (k !~ /^(workspace_id|campaign_id|name|strategy_key|theme|audience|cta_text|cta_url|content_mix)$/) return "targets"

@@ -8,6 +8,8 @@ The plan got a yes and the campaign is filled one way. At the end: a verdict, on
 
 ## Know this
 
+- **Automatic publishing:** read [campaign autonomy](campaign-autonomy.md). A campaign policy grant is not permission for direct post calls. Preserve existing review rules unless the owner/admin explicitly confirms the exact change.
+
 - **Size it:** posts a week × weeks = drafts to review, plus what active Bolta routines and campaigns send. Over about 6, cut posts a week, not weeks (cap: 10 social a week). A first one gets 2 weeks. Subject taken? Offer that one. Campaign or routine, what fits which event: [choosing.md](campaign-choosing.md).
 - **Strategy:** always send one, from [strategies.md](campaign-strategies.md): dashboard name, a gloss. A launch is Problem / Solution; Offer & Promotion needs a real price and end date.
 - **Dates:** `starts_on` today or later, a real `ends_on` (`null` is ignored; no open-ended campaign), the event in the last week.
@@ -44,3 +46,4 @@ The plan got a yes and the campaign is filled one way. At the end: a verdict, on
 
 - Follow the house rules in the Bolta skill.
 - Never start a campaign with no accounts when the workspace has some, or one I filled.
+
