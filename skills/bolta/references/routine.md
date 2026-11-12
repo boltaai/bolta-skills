@@ -20,7 +20,7 @@ It's on, changed, paused or stopped; they know when drafts land: "Bolta routine 
 - **Every setting**, default and when not: [routine-settings.md](routine-settings.md) (schedule, accounts, voice, reviewers), [output](routine-settings-output.md) (count, pages, topics), [writing](routine-settings-writing.md) (pillars, tone, stories).
 - **Accounts:** one per network named (none named: those used this week), `{"provider":"social_account","ref":"<account id>"}`. `count` is per run, across networks. Clock and cron: [routine-schedules.md](routine-schedules.md).
 - **Switching on is not running.** Run now uses credits and needs it on.
-- **"Post without asking"** only on those words, where routine and brand allow it (settings above).
+- **"Post without asking"** needs an explicit grant scoped to this Bolta routine. Read [routine autonomy](routine-autonomy.md): inspect current policy, preserve existing review rules, confirm any migration separately and verify the read-back. Workspace Auto alone is not proof.
 - **Drafts keep missing, "is it working?":** [routine-improving.md](routine-improving.md). A no with a reason teaches Bolta.
 - Pictures, the client, stories, Library posts: [routine-outputs.md](routine-outputs.md).
 - Change, pause, stop, Monday's drafts: [routine-looking-after.md](routine-looking-after.md). Why it didn't run, a refused run now: [routine-runs.md](routine-runs.md).
@@ -44,3 +44,4 @@ It's on, changed, paused or stopped; they know when drafts land: "Bolta routine 
 - Bind every post routine to its accounts; ask me first unless they said "post without asking".
 - Say it's on only after `next_run_at` is read back.
 - Say "Bolta routine", never a bare "routine".
+

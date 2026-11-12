@@ -254,6 +254,9 @@ function hook_common(   tn, i, j, c) {
 # approval_policy in a create-routine or update-routine input:
 # review (exactly review_every_artifact), missing, or other.
 function policy(ti) {
+  # Migration is never covered by a review-first marker or batched approval.
+  # Presence, including false/null/invalid values, asks before the server validates.
+  if (jhas(ti, "autonomy_policy_version") || jhas(ti, "acknowledge_autonomy_migration")) return "other"
   if (!jhas(ti, "approval_policy")) return "missing"
   if (jtype(ti, "approval_policy") == "s" && jstr(ti, "approval_policy") == "review_every_artifact") return "review"
   return "other"
@@ -622,3 +625,4 @@ function field_main(   n, parts, i, p, v) {
 }'
 
 LC_ALL=C exec awk -v MODE="${1:-}" -v FIELD="${2:-}" "$prog"
+
