@@ -1,5 +1,27 @@
 # Eval results: full-coverage skill
 
+## Drafts to 0.95 (Nov 11, 2026)
+
+Judge: sonnet, 3 votes per llm grader; Claude Code 2.1.322. Four draft-quality cases, 3 runs each.
+
+**Judge reasons.** `claude plugin eval` has no option to keep the judge's reasoning: the result file keeps `judgeVotes` and `evidence` (the text judged), and the prompt ends "Respond with exactly one word". New `tools/rejudge_llm.py` re-asks with the same criteria and prompt layout (read from the binary) through `claude -p --safe-mode`, ending "PASS or FAIL, then why, quoting the words". It agrees with the eval's verdict on about half the FAILs (a different call path; the eval's three votes are nearly always identical), so its reasons were used as candidates and every fix was confirmed with the suite.
+
+**Failure causes** (reasons plus reading every failing reply): coffee/Threads: posts without "we" when the DO says "talk as the roasters"; a where-to-buy, subscription or website line stacked on the coffee; season and mood openers ("November mornings..."); "how it is used" lines ("easy to brew at home", "for the cup after dinner"); a line kept and flagged below ("my wording, cut it if untrue"). Candles: scenes and jokes ("no kettle needed"), "find them at our weekend markets" (a product tied to where the business sells). Dental: reassurance promises from the "calm words" DO ("tell us when you book", "we're glad to see you"). One run read `post-writing.md` but not the voice rules once they were split, so post.md and SKILL.md now link both pages. No case or record was contradictory; none changed.
+
+**Changes.** `post-writing.md` keeps the record rules (adds: when to have it, how easy it is, where one product is sold, months the record doesn't give; never keep a line and flag it; at most one non-record sentence per post). New `post-writing-voice.md`: a who-speaks DO holds in every post; one thought (no stacked subscription, schedule, offer or opener); one where-to line about the business, never "find it"; color at most one plain line, no scene, comparison or joke; feelings DOs met by tone, not promises. New `post-writing-threads.md`: 1-3 sentences, one idea, conversational, no link or hashtag in the text, a question only if it fits the voice. post.md, SKILL.md and post-settings-threads.md link them.
+
+| Case | Before (18e3d4e, fresh 3 runs) | After (07521c3, fresh 3 runs) |
+|-|-|-|
+| gauntlet-draft-quality | 0.970 | 0.970 |
+| -saas-linkedin | 1.000 | 0.944 |
+| -dental-facebook | 0.970 | 1.000 |
+| -coffee-threads | 0.861 | 0.917 |
+| Mean | 0.950 | 0.958 |
+
+Intermediate skill versions scored 0.929 to 0.963 on the same 12 runs; the judge's verdict on near-identical replies flips, so one pass carries about +/-0.015 of noise. Before this branch the same cases scored 0.943 on the 64-tool branch (coffee 0.861 both times).
+
+Regression on 07521c3: safety 0.991 (21/25; was 0.988), smoke 0.989 (18/18; was 0.990), settings 0.993 (6/6; was 0.994), gauntlet 2 runs 0.980 over 15 cases (the 12 originals were 0.984). All misses are earlier ones (`warns-user`, `asks-to-schedule`, `reads-it-back`, `keeps-going-offered`) or single runs; no consent grader failed. Checker 0 errors (64-tool fixture, 593/593 keys); hooks 963 passed; sync up to date. Cost about $100 (regression $61, draft runs and judge replays about $39).
+
 ## Draft quality and three Release 2 ports (Nov 12, 2026)
 
 Judge: sonnet, 3 votes per llm grader. All runs `claude plugin eval`, Claude Code 2.1.322.
