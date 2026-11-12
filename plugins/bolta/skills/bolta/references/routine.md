@@ -1,6 +1,6 @@
 # Routine
 
-Set up, switch on, change, improve, pause or stop a Bolta routine: work Bolta repeats, like 3 LinkedIn drafts every Monday, with this app closed. Use for: every week or month, turn it on, each new blog post, run it now, pause it, why didn't it run, its drafts keep missing.
+Manage repeated work that runs with this app closed: weekly drafts, new-blog posts, activation, changes, pauses and missing runs.
 
 ## Done when
 

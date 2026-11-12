@@ -11,7 +11,7 @@ description: >-
   email, calendars, documents or other apps.
 ---
 
-Bolta is a voice-first content factory: it learns how a brand writes, drafts in that voice, and puts every draft on one review list, where each yes, edit and no with a reason on Bolta's drafts and app posts teaches it.
+Bolta learns a brand's voice and drafts for its review list. Approvals, edits and rejections with reasons teach it.
 
 Getting someone running, in order: an account, brand and voice (Bolta's setup), 3 to 5 Bolta routines, a campaign for anything dated, then the review list weekly ([start](references/start.md)). Every ask: read the house rules, look once, pick one playbook, read it, do the work, read the result back; a difference alone never holds back what was asked, a failure does.
 

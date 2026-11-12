@@ -1,10 +1,10 @@
 # Campaign
 
-Plan, start, check or close a campaign: 1 to 4 weeks of posts about one thing, like a launch, sale or event, ending with a verdict. Use for: we launch on Nov 3, a sale ending Friday, how did the campaign do, my campaign is doing nothing.
+Plan, start, check or close a campaign: 1 to 4 weeks about a launch, sale or event, ending with a verdict.
 
 ## Done when
 
-The plan got a yes and the campaign is filled one way. At the end: a verdict, one next step.
+Plan approved; campaign filled one way. End with a verdict and next step.
 
 ## Know this
 

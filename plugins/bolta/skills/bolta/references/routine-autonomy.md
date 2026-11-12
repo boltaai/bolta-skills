@@ -1,10 +1,10 @@
 # Automatic Bolta routines, not automatic client tool approval
 
-Use for "post without asking", Auto not taking effect, or changing a routine's approval model. Default remains review-first. This guide does not grant permission and does not bypass a client's confirmation controls.
+Use for automatic posting and approval-model changes. Default: review-first. This guide grants no permission or client-check bypass.
 
 ## Inspect before changing
 
-Read the named brand and `get-routine` again before any authority change. Inspect `approval_policy`, `autonomy_override`, `autonomy_policy_version`, `updated_at` and `effective_policy` when returned. `policy_migration_available` means server support, not permission for this person. Missing fields or a missing tool parameter mean the connected server cannot perform this flow; do not invent parameters or claim an upgrade is deployed.
+Reread the brand and `get-routine` before authority changes. Inspect `approval_policy`, `autonomy_override`, `autonomy_policy_version`, `updated_at` and `effective_policy` when returned. `policy_migration_available` means server support, not permission for this person. Missing fields or a missing tool parameter mean the connected server cannot perform this flow; do not invent parameters or claim an upgrade is deployed.
 
 `effective_policy` with `resolution_status: current_adapter` is a preview for the linked executor, not a delivery guarantee. `not_resolved` and null approval mean unknown, not automatic. Show remaining constraints in ordinary words. Safe Mode, client sign-off, principal/job restrictions, quality gates and explicit routine review can still prevent automatic scheduling. Do not clear them as a shortcut.
 
@@ -28,4 +28,4 @@ Verify four saved Post records and each record's three account attachments. A su
 
 ## Client boundary
 
-ChatGPT, Claude and other clients use the same advertised server contract, but may impose their own approvals. Do not promise identical host behavior. Bolta Auto does not turn off those checks. Direct approve/schedule/publish calls keep the post-level confirmation rules. Future Bolta-owned routine runs happen on the server and do not call the client's hooks. Client scheduled tasks remain draft/review-only. Never disable hooks to simulate automatic routines.
+Clients share the server contract but may impose their own approvals. Do not promise identical host behavior. Bolta Auto does not turn off those checks. Direct approve/schedule/publish calls keep the post-level confirmation rules. Future Bolta-owned routine runs happen on the server and do not call the client's hooks. Client scheduled tasks remain draft/review-only. Never disable hooks to simulate automatic routines.
