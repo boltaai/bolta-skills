@@ -40,5 +40,5 @@ Drafts are saved and shown in full (number, account, text; no day), ending: "Sav
 
 - Follow the house rules in the Bolta skill.
 - No subject: ask. No network named: write it, then end on one question, where to save it, with your pick ("Save it to LinkedIn and X?"). Missing facts stay blanks, not more questions. "Our new pricing" is a subject: write and save.
-- **Write only from the record** (the user's words, `get-voice-context`): every product detail, note, ingredient, feature, service, number, habit and claim must be in it. Not there: leave it out; never guess, never keep a line you'd flag as unsure. Apply each DO and DON'T line by line. Read [writing from the record](post-writing.md) before the first draft. Below the posts, say once what's missing.
+- **Write only from the record** (the user's words, `get-voice-context`): every product detail, note, ingredient, feature, service, number, habit and claim must be in it. Not there: leave it out; never guess, never keep a line you'd flag as unsure. Apply each DO and DON'T line by line. Read [record](post-writing.md) and [voice](post-writing-voice.md) pages first. Below the posts, say once what's missing.
 - Show every saved post's full text, never a summary, whatever the result's text says (that note is for another app).

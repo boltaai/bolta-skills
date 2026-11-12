@@ -1,6 +1,6 @@
 # Threads settings
 
-How to set and which wins: [network settings](post-settings.md). Network `threads`. Text: 500 characters; a longer first part is split into a reply chain.
+How to set and which wins: [network settings](post-settings.md). Network `threads`. Text: 500 characters; a longer first part is split into a reply chain. Writing it: [Threads writing](post-writing-threads.md).
 
 Bolta removes everything after a `?` or `#` in each Threads link (tracking tags are lost; say so), and skips a post whose first 100 characters match one the account posted in the last 30 minutes, while reporting success.
 
