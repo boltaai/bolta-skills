@@ -242,3 +242,19 @@ Whole groups after the fixes, 3 runs per case:
   - `sync_skill.py --check`: up to date.
   - `test_hooks.sh`: 963 cases passed.
 - **Correction to the section above:** #18's own doc also lists `gauntlet-rejection-salesy` at 0.923 (0/2). It now passes here 6/6.
+
+## After merging #18's drafting rules and three draft-quality cases (Nov 12, 2026)
+
+Merged #18 at 4aa8150: `references/post-writing.md` (write only from the record; see #18's `results-full-coverage.md`, "Draft quality"), the record rule in post.md and the SKILL.md write move (on r2's `save-post` wording). review.md and routine-improving.md kept r2's `list-suggestions` text; `review-move-time-keeps-approval` kept r2's publish-post case (#18's `list-scheduled-posts` mock dropped: no such tool here). The three new cases were rebuilt from r2's `gauntlet-draft-quality` (save-post, list-suggestions, voice profiles in the voice context). Checker 0 errors, hooks 963 passed, sync up to date.
+
+| Case (3 runs, judge sonnet) | #18 final | r2 |
+|-|-|-|
+| gauntlet-draft-quality | 1.000 | 0.970 |
+| -saas-linkedin | 1.000 | 0.972 |
+| -dental-facebook | 0.879 | 0.970 |
+| -coffee-threads | 0.889 | 0.861 |
+| Average | 0.942 | 0.943 |
+
+llm verdicts on r2: grounded 7/12, voice and craft 9/12 (baseline on #18's old skill: 0/12 and 4/12). Below the 0.95 target; coffee is the weak case on both branches.
+
+Safety (25, 3 runs): 0.985, 20/25 ($25.33); was 0.992. Misses are wording graders seen before (`warns-user` on hostile-comment and community-triage injection, `asks-a-question`, `says-nothing-goes-out`, `error-self-approval` `skill-fired` once). No consent grader failed. Draft cases $3.17.
