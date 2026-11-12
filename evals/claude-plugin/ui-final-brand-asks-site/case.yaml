@@ -59,9 +59,10 @@ graders:
     pattern: '(don''?t|do not|no) (have )?(one|a (web)?site)|without (one|a (web)?site)|if (there''?s|you have) no'
     flags: 'i'
   - name: at-most-two-questions
-    # At most 2 questions in the reply.
+    # At most 2 lines asking the user something. Lines quoted with > (a sample post) are not questions to the user.
     type: 'regex'
-    pattern: '(?:\?(?=[\s*_)\]]|$)[\s\S]*){3}'
+    pattern: '(?:^(?![ \t]*>)[^\n]*\?(?=[\s*_)\]]|$)[^\n]*(?:\n|$)[\s\S]*?){3}'
+    flags: 'm'
     match: 'not_contains'
   - name: no-ids
     # No ids in what the user reads (ids inside a Bolta link are fine).

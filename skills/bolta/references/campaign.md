@@ -11,9 +11,9 @@ The plan got a yes and the campaign is filled one way. At the end: a verdict, on
 - **Size it:** posts a week × weeks = drafts to review, plus what active Bolta routines and campaigns send. Over about 6, cut posts a week, not weeks (cap: 10 social a week). A first one gets 2 weeks. Subject taken? Offer that one. Campaign or routine, what fits which event: [choosing.md](campaign-choosing.md).
 - **Strategy:** always send one, from [strategies.md](campaign-strategies.md): dashboard name, a gloss. A launch is Problem / Solution; Offer & Promotion needs a real price and end date.
 - **Dates:** `starts_on` today or later, a real `ends_on` (`null` is ignored; no open-ended campaign), the event in the last week.
-- **From what you know:** event, date, audience, offer from the conversation plus what Bolta holds, in one "Based on..." line, as `context` ([planner-context](routine-planner-context.md)). Never re-ask a given date.
+- **From what you know:** the conversation plus what Bolta holds, in one "Based on..." line, as `context` ([planner-context](routine-planner-context.md)). Never re-ask a given date.
 - **Ask at most one thing:** a missing link, date or (Offer & Promotion) the offer. None named: ask which, and when.
-- **One plan, then "Start it?"** Where offered, `plan` (`kind: "campaign"`) plans and `confirm-plan` saves it not started ([how-to.md](campaign-how-to.md)). Told to start or write now? That's the yes: create, fill and start (or write) in one turn, then show the plan. A read-back differing only in your choices (mix, notes) never holds it.
+- **One plan, then "Start it?"** `plan` (`kind: "campaign"`; load it with the other Bolta tools) plans it, in the same reply; `confirm-plan` saves it not started ([how-to.md](campaign-how-to.md)). By hand only when no `plan` tool exists. Told to start or write now? That's the yes: create, fill and start (or write) in one turn, then show the plan.
   > **Campaign: New pricing** (not started)
   > - Strategy: Problem / Solution
   > - When: Oct 19 to Nov 8 (3 weeks; launch in week 3)

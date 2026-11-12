@@ -8,40 +8,14 @@ structuredContent:
     "workspace": {
       "id": "5a1d0000-0000-4000-8000-0000000000a2"
     },
-    "voice_profile": {
-      "id": "9b000000-0000-4000-8000-0000000000a1",
-      "name": "Starter Voice",
-      "description": "",
-      "speaker_mode": "brand",
-      "language": "en",
-      "is_default": true
-    },
+    "voice_profile": null,
     "business": {
       "name": "Harbor Physio",
       "overview": "",
       "tagline": "",
       "website_url": ""
     },
-    "writing": {
-      "tone": {
-        "playful": 50,
-        "professional": 50,
-        "direct": 50,
-        "thoughtful": 50
-      },
-      "persona": "",
-      "formality": 40,
-      "pacing": "concise",
-      "content_size": "standard",
-      "use_emojis": false,
-      "custom_rules": "",
-      "target_audience": "",
-      "default_post_intent": null,
-      "dos": [],
-      "donts": [],
-      "tone_of_voice": [],
-      "feedback_count": 0
-    },
+    "writing": null,
     "platforms": {},
     "knowledge": {
       "profile_id": null,
@@ -52,21 +26,11 @@ structuredContent:
       "business_dna_source": "none"
     },
     "missing_fields": [
+      "voice_profile",
       "business.overview",
       "business.website_url"
     ],
-    "profiles": [
-      {
-        "id": "9b000000-0000-4000-8000-0000000000a1",
-        "name": "Starter Voice",
-        "speaker_mode": "brand",
-        "is_default": true,
-        "account_ids": [
-          "ac000000-0000-4000-8000-0000000000a1",
-          "facebook_page_5512098834"
-        ]
-      }
-    ]
+    "profiles": []
   },
   "error": null,
   "error_kind": null,

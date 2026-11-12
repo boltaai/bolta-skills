@@ -42,7 +42,8 @@ NOIDS = regex("no-ids", r'(?<![/=])\b[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f
               "No ids in what the user reads (ids inside a Bolta link are fine).", flags="i", match="not_contains")
 PLAIN = regex("plain-words", r'\b(MCP|workspace_id|proposal_id|source_bindings?|approval_policy|review_every_artifact|extract-business-dna|create-voice-profile|update-voice-profile|confirm-plan|create-routine|activate-routine|plan-campaign|get-connect-link|list-routine-templates|switch_on|is_default|replace_voice|writing_samples)\b',
               "No tool names or internal field names in what the user reads.", match="not_contains")
-TWOQ = regex("at-most-two-questions", r'(?:\?(?=[\s*_)\]]|$)[\s\S]*){3}', "At most 2 questions in the reply.", match="not_contains")
+TWOQ = regex("at-most-two-questions", r'(?:^(?![ \t]*>)[^\n]*\?(?=[\s*_)\]]|$)[^\n]*(?:\n|$)[\s\S]*?){3}',
+              "At most 2 lines asking the user something. Lines quoted with > (a sample post) are not questions to the user.", flags="m", match="not_contains")
 SAVES = r'"name"\s*:\s*"mcp__plugin_bolta_bolta__(save-post|bulk-create-posts|create-post|create-routine|confirm-plan|create-content-campaign|create-voice-profile|update-voice-profile|update-business-dna)"'
 NOSAVE = regex("nothing-saved", SAVES, "A preview or a question, not a save.", target="trace", match="not_contains")
 NO_SETUP = tool_used("no-setup-yet", "extract-business-dna", r'^(?![\s\S]*"(?:preview|check)"\W{1,6}true)', 0, 0,
@@ -175,12 +176,11 @@ def build():
                       "**Sample post:** \"Long run left your calves tight? Two easy moves tonight, and when it's time to see Anna.\"\n\n"
                       "**Assumptions:** the topics are mine. A website would add your opening hours and booking link.\n\nSave this to Harbor Physio?")
     case("ui-final-brand-no-website-save", harbor_src,
-         "Harbor Physio (no website) approves the brand built from chat: the existing thin Starter Voice is filled from the findings (no second voice, no website read), the accounts named, and colours, fonts or a logo asked once.",
-         "bolta fires; update-voice-profile on the Starter Voice with the audience; no create-voice-profile; no extract-business-dna; asks once for colours or a logo; nothing invented.",
+         "Harbor Physio (no website, no voice yet) approves the brand built from chat: one voice made from the findings (no website read), the accounts named, and colours, fonts or a logo asked once.",
+         "bolta fires; one create-voice-profile with the audience; no extract-business-dna; asks once for colours or a logo; names the accounts.",
          convo(HARBOR_CHAT + [("Me", harbor_brand), ("You", findings_reply), ("Me", "That's right. We don't have a website."), ("You", manual_preview)], "Looks good, save it."),
-         [tool_used("fills-starter-voice", "update-voice-profile", "9b000000-0000-4000-8000-0000000000a1", 1, None, "The thin Starter Voice is filled, never a second voice."),
-          tool_used("audience-from-chat", "update-voice-profile", r'"target_audience"\s*:\s*"[^"]*(runners|tradies|mums)', 1, None, "Who they said they serve."),
-          tool_used("no-second-voice", "create-voice-profile", None, 0, 0, "A Starter Voice exists."),
+         [tool_used("makes-the-voice", "create-voice-profile", None, 1, 1, "No voice yet and no website: one voice from what they said."),
+          tool_used("audience-from-chat", "create-voice-profile", r'"target_audience"\s*:\s*"[^"]*(runners|tradies|mums)', 1, None, "Who they said they serve."),
           tool_used("no-site-read", "extract-business-dna", None, 0, 0, "No website."),
           PUBLIC,
           regex("asks-visuals-once", r"(colou?rs?|fonts?|logo)[^?\n]{0,160}\?", "Owner: no site means no colours, fonts or logo; asked once, optionally.", flags="i"),
@@ -295,9 +295,15 @@ print("generated")
 # Harbor Physio with no website: nothing in its world may carry the site or a business record.
 for c in ("ui-final-brand-asks-site", "ui-final-brand-no-website", "ui-final-brand-no-website-save"):
     mb = EV / c / "mocks" / "bolta"
-    for f in ("update-business-dna.md", "extract-business-dna.md"):
+    for f in ("update-business-dna.md", "extract-business-dna.md", "get-voice-profile.md", "update-voice-profile.md"):
         (mb / f).unlink(missing_ok=True)
-    for f in ("update-voice-profile.md", "create-voice-profile.md"):
+    # No voice yet (as a brand with no website and no setup has): Lumen's no-voice world, renamed.
+    lumen = EV / "ui-brand-notes-save" / "mocks" / "bolta"
+    for f in ("get-voice-context.md", "create-voice-profile.md"):
+        t = (lumen / f).read_text().replace("Lumen Dental Studio", "Harbor Physio").replace("5a1d0000-0000-4000-8000-0000000000c4", "5a1d0000-0000-4000-8000-0000000000a2")
+        t = t.replace('"facebook_page_7731904456"', '"facebook_page_5512098834"').replace("facebook_page_7731904456", "facebook_page_5512098834")
+        (mb / f).write_text(t)
+    for f in ("create-voice-profile.md",):
         t = (mb / f).read_text()
         t = t.replace('"business_dna_id": "d7a00000-0000-4000-8000-0000000000a2"', '"business_dna_id": null').replace("https://harborphysio.example", "").replace("harborphysio.example", "")
         (mb / f).write_text(t)

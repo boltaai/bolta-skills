@@ -15,7 +15,7 @@ One line before the plan:
 
 > Based on your brand in Bolta (voice: warm, plain; best posts: customer stories on LinkedIn; already running: weekly tips) and what you told me (launch on Dec 3, about 3 posts a week to review), here's what I'd set up.
 
-- Then `plan` in the same reply (routine, recommend or campaign) and show its result: the outline comes from Bolta's planner, not from you.
+- Then `plan` in the same reply (routine, recommend or campaign; load it with the other Bolta tools) and show its result: the outline comes from Bolta's planner, not from you.
 - A gap the planner can size (review time, cadence, how many drafts): assume a sensible default, say it in the line ("about 3 drafts a week; say if you want more"), never stop to ask. Ask first only what blocks a plan: a campaign with no event or date.
 - A launch date or an event already in the conversation: use it; never ask again.
 - They correct a finding: the correction wins, in what you send and what you show.
