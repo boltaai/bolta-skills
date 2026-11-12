@@ -11,7 +11,7 @@
         "account_ids": [
           "<TikTok account id>"
         ],
-        "media": [
+        "media_urls": [
           {
             "url": "https://cdn.example.com/serum.mp4"
           }

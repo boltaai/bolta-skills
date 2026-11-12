@@ -45,7 +45,7 @@ graders:
     # A ghost post with an image goes out as a lasting post.
     type: tool_used
     tool: mcp__plugin_bolta_bolta__save-post
-    input_match: '^(?![\s\S]*"post_id")(?=[\s\S]*(?:"media"\s*:\s*\[\s*[\{"]))'
+    input_match: '^(?![\s\S]*"post_id")(?=[\s\S]*(?:"media(?:_urls)?"\s*:\s*\[\s*[\{"]))'
     min: 0
     max: 0
   - name: code-kept

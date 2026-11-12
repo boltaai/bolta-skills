@@ -17,7 +17,7 @@ All both, per account, unless marked.
 - **Comments and pingbacks**: `comment_status`, `ping_status`, `open` (default) or `closed`.
 - **Pinned to the top**: `sticky` (default false). Guidance: one sticky article at a time, for a launch or an important notice.
 - **Format**: `format` `standard` (default), `aside`, `chat`, `gallery`, `link`, `image`, `quote`, `status`, `video`, `audio`. Only matters if the site's theme uses formats; leave `standard` otherwise.
-- **Featured image**: on save, `media` with `role: "featured"` ([WordPress articles](post-wordpress.md)). `featured_media_id` (details only) takes the site's own media id; leave it to the save.
+- **Featured image**: on save, `media_urls` with `role: "featured"` ([WordPress articles](post-wordpress.md)). `featured_media_id` (details only) takes the site's own media id; leave it to the save.
 
 When it goes out it is published live on the site, never sent as a WordPress draft or for review there; `status` (`publish`, `draft`, `private`, `pending`, `future`, `trash`) can't be set.
 

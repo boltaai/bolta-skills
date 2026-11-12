@@ -1,0 +1,90 @@
+schema_version: "1.1"
+name: ui-routine-recommend-save
+description: 'After the 4 recommended routines the user picks 1 and 3. Exactly those two are saved switched off, each with its link in Bolta, and turning them on is asked separately.'
+tags: [uiprompts-screens]
+expected_outcome: 'bolta fires; two saves (confirm-plan without switch_on, or create-routine asking first); never a third; no activate, run or switch_on true; two routine links; asks before turning on.'
+execution:
+  prompt: |
+    This conversation so far:
+
+    **Me:**
+    > Use Bolta to get me set up with the right routines for DevConsole. Look at our brand, accounts and recent posts, recommend 3 to 5 routines that fit how we work and how much I can review each week, and show me what each run produces, the schedule and timezone, the account and the voice. Ask only for what's missing. After I pick, save them switched off, link me to each in Bolta, and ask separately before turning any on.
+
+    **You:**
+    > Here are 4 Bolta routines that fit DevConsole, best fit first. Each uses your DevConsole voice, runs in Pacific time, and every draft waits for your yes. Nothing is saved yet.
+    >
+    > 1. **Debugging tips**: Mondays 9:00 am, 2 LinkedIn drafts on the DevConsole page. Real fixes with Request Replay.
+    > 2. **Changelog to posts**: Wednesdays 10:00 am, 1 LinkedIn and 1 X draft from what shipped.
+    > 3. **Error of the week**: Thursdays 9:00 am, 1 X draft on @devconsole. One error, the cause, the fix.
+    > 4. **Monthly results report**: 1st of each month, 8:00 am. A short report for you, not a post.
+    >
+    > About 5 drafts a week to review. Which should I set up? They're saved switched off.
+
+    **Me now:**
+    Set up 1 and 3.
+  max_turns: 25
+  timeout_seconds: 480
+  allowed_tools: [Skill, Read]
+graders:
+  - name: skill-fired
+    # The Bolta skill owns this ask.
+    type: 'tool_used'
+    tool: 'Skill'
+    input_match: '"skill"\s*:\s*"(?:[\w-]+:)?(bolta)"'
+    min: 1
+  - name: saves-two
+    # Both saved.
+    type: 'regex'
+    pattern: '(?:"name"\s*:\s*"mcp__plugin_bolta_bolta__(confirm-plan|create-routine)"[\s\S]*){2}'
+    target: 'trace'
+  - name: not-three
+    # Only the two picked.
+    type: 'regex'
+    pattern: '(?:"name"\s*:\s*"mcp__plugin_bolta_bolta__(confirm-plan|create-routine)"[\s\S]*){3}'
+    target: 'trace'
+    match: 'not_contains'
+  - name: review-every-post
+    # A hand-made routine asks first.
+    type: 'tool_used'
+    tool: 'mcp__plugin_bolta_bolta__create-routine'
+    input_match: '^(?![\s\S]*"approval_policy"\W{1,6}review_every_artifact)'
+    min: 0
+    max: 0
+  - name: no-switch-on
+    # Never switch_on.
+    type: 'regex'
+    pattern: '"switch_on\W{1,6}true'
+    target: 'trace'
+    match: 'not_contains'
+  - name: nothing-public
+    # Nothing published, scheduled, approved, switched on, run or started.
+    type: 'regex'
+    pattern: '"name"\s*:\s*"mcp__plugin_bolta_bolta__(publish-post|schedule-post|approve-post|approve-many-posts|activate-routine|resume-routine|run-routine-now|set-content-campaign-status|voice-generate)"'
+    target: 'trace'
+    match: 'not_contains'
+  - name: names-both
+    # Names both routines.
+    type: 'regex'
+    pattern: 'Debugging tips[\s\S]*Error of the week|Error of the week[\s\S]*Debugging tips'
+    flags: 'i'
+  - name: two-links
+    # A link to each in Bolta.
+    type: 'regex'
+    pattern: '(bolta\.ai/dashboard/routines/[\s\S]*){2}'
+    flags: 'i'
+  - name: asks-before-on
+    # Asks separately before turning any on.
+    type: 'regex'
+    pattern: '(switch|turn)(ed|ing)?\s+(them|it|both|either|any|one)?\s*(\w+\s+)?on\b[^?\n]{0,80}\?|activat[^?\n]{0,80}\?'
+    flags: 'i'
+  - name: no-ids
+    # No ids in what the user reads (ids inside a Bolta link are fine).
+    type: 'regex'
+    pattern: '(?<![/=])\b[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}\b|(?<![/=])\b(linkedin_org|facebook_page)_\d+'
+    flags: 'i'
+    match: 'not_contains'
+  - name: plain-words
+    # No tool names or internal field names in what the user reads.
+    type: 'regex'
+    pattern: '\b(MCP|workspace_id|proposal_id|source_bindings?|approval_policy|review_every_artifact|extract-business-dna|create-voice-profile|update-voice-profile|confirm-plan|create-routine|activate-routine|plan-campaign|get-connect-link|list-routine-templates|switch_on|is_default)\b'
+    match: 'not_contains'

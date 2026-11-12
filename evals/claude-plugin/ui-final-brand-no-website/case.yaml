@@ -1,0 +1,77 @@
+schema_version: "1.1"
+name: ui-final-brand-no-website
+description: "Harbor Physio has no website: the brand is previewed from the chat findings alone, with nothing invented, and nothing saved before a yes."
+tags: [uiprompts]
+expected_outcome: "bolta fires; no extract-business-dna; nothing saved; a preview from the findings; no invented facts; asks before saving."
+execution:
+  prompt: |
+    This conversation so far:
+
+    **Me:**
+    > Quick one before Bolta: I'm Anna Ruiz and I run Harbor Physio in Williamstown. Most of our people are weekend runners, tradies and new mums getting back to exercise. We do sports massage, rehab plans and small-group Pilates. I write short and plain, like a friendly coach, never like a medical brochure, and I hate hashtag walls.
+
+    **You:**
+    > Got it, Anna: Harbor Physio, Williamstown, for weekend runners, tradies and new mums; sports massage, rehab plans and small-group Pilates; short, plain, friendly-coach writing, no hashtag walls.
+
+    **Me:**
+    > Use Bolta to set up our brand for Harbor Physio. If no social accounts are connected, give me the link to connect one first. First, look through what you know about me and our business from our chats and show me what you found: what we do, our website, who we serve, our products and how I write. Ask only for what's missing, our website first if you didn't find it. If we don't have one, build it from what you found plus any notes I share. Preview before saving: positioning, products, writing rules, topics and a sample post. Flag assumptions. Only after I say yes, save it, assign the voice to our connected accounts, and link me to review it in Bolta.
+
+    **You:**
+    > From our chats: you run Harbor Physio in Williamstown, for weekend runners, tradies and new mums; you do sports massage, rehab plans and small-group Pilates; you write short and plain, like a friendly coach, no hashtag walls. Right? What's your website? If you don't have one, I'll build it from what you've told me.
+
+    **Me now:**
+    That's right. We don't have a website.
+  max_turns: 25
+  timeout_seconds: 480
+  allowed_tools: [Skill, Read]
+graders:
+  - name: skill-fired
+    # The Bolta skill owns this ask.
+    type: 'tool_used'
+    tool: 'Skill'
+    input_match: '"skill"\s*:\s*"(?:[\w-]+:)?(bolta)"'
+    min: 1
+  - name: no-site-guessed
+    # No website: never read or guess one.
+    type: 'tool_used'
+    tool: 'mcp__plugin_bolta_bolta__extract-business-dna'
+    min: 0
+    max: 0
+  - name: nothing-saved
+    # A preview or a question, not a save.
+    type: 'regex'
+    pattern: '"name"\s*:\s*"mcp__plugin_bolta_bolta__(save-post|bulk-create-posts|create-post|create-routine|confirm-plan|create-content-campaign|create-voice-profile|update-voice-profile|update-business-dna)"'
+    target: 'trace'
+    match: 'not_contains'
+  - name: nothing-public
+    # Nothing published, scheduled, approved, switched on, run or started.
+    type: 'regex'
+    pattern: '"name"\s*:\s*"mcp__plugin_bolta_bolta__(publish-post|schedule-post|approve-post|approve-many-posts|activate-routine|resume-routine|run-routine-now|set-content-campaign-status|voice-generate)"'
+    target: 'trace'
+    match: 'not_contains'
+  - name: asks-before-saving
+    # Preview first; asks before saving.
+    type: 'regex'
+    pattern: '(save|set (it )?up|go ahead)[^?\n]{0,80}\?'
+    flags: 'i'
+  - name: nothing-invented
+    type: 'llm'
+    criteria: |
+      The user, Anna Ruiz, runs Harbor Physio (Williamstown), for weekend runners, tradies and new mums, offering sports massage, rehab plans and small-group Pilates, and writes short and plain like a friendly coach, no hashtag walls. They have no website. PASS if the reply previews a brand profile built only from these facts (a sample post may illustrate the voice but must not state new facts such as prices, opening hours, years in business, awards, other staff or services) and saves nothing yet. What Bolta itself reports is not invented: the brand's Instagram (@harborphysio) and Facebook page are connected and no voice is saved yet; assumptions the reply labels as its own choices (we vs I, spelling, a hashtag limit) are not facts. FAIL if it states any business fact the user did not give, or invents a website. (Grader fix: the first version failed replies for naming the connected accounts Bolta returned; a re-judge with reasons passed all three.)
+  - name: at-most-two-questions
+    # At most 2 lines asking the user something. Lines quoted with > (a sample post) are not questions to the user.
+    type: 'regex'
+    pattern: '(?:^(?![ \t]*>)[^\n]*\?(?=[\s*_)\]]|$)[^\n]*(?:\n|$)[\s\S]*?){3}'
+    flags: 'm'
+    match: 'not_contains'
+  - name: no-ids
+    # No ids in what the user reads (ids inside a Bolta link are fine).
+    type: 'regex'
+    pattern: '(?<![/=])\b[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}\b|(?<![/=])\b(linkedin_org|facebook_page)_\d+'
+    flags: 'i'
+    match: 'not_contains'
+  - name: plain-words
+    # No tool names or internal field names in what the user reads.
+    type: 'regex'
+    pattern: '\b(MCP|workspace_id|proposal_id|source_bindings?|approval_policy|review_every_artifact|extract-business-dna|create-voice-profile|update-voice-profile|confirm-plan|create-routine|activate-routine|plan-campaign|get-connect-link|list-routine-templates|switch_on|is_default|replace_voice|writing_samples)\b'
+    match: 'not_contains'

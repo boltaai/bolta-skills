@@ -1,0 +1,116 @@
+schema_version: "1.1"
+name: ui-brand-site-notes-save
+description: 'Harbor Physio ran the Brand prompt, saw the preview, then shares notes and an Instagram sample and says save. The brand has a thin Starter Voice (from onboarding) on its Instagram and Facebook. The site read is saved and the existing voice is updated with the notes (full DO and DON''T lists), linked to the new business record; no second brand voice.'
+tags: [uiprompts-screens]
+expected_outcome: 'bolta fires; one extract-business-dna setup:true carrying notes (book a session), writing_samples (the sample) and audience; never create-voice-profile; names Instagram/Facebook; Bolta link.'
+execution:
+  prompt: |
+    This conversation so far:
+
+    **Me:**
+    > Use Bolta to set up Brand for Harbor Physio from harborphysio.example. Use Bolta's website import to learn what we sell, who we serve, and how we write.
+    >
+    > Use any notes or writing samples I share to refine the voice. Show me our positioning, products, writing rules, a few content topics, and one sample post. Flag assumptions.
+    >
+    > Show me the preview before saving. If the import saves automatically, ask first. After saving, tell me where to review it in Bolta.
+
+    **You:**
+    > Here's what Bolta's website import read from harborphysio.example. Nothing is saved yet.
+    >
+    > **Positioning:** A physiotherapy clinic in Williamstown, Melbourne, "Get back to what you love."
+    > **Services:** sports injuries, back and neck pain, post-surgery rehab, small-group Pilates. Physios Anna Ruiz and Tom Hale. Book online; private health rebates on the spot; open Monday to Saturday.
+    > **Writing rules**
+    > DO: explain the cause in plain words before the fix · encourage people to keep moving
+    > DON'T: medical jargon without explaining it
+    > **Tone:** warm, encouraging, plain.
+    > **Content topics:** why a niggle keeps coming back · what happens at a first session · moving well after surgery.
+    > **Sample post (Instagram):**
+    > "Back sore after a weekend in the garden? It's usually load, not age. Anna's three gentle moves to try tonight, and when to come and see us."
+    >
+    > **Assumptions:** who you serve isn't spelled out on the site, so I guessed active locals; your Starter Voice has no rules yet, so these would fill it.
+    >
+    > Your Instagram and Facebook already use your Starter Voice. Want to share any notes or writing samples before I save?
+
+    **Me now:**
+    A few notes before you save:
+    - We talk like a friendly coach, never like a medical brochure.
+    - Always say "book a session", never "book an appointment".
+    - No before-and-after photos and no promises of pain-free results (health advertising rules).
+    - Our people: weekend runners, tradies, and new mums getting back to exercise.
+    Writing sample from our Instagram: "Tight hamstrings after your Sunday long run? That's not age, it's load. Here are the three easy moves we give every runner who walks in, and the one sign it's time to book a session."
+
+    Looks good otherwise, save it.
+  max_turns: 25
+  timeout_seconds: 480
+  allowed_tools: [Skill, Read]
+graders:
+  - name: skill-fired
+    # The Bolta skill owns this ask.
+    type: 'tool_used'
+    tool: 'Skill'
+    input_match: '"skill"\s*:\s*"(?:[\w-]+:)?(bolta)"'
+    min: 1
+  - name: sets-up-on-yes
+    # Bolta-Server #1482: the yes runs Bolta's own setup once; it fills the Starter Voice, never a second.
+    type: 'tool_used'
+    tool: 'mcp__plugin_bolta_bolta__extract-business-dna'
+    input_match: '"setup"\W{1,6}true'
+    min: 1
+    max: 1
+  - name: no-second-voice
+    # No second brand voice.
+    type: 'tool_used'
+    tool: 'mcp__plugin_bolta_bolta__create-voice-profile'
+    min: 0
+    max: 0
+  - name: no-content-writes
+    # No post, routine or campaign saved.
+    type: 'regex'
+    pattern: '"name"\s*:\s*"mcp__plugin_bolta_bolta__(save-post|bulk-create-posts|create-post|create-routine|confirm-plan|create-content-campaign)"'
+    target: 'trace'
+    match: 'not_contains'
+  - name: nothing-public
+    # Nothing published, scheduled, approved, switched on, run or started.
+    type: 'regex'
+    pattern: '"name"\s*:\s*"mcp__plugin_bolta_bolta__(publish-post|schedule-post|approve-post|approve-many-posts|activate-routine|resume-routine|run-routine-now|set-content-campaign-status|voice-generate)"'
+    target: 'trace'
+    match: 'not_contains'
+  - name: names-voice-accounts
+    # Owner rule: says which social accounts use this voice.
+    type: 'regex'
+    pattern: '(assign|attach|link|connect|tie|use[sd]?|post(s|ing)? (as|from|to)|writes? for|apply|applies|set (to|for|on))[^.\n]{0,90}(Instagram|Facebook|@?harborphysio)|(Instagram|Facebook|@?harborphysio)[^.\n]{0,90}(assign|attach|linked|connected|will use|uses|use this voice|use the voice|gets? this voice|on this voice|write[sn]? (in|with))'
+    flags: 'i'
+  - name: review-link
+    # Where to review it in Bolta.
+    type: 'regex'
+    pattern: 'bolta\.ai/dashboard/knowledge-base'
+    flags: 'i'
+  - name: no-ids
+    # No ids in what the user reads (ids inside a Bolta link are fine).
+    type: 'regex'
+    pattern: '(?<![/=])\b[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}\b|(?<![/=])\b(linkedin_org|facebook_page)_\d+'
+    flags: 'i'
+    match: 'not_contains'
+  - name: plain-words
+    # No tool names or internal field names in what the user reads.
+    type: 'regex'
+    pattern: '\b(MCP|workspace_id|proposal_id|source_bindings?|approval_policy|review_every_artifact|extract-business-dna|create-voice-profile|update-voice-profile|confirm-plan|create-routine|activate-routine|plan-campaign|get-connect-link|list-routine-templates|switch_on|is_default)\b'
+    match: 'not_contains'
+  - name: notes-passed
+    # The user's notes go into the setup (notes), not a later voice edit.
+    type: 'tool_used'
+    tool: 'mcp__plugin_bolta_bolta__extract-business-dna'
+    input_match: '"setup"\W{1,6}true[\s\S]*book a session|book a session[\s\S]*"setup"\W{1,6}true'
+    min: 1
+  - name: sample-passed
+    # The Instagram sample they pasted, verbatim, as writing_samples.
+    type: 'tool_used'
+    tool: 'mcp__plugin_bolta_bolta__extract-business-dna'
+    input_match: '"writing_samples"\s*:\s*\[[^\]]*hamstrings'
+    min: 1
+  - name: audience-passed
+    # Who they said they reach, as audience.
+    type: 'tool_used'
+    tool: 'mcp__plugin_bolta_bolta__extract-business-dna'
+    input_match: '"audience"\s*:\s*"[^"]*(runners|tradies|mums)'
+    min: 1

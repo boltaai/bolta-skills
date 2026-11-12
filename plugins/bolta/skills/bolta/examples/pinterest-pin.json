@@ -18,7 +18,7 @@
         "account_ids": [
           "<Pinterest account id>"
         ],
-        "media": [
+        "media_urls": [
           {
             "url": "https://cdn.example.com/fig-galette.jpg",
             "alt_text": "A fig galette"

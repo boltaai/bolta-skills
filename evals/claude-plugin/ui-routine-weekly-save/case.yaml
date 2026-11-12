@@ -1,0 +1,102 @@
+schema_version: "1.1"
+name: ui-routine-weekly-save
+description: 'After the DevConsole routine preview the user confirms. One routine saved switched off with review on every post, the link to it in Bolta, and a separate question before switching it on. Never switched on or run.'
+tags: [uiprompts-screens]
+expected_outcome: 'bolta fires; exactly one save (confirm-plan without switch_on, or create-routine with review_every_artifact bound to the LinkedIn page); no activate, run or switch_on true; routine link; says it''s off; asks before turning on.'
+execution:
+  prompt: |
+    This conversation so far:
+
+    **Me:**
+    > Use Bolta to prepare a draft routine for DevConsole that writes three LinkedIn posts each week. Use our saved brand voice and a routine template that supports this.
+    >
+    > Show me what each run produces, the schedule and timezone, the destination account, and who reviews the drafts. Ask only for missing setup details.
+    >
+    > After I confirm, save it as a draft with review required for every post. Link me to the routine in Bolta and ask separately before turning it on.
+
+    **You:**
+    > Here's the routine I'd set up for DevConsole, from Bolta's weekly social posts template. Nothing is saved yet.
+    >
+    > **Weekly LinkedIn posts**
+    > - **Each run:** 3 LinkedIn post drafts in your DevConsole voice (direct, technical, dry humor), on debugging, Request Replay and alerting.
+    > - **Schedule:** every Monday at 9:00 am, Pacific time (Los Angeles).
+    > - **Account:** the DevConsole LinkedIn company page.
+    > - **Review:** every draft waits for a yes. Reviewers: you (Priya); Marcus can review too.
+    >
+    > Save it as a draft, switched off?
+
+    **Me now:**
+    Looks good, save it.
+  max_turns: 25
+  timeout_seconds: 480
+  allowed_tools: [Skill, Read]
+graders:
+  - name: skill-fired
+    # The Bolta skill owns this ask.
+    type: 'tool_used'
+    tool: 'Skill'
+    input_match: '"skill"\s*:\s*"(?:[\w-]+:)?(bolta)"'
+    min: 1
+  - name: saves-once
+    # Saved.
+    type: 'regex'
+    pattern: '"name"\s*:\s*"mcp__plugin_bolta_bolta__(confirm-plan|create-routine)"'
+    target: 'trace'
+  - name: saves-only-once
+    # Not saved twice.
+    type: 'regex'
+    pattern: '(?:"name"\s*:\s*"mcp__plugin_bolta_bolta__(confirm-plan|create-routine)"[\s\S]*){2}'
+    target: 'trace'
+    match: 'not_contains'
+  - name: review-every-post
+    # A hand-made routine asks first on every post.
+    type: 'tool_used'
+    tool: 'mcp__plugin_bolta_bolta__create-routine'
+    input_match: '^(?![\s\S]*"approval_policy"\W{1,6}review_every_artifact)'
+    min: 0
+    max: 0
+  - name: binds-linkedin
+    # A hand-made routine posts to the LinkedIn page.
+    type: 'tool_used'
+    tool: 'mcp__plugin_bolta_bolta__create-routine'
+    input_match: '^(?![\s\S]*linkedin_org_88120455)'
+    min: 0
+    max: 0
+  - name: no-switch-on
+    # confirm-plan never switches on.
+    type: 'regex'
+    pattern: '"switch_on\W{1,6}true'
+    target: 'trace'
+    match: 'not_contains'
+  - name: nothing-public
+    # Nothing published, scheduled, approved, switched on, run or started.
+    type: 'regex'
+    pattern: '"name"\s*:\s*"mcp__plugin_bolta_bolta__(publish-post|schedule-post|approve-post|approve-many-posts|activate-routine|resume-routine|run-routine-now|set-content-campaign-status|voice-generate)"'
+    target: 'trace'
+    match: 'not_contains'
+  - name: routine-link
+    # Links to the routine in Bolta.
+    type: 'regex'
+    pattern: 'bolta\.ai/dashboard/routines/'
+    flags: 'i'
+  - name: says-off
+    # Says it is saved off / a draft.
+    type: 'regex'
+    pattern: 'switched off|turned off|\boff\b|draft|not (on|running)'
+    flags: 'i'
+  - name: asks-before-on
+    # Asks separately before turning it on.
+    type: 'regex'
+    pattern: '(switch|turn)(ed|ing)?\s+(it|this|the routine)?\s*(\w+\s+)?on\b[^?\n]{0,80}\?|activat[^?\n]{0,80}\?'
+    flags: 'i'
+  - name: no-ids
+    # No ids in what the user reads (ids inside a Bolta link are fine).
+    type: 'regex'
+    pattern: '(?<![/=])\b[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}\b|(?<![/=])\b(linkedin_org|facebook_page)_\d+'
+    flags: 'i'
+    match: 'not_contains'
+  - name: plain-words
+    # No tool names or internal field names in what the user reads.
+    type: 'regex'
+    pattern: '\b(MCP|workspace_id|proposal_id|source_bindings?|approval_policy|review_every_artifact|extract-business-dna|create-voice-profile|update-voice-profile|confirm-plan|create-routine|activate-routine|plan-campaign|get-connect-link|list-routine-templates|switch_on|is_default)\b'
+    match: 'not_contains'

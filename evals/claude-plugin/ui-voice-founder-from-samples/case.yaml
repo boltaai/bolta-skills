@@ -1,0 +1,80 @@
+schema_version: "1.1"
+name: ui-voice-founder-from-samples
+description: "Earlier the founder pasted two of her posts and confirmed the findings; she says save. Her person voice is made from those posts (her own words as the sample), writing as I, not the default, on her X."
+tags: [uiprompts]
+expected_outcome: "bolta fires; create-voice-profile with a pasted post as writing_sample, speaker_mode founder, not default; no website read; nothing public."
+execution:
+  prompt: |
+    This conversation so far:
+
+    **Me:**
+    > Here are two posts I wrote on X:
+    > "Shipped the diff view at 1:40 am. Not proud of the hour, proud of the diff. If your replay ever lied to you, this is for you."
+    > "Three things I got wrong about logging: I logged everything, I logged nothing useful, and I never logged the request body. Fixed all three."
+
+    **Me:**
+    > Make a voice for me (Maya, founder) for my X, separate from the DevConsole voice.
+
+    **You:**
+    > From your two posts: short lines, first person, a specific hour or number up front, dry self-deprecation, no hashtags. It would write as "I" on your X and leave the DevConsole voice as the default. Right?
+
+    **Me now:**
+    Yes, that's me. Save it.
+  max_turns: 25
+  timeout_seconds: 480
+  allowed_tools: [Skill, Read]
+graders:
+  - name: skill-fired
+    # The Bolta skill owns this ask.
+    type: 'tool_used'
+    tool: 'Skill'
+    input_match: '"skill"\s*:\s*"(?:[\w-]+:)?(bolta)"'
+    min: 1
+  - name: makes-person-voice
+    # One person voice.
+    type: 'tool_used'
+    tool: 'mcp__plugin_bolta_bolta__create-voice-profile'
+    min: 1
+    max: 1
+  - name: her-words-as-sample
+    # Her pasted post, never one written for her.
+    type: 'tool_used'
+    tool: 'mcp__plugin_bolta_bolta__create-voice-profile'
+    input_match: '"writing_sample"\s*:\s*"[^"]*(diff view|logged everything|1:40)'
+    min: 1
+  - name: writes-as-i
+    # A founder writing as I.
+    type: 'tool_used'
+    tool: 'mcp__plugin_bolta_bolta__create-voice-profile'
+    input_match: '"speaker_mode"\s*:\s*"founder"'
+    min: 1
+  - name: not-default
+    # The brand voice stays the default.
+    type: 'tool_used'
+    tool: 'mcp__plugin_bolta_bolta__create-voice-profile'
+    input_match: '"is_default"\W{1,6}true'
+    min: 0
+    max: 0
+  - name: no-site-read
+    # A person voice reads no website.
+    type: 'tool_used'
+    tool: 'mcp__plugin_bolta_bolta__extract-business-dna'
+    min: 0
+    max: 0
+  - name: nothing-public
+    # Nothing published, scheduled, approved, switched on, run or started.
+    type: 'regex'
+    pattern: '"name"\s*:\s*"mcp__plugin_bolta_bolta__(publish-post|schedule-post|approve-post|approve-many-posts|activate-routine|resume-routine|run-routine-now|set-content-campaign-status|voice-generate)"'
+    target: 'trace'
+    match: 'not_contains'
+  - name: no-ids
+    # No ids in what the user reads (ids inside a Bolta link are fine).
+    type: 'regex'
+    pattern: '(?<![/=])\b[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}\b|(?<![/=])\b(linkedin_org|facebook_page)_\d+'
+    flags: 'i'
+    match: 'not_contains'
+  - name: plain-words
+    # No tool names or internal field names in what the user reads.
+    type: 'regex'
+    pattern: '\b(MCP|workspace_id|proposal_id|source_bindings?|approval_policy|review_every_artifact|extract-business-dna|create-voice-profile|update-voice-profile|confirm-plan|create-routine|activate-routine|plan-campaign|get-connect-link|list-routine-templates|switch_on|is_default|replace_voice|writing_samples)\b'
+    match: 'not_contains'

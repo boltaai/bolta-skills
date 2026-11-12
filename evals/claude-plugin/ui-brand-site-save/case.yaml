@@ -1,0 +1,105 @@
+schema_version: "1.1"
+name: ui-brand-site-save
+description: 'After the DevConsole preview, the user says it looks good and to save. The website read is saved, a voice is made from it (DOs, DON''Ts, audience, topics) as the brand''s voice, the LinkedIn and X accounts are named as using it, and the user gets the place to review it in Bolta.'
+tags: [uiprompts-screens]
+expected_outcome: 'bolta fires; one extract-business-dna setup:true (check polls allowed); no create-voice-profile; names LinkedIn/X as using the voice; Bolta link to the Brand page; nothing public.'
+execution:
+  prompt: |
+    This conversation so far:
+
+    **Me:**
+    > Use Bolta to set up Brand for DevConsole from devconsole.example. Use Bolta's website import to learn what we sell, who we serve, and how we write.
+    >
+    > Use any notes or writing samples I share to refine the voice. Show me our positioning, products, writing rules, a few content topics, and one sample post. Flag assumptions.
+    >
+    > Show me the preview before saving. If the import saves automatically, ask first. After saving, tell me where to review it in Bolta.
+
+    **You:**
+    > Here's what Bolta's website import read from devconsole.example. Nothing is saved yet.
+    >
+    > **Positioning:** A hosted console for API logs, request replay and error alerts, for backend engineers and small platform teams at startups. "See every API call. Fix it before your users notice."
+    > **Products:** Log Search, Request Replay, Error Alerts. Free for one project; a Team plan adds shared workspaces and 30-day history.
+    > **Writing rules**
+    > DO: lead with the developer's problem, then the fix · show a real command, request or log line when it helps · use the product names exactly
+    > DON'T: hype words like "revolutionary" · claims about uptime, speed or customers the site doesn't make
+    > **Tone:** direct, technical, dry humor.
+    > **Content topics:** debugging a failing call with Request Replay · what to log and what not to · alerting on error rates without noise.
+    > **Sample post (LinkedIn):**
+    > "Your API returned 500 at 2:14 am. Your logs say nothing useful. With Request Replay you take that exact call and run it against staging until it passes. One SDK, Node, Python or Go."
+    >
+    > **Assumptions:** the audience is my reading of "small platform teams at startups"; the site gives no Team plan price, so I left it out; the topics are mine, not from the site.
+    >
+    > Your DevConsole LinkedIn page and X account are connected; the new voice will be assigned to both.
+    >
+    > Save this to DevConsole?
+
+    **Me now:**
+    Looks good, save it.
+  max_turns: 25
+  timeout_seconds: 480
+  allowed_tools: [Skill, Read]
+graders:
+  - name: skill-fired
+    # The Bolta skill owns this ask.
+    type: 'tool_used'
+    tool: 'Skill'
+    input_match: '"skill"\s*:\s*"(?:[\w-]+:)?(bolta)"'
+    min: 1
+  - name: sets-up-on-yes
+    # Bolta-Server #1482: the yes runs Bolta's own setup (record, voice, accounts) once.
+    type: 'tool_used'
+    tool: 'mcp__plugin_bolta_bolta__extract-business-dna'
+    input_match: '"setup"\W{1,6}true'
+    min: 1
+    max: 1
+  - name: no-website-url
+    # Never website_url on create (it reads and saves the site again, unseen).
+    type: 'tool_used'
+    tool: 'mcp__plugin_bolta_bolta__create-voice-profile'
+    input_match: '"website_url"'
+    min: 0
+    max: 0
+  - name: no-other-writes
+    # No post, routine or campaign saved; no voice edit.
+    type: 'regex'
+    pattern: '"name"\s*:\s*"mcp__plugin_bolta_bolta__(update-voice-profile|save-post|bulk-create-posts|create-post|create-routine|confirm-plan|create-content-campaign)"'
+    target: 'trace'
+    match: 'not_contains'
+  - name: nothing-public
+    # Nothing published, scheduled, approved, switched on, run or started.
+    type: 'regex'
+    pattern: '"name"\s*:\s*"mcp__plugin_bolta_bolta__(publish-post|schedule-post|approve-post|approve-many-posts|activate-routine|resume-routine|run-routine-now|set-content-campaign-status|voice-generate)"'
+    target: 'trace'
+    match: 'not_contains'
+  - name: names-voice-accounts
+    # Owner rule: says which social accounts the voice is assigned to.
+    type: 'regex'
+    pattern: '(assign|attach|link|connect|tie|use[sd]?|post(s|ing)? (as|from|to)|writes? for|apply|applies|set (to|for|on))[^.\n]{0,90}(LinkedIn|\bX\b|@?devconsole)|(LinkedIn|\bX\b|@?devconsole)[^.\n]{0,90}(assign|attach|linked|connected|will use|uses|use this voice|use the voice|gets? this voice|on this voice|write[sn]? (in|with))'
+    flags: 'i'
+  - name: review-link
+    # Where to review it in Bolta.
+    type: 'regex'
+    pattern: 'bolta\.ai/dashboard/knowledge-base'
+    flags: 'i'
+  - name: names-brand
+    # Names the brand it saved to.
+    type: 'regex'
+    pattern: 'DevConsole'
+    flags: 'i'
+  - name: no-ids
+    # No ids in what the user reads (ids inside a Bolta link are fine).
+    type: 'regex'
+    pattern: '(?<![/=])\b[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}\b|(?<![/=])\b(linkedin_org|facebook_page)_\d+'
+    flags: 'i'
+    match: 'not_contains'
+  - name: plain-words
+    # No tool names or internal field names in what the user reads.
+    type: 'regex'
+    pattern: '\b(MCP|workspace_id|proposal_id|source_bindings?|approval_policy|review_every_artifact|extract-business-dna|create-voice-profile|update-voice-profile|confirm-plan|create-routine|activate-routine|plan-campaign|get-connect-link|list-routine-templates|switch_on|is_default)\b'
+    match: 'not_contains'
+  - name: no-separate-voice
+    # The setup makes and links the voice; a create-voice-profile would be a second voice.
+    type: 'tool_used'
+    tool: 'mcp__plugin_bolta_bolta__create-voice-profile'
+    min: 0
+    max: 0

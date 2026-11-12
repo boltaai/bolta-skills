@@ -1,0 +1,79 @@
+schema_version: "1.1"
+name: ui-final-campaign-date-in-history
+description: "Final Campaign prompt for DevConsole; earlier in the chat the user said DevConsole 2.0 launches Tue Dec 8 with a page: planned with that as context, never asked again."
+tags: [uiprompts]
+expected_outcome: "bolta fires; plan campaign with context naming Dec 8; never asks which event or when; outline shown; nothing saved."
+execution:
+  prompt: |
+    This conversation so far:
+
+    **Me:**
+    > Heads up: DevConsole 2.0 launches Tuesday Dec 8. The page is devconsole.example/2. Main thing is the new Request Replay diff view.
+
+    **You:**
+    > Noted: DevConsole 2.0 on Tue Dec 8, page devconsole.example/2, headline feature the Request Replay diff view.
+
+    **Me now:**
+    Use Bolta to plan a campaign for DevConsole around our next launch or event. First show me what you're basing this on, from our chats and our brand in Bolta (voice, what's already running, our best posts), then ask only for what's missing. If I haven't said which event or the dates, ask in one question. Show me an outline: audience, key message, channels, call to action and a week-by-week plan. After I say yes, save it as a draft and link me to it in Bolta. Ask separately before starting it, and keep every post for my review.
+  max_turns: 25
+  timeout_seconds: 480
+  allowed_tools: [Skill, Read]
+graders:
+  - name: skill-fired
+    # The Bolta skill owns this ask.
+    type: 'tool_used'
+    tool: 'Skill'
+    input_match: '"skill"\s*:\s*"(?:[\w-]+:)?(bolta)"'
+    min: 1
+  - name: plans-campaign
+    # One campaign plan.
+    type: 'tool_used'
+    tool: 'mcp__plugin_bolta_bolta__plan'
+    input_match: '"kind"\s*:\s*"campaign"'
+    min: 1
+  - name: date-in-context
+    # The date from the history reaches the planner.
+    type: 'tool_used'
+    tool: 'mcp__plugin_bolta_bolta__plan'
+    input_match: 'Dec(ember)?\W{0,3}8|12[-/]08|2026-12-08'
+    min: 1
+  - name: no-reask
+    # The date was given: never asked again.
+    type: 'regex'
+    pattern: '(which|what) (launch|event)[^?\n]{0,80}\?|when (is|does)[^?\n]{0,60}\?|what date[^?\n]{0,60}\?'
+    flags: 'i'
+    match: 'not_contains'
+  - name: says-what-its-based-on
+    # Owner: show what the plan or setup is based on before it.
+    type: 'regex'
+    pattern: 'based on|from (what|everything) you(''ve)? (told|said|shared)|from our chats|what I know|from what I (know|have)|here''?s what I (found|know|have)'
+    flags: 'i'
+  - name: nothing-saved
+    # A preview or a question, not a save.
+    type: 'regex'
+    pattern: '"name"\s*:\s*"mcp__plugin_bolta_bolta__(save-post|bulk-create-posts|create-post|create-routine|confirm-plan|create-content-campaign|create-voice-profile|update-voice-profile|update-business-dna)"'
+    target: 'trace'
+    match: 'not_contains'
+  - name: nothing-public
+    # Nothing published, scheduled, approved, switched on, run or started.
+    type: 'regex'
+    pattern: '"name"\s*:\s*"mcp__plugin_bolta_bolta__(publish-post|schedule-post|approve-post|approve-many-posts|activate-routine|resume-routine|run-routine-now|set-content-campaign-status|voice-generate)"'
+    target: 'trace'
+    match: 'not_contains'
+  - name: at-most-two-questions
+    # At most 2 lines asking the user something. Lines quoted with > (a sample post) are not questions to the user.
+    type: 'regex'
+    pattern: '(?:^(?![ \t]*>)[^\n]*\?(?=[\s*_)\]]|$)[^\n]*(?:\n|$)[\s\S]*?){3}'
+    flags: 'm'
+    match: 'not_contains'
+  - name: no-ids
+    # No ids in what the user reads (ids inside a Bolta link are fine).
+    type: 'regex'
+    pattern: '(?<![/=])\b[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}\b|(?<![/=])\b(linkedin_org|facebook_page)_\d+'
+    flags: 'i'
+    match: 'not_contains'
+  - name: plain-words
+    # No tool names or internal field names in what the user reads.
+    type: 'regex'
+    pattern: '\b(MCP|workspace_id|proposal_id|source_bindings?|approval_policy|review_every_artifact|extract-business-dna|create-voice-profile|update-voice-profile|confirm-plan|create-routine|activate-routine|plan-campaign|get-connect-link|list-routine-templates|switch_on|is_default|replace_voice|writing_samples)\b'
+    match: 'not_contains'

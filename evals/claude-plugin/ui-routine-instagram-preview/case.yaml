@@ -1,0 +1,90 @@
+schema_version: "1.1"
+name: ui-routine-instagram-preview
+description: 'The routine panel prompt with another network and cadence: Harbor Physio, two Instagram posts each week. Same outcomes, plus Instagram needs a picture or video for every post.'
+tags: [uiprompts-screens]
+expected_outcome: 'bolta fires; reads the voice; plan or templates; shows output, schedule, Melbourne time, the Instagram account, reviewer; says Instagram needs a picture or video; nothing saved.'
+execution:
+  prompt: |
+    Use Bolta to prepare a draft routine for Harbor Physio that writes two Instagram posts each week. Use our saved brand voice and a routine template that supports this.
+
+    Show me what each run produces, the schedule and timezone, the destination account, and who reviews the drafts. Ask only for missing setup details.
+
+    After I confirm, save it as a draft with review required for every post. Link me to the routine in Bolta and ask separately before turning it on.
+  max_turns: 25
+  timeout_seconds: 480
+  allowed_tools: [Skill, Read]
+graders:
+  - name: skill-fired
+    # The Bolta skill owns this ask.
+    type: 'tool_used'
+    tool: 'Skill'
+    input_match: '"skill"\s*:\s*"(?:[\w-]+:)?(bolta)"'
+    min: 1
+  - name: reads-voice
+    # Uses the saved voice.
+    type: 'regex'
+    pattern: '"name"\s*:\s*"mcp__plugin_bolta_bolta__(get-voice-context|get-voice-profile)"'
+    target: 'trace'
+  - name: fitting-template
+    # A routine template or Bolta's plan.
+    type: 'regex'
+    pattern: '"name"\s*:\s*"mcp__plugin_bolta_bolta__(plan|list-routine-templates)"'
+    target: 'trace'
+  - name: nothing-saved
+    # Nothing saved before the confirm.
+    type: 'regex'
+    pattern: '"name"\s*:\s*"mcp__plugin_bolta_bolta__(save-post|bulk-create-posts|create-post|create-routine|confirm-plan|create-content-campaign|create-voice-profile|update-voice-profile|update-business-dna)"'
+    target: 'trace'
+    match: 'not_contains'
+  - name: nothing-public
+    # Nothing published, scheduled, approved, switched on, run or started.
+    type: 'regex'
+    pattern: '"name"\s*:\s*"mcp__plugin_bolta_bolta__(publish-post|schedule-post|approve-post|approve-many-posts|activate-routine|resume-routine|run-routine-now|set-content-campaign-status|voice-generate)"'
+    target: 'trace'
+    match: 'not_contains'
+  - name: shows-output
+    # What each run produces.
+    type: 'regex'
+    pattern: '\b(2|two)\b[^\n]{0,60}(Instagram )?(post|draft)'
+    flags: 'i'
+  - name: shows-schedule
+    # Day and time.
+    type: 'regex'
+    pattern: '(Mon|Tue|Wed|Thu|Fri|Sat|Sun)[a-z]*\W[^\n]{0,40}\d{1,2}(:\d\d)?\s?(am|pm|AM|PM)?|\d{1,2}:\d\d'
+    flags: 'i'
+  - name: shows-timezone
+    # The timezone.
+    type: 'regex'
+    pattern: 'Melbourne|Australia|AEDT|AEST'
+    flags: 'i'
+  - name: shows-destination
+    # The destination account.
+    type: 'regex'
+    pattern: '@?harborphysio|Harbor Physio[^\n]{0,20}Instagram|Instagram[^\n]{0,30}(account|Harbor)'
+    flags: 'i'
+  - name: shows-reviewer
+    # Who reviews the drafts.
+    type: 'regex'
+    pattern: 'review(s|ed|er|ers)?\b[^\n]{0,80}(you|Anna|Tom|owner|approve)|(you|Anna|Tom)[^\n]{0,60}review|who should review'
+    flags: 'i'
+  - name: instagram-needs-media
+    # Instagram needs a picture or video.
+    type: 'regex'
+    pattern: '(image|photo|picture|video|visual|media)'
+    flags: 'i'
+  - name: at-most-two-questions
+    # Asks only for what is missing: at most 2 questions (lines with a question mark; an either/or on one line is one).
+    type: 'regex'
+    pattern: '(?:\?[^\n]*(?:\n|$)[\s\S]*?){3}'
+    match: 'not_contains'
+  - name: no-ids
+    # No ids in what the user reads (ids inside a Bolta link are fine).
+    type: 'regex'
+    pattern: '(?<![/=])\b[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}\b|(?<![/=])\b(linkedin_org|facebook_page)_\d+'
+    flags: 'i'
+    match: 'not_contains'
+  - name: plain-words
+    # No tool names or internal field names in what the user reads.
+    type: 'regex'
+    pattern: '\b(MCP|workspace_id|proposal_id|source_bindings?|approval_policy|review_every_artifact|extract-business-dna|create-voice-profile|update-voice-profile|confirm-plan|create-routine|activate-routine|plan-campaign|get-connect-link|list-routine-templates|switch_on|is_default)\b'
+    match: 'not_contains'

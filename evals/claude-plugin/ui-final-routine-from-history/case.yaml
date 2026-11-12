@@ -1,0 +1,83 @@
+schema_version: "1.1"
+name: ui-final-routine-from-history
+description: "Final Routine prompt for Harbor Physio with no details; the earlier chat has the audience, services, review time (about 3 a week) and a dislike: the plan's context and the reply carry them, nothing invented."
+tags: [uiprompts]
+expected_outcome: "bolta fires; plan recommend with context naming runners/tradies and 3 a week; a based-on line; sized to about 3 drafts a week; nothing saved; no invented facts."
+execution:
+  prompt: |
+    This conversation so far:
+
+    **Me:**
+    > Quick one before Bolta: I'm Anna Ruiz and I run Harbor Physio in Williamstown. Most of our people are weekend runners, tradies and new mums getting back to exercise. We do sports massage, rehab plans and small-group Pilates. I write short and plain, like a friendly coach, never like a medical brochure, and I hate hashtag walls.
+
+    **You:**
+    > Got it, Anna: Harbor Physio, Williamstown, for weekend runners, tradies and new mums; sports massage, rehab plans and small-group Pilates; short, plain, friendly-coach writing, no hashtag walls.
+
+    **Me:**
+    > I can review about 3 posts a week, max.
+
+    **You:**
+    > Noted: about 3 drafts a week to review.
+
+    **Me now:**
+    Use Bolta to set up the right routines for Harbor Physio. First show me what you're basing this on, from our chats and our brand in Bolta (voice, what's already running, our best posts), then ask only for what's missing. Recommend 3 to 5 routines that fit how much I can review each week, with no duplicates of ones already running, and let Bolta pick the template, day, time and topics. For each, show me what it produces, the schedule and timezone, the account, and who reviews (me unless I say otherwise). After I pick, save them switched off with review on every post, link me to each in Bolta, and ask separately before turning any on.
+  max_turns: 25
+  timeout_seconds: 480
+  allowed_tools: [Skill, Read]
+graders:
+  - name: skill-fired
+    # The Bolta skill owns this ask.
+    type: 'tool_used'
+    tool: 'Skill'
+    input_match: '"skill"\s*:\s*"(?:[\w-]+:)?(bolta)"'
+    min: 1
+  - name: context-from-history
+    # The history's facts reach the planner.
+    type: 'tool_used'
+    tool: 'mcp__plugin_bolta_bolta__plan'
+    input_match: '"context"\s*:\s*"[^"]*(runners|tradies|mums)'
+    min: 1
+  - name: review-time-in-context
+    # Their review time reaches the planner.
+    type: 'tool_used'
+    tool: 'mcp__plugin_bolta_bolta__plan'
+    input_match: '"context"\s*:\s*"[^"]*(\b3\b|three)'
+    min: 1
+  - name: says-what-its-based-on
+    # Owner: show what the plan or setup is based on before it.
+    type: 'regex'
+    pattern: 'based on|from (what|everything) you(''ve)? (told|said|shared)|from our chats|what I know|from what I (know|have)|here''?s what I (found|know|have)'
+    flags: 'i'
+  - name: nothing-saved
+    # A preview or a question, not a save.
+    type: 'regex'
+    pattern: '"name"\s*:\s*"mcp__plugin_bolta_bolta__(save-post|bulk-create-posts|create-post|create-routine|confirm-plan|create-content-campaign|create-voice-profile|update-voice-profile|update-business-dna)"'
+    target: 'trace'
+    match: 'not_contains'
+  - name: nothing-public
+    # Nothing published, scheduled, approved, switched on, run or started.
+    type: 'regex'
+    pattern: '"name"\s*:\s*"mcp__plugin_bolta_bolta__(publish-post|schedule-post|approve-post|approve-many-posts|activate-routine|resume-routine|run-routine-now|set-content-campaign-status|voice-generate)"'
+    target: 'trace'
+    match: 'not_contains'
+  - name: at-most-two-questions
+    # At most 2 lines asking the user something. Lines quoted with > (a sample post) are not questions to the user.
+    type: 'regex'
+    pattern: '(?:^(?![ \t]*>)[^\n]*\?(?=[\s*_)\]]|$)[^\n]*(?:\n|$)[\s\S]*?){3}'
+    flags: 'm'
+    match: 'not_contains'
+  - name: reflects-history
+    type: 'llm'
+    criteria: |
+      Earlier in the chat the user (Anna Ruiz) said: Harbor Physio, Williamstown; clients are weekend runners, tradies and new mums; services are sports massage, rehab plans and small-group Pilates; short, plain friendly-coach writing, no hashtag walls; they can review about 3 posts a week. PASS if the recommended routines are about these clients and services, total about 3 drafts a week or fewer, and the reply states no business fact that neither the user nor Bolta's brand record gave (the record holds: physios Anna Ruiz and Tom Hale, online booking, health-fund rebates on the spot, open Monday to Saturday, sports injuries, back and neck pain, post-surgery rehab, Pilates; anything else, such as prices or awards, is invented). FAIL if it ignores these facts, plans well over 3 drafts a week without saying why, or invents a business fact. (Grader fix: the first version counted the brand record's own facts as invented.)
+  - name: no-ids
+    # No ids in what the user reads (ids inside a Bolta link are fine).
+    type: 'regex'
+    pattern: '(?<![/=])\b[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}\b|(?<![/=])\b(linkedin_org|facebook_page)_\d+'
+    flags: 'i'
+    match: 'not_contains'
+  - name: plain-words
+    # No tool names or internal field names in what the user reads.
+    type: 'regex'
+    pattern: '\b(MCP|workspace_id|proposal_id|source_bindings?|approval_policy|review_every_artifact|extract-business-dna|create-voice-profile|update-voice-profile|confirm-plan|create-routine|activate-routine|plan-campaign|get-connect-link|list-routine-templates|switch_on|is_default|replace_voice|writing_samples)\b'
+    match: 'not_contains'

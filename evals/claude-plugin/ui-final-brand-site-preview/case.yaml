@@ -1,0 +1,100 @@
+schema_version: "1.1"
+name: ui-final-brand-site-preview
+description: "The final Brand prompt (web #2661) for DevConsole, site on file, LinkedIn and X connected: preview only, the five parts, accounts named, asks before saving."
+tags: [uiprompts]
+expected_outcome: "bolta fires; extract-business-dna preview true; nothing saved; five parts; assumptions; accounts named; asks before saving."
+execution:
+  prompt: |
+    Use Bolta to set up our brand for DevConsole. If no social accounts are connected, give me the link to connect one first. Start from our website, devconsole.example, and add what you know about me and our business from our chats and any notes or writing samples I share. Preview before saving: positioning, products, writing rules, topics and a sample post. Flag assumptions. Only after I say yes, save it, assign the voice to our connected accounts, and link me to review it in Bolta.
+  max_turns: 25
+  timeout_seconds: 480
+  allowed_tools: [Skill, Read]
+graders:
+  - name: skill-fired
+    # The Bolta skill owns this ask.
+    type: 'tool_used'
+    tool: 'Skill'
+    input_match: '"skill"\s*:\s*"(?:[\w-]+:)?(bolta)"'
+    min: 1
+  - name: reads-site-in-preview
+    # Website import in preview first.
+    type: 'tool_used'
+    tool: 'mcp__plugin_bolta_bolta__extract-business-dna'
+    input_match: '"preview"\W{1,6}true[\s\S]*devconsole|devconsole[\s\S]*"preview"\W{1,6}true'
+    min: 1
+  - name: no-saving-read
+    # Never a saving website read before the yes.
+    type: 'tool_used'
+    tool: 'mcp__plugin_bolta_bolta__extract-business-dna'
+    input_match: '^(?![\s\S]*"(?:preview|check)"\W{1,6}true)'
+    min: 0
+    max: 0
+  - name: nothing-saved
+    # No voice, business edit, post, routine or campaign saved before the yes.
+    type: 'regex'
+    pattern: '"name"\s*:\s*"mcp__plugin_bolta_bolta__(create-voice-profile|update-voice-profile|update-business-dna|save-post|bulk-create-posts|create-post|create-routine|confirm-plan|create-content-campaign)"'
+    target: 'trace'
+    match: 'not_contains'
+  - name: nothing-public
+    # Nothing published, scheduled, approved, switched on, run or started.
+    type: 'regex'
+    pattern: '"name"\s*:\s*"mcp__plugin_bolta_bolta__(publish-post|schedule-post|approve-post|approve-many-posts|activate-routine|resume-routine|run-routine-now|set-content-campaign-status|voice-generate)"'
+    target: 'trace'
+    match: 'not_contains'
+  - name: shows-products
+    # Products by their site names.
+    type: 'regex'
+    pattern: 'Request Replay[\s\S]*(Log Search|Error Alerts)|(Log Search|Error Alerts)[\s\S]*Request Replay'
+    flags: 'i'
+  - name: shows-writing-rules
+    # Writing rules: DOs and DON'Ts.
+    type: 'regex'
+    pattern: '\bDON''?T|\bavoid\b|never\b'
+    flags: 'i'
+  - name: shows-sample-post
+    # One sample post.
+    type: 'regex'
+    pattern: 'sample post|example post|sample \(|\bsample\b[^\n]{0,40}(linkedin|x\b)'
+    flags: 'i'
+  - name: flags-assumptions
+    # Flags assumptions.
+    type: 'regex'
+    pattern: 'assum|inferred|my (guess|reading)|not (stated|on the site|from the site)|the site (doesn''t|does not)'
+    flags: 'i'
+  - name: names-voice-accounts
+    # Owner rule: always say which social account the voice is assigned to.
+    type: 'regex'
+    pattern: '(assign|attach|link|connect|tie|use[sd]?|post(s|ing)? (as|from|to)|writes? for|apply|applies|set (to|for|on))[^.\n]{0,90}(LinkedIn|\bX\b|@?devconsole|accounts?)|(LinkedIn|\bX\b|@?devconsole|accounts?)[^.\n]{0,90}(assign|attach|linked|connected|will use|uses|use this voice|use the voice|gets? this voice|on this voice|write[sn]? (in|with))'
+    flags: 'i'
+  - name: asks-before-saving
+    # Asks before saving.
+    type: 'regex'
+    pattern: '(save|right|correct|look good|go ahead|shall I|should I|change)[^?\n]{0,100}\?|say \W{0,3}save'
+    flags: 'i'
+  - name: five-parts
+    # Shows all five parts the prompt asked for.
+    type: 'llm'
+    criteria: |
+      The user asked a social media tool to read their website and show: positioning, products, writing rules, a few content topics, and one sample post, then flag assumptions. The site read (the only source of facts) says: DevConsole is a hosted console for API logs, request replay and error alerts. Teams add one SDK (Node, Python or Go) and see every request and response in one place (Log Search), replay a failing call against staging (Request Replay), and get a Slack alert when error rates climb (Error Alerts). Free for one project; the Team plan adds shared workspaces and 30-day history. Built for backend engineers and small platform teams at startups. Tagline: "See every API call. Fix it before your users notice.". It gives no prices, customer names, user counts, uptime or speed figures. PASS if the reply shows ALL of: a positioning line, the products (Log Search, Request Replay, Error Alerts), writing rules (things to do and avoid), at least two content topics, one complete sample post, and at least one flagged assumption. FAIL if any is missing.
+  - name: no-invented-facts
+    # Nothing invented beyond the site read.
+    type: 'llm'
+    criteria: |
+      A reply previews a brand profile for DevConsole from its website. The site read (the only source of facts) says: DevConsole is a hosted console for API logs, request replay and error alerts. Teams add one SDK (Node, Python or Go) and see every request and response in one place (Log Search), replay a failing call against staging (Request Replay), and get a Slack alert when error rates climb (Error Alerts). Free for one project; the Team plan adds shared workspaces and 30-day history. Built for backend engineers and small platform teams at startups. Tagline: "See every API call. Fix it before your users notice.". It gives no prices, customer names, user counts, uptime or speed figures. PASS if the reply (including its sample post) states no price, customer name, user or customer count, uptime, speed or performance figure, award or integration that the site read does not contain. Clearly labelled guesses or assumptions are fine. FAIL if it states any such fact as true.
+  - name: no-ids
+    # No ids in what the user reads (ids inside a Bolta link are fine).
+    type: 'regex'
+    pattern: '(?<![/=])\b[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}\b|(?<![/=])\b(linkedin_org|facebook_page)_\d+'
+    flags: 'i'
+    match: 'not_contains'
+  - name: plain-words
+    # No tool names or internal field names in what the user reads.
+    type: 'regex'
+    pattern: '\b(MCP|workspace_id|proposal_id|source_bindings?|approval_policy|review_every_artifact|extract-business-dna|create-voice-profile|update-voice-profile|confirm-plan|create-routine|activate-routine|plan-campaign|get-connect-link|list-routine-templates|switch_on|is_default)\b'
+    match: 'not_contains'
+  - name: at-most-two-questions
+    # At most 2 lines asking the user something. Lines quoted with > (a sample post) are not questions to the user.
+    type: 'regex'
+    pattern: '(?:^(?![ \t]*>)[^\n]*\?(?=[\s*_)\]]|$)[^\n]*(?:\n|$)[\s\S]*?){3}'
+    flags: 'm'
+    match: 'not_contains'

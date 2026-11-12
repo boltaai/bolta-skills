@@ -1,9 +1,9 @@
 {
  "generated_by": "tools/build_coverage_fixture.py",
- "server_commit": "52024ccf3",
+ "server_commit": "baf14e83b",
  "golden": "boltathread/tests/fixtures/mcp_tools_list.golden.json",
  "counts": {
-  "tool_param": 226,
+  "tool_param": 243,
   "post_details": 223,
   "platform_specific": 80,
   "tool": 64
@@ -6810,6 +6810,202 @@
    "scope": "file"
   },
   {
+   "id": "brand-setup.audience",
+   "group": "tool_param",
+   "source": "mcp golden schema",
+   "tokens_any": [
+    [
+     "audience"
+    ]
+   ],
+   "context_any": [
+    "extract-business-dna"
+   ],
+   "scope": "file"
+  },
+  {
+   "id": "brand-setup.check",
+   "group": "tool_param",
+   "source": "mcp golden schema",
+   "tokens_any": [
+    [
+     "check"
+    ]
+   ],
+   "context_any": [
+    "extract-business-dna"
+   ],
+   "scope": "file"
+  },
+  {
+   "id": "brand-setup.favorite_creators",
+   "group": "tool_param",
+   "source": "mcp golden schema",
+   "tokens_any": [
+    [
+     "favorite_creators"
+    ]
+   ],
+   "context_any": [
+    "extract-business-dna"
+   ],
+   "scope": "file"
+  },
+  {
+   "id": "brand-setup.goals",
+   "group": "tool_param",
+   "source": "mcp golden schema",
+   "tokens_any": [
+    [
+     "goals"
+    ]
+   ],
+   "context_any": [
+    "extract-business-dna"
+   ],
+   "scope": "file"
+  },
+  {
+   "id": "brand-setup.name",
+   "group": "tool_param",
+   "source": "mcp golden schema",
+   "tokens_any": [
+    [
+     "name"
+    ]
+   ],
+   "context_any": [
+    "extract-business-dna"
+   ],
+   "scope": "file"
+  },
+  {
+   "id": "brand-setup.notes",
+   "group": "tool_param",
+   "source": "mcp golden schema",
+   "tokens_any": [
+    [
+     "notes"
+    ]
+   ],
+   "context_any": [
+    "extract-business-dna"
+   ],
+   "scope": "file"
+  },
+  {
+   "id": "brand-setup.preview",
+   "group": "tool_param",
+   "source": "mcp golden schema",
+   "tokens_any": [
+    [
+     "preview"
+    ]
+   ],
+   "context_any": [
+    "extract-business-dna"
+   ],
+   "scope": "file"
+  },
+  {
+   "id": "brand-setup.products",
+   "group": "tool_param",
+   "source": "mcp golden schema",
+   "tokens_any": [
+    [
+     "products"
+    ]
+   ],
+   "context_any": [
+    "extract-business-dna"
+   ],
+   "scope": "file"
+  },
+  {
+   "id": "brand-setup.replace_voice",
+   "group": "tool_param",
+   "source": "mcp golden schema",
+   "tokens_any": [
+    [
+     "replace_voice"
+    ]
+   ],
+   "context_any": [
+    "extract-business-dna"
+   ],
+   "scope": "file"
+  },
+  {
+   "id": "brand-setup.set_as_default",
+   "group": "tool_param",
+   "source": "mcp golden schema",
+   "tokens_any": [
+    [
+     "set_as_default"
+    ]
+   ],
+   "context_any": [
+    "extract-business-dna"
+   ],
+   "scope": "file"
+  },
+  {
+   "id": "brand-setup.setup",
+   "group": "tool_param",
+   "source": "mcp golden schema",
+   "tokens_any": [
+    [
+     "setup"
+    ]
+   ],
+   "context_any": [
+    "extract-business-dna"
+   ],
+   "scope": "file"
+  },
+  {
+   "id": "brand-setup.url",
+   "group": "tool_param",
+   "source": "mcp golden schema",
+   "tokens_any": [
+    [
+     "url"
+    ]
+   ],
+   "context_any": [
+    "extract-business-dna"
+   ],
+   "scope": "file"
+  },
+  {
+   "id": "brand-setup.voice_name",
+   "group": "tool_param",
+   "source": "mcp golden schema",
+   "tokens_any": [
+    [
+     "voice_name"
+    ]
+   ],
+   "context_any": [
+    "extract-business-dna"
+   ],
+   "scope": "file"
+  },
+  {
+   "id": "brand-setup.writing_samples",
+   "group": "tool_param",
+   "source": "mcp golden schema",
+   "tokens_any": [
+    [
+     "writing_samples"
+    ]
+   ],
+   "context_any": [
+    "extract-business-dna"
+   ],
+   "scope": "file"
+  },
+  {
    "id": "campaign-source.campaign_id",
    "group": "tool_param",
    "source": "mcp golden schema",
@@ -10117,6 +10313,50 @@
     [
      "media",
      "mime_type"
+    ]
+   ],
+   "context_any": [
+    "save-post"
+   ],
+   "scope": "file"
+  },
+  {
+   "id": "save-post.media_urls",
+   "group": "tool_param",
+   "source": "mcp golden schema",
+   "tokens_any": [
+    [
+     "media_urls"
+    ]
+   ],
+   "context_any": [
+    "save-post"
+   ],
+   "scope": "file"
+  },
+  {
+   "id": "save-post.media_urls.alt_text",
+   "group": "tool_param",
+   "source": "mcp golden schema",
+   "tokens_any": [
+    [
+     "media_urls",
+     "alt_text"
+    ]
+   ],
+   "context_any": [
+    "save-post"
+   ],
+   "scope": "file"
+  },
+  {
+   "id": "save-post.media_urls.url",
+   "group": "tool_param",
+   "source": "mcp golden schema",
+   "tokens_any": [
+    [
+     "media_urls",
+     "url"
     ]
    ],
    "context_any": [

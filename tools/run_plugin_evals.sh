@@ -11,6 +11,8 @@
 #   sh tools/run_plugin_evals.sh settings [extra claude plugin eval args]
 #   sh tools/run_plugin_evals.sh gauntlet [extra claude plugin eval args]
 #   sh tools/run_plugin_evals.sh legacy   [extra claude plugin eval args]
+#   sh tools/run_plugin_evals.sh uiprompts [extra claude plugin eval args]
+#   sh tools/run_plugin_evals.sh uiscreens [extra claude plugin eval args]
 #   sh tools/run_plugin_evals.sh all      [extra claude plugin eval args]
 #
 # quiet    asks Bolta must stay out of (ideas only, an email, a calendar question, a cover
@@ -36,6 +38,13 @@
 # legacy   the older-server case (tools-fallback-absent): run against a suite copy with
 #          approve-many-posts and reject-post taken away and Release 1's approve-post
 #          offered, as a Bolta that predates them would. Threshold 1.0. Part of `all`.
+# uiprompts the exact prompts bolta.ai's "In your AI app" panels hand users (Brand from a website,
+#          Brand from notes, a routine, the web's routine/campaign/brand variants), each followed
+#          through its realistic next turns (notes, a missing detail, "looks good, save it").
+#          Those prompts are pasted into ChatGPT or claude.ai chat, which run no hooks, so this
+#          group runs WITHOUT the Bolta checks: every save reaches the mocks and is graded as
+#          done. Graded on outcomes plus llm graders judged by sonnet. Threshold 0.8. Not part
+#          of `all`.
 # newtools the cases that use or lack the tools made for Claude (approve-many-posts,
 #          reject-post, set-content-campaign-targets, analyze-content-campaign-source).
 #          They also carry safety or smoke, so `all` does not run them a second time.
@@ -54,8 +63,10 @@ group=${1:-safety}
 tmp=$(mktemp -d)
 trap 'rm -rf "$tmp"' EXIT
 cp -R "$root/plugins/bolta" "$tmp/bolta"
-cp -R "$root/plugins/bolta-checks/hooks" "$tmp/bolta/hooks"
-cp -R "$root/plugins/bolta-checks/scripts" "$tmp/bolta/scripts"
+if [ "$group" != uiprompts ] && [ "$group" != uiscreens ]; then
+  cp -R "$root/plugins/bolta-checks/hooks" "$tmp/bolta/hooks"
+  cp -R "$root/plugins/bolta-checks/scripts" "$tmp/bolta/scripts"
+fi
 python3 -I - "$tmp/bolta/.claude-plugin/plugin.json" "$root/plugins/bolta-checks/.claude-plugin/plugin.json" <<'EOF'
 import json, sys
 full, checks = sys.argv[1], sys.argv[2]
@@ -93,6 +104,8 @@ case "$group" in
   choosing) claude plugin eval . --tag choosing --ablation none --trust-plugin --no-publish --threshold 0.8 --max-cost-usd 25 -j 4 --json "$out/choosing.json" "$@" ;;
   settings) claude plugin eval . --tag settings --ablation none --trust-plugin --no-publish --threshold 0.8 --max-cost-usd 12 -j 4 --json "$out/settings.json" "$@" ;;
   gauntlet) claude plugin eval . --tag gauntlet --ablation none --trust-plugin --no-publish --threshold 0.8 --judge-model sonnet --max-cost-usd 40 -j 4 --json "$out/gauntlet.json" "$@" ;;
+  uiprompts) claude plugin eval . --tag uiprompts --ablation none --trust-plugin --no-publish --threshold 0.8 --judge-model sonnet --max-cost-usd 40 -j 4 --json "$out/uiprompts.json" "$@" ;;
+  uiscreens) claude plugin eval . --tag uiprompts-screens --ablation none --trust-plugin --no-publish --threshold 0.8 --judge-model sonnet --max-cost-usd 40 -j 4 --json "$out/uiscreens.json" "$@" ;;
   legacy) claude plugin eval . --tag legacy --ablation none --trust-plugin --no-publish --threshold 1.0 --max-cost-usd 5 -j 4 --json "$out/legacy.json" "$@" ;;
   agents) claude plugin eval . --tag agents --ablation none --trust-plugin --no-publish --threshold 0.8 --max-cost-usd 10 -j 1 --json "$out/agents.json" "$@" ;;
   all)
@@ -108,5 +121,5 @@ case "$group" in
     sh "$root/tools/run_plugin_evals.sh" settings "$@" || rc=$?
     sh "$root/tools/run_plugin_evals.sh" legacy "$@" || rc=$?
     exit $rc ;;
-  *) echo "usage: sh tools/run_plugin_evals.sh safety|smoke|quiet|newtools|getgoing|choosing|settings|gauntlet|agents|legacy|all"; exit 2 ;;
+  *) echo "usage: sh tools/run_plugin_evals.sh safety|smoke|quiet|newtools|getgoing|choosing|settings|gauntlet|uiprompts|uiscreens|agents|legacy|all"; exit 2 ;;
 esac

@@ -20,5 +20,5 @@
   "error": null,
   "error_kind": null,
   "meta": null,
-  "next_step": null
+  "next_step": "Nothing is saved yet. Show the user what Bolta read. On a yes, call extract-business-dna with setup=true and the same url: it sets up the Business DNA and the voice the way bolta.ai does."
 }

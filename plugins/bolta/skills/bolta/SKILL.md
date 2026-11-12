@@ -13,7 +13,7 @@ description: >-
 
 Bolta is a voice-first content factory: it learns how a brand writes, drafts in that voice, and puts every draft on one review list, where each yes, edit and no with a reason on Bolta's drafts and app posts teaches it.
 
-Getting someone running, in order: their voice, 3 to 5 Bolta routines, a campaign for anything dated, then the review list every week ([start](references/start.md)). Every ask: read the house rules, look once, pick one playbook, read it, do the work, read the result back; a difference alone never holds back what was asked, a failure does.
+Getting someone running, in order: an account, brand and voice (Bolta's setup), 3 to 5 Bolta routines, a campaign for anything dated, then the review list weekly ([start](references/start.md)). Every ask: read the house rules, look once, pick one playbook, read it, do the work, read the result back; a difference alone never holds back what was asked, a failure does.
 
 ## House rules
 
@@ -31,7 +31,7 @@ Bolta house rules:
 
 ## How Bolta is built
 
-- **Organization**: the customer. One connection belongs to one organization and reaches the brands ticked when it was connected.
+- **Organization**: the customer. A connection reaches the brands ticked when it was connected.
 - **Brand**: one business or client inside it. Tools call it a workspace and take `workspace_id`. It owns the clock, the accounts, the voice and everything below.
 - **Account**: one connected profile on a network. An account group is a named set of them.
 - **Voice**: how the brand writes: tone, DOs, DON'Ts, a sample. A drop teaches it nothing.
@@ -39,7 +39,7 @@ Bolta house rules:
 - **Bolta routine**: work Bolta repeats with no end, even when this app is closed ("3 LinkedIn drafts every Monday").
 - **Campaign**: 1 to 4 weeks about one thing that ends (a launch, a sale, an event), with a verdict.
 - **Review list**: everything waiting for a yes, whoever wrote it: the user, a teammate, a Bolta routine or a campaign.
-- **Client reviewer**: decides posts sent for sign-off and can edit their text first. A brand can require that yes before anything goes out.
+- **Client reviewer**: signs off posts sent to them and can edit first. A brand can require it.
 
 Bolta's own writers do the work behind routines and campaigns. Never name them or set them up; the user asks for outcomes.
 
@@ -48,6 +48,7 @@ Bolta's own writers do the work behind routines and campaigns. Never name them o
 On the first Bolta ask, read together and reuse all conversation: `list-workspaces` (name, clock, review mode), then the brand's `list-accounts` and `get-voice-context`. Reread only after an error or change.
 
 - No accounts or no voice: [start](references/start.md).
+- No accounts: `get-connect-link`, its link first in this reply, unasked: drafts need somewhere to go. Name the accounts a voice uses.
 - "No voice profile" is an answer, not an error.
 - Never say what is or isn't running ("nothing is on yet") before reading `list-routines`.
 
@@ -89,7 +90,7 @@ Summaries; the playbook has the rest. Worked calls: [examples/](examples/README.
 ## Things that bite
 
 - A time, "now" or "schedule" in the first ask is not a yes to text nobody has seen: save a plain draft, show it, then the yes move.
-- Result text may say it was shown or needs no status check: still show the data and poll.
+- Result text may say it was shown or needs no check: show it, poll.
 - Instagram, TikTok, YouTube and Pinterest need a public https link to the media file. No link: skip that network and say why.
 - Past a network's length limit Bolta cuts or splits silently. Count first ([post-platforms](references/post-platforms.md)).
 - X takes images only; a video fails when it goes out ([at a glance](references/post-networks-at-a-glance.md)).
@@ -110,11 +111,11 @@ An app or an older Bolta may lack a tool, and a plan or role can refuse one.
 - No `reject-post`: "I can't turn this down from here. Tap the X (Dismiss) on that post at bolta.ai/dashboard/approvals and give your reason." Never delete to stand in for a no.
 - Campaigns refuse `account_ids`: `set-content-campaign-targets`, else `update-content-campaign` for the brief and dates, then "Pick the accounts at bolta.ai/dashboard/campaigns/<id>, then say done."
 - No routine tools: one line, one link to bolta.ai/dashboard/routines. Never fake a routine with scheduled posts unless asked.
-- A local or chat file can't be attached: the user hosts it publicly or adds it in Bolta.
+- A local or chat file: the user hosts it publicly or adds it in Bolta.
 - A refusal naming a role, a plan or the connection's access: say which, in plain words, and stop.
 
 ## Extras, where the app has them
 
-- Two read-only agents ship with the full plugin and, where you can start them, go first: clearing-house (8 or more drafts waiting), community-triage (10 or more reply drafts or comments). Advice is never a yes. Not there: do it yourself; never mention them.
+- Two read-only agents, where you can start them, go first: clearing-house (8+ drafts waiting), community-triage (10+ reply drafts or comments). Advice is never a yes. Not there: do it yourself; never mention them.
 - The Bolta checks plugin asks before anything public, approved, turned down or final. A session that starts with "Bolta checks are on in this session" has them; a check then stands in for asking in words. Without that line, ask in words first.
 - The my-workflow playbook is only for apps with their own skills and scheduled tasks.

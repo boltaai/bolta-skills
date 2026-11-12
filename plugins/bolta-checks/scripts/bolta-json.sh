@@ -192,6 +192,23 @@ function jstr(p, k,   q) { q = p SUBSEP k; return ((q in JT) && JT[q] == "s") ? 
 
 function emit(k, v) { print k "=" v }
 
+# 1 when an extract-business-dna call only reads: every key is in an allow-list for its mode.
+function read_only_site_call(p,   i, n, k, mode) {
+  if (jtype(p, "preview") == "t") mode = "preview"
+  else if (jtype(p, "check") == "t") mode = "check"
+  else return 0
+  if (jtype(p, "preview") == "t" && jtype(p, "check") != "") return 0
+  n = JC[p] + 0
+  for (i = 1; i <= n; i++) {
+    k = JK[p SUBSEP i]
+    if (k == "workspace_id") continue
+    if (mode == "preview" && (k == "url" || k == "preview")) continue
+    if (mode == "check" && k == "check") continue
+    return 0
+  }
+  return 1
+}
+
 function sane(s) {
   gsub(/[^A-Za-z0-9_-]/, "_", s)
   return substr(s, 1, 128)
@@ -444,8 +461,14 @@ function guard_main(   ok, ti) {
   if (TOOL == "update-content-campaign") emit("TARGETS", campaign_targets(ti))
   if (TOOL == "confirm-plan") emit("SWITCHON", switch_on(ti))
   if (TOOL == "decide-routine-recommendation" || TOOL == "decide-bolta-suggestion" || TOOL == "decide-suggestion") emit("DECISION", decision(ti))
-  # A website read with preview: true (the JSON literal, never the string) saves nothing.
-  if (TOOL == "extract-business-dna") emit("PREVIEW", jtype(ti, "preview") == "t" ? 1 : 0)
+  # Saves nothing, so it passes: a pure website preview (keys only workspace_id, url, and
+  # preview: true) or a pure setup status read (keys only workspace_id and check: true). An
+  # allow-list: any other key (setup, notes, name, replace_voice...) asks. JSON true only.
+  if (TOOL == "extract-business-dna") {
+    emit("PREVIEW", read_only_site_call(ti))
+    emit("REPLACE", jtype(ti, "replace_voice") == "t" ? 1 : 0)
+    emit("SITE", jstr(ti, "url") != "" ? 1 : 0)
+  }
 }
 
 # --- mark: did the call succeed? -------------------------------------------------

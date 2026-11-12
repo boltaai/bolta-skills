@@ -948,6 +948,10 @@ def check_tool_ids_and_args(plugin, skills, tools_by_name):
                          f"fallback in SKILL.md's {LEGACY_SECTION!r}")
             else:
                 err(rel, f"`{tok}` is not an exposed Bolta tool or skill")
+        # A tool whose name has no hyphen (`plan`) never matches TOKEN; count it when named in a code span.
+        for m in re.finditer(r"`([a-z][a-z0-9]*)`", text):
+            if m.group(1) in tools_by_name:
+                referenced.add(m.group(1))
         for m in CALL.finditer(text):
             tool, argstr = m.group(1), m.group(2)
             if tool not in tools_by_name:
@@ -1438,7 +1442,10 @@ def check_key_coverage(plugin: pathlib.Path, fixture: pathlib.Path, exempt_path:
         err(where, f"{key['id']} is taught in no references/*.md (needs {' or '.join('+'.join(g) for g in key['tokens_any'])}"
                    + (f" near {'/'.join(key['context_any'])}" if key.get("context_any") else "") + f"; from {key['source']})")
     for net, ids in sorted(no_example.items()):
-        warn(where, f"{net}: {len(ids)} per-network key(s) taught but shown in no examples/*.json: {', '.join(sorted(ids))}")
+        # A nudge, not a gate: --strict (CI) turns every WARN into a failure, and a key that is taught
+        # but not shown in an example is a reason to add an example when one fits, not a broken skill.
+        # A key taught in no reference at all stays an ERROR (above).
+        info(f"{net}: {len(ids)} per-network key(s) taught but shown in no examples/*.json: {', '.join(sorted(ids))}")
     covered = len(keys) - len(missing) - len(set(exempt) & set(keys))
     info(f"key coverage: {covered}/{len(keys)} keys taught, {len(missing)} missing, {len(set(exempt) & set(keys))} exempt "
          f"(fixture from server {data.get('server_commit', '?')})")

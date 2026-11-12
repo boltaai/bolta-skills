@@ -1,0 +1,75 @@
+schema_version: "1.1"
+name: ui-campaign-outline
+description: 'The user names the launch (DevConsole 2.0, Tue Dec 8, a page). Bolta plans one campaign and shows audience, key message, channels, call to action and a week-by-week outline; nothing saved.'
+tags: [uiprompts-screens]
+expected_outcome: 'bolta fires; plan (campaign) or a campaign outline from the brand; audience, key message, channels, CTA, weeks shown; dates around Dec 8, 2026; nothing saved or started; asks to confirm.'
+execution:
+  prompt: |
+    This conversation so far:
+
+    **Me:**
+    > Use Bolta to prepare a draft campaign for DevConsole around our next launch or event (I'll tell you which). Use our saved brand voice. Ask only for missing details, such as the dates. Show me the audience, key message, channels, call to action and a week-by-week outline. After I confirm, save it as a draft and link me to it in Bolta. Ask separately before starting draft generation, and keep every post for my review.
+
+    **You:**
+    > Happy to. Which launch or event is this for, and what's the date? If there's a page about it, send that too and Bolta will build the campaign from it.
+
+    **Me now:**
+    It's the DevConsole 2.0 launch on Tuesday, December 8. Launch page: devconsole.example/2-0
+  max_turns: 25
+  timeout_seconds: 480
+  allowed_tools: [Skill, Read]
+graders:
+  - name: skill-fired
+    # The Bolta skill owns this ask.
+    type: 'tool_used'
+    tool: 'Skill'
+    input_match: '"skill"\s*:\s*"(?:[\w-]+:)?(bolta)"'
+    min: 1
+  - name: plans-campaign
+    # Bolta's planner.
+    type: 'regex'
+    pattern: '"name"\s*:\s*"mcp__plugin_bolta_bolta__plan"'
+    target: 'trace'
+  - name: nothing-saved
+    # Nothing saved before the confirm.
+    type: 'regex'
+    pattern: '"name"\s*:\s*"mcp__plugin_bolta_bolta__(save-post|bulk-create-posts|create-post|create-routine|confirm-plan|create-content-campaign|create-voice-profile|update-voice-profile|update-business-dna)"'
+    target: 'trace'
+    match: 'not_contains'
+  - name: nothing-public
+    # Nothing published, scheduled, approved, switched on, run or started.
+    type: 'regex'
+    pattern: '"name"\s*:\s*"mcp__plugin_bolta_bolta__(publish-post|schedule-post|approve-post|approve-many-posts|activate-routine|resume-routine|run-routine-now|set-content-campaign-status|voice-generate)"'
+    target: 'trace'
+    match: 'not_contains'
+  - name: week-by-week
+    # A week-by-week outline (list or table).
+    type: 'regex'
+    pattern: 'week 1[\s\S]*week 2|\|\s*1\s*\|[\s\S]*\|\s*2\s*\||week[- ]by[- ]week[\s\S]{0,700}(Nov|Dec)[\s\S]{0,400}(Nov|Dec)[\s\S]{0,400}(Nov|Dec)'
+    flags: 'i'
+  - name: launch-date
+    # Holds the launch date.
+    type: 'regex'
+    pattern: 'Dec(ember)?\.?\s*8'
+    flags: 'i'
+  - name: asks-to-save
+    # Asks before saving.
+    type: 'regex'
+    pattern: '(save|set (it )?up|confirm|go ahead|look right)[^?\n]{0,80}\?'
+    flags: 'i'
+  - name: five-parts
+    # Audience, key message, channels, CTA and weeks.
+    type: 'llm'
+    criteria: |
+      The user asked to see the audience, key message, channels, call to action and a week-by-week outline for a launch campaign (DevConsole 2.0, launching Dec 8, 2026, page devconsole.example/2-0; accounts: LinkedIn company page and X). PASS if the reply states all five: an audience, a key message, the channels/accounts, a call to action, and an outline by week. FAIL if any is missing, or if it invents a price, discount, customer or figure.
+  - name: no-ids
+    # No ids in what the user reads (ids inside a Bolta link are fine).
+    type: 'regex'
+    pattern: '(?<![/=])\b[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}\b|(?<![/=])\b(linkedin_org|facebook_page)_\d+'
+    flags: 'i'
+    match: 'not_contains'
+  - name: plain-words
+    # No tool names or internal field names in what the user reads.
+    type: 'regex'
+    pattern: '\b(MCP|workspace_id|proposal_id|source_bindings?|approval_policy|review_every_artifact|extract-business-dna|create-voice-profile|update-voice-profile|confirm-plan|create-routine|activate-routine|plan-campaign|get-connect-link|list-routine-templates|switch_on|is_default)\b'
+    match: 'not_contains'

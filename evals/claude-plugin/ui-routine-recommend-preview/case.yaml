@@ -1,0 +1,71 @@
+schema_version: "1.1"
+name: ui-routine-recommend-preview
+description: 'The web''s routine prompt (buildAiAppPrompt routine): recommend 3 to 5 routines for DevConsole with output, schedule and timezone, account and voice for each; nothing saved.'
+tags: [uiprompts-screens]
+expected_outcome: 'bolta fires; reads brand, accounts and posts; Bolta''s planner (recommend) or templates; 3-5 numbered routines each with output, schedule, timezone, account, voice; asks which; nothing saved.'
+execution:
+  prompt: |
+    Use Bolta to get me set up with the right routines for DevConsole. Look at our brand, accounts and recent posts, recommend 3 to 5 routines that fit how we work and how much I can review each week, and show me what each run produces, the schedule and timezone, the account and the voice. Ask only for what's missing. After I pick, save them switched off, link me to each in Bolta, and ask separately before turning any on.
+  max_turns: 25
+  timeout_seconds: 480
+  allowed_tools: [Skill, Read]
+graders:
+  - name: skill-fired
+    # The Bolta skill owns this ask.
+    type: 'tool_used'
+    tool: 'Skill'
+    input_match: '"skill"\s*:\s*"(?:[\w-]+:)?(bolta)"'
+    min: 1
+  - name: plans-routines
+    # Bolta's planner or the template list.
+    type: 'regex'
+    pattern: '"name"\s*:\s*"mcp__plugin_bolta_bolta__(plan|list-routine-templates)"'
+    target: 'trace'
+  - name: reads-posts
+    # Looks at recent posts (asked).
+    type: 'regex'
+    pattern: '"name"\s*:\s*"mcp__plugin_bolta_bolta__(list-workspace-posts|list-account-insights)"'
+    target: 'trace'
+  - name: nothing-saved
+    # Nothing saved before they pick.
+    type: 'regex'
+    pattern: '"name"\s*:\s*"mcp__plugin_bolta_bolta__(save-post|bulk-create-posts|create-post|create-routine|confirm-plan|create-content-campaign|create-voice-profile|update-voice-profile|update-business-dna)"'
+    target: 'trace'
+    match: 'not_contains'
+  - name: nothing-public
+    # Nothing published, scheduled, approved, switched on, run or started.
+    type: 'regex'
+    pattern: '"name"\s*:\s*"mcp__plugin_bolta_bolta__(publish-post|schedule-post|approve-post|approve-many-posts|activate-routine|resume-routine|run-routine-now|set-content-campaign-status|voice-generate)"'
+    target: 'trace'
+    match: 'not_contains'
+  - name: three-to-five
+    # 3 to 5 numbered routines (a list or a table).
+    type: 'regex'
+    pattern: '(?:^|\n)\s*(\*\*)?3[.)]|\|\s*(\*\*)?#?3(\*\*)?\s*\|'
+    flags: 'i'
+  - name: shows-timezone
+    # The timezone.
+    type: 'regex'
+    pattern: 'Pacific|Los Angeles|\bPT\b|\bPST\b'
+    flags: 'i'
+  - name: asks-which
+    # Asks which to set up (a question or 'tell me which').
+    type: 'regex'
+    pattern: '(which|pick|choose)[^?\n]{0,100}\?|(tell me|let me know|reply with) (which|the numbers)'
+    flags: 'i'
+  - name: each-routine-complete
+    # Every routine shows what the prompt asked.
+    type: 'llm'
+    criteria: |
+      The user asked for 3 to 5 recommended routines, each showing what each run produces, the schedule and timezone, the account and the voice. The brand (DevConsole) has a LinkedIn company page and an X account, one voice ('DevConsole voice'), Pacific time. PASS if 3 to 5 routines are listed and each one states what a run produces (how many drafts or a report), its day and time, and which account; and the timezone and the voice are stated (once for all is fine). FAIL if any routine lacks its output, schedule or account, or if the timezone or voice is never stated.
+  - name: no-ids
+    # No ids in what the user reads (ids inside a Bolta link are fine).
+    type: 'regex'
+    pattern: '(?<![/=])\b[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}\b|(?<![/=])\b(linkedin_org|facebook_page)_\d+'
+    flags: 'i'
+    match: 'not_contains'
+  - name: plain-words
+    # No tool names or internal field names in what the user reads.
+    type: 'regex'
+    pattern: '\b(MCP|workspace_id|proposal_id|source_bindings?|approval_policy|review_every_artifact|extract-business-dna|create-voice-profile|update-voice-profile|confirm-plan|create-routine|activate-routine|plan-campaign|get-connect-link|list-routine-templates|switch_on|is_default)\b'
+    match: 'not_contains'

@@ -1,0 +1,62 @@
+schema_version: "1.1"
+name: ui-brand-web-no-site
+description: 'The web''s Brand prompt when the brand has no website on file: "...from our website." (Lumen Dental Studio). Bolta must ask for the site, never guess a URL, and save nothing.'
+tags: [uiprompts-screens]
+expected_outcome: 'bolta fires; no extract-business-dna (no URL known); nothing saved; asks for the website address; at most 2 questions.'
+execution:
+  prompt: |
+    Use Bolta to set up our brand for Lumen Dental Studio from our website. Preview what Bolta learns from the website before saving: what we sell, who we serve, how we write, a few content topics and one sample post. Flag assumptions. Use any notes or writing samples I share to refine the voice. After I confirm, save it and tell me where to review it in Bolta.
+  max_turns: 25
+  timeout_seconds: 480
+  allowed_tools: [Skill, Read]
+graders:
+  - name: skill-fired
+    # The Bolta skill owns this ask.
+    type: 'tool_used'
+    tool: 'Skill'
+    input_match: '"skill"\s*:\s*"(?:[\w-]+:)?(bolta)"'
+    min: 1
+  - name: no-guessed-site
+    # No site was given: never reads a guessed URL.
+    type: 'tool_used'
+    tool: 'mcp__plugin_bolta_bolta__extract-business-dna'
+    min: 0
+    max: 0
+  - name: nothing-saved
+    # Nothing saved.
+    type: 'regex'
+    pattern: '"name"\s*:\s*"mcp__plugin_bolta_bolta__(create-voice-profile|update-voice-profile|update-business-dna|save-post|bulk-create-posts|create-post|create-routine|confirm-plan|create-content-campaign)"'
+    target: 'trace'
+    match: 'not_contains'
+  - name: nothing-public
+    # Nothing published, scheduled, approved, switched on, run or started.
+    type: 'regex'
+    pattern: '"name"\s*:\s*"mcp__plugin_bolta_bolta__(publish-post|schedule-post|approve-post|approve-many-posts|activate-routine|resume-routine|run-routine-now|set-content-campaign-status|voice-generate)"'
+    target: 'trace'
+    match: 'not_contains'
+  - name: asks-for-site
+    # Asks for the website (a question or a plain request).
+    type: 'regex'
+    pattern: '(website|site|url|web address|address)[^?\n]{0,120}\?|(send|share|give|paste|need)[^.\n]{0,60}(address|url|link|website)'
+    flags: 'i'
+  - name: asks-for-site-words
+    # Names the website in the ask.
+    type: 'regex'
+    pattern: 'website|site|url|web address'
+    flags: 'i'
+  - name: at-most-two-questions
+    # Asks only for what is missing: at most 2 questions (lines with a question mark; an either/or on one line is one).
+    type: 'regex'
+    pattern: '(?:\?[^\n]*(?:\n|$)[\s\S]*?){3}'
+    match: 'not_contains'
+  - name: no-ids
+    # No ids in what the user reads (ids inside a Bolta link are fine).
+    type: 'regex'
+    pattern: '(?<![/=])\b[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}\b|(?<![/=])\b(linkedin_org|facebook_page)_\d+'
+    flags: 'i'
+    match: 'not_contains'
+  - name: plain-words
+    # No tool names or internal field names in what the user reads.
+    type: 'regex'
+    pattern: '\b(MCP|workspace_id|proposal_id|source_bindings?|approval_policy|review_every_artifact|extract-business-dna|create-voice-profile|update-voice-profile|confirm-plan|create-routine|activate-routine|plan-campaign|get-connect-link|list-routine-templates|switch_on|is_default)\b'
+    match: 'not_contains'

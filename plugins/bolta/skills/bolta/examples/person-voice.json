@@ -1,5 +1,5 @@
 {
-  "ask": "Set up a voice for our founder Dana on her LinkedIn. Her posts should sound like her, not like Acme.",
+  "ask": "Set up a voice for our founder Dana on her LinkedIn. Her posts should sound like her, not like Acme. (Earlier in the chat she pasted two of her posts.)",
   "playbook": "voice",
   "steps": [
     {
@@ -8,14 +8,7 @@
         "workspace_id": "<brand's workspace id>",
         "all_profiles": true
       },
-      "why": "Check for a voice already named for Dana and see which voice is the default. The list does not show accounts; get-voice-profile does."
-    },
-    {
-      "tool": "list-workspace-posts",
-      "arguments": {
-        "workspace_id": "<brand's workspace id>"
-      },
-      "why": "Find a post Dana wrote herself for the sample: one on her account with content_origin manual (written by hand, not by Bolta). Manual alone doesn't prove it was her, so check with her. None? Ask her to paste a paragraph."
+      "why": "Check for a voice already named for Dana and see which voice is the default."
     },
     {
       "tool": "create-voice-profile",
@@ -23,21 +16,15 @@
         "workspace_id": "<brand's workspace id>",
         "name": "Dana",
         "is_default": false,
-        "writing_sample": "<a post or paragraph Dana wrote, 50 or more characters>",
+        "writing_sample": "<one of the posts Dana pasted earlier, verbatim>",
+        "speaker_mode": "founder",
+        "perspective": "<whose eyes, in her words>",
+        "target_audience": "<who she said she writes for>",
         "account_ids": [
           "<Dana's LinkedIn account id>"
         ]
       },
-      "why": "A person voice, not a second brand voice: is_default false keeps Acme's voice as the default. The sample also sets the voice's tone, so it must be hers. account_ids only because she named her own LinkedIn: it moves that account off the Acme voice. Left out, every account no voice owns yet goes to Dana's voice. speaker_mode is not saved on create, so it is set next. Choose the accounts now: after creation an account can only be moved between voices in Bolta (Brand > Voices)."
-    },
-    {
-      "tool": "update-voice-profile",
-      "arguments": {
-        "workspace_id": "<brand's workspace id>",
-        "profile_id": "<id from the reply>",
-        "speaker_mode": "founder"
-      },
-      "why": "speaker_mode founder makes drafts in this voice write as I."
+      "why": "First shown to her as findings: what her two pasted posts and her words say about how she writes; confirmed. A person voice, not a second brand voice: is_default false keeps Acme's voice the default. The sample is hers, never one you wrote. speaker_mode founder writes as I. account_ids only because she named her LinkedIn: it moves that account off the Acme voice."
     },
     {
       "tool": "get-voice-profile",
@@ -48,11 +35,11 @@
       "why": "Read back speaker_mode and account_assignments to confirm what was stored."
     }
   ],
-  "say": "Dana's voice is saved, writing as \"I\", and her LinkedIn now uses it. Acme's voice stays the default for everything else. Her angle can be set in Bolta under Brand > Edit voice. Want two first-person posts a week from her, ready for her to approve? That's a Bolta routine on her LinkedIn.",
+  "say": "From your two posts: short lines, first person, a number up front, no hashtags. Dana's voice is saved from them, writing as \"I\", and her LinkedIn now uses it. Acme's voice stays the default for everything else.",
   "never": [
     "A writing sample you or Bolta wrote.",
+    "A finding she didn't say or show (a job title, a story).",
     "Moving an account she didn't name.",
-    "Making Dana's voice the default.",
-    "Promising to move another account to her voice later from here: update-voice-profile can't."
+    "Making Dana's voice the default."
   ]
 }
