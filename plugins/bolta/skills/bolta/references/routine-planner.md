@@ -1,6 +1,6 @@
 # Bolta's planner: plan, change, save
 
-Bolta reads the brand's accounts, voices, existing routines, best recent posts and connected apps, and picks the routine, schedule, accounts, voice and drafts per run. Nothing is created until `confirm-plan`. Prefer it to `create-routine` by hand; settings it can't set come after, with `update-routine`.
+Bolta reads the brand's accounts, voices, existing routines, best recent posts and connected apps, and picks the routine, schedule, accounts, voice and drafts per run. Nothing is created until `confirm-plan`. Prefer it to `create-routine` by hand. Before any plan, show what it's based on and pass it as `context`: [routine-planner-context.md](routine-planner-context.md).
 
 ## Which call
 

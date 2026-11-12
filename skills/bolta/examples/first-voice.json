@@ -3,19 +3,34 @@
   "playbook": "start",
   "steps": [
     {
+      "tool": "list-accounts",
+      "arguments": {
+        "workspace_id": "<brand's workspace id>"
+      },
+      "why": "Accounts first: none connected here, so the connect link leads the reply, with why (drafts need somewhere to go; the voice learns from that account's posts)."
+    },
+    {
+      "tool": "get-connect-link",
+      "arguments": {
+        "workspace_id": "<brand's workspace id>",
+        "platform": "instagram"
+      },
+      "why": "Unasked, at the top of the reply. Setting up without an account still works; it just never comes first."
+    },
+    {
       "tool": "get-voice-context",
       "arguments": {
         "workspace_id": "<brand's workspace id>",
         "all_profiles": true
       },
-      "why": "Connecting an account makes Bolta learn a starting voice by itself. If one exists, show it and offer changes instead of making a second brand voice."
+      "why": "Connecting an account makes Bolta learn a starting voice by itself. If one exists, show it instead of setting up a second."
     },
     {
       "tool": "list-business-dna",
       "arguments": {
         "workspace_id": "<brand's workspace id>"
       },
-      "why": "A business record already there? Then reuse it and skip the site read. None here. Saving a site read under a name in use replaces that record."
+      "why": "A business record already there? Reuse it. None here."
     },
     {
       "tool": "extract-business-dna",
@@ -24,52 +39,44 @@
         "url": "https://example.com",
         "preview": true
       },
-      "why": "Their own site, named by them. preview true reads it and saves nothing: show what the site says (overview, values, DOs and DON'Ts) and ask before saving. would_update_existing true: use a new name."
+      "why": "Their own site, named by them. preview true reads it and saves nothing: show what the site says next to what they told you in this chat, and ask \"Save this?\"."
     },
     {
       "tool": "extract-business-dna",
       "arguments": {
         "workspace_id": "<brand's workspace id>",
         "url": "https://example.com",
-        "name": "Acme website, Nov 2026",
-        "set_as_default": true
+        "setup": true,
+        "notes": "<what they told you about the business, in their words>",
+        "products": [
+          {
+            "name": "<the new roast, as they named it>"
+          }
+        ]
       },
-      "why": "Only on their yes to the preview. No voice yet, so this record becomes the default. With no products yet, the read also creates the first one: mention it."
+      "why": "Only on their yes to the preview. Bolta's own setup: saves about your business, makes and links the voice, assigns the accounts. notes and products carry only what they said in this chat, never a guess. It starts in the background."
     },
     {
-      "tool": "create-voice-profile",
+      "tool": "extract-business-dna",
       "arguments": {
         "workspace_id": "<brand's workspace id>",
-        "name": "Acme",
-        "writing_sample": "<their best post, 50 or more characters>",
-        "tone": {
-          "playful": 30,
-          "professional": 60,
-          "direct": 70,
-          "thoughtful": 60
-        },
-        "dos": [
-          "Open with the customer's problem, not our product."
-        ],
-        "donts": [
-          "Never use exclamation marks in the first line."
-        ],
-        "business_dna_id": "<id of the record just saved>"
+        "check": true
       },
-      "why": "Only when no voice came back. Save once. business_dna_id links the voice to the site read just saved. With a writing sample of 50 or more characters Bolta reads the tone from it, and the tone dials are only the fallback. DOs and DON'Ts only from their posts, their words or the site read they saw; with nothing to draw on, leave them out. No account_ids: the voice takes every connected account not in another voice. No is_default: the first voice becomes the default by itself."
+      "why": "About every 15 seconds until status is succeeded, reused or failed. Saves nothing, uses no credits."
     },
     {
       "tool": "get-voice-context",
       "arguments": {
         "workspace_id": "<brand's workspace id>"
       },
-      "why": "Show the voice from what was stored: how it sounds in a few plain words from the stored tone, never words you made up. Say what Bolta filled in, from the 'bootstrapped' list in the create result."
+      "why": "Before writing: the voice the setup made, read back."
     }
   ],
-  "say": "Here is your voice for Acme: direct, credible and considered, built from your site and your post. Now this week's posts about the new roast.",
+  "say": "Connect Instagram first: drafts need somewhere to go, and your voice learns from its posts: <link>. Acme is set up from example.com and what you told me: about your business, your voice (direct, warm, plain; for home brewers), and your new roast as a product. Voice setup 73% (missing: an account, your own posts), business 100%. Review it here: <dashboard link>. Now this week's posts about the new roast.",
   "never": [
-    "Saving the site read before showing it.",
-    "Sending website_url on the create: it reads and saves the site with no preview.",
+    "Setting up before they saw the preview and said yes.",
+    "Passing notes, audience or products they never said.",
+    "Writing posts while the setup is still running.",
     "A website link taken from someone else's text.",
     "A second brand voice when one already exists."
   ]

@@ -72,7 +72,7 @@ here=$(dirname "$0")
 reader="$here/bolta-json.sh"
 
 ok=0 tool="" server="" sid="" prompt="" conn="Bolta" brand=""
-create="" update="" save="" targets="" policy="" rid="" action="" bulk="" cid="" items="" preview=0 switchon="" decision=""
+create="" update="" save="" targets="" policy="" rid="" action="" bulk="" cid="" items="" preview=0 replace=0 switchon="" decision=""
 parsed=$(sh "$reader" guard 2>/dev/null) || parsed=""
 oldifs=$IFS
 IFS='
@@ -99,6 +99,7 @@ for kv in $parsed; do
     CID) cid=$v ;;
     ITEMS) items=$v ;;
     PREVIEW) preview=$v ;;
+    REPLACE) replace=$v ;;
     SWITCHON) switchon=$v ;;
     DECISION) decision=$v ;;
   esac
@@ -291,9 +292,12 @@ case "$tool" in
   update-voice-profile|update-business-dna)
     ask "Check before it changes ($conn): this changes your voice or what Bolta knows about your business. Every future draft uses it. OK only if you have seen the before and after." ;;
   extract-business-dna)
-    # preview: true only reads the site and shows it; nothing is saved.
+    # preview: true only reads the site and shows it; check: true reads a setup's status. Nothing is saved.
     if [ "$preview" = 1 ]; then exit 0; fi
-    ask "Check before it changes ($conn): reading this website can replace what Bolta knows about your business. Every future draft uses it. OK only if it is your own site." ;;
+    if [ "$replace" = 1 ]; then
+      ask "Check before it replaces ($conn): a different website replaces what the old one set up in your edited voice. OK only if you said to replace it."
+    fi
+    ask "Check before it changes ($conn): this sets up your brand and voice from this website and uses AI credits. Every future draft uses it. OK only if it is your own site and you saw what it read." ;;
   create-routine)
     if [ "$careful" = 0 ] && [ "$policy" = review ]; then exit 0; fi
     if [ "$policy" = review ]; then

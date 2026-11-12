@@ -9,9 +9,9 @@ Read with [start](start.md) when the user answers the proposal. A yes to set up 
 
 ## The order on their yes
 
-1. **Brand:** they said the site read is right: `extract-business-dna` again with `preview: false`. Never before they saw it.
-2. **Voice:** "set up our brand" and a yes to its preview is a yes to both the record and the voice. None exists: make it now ([start-making-voice.md](start-making-voice.md)); one exists: update it with their notes, never a second brand voice.
-3. **Accounts:** say which accounts now use the voice (`bootstrapped.accounts_assigned`, or the voice's `account_ids`). None connected: `get-connect-link` now and show the link. Then where to review it: the result's `dashboard_url`.
+1. **Brand and voice:** they said the preview is right: `extract-business-dna` with `setup: true`, the same `url` and what they told you, then `check: true` until done ([start-brand-setup.md](start-brand-setup.md)). Never before they saw it. "Set up our brand" and a yes to its preview is a yes to both the record and the voice; the setup makes both, filling a thin voice, never a second. No website: [start-making-voice.md](start-making-voice.md).
+2. **Show it:** what it made, the two scores and `setup.dashboard_url`.
+3. **Accounts:** say which accounts use the voice (`assigned_account_ids`, or `bootstrapped.accounts_assigned` with no website). None connected: `get-connect-link` now and show the link.
 4. **Routines:** save each one they picked, switched off. Never one they didn't pick.
 5. **One question:** "Saved, switched off: Weekly coffee tips, Friday roundup. Switch both on?"
 

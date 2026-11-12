@@ -1,0 +1,64 @@
+{
+  "ask": "Set up our brand. (Earlier in the chat: Harbor Physio, a physio clinic in Leeds for runners and desk workers; sports massage and rehab plans; 'we keep it short and plain, no jargon'.)",
+  "playbook": "start",
+  "steps": [
+    {
+      "tool": "list-accounts",
+      "arguments": {
+        "workspace_id": "<brand's workspace id>"
+      },
+      "why": "A Facebook page is connected, so no connect link is needed."
+    },
+    {
+      "tool": "get-voice-context",
+      "arguments": {
+        "workspace_id": "<brand's workspace id>",
+        "all_profiles": true
+      },
+      "why": "No voice yet."
+    },
+    {
+      "tool": "list-business-dna",
+      "arguments": {
+        "workspace_id": "<brand's workspace id>"
+      },
+      "why": "No business record, and no website in what they said. Show the findings and ask once: \"What's your website? If you don't have one, I'll build it from what you've told me.\" They answer: we don't have one."
+    },
+    {
+      "tool": "create-voice-profile",
+      "arguments": {
+        "workspace_id": "<brand's workspace id>",
+        "name": "Harbor Physio",
+        "tone": {
+          "playful": 20,
+          "professional": 70,
+          "direct": 70,
+          "thoughtful": 60
+        },
+        "tone_of_voice": [
+          "plain",
+          "friendly",
+          "practical"
+        ],
+        "target_audience": "Runners and desk workers in Leeds",
+        "topics": [
+          "sports massage",
+          "rehab plans"
+        ],
+        "dos": [
+          "Keep it short and plain."
+        ],
+        "donts": [
+          "No jargon."
+        ]
+      },
+      "why": "Only on their yes to the preview of these findings. Everything here is something they said: the audience, the two services, short and plain, no jargon. Nothing invented: no prices, no years in business."
+    }
+  ],
+  "say": "Harbor Physio's voice is saved from what you told me: short and plain, no jargon, for runners and desk workers in Leeds; your Facebook page uses it. A website would add your services and opening hours, so share it any time. Have brand colours, fonts or a logo? Paste them, or share an image of your logo.",
+  "never": [
+    "Setting up from a website guessed from the name.",
+    "Skipping the website question.",
+    "A fact, colour or font they didn't give."
+  ]
+}

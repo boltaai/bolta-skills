@@ -29,10 +29,11 @@ Each file is one ask from start to finish: the calls in order, why each one is s
 | [campaign-add-existing-posts.json](campaign-add-existing-posts.json) | Add last week's posts to a campaign | [campaign](../references/campaign.md) |
 | [campaign-made-nothing.json](campaign-made-nothing.json) | A campaign that made nothing: diagnosed from one read, fixed, then "Start it?" | [campaign](../references/campaign.md) |
 | [campaign-stop.json](campaign-stop.json) | "Stop the campaign": pause it and say which scheduled posts still go out | [campaign](../references/campaign.md) |
-| [first-voice.json](first-voice.json) | A first voice from a site and a writing sample | [start](../references/start.md) |
-| [person-voice.json](person-voice.json) | A voice for the founder, writing as "I" | [voice](../references/voice.md) |
+| [first-voice.json](first-voice.json) | A new brand from its site: connect link first, preview, setup with what they said, check until done | [start](../references/start.md) |
+| [brand-no-website.json](brand-no-website.json) | No website: findings shown, the site asked for once, the voice built from what they said, colours asked once | [start](../references/start.md) |
+| [person-voice.json](person-voice.json) | A voice for the founder from posts she pasted, writing as "I" | [voice](../references/voice.md) |
 | [voice-generate-batch.json](voice-generate-batch.json) | A batch in the trained voice (1 credit a post written), then the status poll | [voice](../references/voice.md) |
-| [voice-from-website.json](voice-from-website.json) | Update the voice from a relaunched site: re-read it, preview first | [voice](../references/voice.md) |
+| [voice-from-website.json](voice-from-website.json) | A relaunched site on an edited voice: preview, setup, asked before replacing | [voice](../references/voice.md) |
 | [decide-in-one-message.json](decide-in-one-message.json) | "1 and 3 yes, 2 too salesy, drop 4" | [review](../references/review.md) |
 | [schedule-my-text.json](schedule-my-text.json) | The user's own text with a day and time | [review](../references/review.md) |
 | [waiting-on-the-client.json](waiting-on-the-client.json) | A yes where one post still needs the client | [review](../references/review.md) |

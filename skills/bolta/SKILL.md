@@ -11,9 +11,9 @@ description: >-
   email, calendars, documents or other apps.
 ---
 
-Bolta is a voice-first content factory: it learns how a brand writes, drafts in that voice, and puts every draft on one review list, where each yes, edit and no with a reason on Bolta's drafts and app posts teaches it.
+Bolta learns how a brand writes, drafts in that voice, and puts every draft on one review list, where each yes, edit and no with a reason teaches it.
 
-Getting someone running, in order: their voice, 3 to 5 Bolta routines, a campaign for anything dated, then the review list every week ([start](references/start.md)). Every ask: read the house rules, look once, pick one playbook, read it, do the work, read the result back; a difference alone never holds back what was asked, a failure does.
+Getting someone running, in order: an account connected, brand and voice through Bolta's setup, 3 to 5 Bolta routines, a campaign for anything dated, then the review list weekly ([start](references/start.md)). Every ask: read the house rules, look once, pick one playbook, read it, do the work, read the result back; only a failure holds back what was asked.
 
 ## House rules
 
@@ -48,7 +48,8 @@ Bolta's own writers do the work behind routines and campaigns. Never name them o
 On the first Bolta ask, read together and reuse all conversation: `list-workspaces` (name, clock, review mode), then the brand's `list-accounts` and `get-voice-context`. Reread only after an error or change.
 
 - No accounts or no voice: [start](references/start.md).
-- No accounts: `get-connect-link`, its link in this reply, unasked. Name the accounts a voice uses.
+- No accounts: `get-connect-link`, its link first in this reply, unasked: drafts need somewhere to go. Name the accounts a voice uses.
+- Brand, voice, routine, campaign: show what you know of them first, ask only the gaps, pass only what they said ([setup](references/start-brand-setup.md), [plans](references/routine-planner-context.md)).
 - "No voice profile" is an answer, not an error.
 - Never say what is or isn't running ("nothing is on yet") before reading `list-routines`.
 
@@ -77,11 +78,11 @@ Before the first reply, read [the plain-words list](references/today-plain-words
 
 ## The four moves
 
-Summaries; the playbook has the rest. Worked calls: [examples/](examples/README.md).
+Summaries. Worked calls: [examples/](examples/README.md).
 
 **Write.** One post: `save-post` with `content`, `account_ids` and an `idempotency_key`, no `post_id`. Two or more: one `bulk-create-posts`, every item a Draft, then poll `bulk-create-status` until `completed` and show what it stored. Write only from the record ([writing](references/post-writing.md), [voice](references/post-writing-voice.md)): a detail not in it is left out; no stock lines; a missing fact gets a blank ("__% off"). Show every saved post in full. End: "Saved to <brand> as drafts. Nothing goes out yet. Schedule all N? Or tell me what to change."
 
-**Decide.** Read `list-inbox-items`. 8 or more waiting and a clearing-house agent you can start: start it first, show its advice. Otherwise number what waits (account, full text). One message decides all: "1, 3 yes · 2 too salesy · 4 drop". Yes: `submit-for-review` for drafts not yet listed, then one `approve-many-posts` with each post's `expected_fingerprint`. No with a reason: `reject-post` in the user's words; same reason on 2+ of a routine's drafts: also `list-suggestions` (`kind: "routine"`), even if a check stops it; offer the fit or a routine change. Drop: `delete-post`. Read back day, time and account. Approvers here match Bolta ([roles](references/connect-people-and-roles.md)).
+**Decide.** Read `list-inbox-items`. Number what waits (account, full text). One message decides all: "1, 3 yes · 2 too salesy · 4 drop". Yes: `submit-for-review` for drafts not yet listed, then one `approve-many-posts` with each post's `expected_fingerprint`. No with a reason: `reject-post` in the user's words; same reason on 2+ of a routine's drafts: also `list-suggestions` (`kind: "routine"`), even if a check stops it; offer the fit or a routine change. Drop: `delete-post`. Read back day, time and account. Approvers here match Bolta ([roles](references/connect-people-and-roles.md)).
 
 **Repeat.** One summary, "Turn it on?", then `create-routine` (schedule, the brand's `timezone`, ask me first, accounts bound as objects), `activate-routine`, and read `next_run_at` back in the brand's clock. Switching on is not running.
 

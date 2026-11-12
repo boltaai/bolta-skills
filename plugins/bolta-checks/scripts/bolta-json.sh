@@ -444,8 +444,12 @@ function guard_main(   ok, ti) {
   if (TOOL == "update-content-campaign") emit("TARGETS", campaign_targets(ti))
   if (TOOL == "confirm-plan") emit("SWITCHON", switch_on(ti))
   if (TOOL == "decide-routine-recommendation" || TOOL == "decide-bolta-suggestion" || TOOL == "decide-suggestion") emit("DECISION", decision(ti))
-  # A website read with preview: true (the JSON literal, never the string) saves nothing.
-  if (TOOL == "extract-business-dna") emit("PREVIEW", jtype(ti, "preview") == "t" ? 1 : 0)
+  # A website read with preview: true, or a setup status read with check: true (JSON literals,
+  # never strings), saves nothing; setup: true alongside either still asks. REPLACE: replace_voice.
+  if (TOOL == "extract-business-dna") {
+    emit("PREVIEW", (jtype(ti, "preview") == "t" || jtype(ti, "check") == "t") && jtype(ti, "setup") != "t" ? 1 : 0)
+    emit("REPLACE", jtype(ti, "replace_voice") == "t" ? 1 : 0)
+  }
 }
 
 # --- mark: did the call succeed? -------------------------------------------------

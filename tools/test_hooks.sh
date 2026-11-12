@@ -384,10 +384,16 @@ check_guard "the reason names the connection (plugin)" ask standard "$(pre "${P}
 check_guard "first approve explains the batch" ask standard "$(pre "${P}approve-post" "$(input_for approve-post)" "$SID2")" "other approvals, no's, schedules and deletes skip this check"
 check_guard "first delete explains its batch covers deletes only" ask standard "$(pre "${P}delete-post" "$(input_for delete-post)" "$SID2")" "other no's and deletes skip this check"
 check_guard "update-routine not made here says it may post without asking" ask standard "$(pre "${P}update-routine" "{\"routine_id\":\"$RID2\",\"instructions\":\"x\"}")" "may post without asking you"
-check_guard "the site read says it can replace about your business" ask standard "$(pre "${P}extract-business-dna" "$(input_for extract-business-dna)")" "replace what Bolta knows about your business"
+check_guard "the site read says it sets up the brand" ask standard "$(pre "${P}extract-business-dna" "$(input_for extract-business-dna)")" "sets up your brand and voice from this website"
+check_guard "a brand setup asks and names the credits" ask standard "$(pre "${P}extract-business-dna" "{\"workspace_id\":\"$WS\",\"url\":\"https://acme.example\",\"setup\":true,\"notes\":\"we roast our own beans\"}")" "uses AI credits"
+check_guard "a setup that replaces a trained voice says so" ask standard "$(pre "${P}extract-business-dna" "{\"workspace_id\":\"$WS\",\"url\":\"https://other.example\",\"setup\":true,\"replace_voice\":true}")" "replaces what the old one set up"
 for lvl in standard careful; do
   check_guard "a preview-only site read saves nothing and passes ($lvl)" silent "$lvl" "$(pre "${P}extract-business-dna" "{\"workspace_id\":\"$WS\",\"url\":\"https://acme.example\",\"preview\":true}")"
   check_guard "preview as the string \"true\" still asks ($lvl)" ask "$lvl" "$(pre "${P}extract-business-dna" "{\"workspace_id\":\"$WS\",\"url\":\"https://acme.example\",\"preview\":\"true\"}")"
+  check_guard "a setup status check saves nothing and passes ($lvl)" silent "$lvl" "$(pre "${P}extract-business-dna" "{\"workspace_id\":\"$WS\",\"check\":true}")"
+  check_guard "check as the string \"true\" still asks ($lvl)" ask "$lvl" "$(pre "${P}extract-business-dna" "{\"workspace_id\":\"$WS\",\"check\":\"true\"}")"
+  check_guard "setup with check still asks ($lvl)" ask "$lvl" "$(pre "${P}extract-business-dna" "{\"workspace_id\":\"$WS\",\"url\":\"https://acme.example\",\"setup\":true,\"check\":true}")"
+  check_guard "setup with preview still asks ($lvl)" ask "$lvl" "$(pre "${P}extract-business-dna" "{\"workspace_id\":\"$WS\",\"url\":\"https://acme.example\",\"setup\":true,\"preview\":true}")"
   check_guard "preview false still asks ($lvl)" ask "$lvl" "$(pre "${P}extract-business-dna" "{\"workspace_id\":\"$WS\",\"url\":\"https://acme.example\",\"preview\":false}")"
 done
 check_guard "a final no on a repeating post says it can't be undone" ask standard "$(pre "${P}reject-recurring-review" "$(input_for reject-recurring-review)")" "can't be undone"
