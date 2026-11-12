@@ -308,6 +308,26 @@
        },
        "description": "Images or videos to add, as an array of objects: a file attachment ({download_url, mime_type, file_name}) or {\"url\": \"https://...\"}. Each is re-hosted in Bolta. Added to the first part."
       },
+      "media_urls": {
+       "type": "array",
+       "items": {
+        "type": "object",
+        "properties": {
+         "url": {
+          "type": "string",
+          "description": "Direct image or video URL"
+         },
+         "alt_text": {
+          "type": "string",
+          "description": "Alt text for the media"
+         }
+        },
+        "required": [
+         "url"
+        ]
+       },
+       "description": "Images or videos by URL, for a client that has a link rather than a file: [{\"url\": \"https://...\", \"alt_text\": \"...\"}]. Re-hosted and attached exactly like media; use either or both."
+      },
       "account_ids": {
        "type": "array",
        "items": {
@@ -638,6 +658,42 @@
         "type": "object"
        },
        "description": "Images to attach. Each item is the image itself — a file you generated or uploaded in this conversation ({download_url, file_id, mime_type, file_name}), or {\"url\": \"https://...\"} — with the WordPress fields alongside it: role: \"featured\"|\"inline\", alt_text, filename, caption, placement: {type: \"after_heading\"|\"before_heading\"|\"after_paragraph\"|\"append\", heading|paragraph_index}. Each is uploaded to WordPress's real Media Library — the returned wordpress_media_id is what WordPress actually uses, never an internal Bolta media ID."
+      },
+      "media_urls": {
+       "type": "array",
+       "items": {
+        "type": "object",
+        "properties": {
+         "url": {
+          "type": "string",
+          "description": "Direct image URL"
+         },
+         "role": {
+          "type": "string",
+          "description": "\"featured\" or \"inline\""
+         },
+         "alt_text": {
+          "type": "string",
+          "description": "Alt text for the image"
+         },
+         "filename": {
+          "type": "string",
+          "description": "Filename to use in the Media Library"
+         },
+         "caption": {
+          "type": "string",
+          "description": "Image caption"
+         },
+         "placement": {
+          "type": "object",
+          "description": "Where to insert an inline image in the article body"
+         }
+        },
+        "required": [
+         "url"
+        ]
+       },
+       "description": "Images by URL, for a client that has a link rather than a file: [{\"url\": \"https://...\", \"role\": \"featured\"|\"inline\", \"alt_text\": \"...\", \"filename\", \"caption\", \"placement\"}]. Uploaded exactly like media; use either or both."
       },
       "requested_action": {
        "type": "string",

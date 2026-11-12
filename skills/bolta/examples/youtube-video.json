@@ -10,7 +10,7 @@
         "account_ids": [
           "<YouTube account id>"
         ],
-        "media": [
+        "media_urls": [
           {
             "url": "https://cdn.example.com/spring-tour.mp4"
           }

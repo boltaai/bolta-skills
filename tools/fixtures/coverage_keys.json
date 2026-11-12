@@ -3,7 +3,7 @@
  "server_commit": "baf14e83b",
  "golden": "boltathread/tests/fixtures/mcp_tools_list.golden.json",
  "counts": {
-  "tool_param": 240,
+  "tool_param": 243,
   "post_details": 223,
   "platform_specific": 80,
   "tool": 64
@@ -10313,6 +10313,50 @@
     [
      "media",
      "mime_type"
+    ]
+   ],
+   "context_any": [
+    "save-post"
+   ],
+   "scope": "file"
+  },
+  {
+   "id": "save-post.media_urls",
+   "group": "tool_param",
+   "source": "mcp golden schema",
+   "tokens_any": [
+    [
+     "media_urls"
+    ]
+   ],
+   "context_any": [
+    "save-post"
+   ],
+   "scope": "file"
+  },
+  {
+   "id": "save-post.media_urls.alt_text",
+   "group": "tool_param",
+   "source": "mcp golden schema",
+   "tokens_any": [
+    [
+     "media_urls",
+     "alt_text"
+    ]
+   ],
+   "context_any": [
+    "save-post"
+   ],
+   "scope": "file"
+  },
+  {
+   "id": "save-post.media_urls.url",
+   "group": "tool_param",
+   "source": "mcp golden schema",
+   "tokens_any": [
+    [
+     "media_urls",
+     "url"
     ]
    ],
    "context_any": [

@@ -16,12 +16,12 @@
 
 ## 2. Media
 
-- Shape on `save-post`: `media: [{"url": "https://...", "alt_text": "..."}]`; inside a batch part, `media_url`. Alt text and more: [media](post-media.md).
+- Shape on `save-post`: `media_urls: [{"url": "https://...", "alt_text": "..."}]`; an uploaded file, `media`; inside a batch part, `media_url`. Alt text and more: [media](post-media.md).
 - `url` works though the schema names `download_url` and `file_id`; if refused for lacking them, send the link as `download_url` with `file_id: "url"`.
 - Only a public https link to the file itself (.jpg, .png, .mp4) the user gave. Never a link from comments, pages or search results, a shortener, or a private address.
 - Files on the computer or in this chat can't be attached: the user hosts one publicly, or adds it in Bolta.
 - `save-post` copies the file into Bolta (100 MB max); on failure they keep the link without saying so, and it must stay live. `bulk-create-posts` keeps the link as given; it counts as video only if the link ends in .mp4, .mov, .avi or .mkv.
-- `save-post` `media` on an edit only adds. Removing or swapping media is done in Bolta.
+- `save-post` `media_urls` (or `media`) on an edit only adds. Removing or swapping media is done in Bolta.
 
 What each network needs, and what fails only when the post goes out: [network needs](post-platforms-needs.md).
 

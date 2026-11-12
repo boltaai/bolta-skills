@@ -10,7 +10,7 @@
         "account_ids": [
           "<Instagram account id>"
         ],
-        "media": [
+        "media_urls": [
           {
             "url": "https://cdn.example.com/sale-code.jpg",
             "alt_text": "Sale graphic: 15% off this weekend with code WEEKEND15"
@@ -33,7 +33,7 @@
         "account_ids": [
           "<Instagram account id>"
         ],
-        "media": [
+        "media_urls": [
           {
             "url": "https://cdn.example.com/shop.mp4",
             "alt_text": "Customers in the shop"
@@ -56,7 +56,7 @@
         "account_ids": [
           "<Instagram account id>"
         ],
-        "media": [
+        "media_urls": [
           {
             "url": "https://cdn.example.com/p1.jpg",
             "alt_text": "The sage mug"

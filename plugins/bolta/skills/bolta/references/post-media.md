@@ -4,7 +4,7 @@ Bolta facts for images, video and how text is shown. Which links work, file size
 
 ## Attaching media
 
-- On `save-post`: `media: [{"url": "https://...", "alt_text": "..."}]`. A new multi-part post (`parts`) gets it on the first part only; media on a later part goes through a batch item, where the key is `media_url` ([post parts](post-parts.md)). On an edit (`post_id`) `media` only adds.
+- On `save-post`, a link: `media_urls: [{"url": "https://...", "alt_text": "..."}]`. A file uploaded in the chat: `media`, the host's file object (`download_url`, `file_id`); never a link there. A new multi-part post (`parts`) gets it on the first part only; a later part goes through a batch item, key `media_url` ([post parts](post-parts.md)). On an edit (`post_id`) both only add.
 - `url` works although the listed schema names a host file: `{download_url, file_id, mime_type, file_name}` (the last two optional). If a call is refused for lacking them, send the same link as `download_url` with `file_id: "url"`, and `mime_type` (`image/jpeg`) and `file_name` when known.
 - Media is attached per post, from a public link the user gave, at most 25 items per call; Bolta tries to copy each file into its own storage. The brand's Media Library (bolta.ai/dashboard/media) is browsed and filled in Bolta only.
 - No link yet? Say: "Instagram needs an image or video. Send me a public link to it, or add it to the post in Bolta."

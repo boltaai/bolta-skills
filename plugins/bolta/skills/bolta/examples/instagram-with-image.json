@@ -11,7 +11,7 @@
           "<Instagram account id>",
           "<LinkedIn account id>"
         ],
-        "media": [
+        "media_urls": [
           {
             "url": "https://cdn.example.com/roast.jpg",
             "alt_text": "A bag of the new roast"
