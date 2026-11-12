@@ -10,7 +10,7 @@ structuredContent:
       "name": "Starter Voice",
       "is_default": true,
       "speaker_mode": "brand",
-      "business_dna_id": "d7a00000-0000-4000-8000-0000000000a2",
+      "business_dna_id": null,
       "account_ids": [
         "ac000000-0000-4000-8000-0000000000a1",
         "facebook_page_5512098834"

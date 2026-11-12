@@ -8,10 +8,10 @@ execution:
     This conversation so far:
 
     **Me:**
-    > Quick one before Bolta: I run Harbor Physio in Williamstown with Anna Ruiz. Most of our people are weekend runners, tradies and new mums getting back to exercise. We do sports massage, rehab plans and small-group Pilates. I write short and plain, like a friendly coach, never like a medical brochure, and I hate hashtag walls.
+    > Quick one before Bolta: I'm Anna Ruiz and I run Harbor Physio in Williamstown. Most of our people are weekend runners, tradies and new mums getting back to exercise. We do sports massage, rehab plans and small-group Pilates. I write short and plain, like a friendly coach, never like a medical brochure, and I hate hashtag walls.
 
     **You:**
-    > Got it: Harbor Physio, Williamstown, for weekend runners, tradies and new mums; sports massage, rehab plans and small-group Pilates; short, plain, friendly-coach writing, no hashtag walls.
+    > Got it, Anna: Harbor Physio, Williamstown, for weekend runners, tradies and new mums; sports massage, rehab plans and small-group Pilates; short, plain, friendly-coach writing, no hashtag walls.
 
     **Me:**
     > I can review about 3 posts a week, max.
@@ -68,7 +68,7 @@ graders:
   - name: reflects-history
     type: 'llm'
     criteria: |
-      Earlier in the chat the user said: Harbor Physio, Williamstown, with Anna Ruiz; clients are weekend runners, tradies and new mums; services are sports massage, rehab plans and small-group Pilates; short, plain friendly-coach writing, no hashtag walls; they can review about 3 posts a week. PASS if the recommended routines are about these clients and services, total about 3 drafts a week or fewer, and the reply states no business fact the user did not give (no prices, hours, awards, other staff). FAIL if it ignores these facts, plans well over 3 drafts a week without saying why, or invents a business fact.
+      Earlier in the chat the user (Anna Ruiz) said: Harbor Physio, Williamstown; clients are weekend runners, tradies and new mums; services are sports massage, rehab plans and small-group Pilates; short, plain friendly-coach writing, no hashtag walls; they can review about 3 posts a week. PASS if the recommended routines are about these clients and services, total about 3 drafts a week or fewer, and the reply states no business fact the user did not give (no prices, hours, awards, other staff). FAIL if it ignores these facts, plans well over 3 drafts a week without saying why, or invents a business fact.
   - name: no-ids
     # No ids in what the user reads (ids inside a Bolta link are fine).
     type: 'regex'

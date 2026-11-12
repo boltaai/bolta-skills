@@ -8,7 +8,7 @@
       "description": "",
       "speaker_mode": "brand",
       "is_default": true,
-      "business_dna_id": "d7a00000-0000-4000-8000-0000000000a2",
+      "business_dna_id": null,
       "language": "en",
       "account_ids": [
         "ac000000-0000-4000-8000-0000000000a1",

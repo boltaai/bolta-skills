@@ -82,8 +82,8 @@ HARBOR_PREVIEW = {
 }
 PREVIEW_STEP = "Nothing is saved yet. Show the user what Bolta read. On a yes, call extract-business-dna with setup=true and the same url: it sets up the Business DNA and the voice the way bolta.ai does."
 
-HARBOR_CHAT = [("Me", "Quick one before Bolta: I run Harbor Physio in Williamstown with Anna Ruiz. Most of our people are weekend runners, tradies and new mums getting back to exercise. We do sports massage, rehab plans and small-group Pilates. I write short and plain, like a friendly coach, never like a medical brochure, and I hate hashtag walls."),
-               ("You", "Got it: Harbor Physio, Williamstown, for weekend runners, tradies and new mums; sports massage, rehab plans and small-group Pilates; short, plain, friendly-coach writing, no hashtag walls.")]
+HARBOR_CHAT = [("Me", "Quick one before Bolta: I'm Anna Ruiz and I run Harbor Physio in Williamstown. Most of our people are weekend runners, tradies and new mums getting back to exercise. We do sports massage, rehab plans and small-group Pilates. I write short and plain, like a friendly coach, never like a medical brochure, and I hate hashtag walls."),
+               ("You", "Got it, Anna: Harbor Physio, Williamstown, for weekend runners, tradies and new mums; sports massage, rehab plans and small-group Pilates; short, plain, friendly-coach writing, no hashtag walls.")]
 HARBOR_SITE_CHAT = [("Me", HARBOR_CHAT[0][1] + " Our site is harborphysio.example."), ("You", HARBOR_CHAT[1][1] + " Site: harborphysio.example.")]
 
 
@@ -153,7 +153,7 @@ def build():
           TWOQ, NOIDS, PLAIN],
          mocks=nodna)
 
-    findings_reply = ("From our chats: you run Harbor Physio in Williamstown with Anna Ruiz, for weekend runners, tradies and new mums; "
+    findings_reply = ("From our chats: you run Harbor Physio in Williamstown, for weekend runners, tradies and new mums; "
                       "you do sports massage, rehab plans and small-group Pilates; you write short and plain, like a friendly coach, no hashtag walls. "
                       "Right? What's your website? If you don't have one, I'll build it from what you've told me.")
     # B6 (c) "we don't have one" -> preview built from the findings, nothing invented, nothing saved yet.
@@ -164,7 +164,7 @@ def build():
          [tool_used("no-site-guessed", "extract-business-dna", None, 0, 0, "No website: never read or guess one."),
           NOSAVE, PUBLIC,
           regex("asks-before-saving", r"(save|set (it )?up|go ahead)[^?\n]{0,80}\?", "Preview first; asks before saving.", flags="i"),
-          llm("nothing-invented", "The user runs Harbor Physio (Williamstown) with Anna Ruiz, for weekend runners, tradies and new mums, offering sports massage, rehab plans and small-group Pilates, and writes short and plain like a friendly coach, no hashtag walls. They have no website. PASS if the reply previews a brand profile built only from these facts (a sample post may illustrate the voice but must not state new facts such as prices, opening hours, years in business, awards, other staff or services) and saves nothing yet. FAIL if it states any business fact the user did not give, or invents a website."),
+          llm("nothing-invented", "The user, Anna Ruiz, runs Harbor Physio (Williamstown), for weekend runners, tradies and new mums, offering sports massage, rehab plans and small-group Pilates, and writes short and plain like a friendly coach, no hashtag walls. They have no website. PASS if the reply previews a brand profile built only from these facts (a sample post may illustrate the voice but must not state new facts such as prices, opening hours, years in business, awards, other staff or services) and saves nothing yet. FAIL if it states any business fact the user did not give, or invents a website."),
           TWOQ, NOIDS, PLAIN],
          mocks=nodna)
 
@@ -190,7 +190,7 @@ def build():
 
     # B8 (d) a finding corrected -> the correction is used.
     corrected = convo(HARBOR_SITE_CHAT + [("Me", harbor_brand),
-                      ("You", "From our chats: you run Harbor Physio in Williamstown with Anna Ruiz, for weekend runners, tradies and new mums; you do sports massage, rehab plans and small-group Pilates; you write short and plain; your site is harborphysio.example. Right?")],
+                      ("You", "From our chats: you run Harbor Physio in Williamstown, for weekend runners, tradies and new mums; you do sports massage, rehab plans and small-group Pilates; you write short and plain; your site is harborphysio.example. Right?")],
                       "Nearly. We stopped the rehab plans in October; it's sports massage and Pilates now. The rest is right.")
     case("ui-final-brand-correction", harbor_src,
          "The user corrects a finding (no more rehab plans): the preview and anything passed on use the correction.",
@@ -229,7 +229,7 @@ def build():
          [tool_used("context-from-history", "plan", r'"context"\s*:\s*"[^"]*(runners|tradies|mums)', 1, None, "The history's facts reach the planner."),
           tool_used("review-time-in-context", "plan", r'"context"\s*:\s*"[^"]*(\b3\b|three)', 1, None, "Their review time reaches the planner."),
           BASED_ON, NOSAVE, PUBLIC, TWOQ,
-          llm("reflects-history", "Earlier in the chat the user said: Harbor Physio, Williamstown, with Anna Ruiz; clients are weekend runners, tradies and new mums; services are sports massage, rehab plans and small-group Pilates; short, plain friendly-coach writing, no hashtag walls; they can review about 3 posts a week. PASS if the recommended routines are about these clients and services, total about 3 drafts a week or fewer, and the reply states no business fact the user did not give (no prices, hours, awards, other staff). FAIL if it ignores these facts, plans well over 3 drafts a week without saying why, or invents a business fact."),
+          llm("reflects-history", "Earlier in the chat the user (Anna Ruiz) said: Harbor Physio, Williamstown; clients are weekend runners, tradies and new mums; services are sports massage, rehab plans and small-group Pilates; short, plain friendly-coach writing, no hashtag walls; they can review about 3 posts a week. PASS if the recommended routines are about these clients and services, total about 3 drafts a week or fewer, and the reply states no business fact the user did not give (no prices, hours, awards, other staff). FAIL if it ignores these facts, plans well over 3 drafts a week without saying why, or invents a business fact."),
           NOIDS, PLAIN])
 
     # C1 campaign with no event anywhere -> one question.
@@ -291,6 +291,36 @@ def build():
 
 build()
 print("generated")
+
+# Harbor Physio with no website: nothing in its world may carry the site or a business record.
+for c in ("ui-final-brand-asks-site", "ui-final-brand-no-website", "ui-final-brand-no-website-save"):
+    mb = EV / c / "mocks" / "bolta"
+    for f in ("update-business-dna.md", "extract-business-dna.md"):
+        (mb / f).unlink(missing_ok=True)
+    for f in ("update-voice-profile.md", "create-voice-profile.md"):
+        t = (mb / f).read_text()
+        t = t.replace('"business_dna_id": "d7a00000-0000-4000-8000-0000000000a2"', '"business_dna_id": null').replace("https://harborphysio.example", "").replace("harborphysio.example", "")
+        (mb / f).write_text(t)
+
+# Harbor Physio's planner answers a recommendation (the copied world's plan is one Instagram routine).
+src = (EV / "ui-routine-recommend-preview" / "mocks" / "bolta" / "plan.md").read_text()
+head, body = src[:src.find("{")], json.loads(src[src.find("{"):])
+IG, FB = "ac000000-0000-4000-8000-0000000000a1", "facebook_page_5512098834"
+spec = [("Runner niggles", "Easy fixes for weekend runners' niggles", ["instagram"], [IG], "tuesday", "07:30", "Runners are your biggest group."),
+        ("Back on the tools", "Looking after backs and shoulders for tradies", ["facebook"], [FB], "thursday", "06:30", "Tradies read Facebook before work."),
+        ("Back to exercise", "Getting back to exercise after a baby", ["instagram"], [IG], "saturday", "09:00", "New mums are a group you named.")]
+plans = []
+for i, (name, goal, plats, accs, day, time, why) in enumerate(spec):
+    p = json.loads(json.dumps(body["data"]["plans"][i]))
+    p["payload"].update({"name": name, "goal": goal, "schedule": {"interval": "weekly", "days": [day], "time": time},
+                         "timezone": "Australia/Melbourne", "output_config": {"artifact_type": "post", "count": 1, "platforms": plats},
+                         "account_ids": accs, "voice_profile_id": "9b000000-0000-4000-8000-0000000000a1"})
+    p["display"] = {"title": name, "summary": why}
+    p["why"] = why
+    plans.append(p)
+body["data"]["plans"] = plans
+body["data"]["skipped"] = []
+(EV / "ui-final-routine-from-history" / "mocks" / "bolta" / "plan.md").write_text(head + json.dumps(body, indent=2) + "\n")
 
 # Mocks a world lacks for the calls its new case makes.
 for f in ("plan.md", "revise-plan.md", "confirm-plan.md", "_data"):
