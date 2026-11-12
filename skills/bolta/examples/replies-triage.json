@@ -46,10 +46,10 @@
         "engagement_id": "<reply 1 id>",
         "verify": true
       },
-      "why": "Pending with needs_approval false is queued, not failed; sent with canonical_url is live. Reply 3 has not been sent, so there is nothing to read for it yet."
+      "why": "Pending with needs_approval false is queued, not failed; sent with canonical_url is live. Reply 3 has not been sent, so there is nothing to read for it yet. Read right after the send, reply 1 is still pending: say queued, not live."
     }
   ],
-  "say": "Reply 1 is live on Threads (link). 2 is a refund ask: answer it yourself in Bolta's Inbox. Two to check before they go out from your Reddit account. Reply 3, without its last sentence: \"...\" And Bolta's answer to the espresso comment: \"...\" Send both?",
+  "say": "Reply 1 is queued on Threads and goes out in a moment; I'll give you the link once it's live. 2 is a refund ask: answer it yourself in Bolta's Inbox. Two to check before they go out from your Reddit account. Reply 3, without its last sentence: \"...\" And Bolta's answer to the espresso comment: \"...\" Send both?",
   "never": [
     "Sending 2, or drafting an answer to a refund ask.",
     "Sending reply 3 before the user has seen the edited text and said yes to it.",

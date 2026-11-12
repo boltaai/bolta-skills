@@ -46,6 +46,13 @@
       "why": "The decision: a thread, not one post, because there are three separate points and each part stands alone; 3 parts, hook first, the screenshot where it pays off. The screenshot belongs on part 3, so this goes through bulk-create-posts as a nested contents list: save-post parts would put media on part 1 only. Media inside a part is media_url. Poll bulk-create-status for the created_post_id."
     },
     {
+      "tool": "bulk-create-status",
+      "arguments": {
+        "task_id": "<task_id from bulk-create-posts>"
+      },
+      "why": "Poll until completed: its created_post_id is the saved thread the next call sets."
+    },
+    {
       "tool": "save-post",
       "arguments": {
         "post_id": "<created_post_id from bulk-create-status>",

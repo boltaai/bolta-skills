@@ -11,7 +11,7 @@
         "ask": "Post about what we ship. Every merged PR, LinkedIn only, one post each.",
         "context": "Developer tool for small teams; the founder posts on LinkedIn."
       },
-      "why": "The planner can plan routines fed by an app; create-routine can't find a GitHub connection. It returned a plan for each merged pull request with LinkedIn and X, 2 posts each, and needs: 'Connect GitHub' with a link to bolta.ai/dashboard/connections."
+      "why": "The planner can plan routines fed by an app; create-routine can't find a GitHub connection. It returned a plan for each merged pull request with LinkedIn and X, 2 posts each, and needs: 'Connect GitHub' with a link to bolta.ai/dashboard/connections. App-fed routines are switched on per brand: elsewhere plan answers status refused, \"not available for this brand yet\"; say so and offer weekly posts from a changelog page instead."
     },
     {
       "tool": "revise-plan",

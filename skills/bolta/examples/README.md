@@ -58,7 +58,7 @@ Each file is one ask from start to finish: the calls in order, why each one is s
 | [x-thread.json](x-thread.json) | An X thread with replies limited to accounts it follows | [post](../references/post.md) |
 | [facebook-first-comment.json](facebook-first-comment.json) | A Facebook Page post with the link as its first comment | [post](../references/post.md) |
 | [threads-ghost-flash-sale.json](threads-ghost-flash-sale.json) | A 24-hour Threads post for a code that expires tonight, with a topic | [post](../references/post.md) |
-| [threads-poll.json](threads-poll.json) | One poll on Threads and X in one post |
+| [threads-poll.json](threads-poll.json) | One poll on Threads and X in one post | [post](../references/post.md) |
 | [threads-who-can-reply.json](threads-who-can-reply.json) | A Threads post only accounts the brand follows can reply to | [post](../references/post.md) |
 | [threads-spoiler-media.json](threads-spoiler-media.json) | A blurred reveal photo on Threads | [post](../references/post.md) |
 | [x-quote.json](x-quote.json) | Quote a customer's X post, the id from the user's link | [post](../references/post.md) |
