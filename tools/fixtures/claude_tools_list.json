@@ -1686,7 +1686,7 @@
    {
     "name": "create-voice-profile",
     "title": "Create Voice Profile",
-    "description": "Create a new brand voice profile for a workspace. This is the first step in the voice bootstrap flow. Requires voice:write permission.\n\nThe server completes the profile for you: it links the workspace's default Business DNA and copies its brand values / tone of voice / tone constraints / dos / donts into any field you left empty, defaults the content intent, assigns the workspace's unassigned connected social accounts to this voice, seeds starter platform rules and content structures for the platforms those accounts publish to, and derives the workspace's first Product from the Business DNA. Anything you pass explicitly is kept as-is. The response includes a 'bootstrapped' object listing what was filled in — report it to the user so they know what was set up. Either run extract-business-dna BEFORE this call, or just pass website_url and let this call do the scrape.",
+    "description": "Create a new brand voice profile for a workspace. This is the first step in the voice bootstrap flow. Requires voice:write permission.\n\nThe server completes the profile for you: it links the workspace's default Business DNA and copies its brand values / tone of voice / tone constraints / dos / donts into any field you left empty, defaults the content intent, assigns the workspace's unassigned connected social accounts to this voice, seeds starter platform rules and content structures for the platforms those accounts publish to, and derives the workspace's first Product from the Business DNA. Anything you pass explicitly is kept as-is. The response includes a 'bootstrapped' object listing what was filled in — report it to the user so they know what was set up. When the brand has a website, prefer extract-business-dna with setup=true: it makes the voice the way bolta.ai does, from Bolta's own reading of the site. Use this call when there is no website (a writing_sample the user pastes) or for a second voice.",
     "inputSchema": {
      "type": "object",
      "properties": {
@@ -1809,6 +1809,14 @@
       "use_emojis": {
        "type": "boolean",
        "description": "Whether generated content may use emojis (default true)."
+      },
+      "perspective": {
+       "type": "string",
+       "description": "For a founder voice: whose eyes the posts see through, in a sentence (e.g. 'a second-time founder who sold to ops teams'). Up to 500 characters."
+      },
+      "founder_signals": {
+       "type": "object",
+       "description": "For a founder voice: facts about the founder the writer may draw on, as an object (e.g. {\"role\": \"CEO\", \"background\": \"ex-nurse\"})."
       }
      },
      "additionalProperties": false,
@@ -1899,6 +1907,63 @@
       "is_default": {
        "type": "boolean",
        "description": "Make this the workspace's default voice profile"
+      },
+      "description": {
+       "type": "string",
+       "description": "Short description of the voice."
+      },
+      "custom_rules": {
+       "type": "string",
+       "description": "Voice characteristics: how this voice writes, in plain sentences. Replaces the current text."
+      },
+      "brand_persona": {
+       "type": "string",
+       "description": "Who the brand sounds like, in a sentence or two."
+      },
+      "topics": {
+       "type": "array",
+       "items": {
+        "type": "string"
+       },
+       "description": "Main topics this voice writes about (up to 3 are kept)."
+      },
+      "language": {
+       "type": "string",
+       "description": "Language this voice writes in (e.g. 'en', 'es'); empty clears it so the brand's language is used."
+      },
+      "brand_values": {
+       "type": "array",
+       "items": {
+        "type": "string"
+       },
+       "description": "What the brand stands for, e.g. ['craft over speed']."
+      },
+      "tone_constraints": {
+       "type": "array",
+       "items": {
+        "type": "string"
+       },
+       "description": "Hard tone guardrails, e.g. ['never hype']."
+      },
+      "formality": {
+       "type": "integer",
+       "description": "Formality level 0-100."
+      },
+      "use_emojis": {
+       "type": "boolean",
+       "description": "Whether posts may use emojis."
+      },
+      "enable_reddit_signals": {
+       "type": "boolean",
+       "description": "Topic insights: let Bolta read what people discuss about this voice's topics (on by default)."
+      },
+      "perspective": {
+       "type": "string",
+       "description": "For a founder voice: whose eyes the posts see through, in a sentence (e.g. 'a second-time founder who sold to ops teams'). Up to 500 characters."
+      },
+      "founder_signals": {
+       "type": "object",
+       "description": "For a founder voice: facts about the founder the writer may draw on, as an object (e.g. {\"role\": \"CEO\", \"background\": \"ex-nurse\"})."
       }
      },
      "additionalProperties": false,
@@ -1949,7 +2014,7 @@
    {
     "name": "extract-business-dna",
     "title": "Extract Business DNA",
-    "description": "Extract a Business DNA record (industry, audience, positioning, tone signals) by scraping a brand's website. Reaches the public internet and consumes AI credits (ai:generate). Creates a new DNA record on the workspace, and — when the workspace has no products yet — derives its first Product from the same scrape (returned as 'product_created').",
+    "description": "Read a brand's website. Three modes:\n1. preview=true: return what Bolta read (dna_preview), saving nothing. Show it and ask.\n2. setup=true (the way to set up a brand, after the user's yes): runs the same setup bolta.ai runs on a website. It saves the Business DNA, creates and links the voice, detects the language, fills voice characteristics, audience, persona and topics from the site, assigns social accounts, seeds platform rules and adds the site's product. Add what the user already told you in this chat (notes, writing_samples, audience, goals, products, favorite_creators; only what they said or shared): it is saved the way bolta.ai saves the user's documents and fills what a website cannot. Starts in the background (status started); poll with check=true every ~15s until succeeded, reused or failed (about a minute). The finished result lists what was made, the Voice and Business setup scores the Brand page shows, and a dashboard_url. Uses AI credits.\n3. Neither: save only the Business DNA (and a first product when there is none), no voice.\nReaches the public internet and writes to the workspace.",
     "inputSchema": {
      "type": "object",
      "properties": {
@@ -1960,7 +2025,7 @@
       },
       "url": {
        "type": "string",
-       "description": "Public brand URL to scrape and analyze (e.g. the marketing homepage)."
+       "description": "Public brand URL to read (e.g. the marketing homepage). Required except with check=true."
       },
       "name": {
        "type": "string",
@@ -1972,19 +2037,67 @@
       },
       "preview": {
        "type": "boolean",
-       "description": "true: read the site and return what would be saved (dna_preview), saving nothing. Show it to the user and call again without preview only after they say yes. would_update_existing true means saving replaces the DNA of the same name. Credits are still used."
+       "description": "true: read the site and return what would be saved (dna_preview), saving nothing. Show it to the user and call again with setup=true only after they say yes. would_update_existing true means saving replaces the DNA of the same name. Credits are still used."
+      },
+      "setup": {
+       "type": "boolean",
+       "description": "true: set up the brand from url exactly as bolta.ai does (Business DNA, voice, language, accounts, rules, product). Running it again on the same website only fills gaps. A different website than the voice was built from is refused (voice_would_be_replaced) when the voice has the user's edits or review learning. Not with preview. Then poll with check=true."
+      },
+      "check": {
+       "type": "boolean",
+       "description": "true: read the status of the setup started with setup=true (started, succeeded, reused or failed; none if nothing was started). Saves nothing and uses no credits."
+      },
+      "voice_name": {
+       "type": "string",
+       "description": "With setup=true: the name for the voice it sets up. Leave out to name it after the brand."
+      },
+      "replace_voice": {
+       "type": "boolean",
+       "description": "With setup=true: true lets a different website replace what the previous website set up on a voice the user edited or trained. Only after the user says yes to that."
+      },
+      "notes": {
+       "type": "string",
+       "description": "With setup=true: what the user has told you about their business, in their words (what it does, how it talks, what to avoid). Only what they said; never your guesses. Saved as a document the voice reads and used to build it."
+      },
+      "writing_samples": {
+       "type": "array",
+       "items": {
+        "type": "string"
+       },
+       "description": "With setup=true: up to 10 pieces the user wrote and shared (posts, emails), verbatim. The voice is built to sound like them, and they are saved as a document."
+      },
+      "audience": {
+       "type": "string",
+       "description": "With setup=true: who the user said they reach. Used as the voice's audience instead of the site's guess."
+      },
+      "goals": {
+       "type": "string",
+       "description": "With setup=true: the user's stated goals for social."
+      },
+      "products": {
+       "type": "array",
+       "items": {
+        "type": "string"
+       },
+       "description": "With setup=true: up to 5 products or services the user named, as {name, description?, url?}. Added to the brand."
+      },
+      "favorite_creators": {
+       "type": "array",
+       "items": {
+        "type": "string"
+       },
+       "description": "With setup=true: creators the user said they admire, as {platform, username}. Added as the voice's inspiration."
       }
      },
      "additionalProperties": false,
      "required": [
-      "workspace_id",
-      "url"
+      "workspace_id"
      ]
     },
     "annotations": {
      "title": "Extract Business DNA",
      "readOnlyHint": false,
-     "destructiveHint": false,
+     "destructiveHint": true,
      "idempotentHint": false,
      "openWorldHint": true
     }

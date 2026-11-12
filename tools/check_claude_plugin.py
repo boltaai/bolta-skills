@@ -948,6 +948,10 @@ def check_tool_ids_and_args(plugin, skills, tools_by_name):
                          f"fallback in SKILL.md's {LEGACY_SECTION!r}")
             else:
                 err(rel, f"`{tok}` is not an exposed Bolta tool or skill")
+        # A tool whose name has no hyphen (`plan`) never matches TOKEN; count it when named in a code span.
+        for m in re.finditer(r"`([a-z][a-z0-9]*)`", text):
+            if m.group(1) in tools_by_name:
+                referenced.add(m.group(1))
         for m in CALL.finditer(text):
             tool, argstr = m.group(1), m.group(2)
             if tool not in tools_by_name:

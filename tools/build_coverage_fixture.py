@@ -8,7 +8,7 @@ must appear in plugins/bolta/skills/bolta/references/*.md. The coverage section
 of tools/check_claude_plugin.py then fails for every key no reference teaches.
 
 Groups:
-  tool_param   routine and campaign tool inputs (create/update-routine, plan,
+  tool_param   brand setup (extract-business-dna), routine and campaign tool inputs (create/update-routine, plan,
                revise-plan changes, confirm-plan, create/update-content-campaign,
                set-content-campaign-status, analyze-content-campaign-source), save-post,
                publish-post, list-suggestions and decide-suggestion, recursively, with the enum values
@@ -66,6 +66,8 @@ TOOL_PREFIX = {
     "publish-post": "publish-post",
     "list-suggestions": "suggestions",
     "decide-suggestion": "decide-suggestion",
+    # Brand setup: the website pipeline bolta.ai's first run uses (Bolta-Server #1482)
+    "extract-business-dna": "brand-setup",
 }
 SKIP_PARAMS = {"workspace_id"}  # on every tool; the checker's universal param
 
