@@ -33,7 +33,7 @@ Each file is one ask from start to finish: the calls in order, why each one is s
 | [brand-no-website.json](brand-no-website.json) | No website: findings shown, the site asked for once, Bolta's setup from their words, colours asked once | [start](../references/start.md) |
 | [person-voice.json](person-voice.json) | A voice for the founder from posts she pasted, writing as "I" | [voice](../references/voice.md) |
 | [voice-generate-batch.json](voice-generate-batch.json) | A batch in the trained voice (1 credit a post written), then the status poll | [voice](../references/voice.md) |
-| [voice-from-website.json](voice-from-website.json) | A relaunched site on an edited voice: preview, setup, asked before replacing | [voice](../references/voice.md) |
+| [voice-from-website.json](voice-from-website.json) | A new site on an edited voice: preview, setup, asked before replacing | [voice](../references/voice.md) |
 | [decide-in-one-message.json](decide-in-one-message.json) | "1 and 3 yes, 2 too salesy, drop 4" | [review](../references/review.md) |
 | [schedule-my-text.json](schedule-my-text.json) | The user's own text with a day and time | [review](../references/review.md) |
 | [waiting-on-the-client.json](waiting-on-the-client.json) | A yes where one post still needs the client | [review](../references/review.md) |

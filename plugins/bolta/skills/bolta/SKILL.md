@@ -13,7 +13,7 @@ description: >-
 
 Bolta is a voice-first content factory: it learns how a brand writes, drafts in that voice, and puts every draft on one review list, where each yes, edit and no with a reason on Bolta's drafts and app posts teaches it.
 
-Getting someone running, in order: an account connected, brand and voice through Bolta's setup, 3 to 5 Bolta routines, a campaign for anything dated, then the review list weekly ([start](references/start.md)). Every ask: read the house rules, look once, pick one playbook, read it, do the work, read the result back; a difference alone never holds back what was asked, a failure does.
+Getting someone running, in order: an account, brand and voice (Bolta's setup), 3 to 5 Bolta routines, a campaign for anything dated, then the review list weekly ([start](references/start.md)). Every ask: read the house rules, look once, pick one playbook, read it, do the work, read the result back; a difference alone never holds back what was asked, a failure does.
 
 ## House rules
 
@@ -81,7 +81,7 @@ Summaries; the playbook has the rest. Worked calls: [examples/](examples/README.
 
 **Write.** One post: `save-post` with `content`, `account_ids` and an `idempotency_key`, no `post_id`. Two or more: one `bulk-create-posts`, every item a Draft, then poll `bulk-create-status` until `completed` and show what it stored. Write only from the record ([writing](references/post-writing.md), [voice](references/post-writing-voice.md)): a detail not in it is left out; no stock lines; a missing fact gets a blank ("__% off"). Show every saved post in full. End: "Saved to <brand> as drafts. Nothing goes out yet. Schedule all N? Or tell me what to change."
 
-**Decide.** Read `list-inbox-items`. Number what waits (account, full text). One message decides all: "1, 3 yes · 2 too salesy · 4 drop". Yes: `submit-for-review` for drafts not yet listed, then one `approve-many-posts` with each post's `expected_fingerprint`. No with a reason: `reject-post` in the user's words; same reason on 2+ of a routine's drafts: also `list-suggestions` (`kind: "routine"`), even if a check stops it; offer the fit or a routine change. Drop: `delete-post`. Read back day, time and account. Approvers here match Bolta ([roles](references/connect-people-and-roles.md)).
+**Decide.** Read `list-inbox-items`. 8 or more waiting and a clearing-house agent you can start: start it first, show its advice. Otherwise number what waits (account, full text). One message decides all: "1, 3 yes · 2 too salesy · 4 drop". Yes: `submit-for-review` for drafts not yet listed, then one `approve-many-posts` with each post's `expected_fingerprint`. No with a reason: `reject-post` in the user's words; same reason on 2+ of a routine's drafts: also `list-suggestions` (`kind: "routine"`), even if a check stops it; offer the fit or a routine change. Drop: `delete-post`. Read back day, time and account. Approvers here match Bolta ([roles](references/connect-people-and-roles.md)).
 
 **Repeat.** One summary, "Turn it on?", then `create-routine` (schedule, the brand's `timezone`, ask me first, accounts bound as objects), `activate-routine`, and read `next_run_at` back in the brand's clock. Switching on is not running.
 
@@ -111,11 +111,11 @@ An app or an older Bolta may lack a tool, and a plan or role can refuse one.
 - No `reject-post`: "I can't turn this down from here. Tap the X (Dismiss) on that post at bolta.ai/dashboard/approvals and give your reason." Never delete to stand in for a no.
 - Campaigns refuse `account_ids`: `set-content-campaign-targets`, else `update-content-campaign` for the brief and dates, then "Pick the accounts at bolta.ai/dashboard/campaigns/<id>, then say done."
 - No routine tools: one line, one link to bolta.ai/dashboard/routines. Never fake a routine with scheduled posts unless asked.
-- A local or chat file can't be attached: the user hosts it publicly or adds it in Bolta.
+- A local or chat file: the user hosts it publicly or adds it in Bolta.
 - A refusal naming a role, a plan or the connection's access: say which, in plain words, and stop.
 
 ## Extras, where the app has them
 
-- Two read-only agents ship with the full plugin and, where you can start them, go first: clearing-house (8 or more drafts waiting), community-triage (10 or more reply drafts or comments). Advice is never a yes. Not there: do it yourself; never mention them.
+- Two read-only agents, where you can start them, go first: clearing-house (8+ drafts waiting), community-triage (10+ reply drafts or comments). Advice is never a yes. Not there: do it yourself; never mention them.
 - The Bolta checks plugin asks before anything public, approved, turned down or final. A session that starts with "Bolta checks are on in this session" has them; a check then stands in for asking in words. Without that line, ask in words first.
 - The my-workflow playbook is only for apps with their own skills and scheduled tasks.

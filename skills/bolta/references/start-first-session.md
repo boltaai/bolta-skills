@@ -14,7 +14,7 @@ Real names, counts and times; these are examples. Skip what's done. Moments 1 to
 
 ## 2. It already knows me
 
-A voice there: show it ([what to show and say](start-first-session-voice.md)). None: one line, "Want me to make your voice from this?" It is made on their yes, before any routine is saved.
+A voice there: show it ([what to show and say](start-first-session-voice.md)). None: the site preview's "Save this?" covers it: on their yes Bolta's setup makes the voice, before any routine is saved. Never a separate voice question.
 
 ## 3. It keeps going without me
 
