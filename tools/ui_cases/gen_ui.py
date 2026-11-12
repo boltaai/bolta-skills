@@ -350,9 +350,9 @@ for c in ("ui-final-brand-asks-site", "ui-final-brand-no-website", "ui-final-bra
 src = (EV / "ui-routine-recommend-preview" / "mocks" / "bolta" / "plan.md").read_text()
 head, body = src[:src.find("{")], json.loads(src[src.find("{"):])
 IG, FB = "ac000000-0000-4000-8000-0000000000a1", "facebook_page_5512098834"
-spec = [("Runner niggles", "Easy fixes for weekend runners' niggles", ["instagram"], [IG], "tuesday", "07:30", "Runners are your biggest group."),
-        ("Back on the tools", "Looking after backs and shoulders for tradies", ["facebook"], [FB], "thursday", "06:30", "Tradies read Facebook before work."),
-        ("Back to exercise", "Getting back to exercise after a baby", ["instagram"], [IG], "saturday", "09:00", "New mums are a group you named.")]
+spec = [("Runner niggles", "Easy fixes for weekend runners' niggles", ["instagram"], [IG], "tuesday", "07:30", "You named weekend runners."),
+        ("Back on the tools", "Looking after backs and shoulders for tradies", ["facebook"], [FB], "thursday", "06:30", "You named tradies; Facebook spreads the load off Instagram."),
+        ("Back to exercise", "Getting back to exercise after a baby", ["instagram"], [IG], "saturday", "09:00", "You named new mums getting back to exercise.")]
 plans = []
 for i, (name, goal, plats, accs, day, time, why) in enumerate(spec):
     p = json.loads(json.dumps(body["data"]["plans"][i]))

@@ -44,10 +44,10 @@
         },
         "display": {
           "title": "Runner niggles",
-          "summary": "Runners are your biggest group."
+          "summary": "You named weekend runners."
         },
         "preview_topics": [],
-        "why": "Runners are your biggest group.",
+        "why": "You named weekend runners.",
         "rank": 1,
         "expires_at": "2026-12-01T00:00:00+00:00"
       },
@@ -91,10 +91,10 @@
         },
         "display": {
           "title": "Back on the tools",
-          "summary": "Tradies read Facebook before work."
+          "summary": "You named tradies; Facebook spreads the load off Instagram."
         },
         "preview_topics": [],
-        "why": "Tradies read Facebook before work.",
+        "why": "You named tradies; Facebook spreads the load off Instagram.",
         "rank": 2,
         "expires_at": "2026-12-01T00:00:00+00:00"
       },
@@ -138,10 +138,10 @@
         },
         "display": {
           "title": "Back to exercise",
-          "summary": "New mums are a group you named."
+          "summary": "You named new mums getting back to exercise."
         },
         "preview_topics": [],
-        "why": "New mums are a group you named.",
+        "why": "You named new mums getting back to exercise.",
         "rank": 3,
         "expires_at": "2026-12-01T00:00:00+00:00"
       }
