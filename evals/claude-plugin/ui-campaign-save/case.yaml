@@ -1,0 +1,87 @@
+schema_version: "1.1"
+name: ui-campaign-save
+description: 'After the outline the user confirms. The campaign is saved as a draft, linked in Bolta, and starting draft generation is asked separately. Never started.'
+tags: [uiprompts]
+expected_outcome: 'bolta fires; confirm-plan without switch_on, or create-content-campaign; never set-content-campaign-status; campaign link; says draft/not started; asks before starting.'
+execution:
+  prompt: |
+    This conversation so far:
+
+    **Me:**
+    > Use Bolta to prepare a draft campaign for DevConsole around our next launch or event (I'll tell you which). Use our saved brand voice. Ask only for missing details, such as the dates. Show me the audience, key message, channels, call to action and a week-by-week outline. After I confirm, save it as a draft and link me to it in Bolta. Ask separately before starting draft generation, and keep every post for my review.
+
+    **You:**
+    > Happy to. Which launch or event is this for, and what's the date? If there's a page about it, send that too and Bolta will build the campaign from it.
+
+    **Me:**
+    > It's the DevConsole 2.0 launch on Tuesday, December 8. Launch page: devconsole.example/2-0
+
+    **You:**
+    > Here's the campaign plan for DevConsole 2.0. Nothing is saved yet.
+    >
+    > **DevConsole 2.0 launch**: Mon Nov 23 to Sun Dec 13, 2026 (3 weeks), launch day Tue Dec 8.
+    > - **Audience:** backend engineers and small platform teams at startups.
+    > - **Key message:** find and fix a failing API call before your users notice.
+    > - **Channels:** the DevConsole LinkedIn page and @devconsole on X, about 4 posts a week, in your DevConsole voice.
+    > - **Call to action:** "Try DevConsole 2.0" with devconsole.example/2-0.
+    > - **Week 1 (Nov 23-29):** the problem: debugging API calls blind.
+    > - **Week 2 (Nov 30-Dec 6):** what changes in 2.0, from the launch page.
+    > - **Week 3 (Dec 7-13):** launch day Dec 8, then how to try it.
+    >
+    > Every post waits for your review. Save it as a draft?
+
+    **Me now:**
+    Looks good, save it.
+  max_turns: 25
+  timeout_seconds: 480
+  allowed_tools: [Skill, Read]
+graders:
+  - name: skill-fired
+    # The Bolta skill owns this ask.
+    type: 'tool_used'
+    tool: 'Skill'
+    input_match: '"skill"\s*:\s*"(?:[\w-]+:)?(bolta)"'
+    min: 1
+  - name: saves
+    # Saved as a draft.
+    type: 'regex'
+    pattern: '"name"\s*:\s*"mcp__plugin_bolta_bolta__(confirm-plan|create-content-campaign)"'
+    target: 'trace'
+  - name: no-switch-on
+    # Never switch_on.
+    type: 'regex'
+    pattern: '"switch_on\W{1,6}true'
+    target: 'trace'
+    match: 'not_contains'
+  - name: nothing-public
+    # Nothing published, scheduled, approved, switched on, run or started.
+    type: 'regex'
+    pattern: '"name"\s*:\s*"mcp__plugin_bolta_bolta__(publish-post|schedule-post|approve-post|approve-many-posts|activate-routine|resume-routine|run-routine-now|set-content-campaign-status|voice-generate)"'
+    target: 'trace'
+    match: 'not_contains'
+  - name: campaign-link
+    # Links to it in Bolta.
+    type: 'regex'
+    pattern: 'bolta\.ai/dashboard/campaigns/'
+    flags: 'i'
+  - name: says-draft
+    # Says it's a draft, not started.
+    type: 'regex'
+    pattern: 'draft|not (started|running)'
+    flags: 'i'
+  - name: asks-before-start
+    # Asks separately before starting.
+    type: 'regex'
+    pattern: '(start|begin|kick off|generat)[^?\n]{0,100}\?'
+    flags: 'i'
+  - name: no-ids
+    # No ids in what the user reads (ids inside a Bolta link are fine).
+    type: 'regex'
+    pattern: '(?<![/=])\b[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}\b|(?<![/=])\b(linkedin_org|facebook_page)_\d+'
+    flags: 'i'
+    match: 'not_contains'
+  - name: plain-words
+    # No tool names or internal field names in what the user reads.
+    type: 'regex'
+    pattern: '\b(MCP|workspace_id|proposal_id|source_bindings?|approval_policy|review_every_artifact|extract-business-dna|create-voice-profile|update-voice-profile|confirm-plan|create-routine|activate-routine|plan-campaign|get-connect-link|list-routine-templates|switch_on|is_default)\b'
+    match: 'not_contains'

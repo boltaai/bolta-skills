@@ -1,0 +1,123 @@
+schema_version: "1.1"
+name: ui-brand-notes-save
+description: 'Lumen Dental Studio says save after seeing the drafted profile. One voice is made from the notes (DOs, DON''Ts, audience, the user''s own sample), no website read, the Facebook page named as using it, and the place to review it in Bolta.'
+tags: [uiprompts]
+expected_outcome: 'bolta fires; one create-voice-profile with the notes'' DOs/DON''Ts and audience, the user''s sample or tone dials, no website_url; no website read; names the Facebook page; Bolta link.'
+execution:
+  prompt: |
+    This conversation so far:
+
+    **Me:**
+    > Use the brand notes I share to draft a brand profile for Lumen Dental Studio. Show it to me before saving it in Bolta.
+
+    **You:**
+    > Happy to. Paste your brand notes here: what you offer, who your patients are, how you like to sound, anything you never say, and a post or paragraph you've written that sounds like you. I'll draft the profile and show it to you before anything is saved in Bolta.
+
+    **Me:**
+    > Lumen Dental Studio is a family dentist in Evanston, IL. Dr. Maya Patel plus two hygienists.
+    > We do checkups, cleanings, Invisalign and same-day emergency visits.
+    > Patients: busy parents, kids, and nervous adults.
+    > Voice: calm, warm, a little funny. Never scary or clinical.
+    > Don't use the words "pain" or "drill" in posts. Never post prices.
+    > Always end with "Call or book online."
+    > Sample: "Dentist nerves are real. That's why every first visit starts with a chat, not a chair. Bring your questions, we'll bring the coffee. Call or book online."
+
+    **You:**
+    > Here's the draft brand profile for Lumen Dental Studio. Nothing is saved yet.
+    >
+    > **Who you are:** a family dentist in Evanston, IL: Dr. Maya Patel and two hygienists.
+    > **What you offer:** checkups, cleanings, Invisalign, same-day emergency visits.
+    > **Who you serve:** busy parents, kids and nervous adults.
+    > **Tone:** calm, warm, a little funny; never scary or clinical.
+    > **DO:** end every post with "Call or book online." · speak to nervous patients first · keep it light
+    > **DON'T:** use the words "pain" or "drill" · post prices · sound clinical
+    > **Content topics:** what a first visit is like · Invisalign questions · same-day emergency help.
+    > **Sample post (Facebook):**
+    > "Chipped a tooth at Saturday soccer? We keep time for same-day emergency visits, so you're not waiting till Monday. Call or book online."
+    >
+    > Your Facebook page, Lumen Dental Studio, is connected; the new voice will be assigned to it.
+    >
+    > Save this to Lumen Dental Studio in Bolta?
+
+    **Me now:**
+    Looks good, save it.
+  max_turns: 25
+  timeout_seconds: 480
+  allowed_tools: [Skill, Read]
+graders:
+  - name: skill-fired
+    # The Bolta skill owns this ask.
+    type: 'tool_used'
+    tool: 'Skill'
+    input_match: '"skill"\s*:\s*"(?:[\w-]+:)?(bolta)"'
+    min: 1
+  - name: makes-voice
+    # Makes one voice.
+    type: 'tool_used'
+    tool: 'mcp__plugin_bolta_bolta__create-voice-profile'
+    min: 1
+    max: 1
+  - name: signoff-in-dos
+    # The sign-off rule is a DO.
+    type: 'tool_used'
+    tool: 'mcp__plugin_bolta_bolta__create-voice-profile'
+    input_match: '"dos"[^\]]*Call or book online'
+    min: 1
+  - name: banned-words-in-donts
+    # The banned words are a DON'T.
+    type: 'tool_used'
+    tool: 'mcp__plugin_bolta_bolta__create-voice-profile'
+    input_match: '"donts"[^\]]*(pain|drill)'
+    min: 1
+  - name: audience
+    # Who they serve goes in.
+    type: 'tool_used'
+    tool: 'mcp__plugin_bolta_bolta__create-voice-profile'
+    input_match: '"target_audience"\s*:\s*"[^"]*(parent|nervous|kid|famil)'
+    min: 1
+  - name: no-website-url
+    # No website on create.
+    type: 'tool_used'
+    tool: 'mcp__plugin_bolta_bolta__create-voice-profile'
+    input_match: '"website_url"'
+    min: 0
+    max: 0
+  - name: no-site-read
+    # No website read.
+    type: 'tool_used'
+    tool: 'mcp__plugin_bolta_bolta__extract-business-dna'
+    min: 0
+    max: 0
+  - name: no-content-writes
+    # No post, routine or campaign saved.
+    type: 'regex'
+    pattern: '"name"\s*:\s*"mcp__plugin_bolta_bolta__(save-post|bulk-create-posts|create-post|create-routine|confirm-plan|create-content-campaign)"'
+    target: 'trace'
+    match: 'not_contains'
+  - name: nothing-public
+    # Nothing published, scheduled, approved, switched on, run or started.
+    type: 'regex'
+    pattern: '"name"\s*:\s*"mcp__plugin_bolta_bolta__(publish-post|schedule-post|approve-post|approve-many-posts|activate-routine|resume-routine|run-routine-now|set-content-campaign-status|voice-generate)"'
+    target: 'trace'
+    match: 'not_contains'
+  - name: names-voice-account
+    # Owner rule: says the Facebook page uses this voice.
+    type: 'regex'
+    pattern: '(assign|attach|link|connect|tie|use[sd]?|post(s|ing)? (as|from|to)|writes? for|apply|applies|set (to|for|on))[^.\n]{0,90}(Facebook|Lumen Dental Studio page)|(Facebook|Lumen Dental Studio page)[^.\n]{0,90}(assign|attach|linked|connected|will use|uses|use this voice|use the voice|gets? this voice|on this voice|write[sn]? (in|with))'
+    flags: 'i'
+  - name: review-link
+    # Where to review it in Bolta.
+    type: 'regex'
+    pattern: 'bolta\.ai/dashboard/knowledge-base'
+    flags: 'i'
+  - name: no-ids
+    # No ids in what the user reads (ids inside a Bolta link are fine).
+    type: 'regex'
+    pattern: '(?<![/=])\b[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}\b|(?<![/=])\b(linkedin_org|facebook_page)_\d+'
+    flags: 'i'
+    match: 'not_contains'
+  - name: plain-words
+    # No tool names or internal field names in what the user reads.
+    type: 'regex'
+    pattern: '\b(MCP|workspace_id|proposal_id|source_bindings?|approval_policy|review_every_artifact|extract-business-dna|create-voice-profile|update-voice-profile|confirm-plan|create-routine|activate-routine|plan-campaign|get-connect-link|list-routine-templates|switch_on|is_default)\b'
+    match: 'not_contains'
