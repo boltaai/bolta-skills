@@ -4,7 +4,7 @@ Read with [start-brand-setup.md](start-brand-setup.md) once they said there is n
 
 ## Without a website
 
-They said there is none: set the voice up from the findings and their notes with `create-voice-profile` ([start-making-voice.md](start-making-voice.md)): `name`, a `writing_sample` they wrote or the `tone` dials, `target_audience`, `topics`, `dos`, `donts` from their words. Preview it first the same way, and save on their yes. Say what a site would add ("about your business, your products and your colours") and that they can share one later; never ask again.
+They said there is none: set the voice up from the findings and their notes with `create-voice-profile` ([start-making-voice.md](start-making-voice.md)): `name`, a `writing_sample` they wrote or the `tone` dials, `target_audience`, `topics`, `dos`, `donts` from their words. Preview it first the same way (assumptions as statements, one question: "Save this?"), and save on their yes. Then the colours question below, in the same reply. Say what a site would add ("about your business, your products and your colours") and that they can share one later; never ask again.
 
 ## Colours, fonts and logo
 

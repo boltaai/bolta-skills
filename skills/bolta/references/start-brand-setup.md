@@ -15,7 +15,7 @@ Start from this conversation and what you remember of them: business, site, audi
 ## With a website
 
 1. **The site:** from the findings or their answer.
-2. **Preview:** `extract-business-dna` with `url` and `preview: true`. Nothing is saved. Show it in 3-4 lines as "what your site says", then "Save this?".
+2. **Preview:** `extract-business-dna` with `url` and `preview: true`. Nothing is saved. Show it in 3-4 lines as "what your site says", assumptions as statements ("I guessed..."), never questions; one question at the end: "Save this?".
 3. **On their yes:** `extract-business-dna` with `url`, `setup: true`, and the findings, only what they said or shared:
    - `notes`: their words about the business (what it does, how it talks, what to avoid).
    - `writing_samples`: up to 10 pieces they wrote and shared, verbatim.
@@ -29,9 +29,8 @@ Start from this conversation and what you remember of them: business, site, audi
 - `social_accounts_connected: 0`: the connect link first ([start](start.md)); the setup still counts.
 - Something they shared fills a `missing` item: `setup: true` again, same `url`, with those fields. The same site again only fills gaps.
 - `already_running`: this call added nothing; follow it with `check: true`, then run `setup: true` again with the fields. `in_flight_other_site`: wait for that one, then start this.
-- `failed`: say so plainly; offer another address or the no-site setup.
+- `failed`: say so; offer another address or the no-site setup.
 - **A different site on a trained voice** answers `voice_would_be_replaced` (409): the voice has their edits or review learning. Ask: "Your voice was built from <old site> and has your edits. Set it up from <new site> instead? That replaces what the old site set up." Only on a yes, again with `replace_voice: true`.
-- Change one thing later: `update-voice-profile` or `update-business-dna` ([voice](voice.md)).
 
 ## Without a website, and colours
 
@@ -40,4 +39,5 @@ No site, or a brand set up without one: [start-brand-setup-no-site.md](start-bra
 ## Always
 
 - Preview before setup; setup only after a yes in their latest message.
+- A preview reply asks one question, "Save this?": assumptions and conflicts are statements of what you'll do ("I left Tom out; say if he should be in").
 - Pass only what they said or shared.
