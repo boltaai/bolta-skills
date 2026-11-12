@@ -76,7 +76,7 @@ CONNECT_FIRST = ("FIRST: no social account is connected to this brand yet. Befor
     "just comes second. Then: ")
 
 def setup_done(ws, brand, site, dna_id, voice_id, voice_name, audience, topics, tone, accounts, products,
-               voice_missing, business_missing, connected, language="en"):
+               voice_missing, business_missing, connected, language="en", without_website=None):
     vs = 100 - sum({"Give it documents to read": 15, "Assign an account": 10,
                     "Add inspiration (favorite creators)": 2, "Turn on Topic insights": 8}.get(m, 10) for m in voice_missing)
     bs = 100 - sum({"Add brand colors or fonts": 20, "Describe who you reach": 25,
@@ -99,10 +99,18 @@ def setup_done(ws, brand, site, dna_id, voice_id, voice_name, audience, topics, 
         },
         "social_accounts_connected": connected,
     }
+    if without_website:
+        data["manual"] = True
+        data["setup"]["without_website"] = without_website
+        data["setup"]["business_dna"].update({"website_url": "", "has_colors": False, "has_fonts": False})
     step = SETUP_DONE_STEP
     if voice_missing:
         step += (" If the user has already shared writing, notes, products or creators they like in this chat, run "
                  "setup=true again with the same url and those fields to fill what is missing. Never make them up.")
+    if without_website:
+        step += (" This brand was set up without a website, so these are missing: setup.without_website. Suggest "
+                 "adding the website later: extract-business-dna setup=true with the url only fills gaps and keeps what "
+                 "the user said.")
     if connected == 0:
         step = CONNECT_FIRST + step
     elif accounts:

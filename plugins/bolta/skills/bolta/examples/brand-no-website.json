@@ -25,40 +25,37 @@
       "why": "No business record, and no website in what they said. Show the findings and ask once: \"What's your website? If you don't have one, I'll build it from what you've told me.\" They answer: we don't have one."
     },
     {
-      "tool": "create-voice-profile",
+      "tool": "extract-business-dna",
       "arguments": {
         "workspace_id": "<brand's workspace id>",
-        "name": "Harbor Physio",
-        "tone": {
-          "playful": 20,
-          "professional": 70,
-          "direct": 70,
-          "thoughtful": 60
-        },
-        "tone_of_voice": [
-          "plain",
-          "friendly",
-          "practical"
-        ],
-        "target_audience": "Runners and desk workers in Leeds",
-        "topics": [
-          "sports massage",
-          "rehab plans"
-        ],
-        "dos": [
-          "Keep it short and plain."
-        ],
-        "donts": [
-          "No jargon."
+        "setup": true,
+        "notes": "Harbor Physio, a physio clinic in Leeds for runners and desk workers. Sports massage and rehab plans. We keep it short and plain, no jargon.",
+        "audience": "Runners and desk workers in Leeds",
+        "products": [
+          {
+            "name": "Sports massage"
+          },
+          {
+            "name": "Rehab plans"
+          }
         ]
       },
-      "why": "Only on their yes to the preview of these findings. Everything here is something they said: the audience, the two services, short and plain, no jargon. Nothing invented: no prices, no years in business."
+      "why": "Only on their yes to the preview of these findings. No url: Bolta's setup builds the business record and the voice from their words. Everything passed is something they said: no prices, no years in business."
+    },
+    {
+      "tool": "extract-business-dna",
+      "arguments": {
+        "workspace_id": "<brand's workspace id>",
+        "check": true
+      },
+      "why": "About every 15 seconds until succeeded or failed. setup.without_website lists what a site would add."
     }
   ],
-  "say": "Harbor Physio's voice is saved from what you told me: short and plain, no jargon, for runners and desk workers in Leeds; your Facebook page uses it. A website would add your services and opening hours, so share it any time. Have brand colours, fonts or a logo? Paste them, or share an image of your logo.",
+  "say": "Harbor Physio is set up from what you told me: about your business, your services, and your voice (short and plain, no jargon, for runners and desk workers in Leeds); your Facebook page uses it. Voice setup 73%, business 80% (no colours or fonts yet). A website would add your colours and more detail; share it any time and it only fills gaps. Have brand colours, fonts or a logo? Paste them, or share an image of your logo.",
   "never": [
     "Setting up from a website guessed from the name.",
     "Skipping the website question.",
-    "A fact, colour or font they didn't give."
+    "A fact, colour or font they didn't give.",
+    "A second voice next to a Starter Voice."
   ]
 }

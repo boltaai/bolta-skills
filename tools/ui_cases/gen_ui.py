@@ -176,17 +176,23 @@ def build():
                       "**Sample post:** \"Long run left your calves tight? Two easy moves tonight, and when it's time to see Anna.\"\n\n"
                       "**Assumptions:** the topics are mine. A website would add your opening hours and booking link.\n\nSave this to Harbor Physio?")
     case("ui-final-brand-no-website-save", harbor_src,
-         "Harbor Physio (no website, no voice yet) approves the brand built from chat: one voice made from the findings (no website read), the accounts named, and colours, fonts or a logo asked once.",
-         "bolta fires; one create-voice-profile with the audience; no extract-business-dna; asks once for colours or a logo; names the accounts.",
+         "Harbor Physio (no website, no voice yet) approves the brand built from chat: Bolta's setup with no url from their words (no website guessed, no separate voice), the accounts named, and colours, fonts or a logo asked once.",
+         "bolta fires; one extract-business-dna setup:true with no url and notes from the chat; no create-voice-profile; asks once for colours or a logo; names the accounts.",
          convo(HARBOR_CHAT + [("Me", harbor_brand), ("You", findings_reply), ("Me", "That's right. We don't have a website."), ("You", manual_preview)], "Looks good, save it."),
-         [tool_used("makes-the-voice", "create-voice-profile", None, 1, 1, "No voice yet and no website: one voice from what they said."),
-          tool_used("audience-from-chat", "create-voice-profile", r'"target_audience"\s*:\s*"[^"]*(runners|tradies|mums)', 1, None, "Who they said they serve."),
-          tool_used("no-site-read", "extract-business-dna", None, 0, 0, "No website."),
+         [tool_used("sets-up-without-site", "extract-business-dna", r'^(?![\s\S]*"url"\s*:\s*"[^"])(?=[\s\S]*"setup"\W{1,6}true)', 1, 1, "Bolta-Server #1482: no website, so setup:true with no url, from their words."),
+          tool_used("notes-from-chat", "extract-business-dna", r'"notes"\s*:\s*"[^"]*(runners|tradies|mums|Pilates|massage)', 1, None, "Their words as notes."),
+          tool_used("no-site-guessed", "extract-business-dna", r'"url"\s*:\s*"[^"]', 0, 0, "No website: never a guessed url."),
+          tool_used("no-separate-voice", "create-voice-profile", None, 0, 0, "The setup makes the voice."),
           PUBLIC,
           regex("asks-visuals-once", r"(colou?rs?|fonts?|logo)[^?\n]{0,160}\?", "Owner: no site means no colours, fonts or logo; asked once, optionally.", flags="i"),
           regex("names-voice-accounts", r"(Instagram|Facebook)", "Names the accounts that use the voice.", flags="i"),
           NOIDS, PLAIN],
-         mocks=nodna)
+         mocks={**nodna, "extract-business-dna": setup_done("5a1d0000-0000-4000-8000-0000000000a2", "Harbor Physio", "",
+                  "d7a00000-0000-4000-8000-0000000000b2", "9b000000-0000-4000-8000-0000000000b2", "Harbor Physio",
+                  "Weekend runners, tradies and new mums getting back to exercise", ["runner niggles", "tradies' backs", "exercise after a baby"],
+                  ["plain", "friendly", "coach-like"], ["ac000000-0000-4000-8000-0000000000a1", "facebook_page_5512098834"],
+                  ["Sports massage", "Rehab plans", "Small-group Pilates"], ["Turn on Topic insights", "Add inspiration (favorite creators)"],
+                  ["Add brand colors or fonts"], 2, without_website=["colors", "fonts", "logo", "tagline"])})
 
     # B8 (d) a finding corrected -> the correction is used.
     corrected = convo(HARBOR_SITE_CHAT + [("Me", harbor_brand),
@@ -229,7 +235,7 @@ def build():
          [tool_used("context-from-history", "plan", r'"context"\s*:\s*"[^"]*(runners|tradies|mums)', 1, None, "The history's facts reach the planner."),
           tool_used("review-time-in-context", "plan", r'"context"\s*:\s*"[^"]*(\b3\b|three)', 1, None, "Their review time reaches the planner."),
           BASED_ON, NOSAVE, PUBLIC, TWOQ,
-          llm("reflects-history", "Earlier in the chat the user (Anna Ruiz) said: Harbor Physio, Williamstown; clients are weekend runners, tradies and new mums; services are sports massage, rehab plans and small-group Pilates; short, plain friendly-coach writing, no hashtag walls; they can review about 3 posts a week. PASS if the recommended routines are about these clients and services, total about 3 drafts a week or fewer, and the reply states no business fact the user did not give (no prices, hours, awards, other staff). FAIL if it ignores these facts, plans well over 3 drafts a week without saying why, or invents a business fact."),
+          llm("reflects-history", "Earlier in the chat the user (Anna Ruiz) said: Harbor Physio, Williamstown; clients are weekend runners, tradies and new mums; services are sports massage, rehab plans and small-group Pilates; short, plain friendly-coach writing, no hashtag walls; they can review about 3 posts a week. PASS if the recommended routines are about these clients and services, total about 3 drafts a week or fewer, and the reply states no business fact that neither the user nor Bolta's brand record gave (the record holds: physios Anna Ruiz and Tom Hale, online booking, health-fund rebates on the spot, open Monday to Saturday, sports injuries, back and neck pain, post-surgery rehab, Pilates; anything else, such as prices or awards, is invented). FAIL if it ignores these facts, plans well over 3 drafts a week without saying why, or invents a business fact. (Grader fix: the first version counted the brand record's own facts as invented.)"),
           NOIDS, PLAIN])
 
     # C1 campaign with no event anywhere -> one question.
@@ -295,7 +301,7 @@ print("generated")
 # Harbor Physio with no website: nothing in its world may carry the site or a business record.
 for c in ("ui-final-brand-asks-site", "ui-final-brand-no-website", "ui-final-brand-no-website-save"):
     mb = EV / c / "mocks" / "bolta"
-    for f in ("update-business-dna.md", "extract-business-dna.md", "get-voice-profile.md", "update-voice-profile.md"):
+    for f in ("update-business-dna.md", "get-voice-profile.md", "update-voice-profile.md") + (() if c.endswith("-save") else ("extract-business-dna.md",)):
         (mb / f).unlink(missing_ok=True)
     # No voice yet (as a brand with no website and no setup has): Lumen's no-voice world, renamed.
     lumen = EV / "ui-brand-notes-save" / "mocks" / "bolta"
@@ -320,7 +326,7 @@ for i, (name, goal, plats, accs, day, time, why) in enumerate(spec):
     p = json.loads(json.dumps(body["data"]["plans"][i]))
     p["payload"].update({"name": name, "goal": goal, "schedule": {"interval": "weekly", "days": [day], "time": time},
                          "timezone": "Australia/Melbourne", "output_config": {"artifact_type": "post", "count": 1, "platforms": plats},
-                         "account_ids": accs, "voice_profile_id": "9b000000-0000-4000-8000-0000000000a1"})
+                         "account_ids": accs, "voice_profile_id": "9b000000-0000-4000-8000-0000000001a2"})
     p["display"] = {"title": name, "summary": why}
     p["why"] = why
     plans.append(p)

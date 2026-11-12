@@ -386,6 +386,7 @@ check_guard "first delete explains its batch covers deletes only" ask standard "
 check_guard "update-routine not made here says it may post without asking" ask standard "$(pre "${P}update-routine" "{\"routine_id\":\"$RID2\",\"instructions\":\"x\"}")" "may post without asking you"
 check_guard "the site read says it sets up the brand" ask standard "$(pre "${P}extract-business-dna" "$(input_for extract-business-dna)")" "sets up your brand and voice from this website"
 check_guard "a brand setup asks and names the credits" ask standard "$(pre "${P}extract-business-dna" "{\"workspace_id\":\"$WS\",\"url\":\"https://acme.example\",\"setup\":true,\"notes\":\"we roast our own beans\"}")" "uses AI credits"
+check_guard "a setup with no website says it uses what you shared" ask standard "$(pre "${P}extract-business-dna" "{\"workspace_id\":\"$WS\",\"setup\":true,\"notes\":\"we roast our own beans\"}")" "from what you shared"
 check_guard "a setup that replaces a trained voice says so" ask standard "$(pre "${P}extract-business-dna" "{\"workspace_id\":\"$WS\",\"url\":\"https://other.example\",\"setup\":true,\"replace_voice\":true}")" "replaces what the old one set up"
 for lvl in standard careful; do
   check_guard "a preview-only site read saves nothing and passes ($lvl)" silent "$lvl" "$(pre "${P}extract-business-dna" "{\"workspace_id\":\"$WS\",\"url\":\"https://acme.example\",\"preview\":true}")"

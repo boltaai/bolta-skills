@@ -16,7 +16,7 @@ No duplicate brand voice: show what the site says that the voice lacks, and offe
 
 ## Making the voice without a website
 
-A person voice, a second voice, or a brand with no site: `create-voice-profile`, one save, with:
+A person voice or a second voice (a brand with no site: [no website](start-brand-setup-no-site.md)): `create-voice-profile`, one save, with:
 - `name`: "Acme voice" (or their name, for a founder). `language` and `use_emojis` when they said them: only creation sets those ([rules or settings](voice-rules-or-settings.md)).
 - `writing_sample`: 50+ characters they wrote: their best recent post by a person (`content_origin` manual) or a pasted paragraph, never one you or Bolta wrote. `tone`: the four dials (0-100) as a fallback; with neither, the save is refused.
 - `tone_of_voice` (3-5 words), `target_audience`, `topics`, `dos` and `donts` (3-5 each, checkable, under 200 characters) from their words.

@@ -2067,7 +2067,7 @@
     {
       "name": "extract-business-dna",
       "title": "Extract Business DNA",
-      "description": "Read a brand's website. Three modes:\n1. preview=true: return what Bolta read (dna_preview), saving nothing. Show it and ask.\n2. setup=true (the way to set up a brand, after the user's yes): runs the same setup bolta.ai runs on a website. It saves the Business DNA, creates and links the voice, detects the language, fills voice characteristics, audience, persona and topics from the site, assigns social accounts, seeds platform rules and adds the site's product. Add what the user already told you in this chat (notes, writing_samples, audience, goals, products, favorite_creators; only what they said or shared): it is saved the way bolta.ai saves the user's documents and fills what a website cannot. Starts in the background (status started); poll with check=true every ~15s until succeeded, reused or failed (about a minute). The finished result lists what was made, the Voice and Business setup scores the Brand page shows, and a dashboard_url. Uses AI credits.\n3. Neither: save only the Business DNA (and a first product when there is none), no voice.\nReaches the public internet and writes to the workspace.",
+      "description": "Read a brand's website. Three modes:\n1. preview=true: return what Bolta read (dna_preview), saving nothing. Show it and ask.\n2. setup=true (the way to set up a brand, after the user's yes): runs the same setup bolta.ai runs on a website. It saves the Business DNA, creates and links the voice, detects the language, fills voice characteristics, audience, persona and topics from the site, assigns social accounts, seeds platform rules and adds the site's product. Add what the user already told you in this chat (notes, writing_samples, audience, goals, products, favorite_creators; only what they said or shared): it is saved the way bolta.ai saves the user's documents and fills what a website cannot. Starts in the background (status started); poll with check=true every ~15s until succeeded, reused or failed (about a minute). The finished result lists what was made, the Voice and Business setup scores the Brand page shows, and a dashboard_url. Uses AI credits.\nNo website? setup=true without url sets the brand up from notes and writing_samples (the user's own words only); the result lists what a website would add.\n3. Neither: save only the Business DNA (and a first product when there is none), no voice.\nReaches the public internet and writes to the workspace.",
       "inputSchema": {
         "type": "object",
         "properties": {
@@ -2078,7 +2078,7 @@
           },
           "url": {
             "type": "string",
-            "description": "Public brand URL to read (e.g. the marketing homepage). Required except with check=true."
+            "description": "Public brand URL to read (e.g. the marketing homepage). Required for preview and the plain save. For setup, leave it out when there is no website: the brand is set up from notes / writing_samples the user shared."
           },
           "name": {
             "type": "string",

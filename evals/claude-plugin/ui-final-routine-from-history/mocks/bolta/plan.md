@@ -38,7 +38,7 @@
           "account_ids": [
             "ac000000-0000-4000-8000-0000000000a1"
           ],
-          "voice_profile_id": "9b000000-0000-4000-8000-0000000000a1",
+          "voice_profile_id": "9b000000-0000-4000-8000-0000000001a2",
           "approval_policy": "review_every_artifact",
           "default_reviewer_ids": []
         },
@@ -85,7 +85,7 @@
           "account_ids": [
             "facebook_page_5512098834"
           ],
-          "voice_profile_id": "9b000000-0000-4000-8000-0000000000a1",
+          "voice_profile_id": "9b000000-0000-4000-8000-0000000001a2",
           "approval_policy": "review_every_artifact",
           "default_reviewer_ids": []
         },
@@ -132,7 +132,7 @@
           "account_ids": [
             "ac000000-0000-4000-8000-0000000000a1"
           ],
-          "voice_profile_id": "9b000000-0000-4000-8000-0000000000a1",
+          "voice_profile_id": "9b000000-0000-4000-8000-0000000001a2",
           "approval_policy": "review_every_artifact",
           "default_reviewer_ids": []
         },

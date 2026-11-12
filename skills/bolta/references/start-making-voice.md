@@ -1,8 +1,8 @@
 # Start: making the voice
 
-How [start](start.md) makes the first voice. With a website, Bolta's setup makes it, linked to the business record, with its accounts ([start-brand-setup.md](start-brand-setup.md)); there is nothing else to save. If Bolta already learned a starting voice after connecting (`get-voice-context`, or `all_profiles: true` for every voice), show that one instead.
+How [start](start.md) makes a voice. The brand's first voice comes from Bolta's setup, with or without a website ([start-brand-setup.md](start-brand-setup.md), [no website](start-brand-setup-no-site.md)); there is nothing else to save. If Bolta already learned a starting voice after connecting (`get-voice-context`, or `all_profiles: true` for every voice), show that one instead.
 
-## No website: `create-voice-profile`, one save
+## A person voice, a second voice, or an older Bolta: `create-voice-profile`, one save
 
 - Start from what you know of how they write: samples they pasted, phrases they use, likes and dislikes. Show it in a few lines, confirm, ask only the gaps.
 - `writing_sample`: 50+ characters they wrote (their best post, or pasted text); Bolta reads the tone from it. `tone`: the four dials (`playful`, `professional`, `direct`, `thoughtful`, 0-100), the fallback. Neither usable: refused. Never `website_url`: it reads and saves a site with no preview; a site goes through the setup.
@@ -15,7 +15,7 @@ How [start](start.md) makes the first voice. With a website, Bolta's setup makes
 
 ## A voice already there
 
-- A thin voice (no DOs or DON'Ts, such as a Starter Voice) and a website: the setup fills it; it never makes a second. No website: update that one with `update-voice-profile` (full lists, `business_dna_id` of the brand's record), then the colours question; never make a second.
+- A thin voice (no DOs or DON'Ts, such as a Starter Voice) and a website: the setup fills it; it never makes a second. So does the setup with no website. An older Bolta with no setup: update that one with `update-voice-profile` (full lists), then the colours question; never make a second.
 - A trained voice and a different website: the setup refuses (`voice_would_be_replaced`); ask before `replace_voice: true` ([start-brand-setup.md](start-brand-setup.md)).
 
 ## A DON'T after a drop

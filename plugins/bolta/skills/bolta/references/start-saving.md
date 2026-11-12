@@ -9,7 +9,7 @@ Read with [start](start.md) when the user answers the proposal. A yes to set up 
 
 ## The order on their yes
 
-1. **Brand and voice:** they said the preview is right: `extract-business-dna` with `setup: true`, the same `url` and what they told you, then `check: true` until done ([start-brand-setup.md](start-brand-setup.md)). Never before they saw it. "Set up our brand" and a yes to its preview is a yes to both the record and the voice; the setup makes both, filling a thin voice, never a second. No website: [start-making-voice.md](start-making-voice.md).
+1. **Brand and voice:** they said the preview is right: `extract-business-dna` with `setup: true`, the same `url` and what they told you, then `check: true` until done ([start-brand-setup.md](start-brand-setup.md)). Never before they saw it. "Set up our brand" and a yes to its preview is a yes to both the record and the voice; the setup makes both, filling a thin voice, never a second. No website: the same setup with no `url` ([no website](start-brand-setup-no-site.md)).
 2. **Show it:** what it made, the two scores and `setup.dashboard_url`.
 3. **Accounts:** say which accounts use the voice (`assigned_account_ids`, or `bootstrapped.accounts_assigned` with no website). None connected: `get-connect-link` now and show the link.
 4. **Routines:** save each one they picked, switched off. Never one they didn't pick.

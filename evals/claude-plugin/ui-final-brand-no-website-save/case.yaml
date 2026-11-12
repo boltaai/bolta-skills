@@ -1,8 +1,8 @@
 schema_version: "1.1"
 name: ui-final-brand-no-website-save
-description: "Harbor Physio (no website, no voice yet) approves the brand built from chat: one voice made from the findings (no website read), the accounts named, and colours, fonts or a logo asked once."
+description: "Harbor Physio (no website, no voice yet) approves the brand built from chat: Bolta's setup with no url from their words (no website guessed, no separate voice), the accounts named, and colours, fonts or a logo asked once."
 tags: [uiprompts]
-expected_outcome: "bolta fires; one create-voice-profile with the audience; no extract-business-dna; asks once for colours or a logo; names the accounts."
+expected_outcome: "bolta fires; one extract-business-dna setup:true with no url and notes from the chat; no create-voice-profile; asks once for colours or a logo; names the accounts."
 execution:
   prompt: |
     This conversation so far:
@@ -47,22 +47,30 @@ graders:
     tool: 'Skill'
     input_match: '"skill"\s*:\s*"(?:[\w-]+:)?(bolta)"'
     min: 1
-  - name: makes-the-voice
-    # No voice yet and no website: one voice from what they said.
-    type: 'tool_used'
-    tool: 'mcp__plugin_bolta_bolta__create-voice-profile'
-    min: 1
-    max: 1
-  - name: audience-from-chat
-    # Who they said they serve.
-    type: 'tool_used'
-    tool: 'mcp__plugin_bolta_bolta__create-voice-profile'
-    input_match: '"target_audience"\s*:\s*"[^"]*(runners|tradies|mums)'
-    min: 1
-  - name: no-site-read
-    # No website.
+  - name: sets-up-without-site
+    # Bolta-Server #1482: no website, so setup:true with no url, from their words.
     type: 'tool_used'
     tool: 'mcp__plugin_bolta_bolta__extract-business-dna'
+    input_match: '^(?![\s\S]*"url"\s*:\s*"[^"])(?=[\s\S]*"setup"\W{1,6}true)'
+    min: 1
+    max: 1
+  - name: notes-from-chat
+    # Their words as notes.
+    type: 'tool_used'
+    tool: 'mcp__plugin_bolta_bolta__extract-business-dna'
+    input_match: '"notes"\s*:\s*"[^"]*(runners|tradies|mums|Pilates|massage)'
+    min: 1
+  - name: no-site-guessed
+    # No website: never a guessed url.
+    type: 'tool_used'
+    tool: 'mcp__plugin_bolta_bolta__extract-business-dna'
+    input_match: '"url"\s*:\s*"[^"]'
+    min: 0
+    max: 0
+  - name: no-separate-voice
+    # The setup makes the voice.
+    type: 'tool_used'
+    tool: 'mcp__plugin_bolta_bolta__create-voice-profile'
     min: 0
     max: 0
   - name: nothing-public

@@ -72,7 +72,7 @@ here=$(dirname "$0")
 reader="$here/bolta-json.sh"
 
 ok=0 tool="" server="" sid="" prompt="" conn="Bolta" brand=""
-create="" update="" save="" targets="" policy="" rid="" action="" bulk="" cid="" items="" preview=0 replace=0 switchon="" decision=""
+create="" update="" save="" targets="" policy="" rid="" action="" bulk="" cid="" items="" preview=0 replace=0 site=1 switchon="" decision=""
 parsed=$(sh "$reader" guard 2>/dev/null) || parsed=""
 oldifs=$IFS
 IFS='
@@ -100,6 +100,7 @@ for kv in $parsed; do
     ITEMS) items=$v ;;
     PREVIEW) preview=$v ;;
     REPLACE) replace=$v ;;
+    SITE) site=$v ;;
     SWITCHON) switchon=$v ;;
     DECISION) decision=$v ;;
   esac
@@ -296,6 +297,9 @@ case "$tool" in
     if [ "$preview" = 1 ]; then exit 0; fi
     if [ "$replace" = 1 ]; then
       ask "Check before it replaces ($conn): a different website replaces what the old one set up in your edited voice. OK only if you said to replace it."
+    fi
+    if [ "$site" = 0 ]; then
+      ask "Check before it changes ($conn): it sets up brand and voice from what you shared, using AI credits. Every future draft uses it. OK only if you saw what it will save."
     fi
     ask "Check before it changes ($conn): this sets up your brand and voice from this website and uses AI credits. Every future draft uses it. OK only if it is your own site and you saw what it read." ;;
   create-routine)

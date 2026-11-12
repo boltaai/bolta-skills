@@ -467,6 +467,7 @@ function guard_main(   ok, ti) {
   if (TOOL == "extract-business-dna") {
     emit("PREVIEW", read_only_site_call(ti))
     emit("REPLACE", jtype(ti, "replace_voice") == "t" ? 1 : 0)
+    emit("SITE", jstr(ti, "url") != "" ? 1 : 0)
   }
 }
 

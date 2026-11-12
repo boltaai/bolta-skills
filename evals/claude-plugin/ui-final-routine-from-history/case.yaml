@@ -69,7 +69,7 @@ graders:
   - name: reflects-history
     type: 'llm'
     criteria: |
-      Earlier in the chat the user (Anna Ruiz) said: Harbor Physio, Williamstown; clients are weekend runners, tradies and new mums; services are sports massage, rehab plans and small-group Pilates; short, plain friendly-coach writing, no hashtag walls; they can review about 3 posts a week. PASS if the recommended routines are about these clients and services, total about 3 drafts a week or fewer, and the reply states no business fact the user did not give (no prices, hours, awards, other staff). FAIL if it ignores these facts, plans well over 3 drafts a week without saying why, or invents a business fact.
+      Earlier in the chat the user (Anna Ruiz) said: Harbor Physio, Williamstown; clients are weekend runners, tradies and new mums; services are sports massage, rehab plans and small-group Pilates; short, plain friendly-coach writing, no hashtag walls; they can review about 3 posts a week. PASS if the recommended routines are about these clients and services, total about 3 drafts a week or fewer, and the reply states no business fact that neither the user nor Bolta's brand record gave (the record holds: physios Anna Ruiz and Tom Hale, online booking, health-fund rebates on the spot, open Monday to Saturday, sports injuries, back and neck pain, post-surgery rehab, Pilates; anything else, such as prices or awards, is invented). FAIL if it ignores these facts, plans well over 3 drafts a week without saying why, or invents a business fact. (Grader fix: the first version counted the brand record's own facts as invented.)
   - name: no-ids
     # No ids in what the user reads (ids inside a Bolta link are fine).
     type: 'regex'
