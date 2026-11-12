@@ -3,10 +3,8 @@
   "playbook": "results",
   "steps": [
     {
-      "tool": "get-workspace",
-      "arguments": {
-        "workspace_id": "<brand's workspace id>"
-      },
+      "tool": "list-workspaces",
+      "arguments": {},
       "why": "The brand's timezone, to work out today's date there, so the 30 days end now."
     },
     {

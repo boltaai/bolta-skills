@@ -4,10 +4,11 @@ Bolta reads the brand's accounts, voices, existing routines, best recent posts a
 
 ## Which call
 
-- **One routine** ("3 LinkedIn tips every Monday", "posts from our merges"): `plan-routine` with `ask` (their words) and `context` (audience, offer, anything they said, up to 4000 characters; treated as facts).
-- **A blank start** ("set up something for me", no detail): `plan-routine` with `ask` empty. Status `shaping` returns a working plan with `filled` (what Bolta chose and from where), `open` and at most two `questions`. Ask those, nothing more.
-- **Several** ("what should I run?", a first session): `recommend-routines` with `goals`, `context`, `count` 3-5 (default 4). Each plan is a different job, none repeats a running routine, best fit first, each with a `why`. `skipped` says what was left out; fewer plans than asked means Bolta didn't pad the list. `status: "refused"`: nothing fit; say its `why`.
-- **One campaign**: `plan-campaign` ([campaign](campaign.md)).
+- **One routine** ("3 LinkedIn tips every Monday", "posts from our merges"): `plan` with `kind: "routine"`, `ask` (their words) and `context` (audience, offer, anything they said, up to 4000 characters; treated as facts).
+- **A blank start** ("set up something for me", no detail): `plan` with `kind: "routine"` and `ask` empty. Status `shaping` returns a working plan with `filled` (what Bolta chose and from where), `open` and at most two `questions`. Ask those, nothing more.
+- **Several** ("what should I run?", a first session): `plan` with `kind: "recommend"`, `ask` (their goals), `context`, `count` 3-5 (default 4). Each plan is a different job, none repeats a running routine, best fit first, each with a `why`. `skipped` says what was left out; fewer plans than asked means Bolta didn't pad the list. `status: "refused"`: nothing fit; say its `why`.
+- **One campaign**: `plan` with `kind: "campaign"` ([campaign](campaign.md)).
+- **Not sure which:** leave `kind` out and Bolta decides routine or campaign from `ask`, as its own chat does.
 
 ## Reading a plan
 

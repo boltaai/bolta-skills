@@ -3,15 +3,15 @@
   "playbook": "post",
   "steps": [
     {
-      "tool": "get-post-platform-details",
+      "tool": "get-post",
       "arguments": {
         "post_id": "<last week's lemon tart pin id>",
         "platform": "pinterest"
       },
-      "why": "The decision on the board: take it from the pin the user named. No tool lists boards, and with none set Bolta uses the most recently synced board, which may be wrong. This read shows the board as board_id, Pinterest's own id. If that board_id comes back empty, the earlier pin's board was set another way: check its metadata.platformSpecific.pinterest with get-post, else ask the user to pick the board in Bolta."
+      "why": "The decision on the board: take it from the pin the user named. No tool lists boards, and with none set Bolta uses the most recently synced board, which may be wrong. This read shows the board as board_id, Pinterest's own id. If that board_id comes back empty, the earlier pin's board was set another way: check its metadata.platformSpecific.pinterest with get-post without platform, else ask the user to pick the board in Bolta."
     },
     {
-      "tool": "create-post",
+      "tool": "save-post",
       "arguments": {
         "workspace_id": "<brand's workspace id>",
         "content": "A fig galette you can make in 20 minutes.",
@@ -35,7 +35,7 @@
         },
         "idempotency_key": "fig-galette-pin-1"
       },
-      "why": "One image, one pin, all in the saving call. platform_specific board_id takes Pinterest's id, exactly what the read gave (update-post-platform-details would want Bolta's own id instead, so the read's value never goes there). A title people would search, the recipe page as the link (a pin without one gets saves, not visits), and alt text, which Pinterest does receive."
+      "why": "One image, one pin, all in the saving call. platform_specific board_id takes Pinterest's id, exactly what the read gave (platform_details would want Bolta's own id instead, so the read's value never goes there). A title people would search, the recipe page as the link (a pin without one gets saves, not visits), and alt text, which Pinterest does receive."
     },
     {
       "tool": "get-post",
@@ -48,7 +48,7 @@
   "say": "Saved to Acme as a Pinterest draft on the same board as the lemon tart pin: \"Easy 20-minute fig galette\", linking to your fig galette recipe. Nothing goes out yet. Schedule it?",
   "never": [
     "Guessing a board, or leaving it to the most recently synced one.",
-    "Sending the read's board_id to update-post-platform-details: that one takes Bolta's id.",
+    "Sending the read's board_id in platform_details: that one takes Bolta's id.",
     "A link the user didn't give."
   ]
 }

@@ -8,12 +8,11 @@ The user knows what changed and what still goes out, in the workspace clock: "Pu
 
 ## Know this
 
-- **Take it back:** set the post to Draft, sending only the status. It keeps its text, loses its time, and needs a new yes to go out ([review](review.md)). No Bolta check.
-- **Already out**, sending now, or out on some accounts: it can't be recalled; deleting here removes only Bolta's copy, not the network's. Never set it to Draft; Bolta would only relabel it. Say: delete or edit it on the network. Offer a correction as a draft ([post](post.md)).
-- **Stop everything:** pause every Bolta routine that's on and every campaign that's on or about to start. No check, no question first. Then say: scheduled posts still go out. List the next 7 days, plus any due now, with times: "Pull these 5 back to drafts too?" On yes, soonest first, then list again. Keep the old times in the reply.
+- **Take it back:** `save-post` with `post_id` and `unschedule: true`, nothing else. It keeps its text, loses its time (`was_scheduled_for` in the result is the time it no longer goes out at), and needs a new yes to go out ([review](review.md)). No Bolta check.
+- **Already out**, sending now, or out on some accounts: it can't be recalled; deleting here removes only Bolta's copy, not the network's. Never try to take it back; `unschedule` works only on a Scheduled post. Say: delete or edit it on the network. Offer a correction as a draft ([post](post.md)).
+- **Stop everything:** pause every Bolta routine that's on and every campaign that's on or about to start. No check, no question first. Then say: scheduled posts still go out. List the next 7 days, plus any due now (those can no longer be pulled back), with times: "Pull these 5 back to drafts too?" On yes, soonest first, then list again. Keep the old times in the reply.
 - Switching back on usually asks one Bolta check ([routine](routine.md), [campaign](campaign.md)).
-- **Undo a delete:** `list-recently-deleted` returns the newest 100 posts deleted in the brand in the last 7 days that can come back, including deletes made from this app or in Bolta's chat. Deletes from the Bolta dashboard are final. Show the first words and days left.
-- **Restoring** brings it back exactly as it was. A scheduled post whose time passed in the last 2 days goes out within about 15 minutes. Say so, then ask: "As it was, or as a draft?" As a draft: restore, then take it back at once. One Bolta check, every time.
+- **Undo a delete or restore a post:** read [undo a delete](fix-undo-delete.md) first.
 - **Why nothing went out:** check in this order and stop at the first that fits ([references/symptoms.md](fix-symptoms.md)):
   1. A disconnected account: the reconnect link.
   2. Waiting for your yes: the review list's totals. Nearly always this.
@@ -27,11 +26,10 @@ The user knows what changed and what still goes out, in the workspace clock: "Pu
 
 - `list-accounts`, `get-connect-link`: disconnected accounts; reconnect.
 - `list-inbox-items`: waiting for a yes (totals are workspace-wide).
-- `list-scheduled-posts`: scheduled posts, times in UTC.
+- `list-workspace-posts` with `account_ids` (from `list-accounts`): the scheduled queue on those accounts, times in UTC.
 - `list-workspace-posts`: by status, such as `queued` (due now), `failed` or `partially_published`.
 - `get-post`: status, time, the saved reason.
-- `create-post`: a fresh copy of a Failed post.
-- `update-post`: back to Draft.
+- `save-post`: a fresh copy of a Failed post (no `post_id`); back to Draft (`post_id`, `unschedule: true`).
 - `delete-post`: remove a post the user named; undo within 7 days; at most 20 per 5 minutes.
 - `list-recently-deleted`, `restore-deleted`: undo a delete.
 - `list-routines`, `get-routine`, `list-routine-runs`, `pause-routine`: Bolta routines.

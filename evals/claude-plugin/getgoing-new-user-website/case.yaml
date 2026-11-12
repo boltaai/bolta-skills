@@ -43,7 +43,7 @@ graders:
   - name: plans-routines
     # Proposes repeating work (Bolta plans or templates), not one-off posts.
     type: regex
-    pattern: '"name"\s*:\s*"mcp__plugin_bolta_bolta__(recommend-routines|plan-routine|list-routine-templates)"'
+    pattern: '"name"\s*:\s*"mcp__plugin_bolta_bolta__(recommend-routines|plan-routine|list-routine-templates|plan)"'
     target: trace
   - name: shows-routines
     # The proposal is in the reply.
@@ -53,7 +53,7 @@ graders:
   - name: nothing-saved-yet
     # A proposal, not a setup: no routine, campaign or post saved before a yes.
     type: regex
-    pattern: '"name"\s*:\s*"mcp__plugin_bolta_bolta__(confirm-plan|create-routine|create-content-campaign|create-post|bulk-create-posts)"'
+    pattern: '"name"\s*:\s*"mcp__plugin_bolta_bolta__(confirm-plan|create-routine|create-content-campaign|create-post|bulk-create-posts|save-post)"'
     target: trace
     match: not_contains
   - name: nothing-public

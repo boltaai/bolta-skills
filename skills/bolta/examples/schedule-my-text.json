@@ -3,7 +3,7 @@
   "playbook": "review",
   "steps": [
     {
-      "tool": "create-post",
+      "tool": "save-post",
       "arguments": {
         "workspace_id": "<brand's workspace id>",
         "content": "We are hiring two support engineers. Remote, EU hours.",
@@ -12,7 +12,7 @@
         ],
         "idempotency_key": "hiring-support-1"
       },
-      "why": "Their own text with a time is the yes, but the post is still saved as a plain draft first."
+      "why": "Their own text with a time is the yes, but the post is still saved as a plain draft first: save-post with no post_id is always a draft."
     },
     {
       "tool": "submit-for-review",
@@ -34,15 +34,19 @@
       "why": "Read the row again for its content_fingerprint."
     },
     {
-      "tool": "approve-post",
+      "tool": "approve-many-posts",
       "arguments": {
         "workspace_id": "<brand's workspace id>",
-        "post_id": "<post id>",
-        "expected_fingerprint": "<content_fingerprint>",
-        "schedule_mode": "set_fixed_time",
-        "fixed_time": "2026-11-17T09:00:00"
+        "items": [
+          {
+            "post_id": "<post id>",
+            "expected_fingerprint": "<content_fingerprint>",
+            "schedule_mode": "set_fixed_time",
+            "fixed_time": "2026-11-17T09:00:00"
+          }
+        ]
       },
-      "why": "One yes, so approve-post: its result carries scheduled_time (UTC) to read back in the brand's clock. Wall clock in, no Z, no offset, no timezone unless the user named a place."
+      "why": "One yes is one item. Its result carries scheduled_time (UTC) to read back in the brand's clock. Wall clock in, no Z, no offset, no timezone unless the user named a place."
     }
   ],
   "say": "Scheduled for Acme: Tue Nov 17, 9:00 am (New York) on LinkedIn.",

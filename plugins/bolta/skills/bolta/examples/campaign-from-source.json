@@ -14,15 +14,7 @@
         "cta_text": "Read the pricing guide",
         "cta_url": "https://acme.com/blog/pricing-guide",
         "starts_on": "2026-11-16",
-        "ends_on": "2026-11-29"
-      },
-      "why": "A guide that teaches is Product Education. No mix: Content defaults or the strategy's 2 images and 2 carousels, which LinkedIn takes. The link is the one the user gave."
-    },
-    {
-      "tool": "set-content-campaign-targets",
-      "arguments": {
-        "workspace_id": "<brand's workspace id>",
-        "campaign_id": "<campaign id>",
+        "ends_on": "2026-11-29",
         "account_ids": [
           "<LinkedIn account id>"
         ],
@@ -35,7 +27,7 @@
           }
         ]
       },
-      "why": "The blog post is a url source. A Google Doc can't be added by a call: a file source takes only an id the campaign already shows. So the user attaches it on the campaign page (Context, upload), or pastes the quotes for the notes."
+      "why": "A guide that teaches is Product Education. No mix: Content defaults or the strategy's 2 images and 2 carousels, which LinkedIn takes. The link is the one the user gave. The account, notes and page go on the same create call. The blog post is a url source. A Google Doc can't be added by a call: a file source takes only an id the campaign already shows. So the user attaches it on the campaign page (Context, upload), or pastes the quotes for the notes."
     },
     {
       "tool": "analyze-content-campaign-source",

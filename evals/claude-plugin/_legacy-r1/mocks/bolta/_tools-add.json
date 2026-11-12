@@ -1,0 +1,56 @@
+{
+  "tools": [
+    {
+      "name": "approve-post",
+      "title": "Approve Post",
+      "description": "Approve a post that is pending review. Requires admin or owner role. Supports scheduling modes: approve_only, use_suggested_time, or set_fixed_time. To approve several posts the user said yes to, use approve-many-posts. To turn one down with the user's reason, use reject-post.",
+      "inputSchema": {
+        "type": "object",
+        "properties": {
+          "workspace_id": {
+            "type": "string",
+            "format": "uuid",
+            "description": "The workspace ID"
+          },
+          "post_id": {
+            "type": "string",
+            "format": "uuid",
+            "description": "The post ID to approve"
+          },
+          "schedule_mode": {
+            "type": "string",
+            "description": "Scheduling mode: 'approve_only' (default), 'use_suggested_time', or 'set_fixed_time'"
+          },
+          "expected_fingerprint": {
+            "type": "string",
+            "description": "Revision token (content_fingerprint) from the most recent read of this post's review (list-inbox-items / list-reviews). Pass it to guarantee you are approving exactly the revision you reviewed. REQUIRED to resolve a stale_review conflict: after that error, re-read the post, show the user the current version, and retry with the fresh fingerprint. Never reuse an old token."
+          },
+          "fixed_time": {
+            "type": "string",
+            "description": "Fixed schedule time (required when schedule_mode is 'set_fixed_time'). Local wall-clock time in the workspace's timezone (no trailing Z and no UTC offset). Only include an offset when the user explicitly names a zone; never infer one from your own locale."
+          },
+          "timezone": {
+            "type": "string",
+            "description": "IANA timezone name (e.g. 'America/Los_Angeles') that the wall-clock time above should be interpreted in. Send this ONLY when the user explicitly named a zone ('9am Pacific'). Omit it otherwise \u2014 the workspace timezone is used, which is what the user means by default."
+          },
+          "comments": {
+            "type": "string",
+            "description": "Approval comments"
+          }
+        },
+        "additionalProperties": false,
+        "required": [
+          "workspace_id",
+          "post_id"
+        ]
+      },
+      "annotations": {
+        "title": "Approve Post",
+        "readOnlyHint": false,
+        "destructiveHint": true,
+        "idempotentHint": true,
+        "openWorldHint": true
+      }
+    }
+  ]
+}

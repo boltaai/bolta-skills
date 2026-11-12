@@ -3,7 +3,7 @@
   "playbook": "post",
   "steps": [
     {
-      "tool": "create-post",
+      "tool": "save-post",
       "arguments": {
         "workspace_id": "<brand's workspace id>",
         "content": "Finale recap: the twist we argued about for weeks, and why the last scene works.",
@@ -22,7 +22,7 @@
       "why": "The decision: a content warning, because Mastodon readers expect spoilers hidden; the warning is a short plain label. Unlisted keeps a recap off the public timelines while followers still see it. These are network-wide Mastodon settings, so they sit at network level. No poll: Mastodon polls are saved but never sent yet, so it isn't offered."
     },
     {
-      "tool": "get-post-platform-details",
+      "tool": "get-post",
       "arguments": {
         "post_id": "<post id>",
         "platform": "mastodon"

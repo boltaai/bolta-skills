@@ -32,7 +32,8 @@ graders:
     # The launch (Dec 2) falls inside the window.
     type: tool_used
     tool: mcp__plugin_bolta_bolta__create-content-campaign
-    input_match: '"ends_on"\W{1,6}(2026-12-(0[2-9]|[12]\d|3[01])|2027-)'
+    # Release 2: or starts_on with duration_weeks (which sets the end date) reaching Dec 2 or later.
+    input_match: '^(?:(?=[\s\S]*"ends_on"\W{1,6}(2026-12-(0[2-9]|[12]\d|3[01])|2027-))|(?=[\s\S]*"starts_on"\W{1,6}2026-11-05)(?=[\s\S]*"duration_weeks"\W{1,6}[4]\b)|(?=[\s\S]*"starts_on"\W{1,6}2026-11-06)(?=[\s\S]*"duration_weeks"\W{1,6}[4]\b)|(?=[\s\S]*"starts_on"\W{1,6}2026-11-07)(?=[\s\S]*"duration_weeks"\W{1,6}[4]\b)|(?=[\s\S]*"starts_on"\W{1,6}2026-11-08)(?=[\s\S]*"duration_weeks"\W{1,6}[4]\b)|(?=[\s\S]*"starts_on"\W{1,6}2026-11-09)(?=[\s\S]*"duration_weeks"\W{1,6}[4]\b)|(?=[\s\S]*"starts_on"\W{1,6}2026-11-10)(?=[\s\S]*"duration_weeks"\W{1,6}[4]\b)|(?=[\s\S]*"starts_on"\W{1,6}2026-11-11)(?=[\s\S]*"duration_weeks"\W{1,6}[4]\b)|(?=[\s\S]*"starts_on"\W{1,6}2026-11-12)(?=[\s\S]*"duration_weeks"\W{1,6}[34]\b)|(?=[\s\S]*"starts_on"\W{1,6}2026-11-13)(?=[\s\S]*"duration_weeks"\W{1,6}[34]\b)|(?=[\s\S]*"starts_on"\W{1,6}2026-11-14)(?=[\s\S]*"duration_weeks"\W{1,6}[34]\b)|(?=[\s\S]*"starts_on"\W{1,6}2026-11-15)(?=[\s\S]*"duration_weeks"\W{1,6}[34]\b)|(?=[\s\S]*"starts_on"\W{1,6}2026-11-16)(?=[\s\S]*"duration_weeks"\W{1,6}[34]\b)|(?=[\s\S]*"starts_on"\W{1,6}2026-11-17)(?=[\s\S]*"duration_weeks"\W{1,6}[34]\b)|(?=[\s\S]*"starts_on"\W{1,6}2026-11-18)(?=[\s\S]*"duration_weeks"\W{1,6}[34]\b)|(?=[\s\S]*"starts_on"\W{1,6}2026-11-19)(?=[\s\S]*"duration_weeks"\W{1,6}[234]\b)|(?=[\s\S]*"starts_on"\W{1,6}2026-11-20)(?=[\s\S]*"duration_weeks"\W{1,6}[234]\b)|(?=[\s\S]*"starts_on"\W{1,6}2026-11-21)(?=[\s\S]*"duration_weeks"\W{1,6}[234]\b)|(?=[\s\S]*"starts_on"\W{1,6}2026-11-22)(?=[\s\S]*"duration_weeks"\W{1,6}[234]\b)|(?=[\s\S]*"starts_on"\W{1,6}2026-11-23)(?=[\s\S]*"duration_weeks"\W{1,6}[234]\b)|(?=[\s\S]*"starts_on"\W{1,6}2026-11-24)(?=[\s\S]*"duration_weeks"\W{1,6}[234]\b)|(?=[\s\S]*"starts_on"\W{1,6}2026-11-25)(?=[\s\S]*"duration_weeks"\W{1,6}[234]\b)|(?=[\s\S]*"starts_on"\W{1,6}2026-11-26)(?=[\s\S]*"duration_weeks"\W{1,6}[1234]\b)|(?=[\s\S]*"starts_on"\W{1,6}2026-11-27)(?=[\s\S]*"duration_weeks"\W{1,6}[1234]\b)|(?=[\s\S]*"starts_on"\W{1,6}2026-11-28)(?=[\s\S]*"duration_weeks"\W{1,6}[1234]\b)|(?=[\s\S]*"starts_on"\W{1,6}2026-11-29)(?=[\s\S]*"duration_weeks"\W{1,6}[1234]\b)|(?=[\s\S]*"starts_on"\W{1,6}2026-11-30)(?=[\s\S]*"duration_weeks"\W{1,6}[1234]\b)|(?=[\s\S]*"starts_on"\W{1,6}2026-12-01)(?=[\s\S]*"duration_weeks"\W{1,6}[1234]\b)|(?=[\s\S]*"starts_on"\W{1,6}2026-12-02)(?=[\s\S]*"duration_weeks"\W{1,6}[1234]\b))'
     min: 1
   - name: starts-not-in-past
     # Starts today (Nov 11) or later.
@@ -50,10 +51,9 @@ graders:
     max: 0
   - name: page-added
     # The feature page is a source of the campaign.
-    type: tool_used
-    tool: mcp__plugin_bolta_bolta__set-content-campaign-targets
-    input_match: 'ledgerly\.example/reminders'
-    min: 1
+    type: regex
+    target: trace
+    pattern: '"name"\s*:\s*"mcp__plugin_bolta_bolta__(?:create-content-campaign|update-content-campaign)"\s*,\s*"input"\s*:\s*\{(?=[^\n]*?(?:ledgerly\.example/reminders))'
   - name: page-read
     # Only a read source reaches the writer.
     type: tool_used

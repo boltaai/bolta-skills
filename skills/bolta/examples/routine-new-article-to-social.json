@@ -1,7 +1,7 @@
 {
   "ask": "Done, the blog is connected. Save it.",
   "playbook": "routine",
-  "before": "The user asked for posts about each new blog article. plan-routine returned a plan for new_article_to_social (3 drafts per article, LinkedIn and Facebook, the article's link kept exactly) whose needs said 'Connect Blog' with a link; the reply showed the plan and sent the link.",
+  "before": "The user asked for posts about each new blog article. plan with kind routine returned a plan for new_article_to_social (3 drafts per article, LinkedIn and Facebook, the article's link kept exactly) whose needs said 'Connect Blog' with a link; the reply showed the plan and sent the link.",
   "steps": [
     {
       "tool": "confirm-plan",

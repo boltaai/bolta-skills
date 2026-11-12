@@ -67,15 +67,18 @@ graders:
     min: 0
     max: 0
   - name: no-approve-post
-    # The batch tool is offered, so no loop of single approvals.
+    # Release 1: never a loop of the single-post approve-post. Release 2 approves one post with a one-item
+    # approve-many-posts, so the loop is a call with a single item.
     type: tool_used
-    tool: mcp__plugin_bolta_bolta__approve-post
+    tool: mcp__plugin_bolta_bolta__approve-many-posts
+    input_match: '"items"\s*:\s*\[\s*\{[^{}]*\}\s*\]'
     min: 0
     max: 0
   - name: no-approve-recurring-review
     # Not for this ask.
     type: tool_used
-    tool: mcp__plugin_bolta_bolta__approve-recurring-review
+    tool: mcp__plugin_bolta_bolta__approve-many-posts
+    input_match: '"review_id"|f6000000-0000-4000-8000-000000000001|d1000000-0000-4000-8000-000000000004'
     min: 0
     max: 0
   - name: no-publish-post
@@ -93,7 +96,8 @@ graders:
   - name: no-schedule-post
     # Not for this ask.
     type: tool_used
-    tool: mcp__plugin_bolta_bolta__schedule-post
+    tool: mcp__plugin_bolta_bolta__publish-post
+    input_match: '"when"\s*:\s*"(?!now")'
     min: 0
     max: 0
   - name: says-not-done

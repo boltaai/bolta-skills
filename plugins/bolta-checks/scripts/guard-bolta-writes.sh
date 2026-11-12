@@ -72,7 +72,7 @@ here=$(dirname "$0")
 reader="$here/bolta-json.sh"
 
 ok=0 tool="" server="" sid="" prompt="" conn="Bolta" brand=""
-create="" update="" policy="" rid="" action="" bulk="" cid="" items="" preview=0 switchon="" decision=""
+create="" update="" save="" targets="" policy="" rid="" action="" bulk="" cid="" items="" preview=0 switchon="" decision=""
 parsed=$(sh "$reader" guard 2>/dev/null) || parsed=""
 oldifs=$IFS
 IFS='
@@ -90,6 +90,8 @@ for kv in $parsed; do
     BRAND) brand=$v ;;
     CREATE) create=$v ;;
     UPDATE) update=$v ;;
+    SAVE) save=$v ;;
+    TARGETS) targets=$v ;;
     POLICY) policy=$v ;;
     RID) rid=$v ;;
     ACTION) action=$v ;;
@@ -268,6 +270,18 @@ case "$tool" in
     if [ "$update" != safe ]; then
       ask "Check before it changes ($conn): this edit changes when or whether a post goes out. An approved or scheduled post needs a fresh yes."
     fi ;;
+  save-post)
+    case $save in
+      # A new post needs no check, even with per-network text or settings (platform_specific,
+      # platform_details): save-post refuses a time, a status or an action, so it is always a
+      # Draft, and drafts are free: nothing goes public. The check stays on edits to a saved post
+      # (an approved or scheduled one goes back for a yes) and on publish-post.
+      create) exit 0 ;;
+      edit) ask "Check before it changes ($conn): this edits a post. An approved or scheduled post goes back for a fresh yes. OK only if you have seen it." ;;
+      settings) ask "Check before it changes ($conn): this changes a post's network settings or its text per network. An approved post goes back for a fresh yes." ;;
+      unschedule) ask "Check before it changes ($conn): this takes a scheduled post off the schedule. It goes back to draft and will not go out." ;;
+    esac
+    ask "Bolta check ($conn): the plugin can't tell what this save does. OK it only if you expected it." ;;
   update-post-platform-details)
     ask "Check before it changes ($conn): this changes a post's network settings, such as a subreddit, title, privacy or link. An approved post goes back for a fresh yes." ;;
   update-social-bucket)
@@ -328,7 +342,7 @@ case "$tool" in
       undo) ask "Check before it changes ($conn): this undoes a change to a Bolta routine. Every run after this uses the old settings." ;;
     esac
     ask "Bolta check ($conn): the plugin can't tell what this answer to Bolta does. OK it only if you expected it." ;;
-  decide-bolta-suggestion)
+  decide-bolta-suggestion|decide-suggestion)
     case $decision in
       decline)
         if [ "$careful" = 0 ]; then exit 0; fi
@@ -337,6 +351,15 @@ case "$tool" in
       undo) ask "Check before it changes ($conn): this reverses a suggestion you accepted. Everything it changed goes back." ;;
     esac
     ask "Bolta check ($conn): the plugin can't tell what this answer to Bolta does. OK it only if you expected it." ;;
+  update-content-campaign)
+    # Silent only for a brief-only change (an allow-list in bolta-json.sh); accounts,
+    # notes, sources, voice, dates, attached posts and unknown keys are checked.
+    if [ "$targets" != targets ]; then exit 0; fi
+    if [ "$careful" = 1 ]; then
+      ask "Bolta check, careful mode ($conn): this changes a campaign's accounts, dates, posts, notes, sources or voice."
+    fi
+    if campaign_marked; then exit 0; fi
+    ask "Check before it changes ($conn): this changes a campaign's accounts, dates or sources. A running campaign writes its next weeks from it." ;;
   set-content-campaign-targets)
     if [ "$careful" = 1 ]; then
       ask "Bolta check, careful mode ($conn): this sets a campaign's accounts, weeks, notes, sources or voice."

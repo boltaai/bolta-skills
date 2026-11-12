@@ -28,30 +28,31 @@ graders:
   - name: one-post-three-destinations
     # One create-post that names all three destinations.
     type: tool_used
-    tool: mcp__plugin_bolta_bolta__create-post
-    input_match: '^(?=[\s\S]*a1b2c3d4-0001-4a00-8000-000000000002)(?=[\s\S]*a1b2c3d4-0001-4a00-8000-000000000005)(?=[\s\S]*linkedin_org_80412377)'
+    tool: mcp__plugin_bolta_bolta__save-post
+    input_match: '^(?![\s\S]*"post_id")(?=[\s\S]*(?:(?=[\s\S]*a1b2c3d4-0001-4a00-8000-000000000002)(?=[\s\S]*a1b2c3d4-0001-4a00-8000-000000000005)(?=[\s\S]*linkedin_org_80412377)))'
     min: 1
   - name: x-own-text-any-route
     # X's own text, by any route: in the saving create-post (platform_specific x works on a new
     # post since server f9e715259), or after it with update-post or the details tool.
     type: regex
     target: trace
-    pattern: '"name":"mcp__plugin_bolta_bolta__(create-post|update-post)"[\s\S]{0,6000}?\W"x\W{1,6}\{[^{}]*\Wtext\W|"name":"mcp__plugin_bolta_bolta__update-post-platform-details"[\s\S]{0,600}?\Wplatform\W{1,6}x\W'
+    pattern: '"name":"mcp__plugin_bolta_bolta__(create-post|update-post|save-post)"[\s\S]{0,6000}?\W"x\W{1,6}\{[^{}]*\Wtext\W|"name":"mcp__plugin_bolta_bolta__update-post-platform-details"[\s\S]{0,600}?\Wplatform\W{1,6}x\W'
   - name: threads-own-text
     type: tool_used
-    tool: mcp__plugin_bolta_bolta__create-post
-    input_match: '"threads"\s*:\s*\{[^{}]*"text"\s*:'
+    tool: mcp__plugin_bolta_bolta__save-post
+    input_match: '^(?![\s\S]*"post_id")(?=[\s\S]*(?:"threads"\s*:\s*\{[^{}]*"text"\s*:))'
     min: 1
   - name: linkedin-own-text
     # On the network or under the page's own entry.
     type: tool_used
-    tool: mcp__plugin_bolta_bolta__create-post
-    input_match: '"linkedin"\s*:\s*\{[\s\S]*?"text"\s*:'
+    tool: mcp__plugin_bolta_bolta__save-post
+    input_match: '^(?![\s\S]*"post_id")(?=[\s\S]*(?:"linkedin"\s*:\s*\{[\s\S]*?"text"\s*:))'
     min: 1
   - name: one-create-only
     # One post, not one per network.
     type: tool_used
-    tool: mcp__plugin_bolta_bolta__create-post
+    tool: mcp__plugin_bolta_bolta__save-post
+    input_match: '^(?![\s\S]*"post_id")'
     min: 0
     max: 1
   - name: no-separate-posts
@@ -62,8 +63,8 @@ graders:
   - name: no-twitter-key
     # Bolta refuses any network name but its own (x, not twitter).
     type: tool_used
-    tool: mcp__plugin_bolta_bolta__create-post
-    input_match: '"twitter"\s*:'
+    tool: mcp__plugin_bolta_bolta__save-post
+    input_match: '^(?![\s\S]*"post_id")(?=[\s\S]*(?:"twitter"\s*:))'
     min: 0
     max: 0
   - name: shows-each-network
@@ -77,8 +78,8 @@ graders:
   - name: price-kept
     # The price the user gave, never another.
     type: tool_used
-    tool: mcp__plugin_bolta_bolta__create-post
-    input_match: '\$6\.50'
+    tool: mcp__plugin_bolta_bolta__save-post
+    input_match: '^(?![\s\S]*"post_id")(?=[\s\S]*(?:\$6\.50))'
     min: 1
   - name: no-approve-schedule-publish
     # Drafts only: nothing approved, scheduled or posted.

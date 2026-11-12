@@ -8,11 +8,11 @@ A routine only learns from yes and no. `get-routine` `performance_summary`: `art
 
 - Most still waiting: the problem is review time, not the writing. Say it: "It wrote 12; 2 were decided and 10 are waiting." Offer to go through them now ([review](review.md)) or make it smaller. Add no routine and raise no count.
 - Undecided drafts are the usual reason a routine seems not to work (advice): check this before changing the writing.
-- `recommend-routines` returns `review_load` for the whole brand; `list-inbox-items` (`source="team"`, `status="pending"`) counts what waits.
+- `plan` with `kind: "recommend"` returns `review_load` for the whole brand; `list-inbox-items` (`source="team"`, `status="pending"`) counts what waits.
 
 ## Bolta's recommendations for a routine
 
-Every Monday Bolta reviews each routine's last 28 days (at least 3 runs, and 5 decisions before it judges rates). `list-routine-recommendations` (`routine_id` for one) returns rows with `title`, `reason`, `proposed_change` (empty: advice only) and `status` (`proposed`, or `applied`, which can be undone); at most 3 open per routine:
+Every Monday Bolta reviews each routine's last 28 days (at least 3 runs, and 5 decisions before it judges rates). `list-suggestions` with `kind: "routine"` (`routine_id` for one) returns rows with `title`, `reason`, `proposed_change` (empty: advice only) and `status` (`proposed`, or `applied`, which can be undone); at most 3 open per routine:
 
 | Says | Changes |
 |-|-|
@@ -25,16 +25,16 @@ Every Monday Bolta reviews each routine's last 28 days (at least 3 runs, and 5 d
 | Approved 80%+ and published, none waiting | One more per run |
 | On but not run | Nothing: check the schedule |
 
-Show the reason and the exact change; on a yes `decide-routine-recommendation` with `decision: "apply"`. `dismiss` keeps the record; `undo` reverses an applied one.
+Show the reason and the exact change; on a yes `decide-suggestion` with the row's id as `suggestion_id` and `decision: "accept"`. `decline` keeps the record; `undo` reverses an applied one.
 
 ## Bolta's suggestions for the brand
 
-`list-bolta-suggestions`: one change each, made from approvals, edits and rejections (pause a routine that keeps missing, post less often, move its time). What they are and how to accept or undo one: [routine-improving-suggestions.md](routine-improving-suggestions.md).
+`list-suggestions` with `kind: "brand"`: one change each, made from approvals, edits and rejections (pause a routine that keeps missing, post less often, move its time). What they are and how to accept or undo one: [routine-improving-suggestions.md](routine-improving-suggestions.md).
 
 ## The rejection loop
 
 1. Each no carries the user's reason in their words: `reject-post` `reason` (what is wrong, not what to do instead), plus `categories` that fit (`too_salesy`, `wrong_tone`, `too_long`, `off_topic`, `repetitive`, `no_substance`, `factual_error`, `missing_cta`, `other`). No reason given: ask first; it can't be added afterwards. Bolta's voice learning reads it. A drop with no reason teaches nothing.
-2. The same reason twice from one routine: right after the rejections, call `list-routine-recommendations` with its `routine_id`, then `list-bolta-suggestions`. Offer the one that fits; none fits: offer the routine change yourself (`update-routine`). Name the pattern ("Your last 3 were turned down as too salesy"), give Bolta's change, apply only on a yes.
+2. The same reason twice from one routine: with the rejections, even if a check stops them, call `list-suggestions` with `kind: "routine"` and its `routine_id`, then with `kind: "brand"`. Offer the one that fits; none fits: offer the routine change yourself (`update-routine`). Name the pattern ("Your last 3 were turned down as too salesy"), give Bolta's change, apply only on a yes.
 3. Nothing there: offer one change of your own, the smallest that addresses the reason. Wording or facts: one sentence added to `instructions` (current text plus the sentence, sent whole). Topic: `goal`, pillars or a document. Too many: `count`. How it sounds everywhere: the voice ([voice](voice.md)), not the routine.
 4. One change, one yes, then read it back. Check again after its next run.
 

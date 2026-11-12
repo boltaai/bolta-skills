@@ -55,7 +55,7 @@ graders:
   - name: reads-recommendations
     # Asks Bolta what it recommends for the routine.
     type: regex
-    pattern: '"name"\s*:\s*"mcp__plugin_bolta_bolta__(list-routine-recommendations|list-bolta-suggestions|get-routine)"'
+    pattern: '"name"\s*:\s*"mcp__plugin_bolta_bolta__(list-routine-recommendations|list-bolta-suggestions|get-routine|list-suggestions)"'
     target: trace
   - name: offers-routine-change
     # Offers to change the routine so it stops happening.
@@ -65,7 +65,7 @@ graders:
   - name: applies-only-on-yes
     # No routine, recommendation or voice change without a yes.
     type: regex
-    pattern: '"name"\s*:\s*"mcp__plugin_bolta_bolta__(update-routine|decide-routine-recommendation|decide-bolta-suggestion|update-voice-profile|pause-routine)"'
+    pattern: '"name"\s*:\s*"mcp__plugin_bolta_bolta__(update-routine|decide-routine-recommendation|decide-bolta-suggestion|update-voice-profile|pause-routine|decide-suggestion)"'
     target: trace
     match: not_contains
   - name: says-not-done

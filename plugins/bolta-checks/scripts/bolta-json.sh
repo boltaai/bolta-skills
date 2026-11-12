@@ -262,7 +262,8 @@ function switch_on(ti) {
   return "on"
 }
 
-# decide-routine-recommendation and decide-bolta-suggestion: the decision word,
+# decide-suggestion (and the Release 1 decide-routine-recommendation and
+# decide-bolta-suggestion): the decision word,
 # else other.
 function decision(ti,   v) {
   if (jtype(ti, "decision") != "s") return "other"
@@ -309,6 +310,43 @@ function update_verdict(ti) {
   if (jhas(ti, "status") && !is_draft_status(ti)) return "timing"
   if ((jhas(ti, "content") || jhas(ti, "contents") || jhas(ti, "media") || jhas(ti, "accounts") || jhas(ti, "poll") || jhas(ti, "platform_specific")) && !is_draft_status(ti)) return "edit"
   return "safe"
+}
+
+# save-post (Release 2: create-post, update-post and update-post-platform-details
+# in one tool). Allow-lists only: every key must be one save-post takes, and the
+# server refuses a time, a status or an action, so any of those (or anything
+# unknown) is "other". create = no post_id: always a new Draft that goes
+# nowhere, network settings included (as a plain create-post was). On an
+# existing post: edit = only text, media, accounts or a poll (the lighter
+# check); settings = per-network text or settings (platform_specific,
+# platform_details), which can change where and how it goes out; unschedule =
+# a Scheduled post goes back to Draft.
+function save_verdict(ti,   i, k, has_post, unsched, settings) {
+  has_post = jhas(ti, "post_id") && jtype(ti, "post_id") != "n"
+  unsched = jhas(ti, "unschedule") && jtype(ti, "unschedule") != "f" && jtype(ti, "unschedule") != "n"
+  settings = 0
+  for (i = 1; i <= JC[ti]; i++) {
+    k = JK[ti SUBSEP i]
+    if (k ~ /^(platform_specific|platform_details)$/) { settings = 1; continue }
+    if (k !~ /^(workspace_id|post_id|content|parts|media|account_ids|social_buckets|poll|unschedule|idempotency_key)$/) return "other"
+  }
+  if (!has_post) return unsched ? "other" : "create"
+  if (unsched) return "unschedule"
+  if (settings) return "settings"
+  return "edit"
+}
+
+# update-content-campaign: "brief" only when every key is one that changes the
+# brief alone (an allow-list); anything else, including dates, posts to attach
+# and keys this script does not know, is "targets": who the campaign posts
+# from, what Bolta reads for it, or when it runs, which a running campaign
+# writes its next weeks from.
+function campaign_targets(ti,   i, k) {
+  for (i = 1; i <= JC[ti]; i++) {
+    k = JK[ti SUBSEP i]
+    if (k !~ /^(workspace_id|campaign_id|name|strategy_key|theme|audience|cta_text|cta_url|content_mix)$/) return "targets"
+  }
+  return "brief"
 }
 
 # bulk-create-posts: drafts only if every item decodes and is a plain draft.
@@ -402,8 +440,10 @@ function guard_main(   ok, ti) {
   emit("CID", campaign_id(ti))
   if (TOOL == "approve-many-posts") emit("ITEMS", item_count(ti))
   if (TOOL == "bulk-create-posts") emit("BULK", bulk_verdict(ti))
+  if (TOOL == "save-post") emit("SAVE", save_verdict(ti))
+  if (TOOL == "update-content-campaign") emit("TARGETS", campaign_targets(ti))
   if (TOOL == "confirm-plan") emit("SWITCHON", switch_on(ti))
-  if (TOOL == "decide-routine-recommendation" || TOOL == "decide-bolta-suggestion") emit("DECISION", decision(ti))
+  if (TOOL == "decide-routine-recommendation" || TOOL == "decide-bolta-suggestion" || TOOL == "decide-suggestion") emit("DECISION", decision(ti))
   # A website read with preview: true (the JSON literal, never the string) saves nothing.
   if (TOOL == "extract-business-dna") emit("PREVIEW", jtype(ti, "preview") == "t" ? 1 : 0)
 }

@@ -16,7 +16,7 @@
           "day": "monday",
           "time": "08:00"
         },
-        "timezone": "<timezone from get-workspace>",
+        "timezone": "<timezone from list-workspaces>",
         "approval_policy": "inherit",
         "output_config": {
           "artifact_type": "report",

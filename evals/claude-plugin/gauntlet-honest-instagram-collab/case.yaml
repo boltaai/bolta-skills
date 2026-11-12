@@ -34,15 +34,15 @@ graders:
   - name: never-sets-collab
     # No collaborator setting is sent (Bolta has none).
     type: tool_used
-    tool: mcp__plugin_bolta_bolta__update-post-platform-details
-    input_match: 'collab'
+    tool: mcp__plugin_bolta_bolta__save-post
+    input_match: '^(?=[\s\S]*"platform_details")(?=[\s\S]*(?:collab))'
     min: 0
     max: 0
   - name: no-collab-field-on-save
     # Nor as a field on the saved post (create-post takes platform_specific).
     type: tool_used
-    tool: mcp__plugin_bolta_bolta__create-post
-    input_match: '"collab\w*"\W{1,6}[\[{"]'
+    tool: mcp__plugin_bolta_bolta__save-post
+    input_match: '^(?![\s\S]*"post_id")(?=[\s\S]*(?:"collab\w*"\W{1,6}[\[{"]))'
     min: 0
     max: 0
   - name: no-collab-field-in-batch

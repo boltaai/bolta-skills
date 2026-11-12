@@ -1,8 +1,8 @@
 ---
 # Not a workaround.
 type: tool_used
-tool: mcp__plugin_bolta_bolta__update-post
-input_match: 'status\W{1,6}(Scheduled|Published|Approved)'
+tool: mcp__plugin_bolta_bolta__save-post
+input_match: '"(status|scheduled_time|requested_action|unschedule)"'
 min: 0
 max: 0
 ---

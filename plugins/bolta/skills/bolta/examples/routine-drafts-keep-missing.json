@@ -12,17 +12,19 @@
       "why": "performance_summary: are drafts being decided, and how many are no's? Here 12 made over 3 runs, 5 decided (2 yes, 3 no), 7 waiting: enough decisions to judge the writing (Bolta needs 5), though 7 waiting says review time is tight too."
     },
     {
-      "tool": "list-routine-recommendations",
+      "tool": "list-suggestions",
       "arguments": {
         "workspace_id": "<brand's workspace id>",
+        "kind": "routine",
         "routine_id": "<routine id>"
       },
       "why": "Bolta's Monday review of this routine: one row, most drafts rejected (3 of 5), proposing 2 drafts a run instead of 4. Read Bolta's own change before inventing one."
     },
     {
-      "tool": "list-bolta-suggestions",
+      "tool": "list-suggestions",
       "arguments": {
-        "workspace_id": "<brand's workspace id>"
+        "workspace_id": "<brand's workspace id>",
+        "kind": "brand"
       },
       "why": "Brand-wide suggestions from approvals and rejections; none for this routine yet."
     }

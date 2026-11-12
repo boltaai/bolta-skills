@@ -1,6 +1,6 @@
 # Brand settings
 
-`get-workspace` gives one brand's settings. Read it once per brand and reuse it.
+Each `list-workspaces` row is one brand's full settings. Read it once per brand and reuse it.
 
 ## What it returns
 

@@ -31,6 +31,8 @@ CHECKS = REPO / "plugins" / "bolta-checks"
 ROOT_SKILL = REPO / "skills" / "bolta"
 SKILL_SRC = "skills/bolta"
 
+#: Bolta tools whose name has no hyphen.
+ONE_WORD_TOOLS = ("plan",)
 #: How every matcher begins: any server name, then a tool name.
 PREFIX = "^mcp__[A-Za-z0-9_-]+__"
 
@@ -57,6 +59,9 @@ def skill_tools(src: pathlib.Path) -> set[str]:
         m = re.search(r"^## Tools\s*\n(.*?)(?=^## )", text, re.S | re.M)
         if m:
             out.update(re.findall(r"`([a-z][a-z0-9]*(?:-[a-z0-9]+)+)`", m.group(1)))
+            # Tool names without a hyphen (Release 2's `plan`) would match every key in backticks,
+            # so they are listed by name.
+            out.update(t for t in ONE_WORD_TOOLS if f"`{t}`" in m.group(1))
     return out
 
 

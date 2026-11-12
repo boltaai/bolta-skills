@@ -6,11 +6,11 @@ How to set and which wins: [network settings](post-settings.md). Network `pinter
 
 Every pin goes to a board. Bolta picks it in this order:
 
-1. `board_id` in `platform_specific`: **Pinterest's own board id**, a long number (not the board's name or web address). `get-post-platform-details` on any earlier pin shows its board this way, as `board_id`.
-2. A board set with `update-post-platform-details` `board` (or `board_id`): there both take **Bolta's id for the board**, which no read here shows. Don't use this route.
+1. `board_id` in `platform_specific`: **Pinterest's own board id**, a long number (not the board's name or web address). `get-post` with `platform: "pinterest"` on any earlier pin shows its board this way, as `board_id`.
+2. A board set with `save-post` `platform_details` `{"pinterest": {"board": ...}}` (or `board_id`): there both take **Bolta's id for the board**, which no read here shows. Don't use this route.
 3. None set: the account's most recently updated board, which may be the wrong one. No boards at all: the pin fails when it goes out.
 
-Same key name, two different ids: never send a read's `board_id` to `update-post-platform-details`. No tool lists boards: read an earlier pin on the board the user means and put its `board_id` in `platform_specific`, or the user picks the board in Bolta. Say which board will be used before the yes, or ask.
+Same key name, two different ids: never send a read's `board_id` in `platform_details`, only in `platform_specific`. No tool lists boards: read an earlier pin on the board the user means and put its `board_id` in `platform_specific`, or the user picks the board in Bolta. Say which board will be used before the yes, or ask.
 
 ## Settings
 

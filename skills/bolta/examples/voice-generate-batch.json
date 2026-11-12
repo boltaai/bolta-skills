@@ -7,7 +7,7 @@
       "tool": "voice-generate",
       "arguments": {
         "workspace_id": "<brand's workspace id>",
-        "voice_profile_id": "<voice id from list-voice-profiles>",
+        "voice_profile_id": "<voice id from get-voice-context with all_profiles true>",
         "topics": [
           "spring menu"
         ],

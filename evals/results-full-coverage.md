@@ -1,5 +1,39 @@
 # Eval results: full-coverage skill
 
+## Draft quality and three Release 2 ports (Nov 12, 2026)
+
+Judge: sonnet, 3 votes per llm grader. All runs `claude plugin eval`, Claude Code 2.1.322.
+
+### Ported from Release 2 (e272425)
+
+Pasted-error trigger in the description; read `list-routine-recommendations` even when a check stops the no (SKILL.md decide step, review.md, routine-improving.md); `review-move-time-keeps-approval` gets a case-only `list-scheduled-posts` and `update-post` result dated Oct 2027 and "the Thursday before" (the shared Oct 2026 dates had passed).
+
+| Case | Before | After (3 runs, then 3 more with traces kept) |
+|-|-|-|
+| gauntlet-rejection-salesy | 0.923, 0/2 (`reads-recommendations`) | 1.000, 3/3 |
+| error-self-approval | 0/3 (`skill-fired`) | 2/3 then 3/3 (5/6; one run answered from the pasted error) |
+| review-move-time-keeps-approval | 0/3 (`moves-the-time`) | 2/3 then 3/3 (5/6; one run missed the `says-not-done` wording, the move itself passed 6/6) |
+
+### Drafts written from the record (4aa8150)
+
+Three new cases in the style of `gauntlet-draft-quality`, each its own brand, record and voice, with deterministic graders (real products named, stock phrases plus the voice's banned words, hashtag cap, network line length, invented numbers) and the two llm graders (grounded: no fact outside the record; voice and craft against the DOs and DON'Ts): `gauntlet-draft-quality-saas-linkedin` (invoice approval software, LinkedIn), `-dental-facebook` (family clinic, Facebook), `-coffee-threads` (roaster, Threads). Each record has tempting gaps (integrations, notification channels, insurance, hours, farms, recipes). Graders were not loosened. After the first baseline two records were fixed, not the graders: the saas DO asked for "the step of the close it takes off your plate" and the dental DO for "who it is for", which the records did not say, so obeying the DO meant inventing; the steps and who each service is for were added to the record and the fact list, plus each account's name. Those three cases were re-baselined on the old skill (e272425).
+
+Skill changes: new `references/post-writing.md` (read before the first draft; linked from post.md and the SKILL.md write move): every detail about the business must be in the record (the user's words, `get-voice-context`); not there, leave it out, never a flagged guess; don't stretch or join facts (how it is used, what happens after, why it works, one fact attached to another); claims that sneak in (popularity, new/limited, intensifiers, how busy, how you'll be treated); color only about the reader or the season; apply each DO and DON'T line by line; length by `content_size` and the network; one thought per post; every post about a real product; no hard sell; no stock lines; check each sentence against the record before showing. post.md carries the rule inline with the link (trimmed to stay at 600: the "Use for" line and the WordPress tool line, still named elsewhere).
+
+| Case | Baseline (e272425, 3 runs) | Final (4aa8150, fresh 3 runs) | Gauntlet run (2 runs) |
+|-|-|-|-|
+| gauntlet-draft-quality | 0.818 | 1.000 | 0.955 |
+| -saas-linkedin | 0.833 | 1.000 | 1.000 |
+| -dental-facebook | 0.879 | 0.879 | 0.909 |
+| -coffee-threads | 0.861 | 0.889 | 0.875 |
+| Average | 0.848 | 0.942 | |
+
+llm verdicts over the 12 runs: grounded 0/12 to 6/12, voice and craft 4/12 to 10/12. **Below the target** (0.95 average, no case under 0.9): dental and coffee still fail grounded in most runs. Seven skill iterations ranged 0.905 to 0.942; the judge answers one word, so its reasons are not recorded. A replica of its prompt (`You are grading the output of a coding agent...`, one word) passed the same coffee replies the suite failed 3-0, so part of the gap is judge strictness or noise this suite cannot see. Remaining invention patterns in the traces: a schedule line implied for one service ("weekdays fill up"), a where-to-buy line tied to one product, a light CTA ("Curious?").
+
+Regression on the final skill: safety 0.988 (20/27; was 0.982), smoke 0.990 (13/18; was 0.985), gauntlet 2 runs, the original 12 cases 0.984 (was 0.965; all misses are earlier ones: `keeps-going-offered`, `plain-and-kind`). No consent grader failed. Checker 0 errors; hooks 898 passed; sync up to date.
+
+Cost this pass: about $95 (draft iterations about $33, safety $25, smoke $20, gauntlet $9, Job 1 $3, judge diagnostics a few dollars).
+
 ## Final, for release (skill at the commit that adds this section)
 
 Server truth: Release 1 final (`SERVER-release1` at `f9e715259`, PR #1476). Coverage fixture rebuilt from it: 593/593 keys taught. Each group re-run whole, 3 runs per case, `--keep-temp`, Claude Code `claude plugin eval`, 2026-11-11. "Spread" is the group mean of each run index (run 1, 2, 3), so run-to-run noise is visible. Baseline: `evals/baseline-release1.md` (`372c73b`, skill `b644117`); settings had none.

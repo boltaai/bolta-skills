@@ -3,7 +3,7 @@
   "playbook": "post",
   "steps": [
     {
-      "tool": "create-post",
+      "tool": "save-post",
       "arguments": {
         "workspace_id": "<brand's workspace id>",
         "content": "Weekend sale: code WEEKEND15.",
@@ -26,7 +26,7 @@
       "why": "The code graphic becomes a story: the offer ends Sunday, and a story is gone in 24 hours. A story shows no caption, which is fine because the code is in the image. One image only; a story with two fails."
     },
     {
-      "tool": "create-post",
+      "tool": "save-post",
       "arguments": {
         "workspace_id": "<brand's workspace id>",
         "content": "The shop this weekend, in 15 seconds. The sale runs all weekend.",
@@ -49,7 +49,7 @@
       "why": "The clip becomes a reel: video that can reach people who don't follow yet, and it stays useful after the sale."
     },
     {
-      "tool": "create-post",
+      "tool": "save-post",
       "arguments": {
         "workspace_id": "<brand's workspace id>",
         "content": "Four favourites, all 15% off this weekend with WEEKEND15. Swipe for each.",
@@ -79,7 +79,7 @@
       "why": "The product shots become a carousel in the feed: 2 to 10 items make one whatever content_type says, each slide one product. Alt text says only what the user said each photo shows. No trial reel: that needs one video."
     },
     {
-      "tool": "get-post-platform-details",
+      "tool": "get-post",
       "arguments": {
         "post_id": "<story post id>",
         "platform": "instagram"

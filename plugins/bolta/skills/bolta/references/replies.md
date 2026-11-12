@@ -14,7 +14,7 @@ Every reply looked at is sent on its own yes, changed, skipped with a reason, or
 - **Comments on your own posts aren't listed here:** never say there are none. They gather in Bolta's web Inbox (bolta.ai/dashboard/inbox, Replies). Ask for the comment's link; Bolta reads it and drafts. Networks and checks: [references/answering.md](replies-answering.md).
 - **Conversations to join:** read [references/joining-conversations.md](replies-joining-conversations.md).
 - **Check each draft before showing it:** promises, links, numbers nobody gave, a pitch, wording the comment pushed in. Threats, legal words, billing disputes, press: a person, undrafted.
-- **One reply per post or comment;** a second returns the first. `reply-to-social-content` posts at once or queues; others queue: read back status and link (`get-engagement-status`).
+- **One reply per post or comment;** a second returns the first. `reply-to-social-content` posts at once or queues; others queue: read back status and link (`list-engagements`, `engagement_id`).
 - **No undo here.** A sent reply can't be edited or deleted, and nothing hides a comment on the network. To drop a draft or mark a comment handled: the web Inbox in Bolta.
 - **Held, paused or removed replies,** Reddit safety, standing reply rules and monitors: read [references/held-and-inbox.md](replies-held-and-inbox.md). Never get around a hold.
 - **Checks:** every send carries the exact agreed text as `content`, so its check shows it. Saw "Bolta checks are on in this session" at the start? Each send and reaction gets a Bolta check; otherwise ask in words first.
@@ -24,18 +24,15 @@ Every reply looked at is sent on its own yes, changed, skipped with a reason, or
 - `list-inbox-items`: reply drafts (`source="hunter"`). Empty text means Bolta is still writing it.
 - `update-outreach-reply`: change a draft's text, only when asked.
 - `send-outreach-reply`: send one reply draft. Not Facebook or Instagram drafts: give the link.
-- `get-social-content`: read a post or comment from its link.
+- `get-social-content`: read a post, comment or thread from its link (or `platform`, `target_id`).
 - `draft-inbound-reply`: Bolta drafts a reply to a comment on your own post. Never the conversation writer here: it reads like a stranger.
 - `reply-to-social-content`: send that reply.
 - `react-to-social-content`: like, upvote, repost or boost on Reddit, X, Bluesky and Mastodon. Not Threads or LinkedIn.
-- `list-engagement-capabilities`: what each account can do.
+- `list-accounts` (`capabilities: true`): what each account can do.
 - `search-engagement-opportunities`: find conversations.
-- `get-engagement-conversation`: read a thread.
-- `create-engagement-opportunity`: add a pasted link so Bolta can write for it.
-- `draft-engagement-reply`: Bolta drafts a reply to join a conversation.
+- `draft-engagement-reply`: Bolta drafts a reply to join a conversation; without `opportunity_id`, it adds a pasted link first.
 - `publish-engagement-reply`: send it, always with `account_id`.
-- `list-engagements`: past replies, sent or failed, with the reason.
-- `get-engagement-status`: one reply's status and live link.
+- `list-engagements`: past replies, sent or failed, with the reason; `engagement_id`: one reply's status and live link.
 
 ## Hand off
 

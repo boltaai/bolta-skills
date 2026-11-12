@@ -2,7 +2,7 @@
 
 How to save an article: [WordPress articles](post-wordpress.md). How to set and which wins: [network settings](post-settings.md). Network `wordpress`. The post's text is the article body; a `text` key is ignored.
 
-Change settings on a saved article with `update-post-platform-details` (network `wordpress`) or `update-post` `platform_specific` `{"wordpress": {...}}`. In `platform_specific` an account's entry merges with the network's, the account winning, and an empty `title` there doesn't wipe the saved one.
+Change settings on a saved article with `save-post` `post_id` and `platform_details` `{"wordpress": {...}}` or `platform_specific` `{"wordpress": {...}}`. In `platform_specific` an account's entry merges with the network's, the account winning, and an empty `title` there doesn't wipe the saved one.
 
 ## Settings
 

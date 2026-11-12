@@ -27,7 +27,8 @@ structuredContent:
     },
     "missing_fields": [
       "voice_profile"
-    ]
+    ],
+    "profiles": []
   },
   "error": null,
   "error_kind": null,

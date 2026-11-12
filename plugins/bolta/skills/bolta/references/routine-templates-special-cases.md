@@ -15,7 +15,7 @@ Read after [routine-templates.md](routine-templates.md) when the user wants post
 
 ## Setting one up
 
-- With Bolta's planner: `plan-routine` with their words. The plan lists what it still needs ("Connect GitHub" and a link to bolta.ai/dashboard/connections). Send the link; once they've connected, `confirm-plan` binds the connection itself. Saving earlier is refused as `plan_not_ready`, naming what's missing ([routine-planner.md](routine-planner.md)).
+- With Bolta's planner: `plan` with `kind: "routine"` and their words. The plan lists what it still needs ("Connect GitHub" and a link to bolta.ai/dashboard/connections). Send the link; once they've connected, `confirm-plan` binds the connection itself. Saving earlier is refused as `plan_not_ready`, naming what's missing ([routine-planner.md](routine-planner.md)).
 - Without it, or for Drive and meetings: nothing here can list a connection or pick a file. Say so and link bolta.ai/dashboard/routines, where the builder picks it.
 - `available_in_workspace` false, or `unavailable_reason: "source_driven_disabled"`: not switched on for this brand yet. Offer weekly posts with the page in `output_config.source_urls` ("from my blog page"): read each week, skipped when nothing changed.
 - Only-when-asked routines (Drive, meeting) never run on a schedule: run now runs them, and every run writes again from the same document, so ask before a second one.

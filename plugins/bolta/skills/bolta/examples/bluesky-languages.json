@@ -3,7 +3,7 @@
   "playbook": "post",
   "steps": [
     {
-      "tool": "create-post",
+      "tool": "save-post",
       "arguments": {
         "workspace_id": "<brand's workspace id>",
         "content": "Austin: we're open weekends now, 10 to 4.\nAustin: ya abrimos los fines de semana, de 10 a 4.",
@@ -23,7 +23,7 @@
       "why": "The decision: tag both languages because the post really contains both, so people who filter their feed to Spanish see it too. Languages are network-wide on Bluesky. Both lines together stay under 300 characters, so nothing is cut."
     },
     {
-      "tool": "get-post-platform-details",
+      "tool": "get-post",
       "arguments": {
         "post_id": "<post id>",
         "platform": "bluesky"

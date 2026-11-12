@@ -42,7 +42,8 @@ structuredContent:
     "total_accounts": 3,
     "platform_filter": null,
     "token_status_filter": null,
-    "workspace_id": "7d2c4e81-5b3a-4f6e-9c1d-2a3b4c5d6e7f"
+    "workspace_id": "7d2c4e81-5b3a-4f6e-9c1d-2a3b4c5d6e7f",
+    "buckets": []
   },
   "error": null,
   "error_kind": null,

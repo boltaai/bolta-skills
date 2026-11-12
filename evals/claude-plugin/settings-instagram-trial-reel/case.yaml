@@ -22,24 +22,24 @@ graders:
     min: 1
   - name: instagram-account
     type: tool_used
-    tool: mcp__plugin_bolta_bolta__create-post
-    input_match: 'a1b2c3d4-0001-4a00-8000-000000000003'
+    tool: mcp__plugin_bolta_bolta__save-post
+    input_match: '^(?![\s\S]*"post_id")(?=[\s\S]*(?:a1b2c3d4-0001-4a00-8000-000000000003))'
     min: 1
   - name: video-attached
     type: tool_used
-    tool: mcp__plugin_bolta_bolta__create-post
-    input_match: 'latte-art-slowmo\.mp4'
+    tool: mcp__plugin_bolta_bolta__save-post
+    input_match: '^(?![\s\S]*"post_id")(?=[\s\S]*(?:latte-art-slowmo\.mp4))'
     min: 1
   - name: reels
     type: tool_used
-    tool: mcp__plugin_bolta_bolta__create-post
-    input_match: '"instagram"\s*:\s*\{[^{}]*"content_type"\s*:\s*"REELS"'
+    tool: mcp__plugin_bolta_bolta__save-post
+    input_match: '^(?![\s\S]*"post_id")(?=[\s\S]*(?:"instagram"\s*:\s*\{[^{}]*"content_type"\s*:\s*"REELS"))'
     min: 1
   - name: trial-on
     # Either spelling the server reads.
     type: tool_used
-    tool: mcp__plugin_bolta_bolta__create-post
-    input_match: '"instagram"\s*:\s*\{[^{}]*"(trialReelEnabled|trial_reel_enabled)"\s*:\s*true'
+    tool: mcp__plugin_bolta_bolta__save-post
+    input_match: '^(?![\s\S]*"post_id")(?=[\s\S]*(?:"instagram"\s*:\s*\{[^{}]*"(trialReelEnabled|trial_reel_enabled)"\s*:\s*true))'
     min: 1
   - name: user-decides
     # The user graduates it: never the automatic strategy.

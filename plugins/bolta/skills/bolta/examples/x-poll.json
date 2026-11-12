@@ -3,7 +3,7 @@
   "playbook": "post",
   "steps": [
     {
-      "tool": "create-post",
+      "tool": "save-post",
       "arguments": {
         "workspace_id": "<brand's workspace id>",
         "content": "What should we build next?",
@@ -19,7 +19,7 @@
         },
         "idempotency_key": "next-feature-poll-1"
       },
-      "why": "The decision: the poll field on create-post, in the saving call. Bolta refuses a poll X would reject (2 to 4 options of 25 characters at most), with the reason. The question is the post's text. It runs one day, the default, which suits a quick product pulse; a longer one is an X setting (post_type POLL with poll_duration_minutes)."
+      "why": "The decision: the poll field on save-post, in the saving call. Bolta refuses a poll X would reject (2 to 4 options of 25 characters at most), with the reason. The question is the post's text. It runs one day, the default, which suits a quick product pulse; a longer one is an X setting (post_type POLL with poll_duration_minutes)."
     }
   ],
   "say": "Saved to Acme as an X draft: a one-day poll with Dark mode, Exports and iPad app. Nothing goes out yet. Schedule it?",

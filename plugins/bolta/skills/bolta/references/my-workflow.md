@@ -27,12 +27,12 @@ The workflow is saved where the user's AI app finds it, and tested once on today
 ## Tools
 
 A saved workflow uses only these:
-- `get-workspace`, `list-accounts`: workspace name, accounts.
+- `list-workspaces`, `list-accounts`: workspace name and settings, accounts.
 - `get-voice-context`: the voice.
 - `list-workspace-posts`: best posts; this week's drafts, so a repeated run never doubles.
-- `list-scheduled-posts`: days already covered.
+- `list-workspace-posts` with `account_ids`: days already covered (the scheduled queue).
 - `list-inbox-items`: how much is waiting.
-- `create-post`, `bulk-create-posts`, `bulk-create-status`: save drafts; check what saved.
+- `save-post` (no `post_id`: always a draft), `bulk-create-posts`, `bulk-create-status`: save drafts; check what saved.
 - `submit-for-review`: onto the review list.
 - `list-routines`: a Bolta routine already covering it.
 

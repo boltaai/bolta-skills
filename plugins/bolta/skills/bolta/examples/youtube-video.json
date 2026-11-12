@@ -3,7 +3,7 @@
   "playbook": "post",
   "steps": [
     {
-      "tool": "create-post",
+      "tool": "save-post",
       "arguments": {
         "workspace_id": "<brand's workspace id>",
         "content": "A walk through the new dishes on our spring menu.",
@@ -15,22 +15,16 @@
             "url": "https://cdn.example.com/spring-tour.mp4"
           }
         ],
-        "idempotency_key": "spring-tour-yt-1"
-      },
-      "why": "YouTube needs a video from a public link the user gave. The text becomes the description unless one is set."
-    },
-    {
-      "tool": "update-post-platform-details",
-      "arguments": {
-        "post_id": "<post id>",
-        "platform": "youtube",
-        "fields": {
-          "video_title": "Spring menu tour",
-          "privacy_status": "unlisted",
-          "self_declared_made_for_kids": false
+        "idempotency_key": "spring-tour-yt-1",
+        "platform_details": {
+          "youtube": {
+            "video_title": "Spring menu tour",
+            "privacy_status": "unlisted",
+            "self_declared_made_for_kids": false
+          }
         }
       },
-      "why": "The decision: unlisted, as the user asked, so only people with the link can watch for now. Always a title: an empty one is cut from the text. Privacy defaults to private, so it must be set; the details call refuses a misspelling. self_declared_made_for_kids is the kids answer YouTube gets: a menu tour isn't made for children. Add thumbnail_url only if the user gave a public image link."
+      "why": "YouTube needs a video from a public link the user gave. The text becomes the description unless one is set. The decision: unlisted, as the user asked, so only people with the link can watch for now. Always a title: an empty one is cut from the text. Privacy defaults to private, so it must be set; platform_details refuses a misspelling for YouTube, and the draft is still saved: read the result's platform_details.youtube. self_declared_made_for_kids is the kids answer YouTube gets: a menu tour isn't made for children. Add thumbnail_url only if the user gave a public image link."
     }
   ],
   "say": "Saved to Acme as a YouTube draft: 'Spring menu tour', unlisted, not for kids. Nothing goes up yet. Schedule it?",

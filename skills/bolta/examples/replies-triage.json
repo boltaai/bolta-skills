@@ -40,7 +40,7 @@
       "why": "Bolta writes the reply in the voice; it saves and sends nothing. Check it: no promise, link, price or claim nobody gave. Show it, with account and link, and wait for a yes. Sending it later with reply-to-social-content counts as Bolta sending on its own, so Reddit pacing applies."
     },
     {
-      "tool": "get-engagement-status",
+      "tool": "list-engagements",
       "arguments": {
         "workspace_id": "<brand's workspace id>",
         "engagement_id": "<reply 1 id>",

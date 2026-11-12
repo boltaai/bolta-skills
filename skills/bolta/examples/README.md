@@ -88,7 +88,7 @@ Two tools with no row in the playbook table, and where they belong:
 | Tool | Playbook | When |
 |-|-|-|
 | `voice-generate` | [voice](../references/voice.md) | A batch in the trained voice, after saying it costs 1 credit a post and getting a yes |
-| `list-reviews` | [review](../references/review.md) | "What's waiting on me": the posts assigned to this person |
+| `list-inbox-items` with `source: "review_status"` | [review](../references/review.md) | "What's waiting on me": the posts assigned to this person |
 
 ## The shape
 

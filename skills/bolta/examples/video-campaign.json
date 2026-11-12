@@ -17,21 +17,14 @@
         "ends_on": "2026-11-29",
         "content_mix": {
           "short_video": 2
-        }
-      },
-      "why": "The user asked for videos, so the mix is sent explicitly: short_video is the 9:16 vertical format. The cost was said before this yes."
-    },
-    {
-      "tool": "set-content-campaign-targets",
-      "arguments": {
-        "campaign_id": "<campaign id>",
+        },
         "account_ids": [
           "<TikTok account id>",
           "<Instagram account id>"
         ],
         "context_notes": "Week 1: how a candle is poured. Week 2: how the scents are chosen. Facts the user gave, nothing else."
       },
-      "why": "The create reply named no accounts; these are the two networks the user named."
+      "why": "The user asked for videos, so the mix is sent explicitly: short_video is the 9:16 vertical format. The cost was said before this yes. Accounts and notes go on the same create call: these are the two networks the user named, so the campaign is never made without accounts."
     },
     {
       "tool": "set-content-campaign-status",

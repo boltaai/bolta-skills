@@ -3,7 +3,7 @@
   "playbook": "post",
   "steps": [
     {
-      "tool": "create-post",
+      "tool": "save-post",
       "arguments": {
         "workspace_id": "<brand's workspace id>",
         "content": "Ever wondered how a candle gets its swirl?",
@@ -15,21 +15,15 @@
             "url": "https://cdn.example.com/bts.mp4"
           }
         ],
-        "idempotency_key": "bts-tiktok-1"
-      },
-      "why": "TikTok needs one video from a public link the user gave."
-    },
-    {
-      "tool": "update-post-platform-details",
-      "arguments": {
-        "post_id": "<post id>",
-        "platform": "tiktok",
-        "fields": {
-          "privacy_level": "FOLLOWER_OF_CREATOR",
-          "disable_duet": true
+        "idempotency_key": "bts-tiktok-1",
+        "platform_details": {
+          "tiktok": {
+            "privacy_level": "FOLLOWER_OF_CREATOR",
+            "disable_duet": true
+          }
         }
       },
-      "why": "The decision: followers only and duets off, because the user asked for both. Privacy defaults to public, so it must be set; the details call refuses a misspelled level. Only the switches they named: stitches and comments stay as they are."
+      "why": "TikTok needs one video from a public link the user gave. The decision: followers only and duets off, because the user asked for both. Privacy defaults to public, so it must be set; platform_details refuses a misspelled level for TikTok, and the draft is still saved: read the result's platform_details.tiktok. Only the switches they named: stitches and comments stay as they are."
     }
   ],
   "say": "Saved to Acme as a TikTok draft: followers only, duets off. Nothing goes out yet. Schedule it?",

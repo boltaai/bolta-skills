@@ -2,9 +2,9 @@
 
 Which keys each network reads, and from where. How `platform_specific` works: [per network](post-per-network.md). What each key does, its values and when to use it: [network settings](post-settings.md).
 
-- **Per account**: works in `platform_specific` at network level or under `accounts`, and with `update-post-platform-details`.
-- **Network only**: works at network level in `platform_specific` (copied when the post saves) and with `update-post-platform-details`; an account entry is ignored.
-- **Details only**: `update-post-platform-details` (or a batch item's details). In `platform_specific` it is kept and never used.
+- **Per account**: works in `platform_specific` at network level or under `accounts`, and in `platform_details` (both on `save-post`).
+- **Network only**: works at network level in `platform_specific` (copied when the post saves) and in `platform_details`; an account entry is ignored.
+- **Details only**: `save-post` `platform_details` (or a batch item's details). In `platform_specific` it is kept and never used.
 
 | Network | Per account | Network only | Details only |
 |-|-|-|-|
@@ -22,7 +22,7 @@ Which keys each network reads, and from where. How `platform_specific` works: [p
 | Discord | `text`, `channel`, `guild` (Discord's ids) | `embed_enabled`, `embed_title`, `embed_description`, `embed_color` | `selected_channel_id` (Bolta's id), `embed_footer` |
 | WordPress | `title`, `slug`, `excerpt`, `categories`, `tags`, `meta_title`, `meta_description`, `comment_status`, `ping_status`, `sticky`, `format` | | `featured_media_id` |
 
-\* `platform_specific` only: `update-post-platform-details` answers success and keeps nothing.
+\* `platform_specific` only: `platform_details` answers success and keeps nothing.
 
 ## Notes
 

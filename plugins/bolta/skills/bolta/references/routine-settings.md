@@ -22,9 +22,9 @@ Top-level settings of `create-routine` and `update-routine`; `output_config`: [r
 
 - `approval_policy`: `review_every_artifact` ("ask me first", Bolta's default on every post routine: use it), `inherit` (the brand's Approvals setting; the only choice for reports), `auto` (posts without asking).
   - `auto` only on their words, and only on `weekly_social_posts`, `founder_story_series`, `customer_win_social_proof`, `linkedin_thought_leadership` and `square_service_spotlight`; anywhere else it is refused at save, and one saved earlier fails every run (`unsupported_execution_mode`): switch it to ask me first.
-  - Also refused while the brand's `safe_mode` is on or its `autonomy_mode` (`get-workspace`) is manual or assisted. Client sign-off still reviews everything. `auto` turns off sending straight to the client.
+  - Also refused while the brand's `safe_mode` is on or its `autonomy_mode` (`list-workspaces`) is manual or assisted. Client sign-off still reviews everything. `auto` turns off sending straight to the client.
 - `default_reviewer_ids` (up to 20): teammates who review its drafts, ids from `list-workspace-members`; client reviewers are refused. Left out: the brand's default reviewer. On update it replaces the list; `[]` restores the default.
-- `destination_config`: `{"voice_profile_id":"<id from list-voice-profiles>"}`, a voice of this brand; left out, the brand's default voice. Accepted by post routines on Bolta's main writer (weekly posts, founder stories, customer wins, LinkedIn positions, Square), research series and weekly articles; refused on best-posts, thread, reply and report routines and on those fed by GitHub, a blog, HubSpot, Drive or a meeting. A person's voice for first-person, founder and story routines; the brand voice otherwise (Bolta's planner).
+- `destination_config`: `{"voice_profile_id":"<id from get-voice-context all_profiles>"}`, a voice of this brand; left out, the brand's default voice. Accepted by post routines on Bolta's main writer (weekly posts, founder stories, customer wins, LinkedIn positions, Square), research series and weekly articles; refused on best-posts, thread, reply and report routines and on those fed by GitHub, a blog, HubSpot, Drive or a meeting. A person's voice for first-person, founder and story routines; the brand voice otherwise (Bolta's planner).
 
 ## Settings that do nothing
 

@@ -4,9 +4,10 @@
   "before": "Bolta's planner is offered. GitHub is not connected to this brand in Bolta yet.",
   "steps": [
     {
-      "tool": "plan-routine",
+      "tool": "plan",
       "arguments": {
         "workspace_id": "<brand's workspace id>",
+        "kind": "routine",
         "ask": "Post about what we ship. Every merged PR, LinkedIn only, one post each.",
         "context": "Developer tool for small teams; the founder posts on LinkedIn."
       },
@@ -16,7 +17,7 @@
       "tool": "revise-plan",
       "arguments": {
         "workspace_id": "<brand's workspace id>",
-        "proposal_id": "<plan id from plan-routine>",
+        "proposal_id": "<plan id from plan>",
         "changes": {
           "platforms": [
             "linkedin"

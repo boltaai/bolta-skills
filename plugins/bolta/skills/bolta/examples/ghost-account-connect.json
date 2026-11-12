@@ -19,13 +19,16 @@
       "why": "After the user says it's done in Bolta. The ghost row gone and a valid LinkedIn row for Priya means the move happened. A new valid row but the ghost still there: connected but not moved, so her drafts are still held; point to the row's \"Already connected?\" button."
     },
     {
-      "tool": "list-scheduled-posts",
+      "tool": "list-workspace-posts",
       "arguments": {
         "workspace_id": "<brand's workspace id>",
+        "account_ids": [
+          "<Priya's LinkedIn account id>"
+        ],
         "start_date": "<now, UTC with Z>",
         "end_date": "<14 days ahead, UTC with Z>"
       },
-      "why": "Moved drafts go out at their chosen time if still ahead, else the next free slot. Read the times back instead of promising them."
+      "why": "Her scheduled queue: account_ids lists the scheduled posts on that account, soonest first. Moved drafts go out at their chosen time if still ahead, else the next free slot. Read the times back instead of promising them."
     }
   ],
   "say": "Priya's LinkedIn is connected and her voice and drafts moved to it. Her 3 approved posts are scheduled for Tue 9:07 am, Thu 12:23 pm and next Mon 9:15 am.",

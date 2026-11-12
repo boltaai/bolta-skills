@@ -43,7 +43,7 @@
         "workspace_id": "<brand's workspace id>",
         "routine_id": "<Monday routine id>"
       },
-      "why": "Fresh instructions before proposing one change. If list-routine-recommendations is on this app, read Bolta's own suggestion first and offer that instead."
+      "why": "Fresh instructions before proposing one change. If list-suggestions is on this app, read Bolta's own suggestion first (kind routine, with the routine_id) and offer that instead."
     }
   ],
   "say": "Turned down 2 and 4 as too salesy. Bolta saved your reason on both; 4 wasn't on the review list yet, so I put it there first. For the Monday routine I'd add one line to its instructions: \"Never quote prices or push a sale; teach instead.\" Add it?",
