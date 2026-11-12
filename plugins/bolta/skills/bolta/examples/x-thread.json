@@ -43,21 +43,22 @@
           }
         ]
       },
-      "why": "The decision: a thread, not one post, because there are three separate points and each part stands alone; 3 parts, hook first, the screenshot where it pays off. Parts only go in through bulk-create-posts as a nested contents list; media inside a part is media_url. Poll bulk-create-status for the created_post_id."
+      "why": "The decision: a thread, not one post, because there are three separate points and each part stands alone; 3 parts, hook first, the screenshot where it pays off. The screenshot belongs on part 3, so this goes through bulk-create-posts as a nested contents list: save-post parts would put media on part 1 only. Media inside a part is media_url. Poll bulk-create-status for the created_post_id."
     },
     {
-      "tool": "update-post-platform-details",
+      "tool": "save-post",
       "arguments": {
         "post_id": "<created_post_id from bulk-create-status>",
-        "platform": "x",
-        "fields": {
-          "reply_settings": "followers"
+        "platform_details": {
+          "x": {
+            "reply_settings": "followers"
+          }
         }
       },
-      "why": "The user's spam worry decides the value: followers means only accounts the brand follows can reply, which suits a launch. A batch item carries no settings, so it is set on the saved post; the details call refuses a misspelled value. The parts chain as replies either way."
+      "why": "The user's spam worry decides the value: followers means only accounts the brand follows can reply, which suits a launch. A batch item carries no settings, so it is set on the saved post; platform_details refuses a misspelled value. The parts chain as replies either way."
     },
     {
-      "tool": "get-post-platform-details",
+      "tool": "get-post",
       "arguments": {
         "post_id": "<created_post_id from bulk-create-status>",
         "platform": "x"
@@ -67,7 +68,7 @@
   ],
   "say": "Saved to Acme as a draft X thread: part 1 is the post, parts 2 and 3 go out as replies, with your screenshot on part 3. Only accounts you follow can reply. Nothing goes out yet. Schedule it, or change a part?",
   "never": [
-    "create-post for a thread: it saves part 1 only.",
+    "save-post parts for this thread: its media goes on part 1 only, not on the part the user named.",
     "A poll in the thread: Bolta refuses it.",
     "A video on X: it takes images only.",
     "Saying the thread is fully out without checking: a part that fails stops it, and the parts already out stay up."

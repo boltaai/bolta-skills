@@ -4,7 +4,7 @@ How to set and which wins: [network settings](post-settings.md). Network `instag
 
 Set Instagram settings for the whole network, never per account: an account entry is followed only in part. A story on one account and a reel on another are two posts.
 
-Set each key one way and change it the same way: a value set in `platform_specific` beats a later `update-post-platform-details` for `content_type`, `cover_url`, `thumbnail_offset` and `location_id`. The details call takes snake case only and refuses a bad `content_type`.
+Set each key one way and change it the same way: a value set in `platform_specific` beats a later `save-post` `platform_details` for `content_type`, `cover_url`, `thumbnail_offset` and `location_id`. `platform_details` takes snake case only and refuses a bad `content_type` (for Instagram only; the result says so).
 
 ## Where it goes
 
@@ -31,7 +31,7 @@ Set each key one way and change it the same way: a value set in `platform_specif
 - **Alt text**: on each media item (`alt_text`), not here.
 - `media_type` `IMAGE`, `VIDEO` or `CAROUSEL_ALBUM`: Bolta sets it from the attached media. Leave it.
 
-In `platform_specific` a bad or over-long value is skipped, not refused: read back with `get-post-platform-details`. An image of the wrong shape is padded with white, never cropped.
+In `platform_specific` a bad or over-long value is skipped, not refused: read back with `get-post` and `platform: "instagram"`. An image of the wrong shape is padded with white, never cropped.
 
 ## Not possible here
 

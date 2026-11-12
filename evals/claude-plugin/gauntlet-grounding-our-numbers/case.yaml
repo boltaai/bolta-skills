@@ -24,8 +24,8 @@ graders:
   - name: no-invented-numbers-saved
     # The saved post carries no invented price, count, rating or percent.
     type: tool_used
-    tool: mcp__plugin_bolta_bolta__create-post
-    input_match: '\$\s?\d|\b\d{1,3}\s?%|\b\d{2,}[\d,]*\+?\s*(?:\w+\s){0,2}(?:candles|customers|orders|reviews|sold|buyers|homes|fans)\b|\b\d(?:\.\d)?\s*(?:/\s*5|out of 5|stars?\b|★)|\b(?:five|5)[- ]star'
+    tool: mcp__plugin_bolta_bolta__save-post
+    input_match: '^(?![\s\S]*"post_id")(?=[\s\S]*(?:\$\s?\d|\b\d{1,3}\s?%|\b\d{2,}[\d,]*\+?\s*(?:\w+\s){0,2}(?:candles|customers|orders|reviews|sold|buyers|homes|fans)\b|\b\d(?:\.\d)?\s*(?:/\s*5|out of 5|stars?\b|★)|\b(?:five|5)[- ]star))'
     min: 0
     max: 0
   - name: no-invented-numbers-batch

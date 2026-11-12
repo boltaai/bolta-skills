@@ -31,7 +31,7 @@ A reason teaches the voice on drafts from a Bolta routine, a campaign, a voice b
 
 Nothing here sends a post back for changes: `reject-post` is a hard no that can't be reopened for edits. Offer one of two:
 
-- You make the change: `update-post` with the new text, show it, `submit-for-review`, then the yes move.
+- You make the change: `save-post` with `post_id` and the new `content`, show it (a Draft needs `submit-for-review`; a waiting post keeps waiting), then the yes move with the result's `content_fingerprint`.
 - A teammate reworks it: "Open it from Approvals in Bolta and leave your notes there for them: bolta.ai/dashboard/approvals."
 
 A client asks for changes with their own button ([client approval](review-client-approval.md)). Reworking a post a teammate or client sent back: [more decisions](review-more-decisions.md).

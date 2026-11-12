@@ -3,7 +3,7 @@
   "playbook": "post",
   "steps": [
     {
-      "tool": "get-post-platform-details",
+      "tool": "get-post",
       "arguments": {
         "post_id": "<last month's Reddit post id>",
         "platform": "reddit"
@@ -11,34 +11,28 @@
       "why": "Subreddit and flair from the post the user pointed at: no tool lists subreddits or flairs. Copy its selected_subreddit_id and flair_id; never guess either."
     },
     {
-      "tool": "create-post",
+      "tool": "save-post",
       "arguments": {
         "workspace_id": "<brand's workspace id>",
         "content": "We changed our pricing three times this year. Here is what each change did to signups, with the numbers.\n\n**Round 1:** <from the user's doc>\n\n**Round 2:** <from the user's doc>\n\n**Round 3:** <from the user's doc>",
         "account_ids": [
           "<Reddit account id>"
         ],
-        "idempotency_key": "pricing-teardown-reddit-1"
-      },
-      "why": "No media: an image would make it an image post and only the title would go out. Markdown shows as written on Reddit; no hashtags, no pitch. Every number comes from the user's doc, never filled in."
-    },
-    {
-      "tool": "update-post-platform-details",
-      "arguments": {
-        "post_id": "<post id>",
-        "platform": "reddit",
-        "fields": {
-          "title": "Pricing teardown: three changes in a year and what each did to signups",
-          "selected_subreddit_id": "<selected_subreddit_id from last month's post>",
-          "flair_id": "<flair_id from last month's post>",
-          "nsfw": false,
-          "spoiler": false
+        "idempotency_key": "pricing-teardown-reddit-1",
+        "platform_details": {
+          "reddit": {
+            "title": "Pricing teardown: three changes in a year and what each did to signups",
+            "selected_subreddit_id": "<selected_subreddit_id from last month's post>",
+            "flair_id": "<flair_id from last month's post>",
+            "nsfw": false,
+            "spoiler": false
+          }
         }
       },
-      "why": "The decision: flair set because the subreddit removes posts without it, using the id from the earlier post (flair_text alone may not satisfy a required flair). Not NSFW, not a spoiler: the content is neither, and marking it wrongly hides it. Subreddit and title are required before it can be approved."
+      "why": "No media: an image would make it an image post and only the title would go out. Markdown shows as written on Reddit; no hashtags, no pitch. Every number comes from the user's doc, never filled in. The decision: flair set because the subreddit removes posts without it, using the id from the earlier post (flair_text alone may not satisfy a required flair). Not NSFW, not a spoiler: the content is neither, and marking it wrongly hides it. Subreddit and title are required before it can be approved. All in the saving call: read the result's platform_details.reddit, since a refused Reddit field leaves the draft saved without it; fix it with post_id, never a second draft."
     },
     {
-      "tool": "get-post-platform-details",
+      "tool": "get-post",
       "arguments": {
         "post_id": "<post id>",
         "platform": "reddit"

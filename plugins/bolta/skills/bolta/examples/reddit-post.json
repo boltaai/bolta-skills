@@ -20,7 +20,7 @@
           }
         ]
       },
-      "why": "The decision: a one-item batch, because the user named the subreddit and only a batch item takes it by name (subreddit_name); update-post-platform-details needs Bolta's id for it, which no tool lists. Reddit needs a title (256 max) and a subreddit before anything else. The body gives before it asks, with no hashtags and no pitch, as the subreddit expects; the only fact is the one the user gave."
+      "why": "The decision: a one-item batch, because the user named the subreddit and only a batch item takes it by name (subreddit_name); save-post platform_details needs Bolta's id for it, which no tool lists. Reddit needs a title (256 max) and a subreddit before anything else. The body gives before it asks, with no hashtags and no pitch, as the subreddit expects; the only fact is the one the user gave."
     },
     {
       "tool": "bulk-create-status",
@@ -30,7 +30,7 @@
       "why": "Poll until completed. If r/smallbusiness isn't synced in Bolta the item is skipped with a reason here (not in rejected) and no post exists: say so and ask the user to add the subreddit in Bolta."
     },
     {
-      "tool": "get-post-platform-details",
+      "tool": "get-post",
       "arguments": {
         "post_id": "<created post id>",
         "platform": "reddit"

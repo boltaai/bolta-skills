@@ -44,7 +44,7 @@
           }
         ]
       },
-      "why": "The decision: one call for the whole week, about one post per weekday, every item a Draft with its accounts. Never a loop of create-post. Each post is a different angle on hiring with a different first line, in the voice get-voice-context gave. Opinions only: no open roles, salaries, numbers or links, because the user gave none. If the call asks for text items, send each object JSON-encoded."
+      "why": "The decision: one call for the whole week, about one post per weekday, every item a Draft with its accounts. Never a loop of save-post. Each post is a different angle on hiring with a different first line, in the voice get-voice-context gave. Opinions only: no open roles, salaries, numbers or links, because the user gave none. If the call asks for text items, send each object JSON-encoded."
     },
     {
       "tool": "bulk-create-status",

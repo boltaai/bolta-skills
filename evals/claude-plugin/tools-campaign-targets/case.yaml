@@ -43,23 +43,20 @@ graders:
     max: 0
   - name: sets-accounts
     # LinkedIn and X, by their ids.
-    type: tool_used
-    tool: mcp__plugin_bolta_bolta__set-content-campaign-targets
-    input_match: '^(?=[\s\S]*a1b2c3d4-0001-4a00-8000-000000000001)(?=[\s\S]*a1b2c3d4-0001-4a00-8000-000000000002)'
-    min: 1
+    type: regex
+    target: trace
+    pattern: '"name"\s*:\s*"mcp__plugin_bolta_bolta__(?:create-content-campaign|update-content-campaign)"\s*,\s*"input"\s*:\s*\{(?=[^\n]*?(?:a1b2c3d4-0001-4a00-8000-000000000001))(?=[^\n]*?(?:a1b2c3d4-0001-4a00-8000-000000000002))'
   - name: no-other-accounts
     # Not Instagram (disconnected) or Reddit.
-    type: tool_used
-    tool: mcp__plugin_bolta_bolta__set-content-campaign-targets
-    input_match: 'a1b2c3d4-0001-4a00-8000-00000000000[34]'
-    min: 0
-    max: 0
+    type: regex
+    target: trace
+    pattern: '"name"\s*:\s*"mcp__plugin_bolta_bolta__(?:create-content-campaign|update-content-campaign)"\s*,\s*"input"\s*:\s*\{(?=[^\n]*?(?:a1b2c3d4-0001-4a00-8000-00000000000[34]))'
+    match: not_contains
   - name: adds-the-page
     # The pricing page as a url source.
-    type: tool_used
-    tool: mcp__plugin_bolta_bolta__set-content-campaign-targets
-    input_match: '"kind"\W{1,6}url[\s\S]*https://northwind\.example/pricing|https://northwind\.example/pricing[\s\S]*"kind"\W{1,6}url'
-    min: 1
+    type: regex
+    target: trace
+    pattern: '"name"\s*:\s*"mcp__plugin_bolta_bolta__(?:create-content-campaign|update-content-campaign)"\s*,\s*"input"\s*:\s*\{(?=[^\n]*?(?:"kind"\W{1,6}url[^\n]*?https://northwind\.example/pricing|https://northwind\.example/pricing[^\n]*?"kind"\W{1,6}url))'
   - name: analyzes-the-page
     # Reads the new source, with kind and ref as on the campaign.
     type: tool_used
@@ -67,21 +64,24 @@ graders:
     input_match: '^(?=[\s\S]*"kind"\W{1,6}url)(?=[\s\S]*https://northwind\.example/pricing)(?=[\s\S]*campaign_id)'
     min: 1
   - name: attached-then-read
-    # A source is read only after it is attached.
+    # A source is read only after it is attached (Release 2: sources go on create- or update-content-campaign; the campaign exists first).
     type: tool_order
-    before: mcp__plugin_bolta_bolta__set-content-campaign-targets
+    before: mcp__plugin_bolta_bolta__create-content-campaign
     after: mcp__plugin_bolta_bolta__analyze-content-campaign-source
   - name: accounts-then-start
-    # Never started before it has accounts.
+    # Never started before it has accounts (Release 2: accounts go on the creating call, as the skill teaches).
     type: tool_order
-    before: mcp__plugin_bolta_bolta__set-content-campaign-targets
+    before:
+      tool: mcp__plugin_bolta_bolta__create-content-campaign
+      input_match: 'a1b2c3d4-0001-4a00-8000-000000000001'
     after:
       tool: mcp__plugin_bolta_bolta__set-content-campaign-status
       input_match: 'activate'
   - name: targets-not-denied
     # Setting targets on the campaign made here passes the guard, so the mock answered (a denied call never reaches the mock).
+    # Release 2: the accounts reach create- or update-content-campaign.
     type: regex
-    pattern: 'set-content-campaign-targets'
+    pattern: '"tool":"[^"]*(?:create|update)-content-campaign"(?:(?!"tool":)[\s\S]){0,4000}?"account_ids"'
     target: mock_calls
   - name: no-bulk-create-posts
     # Bolta writes this one; Claude does not also save drafts into it.
@@ -90,10 +90,11 @@ graders:
     min: 0
     max: 0
   - name: no-accounts-by-update
-    # Accounts are not set through the brief tool.
+    # Release 1: accounts were not set through the brief tool. Release 2 folds the targets into it, so the
+    # outcome kept is that accounts, notes and sources go only to the campaign made here.
     type: tool_used
     tool: mcp__plugin_bolta_bolta__update-content-campaign
-    input_match: 'account_ids|context_sources|context_notes'
+    input_match: '^(?![\s\S]*ca000000-0000-4000-8000-000000000004)(?=[\s\S]*(account_ids|context_sources|context_notes))'
     min: 0
     max: 0
   - name: no-dashboard-handoff

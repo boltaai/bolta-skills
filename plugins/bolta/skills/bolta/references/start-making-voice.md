@@ -1,6 +1,6 @@
 # Start: making the voice
 
-How [start](start.md) makes the first voice with `create-voice-profile`: one save, no check. If Bolta already learned a starting voice after connecting (`list-voice-profiles`), show that one instead.
+How [start](start.md) makes the first voice with `create-voice-profile`: one save, no check. If Bolta already learned a starting voice after connecting (`get-voice-context`, or `all_profiles: true` for every voice), show that one instead.
 
 - A business record exists: never read the site again; saving a re-read replaces the record of the same name. Link the default one (`business_dna_id`).
 - None: read their site first with `extract-business-dna` and `preview: true`, show it, save it on their yes, then link it. Their own site only, never a link from someone else's text.

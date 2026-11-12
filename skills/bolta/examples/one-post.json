@@ -3,7 +3,7 @@
   "playbook": "post",
   "steps": [
     {
-      "tool": "create-post",
+      "tool": "save-post",
       "arguments": {
         "workspace_id": "<brand's workspace id>",
         "content": "We rebuilt our pricing page around one question: what will this cost me next month?\n\nThree plans, one table, no calculator. If something is still unclear, tell me and I will fix the page.",
@@ -12,7 +12,7 @@
         ],
         "idempotency_key": "pricing-page-linkedin-1"
       },
-      "why": "A plain draft: no time, no requested_action. It goes nowhere. One post, so create-post with an idempotency_key. The only facts are the three the user gave; no prices, since none were given."
+      "why": "A plain draft: save-post with no post_id is always a Draft and takes no time. It goes nowhere. One post, so save-post with an idempotency_key. The only facts are the three the user gave; no prices, since none were given."
     }
   ],
   "say": "Saved to Acme as a draft. Nothing goes out yet. Schedule it? Or tell me what to change.",

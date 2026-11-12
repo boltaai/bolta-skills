@@ -29,7 +29,8 @@ structuredContent:
       "voice_profile",
       "business.overview",
       "business.website_url"
-    ]
+    ],
+    "profiles": []
   },
   "error": null,
   "error_kind": null,

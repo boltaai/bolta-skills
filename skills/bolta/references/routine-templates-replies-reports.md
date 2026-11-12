@@ -15,7 +15,7 @@ Read after [routine-templates.md](routine-templates.md) for Outreach replies, Co
 - **Topics are required:** `output_config: {"artifact_type":"reply","count":3,"topics":[...],"communities":[...]}`. `topics`: up to 10 short phrases buyers use when they need the business ("best CRM for a 5-person agency"), in the user's words. `communities`: up to 10 subreddits, Reddit only. With none, switching on is refused here and every run is refused. Routines made on Bolta's web page start with none: check `get-routine`, add them with a yes.
 - `count` 3 (most 8); weekly or a few weekdays (advice: replies go stale, daily is fine only if someone reviews daily). Never `auto`: ask me first or the brand setting.
 - Drafts wait in `list-engagements` as `pending`, not in the review list. Sending them: [replies](replies.md).
-- **The Outreach keyword monitor** (keywords, subreddits, networks, scored for buying interest) is made by Bolta's planner (`plan-routine`, then `revise-plan` `changes` with `keywords`, `subreddits`) or on Bolta's routines page (bolta.ai/dashboard/routines), never with `create-routine`. Its keywords are edited on that page.
+- **The Outreach keyword monitor** (keywords, subreddits, networks, scored for buying interest) is made by Bolta's planner (`plan` with `kind: "routine"`, then `revise-plan` `changes` with `keywords`, `subreddits`) or on Bolta's routines page (bolta.ai/dashboard/routines), never with `create-routine`. Its keywords are edited on that page.
 - Seen: one reply routine in production, so no evidence yet on what works; start with 3 replies weekly.
 
 ## Comment replies: not yet

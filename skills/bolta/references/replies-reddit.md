@@ -23,7 +23,7 @@ So say "queued" when a status read shows it queued, never "it's posting now".
 
 ## Checking it
 
-`get-engagement-status(engagement_id, verify=true)`. `missing_or_removed` comes only from Reddit: sent, then taken down. On other networks a taken-down reply may show only `verification_failed`, so say "couldn't confirm it's still up", not "it failed".
+`list-engagements(engagement_id, verify=true)`. `missing_or_removed` comes only from Reddit: sent, then taken down. On other networks a taken-down reply may show only `verification_failed`, so say "couldn't confirm it's still up", not "it failed".
 
 ## Always
 

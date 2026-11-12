@@ -24,15 +24,14 @@ One honest read, in plain words: what went out, how it did, what can't be seen y
 
 ## Tools
 
-- `list-workspaces`, `get-workspace`, `list-accounts`, `get-connect-link`: brand, clock, accounts, reconnect link.
-- `cross-platform-analytics`: followers and engagement by network.
-- `list-account-insights`: each account, with growth and reconnect flags.
+- `list-workspaces`, `list-accounts`, `get-connect-link`: brand and clock (each `list-workspaces` row), accounts, reconnect link.
+- `list-account-insights`: each account, with growth and reconnect flags; `by_platform: true` for followers and engagement by network.
 - `get-account-analytics`: one account, day by day.
 - `list-workspace-posts`: `status: "published"`, `include_metrics: true`; `sort_by: "engagement"` for the best.
-- `get-post`, `list-recurring-reviews`: a link to the live post.
+- `get-post`, `list-inbox-items` (`template_id`, older recurring rows): a link to the live post.
 - `list-inbox-items` (`source: "report"`): reports Bolta made.
 - `list-content-campaigns`, `get-content-campaign`: find a campaign; its results.
-- `list-content-campaign-posts`: its posts, and which are undecided.
+- `list-workspace-posts` (`campaign_id`): its posts, and which are undecided.
 - `list-routines`, `get-routine`, `list-routine-runs`: find a Bolta routine; its counts and runs.
 
 ## Hand off

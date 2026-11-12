@@ -15,7 +15,7 @@ Read when an approve, reject or batch call refuses or comes back unclear. The or
 | Library image still being made | Wait for the image, then approve again. |
 | permission refusal | Say the reason plainly: your role can't approve, your plan doesn't include it, or this connection wasn't given that access. Stop after sending for review. |
 | "Cannot approve post with status" | Not on the review list: send it first. |
-| video not ready; Reddit needs a subreddit and title | Say what's missing; fix with `update-post`, then send it again. |
+| video not ready; Reddit needs a subreddit and title | Say what's missing; fix with `save-post` and `post_id` (Reddit: `platform_details`), then send it again. |
 | timeout or unclear | `get-post` before any retry. |
 
 Never "all done" when one failed.

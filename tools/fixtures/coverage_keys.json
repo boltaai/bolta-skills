@@ -1,12 +1,12 @@
 {
  "generated_by": "tools/build_coverage_fixture.py",
- "server_commit": "f9e715259",
+ "server_commit": "52024ccf3",
  "golden": "boltathread/tests/fixtures/mcp_tools_list.golden.json",
  "counts": {
-  "tool_param": 199,
-  "post_details": 220,
+  "tool_param": 226,
+  "post_details": 223,
   "platform_specific": 80,
-  "tool": 94
+  "tool": 64
  },
  "keys": [
   {
@@ -1868,7 +1868,7 @@
   {
    "id": "bluesky.include_facets",
    "group": "post_details",
-   "source": "BlueSkyPostDetails (update-post-platform-details)",
+   "source": "BlueSkyPostDetails (save-post platform_details)",
    "tokens_any": [
     [
      "include_facets"
@@ -1888,7 +1888,7 @@
   {
    "id": "bluesky.languages",
    "group": "post_details",
-   "source": "BlueSkyPostDetails (update-post-platform-details)",
+   "source": "BlueSkyPostDetails (save-post platform_details)",
    "tokens_any": [
     [
      "languages"
@@ -1908,7 +1908,7 @@
   {
    "id": "bluesky.reply_settings",
    "group": "post_details",
-   "source": "BlueSkyPostDetails (update-post-platform-details)",
+   "source": "BlueSkyPostDetails (save-post platform_details)",
    "tokens_any": [
     [
      "reply_settings"
@@ -1976,7 +1976,7 @@
   {
    "id": "discord.embed_color",
    "group": "post_details",
-   "source": "DiscordPostDetails (update-post-platform-details)",
+   "source": "DiscordPostDetails (save-post platform_details)",
    "tokens_any": [
     [
      "embed_color"
@@ -1996,7 +1996,7 @@
   {
    "id": "discord.embed_description",
    "group": "post_details",
-   "source": "DiscordPostDetails (update-post-platform-details)",
+   "source": "DiscordPostDetails (save-post platform_details)",
    "tokens_any": [
     [
      "embed_description"
@@ -2016,7 +2016,7 @@
   {
    "id": "discord.embed_enabled",
    "group": "post_details",
-   "source": "DiscordPostDetails (update-post-platform-details)",
+   "source": "DiscordPostDetails (save-post platform_details)",
    "tokens_any": [
     [
      "embed_enabled"
@@ -2036,7 +2036,7 @@
   {
    "id": "discord.embed_footer",
    "group": "post_details",
-   "source": "DiscordPostDetails (update-post-platform-details)",
+   "source": "DiscordPostDetails (save-post platform_details)",
    "tokens_any": [
     [
      "embed_footer"
@@ -2056,7 +2056,7 @@
   {
    "id": "discord.embed_title",
    "group": "post_details",
-   "source": "DiscordPostDetails (update-post-platform-details)",
+   "source": "DiscordPostDetails (save-post platform_details)",
    "tokens_any": [
     [
      "embed_title"
@@ -2076,7 +2076,7 @@
   {
    "id": "discord.selected_channel",
    "group": "post_details",
-   "source": "DiscordPostDetails (update-post-platform-details)",
+   "source": "DiscordPostDetails (save-post platform_details)",
    "tokens_any": [
     [
      "selected_channel"
@@ -2099,7 +2099,7 @@
   {
    "id": "discord.selected_channel_id",
    "group": "post_details",
-   "source": "DiscordPostDetails (update-post-platform-details)",
+   "source": "DiscordPostDetails (save-post platform_details)",
    "tokens_any": [
     [
      "selected_channel_id"
@@ -2122,7 +2122,7 @@
   {
    "id": "discord.selected_guild",
    "group": "post_details",
-   "source": "DiscordPostDetails (update-post-platform-details)",
+   "source": "DiscordPostDetails (save-post platform_details)",
    "tokens_any": [
     [
      "selected_guild"
@@ -2145,7 +2145,7 @@
   {
    "id": "discord.selected_guild_id",
    "group": "post_details",
-   "source": "DiscordPostDetails (update-post-platform-details)",
+   "source": "DiscordPostDetails (save-post platform_details)",
    "tokens_any": [
     [
      "selected_guild_id"
@@ -2168,7 +2168,7 @@
   {
    "id": "facebook.activity",
    "group": "post_details",
-   "source": "FacebookPostDetails (update-post-platform-details)",
+   "source": "FacebookPostDetails (save-post platform_details)",
    "tokens_any": [
     [
      "activity"
@@ -2188,7 +2188,7 @@
   {
    "id": "facebook.cross_post_delay",
    "group": "post_details",
-   "source": "FacebookPostDetails (update-post-platform-details)",
+   "source": "FacebookPostDetails (save-post platform_details)",
    "tokens_any": [
     [
      "cross_post_delay"
@@ -2208,7 +2208,7 @@
   {
    "id": "facebook.cross_post_enabled",
    "group": "post_details",
-   "source": "FacebookPostDetails (update-post-platform-details)",
+   "source": "FacebookPostDetails (save-post platform_details)",
    "tokens_any": [
     [
      "cross_post_enabled"
@@ -2228,7 +2228,7 @@
   {
    "id": "facebook.cross_post_pages",
    "group": "post_details",
-   "source": "FacebookPostDetails (update-post-platform-details)",
+   "source": "FacebookPostDetails (save-post platform_details)",
    "tokens_any": [
     [
      "cross_post_pages"
@@ -2248,7 +2248,7 @@
   {
    "id": "facebook.enable_comments",
    "group": "post_details",
-   "source": "FacebookPostDetails (update-post-platform-details)",
+   "source": "FacebookPostDetails (save-post platform_details)",
    "tokens_any": [
     [
      "enable_comments"
@@ -2268,7 +2268,7 @@
   {
    "id": "facebook.enable_reactions",
    "group": "post_details",
-   "source": "FacebookPostDetails (update-post-platform-details)",
+   "source": "FacebookPostDetails (save-post platform_details)",
    "tokens_any": [
     [
      "enable_reactions"
@@ -2288,7 +2288,7 @@
   {
    "id": "facebook.enable_sharing",
    "group": "post_details",
-   "source": "FacebookPostDetails (update-post-platform-details)",
+   "source": "FacebookPostDetails (save-post platform_details)",
    "tokens_any": [
     [
      "enable_sharing"
@@ -2308,7 +2308,7 @@
   {
    "id": "facebook.feeling",
    "group": "post_details",
-   "source": "FacebookPostDetails (update-post-platform-details)",
+   "source": "FacebookPostDetails (save-post platform_details)",
    "tokens_any": [
     [
      "feeling"
@@ -2328,7 +2328,7 @@
   {
    "id": "facebook.location",
    "group": "post_details",
-   "source": "FacebookPostDetails (update-post-platform-details)",
+   "source": "FacebookPostDetails (save-post platform_details)",
    "tokens_any": [
     [
      "location"
@@ -2348,7 +2348,7 @@
   {
    "id": "facebook.post_type",
    "group": "post_details",
-   "source": "FacebookPostDetails (update-post-platform-details)",
+   "source": "FacebookPostDetails (save-post platform_details)",
    "tokens_any": [
     [
      "post_type"
@@ -2448,7 +2448,7 @@
   {
    "id": "facebook.primary_page",
    "group": "post_details",
-   "source": "FacebookPostDetails (update-post-platform-details)",
+   "source": "FacebookPostDetails (save-post platform_details)",
    "tokens_any": [
     [
      "primary_page"
@@ -2471,7 +2471,7 @@
   {
    "id": "facebook.primary_page_id",
    "group": "post_details",
-   "source": "FacebookPostDetails (update-post-platform-details)",
+   "source": "FacebookPostDetails (save-post platform_details)",
    "tokens_any": [
     [
      "primary_page_id"
@@ -2494,7 +2494,7 @@
   {
    "id": "facebook.privacy",
    "group": "post_details",
-   "source": "FacebookPostDetails (update-post-platform-details)",
+   "source": "FacebookPostDetails (save-post platform_details)",
    "tokens_any": [
     [
      "privacy"
@@ -2578,7 +2578,7 @@
   {
    "id": "instagram.alt_text",
    "group": "post_details",
-   "source": "InstagramPostDetails (update-post-platform-details)",
+   "source": "InstagramPostDetails (save-post platform_details)",
    "tokens_any": [
     [
      "alt_text"
@@ -2598,7 +2598,7 @@
   {
    "id": "instagram.caption",
    "group": "post_details",
-   "source": "InstagramPostDetails (update-post-platform-details)",
+   "source": "InstagramPostDetails (save-post platform_details)",
    "tokens_any": [
     [
      "caption"
@@ -2618,7 +2618,7 @@
   {
    "id": "instagram.content_type",
    "group": "post_details",
-   "source": "InstagramPostDetails (update-post-platform-details)",
+   "source": "InstagramPostDetails (save-post platform_details)",
    "tokens_any": [
     [
      "content_type"
@@ -2686,7 +2686,7 @@
   {
    "id": "instagram.cover_url",
    "group": "post_details",
-   "source": "InstagramPostDetails (update-post-platform-details)",
+   "source": "InstagramPostDetails (save-post platform_details)",
    "tokens_any": [
     [
      "cover_url"
@@ -2706,7 +2706,7 @@
   {
    "id": "instagram.location_id",
    "group": "post_details",
-   "source": "InstagramPostDetails (update-post-platform-details)",
+   "source": "InstagramPostDetails (save-post platform_details)",
    "tokens_any": [
     [
      "location_id"
@@ -2726,7 +2726,7 @@
   {
    "id": "instagram.media_type",
    "group": "post_details",
-   "source": "InstagramPostDetails (update-post-platform-details)",
+   "source": "InstagramPostDetails (save-post platform_details)",
    "tokens_any": [
     [
      "media_type"
@@ -2794,7 +2794,7 @@
   {
    "id": "instagram.product_tags",
    "group": "post_details",
-   "source": "InstagramPostDetails (update-post-platform-details)",
+   "source": "InstagramPostDetails (save-post platform_details)",
    "tokens_any": [
     [
      "product_tags"
@@ -2814,7 +2814,7 @@
   {
    "id": "instagram.thumbnail_offset",
    "group": "post_details",
-   "source": "InstagramPostDetails (update-post-platform-details)",
+   "source": "InstagramPostDetails (save-post platform_details)",
    "tokens_any": [
     [
      "thumbnail_offset"
@@ -2834,7 +2834,7 @@
   {
    "id": "instagram.trial_graduation_strategy",
    "group": "post_details",
-   "source": "InstagramPostDetails (update-post-platform-details)",
+   "source": "InstagramPostDetails (save-post platform_details)",
    "tokens_any": [
     [
      "trial_graduation_strategy"
@@ -2886,7 +2886,7 @@
   {
    "id": "instagram.trial_reel_enabled",
    "group": "post_details",
-   "source": "InstagramPostDetails (update-post-platform-details)",
+   "source": "InstagramPostDetails (save-post platform_details)",
    "tokens_any": [
     [
      "trial_reel_enabled"
@@ -2906,7 +2906,7 @@
   {
    "id": "instagram.user_tags",
    "group": "post_details",
-   "source": "InstagramPostDetails (update-post-platform-details)",
+   "source": "InstagramPostDetails (save-post platform_details)",
    "tokens_any": [
     [
      "user_tags"
@@ -2926,7 +2926,7 @@
   {
    "id": "linkedin.activity",
    "group": "post_details",
-   "source": "LinkedInPostDetails (update-post-platform-details)",
+   "source": "LinkedInPostDetails (save-post platform_details)",
    "tokens_any": [
     [
      "activity"
@@ -2946,7 +2946,7 @@
   {
    "id": "linkedin.cross_post_delay",
    "group": "post_details",
-   "source": "LinkedInPostDetails (update-post-platform-details)",
+   "source": "LinkedInPostDetails (save-post platform_details)",
    "tokens_any": [
     [
      "cross_post_delay"
@@ -2966,7 +2966,7 @@
   {
    "id": "linkedin.cross_post_enabled",
    "group": "post_details",
-   "source": "LinkedInPostDetails (update-post-platform-details)",
+   "source": "LinkedInPostDetails (save-post platform_details)",
    "tokens_any": [
     [
      "cross_post_enabled"
@@ -2986,7 +2986,7 @@
   {
    "id": "linkedin.cross_post_organizations",
    "group": "post_details",
-   "source": "LinkedInPostDetails (update-post-platform-details)",
+   "source": "LinkedInPostDetails (save-post platform_details)",
    "tokens_any": [
     [
      "cross_post_organizations"
@@ -3006,7 +3006,7 @@
   {
    "id": "linkedin.enable_comments",
    "group": "post_details",
-   "source": "LinkedInPostDetails (update-post-platform-details)",
+   "source": "LinkedInPostDetails (save-post platform_details)",
    "tokens_any": [
     [
      "enable_comments"
@@ -3026,7 +3026,7 @@
   {
    "id": "linkedin.enable_resharing",
    "group": "post_details",
-   "source": "LinkedInPostDetails (update-post-platform-details)",
+   "source": "LinkedInPostDetails (save-post platform_details)",
    "tokens_any": [
     [
      "enable_resharing"
@@ -3046,7 +3046,7 @@
   {
    "id": "linkedin.feeling",
    "group": "post_details",
-   "source": "LinkedInPostDetails (update-post-platform-details)",
+   "source": "LinkedInPostDetails (save-post platform_details)",
    "tokens_any": [
     [
      "feeling"
@@ -3066,7 +3066,7 @@
   {
    "id": "linkedin.include_hashtags",
    "group": "post_details",
-   "source": "LinkedInPostDetails (update-post-platform-details)",
+   "source": "LinkedInPostDetails (save-post platform_details)",
    "tokens_any": [
     [
      "include_hashtags"
@@ -3086,7 +3086,7 @@
   {
    "id": "linkedin.linkedin_specific_content",
    "group": "post_details",
-   "source": "LinkedInPostDetails (update-post-platform-details)",
+   "source": "LinkedInPostDetails (save-post platform_details)",
    "tokens_any": [
     [
      "linkedin_specific_content"
@@ -3106,7 +3106,7 @@
   {
    "id": "linkedin.location",
    "group": "post_details",
-   "source": "LinkedInPostDetails (update-post-platform-details)",
+   "source": "LinkedInPostDetails (save-post platform_details)",
    "tokens_any": [
     [
      "location"
@@ -3126,7 +3126,7 @@
   {
    "id": "linkedin.post_as_organization",
    "group": "post_details",
-   "source": "LinkedInPostDetails (update-post-platform-details)",
+   "source": "LinkedInPostDetails (save-post platform_details)",
    "tokens_any": [
     [
      "post_as_organization"
@@ -3146,7 +3146,7 @@
   {
    "id": "linkedin.post_type",
    "group": "post_details",
-   "source": "LinkedInPostDetails (update-post-platform-details)",
+   "source": "LinkedInPostDetails (save-post platform_details)",
    "tokens_any": [
     [
      "post_type"
@@ -3262,7 +3262,7 @@
   {
    "id": "linkedin.selected_organization",
    "group": "post_details",
-   "source": "LinkedInPostDetails (update-post-platform-details)",
+   "source": "LinkedInPostDetails (save-post platform_details)",
    "tokens_any": [
     [
      "selected_organization"
@@ -3285,7 +3285,7 @@
   {
    "id": "linkedin.selected_organization_id",
    "group": "post_details",
-   "source": "LinkedInPostDetails (update-post-platform-details)",
+   "source": "LinkedInPostDetails (save-post platform_details)",
    "tokens_any": [
     [
      "selected_organization_id"
@@ -3308,7 +3308,7 @@
   {
    "id": "linkedin.tag_connections",
    "group": "post_details",
-   "source": "LinkedInPostDetails (update-post-platform-details)",
+   "source": "LinkedInPostDetails (save-post platform_details)",
    "tokens_any": [
     [
      "tag_connections"
@@ -3328,7 +3328,7 @@
   {
    "id": "linkedin.visibility",
    "group": "post_details",
-   "source": "LinkedInPostDetails (update-post-platform-details)",
+   "source": "LinkedInPostDetails (save-post platform_details)",
    "tokens_any": [
     [
      "visibility"
@@ -3380,7 +3380,7 @@
   {
    "id": "mastodon.in_reply_to_id",
    "group": "post_details",
-   "source": "MastodonPostDetails (update-post-platform-details)",
+   "source": "MastodonPostDetails (save-post platform_details)",
    "tokens_any": [
     [
      "in_reply_to_id"
@@ -3400,7 +3400,7 @@
   {
    "id": "mastodon.language",
    "group": "post_details",
-   "source": "MastodonPostDetails (update-post-platform-details)",
+   "source": "MastodonPostDetails (save-post platform_details)",
    "tokens_any": [
     [
      "language"
@@ -3420,7 +3420,7 @@
   {
    "id": "mastodon.poll_expires_in",
    "group": "post_details",
-   "source": "MastodonPostDetails (update-post-platform-details)",
+   "source": "MastodonPostDetails (save-post platform_details)",
    "tokens_any": [
     [
      "poll_expires_in"
@@ -3440,7 +3440,7 @@
   {
    "id": "mastodon.poll_hide_totals",
    "group": "post_details",
-   "source": "MastodonPostDetails (update-post-platform-details)",
+   "source": "MastodonPostDetails (save-post platform_details)",
    "tokens_any": [
     [
      "poll_hide_totals"
@@ -3460,7 +3460,7 @@
   {
    "id": "mastodon.poll_multiple",
    "group": "post_details",
-   "source": "MastodonPostDetails (update-post-platform-details)",
+   "source": "MastodonPostDetails (save-post platform_details)",
    "tokens_any": [
     [
      "poll_multiple"
@@ -3480,7 +3480,7 @@
   {
    "id": "mastodon.poll_options",
    "group": "post_details",
-   "source": "MastodonPostDetails (update-post-platform-details)",
+   "source": "MastodonPostDetails (save-post platform_details)",
    "tokens_any": [
     [
      "poll_options"
@@ -3500,7 +3500,7 @@
   {
    "id": "mastodon.sensitive",
    "group": "post_details",
-   "source": "MastodonPostDetails (update-post-platform-details)",
+   "source": "MastodonPostDetails (save-post platform_details)",
    "tokens_any": [
     [
      "sensitive"
@@ -3520,7 +3520,7 @@
   {
    "id": "mastodon.spoiler_text",
    "group": "post_details",
-   "source": "MastodonPostDetails (update-post-platform-details)",
+   "source": "MastodonPostDetails (save-post platform_details)",
    "tokens_any": [
     [
      "spoiler_text"
@@ -3540,7 +3540,7 @@
   {
    "id": "mastodon.visibility",
    "group": "post_details",
-   "source": "MastodonPostDetails (update-post-platform-details)",
+   "source": "MastodonPostDetails (save-post platform_details)",
    "tokens_any": [
     [
      "visibility"
@@ -3624,7 +3624,7 @@
   {
    "id": "pinterest.alt_text",
    "group": "post_details",
-   "source": "PinterestPostDetails (update-post-platform-details)",
+   "source": "PinterestPostDetails (save-post platform_details)",
    "tokens_any": [
     [
      "alt_text"
@@ -3644,7 +3644,7 @@
   {
    "id": "pinterest.board",
    "group": "post_details",
-   "source": "PinterestPostDetails (update-post-platform-details)",
+   "source": "PinterestPostDetails (save-post platform_details)",
    "tokens_any": [
     [
      "board"
@@ -3667,7 +3667,7 @@
   {
    "id": "pinterest.board_id",
    "group": "post_details",
-   "source": "PinterestPostDetails (update-post-platform-details)",
+   "source": "PinterestPostDetails (save-post platform_details)",
    "tokens_any": [
     [
      "board_id"
@@ -3690,7 +3690,7 @@
   {
    "id": "pinterest.cover_image_url",
    "group": "post_details",
-   "source": "PinterestPostDetails (update-post-platform-details)",
+   "source": "PinterestPostDetails (save-post platform_details)",
    "tokens_any": [
     [
      "cover_image_url"
@@ -3710,7 +3710,7 @@
   {
    "id": "pinterest.description",
    "group": "post_details",
-   "source": "PinterestPostDetails (update-post-platform-details)",
+   "source": "PinterestPostDetails (save-post platform_details)",
    "tokens_any": [
     [
      "description"
@@ -3730,7 +3730,7 @@
   {
    "id": "pinterest.link",
    "group": "post_details",
-   "source": "PinterestPostDetails (update-post-platform-details)",
+   "source": "PinterestPostDetails (save-post platform_details)",
    "tokens_any": [
     [
      "link"
@@ -3750,7 +3750,7 @@
   {
    "id": "pinterest.media_type",
    "group": "post_details",
-   "source": "PinterestPostDetails (update-post-platform-details)",
+   "source": "PinterestPostDetails (save-post platform_details)",
    "tokens_any": [
     [
      "media_type"
@@ -3818,7 +3818,7 @@
   {
    "id": "pinterest.media_url",
    "group": "post_details",
-   "source": "PinterestPostDetails (update-post-platform-details)",
+   "source": "PinterestPostDetails (save-post platform_details)",
    "tokens_any": [
     [
      "media_url"
@@ -3838,7 +3838,7 @@
   {
    "id": "pinterest.post",
    "group": "post_details",
-   "source": "PinterestPostDetails (update-post-platform-details)",
+   "source": "PinterestPostDetails (save-post platform_details)",
    "tokens_any": [
     [
      "post"
@@ -3858,7 +3858,7 @@
   {
    "id": "pinterest.scheduled_publish_time",
    "group": "post_details",
-   "source": "PinterestPostDetails (update-post-platform-details)",
+   "source": "PinterestPostDetails (save-post platform_details)",
    "tokens_any": [
     [
      "scheduled_publish_time"
@@ -3878,7 +3878,7 @@
   {
    "id": "pinterest.title",
    "group": "post_details",
-   "source": "PinterestPostDetails (update-post-platform-details)",
+   "source": "PinterestPostDetails (save-post platform_details)",
    "tokens_any": [
     [
      "title"
@@ -3898,7 +3898,7 @@
   {
    "id": "reddit.flair_id",
    "group": "post_details",
-   "source": "RedditPostDetails (update-post-platform-details)",
+   "source": "RedditPostDetails (save-post platform_details)",
    "tokens_any": [
     [
      "flair_id"
@@ -3918,7 +3918,7 @@
   {
    "id": "reddit.flair_text",
    "group": "post_details",
-   "source": "RedditPostDetails (update-post-platform-details)",
+   "source": "RedditPostDetails (save-post platform_details)",
    "tokens_any": [
     [
      "flair_text"
@@ -3938,7 +3938,7 @@
   {
    "id": "reddit.nsfw",
    "group": "post_details",
-   "source": "RedditPostDetails (update-post-platform-details)",
+   "source": "RedditPostDetails (save-post platform_details)",
    "tokens_any": [
     [
      "nsfw"
@@ -3958,7 +3958,7 @@
   {
    "id": "reddit.resubmit",
    "group": "post_details",
-   "source": "RedditPostDetails (update-post-platform-details)",
+   "source": "RedditPostDetails (save-post platform_details)",
    "tokens_any": [
     [
      "resubmit"
@@ -3978,7 +3978,7 @@
   {
    "id": "reddit.scheduling_metadata",
    "group": "post_details",
-   "source": "RedditPostDetails (update-post-platform-details)",
+   "source": "RedditPostDetails (save-post platform_details)",
    "tokens_any": [
     [
      "scheduling_metadata"
@@ -3998,7 +3998,7 @@
   {
    "id": "reddit.selected_subreddit",
    "group": "post_details",
-   "source": "RedditPostDetails (update-post-platform-details)",
+   "source": "RedditPostDetails (save-post platform_details)",
    "tokens_any": [
     [
      "selected_subreddit"
@@ -4021,7 +4021,7 @@
   {
    "id": "reddit.selected_subreddit_id",
    "group": "post_details",
-   "source": "RedditPostDetails (update-post-platform-details)",
+   "source": "RedditPostDetails (save-post platform_details)",
    "tokens_any": [
     [
      "selected_subreddit_id"
@@ -4044,7 +4044,7 @@
   {
    "id": "reddit.sendreplies",
    "group": "post_details",
-   "source": "RedditPostDetails (update-post-platform-details)",
+   "source": "RedditPostDetails (save-post platform_details)",
    "tokens_any": [
     [
      "sendreplies"
@@ -4064,7 +4064,7 @@
   {
    "id": "reddit.spoiler",
    "group": "post_details",
-   "source": "RedditPostDetails (update-post-platform-details)",
+   "source": "RedditPostDetails (save-post platform_details)",
    "tokens_any": [
     [
      "spoiler"
@@ -4084,7 +4084,7 @@
   {
    "id": "reddit.title",
    "group": "post_details",
-   "source": "RedditPostDetails (update-post-platform-details)",
+   "source": "RedditPostDetails (save-post platform_details)",
    "tokens_any": [
     [
      "title"
@@ -4104,7 +4104,7 @@
   {
    "id": "threads.auto_publish",
    "group": "post_details",
-   "source": "ThreadsPostDetails (update-post-platform-details)",
+   "source": "ThreadsPostDetails (save-post platform_details)",
    "tokens_any": [
     [
      "auto_publish"
@@ -4124,7 +4124,7 @@
   {
    "id": "threads.is_ghost_post",
    "group": "post_details",
-   "source": "ThreadsPostDetails (update-post-platform-details)",
+   "source": "ThreadsPostDetails (save-post platform_details)",
    "tokens_any": [
     [
      "is_ghost_post"
@@ -4144,7 +4144,7 @@
   {
    "id": "threads.is_spoiler_media",
    "group": "post_details",
-   "source": "ThreadsPostDetails (update-post-platform-details)",
+   "source": "ThreadsPostDetails (save-post platform_details)",
    "tokens_any": [
     [
      "is_spoiler_media"
@@ -4164,7 +4164,7 @@
   {
    "id": "threads.location_id",
    "group": "post_details",
-   "source": "ThreadsPostDetails (update-post-platform-details)",
+   "source": "ThreadsPostDetails (save-post platform_details)",
    "tokens_any": [
     [
      "location_id"
@@ -4184,7 +4184,7 @@
   {
    "id": "threads.reply_control",
    "group": "post_details",
-   "source": "ThreadsPostDetails (update-post-platform-details)",
+   "source": "ThreadsPostDetails (save-post platform_details)",
    "tokens_any": [
     [
      "reply_control"
@@ -4200,6 +4200,22 @@
     "field": "reply_control",
     "where": "fields"
    }
+  },
+  {
+   "id": "threads.reply_control=accounts_you_follow",
+   "group": "post_details",
+   "source": "ThreadsPostDetails.reply_control choices",
+   "tokens_any": [
+    [
+     "reply_control",
+     "accounts_you_follow"
+    ]
+   ],
+   "context_any": [
+    "Threads",
+    "threads"
+   ],
+   "scope": "section"
   },
   {
    "id": "threads.reply_control=everyone",
@@ -4234,6 +4250,22 @@
    "scope": "section"
   },
   {
+   "id": "threads.reply_control=followers_only",
+   "group": "post_details",
+   "source": "ThreadsPostDetails.reply_control choices",
+   "tokens_any": [
+    [
+     "reply_control",
+     "followers_only"
+    ]
+   ],
+   "context_any": [
+    "Threads",
+    "threads"
+   ],
+   "scope": "section"
+  },
+  {
    "id": "threads.reply_control=mentioned",
    "group": "post_details",
    "source": "ThreadsPostDetails.reply_control choices",
@@ -4250,9 +4282,25 @@
    "scope": "section"
   },
   {
+   "id": "threads.reply_control=mentioned_only",
+   "group": "post_details",
+   "source": "ThreadsPostDetails.reply_control choices",
+   "tokens_any": [
+    [
+     "reply_control",
+     "mentioned_only"
+    ]
+   ],
+   "context_any": [
+    "Threads",
+    "threads"
+   ],
+   "scope": "section"
+  },
+  {
    "id": "threads.topic_tag",
    "group": "post_details",
-   "source": "ThreadsPostDetails (update-post-platform-details)",
+   "source": "ThreadsPostDetails (save-post platform_details)",
    "tokens_any": [
     [
      "topic_tag"
@@ -4272,7 +4320,7 @@
   {
    "id": "threads.use_topic_tag",
    "group": "post_details",
-   "source": "ThreadsPostDetails (update-post-platform-details)",
+   "source": "ThreadsPostDetails (save-post platform_details)",
    "tokens_any": [
     [
      "use_topic_tag"
@@ -4292,7 +4340,7 @@
   {
    "id": "tiktok.disable_comments",
    "group": "post_details",
-   "source": "TikTokPostDetails (update-post-platform-details)",
+   "source": "TikTokPostDetails (save-post platform_details)",
    "tokens_any": [
     [
      "disable_comments"
@@ -4312,7 +4360,7 @@
   {
    "id": "tiktok.disable_duet",
    "group": "post_details",
-   "source": "TikTokPostDetails (update-post-platform-details)",
+   "source": "TikTokPostDetails (save-post platform_details)",
    "tokens_any": [
     [
      "disable_duet"
@@ -4332,7 +4380,7 @@
   {
    "id": "tiktok.disable_stitch",
    "group": "post_details",
-   "source": "TikTokPostDetails (update-post-platform-details)",
+   "source": "TikTokPostDetails (save-post platform_details)",
    "tokens_any": [
     [
      "disable_stitch"
@@ -4352,7 +4400,7 @@
   {
    "id": "tiktok.post",
    "group": "post_details",
-   "source": "TikTokPostDetails (update-post-platform-details)",
+   "source": "TikTokPostDetails (save-post platform_details)",
    "tokens_any": [
     [
      "post"
@@ -4372,7 +4420,7 @@
   {
    "id": "tiktok.privacy_level",
    "group": "post_details",
-   "source": "TikTokPostDetails (update-post-platform-details)",
+   "source": "TikTokPostDetails (save-post platform_details)",
    "tokens_any": [
     [
      "privacy_level"
@@ -4456,7 +4504,7 @@
   {
    "id": "wordpress.categories",
    "group": "post_details",
-   "source": "WordPressPostDetails (update-post-platform-details)",
+   "source": "WordPressPostDetails (save-post platform_details)",
    "tokens_any": [
     [
      "categories"
@@ -4476,7 +4524,7 @@
   {
    "id": "wordpress.comment_status",
    "group": "post_details",
-   "source": "WordPressPostDetails (update-post-platform-details)",
+   "source": "WordPressPostDetails (save-post platform_details)",
    "tokens_any": [
     [
      "comment_status"
@@ -4528,7 +4576,7 @@
   {
    "id": "wordpress.custom_fields",
    "group": "post_details",
-   "source": "WordPressPostDetails (update-post-platform-details)",
+   "source": "WordPressPostDetails (save-post platform_details)",
    "tokens_any": [
     [
      "custom_fields"
@@ -4548,7 +4596,7 @@
   {
    "id": "wordpress.excerpt",
    "group": "post_details",
-   "source": "WordPressPostDetails (update-post-platform-details)",
+   "source": "WordPressPostDetails (save-post platform_details)",
    "tokens_any": [
     [
      "excerpt"
@@ -4568,7 +4616,7 @@
   {
    "id": "wordpress.featured_media_id",
    "group": "post_details",
-   "source": "WordPressPostDetails (update-post-platform-details)",
+   "source": "WordPressPostDetails (save-post platform_details)",
    "tokens_any": [
     [
      "featured_media_id"
@@ -4588,7 +4636,7 @@
   {
    "id": "wordpress.format",
    "group": "post_details",
-   "source": "WordPressPostDetails (update-post-platform-details)",
+   "source": "WordPressPostDetails (save-post platform_details)",
    "tokens_any": [
     [
      "format"
@@ -4768,7 +4816,7 @@
   {
    "id": "wordpress.menu_order",
    "group": "post_details",
-   "source": "WordPressPostDetails (update-post-platform-details)",
+   "source": "WordPressPostDetails (save-post platform_details)",
    "tokens_any": [
     [
      "menu_order"
@@ -4788,7 +4836,7 @@
   {
    "id": "wordpress.meta_description",
    "group": "post_details",
-   "source": "WordPressPostDetails (update-post-platform-details)",
+   "source": "WordPressPostDetails (save-post platform_details)",
    "tokens_any": [
     [
      "meta_description"
@@ -4808,7 +4856,7 @@
   {
    "id": "wordpress.meta_title",
    "group": "post_details",
-   "source": "WordPressPostDetails (update-post-platform-details)",
+   "source": "WordPressPostDetails (save-post platform_details)",
    "tokens_any": [
     [
      "meta_title"
@@ -4828,7 +4876,7 @@
   {
    "id": "wordpress.parent_id",
    "group": "post_details",
-   "source": "WordPressPostDetails (update-post-platform-details)",
+   "source": "WordPressPostDetails (save-post platform_details)",
    "tokens_any": [
     [
      "parent_id"
@@ -4848,7 +4896,7 @@
   {
    "id": "wordpress.password",
    "group": "post_details",
-   "source": "WordPressPostDetails (update-post-platform-details)",
+   "source": "WordPressPostDetails (save-post platform_details)",
    "tokens_any": [
     [
      "password"
@@ -4868,7 +4916,7 @@
   {
    "id": "wordpress.ping_status",
    "group": "post_details",
-   "source": "WordPressPostDetails (update-post-platform-details)",
+   "source": "WordPressPostDetails (save-post platform_details)",
    "tokens_any": [
     [
      "ping_status"
@@ -4920,7 +4968,7 @@
   {
    "id": "wordpress.post",
    "group": "post_details",
-   "source": "WordPressPostDetails (update-post-platform-details)",
+   "source": "WordPressPostDetails (save-post platform_details)",
    "tokens_any": [
     [
      "post"
@@ -4940,7 +4988,7 @@
   {
    "id": "wordpress.post_type",
    "group": "post_details",
-   "source": "WordPressPostDetails (update-post-platform-details)",
+   "source": "WordPressPostDetails (save-post platform_details)",
    "tokens_any": [
     [
      "post_type"
@@ -4992,7 +5040,7 @@
   {
    "id": "wordpress.seo_metadata",
    "group": "post_details",
-   "source": "WordPressPostDetails (update-post-platform-details)",
+   "source": "WordPressPostDetails (save-post platform_details)",
    "tokens_any": [
     [
      "seo_metadata"
@@ -5012,7 +5060,7 @@
   {
    "id": "wordpress.status",
    "group": "post_details",
-   "source": "WordPressPostDetails (update-post-platform-details)",
+   "source": "WordPressPostDetails (save-post platform_details)",
    "tokens_any": [
     [
      "status"
@@ -5128,7 +5176,7 @@
   {
    "id": "wordpress.sticky",
    "group": "post_details",
-   "source": "WordPressPostDetails (update-post-platform-details)",
+   "source": "WordPressPostDetails (save-post platform_details)",
    "tokens_any": [
     [
      "sticky"
@@ -5148,7 +5196,7 @@
   {
    "id": "wordpress.tags",
    "group": "post_details",
-   "source": "WordPressPostDetails (update-post-platform-details)",
+   "source": "WordPressPostDetails (save-post platform_details)",
    "tokens_any": [
     [
      "tags"
@@ -5168,7 +5216,7 @@
   {
    "id": "wordpress.template",
    "group": "post_details",
-   "source": "WordPressPostDetails (update-post-platform-details)",
+   "source": "WordPressPostDetails (save-post platform_details)",
    "tokens_any": [
     [
      "template"
@@ -5188,7 +5236,7 @@
   {
    "id": "wordpress.title",
    "group": "post_details",
-   "source": "WordPressPostDetails (update-post-platform-details)",
+   "source": "WordPressPostDetails (save-post platform_details)",
    "tokens_any": [
     [
      "title"
@@ -5208,7 +5256,7 @@
   {
    "id": "x.auto_publish",
    "group": "post_details",
-   "source": "XPostDetails (update-post-platform-details)",
+   "source": "XPostDetails (save-post platform_details)",
    "tokens_any": [
     [
      "auto_publish"
@@ -5228,7 +5276,7 @@
   {
    "id": "x.for_super_followers_only",
    "group": "post_details",
-   "source": "XPostDetails (update-post-platform-details)",
+   "source": "XPostDetails (save-post platform_details)",
    "tokens_any": [
     [
      "for_super_followers_only"
@@ -5248,7 +5296,7 @@
   {
    "id": "x.geo_place_id",
    "group": "post_details",
-   "source": "XPostDetails (update-post-platform-details)",
+   "source": "XPostDetails (save-post platform_details)",
    "tokens_any": [
     [
      "geo_place_id"
@@ -5268,7 +5316,7 @@
   {
    "id": "x.in_reply_to_tweet_id",
    "group": "post_details",
-   "source": "XPostDetails (update-post-platform-details)",
+   "source": "XPostDetails (save-post platform_details)",
    "tokens_any": [
     [
      "in_reply_to_tweet_id"
@@ -5288,7 +5336,7 @@
   {
    "id": "x.is_thread",
    "group": "post_details",
-   "source": "XPostDetails (update-post-platform-details)",
+   "source": "XPostDetails (save-post platform_details)",
    "tokens_any": [
     [
      "is_thread"
@@ -5308,7 +5356,7 @@
   {
    "id": "x.media_tagged_user_ids",
    "group": "post_details",
-   "source": "XPostDetails (update-post-platform-details)",
+   "source": "XPostDetails (save-post platform_details)",
    "tokens_any": [
     [
      "media_tagged_user_ids"
@@ -5328,7 +5376,7 @@
   {
    "id": "x.poll_duration_minutes",
    "group": "post_details",
-   "source": "XPostDetails (update-post-platform-details)",
+   "source": "XPostDetails (save-post platform_details)",
    "tokens_any": [
     [
      "poll_duration_minutes"
@@ -5348,7 +5396,7 @@
   {
    "id": "x.poll_options",
    "group": "post_details",
-   "source": "XPostDetails (update-post-platform-details)",
+   "source": "XPostDetails (save-post platform_details)",
    "tokens_any": [
     [
      "poll_options"
@@ -5368,7 +5416,7 @@
   {
    "id": "x.post_type",
    "group": "post_details",
-   "source": "XPostDetails (update-post-platform-details)",
+   "source": "XPostDetails (save-post platform_details)",
    "tokens_any": [
     [
      "post_type"
@@ -5484,7 +5532,7 @@
   {
    "id": "x.quoted_tweet_id",
    "group": "post_details",
-   "source": "XPostDetails (update-post-platform-details)",
+   "source": "XPostDetails (save-post platform_details)",
    "tokens_any": [
     [
      "quoted_tweet_id"
@@ -5504,7 +5552,7 @@
   {
    "id": "x.reply_settings",
    "group": "post_details",
-   "source": "XPostDetails (update-post-platform-details)",
+   "source": "XPostDetails (save-post platform_details)",
    "tokens_any": [
     [
      "reply_settings"
@@ -5572,7 +5620,7 @@
   {
    "id": "x.thread_position",
    "group": "post_details",
-   "source": "XPostDetails (update-post-platform-details)",
+   "source": "XPostDetails (save-post platform_details)",
    "tokens_any": [
     [
      "thread_position"
@@ -5592,7 +5640,7 @@
   {
    "id": "youtube.allow_comments",
    "group": "post_details",
-   "source": "YouTubePostDetails (update-post-platform-details)",
+   "source": "YouTubePostDetails (save-post platform_details)",
    "tokens_any": [
     [
      "allow_comments"
@@ -5612,7 +5660,7 @@
   {
    "id": "youtube.allow_embedding",
    "group": "post_details",
-   "source": "YouTubePostDetails (update-post-platform-details)",
+   "source": "YouTubePostDetails (save-post platform_details)",
    "tokens_any": [
     [
      "allow_embedding"
@@ -5632,7 +5680,7 @@
   {
    "id": "youtube.category_id",
    "group": "post_details",
-   "source": "YouTubePostDetails (update-post-platform-details)",
+   "source": "YouTubePostDetails (save-post platform_details)",
    "tokens_any": [
     [
      "category_id"
@@ -5652,7 +5700,7 @@
   {
    "id": "youtube.default_language",
    "group": "post_details",
-   "source": "YouTubePostDetails (update-post-platform-details)",
+   "source": "YouTubePostDetails (save-post platform_details)",
    "tokens_any": [
     [
      "default_language"
@@ -5672,7 +5720,7 @@
   {
    "id": "youtube.enable_auto_chapters",
    "group": "post_details",
-   "source": "YouTubePostDetails (update-post-platform-details)",
+   "source": "YouTubePostDetails (save-post platform_details)",
    "tokens_any": [
     [
      "enable_auto_chapters"
@@ -5692,7 +5740,7 @@
   {
    "id": "youtube.made_for_kids",
    "group": "post_details",
-   "source": "YouTubePostDetails (update-post-platform-details)",
+   "source": "YouTubePostDetails (save-post platform_details)",
    "tokens_any": [
     [
      "made_for_kids"
@@ -5712,7 +5760,7 @@
   {
    "id": "youtube.notify_subscribers",
    "group": "post_details",
-   "source": "YouTubePostDetails (update-post-platform-details)",
+   "source": "YouTubePostDetails (save-post platform_details)",
    "tokens_any": [
     [
      "notify_subscribers"
@@ -5732,7 +5780,7 @@
   {
    "id": "youtube.playlist_ids",
    "group": "post_details",
-   "source": "YouTubePostDetails (update-post-platform-details)",
+   "source": "YouTubePostDetails (save-post platform_details)",
    "tokens_any": [
     [
      "playlist_ids"
@@ -5752,7 +5800,7 @@
   {
    "id": "youtube.post",
    "group": "post_details",
-   "source": "YouTubePostDetails (update-post-platform-details)",
+   "source": "YouTubePostDetails (save-post platform_details)",
    "tokens_any": [
     [
      "post"
@@ -5772,7 +5820,7 @@
   {
    "id": "youtube.privacy_status",
    "group": "post_details",
-   "source": "YouTubePostDetails (update-post-platform-details)",
+   "source": "YouTubePostDetails (save-post platform_details)",
    "tokens_any": [
     [
      "privacy_status"
@@ -5856,7 +5904,7 @@
   {
    "id": "youtube.publish_at",
    "group": "post_details",
-   "source": "YouTubePostDetails (update-post-platform-details)",
+   "source": "YouTubePostDetails (save-post platform_details)",
    "tokens_any": [
     [
      "publish_at"
@@ -5876,7 +5924,7 @@
   {
    "id": "youtube.self_declared_made_for_kids",
    "group": "post_details",
-   "source": "YouTubePostDetails (update-post-platform-details)",
+   "source": "YouTubePostDetails (save-post platform_details)",
    "tokens_any": [
     [
      "self_declared_made_for_kids"
@@ -5896,7 +5944,7 @@
   {
    "id": "youtube.tags",
    "group": "post_details",
-   "source": "YouTubePostDetails (update-post-platform-details)",
+   "source": "YouTubePostDetails (save-post platform_details)",
    "tokens_any": [
     [
      "tags"
@@ -5916,7 +5964,7 @@
   {
    "id": "youtube.thumbnail_url",
    "group": "post_details",
-   "source": "YouTubePostDetails (update-post-platform-details)",
+   "source": "YouTubePostDetails (save-post platform_details)",
    "tokens_any": [
     [
      "thumbnail_url"
@@ -5936,7 +5984,7 @@
   {
    "id": "youtube.video_description",
    "group": "post_details",
-   "source": "YouTubePostDetails (update-post-platform-details)",
+   "source": "YouTubePostDetails (save-post platform_details)",
    "tokens_any": [
     [
      "video_description"
@@ -5956,7 +6004,7 @@
   {
    "id": "youtube.video_id",
    "group": "post_details",
-   "source": "YouTubePostDetails (update-post-platform-details)",
+   "source": "YouTubePostDetails (save-post platform_details)",
    "tokens_any": [
     [
      "video_id"
@@ -5976,7 +6024,7 @@
   {
    "id": "youtube.video_title",
    "group": "post_details",
-   "source": "YouTubePostDetails (update-post-platform-details)",
+   "source": "YouTubePostDetails (save-post platform_details)",
    "tokens_any": [
     [
      "video_title"
@@ -6006,18 +6054,6 @@
    "scope": "file"
   },
   {
-   "id": "tool.add-posts-to-content-campaign",
-   "group": "tool",
-   "source": "mcp golden",
-   "tokens_any": [
-    [
-     "add-posts-to-content-campaign"
-    ]
-   ],
-   "context_any": [],
-   "scope": "file"
-  },
-  {
    "id": "tool.analyze-content-campaign-source",
    "group": "tool",
    "source": "mcp golden",
@@ -6036,30 +6072,6 @@
    "tokens_any": [
     [
      "approve-many-posts"
-    ]
-   ],
-   "context_any": [],
-   "scope": "file"
-  },
-  {
-   "id": "tool.approve-post",
-   "group": "tool",
-   "source": "mcp golden",
-   "tokens_any": [
-    [
-     "approve-post"
-    ]
-   ],
-   "context_any": [],
-   "scope": "file"
-  },
-  {
-   "id": "tool.approve-recurring-review",
-   "group": "tool",
-   "source": "mcp golden",
-   "tokens_any": [
-    [
-     "approve-recurring-review"
     ]
    ],
    "context_any": [],
@@ -6126,48 +6138,12 @@
    "scope": "file"
   },
   {
-   "id": "tool.create-engagement-opportunity",
-   "group": "tool",
-   "source": "mcp golden",
-   "tokens_any": [
-    [
-     "create-engagement-opportunity"
-    ]
-   ],
-   "context_any": [],
-   "scope": "file"
-  },
-  {
-   "id": "tool.create-post",
-   "group": "tool",
-   "source": "mcp golden",
-   "tokens_any": [
-    [
-     "create-post"
-    ]
-   ],
-   "context_any": [],
-   "scope": "file"
-  },
-  {
    "id": "tool.create-routine",
    "group": "tool",
    "source": "mcp golden",
    "tokens_any": [
     [
      "create-routine"
-    ]
-   ],
-   "context_any": [],
-   "scope": "file"
-  },
-  {
-   "id": "tool.create-social-bucket",
-   "group": "tool",
-   "source": "mcp golden",
-   "tokens_any": [
-    [
-     "create-social-bucket"
     ]
    ],
    "context_any": [],
@@ -6198,36 +6174,12 @@
    "scope": "file"
   },
   {
-   "id": "tool.cross-platform-analytics",
+   "id": "tool.decide-suggestion",
    "group": "tool",
    "source": "mcp golden",
    "tokens_any": [
     [
-     "cross-platform-analytics"
-    ]
-   ],
-   "context_any": [],
-   "scope": "file"
-  },
-  {
-   "id": "tool.decide-bolta-suggestion",
-   "group": "tool",
-   "source": "mcp golden",
-   "tokens_any": [
-    [
-     "decide-bolta-suggestion"
-    ]
-   ],
-   "context_any": [],
-   "scope": "file"
-  },
-  {
-   "id": "tool.decide-routine-recommendation",
-   "group": "tool",
-   "source": "mcp golden",
-   "tokens_any": [
-    [
-     "decide-routine-recommendation"
+     "decide-suggestion"
     ]
    ],
    "context_any": [],
@@ -6294,18 +6246,6 @@
    "scope": "file"
   },
   {
-   "id": "tool.get-business-dna",
-   "group": "tool",
-   "source": "mcp golden",
-   "tokens_any": [
-    [
-     "get-business-dna"
-    ]
-   ],
-   "context_any": [],
-   "scope": "file"
-  },
-  {
    "id": "tool.get-cascade",
    "group": "tool",
    "source": "mcp golden",
@@ -6342,60 +6282,12 @@
    "scope": "file"
   },
   {
-   "id": "tool.get-engagement-conversation",
-   "group": "tool",
-   "source": "mcp golden",
-   "tokens_any": [
-    [
-     "get-engagement-conversation"
-    ]
-   ],
-   "context_any": [],
-   "scope": "file"
-  },
-  {
-   "id": "tool.get-engagement-status",
-   "group": "tool",
-   "source": "mcp golden",
-   "tokens_any": [
-    [
-     "get-engagement-status"
-    ]
-   ],
-   "context_any": [],
-   "scope": "file"
-  },
-  {
-   "id": "tool.get-my-capabilities",
-   "group": "tool",
-   "source": "mcp golden",
-   "tokens_any": [
-    [
-     "get-my-capabilities"
-    ]
-   ],
-   "context_any": [],
-   "scope": "file"
-  },
-  {
    "id": "tool.get-post",
    "group": "tool",
    "source": "mcp golden",
    "tokens_any": [
     [
      "get-post"
-    ]
-   ],
-   "context_any": [],
-   "scope": "file"
-  },
-  {
-   "id": "tool.get-post-platform-details",
-   "group": "tool",
-   "source": "mcp golden",
-   "tokens_any": [
-    [
-     "get-post-platform-details"
     ]
    ],
    "context_any": [],
@@ -6462,18 +6354,6 @@
    "scope": "file"
   },
   {
-   "id": "tool.get-workspace",
-   "group": "tool",
-   "source": "mcp golden",
-   "tokens_any": [
-    [
-     "get-workspace"
-    ]
-   ],
-   "context_any": [],
-   "scope": "file"
-  },
-  {
    "id": "tool.list-account-insights",
    "group": "tool",
    "source": "mcp golden",
@@ -6498,30 +6378,6 @@
    "scope": "file"
   },
   {
-   "id": "tool.list-bolta-suggestions",
-   "group": "tool",
-   "source": "mcp golden",
-   "tokens_any": [
-    [
-     "list-bolta-suggestions"
-    ]
-   ],
-   "context_any": [],
-   "scope": "file"
-  },
-  {
-   "id": "tool.list-buckets",
-   "group": "tool",
-   "source": "mcp golden",
-   "tokens_any": [
-    [
-     "list-buckets"
-    ]
-   ],
-   "context_any": [],
-   "scope": "file"
-  },
-  {
    "id": "tool.list-business-dna",
    "group": "tool",
    "source": "mcp golden",
@@ -6534,36 +6390,12 @@
    "scope": "file"
   },
   {
-   "id": "tool.list-content-campaign-posts",
-   "group": "tool",
-   "source": "mcp golden",
-   "tokens_any": [
-    [
-     "list-content-campaign-posts"
-    ]
-   ],
-   "context_any": [],
-   "scope": "file"
-  },
-  {
    "id": "tool.list-content-campaigns",
    "group": "tool",
    "source": "mcp golden",
    "tokens_any": [
     [
      "list-content-campaigns"
-    ]
-   ],
-   "context_any": [],
-   "scope": "file"
-  },
-  {
-   "id": "tool.list-engagement-capabilities",
-   "group": "tool",
-   "source": "mcp golden",
-   "tokens_any": [
-    [
-     "list-engagement-capabilities"
     ]
    ],
    "context_any": [],
@@ -6606,42 +6438,6 @@
    "scope": "file"
   },
   {
-   "id": "tool.list-recurring-reviews",
-   "group": "tool",
-   "source": "mcp golden",
-   "tokens_any": [
-    [
-     "list-recurring-reviews"
-    ]
-   ],
-   "context_any": [],
-   "scope": "file"
-  },
-  {
-   "id": "tool.list-reviews",
-   "group": "tool",
-   "source": "mcp golden",
-   "tokens_any": [
-    [
-     "list-reviews"
-    ]
-   ],
-   "context_any": [],
-   "scope": "file"
-  },
-  {
-   "id": "tool.list-routine-recommendations",
-   "group": "tool",
-   "source": "mcp golden",
-   "tokens_any": [
-    [
-     "list-routine-recommendations"
-    ]
-   ],
-   "context_any": [],
-   "scope": "file"
-  },
-  {
    "id": "tool.list-routine-runs",
    "group": "tool",
    "source": "mcp golden",
@@ -6678,24 +6474,12 @@
    "scope": "file"
   },
   {
-   "id": "tool.list-scheduled-posts",
+   "id": "tool.list-suggestions",
    "group": "tool",
    "source": "mcp golden",
    "tokens_any": [
     [
-     "list-scheduled-posts"
-    ]
-   ],
-   "context_any": [],
-   "scope": "file"
-  },
-  {
-   "id": "tool.list-voice-profiles",
-   "group": "tool",
-   "source": "mcp golden",
-   "tokens_any": [
-    [
-     "list-voice-profiles"
+     "list-suggestions"
     ]
    ],
    "context_any": [],
@@ -6750,24 +6534,12 @@
    "scope": "file"
   },
   {
-   "id": "tool.plan-campaign",
+   "id": "tool.plan",
    "group": "tool",
    "source": "mcp golden",
    "tokens_any": [
     [
-     "plan-campaign"
-    ]
-   ],
-   "context_any": [],
-   "scope": "file"
-  },
-  {
-   "id": "tool.plan-routine",
-   "group": "tool",
-   "source": "mcp golden",
-   "tokens_any": [
-    [
-     "plan-routine"
+     "plan"
     ]
    ],
    "context_any": [],
@@ -6822,36 +6594,12 @@
    "scope": "file"
   },
   {
-   "id": "tool.recommend-routines",
-   "group": "tool",
-   "source": "mcp golden",
-   "tokens_any": [
-    [
-     "recommend-routines"
-    ]
-   ],
-   "context_any": [],
-   "scope": "file"
-  },
-  {
    "id": "tool.reject-post",
    "group": "tool",
    "source": "mcp golden",
    "tokens_any": [
     [
      "reject-post"
-    ]
-   ],
-   "context_any": [],
-   "scope": "file"
-  },
-  {
-   "id": "tool.reject-recurring-review",
-   "group": "tool",
-   "source": "mcp golden",
-   "tokens_any": [
-    [
-     "reject-recurring-review"
     ]
    ],
    "context_any": [],
@@ -6882,18 +6630,6 @@
    "scope": "file"
   },
   {
-   "id": "tool.resume-routine",
-   "group": "tool",
-   "source": "mcp golden",
-   "tokens_any": [
-    [
-     "resume-routine"
-    ]
-   ],
-   "context_any": [],
-   "scope": "file"
-  },
-  {
    "id": "tool.revise-plan",
    "group": "tool",
    "source": "mcp golden",
@@ -6918,12 +6654,12 @@
    "scope": "file"
   },
   {
-   "id": "tool.schedule-post",
+   "id": "tool.save-post",
    "group": "tool",
    "source": "mcp golden",
    "tokens_any": [
     [
-     "schedule-post"
+     "save-post"
     ]
    ],
    "context_any": [],
@@ -6960,18 +6696,6 @@
    "tokens_any": [
     [
      "set-content-campaign-status"
-    ]
-   ],
-   "context_any": [],
-   "scope": "file"
-  },
-  {
-   "id": "tool.set-content-campaign-targets",
-   "group": "tool",
-   "source": "mcp golden",
-   "tokens_any": [
-    [
-     "set-content-campaign-targets"
     ]
    ],
    "context_any": [],
@@ -7050,48 +6774,12 @@
    "scope": "file"
   },
   {
-   "id": "tool.update-post",
-   "group": "tool",
-   "source": "mcp golden",
-   "tokens_any": [
-    [
-     "update-post"
-    ]
-   ],
-   "context_any": [],
-   "scope": "file"
-  },
-  {
-   "id": "tool.update-post-platform-details",
-   "group": "tool",
-   "source": "mcp golden",
-   "tokens_any": [
-    [
-     "update-post-platform-details"
-    ]
-   ],
-   "context_any": [],
-   "scope": "file"
-  },
-  {
    "id": "tool.update-routine",
    "group": "tool",
    "source": "mcp golden",
    "tokens_any": [
     [
      "update-routine"
-    ]
-   ],
-   "context_any": [],
-   "scope": "file"
-  },
-  {
-   "id": "tool.update-social-bucket",
-   "group": "tool",
-   "source": "mcp golden",
-   "tokens_any": [
-    [
-     "update-social-bucket"
     ]
    ],
    "context_any": [],
@@ -7312,7 +7000,7 @@
    "scope": "file"
   },
   {
-   "id": "campaign-targets.account_ids",
+   "id": "campaign.account_ids",
    "group": "tool_param",
    "source": "mcp golden schema",
    "tokens_any": [
@@ -7321,317 +7009,8 @@
     ]
    ],
    "context_any": [
-    "set-content-campaign-targets"
-   ],
-   "scope": "file"
-  },
-  {
-   "id": "campaign-targets.campaign_id",
-   "group": "tool_param",
-   "source": "mcp golden schema",
-   "tokens_any": [
-    [
-     "campaign_id"
-    ]
-   ],
-   "context_any": [
-    "set-content-campaign-targets"
-   ],
-   "scope": "file"
-  },
-  {
-   "id": "campaign-targets.context_notes",
-   "group": "tool_param",
-   "source": "mcp golden schema",
-   "tokens_any": [
-    [
-     "context_notes"
-    ]
-   ],
-   "context_any": [
-    "set-content-campaign-targets"
-   ],
-   "scope": "file"
-  },
-  {
-   "id": "campaign-targets.context_sources",
-   "group": "tool_param",
-   "source": "mcp golden schema",
-   "tokens_any": [
-    [
-     "context_sources"
-    ]
-   ],
-   "context_any": [
-    "set-content-campaign-targets"
-   ],
-   "scope": "file"
-  },
-  {
-   "id": "campaign-targets.context_sources.brand_kit=brand_values",
-   "group": "tool_param",
-   "source": "set-content-campaign-targets description",
-   "tokens_any": [
-    [
-     "brand_kit",
-     "brand_values"
-    ]
-   ],
-   "context_any": [
-    "set-content-campaign-targets"
-   ],
-   "scope": "file"
-  },
-  {
-   "id": "campaign-targets.context_sources.brand_kit=business_overview",
-   "group": "tool_param",
-   "source": "set-content-campaign-targets description",
-   "tokens_any": [
-    [
-     "brand_kit",
-     "business_overview"
-    ]
-   ],
-   "context_any": [
-    "set-content-campaign-targets"
-   ],
-   "scope": "file"
-  },
-  {
-   "id": "campaign-targets.context_sources.brand_kit=community_involvement",
-   "group": "tool_param",
-   "source": "set-content-campaign-targets description",
-   "tokens_any": [
-    [
-     "brand_kit",
-     "community_involvement"
-    ]
-   ],
-   "context_any": [
-    "set-content-campaign-targets"
-   ],
-   "scope": "file"
-  },
-  {
-   "id": "campaign-targets.context_sources.brand_kit=custom_image_instructions",
-   "group": "tool_param",
-   "source": "set-content-campaign-targets description",
-   "tokens_any": [
-    [
-     "brand_kit",
-     "custom_image_instructions"
-    ]
-   ],
-   "context_any": [
-    "set-content-campaign-targets"
-   ],
-   "scope": "file"
-  },
-  {
-   "id": "campaign-targets.context_sources.brand_kit=customer_testimonials",
-   "group": "tool_param",
-   "source": "set-content-campaign-targets description",
-   "tokens_any": [
-    [
-     "brand_kit",
-     "customer_testimonials"
-    ]
-   ],
-   "context_any": [
-    "set-content-campaign-targets"
-   ],
-   "scope": "file"
-  },
-  {
-   "id": "campaign-targets.context_sources.brand_kit=donts",
-   "group": "tool_param",
-   "source": "set-content-campaign-targets description",
-   "tokens_any": [
-    [
-     "brand_kit",
-     "donts"
-    ]
-   ],
-   "context_any": [
-    "set-content-campaign-targets"
-   ],
-   "scope": "file"
-  },
-  {
-   "id": "campaign-targets.context_sources.brand_kit=dos",
-   "group": "tool_param",
-   "source": "set-content-campaign-targets description",
-   "tokens_any": [
-    [
-     "brand_kit",
-     "dos"
-    ]
-   ],
-   "context_any": [
-    "set-content-campaign-targets"
-   ],
-   "scope": "file"
-  },
-  {
-   "id": "campaign-targets.context_sources.brand_kit=origin_story",
-   "group": "tool_param",
-   "source": "set-content-campaign-targets description",
-   "tokens_any": [
-    [
-     "brand_kit",
-     "origin_story"
-    ]
-   ],
-   "context_any": [
-    "set-content-campaign-targets"
-   ],
-   "scope": "file"
-  },
-  {
-   "id": "campaign-targets.context_sources.brand_kit=tagline",
-   "group": "tool_param",
-   "source": "set-content-campaign-targets description",
-   "tokens_any": [
-    [
-     "brand_kit",
-     "tagline"
-    ]
-   ],
-   "context_any": [
-    "set-content-campaign-targets"
-   ],
-   "scope": "file"
-  },
-  {
-   "id": "campaign-targets.context_sources.brand_kit=tone_of_voice",
-   "group": "tool_param",
-   "source": "set-content-campaign-targets description",
-   "tokens_any": [
-    [
-     "brand_kit",
-     "tone_of_voice"
-    ]
-   ],
-   "context_any": [
-    "set-content-campaign-targets"
-   ],
-   "scope": "file"
-  },
-  {
-   "id": "campaign-targets.context_sources.kind",
-   "group": "tool_param",
-   "source": "mcp golden schema",
-   "tokens_any": [
-    [
-     "context_sources",
-     "kind"
-    ]
-   ],
-   "context_any": [
-    "set-content-campaign-targets"
-   ],
-   "scope": "file"
-  },
-  {
-   "id": "campaign-targets.context_sources.kind=brand_kit",
-   "group": "tool_param",
-   "source": "mcp golden enum",
-   "tokens_any": [
-    [
-     "kind",
-     "brand_kit"
-    ]
-   ],
-   "context_any": [
-    "set-content-campaign-targets"
-   ],
-   "scope": "file"
-  },
-  {
-   "id": "campaign-targets.context_sources.kind=file",
-   "group": "tool_param",
-   "source": "mcp golden enum",
-   "tokens_any": [
-    [
-     "kind",
-     "file"
-    ]
-   ],
-   "context_any": [
-    "set-content-campaign-targets"
-   ],
-   "scope": "file"
-  },
-  {
-   "id": "campaign-targets.context_sources.kind=url",
-   "group": "tool_param",
-   "source": "mcp golden enum",
-   "tokens_any": [
-    [
-     "kind",
-     "url"
-    ]
-   ],
-   "context_any": [
-    "set-content-campaign-targets"
-   ],
-   "scope": "file"
-  },
-  {
-   "id": "campaign-targets.context_sources.ref",
-   "group": "tool_param",
-   "source": "mcp golden schema",
-   "tokens_any": [
-    [
-     "context_sources",
-     "ref"
-    ]
-   ],
-   "context_any": [
-    "set-content-campaign-targets"
-   ],
-   "scope": "file"
-  },
-  {
-   "id": "campaign-targets.context_sources.title",
-   "group": "tool_param",
-   "source": "mcp golden schema",
-   "tokens_any": [
-    [
-     "context_sources",
-     "title"
-    ]
-   ],
-   "context_any": [
-    "set-content-campaign-targets"
-   ],
-   "scope": "file"
-  },
-  {
-   "id": "campaign-targets.duration_weeks",
-   "group": "tool_param",
-   "source": "mcp golden schema",
-   "tokens_any": [
-    [
-     "duration_weeks"
-    ]
-   ],
-   "context_any": [
-    "set-content-campaign-targets"
-   ],
-   "scope": "file"
-  },
-  {
-   "id": "campaign-targets.voice_profile_id",
-   "group": "tool_param",
-   "source": "mcp golden schema",
-   "tokens_any": [
-    [
-     "voice_profile_id"
-    ]
-   ],
-   "context_any": [
-    "set-content-campaign-targets"
+    "create-content-campaign",
+    "update-content-campaign"
    ],
    "scope": "file"
   },
@@ -7793,6 +7172,292 @@
    "scope": "file"
   },
   {
+   "id": "campaign.context_notes",
+   "group": "tool_param",
+   "source": "mcp golden schema",
+   "tokens_any": [
+    [
+     "context_notes"
+    ]
+   ],
+   "context_any": [
+    "create-content-campaign",
+    "update-content-campaign"
+   ],
+   "scope": "file"
+  },
+  {
+   "id": "campaign.context_sources",
+   "group": "tool_param",
+   "source": "mcp golden schema",
+   "tokens_any": [
+    [
+     "context_sources"
+    ]
+   ],
+   "context_any": [
+    "create-content-campaign",
+    "update-content-campaign"
+   ],
+   "scope": "file"
+  },
+  {
+   "id": "campaign.context_sources.brand_kit=brand_values",
+   "group": "tool_param",
+   "source": "create-content-campaign context_sources description",
+   "tokens_any": [
+    [
+     "brand_kit",
+     "brand_values"
+    ]
+   ],
+   "context_any": [
+    "create-content-campaign",
+    "update-content-campaign"
+   ],
+   "scope": "file"
+  },
+  {
+   "id": "campaign.context_sources.brand_kit=business_overview",
+   "group": "tool_param",
+   "source": "create-content-campaign context_sources description",
+   "tokens_any": [
+    [
+     "brand_kit",
+     "business_overview"
+    ]
+   ],
+   "context_any": [
+    "create-content-campaign",
+    "update-content-campaign"
+   ],
+   "scope": "file"
+  },
+  {
+   "id": "campaign.context_sources.brand_kit=community_involvement",
+   "group": "tool_param",
+   "source": "create-content-campaign context_sources description",
+   "tokens_any": [
+    [
+     "brand_kit",
+     "community_involvement"
+    ]
+   ],
+   "context_any": [
+    "create-content-campaign",
+    "update-content-campaign"
+   ],
+   "scope": "file"
+  },
+  {
+   "id": "campaign.context_sources.brand_kit=custom_image_instructions",
+   "group": "tool_param",
+   "source": "create-content-campaign context_sources description",
+   "tokens_any": [
+    [
+     "brand_kit",
+     "custom_image_instructions"
+    ]
+   ],
+   "context_any": [
+    "create-content-campaign",
+    "update-content-campaign"
+   ],
+   "scope": "file"
+  },
+  {
+   "id": "campaign.context_sources.brand_kit=customer_testimonials",
+   "group": "tool_param",
+   "source": "create-content-campaign context_sources description",
+   "tokens_any": [
+    [
+     "brand_kit",
+     "customer_testimonials"
+    ]
+   ],
+   "context_any": [
+    "create-content-campaign",
+    "update-content-campaign"
+   ],
+   "scope": "file"
+  },
+  {
+   "id": "campaign.context_sources.brand_kit=donts",
+   "group": "tool_param",
+   "source": "create-content-campaign context_sources description",
+   "tokens_any": [
+    [
+     "brand_kit",
+     "donts"
+    ]
+   ],
+   "context_any": [
+    "create-content-campaign",
+    "update-content-campaign"
+   ],
+   "scope": "file"
+  },
+  {
+   "id": "campaign.context_sources.brand_kit=dos",
+   "group": "tool_param",
+   "source": "create-content-campaign context_sources description",
+   "tokens_any": [
+    [
+     "brand_kit",
+     "dos"
+    ]
+   ],
+   "context_any": [
+    "create-content-campaign",
+    "update-content-campaign"
+   ],
+   "scope": "file"
+  },
+  {
+   "id": "campaign.context_sources.brand_kit=origin_story",
+   "group": "tool_param",
+   "source": "create-content-campaign context_sources description",
+   "tokens_any": [
+    [
+     "brand_kit",
+     "origin_story"
+    ]
+   ],
+   "context_any": [
+    "create-content-campaign",
+    "update-content-campaign"
+   ],
+   "scope": "file"
+  },
+  {
+   "id": "campaign.context_sources.brand_kit=tagline",
+   "group": "tool_param",
+   "source": "create-content-campaign context_sources description",
+   "tokens_any": [
+    [
+     "brand_kit",
+     "tagline"
+    ]
+   ],
+   "context_any": [
+    "create-content-campaign",
+    "update-content-campaign"
+   ],
+   "scope": "file"
+  },
+  {
+   "id": "campaign.context_sources.brand_kit=tone_of_voice",
+   "group": "tool_param",
+   "source": "create-content-campaign context_sources description",
+   "tokens_any": [
+    [
+     "brand_kit",
+     "tone_of_voice"
+    ]
+   ],
+   "context_any": [
+    "create-content-campaign",
+    "update-content-campaign"
+   ],
+   "scope": "file"
+  },
+  {
+   "id": "campaign.context_sources.kind",
+   "group": "tool_param",
+   "source": "mcp golden schema",
+   "tokens_any": [
+    [
+     "context_sources",
+     "kind"
+    ]
+   ],
+   "context_any": [
+    "create-content-campaign",
+    "update-content-campaign"
+   ],
+   "scope": "file"
+  },
+  {
+   "id": "campaign.context_sources.kind=brand_kit",
+   "group": "tool_param",
+   "source": "mcp golden enum",
+   "tokens_any": [
+    [
+     "kind",
+     "brand_kit"
+    ]
+   ],
+   "context_any": [
+    "create-content-campaign",
+    "update-content-campaign"
+   ],
+   "scope": "file"
+  },
+  {
+   "id": "campaign.context_sources.kind=file",
+   "group": "tool_param",
+   "source": "mcp golden enum",
+   "tokens_any": [
+    [
+     "kind",
+     "file"
+    ]
+   ],
+   "context_any": [
+    "create-content-campaign",
+    "update-content-campaign"
+   ],
+   "scope": "file"
+  },
+  {
+   "id": "campaign.context_sources.kind=url",
+   "group": "tool_param",
+   "source": "mcp golden enum",
+   "tokens_any": [
+    [
+     "kind",
+     "url"
+    ]
+   ],
+   "context_any": [
+    "create-content-campaign",
+    "update-content-campaign"
+   ],
+   "scope": "file"
+  },
+  {
+   "id": "campaign.context_sources.ref",
+   "group": "tool_param",
+   "source": "mcp golden schema",
+   "tokens_any": [
+    [
+     "context_sources",
+     "ref"
+    ]
+   ],
+   "context_any": [
+    "create-content-campaign",
+    "update-content-campaign"
+   ],
+   "scope": "file"
+  },
+  {
+   "id": "campaign.context_sources.title",
+   "group": "tool_param",
+   "source": "mcp golden schema",
+   "tokens_any": [
+    [
+     "context_sources",
+     "title"
+    ]
+   ],
+   "context_any": [
+    "create-content-campaign",
+    "update-content-campaign"
+   ],
+   "scope": "file"
+  },
+  {
    "id": "campaign.cta_text",
    "group": "tool_param",
    "source": "mcp golden schema",
@@ -7823,6 +7488,21 @@
    "scope": "file"
   },
   {
+   "id": "campaign.duration_weeks",
+   "group": "tool_param",
+   "source": "mcp golden schema",
+   "tokens_any": [
+    [
+     "duration_weeks"
+    ]
+   ],
+   "context_any": [
+    "create-content-campaign",
+    "update-content-campaign"
+   ],
+   "scope": "file"
+  },
+  {
    "id": "campaign.ends_on",
    "group": "tool_param",
    "source": "mcp golden schema",
@@ -7844,6 +7524,21 @@
    "tokens_any": [
     [
      "name"
+    ]
+   ],
+   "context_any": [
+    "create-content-campaign",
+    "update-content-campaign"
+   ],
+   "scope": "file"
+  },
+  {
+   "id": "campaign.post_ids",
+   "group": "tool_param",
+   "source": "mcp golden schema",
+   "tokens_any": [
+    [
+     "post_ids"
     ]
    ],
    "context_any": [
@@ -7994,6 +7689,21 @@
    "scope": "file"
   },
   {
+   "id": "campaign.voice_profile_id",
+   "group": "tool_param",
+   "source": "mcp golden schema",
+   "tokens_any": [
+    [
+     "voice_profile_id"
+    ]
+   ],
+   "context_any": [
+    "create-content-campaign",
+    "update-content-campaign"
+   ],
+   "scope": "file"
+  },
+  {
    "id": "confirm-plan.proposal_id",
    "group": "tool_param",
    "source": "mcp golden schema",
@@ -8022,7 +7732,80 @@
    "scope": "file"
   },
   {
-   "id": "plan-campaign.ask",
+   "id": "decide-suggestion.decision",
+   "group": "tool_param",
+   "source": "mcp golden schema",
+   "tokens_any": [
+    [
+     "decision"
+    ]
+   ],
+   "context_any": [
+    "decide-suggestion"
+   ],
+   "scope": "file"
+  },
+  {
+   "id": "decide-suggestion.decision=accept",
+   "group": "tool_param",
+   "source": "mcp golden enum",
+   "tokens_any": [
+    [
+     "decision",
+     "accept"
+    ]
+   ],
+   "context_any": [
+    "decide-suggestion"
+   ],
+   "scope": "file"
+  },
+  {
+   "id": "decide-suggestion.decision=decline",
+   "group": "tool_param",
+   "source": "mcp golden enum",
+   "tokens_any": [
+    [
+     "decision",
+     "decline"
+    ]
+   ],
+   "context_any": [
+    "decide-suggestion"
+   ],
+   "scope": "file"
+  },
+  {
+   "id": "decide-suggestion.decision=undo",
+   "group": "tool_param",
+   "source": "mcp golden enum",
+   "tokens_any": [
+    [
+     "decision",
+     "undo"
+    ]
+   ],
+   "context_any": [
+    "decide-suggestion"
+   ],
+   "scope": "file"
+  },
+  {
+   "id": "decide-suggestion.suggestion_id",
+   "group": "tool_param",
+   "source": "mcp golden schema",
+   "tokens_any": [
+    [
+     "suggestion_id"
+    ]
+   ],
+   "context_any": [
+    "decide-suggestion"
+   ],
+   "scope": "file"
+  },
+  {
+   "id": "plan.ask",
    "group": "tool_param",
    "source": "mcp golden schema",
    "tokens_any": [
@@ -8031,12 +7814,12 @@
     ]
    ],
    "context_any": [
-    "plan-campaign"
+    "plan"
    ],
    "scope": "file"
   },
   {
-   "id": "plan-campaign.context",
+   "id": "plan.context",
    "group": "tool_param",
    "source": "mcp golden schema",
    "tokens_any": [
@@ -8045,68 +7828,12 @@
     ]
    ],
    "context_any": [
-    "plan-campaign"
+    "plan"
    ],
    "scope": "file"
   },
   {
-   "id": "plan-campaign.links",
-   "group": "tool_param",
-   "source": "mcp golden schema",
-   "tokens_any": [
-    [
-     "links"
-    ]
-   ],
-   "context_any": [
-    "plan-campaign"
-   ],
-   "scope": "file"
-  },
-  {
-   "id": "plan-routine.ask",
-   "group": "tool_param",
-   "source": "mcp golden schema",
-   "tokens_any": [
-    [
-     "ask"
-    ]
-   ],
-   "context_any": [
-    "plan-routine"
-   ],
-   "scope": "file"
-  },
-  {
-   "id": "plan-routine.context",
-   "group": "tool_param",
-   "source": "mcp golden schema",
-   "tokens_any": [
-    [
-     "context"
-    ]
-   ],
-   "context_any": [
-    "plan-routine"
-   ],
-   "scope": "file"
-  },
-  {
-   "id": "recommend-routines.context",
-   "group": "tool_param",
-   "source": "mcp golden schema",
-   "tokens_any": [
-    [
-     "context"
-    ]
-   ],
-   "context_any": [
-    "recommend-routines"
-   ],
-   "scope": "file"
-  },
-  {
-   "id": "recommend-routines.count",
+   "id": "plan.count",
    "group": "tool_param",
    "source": "mcp golden schema",
    "tokens_any": [
@@ -8115,21 +7842,122 @@
     ]
    ],
    "context_any": [
-    "recommend-routines"
+    "plan"
    ],
    "scope": "file"
   },
   {
-   "id": "recommend-routines.goals",
+   "id": "plan.kind",
    "group": "tool_param",
    "source": "mcp golden schema",
    "tokens_any": [
     [
-     "goals"
+     "kind"
     ]
    ],
    "context_any": [
-    "recommend-routines"
+    "plan"
+   ],
+   "scope": "file"
+  },
+  {
+   "id": "plan.kind=campaign",
+   "group": "tool_param",
+   "source": "mcp golden enum",
+   "tokens_any": [
+    [
+     "kind",
+     "campaign"
+    ]
+   ],
+   "context_any": [
+    "plan"
+   ],
+   "scope": "file"
+  },
+  {
+   "id": "plan.kind=recommend",
+   "group": "tool_param",
+   "source": "mcp golden enum",
+   "tokens_any": [
+    [
+     "kind",
+     "recommend"
+    ]
+   ],
+   "context_any": [
+    "plan"
+   ],
+   "scope": "file"
+  },
+  {
+   "id": "plan.kind=routine",
+   "group": "tool_param",
+   "source": "mcp golden enum",
+   "tokens_any": [
+    [
+     "kind",
+     "routine"
+    ]
+   ],
+   "context_any": [
+    "plan"
+   ],
+   "scope": "file"
+  },
+  {
+   "id": "plan.links",
+   "group": "tool_param",
+   "source": "mcp golden schema",
+   "tokens_any": [
+    [
+     "links"
+    ]
+   ],
+   "context_any": [
+    "plan"
+   ],
+   "scope": "file"
+  },
+  {
+   "id": "publish-post.post_id",
+   "group": "tool_param",
+   "source": "mcp golden schema",
+   "tokens_any": [
+    [
+     "post_id"
+    ]
+   ],
+   "context_any": [
+    "publish-post"
+   ],
+   "scope": "file"
+  },
+  {
+   "id": "publish-post.timezone",
+   "group": "tool_param",
+   "source": "mcp golden schema",
+   "tokens_any": [
+    [
+     "timezone"
+    ]
+   ],
+   "context_any": [
+    "publish-post"
+   ],
+   "scope": "file"
+  },
+  {
+   "id": "publish-post.when",
+   "group": "tool_param",
+   "source": "mcp golden schema",
+   "tokens_any": [
+    [
+     "when"
+    ]
+   ],
+   "context_any": [
+    "publish-post"
    ],
    "scope": "file"
   },
@@ -10177,6 +10005,278 @@
    "context_any": [
     "create-routine",
     "update-routine"
+   ],
+   "scope": "file"
+  },
+  {
+   "id": "save-post.account_ids",
+   "group": "tool_param",
+   "source": "mcp golden schema",
+   "tokens_any": [
+    [
+     "account_ids"
+    ]
+   ],
+   "context_any": [
+    "save-post"
+   ],
+   "scope": "file"
+  },
+  {
+   "id": "save-post.content",
+   "group": "tool_param",
+   "source": "mcp golden schema",
+   "tokens_any": [
+    [
+     "content"
+    ]
+   ],
+   "context_any": [
+    "save-post"
+   ],
+   "scope": "file"
+  },
+  {
+   "id": "save-post.idempotency_key",
+   "group": "tool_param",
+   "source": "mcp golden schema",
+   "tokens_any": [
+    [
+     "idempotency_key"
+    ]
+   ],
+   "context_any": [
+    "save-post"
+   ],
+   "scope": "file"
+  },
+  {
+   "id": "save-post.media",
+   "group": "tool_param",
+   "source": "mcp golden schema",
+   "tokens_any": [
+    [
+     "media"
+    ]
+   ],
+   "context_any": [
+    "save-post"
+   ],
+   "scope": "file"
+  },
+  {
+   "id": "save-post.media.download_url",
+   "group": "tool_param",
+   "source": "mcp golden schema",
+   "tokens_any": [
+    [
+     "media",
+     "download_url"
+    ]
+   ],
+   "context_any": [
+    "save-post"
+   ],
+   "scope": "file"
+  },
+  {
+   "id": "save-post.media.file_id",
+   "group": "tool_param",
+   "source": "mcp golden schema",
+   "tokens_any": [
+    [
+     "media",
+     "file_id"
+    ]
+   ],
+   "context_any": [
+    "save-post"
+   ],
+   "scope": "file"
+  },
+  {
+   "id": "save-post.media.file_name",
+   "group": "tool_param",
+   "source": "mcp golden schema",
+   "tokens_any": [
+    [
+     "media",
+     "file_name"
+    ]
+   ],
+   "context_any": [
+    "save-post"
+   ],
+   "scope": "file"
+  },
+  {
+   "id": "save-post.media.mime_type",
+   "group": "tool_param",
+   "source": "mcp golden schema",
+   "tokens_any": [
+    [
+     "media",
+     "mime_type"
+    ]
+   ],
+   "context_any": [
+    "save-post"
+   ],
+   "scope": "file"
+  },
+  {
+   "id": "save-post.parts",
+   "group": "tool_param",
+   "source": "mcp golden schema",
+   "tokens_any": [
+    [
+     "parts"
+    ]
+   ],
+   "context_any": [
+    "save-post"
+   ],
+   "scope": "file"
+  },
+  {
+   "id": "save-post.platform_details",
+   "group": "tool_param",
+   "source": "mcp golden schema",
+   "tokens_any": [
+    [
+     "platform_details"
+    ]
+   ],
+   "context_any": [
+    "save-post"
+   ],
+   "scope": "file"
+  },
+  {
+   "id": "save-post.platform_specific",
+   "group": "tool_param",
+   "source": "mcp golden schema",
+   "tokens_any": [
+    [
+     "platform_specific"
+    ]
+   ],
+   "context_any": [
+    "save-post"
+   ],
+   "scope": "file"
+  },
+  {
+   "id": "save-post.poll",
+   "group": "tool_param",
+   "source": "mcp golden schema",
+   "tokens_any": [
+    [
+     "poll"
+    ]
+   ],
+   "context_any": [
+    "save-post"
+   ],
+   "scope": "file"
+  },
+  {
+   "id": "save-post.post_id",
+   "group": "tool_param",
+   "source": "mcp golden schema",
+   "tokens_any": [
+    [
+     "post_id"
+    ]
+   ],
+   "context_any": [
+    "save-post"
+   ],
+   "scope": "file"
+  },
+  {
+   "id": "save-post.social_buckets",
+   "group": "tool_param",
+   "source": "mcp golden schema",
+   "tokens_any": [
+    [
+     "social_buckets"
+    ]
+   ],
+   "context_any": [
+    "save-post"
+   ],
+   "scope": "file"
+  },
+  {
+   "id": "save-post.unschedule",
+   "group": "tool_param",
+   "source": "mcp golden schema",
+   "tokens_any": [
+    [
+     "unschedule"
+    ]
+   ],
+   "context_any": [
+    "save-post"
+   ],
+   "scope": "file"
+  },
+  {
+   "id": "suggestions.kind",
+   "group": "tool_param",
+   "source": "mcp golden schema",
+   "tokens_any": [
+    [
+     "kind"
+    ]
+   ],
+   "context_any": [
+    "list-suggestions"
+   ],
+   "scope": "file"
+  },
+  {
+   "id": "suggestions.kind=brand",
+   "group": "tool_param",
+   "source": "mcp golden enum",
+   "tokens_any": [
+    [
+     "kind",
+     "brand"
+    ]
+   ],
+   "context_any": [
+    "list-suggestions"
+   ],
+   "scope": "file"
+  },
+  {
+   "id": "suggestions.kind=routine",
+   "group": "tool_param",
+   "source": "mcp golden enum",
+   "tokens_any": [
+    [
+     "kind",
+     "routine"
+    ]
+   ],
+   "context_any": [
+    "list-suggestions"
+   ],
+   "scope": "file"
+  },
+  {
+   "id": "suggestions.routine_id",
+   "group": "tool_param",
+   "source": "mcp golden schema",
+   "tokens_any": [
+    [
+     "routine_id"
+    ]
+   ],
+   "context_any": [
+    "list-suggestions"
    ],
    "scope": "file"
   }

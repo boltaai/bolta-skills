@@ -2,7 +2,7 @@
 
 How to set and which wins: [network settings](post-settings.md). Network `youtube`. Needs one video (a public https link). A `text` in `platform_specific` is ignored; the description is its own setting.
 
-**Per-account entries replace, not merge**: a channel with its own entry under `youtube.accounts` uses only that entry, so repeat every setting it needs there. Missing keys fall back to what `update-post-platform-details` saved.
+**Per-account entries replace, not merge**: a channel with its own entry under `youtube.accounts` uses only that entry, so repeat every setting it needs there. Missing keys fall back to what `save-post` `platform_details` saved.
 
 ## Settings
 
@@ -12,7 +12,7 @@ How to set and which wins: [network settings](post-settings.md). Network `youtub
   - Guidance: `unlisted` to let a client or teammate watch it by link before it is public, then change to `public` (on a scheduled post that needs a new yes). `private` only for the owner's eyes. Say the default out loud: a video saved without a choice goes up private.
 - **Made for kids**: `self_declared_made_for_kids` true or false (default false); `made_for_kids` is the same setting. Both, per account. Ask when the content could be aimed at children: YouTube's rules make the uploader answer.
 - **Tags**: `tags`, a list of words. **Category**: `category_id`, YouTube's number (22 People & Blogs, 27 Education, 28 Science & Technology). Both, per account. Only a category the user agreed to.
-- **Thumbnail**: `thumbnail_url`, a public https image the user gave. Best effort: if it fails, the video still goes up. Here `update-post-platform-details` wins over `platform_specific`.
+- **Thumbnail**: `thumbnail_url`, a public https image the user gave. Best effort: if it fails, the video still goes up. Here `platform_details` wins over `platform_specific`.
 - **Language**: `default_language`, the video's language code such as `"en"` or `"es"`. Both, per account. Set it when the video isn't in the channel's usual language.
 - **Embedding**: `allow_embedding` (default true) lets other sites show the video.
 - **Tell subscribers**: `notify_subscribers` (default true). Guidance: turn off for a re-upload, a client preview or a minor clip so subscribers aren't pinged.

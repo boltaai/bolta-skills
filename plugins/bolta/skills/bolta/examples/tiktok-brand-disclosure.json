@@ -4,7 +4,7 @@
   "before": "The reply asked two things TikTok needs: who should see it, and whether it's the brand's own product or a paid partnership. The user said: public, and it's our own product, nobody paid us.",
   "steps": [
     {
-      "tool": "create-post",
+      "tool": "save-post",
       "arguments": {
         "workspace_id": "<brand's workspace id>",
         "content": "Our new serum is here.",
@@ -21,35 +21,37 @@
             "brand_organic_toggle": true
           }
         },
-        "idempotency_key": "serum-tiktok-1"
-      },
-      "why": "The decision: the video sells the brand's own product, so TikTok expects it disclosed as promoting the user's business: brand_organic_toggle. Not brand_content_toggle, which is for a paid partner. These two can only be set in platform_specific. The post's text is the caption."
-    },
-    {
-      "tool": "update-post-platform-details",
-      "arguments": {
-        "post_id": "<post id>",
-        "platform": "tiktok",
-        "fields": {
-          "privacy_level": "PUBLIC_TO_EVERYONE",
-          "disable_duet": false,
-          "disable_stitch": false
+        "idempotency_key": "serum-tiktok-1",
+        "platform_details": {
+          "tiktok": {
+            "privacy_level": "PUBLIC_TO_EVERYONE",
+            "disable_duet": false,
+            "disable_stitch": false
+          }
         }
       },
-      "why": "Privacy through the details call, which refuses a misspelled level; in platform_specific a typo would quietly become the first level the account allows. Public is what the user said. Duets and stitches stay on: product demos spread through them."
+      "why": "The decision: the video sells the brand's own product, so TikTok expects it disclosed as promoting the user's business: brand_organic_toggle. Not brand_content_toggle, which is for a paid partner. These two can only be set in platform_specific. The post's text is the caption. Privacy through platform_details, which refuses a misspelled level for TikTok (the result's platform_details.tiktok says so, and the draft is still saved); in platform_specific a typo would quietly become the first level the account allows. Public is what the user said. Duets and stitches stay on: product demos spread through them. One saving call carries both."
     },
     {
       "tool": "get-post",
       "arguments": {
         "post_id": "<post id>"
       },
-      "why": "Read back metadata.platformSpecific.tiktok for the disclosure; the privacy reply already showed the saved level."
+      "why": "Read back metadata.platformSpecific.tiktok for the disclosure."
+    },
+    {
+      "tool": "get-post",
+      "arguments": {
+        "post_id": "<post id>",
+        "platform": "tiktok"
+      },
+      "why": "Read back privacy_level, disable_duet and disable_stitch: the save's result reports only whether TikTok's settings were taken, not the values."
     }
   ],
   "say": "Saved to Acme as a TikTok draft, public to everyone, marked as promoting your own business: \"Our new serum is here.\" Duets and stitches are on. Nothing goes out yet. Schedule it?",
   "never": [
     "Deciding for the user that a product video needs no disclosure.",
-    "Setting the disclosure with update-post-platform-details: it answers success and keeps nothing.",
+    "Setting the disclosure in platform_details: it reports ok and keeps nothing.",
     "Assuming public without asking."
   ]
 }

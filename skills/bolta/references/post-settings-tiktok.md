@@ -2,13 +2,13 @@
 
 How to set and which wins: [network settings](post-settings.md). Network `tiktok`. Needs one video (a public https link); photo posts aren't supported. The post's text is the caption, up to 2,200 characters; longer is cut. A `text` in `platform_specific` is ignored here.
 
-**Per-account entries replace, not merge**: an account with its own entry under `tiktok.accounts` uses only that entry, so repeat every TikTok setting it needs there. Where an entry or the network level lacks a key, Bolta falls back to what `update-post-platform-details` saved.
+**Per-account entries replace, not merge**: an account with its own entry under `tiktok.accounts` uses only that entry, so repeat every TikTok setting it needs there. Where an entry or the network level lacks a key, Bolta falls back to what `save-post` `platform_details` saved.
 
 ## Settings
 
 - **Who sees it**: `privacy_level` `PUBLIC_TO_EVERYONE` (default), `MUTUAL_FOLLOW_FRIEND`, `FOLLOWER_OF_CREATOR` or `SELF_ONLY`. Both, per account.
   - If the account doesn't allow the level chosen, TikTok's first allowed level is used instead, which is usually public. Bolta says nothing.
-  - Set it with `update-post-platform-details`, which refuses a misspelled level. In `platform_specific` a misspelling is kept and becomes that first allowed level at publish.
+  - Set it with `platform_details` `{"tiktok": {"privacy_level": ...}}`, which refuses a misspelled level (the result's `platform_details` names it). In `platform_specific` a misspelling is kept and becomes that first allowed level at publish.
   - The user didn't say? Ask; never assume public. `SELF_ONLY` is the way to put a video up for a client or teammate to check in the app first.
 - **Comments**: `disable_comments` true or false (default false). Both, per account.
 - **Duet and stitch**: `disable_duet`, `disable_stitch` true or false (default false: allowed). Both, per account.
@@ -16,7 +16,7 @@ How to set and which wins: [network settings](post-settings.md). Network `tiktok
 - **Promotes the user's own business**: `brand_organic_toggle: true`. `platform_specific` only.
 - **Paid partnership or sponsored**: `brand_content_toggle: true`. `platform_specific` only. TikTok labels the video as branded content. It can't be private: with `SELF_ONLY` the label is dropped.
   - Guidance: TikTok asks creators to disclose promotion; when a video promotes a product, service or offer, ask which applies (own business, a paid partner, or neither) and set it before the yes; never decide for the user that no disclosure is needed. Both can be on.
-  - `update-post-platform-details` can't set these two: it answers success and keeps nothing. Read back with `get-post` (`metadata.platformSpecific.tiktok`).
+  - `platform_details` can't set these two: it reports `ok` for TikTok and keeps nothing. Read back with `get-post` (`metadata.platformSpecific.tiktok`).
 
 ## Not possible here
 

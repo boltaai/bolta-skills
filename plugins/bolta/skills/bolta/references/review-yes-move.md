@@ -4,11 +4,11 @@ Read before carrying out decisions. Times: [review-times.md](review-times.md). L
 
 ## Order inside one reply
 
-1. `submit-for-review` for every yes not yet on the list, in one call. `note`: a short factual note for reviewers, never invented urgency; it can't pick a reviewer. A post "held back: needs a human edit", or a quality refusal (it carries `how_to_fix`), gets new text via `update-post` (text only, no status; that edit asks once), then is shown again, not approved now.
+1. `submit-for-review` for every yes not yet on the list, in one call. `note`: a short factual note for reviewers, never invented urgency; it can't pick a reviewer. A post "held back: needs a human edit", or a quality refusal (it carries `how_to_fix`), gets new text via `save-post` with `post_id` and `content` (that edit asks once), then is shown again, not approved now.
 2. Just sent some? `list-inbox-items` again for their `content_fingerprint`.
-3. `approve-many-posts`, every yes in one call (25 at most; the rest in a second call). It gets the one Bolta check. If missing: `approve-post` each, the first in its own call.
+3. `approve-many-posts`, every yes in one call (25 at most; the rest in a second call). It gets the one Bolta check. One post is one item.
 4. `reject-post` for each no with a reason; `delete-post` for each drop. They pass once the approval's check did.
-5. Read back ([read-back.md](review-read-back.md)). `approve-post` returns `scheduled_time` and `credits_charged`; `approve-many-posts` drops both, so after a batch call `list-scheduled-posts` once (UTC `start_date`/`end_date` ending in Z, a day wider). Its times are UTC; show them in the brand clock.
+5. Read back ([read-back.md](review-read-back.md)). Each `approve-many-posts` item gives `scheduled` and, when set, `scheduled_time` (UTC) and `credits_charged`. After a batch, read back once with `list-workspace-posts` and those posts' `account_ids`, the scheduled queue (UTC `start_date`/`end_date` ending in Z, a day wider). Its times are UTC; show them in the brand clock.
 
 ## Times
 
@@ -22,18 +22,14 @@ Read before carrying out decisions. Times: [review-times.md](review-times.md). L
 
 ## Fingerprints, roles, notes
 
-- `expected_fingerprint`: the row's `content_fingerprint`, read after any change; never reuse an old one. A row with an empty one can't go in `approve-many-posts`: use `approve-post` for it, without it.
-- Here, `approve-post`, `approve-many-posts` and `reject-post` follow Bolta's rule: owners and admins any post; creators Bolta's drafts and posts naming them reviewer; a per-person setting can give or take it away; viewers never. Own post, review mode and client sign-off still apply. More: [people and roles](connect-people-and-roles.md). Refused: give Bolta's sentence, send for review, say who can.
+- `expected_fingerprint`: the row's `content_fingerprint`, read after any change; never reuse an old one. A legacy recurring row has none: send its `review_id` (the row's `id`) instead of `post_id` and `expected_fingerprint`. Any other row with an empty one can't be approved here: read the list again; still empty, it is approved in Bolta (bolta.ai/dashboard/approvals).
+- Here, `approve-many-posts` and `reject-post` follow Bolta's rule: owners and admins any post; creators Bolta's drafts and posts naming them reviewer; a per-person setting can give or take it away; viewers never. Own post, review mode and client sign-off still apply. More: [people and roles](connect-people-and-roles.md). Refused: give Bolta's sentence, send for review, say who can.
 - `comments` on an approval: an optional note kept on the review trail, and for AI drafts fed to Bolta's learning. Use the user's words only.
 - No checks plugin, no Bolta checks. Past 3 yeses, also offer bolta.ai/dashboard/approvals.
 
 ## Reading the result
 
-- Scheduled: read back the time, in the brand clock.
-- "Ready for Scheduling" (typed in Bolta's composer, or no connected account): say it is approved but not scheduled. Account connected and review mode off: ask for a time, then `schedule-post`. Review mode on, `schedule-post` sends it back to the review list: `update-post` with `status: "Draft"`, submit, approve with `set_fixed_time`. More: [review-times.md](review-times.md).
-- `already_decided`: approved before; nothing changed. Repeating a batch is safe.
-- `warnings` (X length, Reddit): pass them on.
-- Post now, check declined after approval: it stays scheduled at Bolta's time. Say the time; offer to pull it back ([fix](fix.md)).
+Scheduled, "Ready for Scheduling", `already_decided`, `warnings`: [review-yes-move-result.md](review-yes-move-result.md).
 
 ## When it goes wrong
 

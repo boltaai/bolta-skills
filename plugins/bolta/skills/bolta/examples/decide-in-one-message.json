@@ -1,7 +1,7 @@
 {
   "ask": "1 and 3 yes, 2 is too salesy, drop 4.",
   "playbook": "review",
-  "before": "The numbered list was shown in the previous reply, read with list-inbox-items (source team, status pending). The brand's clock (get-workspace timezone: America/New_York) was read once at the start.",
+  "before": "The numbered list was shown in the previous reply, read with list-inbox-items (source team, status pending). The brand's clock (the list-workspaces row's timezone: America/New_York) was read once at the start.",
   "steps": [
     {
       "tool": "approve-many-posts",
@@ -20,7 +20,7 @@
           }
         ]
       },
-      "why": "Every yes in one call. approve_only lets Bolta pick the time (review-times.md has the order). Missing here: approve-post for each, the first alone."
+      "why": "Every yes in one call. approve_only lets Bolta pick the time (review-times.md has the order). One post would be one item in the same call."
     },
     {
       "tool": "reject-post",
@@ -43,13 +43,16 @@
       "why": "A drop can be undone for 7 days and records no reason."
     },
     {
-      "tool": "list-scheduled-posts",
+      "tool": "list-workspace-posts",
       "arguments": {
         "workspace_id": "<brand's workspace id>",
+        "account_ids": [
+          "<the approved posts' account ids>"
+        ],
         "start_date": "<now, UTC with Z>",
         "end_date": "<14 days ahead, UTC with Z>"
       },
-      "why": "Read back the day, time and account Bolta gave each yes. approve-many-posts drops each post's time (approve-post would return scheduled_time), so read them here. Bolta picked the times, so ask a wide window. The times come back in UTC: show them in the brand's clock, with its city."
+      "why": "Read back the day, time and account Bolta gave each yes, in one read after the batch. Bolta picked the times, so ask a wide window. The times come back in UTC: show them in the brand's clock, with its city."
     }
   ],
   "say": "Done for Acme. 1 goes out Tue Nov 17, 9:00 am (New York) on LinkedIn. 3 goes out Thu Nov 19, 9:00 am (New York) on LinkedIn. 2 is turned down: too salesy. Bolta saved your reason. 4 is removed; you can undo that for 7 days.",

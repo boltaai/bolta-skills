@@ -9,7 +9,7 @@ Read for changes, pausing, stopping, running now and Monday's drafts. Start with
 | "Make it 2 a week" | `update-routine` with the whole `output_config` | One, except as below |
 | "Move it to Tuesday 9" | `update-routine` with `schedule` and `timezone` | Same |
 | "Pause it", "hold off this week" | `pause-routine` | Never |
-| "Turn it back on" | `resume-routine` (paused) or `activate-routine` (never switched on) | One, unless set up as ask me first in this conversation |
+| "Turn it back on" | `activate-routine` (paused, or never switched on) | One, unless set up as ask me first in this conversation |
 | "Stop it for good" | `archive-routine` | One. Say first: "This can't be undone. Pausing stops it for now." |
 | "Run it now" | `run-routine-now` | One: "Uses credits now. Drafts usually land in a few minutes." |
 | "Copy it" | `get-routine`, then `create-routine` with the same settings | As for a new one |

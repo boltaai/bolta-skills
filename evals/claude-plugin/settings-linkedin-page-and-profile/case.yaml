@@ -28,18 +28,19 @@ graders:
   - name: profile-and-page
     # Both destinations on one post: her profile and the page row.
     type: tool_used
-    tool: mcp__plugin_bolta_bolta__create-post
-    input_match: '^(?=[\s\S]*a1b2c3d4-0001-4a00-8000-000000000006)(?=[\s\S]*linkedin_org_80412377)'
+    tool: mcp__plugin_bolta_bolta__save-post
+    input_match: '^(?![\s\S]*"post_id")(?=[\s\S]*(?:(?=[\s\S]*a1b2c3d4-0001-4a00-8000-000000000006)(?=[\s\S]*linkedin_org_80412377)))'
     min: 1
   - name: page-own-text
     # The page's text sits under linkedin.accounts, keyed by the page's id.
     type: tool_used
-    tool: mcp__plugin_bolta_bolta__create-post
-    input_match: '"linkedin"\s*:\s*\{[\s\S]*"accounts"\s*:\s*\{[\s\S]*"linkedin_org_80412377"\s*:\s*\{[^{}]*"text"\s*:'
+    tool: mcp__plugin_bolta_bolta__save-post
+    input_match: '^(?![\s\S]*"post_id")(?=[\s\S]*(?:"linkedin"\s*:\s*\{[\s\S]*"accounts"\s*:\s*\{[\s\S]*"linkedin_org_80412377"\s*:\s*\{[^{}]*"text"\s*:))'
     min: 1
   - name: one-create-only
     type: tool_used
-    tool: mcp__plugin_bolta_bolta__create-post
+    tool: mcp__plugin_bolta_bolta__save-post
+    input_match: '^(?![\s\S]*"post_id")'
     min: 0
     max: 1
   - name: no-separate-posts
@@ -53,15 +54,15 @@ graders:
     # the skill's own LinkedIn and keys pages when the model Read them (they name these keys to
     # say "don't"), failing runs that never sent either key.
     type: tool_used
-    tool: mcp__plugin_bolta_bolta__update-post-platform-details
-    input_match: 'post_as_organization|selected_organization'
+    tool: mcp__plugin_bolta_bolta__save-post
+    input_match: '^(?=[\s\S]*"platform_details")(?=[\s\S]*(?:post_as_organization|selected_organization))'
     min: 0
     max: 0
   - name: no-org-key-in-post
     # Nor in the saving or updating call's platform_specific.
     type: regex
     target: trace
-    pattern: '"name":"mcp__plugin_bolta_bolta__(create-post|update-post)","input":\{[^\n]{0,6000}?(post_as_organization|selected_organization)'
+    pattern: '"name":"mcp__plugin_bolta_bolta__(create-post|update-post|save-post)","input":\{[^\n]{0,6000}?(post_as_organization|selected_organization)'
     match: not_contains
   - name: shows-both
     type: regex

@@ -40,19 +40,8 @@ One connection for the agency's organization; tick the client brands.
 
 ## What this connection may do
 
-`get-my-capabilities`: read it after a refusal, or when asked. For each "no", `denied_by` gives a reason:
+Nothing lists it ahead of time; a refusal names the reason. What each one means and what to say: [refusals](connect-refusals.md).
 
-| Reason | Say |
-|-|-|
-| `role` | "Your role can't do this." |
-| `workspace_plan` | "Your plan doesn't include this." |
-| `key_scope` | "This connection wasn't given that access." |
-| `override` | "An owner or admin turned this off for you. Ask a brand admin; a new connection won't fix it." |
-
-- On a sign-in connection, workspace settings always show as not given (`key_scope`), by design (Bolta Settings only). Don't flag it.
-- Access follows the role of whoever signed in. A viewer's connection is read-only: no saves, nothing that uses credits. A client reviewer can't connect at all. A role change applies when the sign-in next renews; sign in again to apply it now.
-- A role that can't connect accounts: a teammate whose role can does it.
-- The read can say yes and Bolta still refuse. Give Bolta's sentence; don't try another way.
 - Here the same people approve as in Bolta: owners and admins any post, creators Bolta's drafts and posts naming them reviewer ([roles](connect-people-and-roles.md)).
 
 Clock, review mode and "Is everything set up?": [team-and-integrations](connect-team-and-integrations.md).

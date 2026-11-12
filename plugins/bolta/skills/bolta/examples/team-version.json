@@ -3,9 +3,10 @@
   "playbook": "review",
   "steps": [
     {
-      "tool": "list-voice-profiles",
+      "tool": "get-voice-context",
       "arguments": {
-        "workspace_id": "<brand's workspace id>"
+        "workspace_id": "<brand's workspace id>",
+        "all_profiles": true
       },
       "why": "Who has a person voice. David and Maria each need one; Procurement is a function, written in the brand voice. A person with no voice: offer to make one first (voice playbook) rather than write them in the brand voice by guess."
     },

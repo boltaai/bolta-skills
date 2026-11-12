@@ -1,7 +1,7 @@
 {
   "ask": "Set up 1 and 3.",
   "playbook": "start",
-  "before": "recommend-routines returned three plans, each with its own id; the reply listed them numbered and asked which to set up.",
+  "before": "plan with kind recommend returned three plans, each with its own id; the reply listed them numbered and asked which to set up.",
   "steps": [
     {
       "tool": "confirm-plan",

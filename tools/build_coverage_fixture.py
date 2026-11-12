@@ -8,14 +8,14 @@ must appear in plugins/bolta/skills/bolta/references/*.md. The coverage section
 of tools/check_claude_plugin.py then fails for every key no reference teaches.
 
 Groups:
-  tool_param   routine and campaign tool inputs (create/update-routine, plan-*,
-               recommend-routines, revise-plan changes, confirm-plan,
-               create/update-content-campaign, set-content-campaign-targets/status,
-               analyze-content-campaign-source), recursively, with the enum values
+  tool_param   routine and campaign tool inputs (create/update-routine, plan,
+               revise-plan changes, confirm-plan, create/update-content-campaign,
+               set-content-campaign-status, analyze-content-campaign-source), save-post,
+               publish-post, list-suggestions and decide-suggestion, recursively, with the enum values
                worth teaching. Where the golden schema is an opaque object
                (output_config, schedule, changes, content_mix) the keys come from
                the server's own validators and constants.
-  post_details per-network fields update-post-platform-details accepts
+  post_details per-network fields save-post platform_details accepts
                (posts/post_details_api_v1_views.py derives them from the
                *PostDetails models: editable, non-system fields, FK _id aliases,
                many-to-many) and their closed-set choice values.
@@ -32,7 +32,7 @@ the new keys:
     python3 -I tools/build_coverage_fixture.py [SERVER_PATH]
     python3 -I tools/check_claude_plugin.py --coverage-only
 
-SERVER_PATH defaults to ~/Projects/GitHub/BOLT-SERVER/SERVER-release1. The
+SERVER_PATH defaults to ~/Projects/GitHub/BOLT-SERVER/SERVER-release2. The
 script exits non-zero when a source it expects yields nothing (a renamed file
 or function would otherwise shrink the fixture and "prove" coverage vacuously).
 """
@@ -48,22 +48,24 @@ import sys
 
 REPO = pathlib.Path(__file__).resolve().parent.parent
 OUT = REPO / "tools" / "fixtures" / "coverage_keys.json"
-DEFAULT_SERVER = pathlib.Path.home() / "Projects" / "GitHub" / "BOLT-SERVER" / "SERVER-release1"
+DEFAULT_SERVER = pathlib.Path.home() / "Projects" / "GitHub" / "BOLT-SERVER" / "SERVER-release2"
 
 # Tool -> id prefix. Tools sharing a prefix share keys (create and update take the same fields).
 TOOL_PREFIX = {
     "create-routine": "routine",
     "update-routine": "routine",
-    "plan-routine": "plan-routine",
-    "plan-campaign": "plan-campaign",
-    "recommend-routines": "recommend-routines",
+    "plan": "plan",
     "revise-plan": "revise-plan",
     "confirm-plan": "confirm-plan",
     "create-content-campaign": "campaign",
     "update-content-campaign": "campaign",
-    "set-content-campaign-targets": "campaign-targets",
     "set-content-campaign-status": "campaign-status",
     "analyze-content-campaign-source": "campaign-source",
+    # Release 2's folded post tools and Bolta's suggestions
+    "save-post": "save-post",
+    "publish-post": "publish-post",
+    "list-suggestions": "suggestions",
+    "decide-suggestion": "decide-suggestion",
 }
 SKIP_PARAMS = {"workspace_id"}  # on every tool; the checker's universal param
 
@@ -345,11 +347,13 @@ def tool_params(server, tools):
     action_desc = tools["set-content-campaign-status"]["inputSchema"]["properties"]["action"]["description"]
     enum("campaign-status.action", "action", prose_list(action_desc, "Exactly one of:"), "set-content-campaign-status action description",
          ["set-content-campaign-status"])
-    targets = tools["set-content-campaign-targets"]["inputSchema"]["properties"]["context_sources"]["description"]
+    targets = tools["create-content-campaign"]["inputSchema"]["properties"]["context_sources"]["description"]
     m = re.search(r"Brand-kit sections:\s*(.+?)\.\s", targets)
+    if not m:
+        fail("context_sources brand-kit sections not found in the create-content-campaign description")
     for k in ([w.strip() for w in m.group(1).split(",")] if m else []):
-        add(f"campaign-targets.context_sources.brand_kit={k}", "tool_param", "set-content-campaign-targets description",
-            [["brand_kit", k]], ["set-content-campaign-targets"])
+        add(f"campaign.context_sources.brand_kit={k}", "tool_param", "create-content-campaign context_sources description",
+            [["brand_kit", k]], camp_ctx)
 
 
 # --------------------------------------------------------------------------- #
@@ -450,7 +454,7 @@ def post_details(server):
                 alts.append([fld[:-3]])
             elif f"{fld}_id" in fields:
                 alts.append([f"{fld}_id"])
-            add(f"{net}.{fld}", "post_details", f"{model} (update-post-platform-details)", alts, ctx, "section",
+            add(f"{net}.{fld}", "post_details", f"{model} (save-post platform_details)", alts, ctx, "section",
                 example={"network": net, "field": fld, "where": "fields"})
         for fld, vals in choices.items():
             for val in vals:

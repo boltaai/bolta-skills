@@ -14,14 +14,7 @@
         "cta_text": "See the new pricing",
         "cta_url": "https://example.com/pricing",
         "starts_on": "2026-11-16",
-        "ends_on": "2026-12-06"
-      },
-      "why": "A launch is problem_solution (guidance; always send a strategy). theme is the writer's goal sentence; cta_text is used word for word. ends_on is a real date: null is ignored, not refused, and the campaign would keep 1 week. Launch day Dec 1 sits in week 3 because weeks start on the start date's weekday (Monday). No content_mix: the brand's saved Content defaults apply, else the strategy's own mix (3 images and 1 carousel). Check resolved_content_mix in the reply. If the user asks for a different mix, send only known mix keys; others are dropped silently."
-    },
-    {
-      "tool": "set-content-campaign-targets",
-      "arguments": {
-        "campaign_id": "<campaign id>",
+        "ends_on": "2026-12-06",
         "account_ids": [
           "<LinkedIn account id>",
           "<Instagram account id>"
@@ -35,7 +28,7 @@
           }
         ]
       },
-      "why": "The reply's account_ids was empty (the brand's Content defaults can fill it when crosspost is on). With accounts in the workspace and none on the campaign, activating would stall at needs accounts. Without this tool: the user picks accounts on the campaign's page, then says done."
+      "why": "A launch is problem_solution (guidance; always send a strategy). theme is the writer's goal sentence; cta_text is used word for word. ends_on is a real date: null is ignored, not refused, and the campaign would keep 1 week. Launch day Dec 1 sits in week 3 because weeks start on the start date's weekday (Monday). No content_mix: the brand's saved Content defaults apply, else the strategy's own mix (3 images and 1 carousel). Check resolved_content_mix in the reply. If the user asks for a different mix, send only known mix keys; others are dropped silently. Accounts, notes and the page go on the same create call, so the campaign is made with its accounts. Left out, account_ids would come back empty (the brand's Content defaults fill it only when crosspost is on), and with accounts in the workspace and none on the campaign, activating would stall at needs accounts. If the call refuses these fields: the user picks accounts on the campaign's page, then says done."
     },
     {
       "tool": "analyze-content-campaign-source",

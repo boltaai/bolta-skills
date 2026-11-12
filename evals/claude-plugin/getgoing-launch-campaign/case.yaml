@@ -30,7 +30,7 @@ graders:
   - name: no-loop-of-posts
     # Not a loop of single posts.
     type: regex
-    pattern: '(?:"name"\s*:\s*"mcp__plugin_bolta_bolta__(create-post)"[\s\S]*){3}'
+    pattern: '(?:"name"\s*:\s*"mcp__plugin_bolta_bolta__(create-post|save-post)"[\s\S]*){3}'
     target: trace
     match: not_contains
   - name: no-switch-on-via-plan

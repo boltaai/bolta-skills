@@ -1,7 +1,7 @@
 {
   "ask": "Yes, set it up and turn it on.",
   "playbook": "routine",
-  "before": "The user asked for 'my stories as a founder, LinkedIn and X'. list-voice-profiles showed a person voice 'Maya (founder)' beside the brand voice. The user named three real events to draw on: losing their biggest client in March, rebuilding onboarding because of it, hiring a first engineer in June. The summary said: every Tuesday 8:00 am (London), 2 first-person drafts in Maya's voice for LinkedIn and X, from those events, raw rather than polished, no selling; they wait for your yes; uses credits each run.",
+  "before": "The user asked for 'my stories as a founder, LinkedIn and X'. get-voice-context with all_profiles showed a person voice 'Maya (founder)' beside the brand voice. The user named three real events to draw on: losing their biggest client in March, rebuilding onboarding because of it, hiring a first engineer in June. The summary said: every Tuesday 8:00 am (London), 2 first-person drafts in Maya's voice for LinkedIn and X, from those events, raw rather than polished, no selling; they wait for your yes; uses credits each run.",
   "steps": [
     {
       "tool": "create-routine",
@@ -16,7 +16,7 @@
           "day": "tuesday",
           "time": "08:00"
         },
-        "timezone": "<timezone from get-workspace>",
+        "timezone": "<timezone from list-workspaces>",
         "approval_policy": "review_every_artifact",
         "source_bindings": [
           {
@@ -29,7 +29,7 @@
           }
         ],
         "destination_config": {
-          "voice_profile_id": "<Maya's voice id from list-voice-profiles>"
+          "voice_profile_id": "<Maya's voice id from get-voice-context>"
         },
         "output_config": {
           "artifact_type": "post",

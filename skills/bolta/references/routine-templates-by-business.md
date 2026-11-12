@@ -1,6 +1,6 @@
 # Which Bolta routines fit which business
 
-Read after [routine-templates.md](routine-templates.md) when someone asks "what should Bolta run for us?" and Bolta's planner isn't offered (with it, `recommend-routines` picks and sizes the set: [routine-planner.md](routine-planner.md)). **Bolta** marks Bolta's own grouping; the starter sets are **advice**. Offer only rows `list-routine-templates` shows as creatable and available.
+Read after [routine-templates.md](routine-templates.md) when someone asks "what should Bolta run for us?" and Bolta's planner isn't offered (with it, `plan` with `kind: "recommend"` picks and sizes the set: [routine-planner.md](routine-planner.md)). **Bolta** marks Bolta's own grouping; the starter sets are **advice**. Offer only rows `list-routine-templates` shows as creatable and available.
 
 ## Bolta's own grouping (Bolta)
 

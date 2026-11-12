@@ -59,7 +59,7 @@ Brand: Acme. Accounts: LinkedIn (Jane Doe), X (@acme). Bolta doesn't
 reach Acme? Save nothing; say so.
 
 1. From Bolta: how many posts wait for a yes (list-inbox-items) and what
-   goes out in the next 7 days (list-scheduled-posts).
+   goes out in the next 7 days (list-workspace-posts: account_ids).
 2. Read #wins in Slack from the last 7 days. No Slack? Skip to 5.
 3. For each weekday with nothing going out, draft one post from a win,
    in the voice from get-voice-context. Invent nothing. Name a customer

@@ -2,7 +2,7 @@
 
 Set in `schedule` on `create-routine` or `update-routine`; read `get-routine` first when changing one.
 
-- `timezone` is required for a schedule (no fallback): pass the workspace's from `get-workspace`. Manual and new-source routines don't need one.
+- `timezone` is required for a schedule (no fallback): pass the workspace's from `list-workspaces`. Manual and new-source routines don't need one.
 - `next_run_at` is UTC; say it in the workspace clock: "First drafts Mon Oct 19, 8:00 am (New York)."
 - Every day: `{"interval":"daily","time":"08:00"}`.
 - Weekly ("every Monday morning"): `{"interval":"weekly","day":"monday","time":"08:00"}`; a weekly schedule needs its `day`.

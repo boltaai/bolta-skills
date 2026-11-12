@@ -21,7 +21,7 @@ graders:
   - name: reads-recommendations
     # Asks Bolta what it recommends from the rejections.
     type: regex
-    pattern: '"name"\s*:\s*"mcp__plugin_bolta_bolta__(list-routine-recommendations|list-bolta-suggestions)"'
+    pattern: '"name"\s*:\s*"mcp__plugin_bolta_bolta__(list-routine-recommendations|list-bolta-suggestions|list-suggestions)"'
     target: trace
   - name: names-the-pattern
     # Names the pattern: too long.
@@ -40,7 +40,7 @@ graders:
   - name: applies-only-on-yes
     # No recommendation applied, suggestion accepted, routine or voice changed without a yes.
     type: regex
-    pattern: '"name"\s*:\s*"mcp__plugin_bolta_bolta__(decide-routine-recommendation|decide-bolta-suggestion|update-routine|update-voice-profile)"'
+    pattern: '"name"\s*:\s*"mcp__plugin_bolta_bolta__(decide-routine-recommendation|decide-bolta-suggestion|update-routine|update-voice-profile|decide-suggestion)"'
     target: trace
     match: not_contains
   - name: nothing-public

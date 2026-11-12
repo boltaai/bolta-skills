@@ -32,12 +32,14 @@ graders:
   - name: no-update-yet
     # Asked first: no change in this reply.
     type: tool_used
-    tool: mcp__plugin_bolta_bolta__update-post
+    tool: mcp__plugin_bolta_bolta__save-post
+    input_match: '^(?=[\s\S]*"post_id")'
     min: 0
     max: 0
   - name: no-details-change-yet
     type: tool_used
-    tool: mcp__plugin_bolta_bolta__update-post-platform-details
+    tool: mcp__plugin_bolta_bolta__save-post
+    input_match: '"platform_details"'
     min: 0
     max: 0
   - name: says-back-for-a-yes

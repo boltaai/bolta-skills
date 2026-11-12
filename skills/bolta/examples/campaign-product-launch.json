@@ -4,12 +4,15 @@
   "before": "Bolta's planner is offered on this connection. The workspace clock is New York. Today is Wed Nov 11.",
   "steps": [
     {
-      "tool": "plan-campaign",
+      "tool": "plan",
       "arguments": {
         "workspace_id": "<brand's workspace id>",
+        "kind": "campaign",
         "ask": "Launch campaign for Acme Inbox, which launches Tuesday Dec 8, on LinkedIn and Instagram.",
         "context": "Product: Acme Inbox. Launch day: Tue Dec 8. Facts the user gave, nothing else.",
-        "links": ["https://acme.com/inbox"]
+        "links": [
+          "https://acme.com/inbox"
+        ]
       },
       "why": "The date is in the ask, so no question first. The planner picks the strategy, accounts, mix and dates and creates nothing. Its plan came back starting tomorrow (its default when it reads no start date) for 2 weeks (the default when weeks aren't said), so it ended before launch day; Problem / Solution, and notes. Always read the plan's dates: a launch date can also be taken as the start. Show it in a few lines: name, strategy and its gloss, dates, posts a week × weeks = drafts to review."
     },
@@ -17,7 +20,7 @@
       "tool": "revise-plan",
       "arguments": {
         "workspace_id": "<brand's workspace id>",
-        "proposal_id": "<plan id from plan-campaign>",
+        "proposal_id": "<plan id from plan>",
         "change": "3 weeks from Monday Nov 23 to Sunday Dec 13, so launch day Dec 8 falls in the last week."
       },
       "why": "Guidance: a launch runs 3 weeks with launch day in the last week. Weeks start on the start date's weekday, so a Monday start puts Tue Dec 8 in week 3. The user said yes to that change. The reply has a new id; the old one can't be saved."

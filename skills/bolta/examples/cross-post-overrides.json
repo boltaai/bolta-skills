@@ -17,7 +17,7 @@
       "why": "Limits for every network at once, to count each version against its own."
     },
     {
-      "tool": "create-post",
+      "tool": "save-post",
       "arguments": {
         "workspace_id": "<brand's workspace id>",
         "content": "Our Lisbon shop opens this Saturday at Rua Augusta 12. If you're nearby, come say hello.",

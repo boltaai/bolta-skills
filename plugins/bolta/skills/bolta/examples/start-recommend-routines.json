@@ -14,10 +14,11 @@
       "why": "What already waits for a yes: 12 drafts, most from Weekly tips. Count them before adding anything."
     },
     {
-      "tool": "recommend-routines",
+      "tool": "plan",
       "arguments": {
         "workspace_id": "<brand's workspace id>",
-        "goals": "More bookings for our physio clinic",
+        "kind": "recommend",
+        "ask": "More bookings for our physio clinic",
         "context": "3-person physio clinic. Patients are mostly desk workers with back and neck pain and runners. They book online.",
         "count": 4
       },

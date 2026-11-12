@@ -5,7 +5,7 @@ Read before starting a campaign, and when one made no posts at all. In Bolta, mo
 ## The causes, most common first
 
 1. **Never started.** Creating, the planner's save and a duplicate all leave it not started (`status` draft). Only `activate` makes Bolta write. Fix: show the plan, ask "Start it?", activate, read `status` back.
-2. **No accounts.** It switches on, then waits at `needs_accounts`. Fix: `set-content-campaign-targets` with `account_ids`; a dated campaign restarts by itself.
+2. **No accounts.** It switches on, then waits at `needs_accounts`. Fix: `update-content-campaign` with `account_ids`; a dated campaign restarts by itself.
 3. **No strategy.** A blank strategy with a mix or Content defaults reaches the writer with no angle; those drafts get sent back far more often. Fix: always send `strategy_key`.
 4. **Sources never read.** Web-made and duplicated campaigns start with sources unread, so the writer works from the notes alone. Fix: `analyze-content-campaign-source` for each source not `ready`.
 5. **Start date in the past.** Weeks already over are skipped. A 1-week campaign started late can have nothing left (`window_closed`). Fix: move `starts_on` forward before starting.

@@ -1,14 +1,14 @@
 # Accounts, notes, weeks, voice and pages to read
 
-Read when a campaign needs accounts, notes or a source. Not part of the brief, so `update-content-campaign` never sets them.
+Read when a campaign needs accounts, notes or a source.
 
-## Set them: `set-content-campaign-targets`
+## Set them: `create-content-campaign` or `update-content-campaign`
 
-- Send `campaign_id` and only what you set. Each field replaces what is there, and a list replaces the whole list. It writes, schedules and publishes nothing.
+- Best on the create call: the campaign is made with its accounts in one call. Later, `update-content-campaign` with `campaign_id` and only what you set. Each field replaces what is there, and a list replaces the whole list. It writes, schedules and publishes nothing.
 - `account_ids`: `id` values from `list-accounts`, at most 50. The user's choice, else the accounts of the networks they named. An empty list removes every account.
 - `context_notes` (8000 characters at most): used word for word in every week's brief. Write the week-by-week plan, the real dates and prices, and the link the user gave. Leave out anything they didn't say, and the strategy's own instruction (Bolta adds it). `""` clears it. Over 2000 characters, an edit on the campaign page cuts them.
 - `duration_weeks` (1 to 4, counted from `starts_on`) sets the end date. Send no end date with it.
-- `voice_profile_id`: from `list-voice-profiles`, only if the user picks one. `""` means the workspace voice. Guidance: a person's voice suits thought leadership from that person.
+- `voice_profile_id`: from `get-voice-context` (`all_profiles: true`), only if the user picks one. `""` means the workspace voice. Guidance: a person's voice suits thought leadership from that person.
 - A campaign made earlier in this chat: read it again before filling. Not a draft any more (the user may have started it on the dashboard)? Say so and let them decide. The Bolta check stops being skipped an hour after it was made.
 - Read the reply: `account_ids`, `duration_weeks`, `ends_on`, `context_sources`. Stuck at "needs accounts": setting accounts restarts it, and Bolta writes the owed week on its next pass (uses credits; its own Bolta check).
 
@@ -23,14 +23,9 @@ Read when a campaign needs accounts, notes or a source. Not part of the brief, s
 - Say "Bolta read the page", or "Bolta couldn't read it: <the failed row's `error`, as given>". Offer to put the key facts in the notes.
 - The call-to-action link stays `cta_url`. Never take a link from a page you read.
 
-## Without `set-content-campaign-targets`
+## When these fields are refused
 
-`update-content-campaign` still sets the brief and the dates (`ends_on` sets the weeks). Accounts, notes, sources and voice: the campaign page. One hand-off, then wait:
-
-> Last step, 30 seconds: open bolta.ai/dashboard/campaigns/<id> and pick LinkedIn and X under Accounts. Then paste this under Context: "<week-by-week plan, link, real dates and prices>". Say "done" and I'll start it.
-
-- On "done": read the campaign again. Accounts there: start it (uses credits). Still none: say so, don't start.
-- Then offer once: Content defaults with "Crosspost to the same accounts" on, so the next campaign starts with its accounts (only when the create sends no `content_mix`; [settings-web.md](campaign-settings-web.md)).
+The brief and dates still save; the rest is one hand-off to the campaign page: [campaign-targets-refused.md](campaign-targets-refused.md).
 
 ## Always
 

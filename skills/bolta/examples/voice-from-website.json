@@ -3,9 +3,10 @@
   "playbook": "voice",
   "steps": [
     {
-      "tool": "list-voice-profiles",
+      "tool": "get-voice-context",
       "arguments": {
-        "workspace_id": "<brand's workspace id>"
+        "workspace_id": "<brand's workspace id>",
+        "all_profiles": true
       },
       "why": "Acme already has a brand voice, so the site read becomes rule changes to that voice, never a second brand voice."
     },

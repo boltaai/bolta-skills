@@ -8,7 +8,7 @@ Get the subject, the date and one link (an event, launch or offer page). A date 
 
 ## 2. Plan it
 
-- **Bolta's planner, where offered:** `plan-campaign` with `ask` (the user's words with the date), `context` (audience, offer, facts they gave) and `links` (up to 5 pages). It returns a plan with an id: dates, weeks (2 when unsaid, at most 4), strategy, accounts, posts per week, total drafts and notes such as "Left out blog posts". Nothing is created. A question in the result needs its answer first. Read its dates: no date said, it starts tomorrow; "launches Dec 8" can be taken as the start. Step 3 puts the event in the last week.
+- **Bolta's planner, where offered:** `plan` with `kind: "campaign"`, `ask` (the user's words with the date), `context` (audience, offer, facts they gave) and `links` (up to 5 pages). It returns a plan with an id: dates, weeks (2 when unsaid, at most 4), strategy, accounts, posts per week, total drafts and notes such as "Left out blog posts". Nothing is created. A question in the result needs its answer first. Read its dates: no date said, it starts tomorrow; "launches Dec 8" can be taken as the start. Step 3 puts the event in the last week.
 - **No planner:** write the plan yourself ([campaign.md](campaign.md)): name, strategy, dates with the event in the last week, posts a week × weeks, who writes it.
 
 Show it in a few lines and ask "Save it?".
@@ -19,11 +19,11 @@ Show it in a few lines and ask "Save it?".
 
 ## 4. Save it, not started
 
-`confirm-plan` with the current id and no `switch_on`: the campaign is saved **not started**; nothing is written. It reads up to 5 linked pages itself: report each `sources` row that failed. `plan_not_ready` names what is missing. No planner: `create-content-campaign` ([settings.md](campaign-settings.md)).
+`confirm-plan` with the current id and no `switch_on`: the campaign is saved **not started**; nothing is written. It reads up to 5 linked pages itself: report each `sources` row that failed. `plan_not_ready` names what is missing. No planner: `create-content-campaign` ([settings.md](campaign-settings.md)), which can carry the accounts, notes and sources of step 5 in the same call.
 
 ## 5. Accounts, notes, sources
 
-`get-content-campaign`. Then `set-content-campaign-targets` for whatever is missing ([targets.md](campaign-targets.md)): accounts, the real dates and facts in `context_notes`, a page or brand-kit section. Then `analyze-content-campaign-source` for every source not `ready`. Only read sources reach the writer.
+`get-content-campaign`. Then `update-content-campaign` for whatever is missing ([targets.md](campaign-targets.md)): accounts, the real dates and facts in `context_notes`, a page or brand-kit section. Then `analyze-content-campaign-source` for every source not `ready`. Only read sources reach the writer.
 
 ## 6. Start it, on a separate yes
 

@@ -21,9 +21,9 @@ Who can do what in an organization and on a brand, and how to name a teammate. N
 - **Who approves, in Bolta:** owners and admins, any post. Creators, Bolta's drafts (routine, recurring and agent work) and any post where they are a named reviewer. Client reviewers, the posts sent to them in a client request (approve, ask for changes or dismiss), never one they sent. Viewers don't.
 - A per-person setting in People & access can give or take away approving. Taken away, it holds even an admin, never the brand owner.
 - Nobody approves their own post while someone else can ([own post](review-more-decisions.md)); Bolta's drafts are nobody's own.
-- **Through this app** (`approve-post`, `approve-many-posts`, `reject-post`): the same rule as in Bolta, per-person settings included; a viewer never. The connection needs write access. Own post, review mode, client sign-off and the rule that posts from this app wait for a person's yes still apply. On a refusal, give Bolta's sentence and say who can.
+- **Through this app** (`approve-many-posts`, `reject-post`): the same rule as in Bolta, per-person settings included; a viewer never. The connection needs write access. Own post, review mode, client sign-off and the rule that posts from this app wait for a person's yes still apply. On a refusal, give Bolta's sentence and say who can.
 - A creator can be sent a client request and decide it for the client ([client approval](review-client-approval.md)).
-- An owner or admin can grant or deny single permissions for one person on one brand. For what someone can do right now, read `get-my-capabilities`; never state it from the role alone.
+- An owner or admin can grant or deny single permissions for one person on one brand. So nothing here reads what someone can do right now: never state it from the role alone. A refusal names the role or access that's missing; say that.
 
 ## Client reviewers
 
@@ -39,5 +39,5 @@ Who can do what in an organization and on a brand, and how to name a teammate. N
 ## Always
 
 - Follow the house rules in the Bolta skill.
-- Read `get-my-capabilities` before saying what someone may do.
+- Never promise what someone may do from their role; a refusal names the reason.
 - Never claim a person was invited, removed or given a role from here.

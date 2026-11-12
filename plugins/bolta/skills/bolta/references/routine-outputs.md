@@ -29,7 +29,7 @@ All live in `output_config`; read `get-routine` first.
 
 ## Library posts alongside
 
-`library: {"enabled": true, "voice_profile_ids": [...], "send_to_client": false}` on a post routine (voices from `list-voice-profiles`): up to 4 Library posts a run, at most once a day, reviewed first, skipped while a story is on. A routine that only makes Library posts is set up in Brand > Library (bolta.ai/dashboard/knowledge-base?tab=library); `list-routine-runs` stays empty for it, so read `get-routine` `library.last_status`.
+`library: {"enabled": true, "voice_profile_ids": [...], "send_to_client": false}` on a post routine (voices from `get-voice-context` with `all_profiles: true`): up to 4 Library posts a run, at most once a day, reviewed first, skipped while a story is on. A routine that only makes Library posts is set up in Brand > Library (bolta.ai/dashboard/knowledge-base?tab=library); `list-routine-runs` stays empty for it, so read `get-routine` `library.last_status`.
 
 Best posts again (`repurposing`): [routine-settings-writing.md](routine-settings-writing.md).
 

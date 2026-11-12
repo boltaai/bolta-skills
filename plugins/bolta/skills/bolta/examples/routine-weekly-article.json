@@ -16,7 +16,7 @@
           "day": "wednesday",
           "time": "07:00"
         },
-        "timezone": "<timezone from get-workspace>",
+        "timezone": "<timezone from list-workspaces>",
         "approval_policy": "review_every_artifact",
         "output_config": {
           "artifact_type": "article",

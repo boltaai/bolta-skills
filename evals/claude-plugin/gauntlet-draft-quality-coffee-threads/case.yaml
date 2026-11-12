@@ -24,7 +24,7 @@ graders:
   - name: nothing-saved
     # Asked not to save.
     type: regex
-    pattern: '"name"\s*:\s*"mcp__plugin_bolta_bolta__(create-post|bulk-create-posts)"'
+    pattern: '"name"\s*:\s*"mcp__plugin_bolta_bolta__(create-post|bulk-create-posts|save-post)"'
     target: trace
     match: not_contains
   - name: nothing-public

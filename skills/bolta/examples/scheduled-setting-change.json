@@ -1,29 +1,30 @@
 {
   "ask": "The client loved the preview. Make the YouTube video public.",
   "playbook": "post",
-  "before": "list-scheduled-posts showed the YouTube video Scheduled for Fri 10:00 am, unlisted. The reply said: \"Making it public sends this scheduled post back for your yes, and the client's yes no longer counts. Change it?\" The user said yes.",
+  "before": "list-workspace-posts with the YouTube account_ids showed the YouTube video Scheduled for Fri 10:00 am, unlisted. The reply said: \"Making it public sends this scheduled post back for your yes, and the client's yes no longer counts. Change it?\" The user said yes.",
   "steps": [
     {
       "tool": "get-post",
       "arguments": {
         "post_id": "<post id>"
       },
-      "why": "First, where privacy was set. If metadata.platformSpecific.youtube holds privacy_status, that value wins and a details change would do nothing: change it with update-post platform_specific instead. Here it isn't there."
+      "why": "First, where privacy was set. If metadata.platformSpecific.youtube holds privacy_status, that value wins and a details change would do nothing: change it with save-post platform_specific instead. Here it isn't there."
     },
     {
-      "tool": "update-post-platform-details",
+      "tool": "save-post",
       "arguments": {
         "post_id": "<post id>",
-        "platform": "youtube",
-        "fields": {
-          "privacy_status": "public",
-          "notify_subscribers": true
+        "platform_details": {
+          "youtube": {
+            "privacy_status": "public",
+            "notify_subscribers": true
+          }
         }
       },
-      "why": "The decision: public now that the preview is approved, and subscribers told this time. Only the keys that change. A real change on a scheduled post sends it back to waiting; the reply carries approval_reset and a message."
+      "why": "The decision: public now that the preview is approved, and subscribers told this time. Only the keys that change. A real change on a scheduled post sends it back to waiting; the result carries sent_back_for_review, approval_reset and a message, and reports the youtube row."
     },
     {
-      "tool": "get-post-platform-details",
+      "tool": "get-post",
       "arguments": {
         "post_id": "<post id>",
         "platform": "youtube"
@@ -34,7 +35,7 @@
   "say": "Changed for Acme: the YouTube video will go up public and subscribers will be notified. That sent the post back to waiting for your yes, so it won't go out Fri 10:00 am until you approve it again. Approve it now?",
   "never": [
     "Changing it before saying it needs a new yes.",
-    "A details change when the same key sits in platform_specific: it would not take effect.",
+    "A platform_details change when the same key sits in platform_specific: it would not take effect.",
     "Approving again in the same turn without a fresh yes."
   ]
 }

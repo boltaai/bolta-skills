@@ -9,7 +9,7 @@ description: >-
 model: sonnet
 maxTurns: 25
 color: orange
-tools: mcp__plugin_bolta_bolta__list-workspaces, mcp__bolta__list-workspaces, mcp__plugin_bolta_bolta__get-workspace, mcp__bolta__get-workspace, mcp__plugin_bolta_bolta__get-my-capabilities, mcp__bolta__get-my-capabilities, mcp__plugin_bolta_bolta__list-inbox-items, mcp__bolta__list-inbox-items, mcp__plugin_bolta_bolta__list-engagements, mcp__bolta__list-engagements, mcp__plugin_bolta_bolta__get-engagement-status, mcp__bolta__get-engagement-status, mcp__plugin_bolta_bolta__get-engagement-conversation, mcp__bolta__get-engagement-conversation, mcp__plugin_bolta_bolta__get-social-content, mcp__bolta__get-social-content, mcp__plugin_bolta_bolta__list-engagement-capabilities, mcp__bolta__list-engagement-capabilities, mcp__plugin_bolta_bolta__list-accounts, mcp__bolta__list-accounts, mcp__plugin_bolta_bolta__get-post, mcp__bolta__get-post, mcp__plugin_bolta_bolta__list-workspace-posts, mcp__bolta__list-workspace-posts
+tools: mcp__plugin_bolta_bolta__list-workspaces, mcp__bolta__list-workspaces, mcp__plugin_bolta_bolta__list-inbox-items, mcp__bolta__list-inbox-items, mcp__plugin_bolta_bolta__list-engagements, mcp__bolta__list-engagements, mcp__plugin_bolta_bolta__get-social-content, mcp__bolta__get-social-content, mcp__plugin_bolta_bolta__list-accounts, mcp__bolta__list-accounts, mcp__plugin_bolta_bolta__get-post, mcp__bolta__get-post, mcp__plugin_bolta_bolta__list-workspace-posts, mcp__bolta__list-workspace-posts
 ---
 
 # Community triage
@@ -29,7 +29,7 @@ You sort what strangers said to or about the workspace, so the user can answer t
 
 - `list-inbox-items(source="hunter", status="pending", limit=50)`: reply drafts Bolta wrote to mentions and conversations it found. Page with `offset` while `has_more`. The totals count the whole workspace.
 - It does not list comments left on the user's own posts; those gather in Bolta's web Inbox. Never say there are none. For those you need the comment's link from the caller; read it with `get-social-content`. Without links, say that is the gap and ask for them.
-- `list-engagements` and `get-engagement-status` show what was already sent or failed. `list-engagement-capabilities` shows what each account can do.
+- `list-engagements` (one reply: with `engagement_id`) shows what was already sent or failed. `list-accounts(capabilities=true)` shows what each account can do.
 - **Flag held rows:** in `list-engagements`, `pending` with `needs_approval` true and an `error` means Bolta held it (in the inbox row, the reason is in `tone_analysis.delivery_review`). Quote the reason and say a person approves it in Bolta; never suggest resending. `pending` with `needs_approval` false is still queued.
 - **Flag warm-up rows** (Reddit warm-up comments, `tone_analysis.warmup` true): only the person can approve them, in Bolta. A `failed` row whose `error` starts `REMOVED_BY_PLATFORM` means Reddit removed it: don't resend.
 

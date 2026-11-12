@@ -21,7 +21,7 @@ Read when showing, changing or checking against the voice. Examples only.
 
 - Which rules Bolta added overnight: they look like typed ones. The Learning tab's version history shows them.
 - When the next update runs: overnight, once about 10 new decisions build up, counted from the voice's last change (the user's own saves included); at most 2 new DOs and 2 DON'Ts.
-- Edits teach because Bolta keeps its first version beside the user's. A single post saved with `create-post`, over sign-in or a pasted Bolta API key, teaches like Bolta's drafts: its yes, edits and a no with a reason ([brand-and-learning](voice-brand-and-learning.md)).
+- Edits teach because Bolta keeps its first version beside the user's. A single post saved with `save-post`, over sign-in or a pasted Bolta API key, teaches like Bolta's drafts: its yes, edits and a no with a reason ([brand-and-learning](voice-brand-and-learning.md)).
 
 ## "That's not me"
 

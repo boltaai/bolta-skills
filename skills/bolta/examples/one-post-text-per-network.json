@@ -17,7 +17,7 @@
       "why": "The three account ids. Any account marked for reconnecting is named before writing for it."
     },
     {
-      "tool": "create-post",
+      "tool": "save-post",
       "arguments": {
         "workspace_id": "<brand's workspace id>",
         "content": "We've opened a second office, in Lisbon. Eight of us start there in January, and we're hiring two engineers.",

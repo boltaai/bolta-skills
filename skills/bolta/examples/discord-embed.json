@@ -3,7 +3,7 @@
   "playbook": "post",
   "steps": [
     {
-      "tool": "get-post-platform-details",
+      "tool": "get-post",
       "arguments": {
         "post_id": "<last release note post id>",
         "platform": "discord"
@@ -11,32 +11,26 @@
       "why": "The channel comes from the post the user pointed at; no tool lists channels. Without one the post schedules and then fails."
     },
     {
-      "tool": "create-post",
+      "tool": "save-post",
       "arguments": {
         "workspace_id": "<brand's workspace id>",
         "content": "Version 2.4 is out: faster exports and a new calendar view.",
         "account_ids": [
           "<Discord account id>"
         ],
-        "idempotency_key": "release-2-4-discord-1"
-      },
-      "why": "The message text, used as is if the embed ever goes."
-    },
-    {
-      "tool": "update-post-platform-details",
-      "arguments": {
-        "post_id": "<post id>",
-        "platform": "discord",
-        "fields": {
-          "selected_channel_id": "<selected_channel.id from the last release note>",
-          "embed_enabled": true,
-          "embed_title": "Acme 2.4",
-          "embed_description": "Faster exports.\nA new calendar view.",
-          "embed_color": "#7B23CB",
-          "embed_footer": "Acme release notes"
+        "idempotency_key": "release-2-4-discord-1",
+        "platform_details": {
+          "discord": {
+            "selected_channel_id": "<selected_channel.id from the last release note>",
+            "embed_enabled": true,
+            "embed_title": "Acme 2.4",
+            "embed_description": "Faster exports.\nA new calendar view.",
+            "embed_color": "#7B23CB",
+            "embed_footer": "Acme release notes"
+          }
         }
       },
-      "why": "The decision: an embed, because a release note has a title and a list worth setting apart; a chat-style update would stay plain text. With embed_description set, the embed replaces the message text; without it the text would show twice. Only the two changes the user named, nothing invented. The footer is a details-only key, so everything goes in this one call. The channel id is Bolta's own, as the read gave it."
+      "why": "The message text, used as is if the embed ever goes. The decision: an embed, because a release note has a title and a list worth setting apart; a chat-style update would stay plain text. With embed_description set, the embed replaces the message text; without it the text would show twice. Only the two changes the user named, nothing invented. The footer is a details-only key, so every Discord setting goes in platform_details on the saving call itself. The channel id is Bolta's own, as the read gave it. Read the result's platform_details.discord: a refused Discord field leaves the draft saved without it."
     }
   ],
   "say": "Saved to Acme as a Discord draft for the same channel as the last release note, as an embed titled \"Acme 2.4\": faster exports, and a new calendar view. Nothing goes out yet. Post it now or schedule it?",

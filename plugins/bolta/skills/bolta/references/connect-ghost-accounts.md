@@ -21,7 +21,7 @@ Say: "Connect it from the Accounts tab in Bolta, then say yes to moving <name>'s
 
 - Read `list-accounts` again: the `ghost` row is gone and the real one is valid. Until then, say it hasn't moved.
 - Held drafts bind to the real account and go out the way drafts made before a connection do: at their chosen time if still ahead, else the next free slot. A draft still waiting for a yes, or for a client, keeps waiting.
-- Re-read with `list-scheduled-posts` before saying when anything goes out.
+- Re-read with `list-workspace-posts` and the account's id in `account_ids` before saying when anything goes out.
 
 ## Always
 

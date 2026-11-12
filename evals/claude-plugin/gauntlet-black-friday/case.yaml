@@ -29,7 +29,7 @@ graders:
   - name: not-a-routine
     # A sale that ends is never a routine.
     type: regex
-    pattern: '"name"\s*:\s*"mcp__plugin_bolta_bolta__(create-routine|recommend-routines)"'
+    pattern: '"name"\s*:\s*"mcp__plugin_bolta_bolta__(create-routine|recommend-routines)"|"name"\s*:\s*"mcp__plugin_bolta_bolta__(?:plan)"\s*,\s*"input"\s*:\s*\{(?=[^\n]*?(?:"kind"\s*:\s*"(routine|recommend)"))'
     target: trace
     match: not_contains
   - name: no-pile-of-posts
@@ -62,7 +62,7 @@ graders:
   - name: no-discount-in-plan
     # No invented percent in what Bolta plans from.
     type: tool_used
-    tool: mcp__plugin_bolta_bolta__plan-campaign
+    tool: mcp__plugin_bolta_bolta__plan
     input_match: '\d{1,2}\s?%'
     min: 0
     max: 0
