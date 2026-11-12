@@ -11,9 +11,9 @@ description: >-
   email, calendars, documents or other apps.
 ---
 
-Bolta learns how a brand writes, drafts in that voice, and puts every draft on one review list, where each yes, edit and no with a reason teaches it.
+Bolta is a voice-first content factory: it learns how a brand writes, drafts in that voice, and puts every draft on one review list, where each yes, edit and no with a reason on Bolta's drafts and app posts teaches it.
 
-Getting someone running, in order: an account connected, brand and voice through Bolta's setup, 3 to 5 Bolta routines, a campaign for anything dated, then the review list weekly ([start](references/start.md)). Every ask: read the house rules, look once, pick one playbook, read it, do the work, read the result back; only a failure holds back what was asked.
+Getting someone running, in order: an account connected, brand and voice through Bolta's setup, 3 to 5 Bolta routines, a campaign for anything dated, then the review list weekly ([start](references/start.md)). Every ask: read the house rules, look once, pick one playbook, read it, do the work, read the result back; a difference alone never holds back what was asked, a failure does.
 
 ## House rules
 
@@ -49,7 +49,6 @@ On the first Bolta ask, read together and reuse all conversation: `list-workspac
 
 - No accounts or no voice: [start](references/start.md).
 - No accounts: `get-connect-link`, its link first in this reply, unasked: drafts need somewhere to go. Name the accounts a voice uses.
-- Brand, voice, routine, campaign: show what you know of them first, ask only the gaps, pass only what they said ([setup](references/start-brand-setup.md), [plans](references/routine-planner-context.md)).
 - "No voice profile" is an answer, not an error.
 - Never say what is or isn't running ("nothing is on yet") before reading `list-routines`.
 
@@ -78,7 +77,7 @@ Before the first reply, read [the plain-words list](references/today-plain-words
 
 ## The four moves
 
-Summaries. Worked calls: [examples/](examples/README.md).
+Summaries; the playbook has the rest. Worked calls: [examples/](examples/README.md).
 
 **Write.** One post: `save-post` with `content`, `account_ids` and an `idempotency_key`, no `post_id`. Two or more: one `bulk-create-posts`, every item a Draft, then poll `bulk-create-status` until `completed` and show what it stored. Write only from the record ([writing](references/post-writing.md), [voice](references/post-writing-voice.md)): a detail not in it is left out; no stock lines; a missing fact gets a blank ("__% off"). Show every saved post in full. End: "Saved to <brand> as drafts. Nothing goes out yet. Schedule all N? Or tell me what to change."
 
