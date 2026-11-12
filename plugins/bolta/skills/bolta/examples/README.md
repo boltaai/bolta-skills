@@ -4,7 +4,9 @@ Each file is one ask from start to finish: the calls in order, why each one is s
 
 | File | The ask | Playbook |
 |-|-|-|
-| [weekly-routine.json](weekly-routine.json) | A Bolta routine: create, switch on, read back | [routine](../references/routine.md) |
+| [weekly-routine.json](weekly-routine.json) | A Bolta routine: Bolta's plan first, shown, a yes saves it switched off | [routine](../references/routine.md) |
+| [routine-switch-on.json](routine-switch-on.json) | Switching a saved routine on, on its own yes | [routine](../references/routine.md) |
+| [routine-without-planner.json](routine-without-planner.json) | No plan tool: create-routine, saved switched off | [routine-without-planner](../references/routine-without-planner.md) |
 | [routine-with-images.json](routine-with-images.json) | Weekly posts with an image each | [routine](../references/routine.md) |
 | [routine-to-client.json](routine-to-client.json) | Send a routine's drafts straight to the client, keeping about 20 waiting | [routine](../references/routine.md) |
 | [fix-a-failed-run.json](fix-a-failed-run.json) | A skipped run: one instructions change, then run now | [routine](../references/routine.md) |

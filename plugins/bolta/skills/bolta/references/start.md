@@ -8,10 +8,10 @@ They have the connect link or a connected account, saw their brand and voice, an
 
 ## Know this
 
-**The first reply does it all.** Read together, then answer once, in this order:
+**The first reply does it all, and opens with the connect link when no account is connected.** Read together, answer once, in this order:
 
 1. **Look once** (the Bolta skill), plus `list-routines`, `list-content-campaigns`, `list-business-dna`, the `list-inbox-items` pending count; load `plan`, `get-connect-link` and `extract-business-dna` in the same tool load. Routines on and drafts flowing: [today](today.md).
-2. **An account first.** None connected: `get-connect-link`, the link at the top of this reply, unasked, with why: "Connect one first: drafts need somewhere to go, and your voice learns from that account's posts." Still none at the end: repeat it last. Setting up without one works, never first. Connected: name the accounts the voice writes for.
+2. **An account first.** None connected: `get-connect-link`, the link at the top of this reply, unasked, with why: "Connect one first: drafts need somewhere to go, and your voice learns from that account's posts." Still none at the end: repeat it last. Connected: name the accounts the voice writes for.
 3. **Brand and voice, from what you know.** Show what you know (business, site, audience, products, how they write) in a few lines; ask only the gaps, website first ([start-brand-setup.md](start-brand-setup.md)). A site: `extract-business-dna` `preview: true` in 3-4 lines; on yes, `setup: true` with what they told you, `check: true` until done. None: the same setup from what they shared. A voice exists: show it in a line ([first session](start-first-session-voice.md)); a record exists: reuse it.
 4. **Propose 3-5 Bolta routines in this same reply**, before any yes, each a different job, best fit first, in their words. Only networks they named; Instagram needs a picture or video ([start-matching.md](start-matching.md)).
    - Always call `plan`: `kind: "recommend"`, their words as `ask`, `count` 3-5, what Bolta holds and what they told you as `context`, said first in one "Based on..." line ([routine-planner-context.md](routine-planner-context.md)). Show each plan's name, day, time, networks, drafts per run, `why`.
@@ -23,7 +23,7 @@ They have the connect link or a connected account, saw their brand and voice, an
 
 **Saving:** a yes saves them switched off; switching on is its own yes ([start-saving.md](start-saving.md)).
 
-**After:** "On Monday, say 'what's waiting'." Wording: [first session](start-first-session.md).
+**After:** "On Monday, say 'what's waiting'." Words: [first session](start-first-session.md).
 
 ## Tools
 
@@ -39,5 +39,5 @@ They have the connect link or a connected account, saw their brand and voice, an
 ## Always
 
 - Follow the house rules in the Bolta skill.
-- Nothing runs, posts or switches on without its own yes; never run a routine now in the first session.
+- Nothing runs, posts or switches on without its own yes.
 - Claim learning only from the decision count.

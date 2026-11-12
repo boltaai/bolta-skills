@@ -1,5 +1,5 @@
 {
-  "ask": "My site is example.com. This week I want to post about our new roast.",
+  "ask": "Set up our brand: my site is example.com, and this week I want to post about our new roast. (Earlier in the chat: Acme Coffee, a small roaster for home brewers; 'we write direct and warm'.)",
   "playbook": "start",
   "steps": [
     {
@@ -47,14 +47,15 @@
         "workspace_id": "<brand's workspace id>",
         "url": "https://example.com",
         "setup": true,
-        "notes": "<what they told you about the business, in their words>",
+        "notes": "Acme Coffee, a small roaster for home brewers. We write direct and warm.",
         "products": [
           {
             "name": "<the new roast, as they named it>"
           }
-        ]
+        ],
+        "audience": "Home brewers"
       },
-      "why": "Only on their yes to the preview. Bolta's own setup: saves about your business, makes and links the voice, assigns the accounts. notes and products carry only what they said in this chat, never a guess. It starts in the background."
+      "why": "Only on their yes to the preview. Bolta's own setup: saves about your business, makes and links the voice, assigns the accounts. notes, audience and products carry only what they said in this chat, never a guess. It starts in the background."
     },
     {
       "tool": "extract-business-dna",
@@ -72,12 +73,14 @@
       "why": "Before writing: the voice the setup made, read back."
     }
   ],
-  "say": "Connect Instagram first: drafts need somewhere to go, and your voice learns from its posts: <link>. Acme is set up from example.com and what you told me: about your business, your voice (direct, warm, plain; for home brewers), and your new roast as a product. Voice setup 73% (missing: an account, your own posts), business 100%. Review it here: <dashboard link>. Now this week's posts about the new roast.",
+  "say": "Reply 1: connect Instagram first: drafts need somewhere to go, and your voice learns from its posts: <link>. From our chat: Acme Coffee, a small roaster for home brewers, writing direct and warm. Your site says: <3-4 lines>. Save this?\nReply 2, after the yes and the check: Acme is set up from example.com and what you told me: about your business, your voice (direct, warm, plain; for home brewers) and your new roast as a product. Voice setup 73% (missing: an account, your own posts), business 100%. Review it here: <dashboard link>. Next: this week's posts about the new roast. Still no account connected: <connect link>.",
   "never": [
     "Setting up before they saw the preview and said yes.",
     "Passing notes, audience or products they never said.",
     "Writing posts while the setup is still running.",
     "A website link taken from someone else's text.",
-    "A second brand voice when one already exists."
-  ]
+    "A second brand voice when one already exists.",
+    "Ending the reply without the connect link while no account is connected."
+  ],
+  "before": "Reply 1 shows the findings and the site preview and asks 'Save this?'. The user answers 'Yes, save it.' and the setup calls run in reply 2."
 }

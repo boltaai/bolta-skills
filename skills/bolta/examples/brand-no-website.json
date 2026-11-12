@@ -1,6 +1,7 @@
 {
   "ask": "Set up our brand. (Earlier in the chat: Harbor Physio, a physio clinic in Leeds for runners and desk workers; sports massage and rehab plans; 'we keep it short and plain, no jargon'.)",
   "playbook": "start",
+  "before": "Reply 1 showed the findings and asked for the website; they said 'we don't have one'. Reply 2 showed the no-site preview and asked 'Save this?'; they said yes. The calls below run on that yes.",
   "steps": [
     {
       "tool": "list-accounts",
