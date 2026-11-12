@@ -1,7 +1,7 @@
 {
   "name": "bolta-checks",
   "displayName": "BOLTA checks",
-  "version": "0.5.0",
+  "version": "0.5.1",
   "description": "Bolta's local checks: ask before anything public, approved, turned down or final, under any Bolta connection name. Install next to bolta.",
   "author": {
     "name": "BOLTA",

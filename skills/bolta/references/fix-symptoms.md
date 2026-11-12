@@ -5,7 +5,7 @@ Read when something didn't go out or get written. The first row that fits is the
 ## Where the reason is
 
 - **Accounts:** `token_status` other than `valid` or `ghost` means disconnected, the cause of most failed sends. `ghost` means added without connecting: never a reconnect ([fix-after-publish.md](fix-after-publish.md)).
-- **The review list:** `total_team` (drafts from you, Bolta routines and campaigns) and `total_recurring` (AI-written recurring drafts, not repeated copies of one post) are workspace-wide.
+- **The review list:** `total_team` (drafts from you, Bolta routines and campaigns) and `total_recurring` (drafts from older automations) are workspace-wide.
 - **One post:** `status` first. `metadata.failure.errors` holds each network's reason (`friendly`) and fix (`action`). `metadata.partial` lists the accounts it missed (`unpublished`); `outcome: "unknown"` may have gone out, so check the network. `quality_block` says why it was held back. Otherwise a `failure_routed` entry in `activity_history`. Nothing saved: say so, then check the account.
 - **Scheduled times** are UTC: ask a day wider, dates ending in `Z`.
 

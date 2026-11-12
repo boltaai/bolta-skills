@@ -4,8 +4,8 @@ When someone wants one finished post to go out more than once, rather than new p
 
 ## The same post repeating
 
-- Daily, weekly, or on chosen weekdays: the Loops page, bolta.ai/dashboard/calendar/loops. No tool sets it up from here; point them there.
-- Loop copies are created as Scheduled and skip review, so they are not for brands that need sign-off on every post. They keep the post's network settings.
+- Daily, weekly, or on chosen weekdays: a repeat post, set on the Repeat tab at bolta.ai/dashboard/calendar/loops. No tool sets it up from here; point them there.
+- Repeat post copies are created as Scheduled and skip review, so they are not for brands that need sign-off on every post. They keep the post's network settings.
 - If they want a new post each time, not a copy, say so: "That's a routine: Bolta writes a fresh draft each time and waits for your yes." Then [routine](routine.md).
 
 ## Auto-repost and auto-plug

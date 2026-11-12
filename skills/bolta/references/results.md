@@ -28,7 +28,7 @@ One honest read, in plain words: what went out, how it did, what can't be seen y
 - `list-account-insights`: each account, with growth and reconnect flags; `by_platform: true` for followers and engagement by network.
 - `get-account-analytics`: one account, day by day.
 - `list-workspace-posts`: `status: "published"`, `include_metrics: true`; `sort_by: "engagement"` for the best.
-- `get-post`, `list-inbox-items` (`template_id`, older recurring rows): a link to the live post.
+- `get-post`: a link to the live post.
 - `list-inbox-items` (`source: "report"`): reports Bolta made.
 - `list-content-campaigns`, `get-content-campaign`: find a campaign; its results.
 - `list-workspace-posts` (`campaign_id`): its posts, and which are undecided.
