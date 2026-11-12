@@ -1,0 +1,109 @@
+schema_version: "1.1"
+name: ui-brand-site-noaccount-save
+description: 'Ferro Bikes saw the preview (no accounts connected) and says save. The site read and a voice are saved; since nothing is connected, the reply gives the connect link and says the account will use this voice once connected.'
+tags: [uiprompts]
+expected_outcome: 'bolta fires; one saving extract-business-dna; one create-voice-profile with DOs and DON''Ts; get-connect-link and its link shown; says to connect an account for the voice; Bolta link to the Brand page; nothing public.'
+execution:
+  prompt: |
+    This conversation so far:
+
+    **Me:**
+    > Use Bolta to set up Brand for Ferro Bikes from ferrobikes.example. Use Bolta's website import to learn what we sell, who we serve, and how we write.
+    >
+    > Use any notes or writing samples I share to refine the voice. Show me our positioning, products, writing rules, a few content topics, and one sample post. Flag assumptions.
+    >
+    > Show me the preview before saving. If the import saves automatically, ask first. After saving, tell me where to review it in Bolta.
+
+    **You:**
+    > Here's what Bolta's website import read from ferrobikes.example. Nothing is saved yet.
+    >
+    > **Positioning:** A bike repair and servicing workshop in Bristol, "Fixed properly, back on the road fast."
+    > **Services:** same-week services, wheel builds, e-bike repairs, a Saturday maintenance class for beginners; collection and delivery within 5 miles.
+    > **Writing rules**
+    > DO: say what was fixed and why it matters on the road · keep it practical
+    > DON'T: jargon a beginner wouldn't know
+    > **Tone:** friendly, practical, no-nonsense.
+    > **Content topics:** a fix of the week · winter commuting checks · e-bike battery care.
+    > **Sample post (Instagram):**
+    > "This one came in with a rubbing back brake and a wobbly wheel. Trued, new pads, back on the road the same week. Book a service before the dark evenings."
+    >
+    > **Assumptions:** the audience (commuters, weekend riders, e-bike owners) comes from the site's wording; the topics are mine.
+    >
+    > No social accounts are connected to Ferro Bikes yet.
+    >
+    > Save this to Ferro Bikes?
+
+    **Me now:**
+    Yes, save it.
+  max_turns: 25
+  timeout_seconds: 480
+  allowed_tools: [Skill, Read]
+graders:
+  - name: skill-fired
+    # The Bolta skill owns this ask.
+    type: 'tool_used'
+    tool: 'Skill'
+    input_match: '"skill"\s*:\s*"(?:[\w-]+:)?(bolta)"'
+    min: 1
+  - name: saves-site-read
+    # Saves the website read once.
+    type: 'tool_used'
+    tool: 'mcp__plugin_bolta_bolta__extract-business-dna'
+    input_match: '^(?![\s\S]*"preview"\W{1,6}true)'
+    min: 1
+    max: 1
+  - name: makes-voice
+    # Makes one voice.
+    type: 'tool_used'
+    tool: 'mcp__plugin_bolta_bolta__create-voice-profile'
+    min: 1
+    max: 1
+  - name: voice-has-rules
+    # The voice carries DOs and DON'Ts.
+    type: 'tool_used'
+    tool: 'mcp__plugin_bolta_bolta__create-voice-profile'
+    input_match: '"dos"\s*:\s*\[\s*"[\s\S]*"donts"\s*:\s*\[\s*"|"donts"\s*:\s*\[\s*"[\s\S]*"dos"\s*:\s*\[\s*"'
+    min: 1
+  - name: connect-link
+    # No account connected: gets the connect link.
+    type: 'tool_used'
+    tool: 'mcp__plugin_bolta_bolta__get-connect-link'
+    min: 1
+  - name: shows-connect-link
+    # Shows the connect link.
+    type: 'regex'
+    pattern: 'bolta\.ai/dashboard/account/socials'
+    flags: 'i'
+  - name: connect-for-voice
+    # Owner rule: says to connect an account so it uses this voice.
+    type: 'regex'
+    pattern: 'connect[\s\S]{0,200}(voice|assign|use)|(voice|assign)[\s\S]{0,200}connect'
+    flags: 'i'
+  - name: no-content-writes
+    # No post, routine or campaign saved.
+    type: 'regex'
+    pattern: '"name"\s*:\s*"mcp__plugin_bolta_bolta__(save-post|bulk-create-posts|create-post|create-routine|confirm-plan|create-content-campaign)"'
+    target: 'trace'
+    match: 'not_contains'
+  - name: nothing-public
+    # Nothing published, scheduled, approved, switched on, run or started.
+    type: 'regex'
+    pattern: '"name"\s*:\s*"mcp__plugin_bolta_bolta__(publish-post|schedule-post|approve-post|approve-many-posts|activate-routine|resume-routine|run-routine-now|set-content-campaign-status|voice-generate)"'
+    target: 'trace'
+    match: 'not_contains'
+  - name: review-link
+    # Where to review it in Bolta.
+    type: 'regex'
+    pattern: 'bolta\.ai/dashboard/knowledge-base'
+    flags: 'i'
+  - name: no-ids
+    # No ids in what the user reads (ids inside a Bolta link are fine).
+    type: 'regex'
+    pattern: '(?<![/=])\b[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}\b|(?<![/=])\b(linkedin_org|facebook_page)_\d+'
+    flags: 'i'
+    match: 'not_contains'
+  - name: plain-words
+    # No tool names or internal field names in what the user reads.
+    type: 'regex'
+    pattern: '\b(MCP|workspace_id|proposal_id|source_bindings?|approval_policy|review_every_artifact|extract-business-dna|create-voice-profile|update-voice-profile|confirm-plan|create-routine|activate-routine|plan-campaign|get-connect-link|list-routine-templates|switch_on|is_default)\b'
+    match: 'not_contains'

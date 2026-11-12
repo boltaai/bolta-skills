@@ -7,6 +7,9 @@ How [start](start.md) makes the first voice with `create-voice-profile`: one sav
 - `writing_sample`: 50+ characters (their best post they wrote, or pasted text); Bolta reads the tone from it. `tone`: the four dials (`playful`, `professional`, `direct`, `thoughtful`, 0-100), the fallback; with no sample, set them from the tone the site read showed. Neither usable: refused. Never `website_url`: it reads and saves the site with no preview.
 - 3-5 DOs and DON'Ts from their posts or words, each a checkable sentence, 200 characters at most (longer ones are split). Nothing to draw on: leave them out; Bolta fills them from about your business.
 - Leave `is_default` and `account_ids` out: it becomes the default only if the brand has none, and takes every connected account not in another voice. Say what Bolta filled in (`bootstrapped` in the result).
+- The audience and content topics you showed go in too: `target_audience`, `topics`.
+- Always say which accounts use it, by network and name (`bootstrapped.accounts_assigned`). None: `get-connect-link`, show the link, "Connect one and it uses this voice."
+- A thin voice already exists (no DOs or DON'Ts, such as a Starter Voice): update that one with `update-voice-profile` (full lists, `business_dna_id` of the record just saved); never make a second.
 - A person speaking as "I" (a founder): `speaker_mode: "founder"`; default is `brand` ("we").
 
 ## A DON'T after a drop

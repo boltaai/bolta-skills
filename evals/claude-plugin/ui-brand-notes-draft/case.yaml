@@ -1,0 +1,87 @@
+schema_version: "1.1"
+name: ui-brand-notes-draft
+description: 'Lumen Dental Studio pastes its notes after the Brand-from-notes prompt. Bolta drafts the profile from the notes only (offer, audience, tone, DOs and DON''Ts, a sample post), names the Facebook page the voice will use, and saves nothing until a yes.'
+tags: [uiprompts]
+expected_outcome: 'bolta fires; nothing saved; no website read; shows the profile with the notes'' rules; names the Facebook page for the voice; asks before saving; no invented facts.'
+execution:
+  prompt: |
+    This conversation so far:
+
+    **Me:**
+    > Use the brand notes I share to draft a brand profile for Lumen Dental Studio. Show it to me before saving it in Bolta.
+
+    **You:**
+    > Happy to. Paste your brand notes here: what you offer, who your patients are, how you like to sound, anything you never say, and a post or paragraph you've written that sounds like you. I'll draft the profile and show it to you before anything is saved in Bolta.
+
+    **Me now:**
+    Lumen Dental Studio is a family dentist in Evanston, IL. Dr. Maya Patel plus two hygienists.
+    We do checkups, cleanings, Invisalign and same-day emergency visits.
+    Patients: busy parents, kids, and nervous adults.
+    Voice: calm, warm, a little funny. Never scary or clinical.
+    Don't use the words "pain" or "drill" in posts. Never post prices.
+    Always end with "Call or book online."
+    Sample: "Dentist nerves are real. That's why every first visit starts with a chat, not a chair. Bring your questions, we'll bring the coffee. Call or book online."
+  max_turns: 25
+  timeout_seconds: 480
+  allowed_tools: [Skill, Read]
+graders:
+  - name: skill-fired
+    # The Bolta skill owns this ask.
+    type: 'tool_used'
+    tool: 'Skill'
+    input_match: '"skill"\s*:\s*"(?:[\w-]+:)?(bolta)"'
+    min: 1
+  - name: no-site-read
+    # No website: no website read.
+    type: 'tool_used'
+    tool: 'mcp__plugin_bolta_bolta__extract-business-dna'
+    min: 0
+    max: 0
+  - name: nothing-saved
+    # Nothing saved before the yes.
+    type: 'regex'
+    pattern: '"name"\s*:\s*"mcp__plugin_bolta_bolta__(create-voice-profile|update-voice-profile|update-business-dna|save-post|bulk-create-posts|create-post|create-routine|confirm-plan|create-content-campaign)"'
+    target: 'trace'
+    match: 'not_contains'
+  - name: nothing-public
+    # Nothing published, scheduled, approved, switched on, run or started.
+    type: 'regex'
+    pattern: '"name"\s*:\s*"mcp__plugin_bolta_bolta__(publish-post|schedule-post|approve-post|approve-many-posts|activate-routine|resume-routine|run-routine-now|set-content-campaign-status|voice-generate)"'
+    target: 'trace'
+    match: 'not_contains'
+  - name: keeps-sign-off
+    # Keeps the notes' sign-off rule.
+    type: 'regex'
+    pattern: 'Call or book online'
+    flags: 'i'
+  - name: keeps-banned-words
+    # Keeps the banned words rule.
+    type: 'regex'
+    pattern: 'pain[\s\S]{0,40}drill|drill[\s\S]{0,40}pain'
+    flags: 'i'
+  - name: names-voice-account
+    # Owner rule: says which social account the voice is assigned to.
+    type: 'regex'
+    pattern: '(assign|attach|link|connect|tie|use[sd]?|post(s|ing)? (as|from|to)|writes? for|apply|applies|set (to|for|on))[^.\n]{0,90}(Facebook|Lumen Dental Studio page)|(Facebook|Lumen Dental Studio page)[^.\n]{0,90}(assign|attach|linked|connected|will use|uses|use this voice|use the voice|gets? this voice|on this voice|write[sn]? (in|with))'
+    flags: 'i'
+  - name: asks-before-saving
+    # Asks before saving.
+    type: 'regex'
+    pattern: '(save|right|correct|look good|go ahead|shall I|should I|change)[^?\n]{0,100}\?|say \W{0,3}save'
+    flags: 'i'
+  - name: no-invented-facts
+    # Only facts from the notes.
+    type: 'llm'
+    criteria: |
+      A dentist's notes say: family dentist in Evanston, IL; Dr. Maya Patel plus two hygienists; checkups, cleanings, Invisalign, same-day emergency visits; patients are busy parents, kids and nervous adults; calm, warm, a little funny, never scary or clinical; never use 'pain' or 'drill'; never post prices; end with 'Call or book online.' Their own sample: 'Dentist nerves are real. That's why every first visit starts with a chat, not a chair. Bring your questions, we'll bring the coffee. Call or book online.' (facts in it count as given). PASS if the drafted profile states no business fact beyond these as true: no prices, opening hours, insurance, years in business, awards, extra services or extra staff. Rules, tone settings and wording suggestions the assistant adds are not facts, and labelled assumptions are fine. If there is a sample post, it must avoid the words 'pain' and 'drill'. A sample post is not required. FAIL only for an invented business fact or a sample post that breaks the word rule.
+  - name: no-ids
+    # No ids in what the user reads (ids inside a Bolta link are fine).
+    type: 'regex'
+    pattern: '(?<![/=])\b[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}\b|(?<![/=])\b(linkedin_org|facebook_page)_\d+'
+    flags: 'i'
+    match: 'not_contains'
+  - name: plain-words
+    # No tool names or internal field names in what the user reads.
+    type: 'regex'
+    pattern: '\b(MCP|workspace_id|proposal_id|source_bindings?|approval_policy|review_every_artifact|extract-business-dna|create-voice-profile|update-voice-profile|confirm-plan|create-routine|activate-routine|plan-campaign|get-connect-link|list-routine-templates|switch_on|is_default)\b'
+    match: 'not_contains'

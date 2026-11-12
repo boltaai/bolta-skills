@@ -10,9 +10,10 @@ Read with [start](start.md) when the user answers the proposal. A yes to set up 
 ## The order on their yes
 
 1. **Brand:** they said the site read is right: `extract-business-dna` again with `preview: false`. Never before they saw it.
-2. **Voice:** they said yes to a voice and none exists: make it now ([start-making-voice.md](start-making-voice.md)).
-3. **Routines:** save each one they picked, switched off. Never one they didn't pick.
-4. **One question:** "Saved, switched off: Weekly coffee tips, Friday roundup. Switch both on?"
+2. **Voice:** "set up our brand" and a yes to its preview is a yes to both the record and the voice. None exists: make it now ([start-making-voice.md](start-making-voice.md)); one exists: update it with their notes, never a second brand voice.
+3. **Accounts:** say which accounts now use the voice (`bootstrapped.accounts_assigned`, or the voice's `account_ids`). None connected: `get-connect-link` now and show the link. Then where to review it: the result's `dashboard_url`.
+4. **Routines:** save each one they picked, switched off. Never one they didn't pick.
+5. **One question:** "Saved, switched off: Weekly coffee tips, Friday roundup. Switch both on?"
 
 ## Saving with Bolta's planner
 
