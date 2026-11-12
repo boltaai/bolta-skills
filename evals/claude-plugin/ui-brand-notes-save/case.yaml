@@ -2,7 +2,7 @@ schema_version: "1.1"
 name: ui-brand-notes-save
 description: 'Lumen Dental Studio says save after seeing the drafted profile. One voice is made from the notes (DOs, DON''Ts, audience, the user''s own sample), no website read, the Facebook page named as using it, and the place to review it in Bolta.'
 tags: [uiprompts-screens]
-expected_outcome: 'bolta fires; one create-voice-profile with the notes'' DOs/DON''Ts and audience, the user''s sample or tone dials, no website_url; no website read; names the Facebook page; Bolta link.'
+expected_outcome: 'bolta fires; one extract-business-dna setup:true with no url, notes carrying the sign-off and banned words, the audience; no create-voice-profile; names the Facebook page; Bolta link.'
 execution:
   prompt: |
     This conversation so far:
@@ -51,41 +51,11 @@ graders:
     tool: 'Skill'
     input_match: '"skill"\s*:\s*"(?:[\w-]+:)?(bolta)"'
     min: 1
-  - name: makes-voice
-    # Makes one voice.
-    type: 'tool_used'
-    tool: 'mcp__plugin_bolta_bolta__create-voice-profile'
-    min: 1
-    max: 1
-  - name: signoff-in-dos
-    # The sign-off rule is a DO.
-    type: 'tool_used'
-    tool: 'mcp__plugin_bolta_bolta__create-voice-profile'
-    input_match: '"dos"[^\]]*Call or book online'
-    min: 1
-  - name: banned-words-in-donts
-    # The banned words are a DON'T.
-    type: 'tool_used'
-    tool: 'mcp__plugin_bolta_bolta__create-voice-profile'
-    input_match: '"donts"[^\]]*(pain|drill)'
-    min: 1
-  - name: audience
-    # Who they serve goes in.
-    type: 'tool_used'
-    tool: 'mcp__plugin_bolta_bolta__create-voice-profile'
-    input_match: '"target_audience"\s*:\s*"[^"]*(parent|nervous|kid|famil)'
-    min: 1
-  - name: no-website-url
-    # No website on create.
-    type: 'tool_used'
-    tool: 'mcp__plugin_bolta_bolta__create-voice-profile'
-    input_match: '"website_url"'
-    min: 0
-    max: 0
   - name: no-site-read
-    # No website read.
+    # No website: never a url read.
     type: 'tool_used'
     tool: 'mcp__plugin_bolta_bolta__extract-business-dna'
+    input_match: '"url"\s*:\s*"[^"]'
     min: 0
     max: 0
   - name: no-content-writes
@@ -121,3 +91,28 @@ graders:
     type: 'regex'
     pattern: '\b(MCP|workspace_id|proposal_id|source_bindings?|approval_policy|review_every_artifact|extract-business-dna|create-voice-profile|update-voice-profile|confirm-plan|create-routine|activate-routine|plan-campaign|get-connect-link|list-routine-templates|switch_on|is_default)\b'
     match: 'not_contains'
+  - name: sets-up-from-notes
+    # Bolta-Server #1482 (no website): the yes runs Bolta's setup with no url from the notes; it makes the voice.
+    type: 'tool_used'
+    tool: 'mcp__plugin_bolta_bolta__extract-business-dna'
+    input_match: '^(?![\s\S]*"url"\s*:\s*"[^"])(?=[\s\S]*"setup"\W{1,6}true)'
+    min: 1
+    max: 1
+  - name: notes-carry-rules
+    # The notes (sign-off, banned words) reach the setup in their words.
+    type: 'tool_used'
+    tool: 'mcp__plugin_bolta_bolta__extract-business-dna'
+    input_match: '"notes"\s*:\s*"[^"]*(Call or book online|pain|drill)'
+    min: 1
+  - name: audience-passed
+    # Who they serve, from the notes.
+    type: 'tool_used'
+    tool: 'mcp__plugin_bolta_bolta__extract-business-dna'
+    input_match: '"(audience|notes)"\s*:\s*"[^"]*(parent|nervous|kid|famil)'
+    min: 1
+  - name: no-separate-voice
+    # The setup makes the voice; a create would be a second one.
+    type: 'tool_used'
+    tool: 'mcp__plugin_bolta_bolta__create-voice-profile'
+    min: 0
+    max: 0
