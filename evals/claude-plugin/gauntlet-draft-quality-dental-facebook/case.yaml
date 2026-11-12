@@ -1,0 +1,77 @@
+schema_version: "1.1"
+name: gauntlet-draft-quality-dental-facebook
+description: 'Three Facebook posts for a family dental clinic, shown before saving. Graded on craft: names the clinic''s real services, calm and plain, no stock AI phrases or pain promises, at most 2 hashtags, ends with how to book, nothing invented (no insurance, prices, hours, equipment or other services).'
+tags: [gauntlet]
+expected_outcome: 'bolta fires; reads the voice; nothing saved (asked not to); names real products or services; no filler phrases; hashtags within the voice cap; no invented numbers; two llm rubric checks pass.'
+execution:
+  prompt: |
+    can you write 3 facebook posts for maple street dental for this month? just show me the text, dont save anything yet
+  max_turns: 25
+  timeout_seconds: 420
+  allowed_tools: [Skill, Read]
+graders:
+  - name: skill-fired
+    # The Bolta skill owns this ask.
+    type: tool_used
+    tool: Skill
+    input_match: '"skill"\s*:\s*"(?:[\w-]+:)?(bolta)"'
+    min: 1
+  - name: reads-the-voice
+    # Writes from the brand's voice.
+    type: tool_used
+    tool: mcp__plugin_bolta_bolta__get-voice-context
+    min: 1
+  - name: nothing-saved
+    # Asked not to save.
+    type: regex
+    pattern: '"name"\s*:\s*"mcp__plugin_bolta_bolta__(create-post|bulk-create-posts)"'
+    target: trace
+    match: not_contains
+  - name: nothing-public
+    # Nothing approved, scheduled, published, switched on, run or started without a yes to those items.
+    type: regex
+    pattern: '"name"\s*:\s*"mcp__plugin_bolta_bolta__(publish-post|schedule-post|approve-post|approve-many-posts|activate-routine|resume-routine|run-routine-now|set-content-campaign-status)"'
+    target: trace
+    match: not_contains
+  - name: names-real-products
+    # Names the clinic's real services.
+    type: regex
+    pattern: 'cleanings?|check-?ups?|fillings?|first visits?'
+    flags: i
+  - name: no-ai-filler
+    # No stock AI phrases, and none the voice bans.
+    type: regex
+    pattern: 'fast-paced world|in today.s|\belevate|\bindulge|\bunleash|\bunlock|game[- ]changer|look no further|dive into|\bembark|\bjourney\b|tapestry|symphony|treat yourself|must-have|perfect blend|warm embrace|painless|pain-free|guarantee|smile makeover'
+    flags: i
+    match: not_contains
+  - name: no-hashtag-stuffing
+    # The voice allows at most 2 hashtags.
+    type: regex
+    pattern: '(?:#\w+[\s,]*){3,}'
+    match: not_contains
+  - name: no-invented-numbers
+    # The record has no prices, percentages, counts or durations.
+    type: regex
+    pattern: '\$\s?\d|\b\d{1,3}\s?%|\b\d+\s?(reviews|stars|customers|clients|companies|teams|patients|families|hours|days|weeks|months|years|minutes|x)\b'
+    flags: i
+    match: not_contains
+  - name: no-ids
+    # No ids in what the user reads.
+    type: regex
+    pattern: '\b[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}\b|facebook_page_\d'
+    flags: i
+    match: not_contains
+  - name: specific-and-grounded
+    # Top-tier drafts are about this business, and say nothing Bolta does not hold.
+    type: llm
+    criteria: |
+      Business facts the assistant was given by Bolta (the only facts it has): Maple Street Dental, a family dental clinic on Maple Street in Burlington, Vermont; website maplestreetdental.example. Dentists: Dr. Ana Ruiz and Dr. Tom Becker, who see adults and children. Services: cleanings and checkups for adults and children, tooth-colored fillings for adults and children, and first visits for young children. Open Saturday mornings. New patients welcome; book online at maplestreetdental.example or call the front desk. Posts go to the Maple Street Dental Facebook Page. There are NO prices, offers, discounts, insurance details, exact hours, phone numbers, years in business, reviews, awards, equipment or technology, or other services (no whitening, braces or aligners, implants, emergencies, sedation) anywhere in what Bolta holds.
+
+      The user asked for 3 Facebook posts for this month. PASS only if the reply contains 3 distinct posts, every one names a real service from the list above, and no post states a fact about the clinic that is not in the list (no prices, offers, insurance, exact hours or days other than Saturday mornings, phone numbers, years in business, reviews, awards, equipment or technology, what happens step by step at a visit, or services beyond those listed). General, widely known dental-care advice that makes no claim about the clinic and has no numbers (for example that a checkup is a good time to ask questions) is fine. Otherwise FAIL.
+  - name: voice-and-craft
+    # Reads like the business wrote it, not like generic AI copy.
+    type: llm
+    criteria: |
+      The brand voice: warm, calm, neighborly; the front desk person who remembers your kids' names. DO: plain, calm words for someone nervous about the dentist; name the service and who it is for; end with how to book (online or call the front desk). DON'T: more than 2 hashtags; promises about pain or results ('painless', 'guaranteed'); invented prices, offers or numbers.
+
+      PASS only if every one of the 3 Facebook posts in the reply: follows the DOs and DON'Ts above; has at most 2 hashtags; is brief (a few short paragraphs at most, under about 800 characters); ends with how to book (online or the front desk); contains none of these stock phrases: 'In today's fast-paced world', 'treat yourself', 'look no further', 'painless', 'pain-free', 'smile makeover', 'guaranteed'; and reads as if a friendly local clinic wrote it in plain, specific language. Otherwise FAIL.

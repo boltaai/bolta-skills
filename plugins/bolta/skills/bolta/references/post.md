@@ -1,6 +1,6 @@
 # Post
 
-Write social posts and save them to Bolta as drafts: one post, a week, one idea for several networks, a WordPress article. Use for: write a post about X, a week of LinkedIn posts, turn this into posts.
+Write social posts and save them to Bolta as drafts: one post, a week, one idea for several networks, a WordPress article.
 
 ## Done when
 
@@ -31,7 +31,6 @@ Drafts are saved and shown in full (number, account, text; no day), ending: "Sav
 - `list-scheduled-posts`, `list-routines`, `list-content-campaigns`: covered.
 - `create-post`, `bulk-create-posts`, `bulk-create-status`, `update-post`: save, check, change.
 - `get-post-platform-details`, `update-post-platform-details`: network fields.
-- `create-wordpress-blog-post`: an article draft.
 
 ## Hand off
 
@@ -42,5 +41,5 @@ Drafts are saved and shown in full (number, account, text; no day), ending: "Sav
 
 - Follow the house rules in the Bolta skill.
 - No subject: ask. No network named: write it, then end on one question, where to save it, with your pick ("Save it to LinkedIn and X?"). Missing facts stay blanks, not more questions. "Our new pricing" is a subject: write and save.
-- Every claim comes from the user, the business record or the voice: leave out prices, dates and links they didn't give, and never add scarcity or stock lines ("back on the shelf", "while it lasts"). Below the posts, say once what's missing.
+- **Write only from the record** (the user's words, `get-voice-context`): every product detail, note, ingredient, feature, service, number, habit and claim must be in it. Not there: leave it out; never guess, never keep a line you'd flag as unsure. Apply each DO and DON'T line by line. Read [writing from the record](post-writing.md) before the first draft. Below the posts, say once what's missing.
 - Show every saved post's full text, never a summary, whatever the result's text says (that note is for another app).
