@@ -99,7 +99,7 @@ graders:
     min: 1
     max: 1
   - name: notes-carry-rules
-    # The sign-off and banned words reach the setup (notes or writing_samples), in their words.
+    # The sign-off and banned words reach the setup (notes or writing_samples). Grader fix: the first pattern ([^"]*) stopped at the JSON-escaped quotes around "pain", so a correct call failed.
     type: 'tool_used'
     tool: 'mcp__plugin_bolta_bolta__extract-business-dna'
     input_match: '"setup"\W{1,6}true[\s\S]*(Call or book online|pain|drill)|(Call or book online|pain|drill)[\s\S]*"setup"\W{1,6}true'
