@@ -14,7 +14,7 @@ Read before reading a website, making a voice, or mentioning documents.
 
 No duplicate brand voice: show what the site says that the voice lacks, and offer it as rule changes. A voice for a person (a founder, a team member) is fine: [voice-brand-and-learning](voice-brand-and-learning.md).
 
-## Making the voice without a website
+## A person's voice, or a second voice
 
 A person voice or a second voice (a brand with no site: [no website](start-brand-setup-no-site.md)): `create-voice-profile`, one save, with:
 - `name`: "Acme voice" (or their name, for a founder). `language` and `use_emojis` when they said them: only creation sets those ([rules or settings](voice-rules-or-settings.md)).
