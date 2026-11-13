@@ -9,7 +9,7 @@ Each `list-workspaces` row is one brand's full settings. Read it once per brand 
 - `default_reviewer_ids`: who reviews by default.
 - `autonomy_mode` (Default automation level): at auto or aggressive, routines, campaigns and jobs that follow the brand publish without review. Posts made through this connection still wait for a yes.
 - `approval`: in plain words, whether work publishes without review there, with its `updated_at`.
-- `connection_automation_permission` (`granted`, `not_granted`, `not_asked`): whether this connection may loosen approval or automation there.
+- `connection_automation_permission` (`granted`, `not_granted`, `not_asked`): whether this connection may loosen approval there: `not_granted` means an owner switched it off; otherwise the user's yes in this chat decides.
 - `connection_turned_off`: what an owner or admin turned off for this connection on that brand. Don't try those tools there; say it was turned off for this connection and can be turned back on in Bolta: Settings > API > AI app connections.
 - `transcript_processing_enabled`: whether Bolta processes transcripts for this brand.
 

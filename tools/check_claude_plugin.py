@@ -1000,9 +1000,11 @@ SKILL_CLAIMS = [
      "connections; users.ai_app_connections_views)"),
     ("references/connect-brand-approval.md", re.compile(r"acknowledge: true"), True,
      "set-brand-approval loosens only on a second call with acknowledge=true after the preview"),
-    ("references/connect-brand-approval.md", re.compile(r"`not_asked` is refused"), True,
-     "set-brand-approval refuses a loosening unless the automation permission is granted "
-     "(users.brand_approval: automation_consent is not True)"),
+    ("references/connect-brand-approval.md", re.compile(r"`not_asked` is refused"), False,
+     "set-brand-approval refuses a loosening only when the switch is off (not_granted); an AI-app "
+     "connection never asked loosens after the preview and acknowledge (users.brand_approval._may_loosen)"),
+    ("references/connect-brand-approval.md", re.compile(r"`not_granted`"), True,
+     "say that not_granted (an owner switched it off) refuses loosening"),
     ("references/routine-weekly-networks.md", re.compile(r'"cross-platform"[^\n]*first run'), True,
      "cross-platform needs the read-the-first-run-back fallback (an older Bolta holds every "
      "one-account save after the first)"),

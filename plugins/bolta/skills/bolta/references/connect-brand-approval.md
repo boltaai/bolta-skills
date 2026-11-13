@@ -10,7 +10,7 @@ The brand's `list-workspaces` row: `approval` (in plain words, whether work publ
 
 - An owner or admin only. Anyone else is refused (`approval_change_forbidden`): an owner or admin changes it in Bolta, Settings > Rules > Approvals.
 - Stricter (a lower level, or Safe Mode on) applies on the first call.
-- Looser (auto or aggressive let routines, campaigns and jobs that follow the brand publish without review; Safe Mode off) also needs this connection's automation permission: `connection_automation_permission` `granted`. Here `not_asked` is refused too.
+- Looser (auto or aggressive let routines, campaigns and jobs that follow the brand publish without review; Safe Mode off) is refused when `connection_automation_permission` is `not_granted` (an owner switched it off); otherwise it needs the preview and the user's yes.
 
 ## The change
 
@@ -24,7 +24,7 @@ The brand's `list-workspaces` row: `approval` (in plain words, whether work publ
 
 ## Refusals
 
-- `automation_not_granted`: this connection may not loosen it. Follow its `what_to_do` (an owner or admin reconnects this app and ticks "Let this AI app change approval and automation settings", or makes the change in Bolta). An owner or admin can also allow it for this connection in Bolta: Settings > API > AI app connections, if the person who connected it is an owner or admin there too. Stop; never retry.
+- `automation_not_granted`: this connection may not loosen it. Follow its `what_to_do`: an owner or admin turns it on in Bolta (Settings > API > AI app connections) or makes the change in Bolta. Stop; never retry.
 - `configuration_changed`: it changed since it was read. Read `list-workspaces` again, show it, ask again.
 
 ## Always
