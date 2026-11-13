@@ -1,6 +1,6 @@
 # Changing a brand's approval settings
 
-Read when the user asks to change how much waits for review on a brand: its Default automation level (`autonomy_mode`: manual, assisted, auto, aggressive) or Safe Mode ("Approve team posts", `safe_mode`). Only on their words; never offer to loosen review, never in a scheduled run. Back to [brand settings](connect-brand-settings.md).
+Read when the user asks to change how much waits for review on a brand: its Default automation level (`autonomy_mode`: manual, assisted, auto, aggressive) or Safe Mode ("Approve team posts", `safe_mode`). Only on their words, or their yes to switching it when the brand blocks a routine or campaign they asked to post without review; never otherwise offer to loosen, never in a scheduled run. Back to [brand settings](connect-brand-settings.md).
 
 ## Read first
 

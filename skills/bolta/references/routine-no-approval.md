@@ -12,7 +12,7 @@ Read when the user asks for a Bolta routine's or campaign's posts to go out with
 
 ## What all has to be true
 
-1. **The brand allows it.** A routine can only be stricter than its brand: `autonomy_mode` not manual or assisted, review mode (`safe_mode`) off. Only an owner or admin changes these, in Bolta or on their words here ([brand approval](connect-brand-approval.md)). Say what the brand needs, once.
+1. **The brand allows it.** A routine can only be stricter than its brand: `autonomy_mode` not manual or assisted, review mode (`safe_mode`) off. If it blocks their ask, say why and ask once: "Switch Acme to Auto so this posts without asking?" Yes: [brand approval](connect-brand-approval.md), then retry.
 2. **The routine asks for it.** `approval_policy`: `auto` (weekly posts, founder stories, customer wins, LinkedIn positions, Square only) or `inherit` (follow the brand).
 3. **The brand decides, not an old writer setting.** Routines start on `legacy`, where an older setting on Bolta's writer can decide ahead of the brand (`effective_policy.decided_by` `agent`, or `follows_workspace_candidate` true). `autonomy_policy_version` `owner_v1` hands it to the brand and routine settings. Owner or admin only, one-way. It can loosen on its own: with `inherit` on a brand that allows it, posts stop waiting. Only `review_every_artifact` keeps asking for sure. It approves no draft already waiting.
 4. **This connection may do it.** `connection_automation_permission`: `granted`, fine; `not_asked` (connected before the choice), the user's role decides; `not_granted`, it is refused (`automation_not_granted`): "This connection can't turn approval off for Acme. An owner or admin can reconnect and allow it, allow it in Bolta (Settings > API > AI app connections), or change it in Bolta." Follow `what_to_do`; [details](connect-brand-approval.md). Stop; never retry.
@@ -34,4 +34,4 @@ Read `get-routine` back. Say "posts without asking" only when `effective_policy.
 
 - One yes for this change alone, separate from "Turn it on?".
 - Read Bolta back before saying anything posts without asking.
-- A refusal naming the role, the brand or this connection: say it plainly and stop.
+- A refusal naming the role or this connection: say it plainly and stop. Naming the brand: rule 1.
