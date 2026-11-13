@@ -1,6 +1,6 @@
 # Posting without a yes each time
 
-Read when the user asks for a Bolta routine's or campaign's posts to go out without their yes on each one ("no approval", "just post them"). Only on their words; never offer it, never in a scheduled run. Making review stricter needs none of this.
+Read when the user asks for a Bolta routine's or campaign's posts to go out without their yes on each one ("no approval", "just post them"). Only on their words; never offer it, never in a scheduled run. A stricter routine needs only their yes; a stricter campaign does not (below).
 
 ## Read what decides today
 
@@ -15,7 +15,7 @@ Read when the user asks for a Bolta routine's or campaign's posts to go out with
 1. **The brand allows it.** A routine can only be stricter than its brand: `autonomy_mode` not manual or assisted, review mode (`safe_mode`) off. Only an owner or admin changes these, at bolta.ai/dashboard/settings. Say what the brand needs and where, once.
 2. **The routine asks for it.** `approval_policy`: `auto` (weekly posts, founder stories, customer wins, LinkedIn positions, Square only) or `inherit` (follow the brand).
 3. **The brand decides, not an old writer setting.** Routines start on `legacy`, where an older setting on Bolta's writer can decide ahead of the brand (`effective_policy.decided_by` `agent`, or `follows_workspace_candidate` true). `autonomy_policy_version` `owner_v1` hands it to the brand and routine settings. Owner or admin only, one-way. It can loosen on its own: with `inherit` on a brand that allows it, posts stop waiting. Only `review_every_artifact` keeps asking for sure. It approves no draft already waiting.
-4. **This connection may do it.** `connection_automation_permission`: `granted`, fine; `not_asked` (connected before the choice), the user's role decides; `not_granted`, it is refused (`automation_not_granted`): "This connection can't turn approval off for Acme. An owner or admin can reconnect this app and tick 'Let this AI app change approval and automation settings for Acme' (Bolta Settings > API, AI app connections), or change it in Bolta." Stop; never retry.
+4. **This connection may do it.** `connection_automation_permission`: `granted`, fine; `not_asked` (connected before the choice), the user's role decides; `not_granted`, it is refused (`automation_not_granted`): "This connection can't turn approval off for Acme. An owner or admin can reconnect this app and tick 'Let this AI app change approval and automation settings for Acme' on the reconnect screen, or change it in Bolta." Stop; never retry.
 5. **Client sign-off stays.** A brand that needs the client's yes still sends every post to the client.
 
 ## The change, on one yes
@@ -28,7 +28,7 @@ Read `get-routine` back. Say "posts without asking" only when `effective_policy.
 
 ## Campaigns
 
-`update-content-campaign` takes the same: `approval_policy` (`inherit`, `review_every_artifact`, `auto`), `autonomy_override` (`""` follows the brand; `manual`, `assisted`, `auto`, `aggressive` are only ever stricter), and the move with `autonomy_policy_version: "owner_v1"`, `acknowledge_autonomy_migration: true` and `expected_updated_at` from `get-content-campaign`. Older campaigns always ask first until moved. Same yes, same read-back (`effective_policy`).
+`update-content-campaign` takes the same: `approval_policy` (`inherit`, `review_every_artifact`, `auto`), `autonomy_override` (`""` follows the brand; `manual`, `assisted`, `auto`, `aggressive` are only ever stricter), and the move with `autonomy_policy_version: "owner_v1"`, `acknowledge_autonomy_migration: true` and `expected_updated_at` from `get-content-campaign`. Older campaigns always ask first until moved. Tightening a campaign needs all of that too (`acknowledge_autonomy_migration`, `expected_updated_at`, an owner or admin) and moves it to `owner_v1`: say so in the yes. Same read-back (`effective_policy`).
 
 ## Always
 

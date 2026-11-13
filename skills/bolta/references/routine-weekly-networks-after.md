@@ -13,7 +13,7 @@ Run only on a clear yes to one of those. Never as a test after a settings change
 ## Times in their clock
 
 - Every time is read back in the brand's clock with its city: "Tue Nov 17, 9:00 am (Denver)".
-- An approve result with `what_happened` or `scheduled_local`: say that. Without them, `scheduled_time` is UTC: convert it before saying it.
+- An approve result with `what_happened`: say it. `scheduled_local` is a bare brand-clock time (`2026-11-17T09:00`): say it as above, never raw. Without them, `scheduled_time` is UTC: convert it before saying it.
 - A yes with no time still schedules Bolta's drafts at the next posting slot. Say so before the yes: "Approving schedules each one at your next posting time."
 
 ## Deleted drafts

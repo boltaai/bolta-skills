@@ -8,7 +8,7 @@ Read before carrying out decisions. Times: [review-times.md](review-times.md). L
 2. Just sent some? `list-inbox-items` again for their `content_fingerprint`.
 3. `approve-many-posts`, every yes in one call (25 at most; the rest in a second call). It gets the one Bolta check. One post is one item.
 4. `reject-post` for each no with a reason; `delete-post` for each drop. They pass once the approval's check did.
-5. Read back ([read-back.md](review-read-back.md)). Each `approve-many-posts` item gives `scheduled` and, when set, `scheduled_time` (UTC) and `credits_charged`; where Bolta adds them, `what_happened` and `scheduled_local` (the brand's clock, with `timezone`): say those as they are. After a batch, read back once with `list-workspace-posts` and those posts' `account_ids`, the scheduled queue (UTC `start_date`/`end_date` ending in Z, a day wider). Its times are UTC; show them in the brand clock.
+5. Read back ([read-back.md](review-read-back.md)). Each `approve-many-posts` item gives `scheduled` and, when set, `scheduled_time` (UTC) and `credits_charged`; where Bolta adds them, `what_happened` (say it as is) and `scheduled_local`, a bare brand-clock time (`2026-11-17T09:00`): say it with `timezone`'s city, "Tue Nov 17, 9:00 am (Denver)", never raw. After a batch, read back once with `list-workspace-posts` and those posts' `account_ids`, the scheduled queue (UTC `start_date`/`end_date` ending in Z, a day wider). Its times are UTC; show them in the brand clock.
 
 ## Times
 

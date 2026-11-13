@@ -986,7 +986,39 @@ def check_links(plugin):
                 err(rel, f"link {m.group(1)!r} points at nothing")
 
 
+#: Claims a skill file must not make, or must make, because the server says
+#: otherwise. Each was wrong in a reviewed PR: (file under skills/bolta,
+#: pattern, must_match, why).
+SKILL_CLAIMS = [
+    ("references/routine-no-approval.md", re.compile(r"stricter needs none", re.I), False,
+     "campaigns refuse any approval_policy/autonomy_override change, tightening too, "
+     "without acknowledge_autonomy_migration, expected_updated_at and an owner or admin"),
+    ("references/routine-no-approval.md", re.compile(r"Tightening a campaign", re.I), True,
+     "say that tightening a campaign needs the same acknowledgement as loosening it"),
+    ("references/routine-no-approval.md", re.compile(r"AI app connections"), False,
+     "no 'AI app connections' page exists; the permission is set on the reconnect screen"),
+    ("references/routine-weekly-networks.md", re.compile(r'"cross-platform"[^\n]*first run'), True,
+     "cross-platform needs the read-the-first-run-back fallback (an older Bolta holds every "
+     "one-account save after the first)"),
+    ("examples/weekly-three-networks-setup.json", re.compile(r"first run[^\"]*missing", re.I), True,
+     "the cross-platform example must read the first run back for missing posts"),
+    ("references/review-yes-move.md", re.compile(r"scheduled_local[^.]*as they are"), False,
+     "scheduled_local is a bare ISO wall-clock value; format it with timezone, never read it raw"),
+    ("references/routine-weekly-networks-after.md", re.compile(r"`scheduled_local`: say that"), False,
+     "scheduled_local is a bare ISO wall-clock value; format it with timezone, never read it raw"),
+]
+
+
+def check_skill_claims(plugin):
+    root = plugin / "skills" / "bolta"
+    for rel, rx, must, why in SKILL_CLAIMS:
+        p = root / rel
+        if p.is_file() and bool(rx.search(p.read_text())) != must:
+            err(f"skills/bolta/{rel}", why)
+
+
 def check_lint(plugin, skills):
+    check_skill_claims(plugin)
     skill_names = set(skills)
     for path in md_files(plugin):
         rel = path.relative_to(plugin)

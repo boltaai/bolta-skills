@@ -41,7 +41,7 @@
         },
         "instructions": "<his brief, word for word> Never invent facts, numbers, prices or dates."
       },
-      "why": "One routine, three bound accounts, one object each, ids exactly as list-accounts gave them: the Page (facebook_page_<id>) and the company page (linkedin_org_<id>), never his person. cross-platform with count 3 means 3 posts a run, each on all three accounts, cut to Bluesky's 300. The brief goes in whole: up to 8,000 characters (an older Bolta refuses past 4,000; then shorten it with him). Saved asking first and switched off: posting without his yes is its own question, asked once this read is back."
+      "why": "One routine, three bound accounts, one object each, ids exactly as list-accounts gave them: the Page (facebook_page_<id>) and the company page (linkedin_org_<id>), never his person. cross-platform with count 3 means 3 posts a run, each on all three accounts, cut to Bluesky's 300; an older Bolta can hold every copy after the first account's, so read the first run back and say if some are missing. The brief goes in whole: up to 8,000 characters (an older Bolta refuses past 4,000; then shorten it with him). Saved asking first and switched off: posting without his yes is its own question, asked once this read is back."
     },
     {
       "tool": "get-routine",
