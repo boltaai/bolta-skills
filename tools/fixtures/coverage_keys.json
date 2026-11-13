@@ -1,9 +1,9 @@
 {
  "generated_by": "tools/build_coverage_fixture.py",
- "server_commit": "64354f957",
+ "server_commit": "a00de5c3b",
  "golden": "boltathread/tests/fixtures/mcp_tools_list.golden.json",
  "counts": {
-  "tool_param": 274,
+  "tool_param": 292,
   "post_details": 223,
   "platform_specific": 80,
   "tool": 67
@@ -7277,12 +7277,216 @@
    "scope": "file"
   },
   {
+   "id": "campaign.acknowledge_autonomy_migration",
+   "group": "tool_param",
+   "source": "mcp golden schema",
+   "tokens_any": [
+    [
+     "acknowledge_autonomy_migration"
+    ]
+   ],
+   "context_any": [
+    "create-content-campaign",
+    "update-content-campaign"
+   ],
+   "scope": "file"
+  },
+  {
+   "id": "campaign.approval_policy",
+   "group": "tool_param",
+   "source": "mcp golden schema",
+   "tokens_any": [
+    [
+     "approval_policy"
+    ]
+   ],
+   "context_any": [
+    "create-content-campaign",
+    "update-content-campaign"
+   ],
+   "scope": "file"
+  },
+  {
+   "id": "campaign.approval_policy=auto",
+   "group": "tool_param",
+   "source": "mcp golden enum",
+   "tokens_any": [
+    [
+     "approval_policy",
+     "auto"
+    ]
+   ],
+   "context_any": [
+    "create-content-campaign",
+    "update-content-campaign"
+   ],
+   "scope": "file"
+  },
+  {
+   "id": "campaign.approval_policy=inherit",
+   "group": "tool_param",
+   "source": "mcp golden enum",
+   "tokens_any": [
+    [
+     "approval_policy",
+     "inherit"
+    ]
+   ],
+   "context_any": [
+    "create-content-campaign",
+    "update-content-campaign"
+   ],
+   "scope": "file"
+  },
+  {
+   "id": "campaign.approval_policy=review_every_artifact",
+   "group": "tool_param",
+   "source": "mcp golden enum",
+   "tokens_any": [
+    [
+     "approval_policy",
+     "review_every_artifact"
+    ]
+   ],
+   "context_any": [
+    "create-content-campaign",
+    "update-content-campaign"
+   ],
+   "scope": "file"
+  },
+  {
    "id": "campaign.audience",
    "group": "tool_param",
    "source": "mcp golden schema",
    "tokens_any": [
     [
      "audience"
+    ]
+   ],
+   "context_any": [
+    "create-content-campaign",
+    "update-content-campaign"
+   ],
+   "scope": "file"
+  },
+  {
+   "id": "campaign.autonomy_override",
+   "group": "tool_param",
+   "source": "mcp golden schema",
+   "tokens_any": [
+    [
+     "autonomy_override"
+    ]
+   ],
+   "context_any": [
+    "create-content-campaign",
+    "update-content-campaign"
+   ],
+   "scope": "file"
+  },
+  {
+   "id": "campaign.autonomy_override=",
+   "group": "tool_param",
+   "source": "mcp golden enum",
+   "tokens_any": [
+    [
+     "autonomy_override",
+     ""
+    ]
+   ],
+   "context_any": [
+    "create-content-campaign",
+    "update-content-campaign"
+   ],
+   "scope": "file"
+  },
+  {
+   "id": "campaign.autonomy_override=aggressive",
+   "group": "tool_param",
+   "source": "mcp golden enum",
+   "tokens_any": [
+    [
+     "autonomy_override",
+     "aggressive"
+    ]
+   ],
+   "context_any": [
+    "create-content-campaign",
+    "update-content-campaign"
+   ],
+   "scope": "file"
+  },
+  {
+   "id": "campaign.autonomy_override=assisted",
+   "group": "tool_param",
+   "source": "mcp golden enum",
+   "tokens_any": [
+    [
+     "autonomy_override",
+     "assisted"
+    ]
+   ],
+   "context_any": [
+    "create-content-campaign",
+    "update-content-campaign"
+   ],
+   "scope": "file"
+  },
+  {
+   "id": "campaign.autonomy_override=auto",
+   "group": "tool_param",
+   "source": "mcp golden enum",
+   "tokens_any": [
+    [
+     "autonomy_override",
+     "auto"
+    ]
+   ],
+   "context_any": [
+    "create-content-campaign",
+    "update-content-campaign"
+   ],
+   "scope": "file"
+  },
+  {
+   "id": "campaign.autonomy_override=manual",
+   "group": "tool_param",
+   "source": "mcp golden enum",
+   "tokens_any": [
+    [
+     "autonomy_override",
+     "manual"
+    ]
+   ],
+   "context_any": [
+    "create-content-campaign",
+    "update-content-campaign"
+   ],
+   "scope": "file"
+  },
+  {
+   "id": "campaign.autonomy_policy_version",
+   "group": "tool_param",
+   "source": "mcp golden schema",
+   "tokens_any": [
+    [
+     "autonomy_policy_version"
+    ]
+   ],
+   "context_any": [
+    "create-content-campaign",
+    "update-content-campaign"
+   ],
+   "scope": "file"
+  },
+  {
+   "id": "campaign.autonomy_policy_version=owner_v1",
+   "group": "tool_param",
+   "source": "mcp golden enum",
+   "tokens_any": [
+    [
+     "autonomy_policy_version",
+     "owner_v1"
     ]
    ],
    "context_any": [
@@ -7771,6 +7975,21 @@
    "tokens_any": [
     [
      "ends_on"
+    ]
+   ],
+   "context_any": [
+    "create-content-campaign",
+    "update-content-campaign"
+   ],
+   "scope": "file"
+  },
+  {
+   "id": "campaign.expected_updated_at",
+   "group": "tool_param",
+   "source": "mcp golden schema",
+   "tokens_any": [
+    [
+     "expected_updated_at"
     ]
    ],
    "context_any": [
@@ -9106,6 +9325,21 @@
    "scope": "file"
   },
   {
+   "id": "routine.acknowledge_autonomy_migration",
+   "group": "tool_param",
+   "source": "mcp golden schema",
+   "tokens_any": [
+    [
+     "acknowledge_autonomy_migration"
+    ]
+   ],
+   "context_any": [
+    "create-routine",
+    "update-routine"
+   ],
+   "scope": "file"
+  },
+  {
    "id": "routine.approval_policy",
    "group": "tool_param",
    "source": "mcp golden schema",
@@ -9160,6 +9394,37 @@
     [
      "approval_policy",
      "review_every_artifact"
+    ]
+   ],
+   "context_any": [
+    "create-routine",
+    "update-routine"
+   ],
+   "scope": "file"
+  },
+  {
+   "id": "routine.autonomy_policy_version",
+   "group": "tool_param",
+   "source": "mcp golden schema",
+   "tokens_any": [
+    [
+     "autonomy_policy_version"
+    ]
+   ],
+   "context_any": [
+    "create-routine",
+    "update-routine"
+   ],
+   "scope": "file"
+  },
+  {
+   "id": "routine.autonomy_policy_version=owner_v1",
+   "group": "tool_param",
+   "source": "mcp golden enum",
+   "tokens_any": [
+    [
+     "autonomy_policy_version",
+     "owner_v1"
     ]
    ],
    "context_any": [
@@ -9285,6 +9550,21 @@
     [
      "destination_config",
      "voice_profile_id"
+    ]
+   ],
+   "context_any": [
+    "create-routine",
+    "update-routine"
+   ],
+   "scope": "file"
+  },
+  {
+   "id": "routine.expected_updated_at",
+   "group": "tool_param",
+   "source": "mcp golden schema",
+   "tokens_any": [
+    [
+     "expected_updated_at"
     ]
    ],
    "context_any": [

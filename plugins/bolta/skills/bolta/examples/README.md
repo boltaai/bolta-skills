@@ -5,6 +5,7 @@ Each file is one ask from start to finish: the calls in order, why each one is s
 | File | The ask | Playbook |
 |-|-|-|
 | [weekly-routine.json](weekly-routine.json) | A Bolta routine: create, switch on, read back | [routine](../references/routine.md) |
+| [weekly-three-networks-no-approval.json](weekly-three-networks-no-approval.json) | A weekly brief to a Facebook Page, a LinkedIn page and Bluesky, posting without a yes each time | [routine](../references/routine.md) |
 | [routine-with-images.json](routine-with-images.json) | Weekly posts with an image each | [routine](../references/routine.md) |
 | [routine-to-client.json](routine-to-client.json) | Send a routine's drafts straight to the client, keeping about 20 waiting | [routine](../references/routine.md) |
 | [fix-a-failed-run.json](fix-a-failed-run.json) | A skipped run: one instructions change, then run now | [routine](../references/routine.md) |

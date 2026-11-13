@@ -1,0 +1,3 @@
+{
+  "campaign.autonomy_override=": "The empty value (follow the brand) is taught as `\"\"` next to autonomy_override and update-content-campaign in routine-no-approval.md; the code-token scanner only sees identifiers, so an empty string can never match."
+}

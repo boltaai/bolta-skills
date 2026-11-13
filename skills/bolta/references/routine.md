@@ -16,11 +16,11 @@ It's on, changed, paused or stopped; they know when drafts land: "Bolta routine 
   > **Bolta routine: Weekly LinkedIn, hiring**
   > - Every Monday 8:00 am (New York), Bolta writes 3 LinkedIn drafts about hiring.
   > - They wait for your yes. Runs with this app closed; uses credits each run.
-- **On yes, without the planner:** `create-routine` with `name`, `goal` (their words), `template_key`, `trigger_type: "schedule"`, `schedule: {"interval":"weekly","day":"monday","time":"08:00"}`, the workspace `timezone`, `approval_policy: "review_every_artifact"`, accounts bound, `output_config: {"artifact_type":"post","count":3}` (`platforms` only if they limited networks), `instructions`: their words plus "Never invent facts, numbers, prices or dates." Then `activate-routine`, read `next_run_at` back: "On Monday, say 'what's waiting'."
+- **On yes, without the planner:** `create-routine` with `name`, `goal` (their words), `template_key`, `trigger_type: "schedule"`, `schedule: {"interval":"weekly","day":"monday","time":"08:00"}`, the workspace `timezone`, `approval_policy: "review_every_artifact"`, accounts bound, `output_config: {"artifact_type":"post","count":3}`, `instructions`: their words plus "Never invent facts, numbers, prices or dates." Then `activate-routine`, read `next_run_at` back: "On Monday, say 'what's waiting'."
 - **Every setting**, default and when not: [routine-settings.md](routine-settings.md) (schedule, accounts, voice, reviewers), [output](routine-settings-output.md) (count, pages, topics), [writing](routine-settings-writing.md) (pillars, tone, stories).
-- **Accounts:** one per network named (none named: those used this week), `{"provider":"social_account","ref":"<account id>"}`. `count` is per run, across networks. Clock and cron: [routine-schedules.md](routine-schedules.md).
-- **Switching on is not running.** Run now uses credits and needs it on.
-- **"Post without asking"** only on those words, where routine and brand allow it (settings above).
+- **Accounts:** one per network named (none named: those used this week), `{"provider":"social_account","ref":"<account id>"}`. Several networks, Pages, `count`: [weekly-networks](routine-weekly-networks.md). Clock: [routine-schedules.md](routine-schedules.md).
+- **Switching on is not running.** Run now uses credits, needs it on, and never lands on a week not yet out ([after](routine-weekly-networks-after.md): times, the daily email).
+- **"Post without asking"** only on those words: [no-approval](routine-no-approval.md).
 - **Drafts keep missing, "is it working?":** [routine-improving.md](routine-improving.md). A no with a reason teaches Bolta.
 - Pictures, the client, stories, Library posts: [routine-outputs.md](routine-outputs.md).
 - Change, pause, stop, Monday's drafts: [routine-looking-after.md](routine-looking-after.md). Why it didn't run, a refused run now: [routine-runs.md](routine-runs.md).

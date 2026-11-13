@@ -62,7 +62,7 @@ Read exactly one before acting, plus what it names. Never act from this page alo
 | Set me up, get going, I have nothing set up, keep me posting with nothing running yet, no accounts | [start](references/start.md) |
 | Write a post, a week of posts, an article; turn this into posts | [post](references/post.md) |
 | What's waiting, yes to 1 and 3, schedule this Tuesday 9am, post now, delete drafts, move a time, the client's yes, a post per teammate | [review](references/review.md) |
-| Every week, images or video every week, each new blog post, pause or run my routine, its drafts keep missing | [routine](references/routine.md) |
+| Every week, images or video weekly, each new blog post, no approval, pause or run my routine, its drafts keep missing | [routine](references/routine.md) |
 | A launch, sale or event, "for 3 weeks", how did the campaign do | [campaign](references/campaign.md) |
 | How did it do, what's working, which post did best | [results](references/results.md) |
 | That's not me, show my voice, add a rule, what has Bolta learned | [voice](references/voice.md) |

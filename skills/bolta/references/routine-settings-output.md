@@ -5,7 +5,7 @@
 ## Always sent
 
 - `artifact_type`: `post`, `article` (weekly article), `reply` (reply routines) or `report` (reports). Required whenever `output_config` is sent, or the save is refused.
-- `count`: drafts per run, across all networks together. Send it every time. Sent without it, Bolta uses its writer's default, not the routine's: founder stories, customer wins and LinkedIn positions jump from 2 to 4 (Bolta). Most per run:
+- `count`: posts per run. One post everywhere (`"cross-platform"`): each goes to every bound account. One per network (`"platform-specific"`): `count` ideas, each written once per account ([weekly-networks](routine-weekly-networks.md)). Send it every time. Sent without it, Bolta uses its writer's default, not the routine's: founder stories, customer wins and LinkedIn positions jump from 2 to 4 (Bolta). Most per run:
 
 | Makes | Most |
 |-|-|

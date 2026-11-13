@@ -1,0 +1,72 @@
+{
+  "ask": "Yes, save it. And yes to the second one: post them without asking me.",
+  "playbook": "routine",
+  "before": "The owner asked for 3 posts every Monday from a long brief he pasted (about 5,600 characters), on the Acme Facebook Page, the Acme LinkedIn company page and Bluesky, without approving each post. Already read: list-workspaces (timezone America/Denver, autonomy_mode auto, safe_mode off, connection_automation_permission granted), list-accounts (the three rows; LinkedIn also has his personal profile, and he picked the company page). He chose the same post everywhere, knowing Bluesky keeps every copy to 300 characters. Two questions were shown: the routine summary ending 'Save it?', and, on its own, the no-approval message from routine-no-approval ending 'Go ahead?'. Nothing is switched on yet.",
+  "steps": [
+    {
+      "tool": "create-routine",
+      "arguments": {
+        "workspace_id": "<brand's workspace id>",
+        "name": "Weekly posts, Acme",
+        "goal": "Three posts a week from our brief that bring small studios to our booking page",
+        "template_key": "weekly_social_posts",
+        "trigger_type": "schedule",
+        "schedule": {
+          "interval": "weekly",
+          "day": "monday",
+          "time": "08:00"
+        },
+        "timezone": "<timezone from list-workspaces>",
+        "approval_policy": "auto",
+        "source_bindings": [
+          {"provider": "social_account", "ref": "<Acme Facebook Page id from list-accounts>"},
+          {"provider": "social_account", "ref": "<Acme LinkedIn company page id from list-accounts>"},
+          {"provider": "social_account", "ref": "<Bluesky account id from list-accounts>"}
+        ],
+        "output_config": {
+          "artifact_type": "post",
+          "count": 3,
+          "settings": {
+            "contentGenerationMode": "cross-platform"
+          }
+        },
+        "instructions": "<his brief, word for word> Never invent facts, numbers, prices or dates."
+      },
+      "why": "One routine, three bound accounts, one object each: the Page and the company page, never his person. cross-platform with count 3 means 3 posts a run, each on all three accounts, cut to Bluesky's 300. The brief goes in whole: up to 8,000 characters (an older Bolta refuses past 4,000; then shorten it with him). auto is allowed on weekly posts and only where the brand allows it. Created switched off."
+    },
+    {
+      "tool": "get-routine",
+      "arguments": {
+        "workspace_id": "<brand's workspace id>",
+        "routine_id": "<routine id>"
+      },
+      "why": "autonomy_policy_version is legacy on every new routine, and updated_at is the revision the move needs. effective_policy reads not_resolved before the first run."
+    },
+    {
+      "tool": "update-routine",
+      "arguments": {
+        "workspace_id": "<brand's workspace id>",
+        "routine_id": "<routine id>",
+        "autonomy_policy_version": "owner_v1",
+        "acknowledge_autonomy_migration": true,
+        "expected_updated_at": "<updated_at from that get-routine>"
+      },
+      "why": "His second yes covered this move, said as one-way. It makes Acme's settings and the routine's own decide, not an older writer setting. On configuration_changed: read again, show it, ask again. On automation_not_granted: say an owner or admin must reconnect and tick the box for Acme, then stop."
+    },
+    {
+      "tool": "get-routine",
+      "arguments": {
+        "workspace_id": "<brand's workspace id>",
+        "routine_id": "<routine id>"
+      },
+      "why": "Read back autonomy_policy_version owner_v1, approval_policy auto, the three accounts by name, and effective_policy. Still not_resolved: say Bolta confirms it after the first run."
+    }
+  ],
+  "say": "Saved to Acme, switched off. Before I switch it on:\n**Bolta routine: Weekly posts, Acme**\n- Every Monday 8:00 am (Denver), Bolta writes 3 posts from your brief.\n- Each goes to the Acme Facebook Page, the Acme LinkedIn page and Bluesky, same text, 300 characters at most.\n- Set to post without your yes, at your next posting times. Bolta confirms that after the first run; until then, treat them as waiting for you.\n- Runs with this app closed; uses credits each run.\nTurn it on?",
+  "never": [
+    "Switching it on in the same breath as the approval change: activation gets its own yes.",
+    "Saying it posts without asking before effective_policy says approval_required false.",
+    "Binding his personal LinkedIn because he said 'my LinkedIn'.",
+    "Retrying the move with a fresh updated_at after configuration_changed."
+  ]
+}
