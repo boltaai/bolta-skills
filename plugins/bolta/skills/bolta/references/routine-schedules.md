@@ -13,6 +13,10 @@ Set in `schedule` on `create-routine` or `update-routine`; read `get-routine` fi
 - Bolta's planner takes `days` and `day_of_month` instead ([routine-planner.md](routine-planner.md)).
 - Time-sensitive slots: avoid 17:45-18:15 UTC (say it in their clock), when Bolta's servers are busiest.
 
+## When posts go out: `posting_times`
+
+`schedule` decides when drafts are written; `output_config.posting_times` on `create-routine` or `update-routine` decides when posts go out. `[{"time": "09:00"}]` is every day at 9:00; add a `day` (`monday`, `tuesday`, `wednesday`, `thursday`, `friday`, `saturday`, `sunday`) for one weekday: `[{"day": "tuesday", "time": "09:00"}, {"day": "friday", "time": "09:00"}]`. 24-hour wall clock in the brand's time zone, never a UTC offset; at most 21 times. Each post takes the next free time after the run within 14 days, one post per account per time (a run's posts for different accounts share a time). Leave it out, or send `[]`, for Bolta's best times. `get-routine` reads it back as `posting_times.summary`; none there means best times.
+
 ## Always
 
 - Send the brand's `timezone` with every schedule, and say times in that clock.

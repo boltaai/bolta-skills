@@ -995,8 +995,14 @@ SKILL_CLAIMS = [
      "without acknowledge_autonomy_migration, expected_updated_at and an owner or admin"),
     ("references/routine-no-approval.md", re.compile(r"Tightening a campaign", re.I), True,
      "say that tightening a campaign needs the same acknowledgement as loosening it"),
-    ("references/routine-no-approval.md", re.compile(r"AI app connections"), False,
-     "no 'AI app connections' page exists; the permission is set on the reconnect screen"),
+    ("references/routine-no-approval.md", re.compile(r"Settings > API > AI app connections"), True,
+     "name where an owner or admin allows this connection to loosen approval (Settings > API > AI app "
+     "connections; users.ai_app_connections_views)"),
+    ("references/connect-brand-approval.md", re.compile(r"acknowledge: true"), True,
+     "set-brand-approval loosens only on a second call with acknowledge=true after the preview"),
+    ("references/connect-brand-approval.md", re.compile(r"`not_asked` is refused"), True,
+     "set-brand-approval refuses a loosening unless the automation permission is granted "
+     "(users.brand_approval: automation_consent is not True)"),
     ("references/routine-weekly-networks.md", re.compile(r'"cross-platform"[^\n]*first run'), True,
      "cross-platform needs the read-the-first-run-back fallback (an older Bolta holds every "
      "one-account save after the first)"),

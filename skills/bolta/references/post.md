@@ -11,7 +11,7 @@ Drafts are saved and shown in full (number, account, text; no day), ending: "Sav
 - **Ideas only** ("3 tweet ideas", "don't save"): answer in chat, offer to save, save nothing.
 - **Voice:** `get-voice-context` has rules but no example posts: add their 2-3 best published posts (last 60 days, with metrics). No voice: write plainly, say so, offer [voice](voice.md).
 - **Drafts need no approval and go nowhere**: "let me see it first" still saves one. A time or "now": save a plain Draft, show it, then [review](review.md).
-- **Two or more posts:** one `bulk-create-posts`, items `{content, account_ids, status: "Draft"}` (a group: `social_buckets`). Reddit and Discord items need their details inside or are skipped ([parts](post-parts.md)). Report `rejected`. Poll `bulk-create-status` until `completed`, whatever its text says; show `posts`, report `skip_reasons`, `quality_blocked`. **One post:** `save-post` (no `post_id`: always a Draft) with `content`, `account_ids`, an `idempotency_key` (Reddit by name: [Reddit](post-settings-reddit-discord.md)).
+- **Two or more posts:** one `bulk-create-posts`, items `{content, account_ids, status: "Draft"}` (a group: `social_buckets`). Reddit and Discord items need their details inside or are skipped ([parts](post-parts.md)). Report `rejected`. Poll its `task_id` until `completed`, whatever its text says; show `posts`, report `skip_reasons`, `quality_blocked`. **One post:** `save-post` (no `post_id`: always a Draft) with `content`, `account_ids`, an `idempotency_key` (Reddit by name: [Reddit](post-settings-reddit-discord.md)).
 - **A week:** about one per weekday on the networks named; write all they asked. Skip only a subject already covered (next 7 days, active routines and campaigns); a busy day gets a note.
 - At most 12 posts a sitting: cut posts per week, not weeks.
 - **No time named:** "Approved without a time, Bolta picks one from your schedule."
@@ -28,7 +28,7 @@ Drafts are saved and shown in full (number, account, text; no day), ending: "Sav
 - `list-accounts` (`groups: true`), `get-connect-link`: accounts, groups; a connect link.
 - `list-workspace-posts`: best posts; drafts before a retry; the queue (`account_ids`).
 - `list-routines`, `list-content-campaigns`: covered.
-- `save-post`, `bulk-create-posts`, `bulk-create-status`: save, check, change.
+- `save-post`, `bulk-create-posts` (`task_id`: status): save, check, change.
 - `get-post` with `platform`; `save-post` `platform_details`: network fields.
 
 ## Hand off

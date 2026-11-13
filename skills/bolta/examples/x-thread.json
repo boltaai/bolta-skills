@@ -43,19 +43,19 @@
           }
         ]
       },
-      "why": "The decision: a thread, not one post, because there are three separate points and each part stands alone; 3 parts, hook first, the screenshot where it pays off. The screenshot belongs on part 3, so this goes through bulk-create-posts as a nested contents list: save-post parts would put media on part 1 only. Media inside a part is media_url. Poll bulk-create-status for the created_post_id."
+      "why": "The decision: a thread, not one post, because there are three separate points and each part stands alone; 3 parts, hook first, the screenshot where it pays off. The screenshot belongs on part 3, so this goes through bulk-create-posts as a nested contents list: save-post parts would put media on part 1 only. Media inside a part is media_url. Poll bulk-create-posts with only the task_id for the created_post_id."
     },
     {
-      "tool": "bulk-create-status",
+      "tool": "bulk-create-posts",
       "arguments": {
         "task_id": "<task_id from bulk-create-posts>"
       },
-      "why": "Poll until completed: its created_post_id is the saved thread the next call sets."
+      "why": "The status read: only the task_id, no posts. Poll until completed: its created_post_id is the saved thread the next call sets."
     },
     {
       "tool": "save-post",
       "arguments": {
-        "post_id": "<created_post_id from bulk-create-status>",
+        "post_id": "<created_post_id from the task_id status>",
         "platform_details": {
           "x": {
             "reply_settings": "followers"
@@ -67,7 +67,7 @@
     {
       "tool": "get-post",
       "arguments": {
-        "post_id": "<created_post_id from bulk-create-status>",
+        "post_id": "<created_post_id from the task_id status>",
         "platform": "x"
       },
       "why": "Read back reply_settings before saying the thread is set."

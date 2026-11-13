@@ -31,19 +31,19 @@
           }
         ]
       },
-      "why": "Two posts: one bulk call, every item a Draft. Then poll bulk-create-status until completed for the two post ids. platform_details covers several networks in one call, not several posts, so each post gets its own save-post."
+      "why": "Two posts: one bulk call, every item a Draft. Then poll bulk-create-posts with only the task_id until completed for the two post ids. platform_details covers several networks in one call, not several posts, so each post gets its own save-post."
     },
     {
-      "tool": "bulk-create-status",
+      "tool": "bulk-create-posts",
       "arguments": {
         "task_id": "<task_id from bulk-create-posts>"
       },
-      "why": "Poll until completed for the two post ids: the settings below go on posts that exist."
+      "why": "The status read: only the task_id, no posts. Poll until completed for the two post ids: the settings below go on posts that exist."
     },
     {
       "tool": "save-post",
       "arguments": {
-        "post_id": "<first post id from bulk-create-status>",
+        "post_id": "<first post id from the task_id status>",
         "platform_details": {
           "threads": {
             "topic_tag": "Small Business",
@@ -56,7 +56,7 @@
     {
       "tool": "save-post",
       "arguments": {
-        "post_id": "<second post id from bulk-create-status>",
+        "post_id": "<second post id from the task_id status>",
         "platform_details": {
           "threads": {
             "is_ghost_post": true
@@ -68,7 +68,7 @@
     {
       "tool": "get-post",
       "arguments": {
-        "post_id": "<second post id from bulk-create-status>",
+        "post_id": "<second post id from the task_id status>",
         "platform": "threads"
       },
       "why": "Unknown keys are ignored with a success reply: read back before saying it is set."

@@ -1,4 +1,4 @@
-Queued. The Bolta card is rendering the posts itself and will list every one of them with its full copy as soon as they land — you do NOT need to call bulk-create-status, and you must NOT repeat, quote, summarize or list the post copy in your reply (the card is the single source of truth and would be duplicated). Reply with ONE short sentence (e.g. "Writing those now — they'll appear above in a moment.") and nothing else.
+Queued. The Bolta card is rendering the posts itself and will list every one of them with its full copy as soon as they land — you do NOT need to check on the task, and you must NOT repeat, quote, summarize or list the post copy in your reply (the card is the single source of truth and would be duplicated). Reply with ONE short sentence (e.g. "Writing those now — they'll appear above in a moment.") and nothing else.
 
 structuredContent:
 {

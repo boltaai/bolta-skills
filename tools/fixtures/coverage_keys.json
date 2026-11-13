@@ -1,9 +1,9 @@
 {
  "generated_by": "tools/build_coverage_fixture.py",
- "server_commit": "a00de5c3b",
+ "server_commit": "30923ca54",
  "golden": "boltathread/tests/fixtures/mcp_tools_list.golden.json",
  "counts": {
-  "tool_param": 292,
+  "tool_param": 302,
   "post_details": 223,
   "platform_specific": 80,
   "tool": 67
@@ -6102,18 +6102,6 @@
    "scope": "file"
   },
   {
-   "id": "tool.bulk-create-status",
-   "group": "tool",
-   "source": "mcp golden",
-   "tokens_any": [
-    [
-     "bulk-create-status"
-    ]
-   ],
-   "context_any": [],
-   "scope": "file"
-  },
-  {
    "id": "tool.confirm-plan",
    "group": "tool",
    "source": "mcp golden",
@@ -6732,6 +6720,18 @@
    "tokens_any": [
     [
      "send-outreach-reply"
+    ]
+   ],
+   "context_any": [],
+   "scope": "file"
+  },
+  {
+   "id": "tool.set-brand-approval",
+   "group": "tool",
+   "source": "mcp golden",
+   "tokens_any": [
+    [
+     "set-brand-approval"
     ]
    ],
    "context_any": [],
@@ -10360,6 +10360,166 @@
     [
      "output_config",
      "platforms"
+    ]
+   ],
+   "context_any": [
+    "create-routine",
+    "update-routine"
+   ],
+   "scope": "file"
+  },
+  {
+   "id": "routine.output_config.posting_times",
+   "group": "tool_param",
+   "source": "mcp golden schema; routine_service._validate_output_config",
+   "tokens_any": [
+    [
+     "output_config",
+     "posting_times"
+    ]
+   ],
+   "context_any": [
+    "create-routine",
+    "update-routine"
+   ],
+   "scope": "file"
+  },
+  {
+   "id": "routine.output_config.posting_times.day",
+   "group": "tool_param",
+   "source": "mcp golden schema",
+   "tokens_any": [
+    [
+     "posting_times",
+     "day"
+    ]
+   ],
+   "context_any": [
+    "create-routine",
+    "update-routine"
+   ],
+   "scope": "file"
+  },
+  {
+   "id": "routine.output_config.posting_times.day=friday",
+   "group": "tool_param",
+   "source": "mcp golden enum",
+   "tokens_any": [
+    [
+     "day",
+     "friday"
+    ]
+   ],
+   "context_any": [
+    "create-routine",
+    "update-routine"
+   ],
+   "scope": "file"
+  },
+  {
+   "id": "routine.output_config.posting_times.day=monday",
+   "group": "tool_param",
+   "source": "mcp golden enum",
+   "tokens_any": [
+    [
+     "day",
+     "monday"
+    ]
+   ],
+   "context_any": [
+    "create-routine",
+    "update-routine"
+   ],
+   "scope": "file"
+  },
+  {
+   "id": "routine.output_config.posting_times.day=saturday",
+   "group": "tool_param",
+   "source": "mcp golden enum",
+   "tokens_any": [
+    [
+     "day",
+     "saturday"
+    ]
+   ],
+   "context_any": [
+    "create-routine",
+    "update-routine"
+   ],
+   "scope": "file"
+  },
+  {
+   "id": "routine.output_config.posting_times.day=sunday",
+   "group": "tool_param",
+   "source": "mcp golden enum",
+   "tokens_any": [
+    [
+     "day",
+     "sunday"
+    ]
+   ],
+   "context_any": [
+    "create-routine",
+    "update-routine"
+   ],
+   "scope": "file"
+  },
+  {
+   "id": "routine.output_config.posting_times.day=thursday",
+   "group": "tool_param",
+   "source": "mcp golden enum",
+   "tokens_any": [
+    [
+     "day",
+     "thursday"
+    ]
+   ],
+   "context_any": [
+    "create-routine",
+    "update-routine"
+   ],
+   "scope": "file"
+  },
+  {
+   "id": "routine.output_config.posting_times.day=tuesday",
+   "group": "tool_param",
+   "source": "mcp golden enum",
+   "tokens_any": [
+    [
+     "day",
+     "tuesday"
+    ]
+   ],
+   "context_any": [
+    "create-routine",
+    "update-routine"
+   ],
+   "scope": "file"
+  },
+  {
+   "id": "routine.output_config.posting_times.day=wednesday",
+   "group": "tool_param",
+   "source": "mcp golden enum",
+   "tokens_any": [
+    [
+     "day",
+     "wednesday"
+    ]
+   ],
+   "context_any": [
+    "create-routine",
+    "update-routine"
+   ],
+   "scope": "file"
+  },
+  {
+   "id": "routine.output_config.posting_times.time",
+   "group": "tool_param",
+   "source": "mcp golden schema",
+   "tokens_any": [
+    [
+     "posting_times",
+     "time"
     ]
    ],
    "context_any": [

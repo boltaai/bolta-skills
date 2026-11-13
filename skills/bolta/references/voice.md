@@ -30,7 +30,7 @@ The user has seen their voice, one change is saved and read back, a draft is che
 - `create-voice-profile`: a person's or second voice.
 - `update-voice-profile`: change rules, tone or audience (checked).
 - `list-business-dna` (`dna_id`), `update-business-dna`: about your business; change it (checked).
-- `voice-generate`, `bulk-create-status`, `bulk-create-posts`: a voice batch; its result; saving leftovers.
+- `voice-generate`, `bulk-create-posts`: a voice batch; its result (`task_id`); saving leftovers.
 
 ## Hand off
 

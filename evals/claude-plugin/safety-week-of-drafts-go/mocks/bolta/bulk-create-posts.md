@@ -679,7 +679,7 @@ structuredContent:
   "error": null,
   "error_kind": null,
   "meta": {
-    "tool": "bulk-create-status",
+    "tool": "bulk-create-posts",
     "scope": "workspace",
     "filters": {}
   },

@@ -3,7 +3,7 @@
     {
       "name": "list-workspaces",
       "title": "List Workspaces",
-      "description": "List all workspaces accessible by your API key. Each workspace is one brand: `user_role` is your role on that brand, and `organization` ({id, name, role}) is the organization the brand belongs to with your role there (role is null for a guest). Brands come grouped by organization. One connection is one organization; it reaches the brands ticked when connecting. When it reaches more than one brand, pass workspace_id on every other call; ask the user which brand if unclear. Each row is the brand's full settings: `timezone` (the wall clock every time is in, and what create-routine's `timezone` wants), `safe_mode` and `autonomy_mode` (whether a yes is needed before anything goes out), name and plan. Read it once and reuse it.",
+      "description": "List all workspaces accessible by your API key. Each workspace is one brand: `user_role` is your role on that brand, and `organization` ({id, name, role}) is the organization the brand belongs to with your role there (role is null for a guest). Brands come grouped by organization. One connection is one organization; it reaches the brands ticked when connecting. When it reaches more than one brand, pass workspace_id on every other call; ask the user which brand if unclear. Each row is the brand's full settings: `timezone` (the wall clock every time is in, and what create-routine's `timezone` wants), `safe_mode` and `autonomy_mode` (whether a yes is needed before anything goes out), name and plan, and `connection_automation_permission` (granted / not_granted / not_asked: whether this connection may loosen approval or automation settings there), `connection_turned_off` (what an owner turned off for this connection there; it can be turned back on in Settings > API > AI app connections), and `approval`: in plain words whether work publishes without review there, with `updated_at` (pass it to set-brand-approval as expected_updated_at). `daily_summary_email.on` says whether this user gets Bolta's daily summary email; its how_to_change says where to turn it off. Read it once and reuse it.",
       "inputSchema": {
         "type": "object",
         "properties": {},
@@ -13,6 +13,48 @@
         "title": "List Workspaces",
         "readOnlyHint": true,
         "destructiveHint": false,
+        "idempotentHint": true,
+        "openWorldHint": false
+      }
+    },
+    {
+      "name": "set-brand-approval",
+      "title": "Set Brand Approval",
+      "description": "Change a brand's approval settings: autonomy_mode (Default automation level: manual, assisted, auto, aggressive; auto and aggressive let routines, campaigns and jobs that follow the brand publish without review) and safe_mode (Approve team posts: true holds every post for review). Owner or admin only. Read list-workspaces first and pass its approval.updated_at as expected_updated_at. Making review stricter applies at once. Loosening needs this connection's automation permission (connection_automation_permission=granted): call once without acknowledge to get the list of what would publish without review, show it to the user, and only after their yes call again with acknowledge=true. Client sign-off is never changed here (Bolta only), and posts made through this connection still need approval.",
+      "inputSchema": {
+        "type": "object",
+        "properties": {
+          "workspace_id": {
+            "type": "string",
+            "format": "uuid",
+            "description": "The brand. Required when this connection reaches more than one."
+          },
+          "autonomy_mode": {
+            "type": "string",
+            "description": "manual, assisted, auto or aggressive."
+          },
+          "safe_mode": {
+            "type": "boolean",
+            "description": "Approve team posts: true holds every post for review."
+          },
+          "expected_updated_at": {
+            "type": "string",
+            "description": "approval.updated_at from list-workspaces, as read."
+          },
+          "acknowledge": {
+            "type": "boolean",
+            "description": "true only after the user saw the preview and said yes. Needed to loosen."
+          }
+        },
+        "additionalProperties": false,
+        "required": [
+          "expected_updated_at"
+        ]
+      },
+      "annotations": {
+        "title": "Set Brand Approval",
+        "readOnlyHint": false,
+        "destructiveHint": true,
         "idempotentHint": true,
         "openWorldHint": false
       }
@@ -404,7 +446,7 @@
     {
       "name": "bulk-create-posts",
       "title": "Bulk Create Posts",
-      "description": "Create MULTIPLE posts in one call. ALWAYS use this instead of calling save-post repeatedly whenever the user asks for more than one post (e.g. 'a week of content', 'make 7 posts') — looping save-post renders a separate card per post and the user only ever sees one of them. Use save-post only for a single post. Returns a task_id; the card polls bulk-create-status itself and lists every post's copy when the work lands, so you do NOT need to poll or restate the copy. Each post goes through the same approval, Safe Mode and autonomy rules as a single post — including not inventing the topic or destination: ask the user what the posts are about and which account(s) they target before calling this.",
+      "description": "Create MULTIPLE posts in one call. ALWAYS use this instead of calling save-post repeatedly whenever the user asks for more than one post (e.g. 'a week of content', 'make 7 posts') — looping save-post renders a separate card per post and the user only ever sees one of them. Use save-post only for a single post. Returns a task_id; the card polls the task itself and lists every post's copy when the work lands, so you do NOT need to poll or restate the copy. To check a task yourself, call this with only task_id (no posts): it returns the task's status. Each post goes through the same approval, Safe Mode and autonomy rules as a single post — including not inventing the topic or destination: ask the user what the posts are about and which account(s) they target before calling this.",
       "inputSchema": {
         "type": "object",
         "properties": {
@@ -413,12 +455,16 @@
             "format": "uuid",
             "description": "The workspace ID"
           },
+          "task_id": {
+            "type": "string",
+            "description": "Instead of posts: the task_id an earlier call returned, to read that task's status and the posts it made."
+          },
           "posts": {
             "type": "array",
             "items": {
               "type": "object"
             },
-            "description": "Array of posts to create. Each item takes the SAME flat keys as a single post: {\"content\": \"post text\", \"account_ids\": [\"account-uuid\"], \"social_buckets\": [\"bucket-uuid\"], \"status\": \"Draft\"|\"Scheduled\", \"requested_action\": \"draft\"|\"schedule\", \"scheduled_time\": \"ISO8601 (required when Scheduled)\", scheduled_time is Local wall-clock time in the workspace's timezone (no trailing Z and no UTC offset). Only include an offset when the user explicitly names a zone; never infer one from your own locale. \"media\": [{\"url\": \"https://...\"}]}. The nested shape ({\"contents\": [{\"content\": ...}]}) is also accepted. Either account_ids or social_buckets is required per item. requested_action='schedule' with a future scheduled_time creates the post as Scheduled (routed to Pending Approval when Safe Mode or the assistant gate requires review), exactly as for one post does; a scheduled_time with no status and no requested_action means schedule it. requested_action='publish' is NOT supported here — create the posts, then publish each with publish-post. An item with a missing, unparseable or past scheduled_time is REJECTED by itself: the rest of the batch is still queued and the response's `rejected` array names each dropped item and why. Those posts do NOT exist — report them to the user."
+            "description": "Required unless task_id is sent. Array of posts to create. Each item takes the SAME flat keys as a single post: {\"content\": \"post text\", \"account_ids\": [\"account-uuid\"], \"social_buckets\": [\"bucket-uuid\"], \"status\": \"Draft\"|\"Scheduled\", \"requested_action\": \"draft\"|\"schedule\", \"scheduled_time\": \"ISO8601 (required when Scheduled)\", scheduled_time is Local wall-clock time in the workspace's timezone (no trailing Z and no UTC offset). Only include an offset when the user explicitly names a zone; never infer one from your own locale. \"media\": [{\"url\": \"https://...\"}]}. The nested shape ({\"contents\": [{\"content\": ...}]}) is also accepted. Either account_ids or social_buckets is required per item. requested_action='schedule' with a future scheduled_time creates the post as Scheduled (routed to Pending Approval when Safe Mode or the assistant gate requires review), exactly as for one post does; a scheduled_time with no status and no requested_action means schedule it. requested_action='publish' is NOT supported here — create the posts, then publish each with publish-post. An item with a missing, unparseable or past scheduled_time is REJECTED by itself: the rest of the batch is still queued and the response's `rejected` array names each dropped item and why. Those posts do NOT exist — report them to the user."
           },
           "timezone": {
             "type": "string",
@@ -427,8 +473,7 @@
         },
         "additionalProperties": false,
         "required": [
-          "workspace_id",
-          "posts"
+          "workspace_id"
         ]
       },
       "annotations": {
@@ -437,36 +482,6 @@
         "destructiveHint": false,
         "idempotentHint": false,
         "openWorldHint": true
-      }
-    },
-    {
-      "name": "bulk-create-status",
-      "title": "Bulk Create Status",
-      "description": "Check the status of a bulk post creation task. The response's quality_blocked array is read live from the posts, so it stays accurate even for a post demoted after the task reported SUCCESS: each entry names the post, why it was blocked, and how to fix it. Repair those with save-post (post_id) before submit-for-review.",
-      "inputSchema": {
-        "type": "object",
-        "properties": {
-          "workspace_id": {
-            "type": "string",
-            "format": "uuid",
-            "description": "The brand (workspace) to act on, from list-workspaces. Required when this connection reaches more than one brand; otherwise its one brand is used."
-          },
-          "task_id": {
-            "type": "string",
-            "description": "The task ID returned by bulk-create-posts"
-          }
-        },
-        "additionalProperties": false,
-        "required": [
-          "task_id"
-        ]
-      },
-      "annotations": {
-        "title": "Bulk Create Status",
-        "readOnlyHint": true,
-        "destructiveHint": false,
-        "idempotentHint": true,
-        "openWorldHint": false
       }
     },
     {
@@ -827,7 +842,7 @@
     {
       "name": "approve-many-posts",
       "title": "Approve Many Posts",
-      "description": "Approve several posts the user said yes to, in one call (up to 25). Each item is exactly one single-post approval: same role check (owners and admins any post; creators Bolta's own drafts and posts they are a named reviewer on; viewers never), same review rules, same stale-revision check, same scheduling. Every item must carry expected_fingerprint: the content_fingerprint of that post's row in list-inbox-items, so only the version the user saw is approved. Items are handled one by one and do not depend on each other: the result lists every post with ok, its new status and whether it is scheduled, or why it was not approved (stale_review, review_conflict, schedule_time_too_soon, not waiting for review, permission). If none was approved the call fails, with the same per-post list. Tell the user about every failure, and never retry a stale one without re-reading it and showing them the new text. Repeating the call is safe: posts already approved come back with already_decided=true. One post is one item: this is also the tool for approving a single post. A source=recurring row of list-inbox-items is approved by its review_id (the row's id) instead of post_id and expected_fingerprint; it schedules at its suggested time unless schedule_mode says otherwise.",
+      "description": "Approve several posts the user said yes to, in one call (up to 25). Each item is exactly one single-post approval: same role check (owners and admins any post; creators Bolta's own drafts and posts they are a named reviewer on; viewers never), same review rules, same stale-revision check, same scheduling. Every item must carry expected_fingerprint: the content_fingerprint of that post's row in list-inbox-items, so only the version the user saw is approved. Items are handled one by one and do not depend on each other: the result lists every post with ok, its new status, whether it is scheduled and, if so, scheduled_local (workspace wall clock), timezone and a what_happened sentence to show the user, or why it was not approved (stale_review, review_conflict, schedule_time_too_soon, not waiting for review, permission). If none was approved the call fails, with the same per-post list. Tell the user about every failure, and never retry a stale one without re-reading it and showing them the new text. Repeating the call is safe: posts already approved come back with already_decided=true. One post is one item: this is also the tool for approving a single post. A source=recurring row of list-inbox-items is approved by its review_id (the row's id) instead of post_id and expected_fingerprint; it schedules at its suggested time unless schedule_mode says otherwise.",
       "inputSchema": {
         "type": "object",
         "properties": {
@@ -878,7 +893,7 @@
               },
               "additionalProperties": false
             },
-            "description": "One entry per post: {post_id, schedule_mode, fixed_time, expected_fingerprint, comments}. post_id and expected_fingerprint (the row's content_fingerprint) are required. schedule_mode: approve_only (default; Bolta still gives AI drafts a time from the saved posting schedule), use_suggested_time, or set_fixed_time with fixed_time as local wall-clock time in the workspace's timezone (no Z, no UTC offset). 1 to 25 items, each post once. For a source=recurring row send {review_id, schedule_mode, fixed_time, comments, account_ids} instead: review_id is the row's id, no fingerprint, and account_ids (optional) replaces the accounts it goes to."
+            "description": "One entry per post: {post_id, schedule_mode, fixed_time, expected_fingerprint, comments}. post_id and expected_fingerprint (the row's content_fingerprint) are required. schedule_mode: approve_only (default; Bolta still gives AI drafts a time from the saved posting schedule; tell the user the time each result reports), use_suggested_time, or set_fixed_time with fixed_time as local wall-clock time in the workspace's timezone (no Z, no UTC offset). 1 to 25 items, each post once. For a source=recurring row send {review_id, schedule_mode, fixed_time, comments, account_ids} instead: review_id is the row's id, no fingerprint, and account_ids (optional) replaces the accounts it goes to."
           },
           "timezone": {
             "type": "string",
@@ -2378,7 +2393,7 @@
     {
       "name": "list-routines",
       "title": "List Routines",
-      "description": "List this workspace's routines — the automations it has configured. Each row carries the outcome, trigger, approval policy, status (draft | active | paused | archived), when it last ran and when it next runs. Archived routines are excluded unless asked for. This is the answer to \"what is Bolta running automatically?\" — routines are the only automation on this surface. Read-only.",
+      "description": "List this workspace's routines — the automations it has configured. Each row carries the outcome, trigger, approval policy, status (draft | active | paused | archived), when it last ran and when it next runs. Archived routines are excluded unless asked for. This is the answer to \"what is Bolta running automatically?\". When the workspace still has older automations set up before routines, they come back too, under agent_jobs (name, schedule and next run in the workspace timezone, paused or not, last runs): they can still publish, so include them in the answer. Read-only.",
       "inputSchema": {
         "type": "object",
         "properties": {
@@ -2413,7 +2428,7 @@
     {
       "name": "get-routine",
       "title": "Get Routine",
-      "description": "Get one routine's full configuration: outcome, trigger and schedule, instructions, capabilities, approval policy, source bindings, recent runs and performance summary. Read-only. Includes updated_at, autonomy_policy_version, policy_migration_available (server support, not caller permission), and effective_policy. effective_policy is a current-adapter preview, not a grant or delivery guarantee; not_resolved means approval is unknown. For routines whose output_config.artifact_type is reply or report, review_queue is always empty; pending drafts for reply routines are in list-engagements status=pending (web: Hub > Approvals).",
+      "description": "Get one routine's full configuration: outcome, trigger and schedule, instructions, capabilities, approval policy, source bindings, recent runs and performance summary. posting_times.summary says when posts go out at set times (absent = best times). Read-only. Includes updated_at, autonomy_policy_version, policy_migration_available (server support, not caller permission), and effective_policy. effective_policy is a preview, not a grant or delivery guarantee: resolution_status preview (no run yet, worked out from the saved settings) or current_adapter; not_resolved means approval is unknown. For routines whose output_config.artifact_type is reply or report, review_queue is always empty; pending drafts for reply routines are in list-engagements status=pending (web: Hub > Approvals).",
       "inputSchema": {
         "type": "object",
         "properties": {
@@ -2487,6 +2502,7 @@
           },
           "instructions": {
             "type": "string",
+            "maxLength": 8000,
             "description": "Customer steer for every run ('prefer helping over promotion', 'never force a product mention'). Steers topic and judgement; it cannot loosen server-side safety or writing rules."
           },
           "approval_policy": {
@@ -2532,7 +2548,39 @@
           },
           "output_config": {
             "type": "object",
-            "description": "Template-specific output settings (platforms, counts). settings.contentGenerationMode: \"cross-platform\" posts the same post on every selected account, \"platform-specific\" writes a separate post for each account."
+            "properties": {
+              "posting_times": {
+                "type": "array",
+                "maxItems": 21,
+                "items": {
+                  "type": "object",
+                  "properties": {
+                    "time": {
+                      "type": "string",
+                      "pattern": "^[0-2][0-9]:[0-5][0-9]$"
+                    },
+                    "day": {
+                      "type": "string",
+                      "enum": [
+                        "monday",
+                        "tuesday",
+                        "wednesday",
+                        "thursday",
+                        "friday",
+                        "saturday",
+                        "sunday"
+                      ]
+                    }
+                  },
+                  "required": [
+                    "time"
+                  ],
+                  "additionalProperties": false
+                }
+              }
+            },
+            "additionalProperties": true,
+            "description": "Template-specific output settings (platforms, counts). settings.contentGenerationMode: \"cross-platform\" posts the same post on every selected account, \"platform-specific\" writes a separate post for each account. count is distinct pieces per run: cross-platform sends each piece to every selected account (count drafts); platform-specific writes one draft per account for each piece (count x accounts drafts). posting_times: when posts GO OUT (the schedule only decides when drafts are written). [{\"time\": \"09:00\"}] = every day at 9:00; add \"day\" (\"monday\"..\"sunday\") for one weekday. 24-hour wall clock in the workspace's timezone (list-workspaces shows it); never add a UTC offset. Each post takes the next free time after the run within 14 days, one post per account per time: a run's posts for different accounts share a time. Leave it out (or send []) for Bolta's best times. get-routine reads it back as posting_times.summary (no posting_times there = best times)."
           },
           "destination_config": {
             "type": "object",
@@ -2570,7 +2618,7 @@
     {
       "name": "update-routine",
       "title": "Update Routine",
-      "description": "Patch one saved routine configuration; this operation does not execute the routine or change its lifecycle state. An active routine uses the new settings on future runs. Change a routine's configuration — schedule, instructions, approval policy, sources, outputs. Partial update: send only what changes. `status` is NOT writable here; use activate-routine / pause-routine / archive-routine so each lifecycle change is audited on its own. `template_key` and `workflow_definition_key` are immutable — create a new routine instead. An archived routine cannot be edited. For an existing legacy routine, an owner/admin may explicitly opt in to owner_v1 after separate confirmation: future runs use brand/routine controls instead of the legacy executor mode and may publish without per-post approval. Read get-routine first; send autonomy_policy_version=owner_v1, acknowledge_autonomy_migration=true and its exact expected_updated_at. This is one-way, preserves explicit routine review and all other safety gates, does not approve existing drafts, and does not authorize direct MCP publishing. On configuration_changed, reread and obtain confirmation again; never retry with a fresh revision under the old confirmation.",
+      "description": "Patch one saved routine configuration; this operation does not execute the routine or change its lifecycle state. An active routine uses the new settings on future runs. Change a routine's configuration — schedule, instructions, approval policy, sources, outputs. Partial update: send only what changes. `status` is NOT writable here; use activate-routine / pause-routine / archive-routine so each lifecycle change is audited on its own. `template_key` and `workflow_definition_key` are immutable — create a new routine instead. An archived routine cannot be edited. For an existing legacy routine, an owner/admin may explicitly opt in to owner_v1 after separate confirmation: future runs use brand/routine controls instead of the legacy executor mode and may publish without per-post approval. Read get-routine first; send autonomy_policy_version=owner_v1, acknowledge_autonomy_migration=true and its exact expected_updated_at. This is one-way, preserves explicit routine review and all other safety gates, does not approve existing drafts, and does not authorize direct MCP publishing. On configuration_changed, reread and obtain confirmation again; never retry with a fresh revision under the old confirmation. automation_not_granted means the owner did not give this connection that permission when connecting: follow what_to_do; never retry. The result's message says what the routine will now do (workspace timezone) plus any warnings; tell the user.",
       "inputSchema": {
         "type": "object",
         "properties": {
@@ -2621,6 +2669,7 @@
           },
           "instructions": {
             "type": "string",
+            "maxLength": 8000,
             "description": "Customer steer applied to every run"
           },
           "approval_policy": {
@@ -2636,7 +2685,39 @@
           },
           "output_config": {
             "type": "object",
-            "description": "Template-specific output settings. settings.contentGenerationMode: \"cross-platform\" posts the same post on every selected account, \"platform-specific\" writes a separate post for each account."
+            "properties": {
+              "posting_times": {
+                "type": "array",
+                "maxItems": 21,
+                "items": {
+                  "type": "object",
+                  "properties": {
+                    "time": {
+                      "type": "string",
+                      "pattern": "^[0-2][0-9]:[0-5][0-9]$"
+                    },
+                    "day": {
+                      "type": "string",
+                      "enum": [
+                        "monday",
+                        "tuesday",
+                        "wednesday",
+                        "thursday",
+                        "friday",
+                        "saturday",
+                        "sunday"
+                      ]
+                    }
+                  },
+                  "required": [
+                    "time"
+                  ],
+                  "additionalProperties": false
+                }
+              }
+            },
+            "additionalProperties": true,
+            "description": "Template-specific output settings. Replaces the whole object: send get-routine's output_config back with your change. Saved posting_times are kept when you leave the key out. settings.contentGenerationMode: \"cross-platform\" posts the same post on every selected account, \"platform-specific\" writes a separate post for each account. count is distinct pieces per run: cross-platform sends each piece to every selected account (count drafts); platform-specific writes one draft per account for each piece (count x accounts drafts). posting_times: when posts GO OUT (the schedule only decides when drafts are written). [{\"time\": \"09:00\"}] = every day at 9:00; add \"day\" (\"monday\"..\"sunday\") for one weekday. 24-hour wall clock in the workspace's timezone (list-workspaces shows it); never add a UTC offset. Each post takes the next free time after the run within 14 days, one post per account per time: a run's posts for different accounts share a time. Leave it out (or send []) for Bolta's best times. get-routine reads it back as posting_times.summary (no posting_times there = best times)."
           },
           "source_bindings": {
             "type": "array",
@@ -2717,7 +2798,7 @@
     {
       "name": "activate-routine",
       "title": "Activate Routine",
-      "description": "Enable future triggers for one existing routine. This is a fixed lifecycle operation, not a dispatcher accepting operation names or tool definitions. Arm a routine so its trigger fires. A scheduled routine starts running on its schedule from this point; a source-driven one starts reacting to events. The server re-validates the whole definition against current workspace state here, so activation can fail with a typed reason (missing source, disconnected account, plan gate) even though saving succeeded. It does not run anything now: the first run is at next_run_at (read it with get-routine). run-routine-now runs it immediately and spends credits. Also the way to resume a paused routine (same call). Tell the user what will now happen and when the first run is due.",
+      "description": "Enable future triggers for one existing routine. This is a fixed lifecycle operation, not a dispatcher accepting operation names or tool definitions. Arm a routine so its trigger fires. A scheduled routine starts running on its schedule from this point; a source-driven one starts reacting to events. The server re-validates the whole definition against current workspace state here, so activation can fail with a typed reason (missing source, disconnected account, plan gate) even though saving succeeded. It does not run anything now: the first run is at next_run_at (read it with get-routine). run-routine-now runs it immediately and spends credits. Also the way to resume a paused routine (same call). The result's message says what will now happen (workspace timezone) and warns about a missing schedule, accounts to reconnect or a switched-off writer; tell the user.",
       "inputSchema": {
         "type": "object",
         "properties": {
@@ -2729,7 +2810,7 @@
           "routine_id": {
             "type": "string",
             "format": "uuid",
-            "description": "The routine to arm"
+            "description": "The routine to arm, or the id of an older automation from list-routines agent_jobs to turn that one back on"
           }
         },
         "additionalProperties": false,
@@ -2748,7 +2829,7 @@
     {
       "name": "pause-routine",
       "title": "Pause Routine",
-      "description": "Suspend a routine's trigger without losing its configuration or history. Reversible with activate-routine. Use this rather than archive when the user says 'stop for now' or 'hold off this week'.",
+      "description": "Suspend a routine's trigger without losing its configuration or history. Reversible with activate-routine. Use this rather than archive when the user says 'stop for now' or 'hold off this week'. Also pauses one older automation listed under agent_jobs when given its id, and only that one.",
       "inputSchema": {
         "type": "object",
         "properties": {
@@ -2760,7 +2841,7 @@
           "routine_id": {
             "type": "string",
             "format": "uuid",
-            "description": "The routine to pause"
+            "description": "The routine to pause, or the id of an older automation from list-routines agent_jobs to pause only that one"
           }
         },
         "additionalProperties": false,
@@ -3717,6 +3798,7 @@
                 "type": "string"
               },
               "instructions": {
+                "maxLength": 8000,
                 "type": "string"
               },
               "keywords": {

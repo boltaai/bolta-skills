@@ -31,7 +31,7 @@ Acme? Save nothing; say so.
 4. Drafts from this issue already saved (list-workspace-posts, drafts,
    last 7 days)? Stop.
 5. Say "Saving to Acme." Save both with bulk-create-posts as Draft on
-   Jane's LinkedIn, read bulk-create-status, then submit-for-review.
+   Jane's LinkedIn, poll task_id, then submit-for-review.
 6. Reply: each draft's first line; anything else as suggestions.
 
 When nobody is watching, only save drafts or send them for review. Never
@@ -66,7 +66,7 @@ reach Acme? Save nothing; say so.
    only if the message says they agreed. No fit? Leave the day empty.
 4. This week's drafts already saved (list-workspace-posts)? Stop.
    Otherwise say "Saving to Acme.", save each as Draft on its account
-   with bulk-create-posts, read bulk-create-status, submit-for-review.
+   with bulk-create-posts, poll task_id, submit-for-review.
 5. Reply in 5 lines or fewer: waiting, going out, drafted, set aside and why.
 
 When nobody is watching, only save drafts or send them for review. Never

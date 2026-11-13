@@ -372,6 +372,15 @@ function campaign_targets(ti,   i, k) {
 # carrying a \u escape at its own level fails to decode (jdecode). So a \u in
 # post text, or anywhere else in the payload, needs no special case.
 function bulk_verdict(ti,   i, k, n, p, item) {
+  # Only a task_id (and the brand): the status read of an earlier batch.
+  # It writes nothing, so it passes even in careful mode.
+  if (jtype(ti, "task_id") == "s" && !jhas(ti, "posts")) {
+    for (i = 1; i <= JC[ti]; i++) {
+      k = JK[ti SUBSEP i]
+      if (k != "workspace_id" && k != "task_id") return "other"
+    }
+    return "status"
+  }
   for (i = 1; i <= JC[ti]; i++) {
     k = JK[ti SUBSEP i]
     if (k != "workspace_id" && k != "posts" && k != "timezone") return "other"
@@ -457,6 +466,9 @@ function guard_main(   ok, ti) {
   emit("CID", campaign_id(ti))
   if (TOOL == "approve-many-posts") emit("ITEMS", item_count(ti))
   if (TOOL == "bulk-create-posts") emit("BULK", bulk_verdict(ti))
+  # set-brand-approval loosens only with acknowledge: absent or JSON false is a
+  # preview or a stricter setting. Anything else (true, "true", unreadable) asks.
+  if (TOOL == "set-brand-approval") emit("ACK", (!jhas(ti, "acknowledge") || jtype(ti, "acknowledge") == "f") ? 0 : 1)
   if (TOOL == "save-post") emit("SAVE", save_verdict(ti))
   if (TOOL == "update-content-campaign") emit("TARGETS", campaign_targets(ti))
   if (TOOL == "confirm-plan") emit("SWITCHON", switch_on(ti))

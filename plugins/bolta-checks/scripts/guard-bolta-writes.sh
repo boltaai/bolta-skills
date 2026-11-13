@@ -72,7 +72,7 @@ here=$(dirname "$0")
 reader="$here/bolta-json.sh"
 
 ok=0 tool="" server="" sid="" prompt="" conn="Bolta" brand=""
-create="" update="" save="" targets="" policy="" rid="" action="" bulk="" cid="" items="" preview=0 replace=0 site=1 switchon="" decision=""
+create="" update="" save="" ack="" targets="" policy="" rid="" action="" bulk="" cid="" items="" preview=0 replace=0 site=1 switchon="" decision=""
 parsed=$(sh "$reader" guard 2>/dev/null) || parsed=""
 oldifs=$IFS
 IFS='
@@ -103,6 +103,7 @@ for kv in $parsed; do
     SITE) site=$v ;;
     SWITCHON) switchon=$v ;;
     DECISION) decision=$v ;;
+    ACK) ack=$v ;;
   esac
 done
 IFS=$oldifs
@@ -255,7 +256,13 @@ case "$tool" in
     batch_ask ;;
   reject-recurring-review)
     ask "This can't be undone ($conn): a no on this repeating post is final. OK only if you said no to it." ;;
+  set-brand-approval)
+    # Without acknowledge it only previews a loosening (or applies a stricter
+    # setting); acknowledge=true is what lets posts go out without review.
+    if [ "$ack" = 0 ]; then exit 0; fi
+    ask "Check before review is loosened ($conn): with this, posts on this brand can go out without anyone's yes. OK only if you saw what would publish without review and said yes." ;;
   bulk-create-posts)
+    if [ "$bulk" = status ]; then exit 0; fi
     if [ "$careful" = 0 ] && [ "$bulk" = drafts ]; then exit 0; fi
     if [ "$careful" = 1 ]; then
       ask "Bolta check, careful mode ($conn): you are saving several posts at once. Check the posts, accounts and times above."

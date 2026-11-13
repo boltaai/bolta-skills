@@ -34,7 +34,7 @@ The plan got a yes and the campaign is filled one way. At the end: a verdict, on
 - `create-content-campaign`, `update-content-campaign` (brief, accounts, notes, sources; `post_ids` alone attaches posts), `analyze-content-campaign-source`.
 - `plan` (`kind: "campaign"`), `revise-plan`, `confirm-plan`: where offered.
 - `set-content-campaign-status`: activate, pause, resume, complete, archive.
-- `list-workspace-posts` (`campaign_id`), `bulk-create-posts`, `bulk-create-status`, `list-routines`.
+- `list-workspace-posts` (`campaign_id`), `bulk-create-posts`, `list-routines`.
 
 ## Hand off
 
