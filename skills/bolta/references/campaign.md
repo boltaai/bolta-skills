@@ -31,14 +31,14 @@ The plan got a yes and the campaign is filled one way. At the end: a verdict, on
 ## Tools
 
 - `list-workspaces`, `list-accounts`, `get-voice-context`, `list-content-campaigns`, `get-content-campaign`.
-- `create-content-campaign`, `update-content-campaign` (brief, accounts, notes, sources; `post_ids` alone attaches posts), `analyze-content-campaign-source`.
-- `plan` (`kind: "campaign"`), `revise-plan`, `confirm-plan`: where offered.
+- `plan` (`kind: "campaign"`), `revise-plan`, `confirm-plan`: first.
+- `update-content-campaign` (brief, accounts, notes, sources; `post_ids` alone attaches posts), `analyze-content-campaign-source`; `create-content-campaign` only without `plan`.
 - `set-content-campaign-status`: activate, pause, resume, complete, archive.
 - `list-workspace-posts` (`campaign_id`), `bulk-create-posts`, `list-routines`.
 
 ## Hand off
 
-[review](review.md), [routine](routine.md) (no end), [post](post.md), [results](results.md), [voice](voice.md), [connect](connect.md), [fix](fix.md) (undo).
+[review](review.md), [routine](routine.md), [post](post.md), [results](results.md), [connect](connect.md), [fix](fix.md).
 
 ## Always
 

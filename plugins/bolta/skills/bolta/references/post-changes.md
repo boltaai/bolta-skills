@@ -6,7 +6,7 @@ Part of [post](post.md). `save-post` with `post_id` edits that post in place: it
 
 - `content` on an edit is the first part's text. A later part of a thread can't be edited from here: save a new post with all its `parts` and, after a yes, delete the old draft; or edit it in Bolta ([post parts](post-parts.md)).
 - `account_ids` replaces the whole list: send every account the post should keep.
-- `media` only adds; removing or swapping media is done in Bolta ([media](post-media.md)).
+- `media_urls` only add; removing or swapping media is done in Bolta ([media](post-media.md)).
 - `platform_specific` merges into what is there ([per network](post-per-network.md)).
 - `platform_details` sets each network's settings row, several networks in one call: `{"youtube": {"privacy_status": "public"}, "threads": {"reply_control": "followers"}}`. The result reports each network; a bad field on one network does not stop the others. Read back with `get-post` and `platform`.
 - Never send `scheduled_time`, `status` or `requested_action`: `save-post` refuses them.

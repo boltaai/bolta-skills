@@ -25,7 +25,7 @@ Each set is 3-5 Bolta routines doing different jobs, about 3-6 drafts a week in 
 
 ## Choosing within a set
 
-- **Voice first.** Story and position routines need a person voice and real events; without them, start with weekly posts and add the story routine once the user gives events ([routine-settings-writing.md](routine-settings-writing.md)).
+- **A person's voice.** Story and position routines need a person voice and real events; without them, start with weekly posts and add the story routine once the user gives events ([routine-settings-writing.md](routine-settings-writing.md)).
 - **One job each.** Never two routines doing the same job on the same network; raise the first one's `count` instead.
 - **Not first:** best posts again and threads from a best post need months of published posts with likes, comments or shares. Reply routines need Premium and someone who reviews replies within a day or two.
 - **Dated things** (a launch, a sale, an event) are a campaign, proposed beside the set: [campaign](campaign.md).

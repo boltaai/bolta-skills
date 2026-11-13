@@ -4,7 +4,7 @@ A thread on X, a reply chain on Threads or Bluesky, or a Facebook post with a co
 
 ## Saving parts
 
-- One multi-part post: `save-post` with `parts`, an array of strings in order, instead of `content`: `{"parts": ["Part 1 text", "Part 2 text"], "account_ids": [...]}`. A `poll` goes on the first part (never on an X thread). `media` is added to the first part only: `save-post` has no media per part.
+- One multi-part post: `save-post` with `parts`, an array of strings in order, instead of `content`: `{"parts": ["Part 1 text", "Part 2 text"], "account_ids": [...]}`. A `poll` goes on the first part (never on an X thread). `media_urls` (a link) goes on the first part only: `save-post` has no media per part.
 - Media on a later part: `bulk-create-posts`, where each item carries a nested `contents` list instead of `content`:
   `{"account_ids": [...], "status": "Draft", "contents": [{"content": "...", "index": 0}, {"content": "...", "index": 1, "media": [{"media_url": "https://...", "alt_text": "..."}]}]}`. Or the user adds it to that part in Bolta.
 - Media inside a part must use `media_url`. A `url` key there is dropped silently.

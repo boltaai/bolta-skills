@@ -1,56 +1,23 @@
 {
-  "ask": "Yes, turn it on.",
+  "ask": "Every Monday, 3 LinkedIn drafts about hiring.",
   "playbook": "routine",
-  "before": "The summary was shown in the previous reply: every Monday 8:00 am, 3 LinkedIn drafts about hiring, they wait for your yes, uses credits each run.",
+  "before": "The look was done: LinkedIn is connected, no routine does this yet, 2 drafts wait.",
   "steps": [
     {
-      "tool": "create-routine",
+      "tool": "plan",
       "arguments": {
         "workspace_id": "<brand's workspace id>",
-        "name": "Weekly LinkedIn, hiring",
-        "goal": "3 LinkedIn drafts about hiring every Monday",
-        "template_key": "weekly_social_posts",
-        "trigger_type": "schedule",
-        "schedule": {
-          "interval": "weekly",
-          "day": "monday",
-          "time": "08:00"
-        },
-        "timezone": "<timezone from list-workspaces>",
-        "approval_policy": "review_every_artifact",
-        "source_bindings": [
-          {
-            "provider": "social_account",
-            "ref": "<LinkedIn account id>"
-          }
-        ],
-        "output_config": {
-          "artifact_type": "post",
-          "count": 3
-        },
-        "instructions": "3 LinkedIn drafts about hiring every Monday. Never invent facts, numbers, prices or dates."
+        "kind": "routine",
+        "ask": "3 LinkedIn drafts about hiring every Monday",
+        "context": "Based on: the brand's voice and its best LinkedIn posts, and what they said: Mondays, LinkedIn, hiring."
       },
-      "why": "Weekly posts, the default kind for steady presence; weekly at 3 fits what most people can review. The time zone is required and has no fallback. Accounts are bound as objects, and they decide the networks: platforms is sent only when the user limits networks, so an account added later is used. count goes with artifact_type every time output_config is sent. Ask me first unless the user said post without asking."
-    },
-    {
-      "tool": "activate-routine",
-      "arguments": {
-        "routine_id": "<routine id>"
-      },
-      "why": "Switching on is not running. Nothing is written until the next run."
-    },
-    {
-      "tool": "get-routine",
-      "arguments": {
-        "routine_id": "<routine id>"
-      },
-      "why": "next_run_at is UTC: say it in the brand's clock. Only now say it is on."
+      "why": "Bolta's planner first, even for one clear sentence: it picks the schedule, accounts, voice and drafts per run, and sizes them to what the user can review. One 'Based on...' line goes in as context. Nothing is saved yet."
     }
   ],
-  "say": "Bolta routine on. First drafts Mon Nov 16, 8:00 am (New York). On Monday, say 'what's waiting'.",
+  "say": "Based on your voice and best LinkedIn posts: **Weekly LinkedIn, hiring**: every Monday 8:00 am (New York), Bolta writes 3 LinkedIn drafts about hiring. They wait for your yes. Runs with this app closed; uses credits each run. Save it? It is saved switched off.",
   "never": [
-    "run-routine-now in the same breath: it spends credits and needs its own yes.",
-    "A bare 'routine' where the app's own scheduling could be meant.",
-    "Leaving count out of output_config: Bolta would use its writer's default, 4."
+    "create-routine or activate-routine here: the plan comes first, the yes saves it off, and switching on is a second yes.",
+    "Asking what to post about: the plan has a topic.",
+    "A bare 'routine' where the app's own scheduling could be meant."
   ]
 }

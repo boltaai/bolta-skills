@@ -23,7 +23,7 @@ Read before carrying out decisions. Times: [review-times.md](review-times.md). L
 ## Fingerprints, roles, notes
 
 - `expected_fingerprint`: the row's `content_fingerprint`, read after any change; never reuse an old one. A row whose `source` is not `team` has none: send its `id` as `review_id`, with no `post_id` or `expected_fingerprint`. A team row with an empty one can't be approved here: read the list again; still empty, it is approved in Bolta (bolta.ai/dashboard/approvals).
-- Here, `approve-many-posts` and `reject-post` follow Bolta's rule: owners and admins any post; creators Bolta's drafts and posts naming them reviewer; a per-person setting can give or take it away; viewers never. Own post, review mode and client sign-off still apply. More: [people and roles](connect-people-and-roles.md). Refused: give Bolta's sentence, send for review, say who can.
+- Here, `approve-many-posts`, `reject-post` and `publish-post` follow Bolta's rule: owners and admins any post; creators Bolta's drafts and posts naming them reviewer; a per-person setting can give or take it away; viewers never. Own post, review mode, Safe Mode and client sign-off still apply. More: [people and roles](connect-people-and-roles.md). Refused: give Bolta's sentence, send for review, say who can.
 - `comments` on an approval: an optional note kept on the review trail, and for AI drafts fed to Bolta's learning. Use the user's words only.
 - No checks plugin, no Bolta checks. Past 3 yeses, also offer bolta.ai/dashboard/approvals.
 

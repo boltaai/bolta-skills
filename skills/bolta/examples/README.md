@@ -4,7 +4,9 @@ Each file is one ask from start to finish: the calls in order, why each one is s
 
 | File | The ask | Playbook |
 |-|-|-|
-| [weekly-routine.json](weekly-routine.json) | A Bolta routine: create, switch on, read back | [routine](../references/routine.md) |
+| [weekly-routine.json](weekly-routine.json) | A Bolta routine: Bolta's plan first, shown, a yes saves it switched off | [routine](../references/routine.md) |
+| [routine-switch-on.json](routine-switch-on.json) | Switching a saved routine on, on its own yes | [routine](../references/routine.md) |
+| [routine-without-planner.json](routine-without-planner.json) | No plan tool: create-routine, saved switched off | [routine-without-planner](../references/routine-without-planner.md) |
 | [weekly-three-networks-setup.json](weekly-three-networks-setup.json) | A weekly brief to a Facebook Page, a LinkedIn page and Bluesky, saved asking first | [routine](../references/routine.md) |
 | [weekly-three-networks-no-approval.json](weekly-three-networks-no-approval.json) | The same routine moved to posting without a yes each time, then the summary before switching on | [routine](../references/routine.md) |
 | [routine-with-images.json](routine-with-images.json) | Weekly posts with an image each | [routine](../references/routine.md) |
