@@ -990,11 +990,10 @@ def check_links(plugin):
 #: otherwise. Each was wrong in a reviewed PR: (file under skills/bolta,
 #: pattern, must_match, why).
 SKILL_CLAIMS = [
-    ("references/routine-no-approval.md", re.compile(r"stricter needs none", re.I), False,
-     "campaigns refuse any approval_policy/autonomy_override change, tightening too, "
-     "without acknowledge_autonomy_migration, expected_updated_at and an owner or admin"),
-    ("references/routine-no-approval.md", re.compile(r"Tightening a campaign", re.I), True,
-     "say that tightening a campaign needs the same acknowledgement as loosening it"),
+    ("references/routine-no-approval.md", re.compile(r"owner_v1|acknowledge_autonomy_migration|legacy", re.I), False,
+     "the server removed the legacy/owner_v1 split; the brand is the ceiling and the routine or campaign can only be stricter"),
+    ("references/routine-no-approval.md", re.compile(r"Tightening a campaign or routine .* needs only their yes", re.I), True,
+     "tightening a campaign no longer needs an acknowledgement, only the user's yes"),
     ("references/routine-no-approval.md", re.compile(r"Settings > API > AI app connections"), True,
      "name where an owner or admin allows this connection to loosen approval (Settings > API > AI app "
      "connections; users.ai_app_connections_views)"),

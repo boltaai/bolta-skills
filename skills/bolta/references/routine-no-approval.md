@@ -1,37 +1,42 @@
 # Posting without a yes each time
 
-Read when the user asks for a Bolta routine's or campaign's posts to go out without their yes on each one ("no approval", "just post them"). Only on their words; never offer it, never in a scheduled run. A stricter routine needs only their yes; a stricter campaign does not (below).
+Read when the user asks for a Bolta routine's or campaign's posts to go out without their yes on each one ("no approval", "just post them"). Only on their words; never offer it, never in a scheduled run.
+
+## One rule decides
+
+The brand's automation level (`autonomy_mode`) and review mode (`safe_mode`) are the ceiling. A routine's or campaign's `approval_policy` (`inherit`, `auto`, `review_every_artifact`) and a campaign's `autonomy_override` (`""` follows the brand; `manual`, `assisted`, `auto`, `aggressive`) can only be stricter. Client sign-off still applies. An older writer setting no longer decides.
 
 ## Read what decides today
 
-`get-routine`: `approval_policy`, `autonomy_policy_version`, `updated_at`, `effective_policy`. The brand row from `list-workspaces`: `autonomy_mode`, `safe_mode` and, where shown, `connection_automation_permission`. Say the answer in plain words:
+`get-routine` (or `get-content-campaign`): `approval_policy`, `updated_at`, `effective_policy`. The brand row from `list-workspaces`: `autonomy_mode`, `safe_mode` and, where shown, `connection_automation_permission`. Say it in plain words:
 
 - `effective_policy.approval_required` true: "Posts wait for your yes because <`decided_explanation`, in plain words>."
 - false: it already posts without asking. Say so and stop.
 - `resolution_status` `not_resolved` (it hasn't run yet): "Bolta can tell after the first run."
 
-## What all has to be true
+## Work out every change, ask once
 
-1. **The brand allows it.** A routine can only be stricter than its brand: `autonomy_mode` not manual or assisted, review mode (`safe_mode`) off. If it blocks their ask, say why and ask once: "Switch Acme to Auto so this posts without asking?" Yes: [brand approval](connect-brand-approval.md), then retry.
-2. **The routine asks for it.** `approval_policy`: `auto` (weekly posts, founder stories, customer wins, LinkedIn positions, Square only) or `inherit` (follow the brand).
-3. **The brand decides, not an old writer setting.** Routines start on `legacy`, where an older setting on Bolta's writer can decide ahead of the brand (`effective_policy.decided_by` `agent`, or `follows_workspace_candidate` true). `autonomy_policy_version` `owner_v1` hands it to the brand and routine settings. Owner or admin only, one-way. It can loosen on its own: with `inherit` on a brand that allows it, posts stop waiting. Only `review_every_artifact` keeps asking for sure. It approves no draft already waiting.
-4. **This connection may do it.** `connection_automation_permission`: `granted` or `not_asked`, the user's role and yes decide; `not_granted`, it is refused (`automation_not_granted`): "This is switched off for this app on Acme. An owner or admin can turn it on in Bolta (Settings > API > AI app connections) or change it in Bolta." Follow `what_to_do`; [details](connect-brand-approval.md). Stop; never retry.
-5. **Client sign-off stays.** A brand that needs the client's yes still sends every post to the client.
+1. **This connection may do it.** `connection_automation_permission` `not_granted`: refused (`automation_not_granted`): "This is switched off for this app on Acme. An owner or admin can turn it on in Bolta (Settings > API > AI app connections)." Follow `what_to_do`; stop; never retry. `granted` or `not_asked`: the user's role and yes decide.
+2. **The brand.** `autonomy_mode` manual or assisted, or `safe_mode` on: it must go to Auto.
+3. **The routine or campaign.** `approval_policy` to `auto` (routines: weekly posts, founder stories, customer wins, LinkedIn positions, Square only); a campaign's stricter `autonomy_override` to `""`.
 
-## The change, on one yes
+Put everything needed in one plain sentence and one question:
 
-> From the next run, Weekly posts goes out without your yes, at your posting times. Acme's settings decide this from now on, not the old writer setting, and that can't be undone. The client still signs off. The 3 drafts already waiting still need you. Go ahead?
+> To post this without asking you, I'll switch Acme to Auto and set Weekly posts to publish on its own. The client still signs off, and the 3 drafts already waiting still need you. OK?
 
-Then one `update-routine`: `approval_policy: "auto"`, `autonomy_policy_version: "owner_v1"`, `acknowledge_autonomy_migration: true`, `expected_updated_at` (the exact `updated_at` from the `get-routine` they saw). Already `owner_v1`: send only `approval_policy`. `configuration_changed`: someone changed it; read `get-routine` again, show it, ask again; never resend under the old yes.
+Leave out the brand part when the brand already allows it.
 
-Read `get-routine` back. Say "posts without asking" only when `effective_policy.approval_required` is false; otherwise say what still decides, from `decided_explanation`. Still `not_resolved`: "Set. Bolta confirms it after the first run; until then treat drafts as waiting for you."
+## On one yes, make all of them
 
-## Campaigns
+1. Brand, if needed: `set-brand-approval` preview (no `acknowledge`), then the same call with `acknowledge: true` ([brand approval](connect-brand-approval.md)). If the preview shows more publishing without review than the sentence said (`newly_without_review`), show that and ask again before acknowledging.
+2. `update-routine` (or `update-content-campaign`): `approval_policy: "auto"` and `expected_updated_at` (the exact `updated_at` they saw). `configuration_changed`: someone changed it; read again, show it, ask again; never resend under the old yes.
+3. Read `get-routine` back. Say "posts without asking" only when `effective_policy.approval_required` is false; otherwise say what still decides, from `decided_explanation`. Still `not_resolved`: "Set. Bolta confirms it after the first run; until then treat drafts as waiting for you."
 
-`update-content-campaign` takes the same: `approval_policy` (`inherit`, `review_every_artifact`, `auto`), `autonomy_override` (`""` follows the brand; `manual`, `assisted`, `auto`, `aggressive` are only ever stricter), and the move with `autonomy_policy_version: "owner_v1"`, `acknowledge_autonomy_migration: true` and `expected_updated_at` from `get-content-campaign`. Older campaigns always ask first until moved. Tightening a campaign needs all of that too (`acknowledge_autonomy_migration`, `expected_updated_at`, an owner or admin) and moves it to `owner_v1`: say so in the yes. Same read-back (`effective_policy`).
+Tightening a campaign or routine (`review_every_artifact`, a stricter `autonomy_override`) needs only their yes, nothing else.
 
 ## Always
 
-- One yes for this change alone, separate from "Turn it on?".
+- This yes is separate from "Turn it on?".
 - Read Bolta back before saying anything posts without asking.
-- A refusal naming the role or this connection: say it plainly and stop. Naming the brand: rule 1.
+- A refusal naming the role or this connection: say it plainly and stop.
+- No draft already waiting is approved by this.

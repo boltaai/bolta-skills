@@ -49,7 +49,7 @@
         "workspace_id": "<brand's workspace id>",
         "routine_id": "<routine id>"
       },
-      "why": "Read the three accounts back by name. autonomy_policy_version is legacy on every new routine, updated_at is the revision the no-approval move needs, and effective_policy reads not_resolved before the first run."
+      "why": "Read the three accounts back by name. updated_at is the revision the no-approval move needs, and effective_policy reads not_resolved before the first run."
     }
   ],
   "say": "Saved to Acme as Weekly posts, switched off: Mondays 8:00 am (Denver), 3 posts from your brief to the Acme Facebook Page, the Acme LinkedIn page and Bluesky.\nNow posting without your yes. From the next run, Weekly posts goes out without your yes, at your posting times. Acme's settings decide this from now on, not the old writer setting, and that can't be undone. The client still signs off. Go ahead?",
