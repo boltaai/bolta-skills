@@ -2413,7 +2413,7 @@
     {
       "name": "get-routine",
       "title": "Get Routine",
-      "description": "Get one routine's full configuration: outcome, trigger and schedule, instructions, capabilities, approval policy, source bindings, recent runs and performance summary. Read-only. For routines whose output_config.artifact_type is reply or report, review_queue is always empty; pending drafts for reply routines are in list-engagements status=pending (web: Hub > Approvals).",
+      "description": "Get one routine's full configuration: outcome, trigger and schedule, instructions, capabilities, approval policy, source bindings, recent runs and performance summary. Read-only. Includes updated_at, autonomy_policy_version, policy_migration_available (server support, not caller permission), and effective_policy. effective_policy is a current-adapter preview, not a grant or delivery guarantee; not_resolved means approval is unknown. For routines whose output_config.artifact_type is reply or report, review_queue is always empty; pending drafts for reply routines are in list-engagements status=pending (web: Hub > Approvals).",
       "inputSchema": {
         "type": "object",
         "properties": {
@@ -2532,7 +2532,7 @@
           },
           "output_config": {
             "type": "object",
-            "description": "Template-specific output settings (platforms, counts)."
+            "description": "Template-specific output settings (platforms, counts). settings.contentGenerationMode: \"cross-platform\" posts the same post on every selected account, \"platform-specific\" writes a separate post for each account."
           },
           "destination_config": {
             "type": "object",
@@ -2570,7 +2570,7 @@
     {
       "name": "update-routine",
       "title": "Update Routine",
-      "description": "Patch one saved routine configuration; this operation does not execute the routine or change its lifecycle state. An active routine uses the new settings on future runs. Change a routine's configuration — schedule, instructions, approval policy, sources, outputs. Partial update: send only what changes. `status` is NOT writable here; use activate-routine / pause-routine / archive-routine so each lifecycle change is audited on its own. `template_key` and `workflow_definition_key` are immutable — create a new routine instead. An archived routine cannot be edited.",
+      "description": "Patch one saved routine configuration; this operation does not execute the routine or change its lifecycle state. An active routine uses the new settings on future runs. Change a routine's configuration — schedule, instructions, approval policy, sources, outputs. Partial update: send only what changes. `status` is NOT writable here; use activate-routine / pause-routine / archive-routine so each lifecycle change is audited on its own. `template_key` and `workflow_definition_key` are immutable — create a new routine instead. An archived routine cannot be edited. For an existing legacy routine, an owner/admin may explicitly opt in to owner_v1 after separate confirmation: future runs use brand/routine controls instead of the legacy executor mode and may publish without per-post approval. Read get-routine first; send autonomy_policy_version=owner_v1, acknowledge_autonomy_migration=true and its exact expected_updated_at. This is one-way, preserves explicit routine review and all other safety gates, does not approve existing drafts, and does not authorize direct MCP publishing. On configuration_changed, reread and obtain confirmation again; never retry with a fresh revision under the old confirmation.",
       "inputSchema": {
         "type": "object",
         "properties": {
@@ -2583,6 +2583,21 @@
             "type": "string",
             "format": "uuid",
             "description": "The routine to update"
+          },
+          "autonomy_policy_version": {
+            "type": "string",
+            "enum": [
+              "owner_v1"
+            ],
+            "description": "Explicit one-way owner/admin opt-in: owner_v1. Omit for ordinary edits. Requires separate informed confirmation, acknowledgement and exact revision."
+          },
+          "acknowledge_autonomy_migration": {
+            "type": "boolean",
+            "description": "Set true only after the owner/admin confirms this routine's migration and its future-run consequences. Not permission for direct publish calls."
+          },
+          "expected_updated_at": {
+            "type": "string",
+            "description": "Exact updated_at from the get-routine result the user reviewed. Required for policy migration; never use a wildcard or invent a revision."
           },
           "name": {
             "type": "string",
@@ -2621,7 +2636,7 @@
           },
           "output_config": {
             "type": "object",
-            "description": "Template-specific output settings"
+            "description": "Template-specific output settings. settings.contentGenerationMode: \"cross-platform\" posts the same post on every selected account, \"platform-specific\" writes a separate post for each account."
           },
           "source_bindings": {
             "type": "array",
@@ -2892,7 +2907,7 @@
     {
       "name": "get-content-campaign",
       "title": "Get Content Campaign",
-      "description": "Read one content campaign in full: its brief (name, theme, audience, strategy, call to action, content mix, window), its status, and its derived results. Unlike the list, this read derives the campaign's performance, so prefer the list when the user is browsing and this when they ask how one campaign is doing. Read-only.",
+      "description": "Read one content campaign in full: its brief (name, theme, audience, strategy, call to action, content mix, window), its status, and its derived results. Unlike the list, this read derives the campaign's performance, so prefer the list when the user is browsing and this when they ask how one campaign is doing. Read-only. Includes updated_at, autonomy_policy_version, approval_policy, autonomy_override and policy_migration_available where supported. Migration availability describes server support, not caller permission or delivery success.",
       "inputSchema": {
         "type": "object",
         "properties": {
@@ -3054,7 +3069,7 @@
     {
       "name": "update-content-campaign",
       "title": "Update Content Campaign",
-      "description": "Edit a content campaign's brief — any of name, strategy_key, theme, audience, cta_text, cta_url, starts_on, ends_on, content_mix. Send only what changes. Also what Bolta needs to write it: account_ids (the accounts to post from), duration_weeks, context_notes, context_sources (pages or files to read) and voice_profile_id. Each field you send replaces what is there, and a list replaces the whole list. On an active campaign stuck on 'needs accounts', setting accounts re-arms it and Bolta writes the owed week on its next pass. New sources start as pending, and the writer does not use them until analyze-content-campaign-source has read each one. This call generates, schedules and publishes nothing. \n\nStatus is NOT writable here: lifecycle moves are set-content-campaign-status, and results are derived, never set. Sending either is rejected by name rather than ignored. post_ids, sent alone, attaches existing posts to the campaign.",
+      "description": "Edit a content campaign's brief — any of name, strategy_key, theme, audience, cta_text, cta_url, starts_on, ends_on, content_mix. Send only what changes. Also what Bolta needs to write it: account_ids (the accounts to post from), duration_weeks, context_notes, context_sources (pages or files to read) and voice_profile_id. Each field you send replaces what is there, and a list replaces the whole list. On an active campaign stuck on 'needs accounts', setting accounts re-arms it and Bolta writes the owed week on its next pass. New sources start as pending, and the writer does not use them until analyze-content-campaign-source has read each one. This call generates, schedules and publishes nothing now. Owner/admin policy changes can allow future campaign runs to schedule without per-post approval. Read get-content-campaign and obtain separate confirmation of the exact automation/review changes before sending policy fields. Every policy change requires acknowledge_autonomy_migration=true and expected_updated_at from that reviewed read. owner_v1 opt-in is one-way; migration alone keeps review. Changing review to inherit/auto is a separate explicit decision, never a default. Safe Mode, client signoff and other restrictions still apply. Existing drafts and direct MCP calls are not approved. On configuration_changed, reread and ask again; do not silently refresh the revision. \n\nStatus is NOT writable here: lifecycle moves are set-content-campaign-status, and results are derived, never set. Sending either is rejected by name rather than ignored. post_ids, sent alone, attaches existing posts to the campaign.",
       "inputSchema": {
         "type": "object",
         "properties": {
@@ -3067,6 +3082,41 @@
             "type": "string",
             "format": "uuid",
             "description": "The content campaign to update"
+          },
+          "autonomy_policy_version": {
+            "type": "string",
+            "enum": [
+              "owner_v1"
+            ],
+            "description": "Explicit owner/admin one-way opt-in: owner_v1. Omit for ordinary edits. Migration alone preserves the current review rule."
+          },
+          "approval_policy": {
+            "type": "string",
+            "enum": [
+              "inherit",
+              "review_every_artifact",
+              "auto"
+            ],
+            "description": "inherit | review_every_artifact | auto. Request, not grant. Changing existing review requires explicit owner/admin confirmation, acknowledgement and exact revision."
+          },
+          "autonomy_override": {
+            "type": "string",
+            "enum": [
+              "",
+              "manual",
+              "assisted",
+              "auto",
+              "aggressive"
+            ],
+            "description": "Optional tighten-only campaign autonomy: empty string inherits; manual | assisted | auto | aggressive. Any change requires owner/admin confirmation, acknowledgement and exact revision."
+          },
+          "acknowledge_autonomy_migration": {
+            "type": "boolean",
+            "description": "true only after owner/admin confirms the exact campaign automation/review change and future-run consequences. Required for any changed policy field."
+          },
+          "expected_updated_at": {
+            "type": "string",
+            "description": "Exact updated_at from get-content-campaign that the user reviewed. Required for policy changes. Never invent a revision or send a wildcard."
           },
           "name": {
             "type": "string",
@@ -3617,7 +3667,7 @@
     {
       "name": "revise-plan",
       "title": "Revise Plan",
-      "description": "Revise one stored routine or campaign proposal, identified by proposal_id. This edits the proposal only; it does not create, activate or run a routine or campaign. Change a plan from plan before it is saved: change is a sentence (\"Tuesdays instead\"), changes sets exact fields agreed in the chat with no guessing; both apply the sentence first. Returns the new plan with a new id and what changed; the old id can no longer be saved. Nothing is created.",
+      "description": "Revise one stored routine or campaign proposal, identified by proposal_id. This edits the proposal only; it does not create, activate or run a routine or campaign. Change a plan from plan before it is saved: change is a sentence (\"Tuesdays instead\"), changes sets exact fields agreed in the chat with no guessing; both apply the sentence first. Returns the new plan with a new id and what changed; the old id can no longer be saved. This supersedes the previous proposal and cannot be undone through this tool; confirm-plan must use the new id. No routine or campaign is created.",
       "inputSchema": {
         "type": "object",
         "properties": {
@@ -3772,7 +3822,7 @@
       "annotations": {
         "title": "Revise Plan",
         "readOnlyHint": false,
-        "destructiveHint": false,
+        "destructiveHint": true,
         "idempotentHint": false,
         "openWorldHint": false
       }

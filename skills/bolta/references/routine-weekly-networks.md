@@ -1,11 +1,11 @@
 # One weekly Bolta routine for several networks
 
-Read for one weekly routine that posts to two or more networks (a Facebook Page, LinkedIn, Bluesky, X). Posting without a yes each time: [routine-no-approval.md](routine-no-approval.md). Once it's on: [routine-weekly-networks-after.md](routine-weekly-networks-after.md). Worked calls: [weekly-three-networks-no-approval](../examples/weekly-three-networks-no-approval.json).
+Read for one weekly routine that posts to two or more networks (a Facebook Page, LinkedIn, Bluesky, X). Posting without a yes each time: [routine-no-approval.md](routine-no-approval.md). Once it's on: [routine-weekly-networks-after.md](routine-weekly-networks-after.md). Worked calls: [setup](../examples/weekly-three-networks-setup.json), then [no approval](../examples/weekly-three-networks-no-approval.json).
 
 ## In order
 
 1. **Connect first.** Read `list-accounts`. A network they named with no row: `get-connect-link`, its link first, and wait for "done". Then show what is connected by name and network.
-2. **Which account, exactly.** Facebook posts go to a Page (`is_page` rows), never a person. LinkedIn has the personal profile plus one row per company page (`is_organization`). "My LinkedIn" with a company page connected: ask once, "You, or the Acme page?" Bind each chosen row's `id`: `source_bindings` `[{"provider":"social_account","ref":"<id>"}]`, one object per account. Read the bound accounts back by name.
+2. **Which account, exactly.** Facebook posts go to a Page (`is_page` rows), never a person. LinkedIn has the personal profile plus one row per company page (`is_organization`). "My LinkedIn" with a company page connected: ask once, "You, or the Acme page?" Bind each chosen row's `id` exactly as `list-accounts` gives it (a Page `facebook_page_<id>`, a company page `linkedin_org_<id>`; never `base_account_id`): `source_bindings` `[{"provider":"social_account","ref":"<id>"}]`, one object per account. Read the bound accounts back by name.
 3. **The brief.** `instructions` carries their standing brief word for word: topics, facts, links, words to avoid, plus "Never invent facts, numbers, prices or dates." Up to 8,000 characters. An older Bolta refuses past 4,000: say so and offer to shorten it with them. Never cut it yourself.
 4. **One post everywhere, or one per network.** `output_config.settings.contentGenerationMode`:
    - `"cross-platform"` (new routines with 2+ accounts start here): every post goes to every bound account with the same text. `count` is posts per run; each one lands on all of them. The shared text is cut to the shortest limit among them, so with Bluesky bound every network gets 300 characters or fewer.
