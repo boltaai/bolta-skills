@@ -4,13 +4,13 @@ Save a chain you just ran that ends in Bolta drafts, like newsletter to LinkedIn
 
 ## Done when
 
-The workflow is saved where the user's AI app finds it, and tested once on today's input. A weekly scheduled task exists only if the host created it.
+The workflow is saved where the user's AI app finds it, tested once on today's input. A weekly scheduled task exists only if the host created it.
 
 ## Know this
 
 - **When to offer:** after the same chain ran twice, or when asked. Once per conversation: "Want me to save this as your own workflow?"
 - **Bolta-only? Use a Bolta routine.** Only Bolta, its accounts or one web page: hand to [routine](routine.md); it runs with this app closed. Workflows are for chains needing another app (Gmail, Notion, Drive, Slack).
-- **Capture from the conversation; don't interview.** The steps are what happened; the user's corrections are the rules. Show them in one block, each marked **always the same**, **changes each time** or **your call**, then ask "Right?"
+- **Capture from the conversation; don't interview.** Steps are what happened; the user's corrections are the rules. Show them in one block, each marked **always the same**, **changes each time** or **your call**, then ask "Right?"
 - **Every "your call" ends at a Bolta draft or the review list.** The user decides later, in [review](review.md).
 - **Their words, not today's specifics.** Name it after the job, lowercase with hyphens. Leave out what changes each time.
 - **It must stand alone.** A scheduled run may skip this plugin and Bolta's checks; some approve every step on their own. The file names the brand (workspace, with its id) and accounts, says what to do when a source is missing or this week's drafts exist, and ends with these lines, word for word:
@@ -21,12 +21,12 @@ The workflow is saved where the user's AI app finds it, and tested once on today
 <!-- host-note -->
   In apps that have a **Save skill** button (for example claude.ai or Cowork), present a .skill file and the user taps **Save skill**. In apps with skills on disk (for example Claude Code), write `~/.claude/skills/<name>/SKILL.md` (this machine only).
 <!-- /host-note -->
-- **Offer a weekly scheduled task once:** "Want this as a weekly scheduled task, Mondays 9 am? It only saves drafts." The host creates it. Confirm only after you see it created, with day and time; otherwise say it isn't set.
+- **Offer a weekly scheduled task once:** "Want this as a weekly scheduled task, Mondays 9 am? It only saves drafts." The host creates it. Confirm only after you see it created, with day and time; otherwise say it isn't set. Never "I'll run this every Monday."
 - Examples: [references/examples.md](my-workflow-examples.md).
 
 ## Tools
 
-A saved workflow uses only these:
+Uses only:
 - `list-workspaces`, `list-accounts`: workspace name and settings, accounts.
 - `get-voice-context`: the voice.
 - `list-workspace-posts`: best posts; this week's drafts, so a repeated run never doubles.
