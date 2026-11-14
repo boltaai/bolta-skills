@@ -1,12 +1,12 @@
 # Client approval
 
-Agencies and teams often need a client's yes before a post goes out. Three things send posts to a client from here; the rest of client review happens in Bolta. Setting it up for an agency: [review-client-howto.md](review-client-howto.md). Settings that change a yes: [review-client-approval-settings.md](review-client-approval-settings.md).
+Agencies and teams need a client's yes before a post goes out. Three things send posts to a client from here; the rest of client review happens in Bolta. Setting it up for an agency: [review-client-howto.md](review-client-howto.md). Settings that change a yes: [review-client-approval-settings.md](review-client-approval-settings.md).
 
 ## Who is who
 
 - **The organization** is the agency or company. Its owners and admins reach every brand in it; a member reaches only the brands they were given.
 - **On a brand:** owners and admins write, approve, turn down and post now; creators write, send for review, schedule with review mode off, and approve Bolta's drafts and posts naming them reviewer; a viewer only looks ([roles](connect-people-and-roles.md)).
-- **A client reviewer** decides posts sent to them, takes no paid seat and can't connect an AI app. Invited from the brand's People & access. A brand creator can also be sent a client request, and their yes counts as the client's. More: [review-client-details.md](review-client-details.md).
+- **A client reviewer** decides posts sent to them, takes no paid seat and can't connect an AI app. Invited from the brand's People & access. A brand creator can also be sent a client request, unless the brand requires sign-off, and their yes counts as the client's. More: [review-client-details.md](review-client-details.md).
 
 ## What reaches a client from here
 
@@ -16,7 +16,7 @@ Agencies and teams often need a client's yes before a post goes out. Three thing
 
 ## The steps
 
-1. The team sends up to 50 posts not yet approved (none too long for its network) to the brand's client reviewers or creators, never the sender, marking some required if it wants. Email can be switched off per send.
+1. The team sends up to 50 posts not yet approved (none too long for its network) to the brand's client reviewers or, without required sign-off, creators, never the sender, marking some required if it wants. Email can be switched off per send.
 2. The client gets a notice and, with email on, Approve and Ask for changes buttons per post. Reminders: [howto](review-client-howto.md).
 3. Each post is answered on its own:
    - **Approve**: sign-off recorded; the post is scheduled at the time the client saw if still ahead, else the next open slot.
@@ -27,7 +27,7 @@ Agencies and teams often need a client's yes before a post goes out. Three thing
 
 ## Where a post stands
 
-`get-post` returns `client_signoff`: `required` (the brand's sign-off setting; the `list-workspaces` row doesn't show it) and `state`: `not_required`, `not_sent`, `waiting_on_client` or `signed_off`. `waiting_on_client` can also mean required reviewers haven't all answered; `not_required` only says the brand doesn't require sign-off, not that no client has the post. Review list rows don't say a post is with the client: on a sign-off brand, read `get-post` before a batch. Refusals and what to say: [review-client-howto.md](review-client-howto.md).
+`get-post` returns `client_signoff`: `required` (the brand's sign-off setting; the `list-workspaces` row doesn't show it) and `state`: `not_required`, `not_sent`, `waiting_on_client` or `signed_off`. `waiting_on_client` can also mean required reviewers haven't all answered; `not_required` only says the brand doesn't require sign-off, not that no client has the post. `list-inbox-items` team rows carry `waiting_on_client` (`names`) while a post is out with a reviewer: never approve those rows. Refusals: [review-client-howto.md](review-client-howto.md).
 
 ## Always
 
