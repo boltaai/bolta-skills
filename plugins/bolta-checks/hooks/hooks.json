@@ -3,7 +3,7 @@
   "hooks": {
     "PreToolUse": [
       {
-        "matcher": "^mcp__[A-Za-z0-9_-]+__(publish-post|schedule-post|approve-post|approve-many-posts|reject-post|approve-recurring-review|reject-recurring-review|send-outreach-reply|publish-engagement-reply|reply-to-social-content|react-to-social-content|activate-routine|resume-routine|run-routine-now|delete-post|archive-routine|set-content-campaign-status|set-content-campaign-targets|update-post|update-post-platform-details|update-social-bucket|restore-deleted|update-business-dna|extract-business-dna|update-voice-profile|create-routine|update-routine|create-post|bulk-create-posts|create-wordpress-blog-post|voice-generate|confirm-plan|decide-routine-recommendation|decide-bolta-suggestion|save-post|decide-suggestion|update-content-campaign|set-brand-approval)$",
+        "matcher": "^mcp__[A-Za-z0-9_-]+__(publish-post|schedule-post|approve-post|approve-many-posts|reject-post|approve-recurring-review|reject-recurring-review|send-outreach-reply|publish-engagement-reply|reply-to-social-content|react-to-social-content|activate-routine|resume-routine|run-routine-now|delete-post|archive-routine|set-content-campaign-status|set-content-campaign-targets|update-post|update-post-platform-details|update-social-bucket|restore-deleted|update-business-dna|extract-business-dna|update-voice-profile|create-routine|update-routine|create-post|bulk-create-posts|create-wordpress-blog-post|voice-generate|confirm-plan|decide-routine-recommendation|decide-bolta-suggestion|save-post|decide-suggestion|update-content-campaign|set-brand-approval|submit-for-review)$",
         "hooks": [
           {
             "type": "command",

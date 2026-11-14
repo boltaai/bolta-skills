@@ -14,7 +14,7 @@ A brand setting: no post is approved, scheduled or posted without a current clie
 
 ## What to say
 
-- The calendar shrank after it was turned on: "Turning on client sign-off pulled the scheduled posts without a client yes back to waiting. That's the setting working. Send them to the client from Approvals in Bolta."
+- The calendar shrank after it was turned on: "Turning on client sign-off pulled the scheduled posts without a client yes back to waiting. That's the setting working. I can send them to <name> on your yes" ([send to a person](review-client-send.md)).
 - A yes was voided by an edit: "The post changed after the client approved, so their yes no longer counts. Send it to them again."
 - Only the time moved, after the client's yes: "Moving the time doesn't need a new client yes."
 - Moving the time while the client hasn't answered: "The client saw the old time, so this request no longer counts. Send it to them again from Approvals." Say it before moving, and move only on a yes.

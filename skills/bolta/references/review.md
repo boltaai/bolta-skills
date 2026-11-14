@@ -15,7 +15,7 @@ All decisions in one pass, then read back: scheduled (day, time, account), chang
 - **A no with a reason:** `reject-post` with their own words as `reason` (what is wrong) and the `categories` that fit. "No to 2" alone is no reason: call nothing for it, do the rest, then ask why, once. Same reason on 2+ of a routine's drafts: also `list-suggestions` (`kind: "routine"`, `routine_id`), even if the no was stopped; offer the fit, else a routine change. Not yet sent for review, categories, send back for changes: [saying no](review-saying-no.md). Never delete in place of a no.
 - **Drop:** "delete all" gets the numbered list first. `delete-post` (undo for 7 days) records no reason; at most 20 per 5 minutes.
 - **Change a post, move a time, post now, Bolta checks:** read [change, move, post now](review-change-move-post-now.md) first. A changed post needs a new yes; a declined check means not done.
-- **A client's yes** (sign-off, "send it to the client", "waiting on the client"): [client approval](review-client-approval.md), [details](review-client-details.md), [set it up for an agency](review-client-howto.md). **One idea, a version per teammate:** [team version](review-team-version.md).
+- **Someone else's yes** ("send to Sam for approval", client sign-off): [send to a person](review-client-send.md), [client approval](review-client-approval.md), [details](review-client-details.md), [agency setup](review-client-howto.md). **One idea, a version per teammate:** [team version](review-team-version.md).
 - Roles, fingerprints, errors, chat: [references/yes-move.md](review-yes-move.md). Library posts, send-backs, credits: [references/more-decisions.md](review-more-decisions.md). Read-back, DON'T offer: [references/read-back.md](review-read-back.md).
 
 ## Tools

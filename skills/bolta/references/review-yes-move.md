@@ -4,7 +4,7 @@ Read before carrying out decisions. Times: [review-times.md](review-times.md). L
 
 ## Order inside one reply
 
-1. `submit-for-review` for every yes not yet on the list, in one call. `note`: a short factual note for reviewers, never invented urgency; it can't pick a reviewer. A post "held back: needs a human edit", or a quality refusal (it carries `how_to_fix`), gets new text via `save-post` with `post_id` and `content` (that edit asks once), then is shown again, not approved now.
+1. `submit-for-review` for every yes not yet on the list, in one call. `note`: a short factual note for reviewers, never invented urgency. Never pass `reviewer_ids` here: a send to a person is its own yes ([send to a person](review-client-send.md)), and you never approve those posts yourself. A post "held back: needs a human edit", or a quality refusal (it carries `how_to_fix`), gets new text via `save-post` with `post_id` and `content` (that edit asks once), then is shown again, not approved now.
 2. Just sent some? `list-inbox-items` again for their `content_fingerprint`.
 3. `approve-many-posts`, every yes in one call (25 at most; the rest in a second call). It gets the one Bolta check. One post is one item.
 4. `reject-post` for each no with a reason; `delete-post` for each drop. They pass once the approval's check did.
