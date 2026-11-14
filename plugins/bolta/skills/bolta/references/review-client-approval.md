@@ -1,6 +1,6 @@
 # Client approval
 
-Agencies and teams often need a client's yes before a post goes out. Two things can send posts to a client from here; everything else about client review happens in Bolta. Setting it up for an agency: [review-client-howto.md](review-client-howto.md). Settings that change a yes: [review-client-approval-settings.md](review-client-approval-settings.md).
+Agencies and teams often need a client's yes before a post goes out. Three things send posts to a client from here; the rest of client review happens in Bolta. Setting it up for an agency: [review-client-howto.md](review-client-howto.md). Settings that change a yes: [review-client-approval-settings.md](review-client-approval-settings.md).
 
 ## Who is who
 
@@ -12,7 +12,7 @@ Agencies and teams often need a client's yes before a post goes out. Two things 
 
 - **A Bolta routine set to send its drafts straight to the client** (`update-routine`, `output_config.review` with `to_client`): each run's drafts skip the team and go to the client ([routine-outputs.md](routine-outputs.md)).
 - **A Library post made with "send to the client" ticked**: `approve-many-posts` sends it to the client instead of putting it live (its item: `scheduled` false, status not Approved).
-- Nothing else. A hand-picked request, a resend, a withdrawal and answering client comments happen in Approvals in Bolta. `submit-for-review` is the team's list, never a client's.
+- **A hand-picked send to named people**: `submit-for-review` with `reviewer_ids` ([send to a person](review-client-send.md)). Without `reviewer_ids` it is the team's list. A resend, a withdrawal and answering client comments happen in Approvals in Bolta.
 
 ## The steps
 

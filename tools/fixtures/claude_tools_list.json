@@ -807,7 +807,7 @@
    {
     "name": "submit-for-review",
     "title": "Submit Posts for Review",
-    "description": "Submit one or more posts for team review. Changes post status to 'Pending Approval' and creates TeamPostReview records. Only 'Draft' and 'Needs Revision' posts can be submitted. A post rejected here for being 'Quality Blocked' is NOT a dead end — the per-post result carries quality_block.message with the specific problem; rewrite that post with save-post with its post_id (which re-runs the check and returns it to Draft when it passes) and submit it again, rather than reporting the block to the user as final.",
+    "description": "Submit posts for review. Without reviewer_ids: the team review list (Draft or Needs Revision only). With reviewer_ids: sends them to those named people, who get an email and reminders at 2 and 5 days. When the user says 'send for approval' without naming anyone, ask who; list-workspace-members gives ids (can_receive_approval_requests). Before sending, show the posts and the people's names and get the user's yes. Never use reviewer_ids when nobody is present. A post rejected for being 'Quality Blocked' is not a dead end: quality_block.message says why; fix it with save-post (post_id) and submit again.",
     "inputSchema": {
      "type": "object",
      "properties": {
@@ -825,7 +825,22 @@
       },
       "note": {
        "type": "string",
-       "description": "Note for reviewers (e.g. 'AI drafts ready for review')"
+       "description": "Note for reviewers (e.g. 'AI drafts ready for review'). With reviewer_ids, the named people read it."
+      },
+      "reviewer_ids": {
+       "type": "array",
+       "items": {
+        "type": "string"
+       },
+       "description": "Send to these people for approval: ids from list-workspace-members with can_receive_approval_requests true (client reviewers and creators). Emails a real person: only after the user said yes to these posts and names."
+      },
+      "title": {
+       "type": "string",
+       "description": "With reviewer_ids: a short title the people see (e.g. 'May launch posts')."
+      },
+      "notify_email": {
+       "type": "boolean",
+       "description": "With reviewer_ids: email them (default true). False sends a Bolta notice only."
       }
      },
      "additionalProperties": false,
@@ -839,7 +854,7 @@
      "readOnlyHint": false,
      "destructiveHint": false,
      "idempotentHint": false,
-     "openWorldHint": false
+     "openWorldHint": true
     }
    },
    {
@@ -3618,7 +3633,7 @@
    {
     "name": "list-workspace-members",
     "title": "List Brand Team",
-    "description": "List the people on this brand's team: each person's id, name and role (owner, admin, creator, viewer). Client reviewers are not listed. Use it to turn a name the user gives into the id that create-routine and update-routine take in default_reviewer_ids. No email addresses. Changes nothing.",
+    "description": "List the people on this brand: each person's id, name, role (owner, admin, creator, viewer, or reviewer for a client reviewer) and can_receive_approval_requests. Use it to turn a name into an id: for submit-for-review reviewer_ids, pick people with can_receive_approval_requests true; for create-routine and update-routine default_reviewer_ids, pick team members (never role reviewer). No email addresses. Changes nothing.",
     "inputSchema": {
      "type": "object",
      "properties": {

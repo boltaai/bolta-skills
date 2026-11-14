@@ -478,6 +478,9 @@ function guard_main(   ok, ti) {
   if (TOOL == "save-post") emit("SAVE", save_verdict(ti))
   if (TOOL == "update-content-campaign") emit("TARGETS", campaign_targets(ti))
   if (TOOL == "confirm-plan") emit("SWITCHON", switch_on(ti))
+  # submit-for-review with reviewer_ids sends to named people by email. Absent
+  # or JSON null is the team list; anything else (a list, even empty) asks.
+  if (TOOL == "submit-for-review") emit("REVIEWERS", (!jhas(ti, "reviewer_ids") || jtype(ti, "reviewer_ids") == "n") ? 0 : 1)
   if (TOOL == "decide-routine-recommendation" || TOOL == "decide-bolta-suggestion" || TOOL == "decide-suggestion") emit("DECISION", decision(ti))
   # Saves nothing, so it passes: a pure website preview (keys only workspace_id, url, and
   # preview: true) or a pure setup status read (keys only workspace_id and check: true). An
