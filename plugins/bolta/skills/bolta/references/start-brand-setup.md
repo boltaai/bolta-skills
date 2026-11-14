@@ -1,10 +1,10 @@
 # Start: setting up the brand and voice
 
-How [start](start.md) and [voice](voice.md) set up a brand: the setup bolta.ai runs on a website. It saves about your business, makes and links the voice, its language, accounts, starter rules per network and the site's product. Their own site only.
+How [start](start.md) and [voice](voice.md) set up a brand: the setup bolta.ai runs on a website. It saves about your business, makes and links the voice, its language, accounts, starter rules per network and the site's product.
 
 ## What you already know
 
-Start from this conversation and what you remember of them: business, site, audience, products, goals, how they write, likes and dislikes. Show it in a few lines; ask only the gaps, in one question:
+No account connected: the connect link opens this reply, with why ([start](start.md)). Start from this conversation and what you remember of them: business, site, audience, products, goals, how they write, likes and dislikes. Show it in a few lines; ask only the gaps, in one question:
 
 > From our chats: you run Harbor Physio in Leeds, for runners and desk workers, you sell sports massage and rehab plans, and you write short and plain. Right? What's your website? If you don't have one, I'll build it from what you've told me.
 
@@ -26,7 +26,7 @@ Start from this conversation and what you remember of them: business, site, audi
 4. **Follow it:** it starts in the background (`started`, about a minute). Say "Bolta is reading your site", then `check: true` about every 15 seconds until `succeeded`, `reused` or `failed`. No posts meanwhile.
 5. **Show the result:** what it made (`setup`: the business record, the voice with its language, audience and topics, the products), the two scores (`setup.voice_setup` and `setup.business_setup`, with what each is `missing`), which accounts use the voice (`assigned_account_ids`, by network and name), and `setup.dashboard_url`. Then `get-voice-context` before writing.
 
-- `social_accounts_connected: 0`: the connect link first ([start](start.md)); the setup still counts.
+- `social_accounts_connected: 0`: repeat the connect link; the setup still counts.
 - Something they shared fills a `missing` item: `setup: true` again, same `url`, with those fields. The same site again only fills gaps.
 - `already_running`: this call added nothing; follow it with `check: true`, then run `setup: true` again with the fields. `in_flight_other_site`: wait for that one, then start this.
 - `failed`: say so; offer another address or the no-site setup.
@@ -40,4 +40,3 @@ No site, or a brand set up without one: [start-brand-setup-no-site.md](start-bra
 
 - Preview before setup; setup only after a yes in their latest message.
 - A preview reply asks one question, "Save this?": assumptions and conflicts are statements of what you'll do ("I left Tom out; say if he should be in").
-- Pass only what they said or shared.

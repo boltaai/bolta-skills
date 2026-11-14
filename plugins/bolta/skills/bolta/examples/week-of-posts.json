@@ -47,11 +47,11 @@
       "why": "The decision: one call for the whole week, about one post per weekday, every item a Draft with its accounts. Never a loop of save-post. Each post is a different angle on hiring with a different first line, in the voice get-voice-context gave. Opinions only: no open roles, salaries, numbers or links, because the user gave none. If the call asks for text items, send each object JSON-encoded."
     },
     {
-      "tool": "bulk-create-status",
+      "tool": "bulk-create-posts",
       "arguments": {
         "task_id": "<task_id from the reply>"
       },
-      "why": "Poll until status is completed, whatever the reply's text says. Its posts are the real saved rows; report rejected and quality_blocked."
+      "why": "The status read: only the task_id, no posts. Poll until status is completed, whatever the reply's text says. Its posts are the real saved rows; report rejected and quality_blocked."
     }
   ],
   "say": "Saved to Acme as drafts (all 5 shown above in full). Nothing goes out yet. I kept them to opinions because you didn't name open roles or a link to apply. Schedule all 5? Or tell me what to change. Approved without a time, Bolta picks one from your posting schedule.",

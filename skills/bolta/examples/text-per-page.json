@@ -39,13 +39,13 @@
         },
         "idempotency_key": "launch-pages-1"
       },
-      "why": "The decision: one post with a text per destination, because only the voice differs. Ids exactly as list-accounts gave them; Bolta stores them under the page names. The profile has no entry, so it gets the main text in the founder's \"I\". The company page gets its own in \"we\". The Acme Page gets the Facebook text, the Lisbon Page its own. No price or trial: none was given. Saved as a draft; scheduling is publish-post, a second call after the yes."
+      "why": "The decision: one post with a text per destination, because only the voice differs. Ids exactly as list-accounts gave them; Bolta stores them under the page names. The profile has no entry, so it gets the main text in the founder's \"I\". The company page gets its own in \"we\". The Acme Page gets the Facebook text, the Lisbon Page its own. No price or trial: none was given. Saved as a draft; scheduling is submit-for-review, then approve-many-posts with set_fixed_time after the yes."
     }
   ],
   "say": "Saved to Acme as one draft for 4 destinations. 1. LinkedIn, you: (full text) 2. LinkedIn, Acme company page: (full text) 3. Facebook, Acme Page: (full text) 4. Facebook, Acme Lisbon Page: (full text). Nothing goes out yet. Schedule it?",
   "never": [
     "A page id that didn't come from list-accounts, or a page name in its place.",
     "Leaving out which text goes where: name every destination with its own text.",
-    "A time in the saving call: save-post refuses it; scheduling is publish-post after the yes."
+    "A time in the saving call: save-post refuses it; scheduling is approve-many-posts with set_fixed_time after the yes."
   ]
 }

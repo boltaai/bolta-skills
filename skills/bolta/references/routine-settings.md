@@ -1,12 +1,12 @@
 # Bolta routine settings: what, when, who decides
 
-Top-level settings of `create-routine` and `update-routine`; `output_config`: [routine-settings-output.md](routine-settings-output.md). Labels: **Bolta**, Bolta's own rule or default; **seen**, what customers keep or drop (never quote the counts); **advice**, judgement.
+Top-level settings of `create-routine` and `update-routine`; `output_config`: [routine-settings-output.md](routine-settings-output.md). Labels: **Bolta**, Bolta's rule or default; **seen**, what customers keep (never quote counts); **advice**, judgement.
 
 ## What it is
 
-- `name` (required, up to 255 characters): what it does, "Weekly LinkedIn, hiring". Display only.
+- `name` (required, up to 255): "Weekly LinkedIn, hiring". Display only.
 - `goal` (required, up to 2000): their words, audience plus purpose: "Help clinic owners see why posture coaching beats one-off treatment." Never invent one. Not a dated event: it repeats every run. Bolta's sample goals ("Post consistently each week") count as no topic, so with no brand details the run is skipped (Bolta).
-- `instructions` (up to 4000, default empty): rules for every run: tone, words to avoid, facts to use, "Never invent facts, numbers, prices or dates." A `goal` or `instructions` starting "reply to…", "respond to…" or "draft replies" is refused on a post routine (`reply_workflow_required`): reword it as a topic, or use a reply routine.
+- `instructions` (up to 8,000; 4,000 on an older Bolta): the brief for every run: tone, words to avoid, facts to use, "Never invent facts, numbers, prices or dates." A `goal` or `instructions` starting "reply to…", "respond to…" or "draft replies" is refused on a post routine (`reply_workflow_required`): reword it as a topic, or use a reply routine.
 - `template_key`: what it makes ([routine-templates.md](routine-templates.md)). It never changes: another kind is a new routine. Leave `workflow_definition_key` and `outcome_category` out.
 
 ## When it runs
@@ -22,9 +22,9 @@ Top-level settings of `create-routine` and `update-routine`; `output_config`: [r
 
 - `approval_policy`: `review_every_artifact` ("ask me first", Bolta's default on every post routine: use it), `inherit` (the brand's Approvals setting; the only choice for reports), `auto` (posts without asking).
   - `auto` only on their words, and only on `weekly_social_posts`, `founder_story_series`, `customer_win_social_proof`, `linkedin_thought_leadership` and `square_service_spotlight`; anywhere else it is refused at save, and one saved earlier fails every run (`unsupported_execution_mode`): switch it to ask me first.
-  - Also refused while the brand's `safe_mode` is on or its `autonomy_mode` (`list-workspaces`) is manual or assisted. Client sign-off still reviews everything. `auto` turns off sending straight to the client.
+  - Also refused while the brand's `safe_mode` is on or its `autonomy_mode` (`list-workspaces`) is manual or assisted. Client sign-off still reviews everything. `auto` turns off sending straight to the client. The brand is the ceiling: [no-approval](routine-no-approval.md).
 - `default_reviewer_ids` (up to 20): teammates who review its drafts, ids from `list-workspace-members`; client reviewers are refused. Left out: the brand's default reviewer. On update it replaces the list; `[]` restores the default.
-- `destination_config`: `{"voice_profile_id":"<id from get-voice-context all_profiles>"}`, a voice of this brand; left out, the brand's default voice. Accepted by post routines on Bolta's main writer (weekly posts, founder stories, customer wins, LinkedIn positions, Square), research series and weekly articles; refused on best-posts, thread, reply and report routines and on those fed by GitHub, a blog, HubSpot, Drive or a meeting. A person's voice for first-person, founder and story routines; the brand voice otherwise (Bolta's planner).
+- `destination_config`: `{"voice_profile_id":"<id from get-voice-context all_profiles>"}`, a voice of this brand; left out, the brand's default voice. Accepted by post routines on Bolta's main writer (weekly posts, founder stories, customer wins, LinkedIn positions, Square), research series and weekly articles; refused on best-posts, thread, reply and report routines and on those fed by GitHub, a blog, HubSpot, Drive or a meeting. A person's voice for first-person and story routines; else the brand voice.
 
 ## Settings that do nothing
 

@@ -1,6 +1,6 @@
 # Campaign
 
-Plan, start, check or close a campaign: 1 to 4 weeks of posts about one thing, like a launch, sale or event, ending with a verdict. Use for: we launch on Nov 3, a sale ending Friday, how did the campaign do, my campaign is doing nothing.
+Plan, start, check or close a campaign: 1 to 4 weeks of posts about a launch, sale or event, ending with a verdict. Use for: we launch on Nov 3, a sale ending Friday, how did the campaign do, my campaign is doing nothing.
 
 ## Done when
 
@@ -25,20 +25,21 @@ The plan got a yes and the campaign is filled one way. At the end: a verdict, on
 - **A page to read:** a `url` in `context_sources`, then `analyze-content-campaign-source` for each; only read ones reach the writer.
 - **Every setting:** [settings.md](campaign-settings.md) and the pages it links.
 - **Video, blog, email, team version, Library:** [formats-and-team.md](campaign-formats-and-team.md). Say video costs more first.
+- **Posting without a yes:** [no-approval](routine-no-approval.md).
 - **Pause, resume, finish (`complete`), retire (`archive`):** ask once; the last two are final.
 - **Verdict** after the end date: [verdict.md](campaign-verdict.md). **Nothing happened:** [why-nothing.md](campaign-why-nothing.md); usually never started ([avoid](campaign-why-nothing-avoid.md)) or waiting for your yes.
 
 ## Tools
 
 - `list-workspaces`, `list-accounts`, `get-voice-context`, `list-content-campaigns`, `get-content-campaign`.
-- `create-content-campaign`, `update-content-campaign` (brief, accounts, notes, sources; `post_ids` alone attaches posts), `analyze-content-campaign-source`.
-- `plan` (`kind: "campaign"`), `revise-plan`, `confirm-plan`: where offered.
+- `plan` (`kind: "campaign"`), `revise-plan`, `confirm-plan`: first.
+- `update-content-campaign` (brief, accounts, notes, sources; `post_ids` alone attaches posts), `analyze-content-campaign-source`; `create-content-campaign` only without `plan`.
 - `set-content-campaign-status`: activate, pause, resume, complete, archive.
-- `list-workspace-posts` (`campaign_id`), `bulk-create-posts`, `bulk-create-status`, `list-routines`.
+- `list-workspace-posts` (`campaign_id`), `bulk-create-posts`, `list-routines`.
 
 ## Hand off
 
-[review](review.md), [routine](routine.md) (no end), [post](post.md), [results](results.md), [voice](voice.md), [connect](connect.md), [fix](fix.md) (undo).
+[review](review.md), [routine](routine.md), [post](post.md), [results](results.md), [connect](connect.md), [fix](fix.md).
 
 ## Always
 

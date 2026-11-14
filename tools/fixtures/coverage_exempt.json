@@ -1,0 +1,9 @@
+{
+  "campaign.autonomy_override=": "The empty value (follow the brand) is taught as `\"\"` next to autonomy_override and update-content-campaign in routine-no-approval.md; the code-token scanner only sees identifiers, so an empty string can never match.",
+  "campaign.acknowledge_autonomy_migration": "Server no-op since the legacy/owner_v1 split was removed: still accepted, changes nothing. The skill deliberately never teaches or sends it.",
+  "campaign.autonomy_policy_version": "Server no-op since the legacy/owner_v1 split was removed: still accepted, changes nothing. The skill deliberately never teaches or sends it.",
+  "campaign.autonomy_policy_version=owner_v1": "Server no-op since the legacy/owner_v1 split was removed: still accepted, changes nothing. The skill deliberately never teaches or sends it.",
+  "routine.acknowledge_autonomy_migration": "Server no-op since the legacy/owner_v1 split was removed: still accepted, changes nothing. The skill deliberately never teaches or sends it.",
+  "routine.autonomy_policy_version": "Server no-op since the legacy/owner_v1 split was removed: still accepted, changes nothing. The skill deliberately never teaches or sends it.",
+  "routine.autonomy_policy_version=owner_v1": "Server no-op since the legacy/owner_v1 split was removed: still accepted, changes nothing. The skill deliberately never teaches or sends it."
+}

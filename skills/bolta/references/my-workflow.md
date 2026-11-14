@@ -32,7 +32,7 @@ A saved workflow uses only these:
 - `list-workspace-posts`: best posts; this week's drafts, so a repeated run never doubles.
 - `list-workspace-posts` with `account_ids`: days already covered (the scheduled queue).
 - `list-inbox-items`: how much is waiting.
-- `save-post` (no `post_id`: always a draft), `bulk-create-posts`, `bulk-create-status`: save drafts; check what saved.
+- `save-post` (no `post_id`: always a draft), `bulk-create-posts`: save drafts; its `task_id`: what saved.
 - `submit-for-review`: onto the review list.
 - `list-routines`: a Bolta routine already covering it.
 

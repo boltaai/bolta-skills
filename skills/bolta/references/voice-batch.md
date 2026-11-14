@@ -23,7 +23,7 @@ Read before running `voice-generate`. Worked: [voice-generate-batch](../examples
 
 ## Reading the result
 
-- Poll `bulk-create-status` with the task id: `posts` are the saved drafts, `not_saved` gives a reason for each one left out, `quality_blocked` says why a draft was held and how to fix it. Nothing goes out until the user says yes.
+- Poll `bulk-create-posts` with only the task id (`task_id`, no `posts`): `posts` are the saved drafts, `not_saved` gives a reason for each one left out, `quality_blocked` says why a draft was held and how to fix it. Nothing goes out until the user says yes.
 - Nothing saved? Show `generated_posts`; save the ones they want with `bulk-create-posts`.
 - Something they want every week? A routine, not a batch: [routine](routine.md). One post: you write it, free.
 

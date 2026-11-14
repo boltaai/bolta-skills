@@ -19,7 +19,7 @@
         ],
         "idempotency_key": "hiring-li-page-1"
       },
-      "why": "The decision: the page id alone, because hiring news is company news and the user said not the profile. The page id alone posts as the page. save-post makes a Draft and takes no time; scheduling is publish-post, a second call after the yes. No salary, deadline or apply link: none was given, so say that below the draft."
+      "why": "The decision: the page id alone, because hiring news is company news and the user said not the profile. The page id alone posts as the page. save-post makes a Draft and takes no time; scheduling is submit-for-review, then approve-many-posts with set_fixed_time after the yes. No salary, deadline or apply link: none was given, so say that below the draft."
     }
   ],
   "say": "Saved to Acme as a LinkedIn draft for the Acme company page, not your profile. Nothing goes out yet. I left out how to apply because you didn't give a link. Schedule it?",

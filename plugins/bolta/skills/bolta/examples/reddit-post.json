@@ -23,11 +23,11 @@
       "why": "The decision: a one-item batch, because the user named the subreddit and only a batch item takes it by name (subreddit_name); save-post platform_details needs Bolta's id for it, which no tool lists. Reddit needs a title (256 max) and a subreddit before anything else. The body gives before it asks, with no hashtags and no pitch, as the subreddit expects; the only fact is the one the user gave."
     },
     {
-      "tool": "bulk-create-status",
+      "tool": "bulk-create-posts",
       "arguments": {
         "task_id": "<task_id from bulk-create-posts>"
       },
-      "why": "Poll until completed. If r/smallbusiness isn't synced in Bolta the item is skipped with a reason here (not in rejected) and no post exists: say so and ask the user to add the subreddit in Bolta."
+      "why": "The status read: only the task_id, no posts. Poll until completed. If r/smallbusiness isn't synced in Bolta the item is skipped with a reason here (not in rejected) and no post exists: say so and ask the user to add the subreddit in Bolta."
     },
     {
       "tool": "get-post",
@@ -42,7 +42,7 @@
   "never": [
     "A guessed subreddit id: a name goes in a batch item, an id comes from an earlier post's read.",
     "A Reddit or Discord item in a batch without its details: it is skipped, not saved.",
-    "Saying it saved before bulk-create-status shows the post.",
+    "Saying it saved before the task_id status shows the post.",
     "Details of what was removed: the user gave only the numbers 9 and 3."
   ]
 }

@@ -25,7 +25,7 @@ All decisions in one pass, then read back: scheduled (day, time, account), chang
 - `approve-many-posts`: every yes, one post or many.
 - `reject-post`: a no with a reason.
 - `list-suggestions`: after repeated no's.
-- `delete-post`: drop. `publish-post` with `when`: a time, a new time, or `"now"`.
+- `delete-post`: drop. `publish-post`: `"now"`, or a new time on an approved post, after the yes; never the way to schedule a new one.
 - `get-voice-profile`, `update-voice-profile`: one DON'T.
 - `plan-team-posts`, `update-team-post-plan`, `generate-team-post-drafts`, `get-team-post-plan`: team versions.
 

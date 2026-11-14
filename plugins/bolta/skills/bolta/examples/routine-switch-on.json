@@ -1,0 +1,26 @@
+{
+  "ask": "Yes, switch it on.",
+  "playbook": "routine",
+  "before": "plan returned Weekly LinkedIn, hiring (every Monday 8:00 am, 3 drafts, waits for your yes); the user said save it; confirm-plan saved it switched off; the reply asked 'Switch it on?'.",
+  "steps": [
+    {
+      "tool": "activate-routine",
+      "arguments": {
+        "routine_id": "<routine id>"
+      },
+      "why": "Its own yes. Switching on is not running: nothing is written until the next run, and run-routine-now needs another yes."
+    },
+    {
+      "tool": "get-routine",
+      "arguments": {
+        "routine_id": "<routine id>"
+      },
+      "why": "next_run_at is UTC: say it in the brand's clock. Only now say it is on."
+    }
+  ],
+  "say": "Bolta routine on. First drafts Mon Nov 16, 8:00 am (New York). On Monday, say 'what's waiting'.",
+  "never": [
+    "run-routine-now in the same breath: it spends credits and needs its own yes.",
+    "Saying it is on before next_run_at is read back."
+  ]
+}

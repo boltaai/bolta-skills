@@ -1,0 +1,61 @@
+{
+  "ask": "Yes, save it.",
+  "playbook": "routine",
+  "before": "The owner asked for 3 posts every Monday from a long brief he pasted (about 5,600 characters), on the Acme Facebook Page, the Acme LinkedIn company page and Bluesky, and said he doesn't want to approve each post. Already read: list-workspaces (timezone America/Denver, autonomy_mode auto, safe_mode off, connection_automation_permission granted) and list-accounts (the three rows; LinkedIn also has his personal profile, and he picked the company page). He chose the same post everywhere, knowing Bluesky keeps every copy to 300 characters. The summary ended 'Save it? Posting without your yes comes next.'",
+  "steps": [
+    {
+      "tool": "create-routine",
+      "arguments": {
+        "workspace_id": "<brand's workspace id>",
+        "name": "Weekly posts, Acme",
+        "goal": "Three posts a week from our brief that bring small studios to our booking page",
+        "template_key": "weekly_social_posts",
+        "trigger_type": "schedule",
+        "schedule": {
+          "interval": "weekly",
+          "day": "monday",
+          "time": "08:00"
+        },
+        "timezone": "<timezone from list-workspaces>",
+        "approval_policy": "review_every_artifact",
+        "source_bindings": [
+          {
+            "provider": "social_account",
+            "ref": "<Acme Facebook Page id from list-accounts>"
+          },
+          {
+            "provider": "social_account",
+            "ref": "<Acme LinkedIn company page id from list-accounts>"
+          },
+          {
+            "provider": "social_account",
+            "ref": "<Bluesky account id from list-accounts>"
+          }
+        ],
+        "output_config": {
+          "artifact_type": "post",
+          "count": 3,
+          "settings": {
+            "contentGenerationMode": "cross-platform"
+          }
+        },
+        "instructions": "<his brief, word for word> Never invent facts, numbers, prices or dates."
+      },
+      "why": "One routine, three bound accounts, one object each, ids exactly as list-accounts gave them: the Page (facebook_page_<id>) and the company page (linkedin_org_<id>), never his person. cross-platform with count 3 means 3 posts a run, each on all three accounts, cut to Bluesky's 300; an older Bolta can hold every copy after the first account's, so read the first run back and say if some are missing. The brief goes in whole: up to 8,000 characters (an older Bolta refuses past 4,000; then shorten it with him). Saved asking first and switched off: posting without his yes is its own question, asked once this read is back."
+    },
+    {
+      "tool": "get-routine",
+      "arguments": {
+        "workspace_id": "<brand's workspace id>",
+        "routine_id": "<routine id>"
+      },
+      "why": "Read the three accounts back by name. updated_at is the revision the no-approval move needs, and effective_policy reads not_resolved before the first run."
+    }
+  ],
+  "say": "Saved to Acme as Weekly posts, switched off: Mondays 8:00 am (Denver), 3 posts from your brief to the Acme Facebook Page, the Acme LinkedIn page and Bluesky.\nNow posting without your yes. From the next run, Weekly posts goes out without your yes, at your posting times. Acme's settings decide this from now on, not the old writer setting, and that can't be undone. The client still signs off. Go ahead?",
+  "never": [
+    "Setting it to post without asking in the same yes as saving it.",
+    "Binding his personal LinkedIn because he said 'my LinkedIn'.",
+    "Cutting his brief to fit: say the limit and shorten it with him."
+  ]
+}

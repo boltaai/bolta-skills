@@ -254,6 +254,8 @@ function hook_common(   tn, i, j, c) {
 # approval_policy in a create-routine or update-routine input:
 # review (exactly review_every_artifact), missing, or other.
 function policy(ti) {
+  # The owner_v1 move loosens on a server without the one approval rule: always ask.
+  if (jhas(ti, "autonomy_policy_version") || jhas(ti, "acknowledge_autonomy_migration")) return "other"
   if (!jhas(ti, "approval_policy")) return "missing"
   if (jtype(ti, "approval_policy") == "s" && jstr(ti, "approval_policy") == "review_every_artifact") return "review"
   return "other"
@@ -357,8 +359,12 @@ function save_verdict(ti,   i, k, has_post, unsched, settings) {
 # brief alone (an allow-list); anything else, including dates, posts to attach
 # and keys this script does not know, is "targets": who the campaign posts
 # from, what Bolta reads for it, or when it runs, which a running campaign
-# writes its next weeks from.
+# writes its next weeks from; policy for a change that may loosen approval.
 function campaign_targets(ti,   i, k) {
+  # Whether its posts may go out without a yes: asked even on a campaign made
+  # here. Ask me first (review_every_artifact) only tightens, so it is a target.
+  if (jhas(ti, "autonomy_override") || jhas(ti, "autonomy_policy_version") || jhas(ti, "acknowledge_autonomy_migration")) return "policy"
+  if (jhas(ti, "approval_policy") && !(jtype(ti, "approval_policy") == "s" && jstr(ti, "approval_policy") == "review_every_artifact")) return "policy"
   for (i = 1; i <= JC[ti]; i++) {
     k = JK[ti SUBSEP i]
     if (k !~ /^(workspace_id|campaign_id|name|strategy_key|theme|audience|cta_text|cta_url|content_mix)$/) return "targets"
@@ -372,6 +378,15 @@ function campaign_targets(ti,   i, k) {
 # carrying a \u escape at its own level fails to decode (jdecode). So a \u in
 # post text, or anywhere else in the payload, needs no special case.
 function bulk_verdict(ti,   i, k, n, p, item) {
+  # Only a task_id (and the brand): the status read of an earlier batch.
+  # It writes nothing, so it passes even in careful mode.
+  if (jtype(ti, "task_id") == "s" && !jhas(ti, "posts")) {
+    for (i = 1; i <= JC[ti]; i++) {
+      k = JK[ti SUBSEP i]
+      if (k != "workspace_id" && k != "task_id") return "other"
+    }
+    return "status"
+  }
   for (i = 1; i <= JC[ti]; i++) {
     k = JK[ti SUBSEP i]
     if (k != "workspace_id" && k != "posts" && k != "timezone") return "other"
@@ -457,6 +472,9 @@ function guard_main(   ok, ti) {
   emit("CID", campaign_id(ti))
   if (TOOL == "approve-many-posts") emit("ITEMS", item_count(ti))
   if (TOOL == "bulk-create-posts") emit("BULK", bulk_verdict(ti))
+  # set-brand-approval loosens only with acknowledge: absent or JSON false is a
+  # preview or a stricter setting. Anything else (true, "true", unreadable) asks.
+  if (TOOL == "set-brand-approval") emit("ACK", (!jhas(ti, "acknowledge") || jtype(ti, "acknowledge") == "f") ? 0 : 1)
   if (TOOL == "save-post") emit("SAVE", save_verdict(ti))
   if (TOOL == "update-content-campaign") emit("TARGETS", campaign_targets(ti))
   if (TOOL == "confirm-plan") emit("SWITCHON", switch_on(ti))

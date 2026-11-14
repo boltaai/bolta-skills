@@ -986,7 +986,46 @@ def check_links(plugin):
                 err(rel, f"link {m.group(1)!r} points at nothing")
 
 
+#: Claims a skill file must not make, or must make, because the server says
+#: otherwise. Each was wrong in a reviewed PR: (file under skills/bolta,
+#: pattern, must_match, why).
+SKILL_CLAIMS = [
+    ("references/routine-no-approval.md", re.compile(r"owner_v1|acknowledge_autonomy_migration|legacy", re.I), False,
+     "the server removed the legacy/owner_v1 split; the brand is the ceiling and the routine or campaign can only be stricter"),
+    ("references/routine-no-approval.md", re.compile(r"Tightening a campaign or routine .* needs only their yes", re.I), True,
+     "tightening a campaign no longer needs an acknowledgement, only the user's yes"),
+    ("references/routine-no-approval.md", re.compile(r"Settings > API > AI app connections"), True,
+     "name where an owner or admin allows this connection to loosen approval (Settings > API > AI app "
+     "connections; users.ai_app_connections_views)"),
+    ("references/connect-brand-approval.md", re.compile(r"acknowledge: true"), True,
+     "set-brand-approval loosens only on a second call with acknowledge=true after the preview"),
+    ("references/connect-brand-approval.md", re.compile(r"`not_asked` is refused"), False,
+     "set-brand-approval refuses a loosening only when the switch is off (not_granted); an AI-app "
+     "connection never asked loosens after the preview and acknowledge (users.brand_approval._may_loosen)"),
+    ("references/connect-brand-approval.md", re.compile(r"`not_granted`"), True,
+     "say that not_granted (an owner switched it off) refuses loosening"),
+    ("references/routine-weekly-networks.md", re.compile(r'"cross-platform"[^\n]*first run'), True,
+     "cross-platform needs the read-the-first-run-back fallback (an older Bolta holds every "
+     "one-account save after the first)"),
+    ("examples/weekly-three-networks-setup.json", re.compile(r"first run[^\"]*missing", re.I), True,
+     "the cross-platform example must read the first run back for missing posts"),
+    ("references/review-yes-move.md", re.compile(r"scheduled_local[^.]*as they are"), False,
+     "scheduled_local is a bare ISO wall-clock value; format it with timezone, never read it raw"),
+    ("references/routine-weekly-networks-after.md", re.compile(r"`scheduled_local`: say that"), False,
+     "scheduled_local is a bare ISO wall-clock value; format it with timezone, never read it raw"),
+]
+
+
+def check_skill_claims(plugin):
+    root = plugin / "skills" / "bolta"
+    for rel, rx, must, why in SKILL_CLAIMS:
+        p = root / rel
+        if p.is_file() and bool(rx.search(p.read_text())) != must:
+            err(f"skills/bolta/{rel}", why)
+
+
 def check_lint(plugin, skills):
+    check_skill_claims(plugin)
     skill_names = set(skills)
     for path in md_files(plugin):
         rel = path.relative_to(plugin)

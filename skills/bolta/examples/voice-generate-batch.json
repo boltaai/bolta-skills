@@ -20,11 +20,11 @@
       "why": "1 credit per post written, charged when the writing finishes; said first. The account goes in selected_accounts_or_buckets, or the drafts are saved with no account. The reply carries a task_id."
     },
     {
-      "tool": "bulk-create-status",
+      "tool": "bulk-create-posts",
       "arguments": {
         "task_id": "<task_id from the reply>"
       },
-      "why": "Poll until completed is true. posts are the saved posts; quality_blocked lists any saved as Quality Blocked instead of Draft, and not_saved lists any not saved, each with its reason. Nothing saved: show generated_posts and save them with bulk-create-posts."
+      "why": "The status read: only the task_id, no posts. Poll until completed is true. posts are the saved posts; quality_blocked lists any saved as Quality Blocked instead of Draft, and not_saved lists any not saved, each with its reason. Nothing saved: show generated_posts and save them with bulk-create-posts."
     }
   ],
   "say": "Saved to Acme: Bolta wrote 5 LinkedIn posts about the spring menu in your voice, as drafts. Nothing goes out yet. Want to read them? And if you want a batch like this every week, that's a Bolta routine: a week of drafts in your voice, waiting for your yes.",
