@@ -39,3 +39,6 @@ Most post routines and the weekly article take one unused idea per piece from th
 
 - Send `artifact_type` and `count` together, every time `output_config` is sent.
 - Never send a key the routine doesn't take: `topics` on a post routine, `source_urls` on a best-posts routine, `time_window` anywhere are refused.
+
+
+Optional platform inheritance and overrides: [routine preferences](routine-preferences.md).

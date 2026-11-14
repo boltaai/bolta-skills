@@ -47,3 +47,6 @@ One of `educational`, `bold`, `insightful`, `conversational`. Only on the user's
 
 - Fill settings only from what the user said or their documents show; ask before inventing pillars, themes or a product mention.
 - Put the real facts and events in `instructions`; settings shape writing, they never supply facts.
+
+
+Optional automatic/custom writing modes: [routine preferences](routine-preferences.md).

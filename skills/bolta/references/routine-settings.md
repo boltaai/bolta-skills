@@ -2,6 +2,8 @@
 
 Top-level settings of `create-routine` and `update-routine`; `output_config`: [routine-settings-output.md](routine-settings-output.md). Labels: **Bolta**, Bolta's rule or default; **seen**, what customers keep (never quote counts); **advice**, judgement.
 
+[Setup](routine-preferences.md).
+
 ## What it is
 
 - `name` (required, up to 255): "Weekly LinkedIn, hiring". Display only.
