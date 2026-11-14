@@ -72,7 +72,7 @@ here=$(dirname "$0")
 reader="$here/bolta-json.sh"
 
 ok=0 tool="" server="" sid="" prompt="" conn="Bolta" brand=""
-create="" update="" save="" ack="" targets="" policy="" rid="" action="" bulk="" cid="" items="" preview=0 replace=0 site=1 switchon="" decision=""
+create="" update="" save="" ack="" reviewers="" targets="" policy="" rid="" action="" bulk="" cid="" items="" preview=0 replace=0 site=1 switchon="" decision=""
 parsed=$(sh "$reader" guard 2>/dev/null) || parsed=""
 oldifs=$IFS
 IFS='
@@ -104,6 +104,7 @@ for kv in $parsed; do
     SWITCHON) switchon=$v ;;
     DECISION) decision=$v ;;
     ACK) ack=$v ;;
+    REVIEWERS) reviewers=$v ;;
   esac
 done
 IFS=$oldifs
@@ -256,6 +257,12 @@ case "$tool" in
     batch_ask ;;
   reject-recurring-review)
     ask "This can't be undone ($conn): a no on this repeating post is final. OK only if you said no to it." ;;
+  submit-for-review)
+    # The team list passes (keys within workspace_id, post_ids, note). Sending
+    # to named people emails someone outside this chat, so it asks every
+    # time, in every mode, never on a window. Any other key asks too.
+    if [ "$reviewers" = 0 ]; then exit 0; fi
+    ask "Check before it is sent ($conn): the people named get these posts by email, with reminders. OK only if you saw the posts and who gets them." ;;
   set-brand-approval)
     # Without acknowledge it only previews a loosening (or applies a stricter
     # setting); acknowledge=true is what lets posts go out without review.

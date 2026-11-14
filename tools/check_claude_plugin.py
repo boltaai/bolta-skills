@@ -96,7 +96,10 @@ PENDING_UPDATES = ("create-routine", "update-routine", "extract-business-dna", "
                    # Release 2: tools that absorbed a folded tool's arguments
                    "list-workspaces", "list-accounts", "list-workspace-posts", "get-post", "publish-post",
                    "list-inbox-items", "draft-engagement-reply", "list-engagements", "list-account-insights",
-                   "get-voice-context", "list-business-dna", "create-content-campaign", "update-content-campaign")
+                   "get-voice-context", "list-business-dna", "create-content-campaign", "update-content-campaign",
+                   # Send for approval to named people (reviewer_ids, title, notify_email;
+                   # list-workspace-members gains can_receive_approval_requests)
+                   "submit-for-review", "list-workspace-members")
 #: Claude Code sends "claude-code/<version> (<entrypoint>)" on its MCP requests,
 #: and the server matches "claude" in it. Without it the list lacks the tools made for Claude.
 CLAUDE_USER_AGENT = "claude-code/2.1.302 (cli; bolta-plugin-check)"

@@ -32,8 +32,8 @@ Who can do what in an organization and on a brand, and how to name a teammate. N
 
 ## A teammate's name
 
-- `list-workspace-members`: each person's id, name and role on the brand, no email. Use it to turn "Priya" into the id a Bolta routine's reviewers take (`default_reviewer_ids`).
-- Client reviewers are never listed: ask the user who the client is.
+- `list-workspace-members`: each person's id, name and role on the brand, no email. Use it to turn "Priya" into the id a Bolta routine's reviewers take (`default_reviewer_ids`): team members only, never a reviewer row.
+- Client reviewers show as role reviewer. Their ids are only for sending posts to them ([send to a person](review-client-send.md)).
 - Not on this app: ask for the name and send the user to the routine's page in Bolta to pick the reviewer.
 
 ## Always

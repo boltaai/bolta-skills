@@ -209,6 +209,18 @@ function read_only_site_call(p,   i, n, k, mode) {
   return 1
 }
 
+# 1 when a submit-for-review call only adds to the team list: every key is in
+# {workspace_id, post_ids, note}.
+function team_list_only(p,   i, n, k) {
+  n = JC[p] + 0
+  for (i = 1; i <= n; i++) {
+    k = JK[p SUBSEP i]
+    if (k == "workspace_id" || k == "post_ids" || k == "note") continue
+    return 0
+  }
+  return 1
+}
+
 function sane(s) {
   gsub(/[^A-Za-z0-9_-]/, "_", s)
   return substr(s, 1, 128)
@@ -478,6 +490,10 @@ function guard_main(   ok, ti) {
   if (TOOL == "save-post") emit("SAVE", save_verdict(ti))
   if (TOOL == "update-content-campaign") emit("TARGETS", campaign_targets(ti))
   if (TOOL == "confirm-plan") emit("SWITCHON", switch_on(ti))
+  # submit-for-review: the team list only when every key is workspace_id,
+  # post_ids or note (an allow-list). Any other key (reviewer_ids sends to
+  # named people by email; title, notify_email or unknown) asks.
+  if (TOOL == "submit-for-review") emit("REVIEWERS", team_list_only(ti) ? 0 : 1)
   if (TOOL == "decide-routine-recommendation" || TOOL == "decide-bolta-suggestion" || TOOL == "decide-suggestion") emit("DECISION", decision(ti))
   # Saves nothing, so it passes: a pure website preview (keys only workspace_id, url, and
   # preview: true) or a pure setup status read (keys only workspace_id and check: true). An

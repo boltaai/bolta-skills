@@ -10,7 +10,7 @@ Three settings decide whether a post waits, and for whom. Read with [review-clie
 
 ## What to say
 
-- Sign-off required and the user asks to approve: "This brand needs the client's yes first. Send it from Approvals in Bolta."
+- Sign-off required and the user asks to approve: "This brand needs the client's yes first. I can send it to <name> on your yes" ([send to a person](review-client-send.md)).
 - Routine drafts going straight to the client: "These reach the client before anyone on the team sees them."
 
 ## Always
