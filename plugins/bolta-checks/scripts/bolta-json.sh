@@ -254,6 +254,8 @@ function hook_common(   tn, i, j, c) {
 # approval_policy in a create-routine or update-routine input:
 # review (exactly review_every_artifact), missing, or other.
 function policy(ti) {
+  # The owner_v1 move loosens on a server without the one approval rule: always ask.
+  if (jhas(ti, "autonomy_policy_version") || jhas(ti, "acknowledge_autonomy_migration")) return "other"
   if (!jhas(ti, "approval_policy")) return "missing"
   if (jtype(ti, "approval_policy") == "s" && jstr(ti, "approval_policy") == "review_every_artifact") return "review"
   return "other"
@@ -361,7 +363,7 @@ function save_verdict(ti,   i, k, has_post, unsched, settings) {
 function campaign_targets(ti,   i, k) {
   # Whether its posts may go out without a yes: asked even on a campaign made
   # here. Ask me first (review_every_artifact) only tightens, so it is a target.
-  if (jhas(ti, "autonomy_override")) return "policy"
+  if (jhas(ti, "autonomy_override") || jhas(ti, "autonomy_policy_version") || jhas(ti, "acknowledge_autonomy_migration")) return "policy"
   if (jhas(ti, "approval_policy") && !(jtype(ti, "approval_policy") == "s" && jstr(ti, "approval_policy") == "review_every_artifact")) return "policy"
   for (i = 1; i <= JC[ti]; i++) {
     k = JK[ti SUBSEP i]
