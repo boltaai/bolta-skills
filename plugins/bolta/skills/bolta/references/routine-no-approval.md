@@ -37,6 +37,7 @@ Tightening a campaign or routine (`review_every_artifact`, a stricter `autonomy_
 ## Always
 
 - This yes is separate from "Turn it on?".
+- These settings are Bolta's rule for a Bolta routine's or campaign's own runs. They never approve, schedule or publish a post from this app (that needs a yes on its exact text) and never skip a client's sign-off.
 - Read Bolta back before saying anything posts without asking.
 - A refusal naming the role or this connection: say it plainly and stop.
 - No draft already waiting is approved by this.

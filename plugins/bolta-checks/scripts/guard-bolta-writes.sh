@@ -367,6 +367,9 @@ case "$tool" in
     esac
     ask "Bolta check ($conn): the plugin can't tell what this answer to Bolta does. OK it only if you expected it." ;;
   update-content-campaign)
+    if [ "$targets" = policy ]; then
+      ask "Check before it changes ($conn): this changes whether a campaign's posts can go out without your yes. It approves no post."
+    fi
     # Silent only for a brief-only change (an allow-list in bolta-json.sh); accounts,
     # notes, sources, voice, dates, attached posts and unknown keys are checked.
     if [ "$targets" != targets ]; then exit 0; fi

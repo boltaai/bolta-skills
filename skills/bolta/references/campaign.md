@@ -1,6 +1,6 @@
 # Campaign
 
-Plan, start, check or close a campaign: 1 to 4 weeks of posts about one thing, like a launch, sale or event, ending with a verdict. Use for: we launch on Nov 3, a sale ending Friday, how did the campaign do, my campaign is doing nothing.
+Plan, start, check or close a campaign: 1 to 4 weeks of posts about a launch, sale or event, ending with a verdict. Use for: we launch on Nov 3, a sale ending Friday, how did the campaign do, my campaign is doing nothing.
 
 ## Done when
 
@@ -25,6 +25,7 @@ The plan got a yes and the campaign is filled one way. At the end: a verdict, on
 - **A page to read:** a `url` in `context_sources`, then `analyze-content-campaign-source` for each; only read ones reach the writer.
 - **Every setting:** [settings.md](campaign-settings.md) and the pages it links.
 - **Video, blog, email, team version, Library:** [formats-and-team.md](campaign-formats-and-team.md). Say video costs more first.
+- **Posting without a yes:** [no-approval](routine-no-approval.md).
 - **Pause, resume, finish (`complete`), retire (`archive`):** ask once; the last two are final.
 - **Verdict** after the end date: [verdict.md](campaign-verdict.md). **Nothing happened:** [why-nothing.md](campaign-why-nothing.md); usually never started ([avoid](campaign-why-nothing-avoid.md)) or waiting for your yes.
 

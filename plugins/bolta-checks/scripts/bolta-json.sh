@@ -357,8 +357,12 @@ function save_verdict(ti,   i, k, has_post, unsched, settings) {
 # brief alone (an allow-list); anything else, including dates, posts to attach
 # and keys this script does not know, is "targets": who the campaign posts
 # from, what Bolta reads for it, or when it runs, which a running campaign
-# writes its next weeks from.
+# writes its next weeks from; policy for a change that may loosen approval.
 function campaign_targets(ti,   i, k) {
+  # Whether its posts may go out without a yes: asked even on a campaign made
+  # here. Ask me first (review_every_artifact) only tightens, so it is a target.
+  if (jhas(ti, "autonomy_override")) return "policy"
+  if (jhas(ti, "approval_policy") && !(jtype(ti, "approval_policy") == "s" && jstr(ti, "approval_policy") == "review_every_artifact")) return "policy"
   for (i = 1; i <= JC[ti]; i++) {
     k = JK[ti SUBSEP i]
     if (k !~ /^(workspace_id|campaign_id|name|strategy_key|theme|audience|cta_text|cta_url|content_mix)$/) return "targets"
