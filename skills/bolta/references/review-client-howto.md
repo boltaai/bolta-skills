@@ -15,9 +15,9 @@ Advice from how Bolta behaves; the user decides.
 
 ## From here, step by step
 
-1. Look once. Teammates' names to ids: `list-workspace-members` (it never lists client reviewers: ask who the client is). Not on this app: use the names.
+1. Look once. Names to ids: `list-workspace-members` (client reviewers show as role reviewer). Not on this app: use the names.
 2. Write the drafts ([post](post.md)) and show them in full.
-3. Send them: "Send these to the client from Approvals in Bolta: bolta.ai/dashboard/approvals. Pick the client, mark who must sign off." A straight-to-client routine or a Library post marked "send to the client" are the two ways from here ([client approval](review-client-approval.md)), each only on a yes naming the client.
+3. Send them on a yes naming the client: [send to a person](review-client-send.md). Marking who must sign off happens in Approvals in Bolta. A straight-to-client routine or a Library post marked "send to the client" also reach them ([client approval](review-client-approval.md)).
 4. Follow up with `get-post` per post (`client_signoff`); review list rows don't show it.
 5. After the client's yes the post is scheduled; read the times back with `list-workspace-posts` and their `account_ids`. If the sender's own setting approves without scheduling, a hand-made post with no time still needs one.
 
@@ -36,4 +36,4 @@ Later drafts from the same Bolta routine or Library fill join its open request w
 
 - Follow the house rules in the Bolta skill.
 - Never move a time, edit or approve a post the client hasn't answered without saying it voids the request.
-- Never claim a send, reminder or withdrawal was done from here.
+- Never claim a send was done unless `submit-for-review` with `reviewer_ids` said so; reminders and withdrawals happen in Bolta.

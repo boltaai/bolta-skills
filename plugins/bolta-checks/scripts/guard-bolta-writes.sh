@@ -258,8 +258,9 @@ case "$tool" in
   reject-recurring-review)
     ask "This can't be undone ($conn): a no on this repeating post is final. OK only if you said no to it." ;;
   submit-for-review)
-    # The team list passes. Sending to named people emails someone outside
-    # this chat, so it asks every time, in every mode, never on a window.
+    # The team list passes (keys within workspace_id, post_ids, note). Sending
+    # to named people emails someone outside this chat, so it asks every
+    # time, in every mode, never on a window. Any other key asks too.
     if [ "$reviewers" = 0 ]; then exit 0; fi
     ask "Check before it is sent ($conn): the people named get these posts by email, with reminders. OK only if you saw the posts and who gets them." ;;
   set-brand-approval)

@@ -48,7 +48,7 @@ import sys
 
 REPO = pathlib.Path(__file__).resolve().parent.parent
 OUT = REPO / "tools" / "fixtures" / "coverage_keys.json"
-DEFAULT_SERVER = pathlib.Path.home() / "Projects" / "GitHub" / "BOLT-SERVER" / "SERVER-release2"
+DEFAULT_SERVER = pathlib.Path.home() / "Projects" / "GitHub" / "BOLT-SERVER" / "SERVER"
 
 # Tool -> id prefix. Tools sharing a prefix share keys (create and update take the same fields).
 TOOL_PREFIX = {

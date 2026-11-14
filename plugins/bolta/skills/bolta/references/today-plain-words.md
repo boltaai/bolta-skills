@@ -33,6 +33,7 @@ Use these in everything the user reads. Left of the colon: Bolta's data. Right: 
 - Safe Mode: review mode ("Safe Mode" in settings, said once).
 - AI credits: uses credits.
 - hunter, outreach, engagement opportunity: reply drafts, conversations to join.
+- sent_to, waiting_on_client: "sent to Sam for approval", "waiting on Sam". already_in_review: "already waiting on someone".
 - stale_review: "This post changed since you looked. Here's the new version. Still yes?"
 - denied_by role / workspace_plan / key_scope / override: your role can't / your plan doesn't include it / this connection lacks that access / an admin turned it off for you.
 

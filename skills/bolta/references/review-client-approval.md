@@ -12,7 +12,7 @@ Agencies and teams often need a client's yes before a post goes out. Three thing
 
 - **A Bolta routine set to send its drafts straight to the client** (`update-routine`, `output_config.review` with `to_client`): each run's drafts skip the team and go to the client ([routine-outputs.md](routine-outputs.md)).
 - **A Library post made with "send to the client" ticked**: `approve-many-posts` sends it to the client instead of putting it live (its item: `scheduled` false, status not Approved).
-- **A hand-picked send to named people**: `submit-for-review` with `reviewer_ids` ([send to a person](review-client-send.md)). Without `reviewer_ids` it is the team's list. A resend, a withdrawal and answering client comments happen in Approvals in Bolta.
+- **A hand-picked send to named people**: `submit-for-review` with `reviewer_ids` ([send to a person](review-client-send.md)). Without it, the team's list. Resends, withdrawals and replies to client comments happen in Approvals in Bolta.
 
 ## The steps
 

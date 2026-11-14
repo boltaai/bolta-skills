@@ -38,7 +38,7 @@ Read when a row is a Library post, a post came back for changes, an approval is 
 
 ## Reviewers
 
-- Picking named reviewers, or reassigning them, happens in Bolta's "Send for review" picker. `submit-for-review` can't pick one.
+- Sending posts to named people: `submit-for-review` with `reviewer_ids` ([send to a person](review-client-send.md)). Reassigning them or marking who must sign off happens in Bolta.
 - Default reviewers are set in Settings > Rules > Approvals. The `list-workspaces` row's `default_reviewer_ids` are ids only: never show them.
 - Waiting on the user: `list-inbox-items(source="review_status", reviewer_id="me")`.
 

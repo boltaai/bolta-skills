@@ -28,12 +28,12 @@
       "arguments": {
         "workspace_id": "<Acme's workspace id>"
       },
-      "why": "Who is on the team. Client reviewers are never listed, so the user is asked who at Acme signs off. Missing on this app: ask by name."
+      "why": "Who is on the brand. Acme's client reviewer shows as role reviewer, so the drafts can go to them once they are invited. Missing on this app: ask by name."
     }
   ],
-  "say": "Here's how I'd set it up for Acme. Every post must have their yes: that's the \"Client sign-off required\" switch in Acme's settings, Approvals section. Only your organization owner can turn it on, and it pulls any scheduled post without a client yes back to waiting, so turn it on before scheduling. Invite Acme's approver as a client reviewer in People & access (no seat). Mark someone required only if their own yes is a must. Then send these 4 drafts from Approvals: bolta.ai/dashboard/approvals. They get reminders on days 2 and 5. Don't move a time after sending: the client saw it, and a new one means sending again. I'll check where each post stands whenever you ask.",
+  "say": "Here's how I'd set it up for Acme. Every post must have their yes: that's the \"Client sign-off required\" switch in Acme's settings, Approvals section. Only your organization owner can turn it on, and it pulls any scheduled post without a client yes back to waiting, so turn it on before scheduling. Invite Acme's approver as a client reviewer in People & access (no seat). Mark someone required only if their own yes is a must. Once they're invited, I can send these 4 drafts to them on your yes; they get an email and reminders on days 2 and 5. Don't move a time after sending: the client saw it, and a new one means sending again. I'll check where each post stands whenever you ask.",
   "never": [
-    "Saying the drafts were sent to the client: a hand-picked request is sent in Bolta, not from here.",
+    "Saying the drafts were sent to the client before a send to them succeeded.",
     "Approving the drafts for the team to save the client a step.",
     "Telling a creator they can approve any post for the team: a creator approves only Bolta's drafts and posts naming them reviewer, and a refusal names the role.",
     "Moving a post's time while the client hasn't answered without saying it voids the request."
