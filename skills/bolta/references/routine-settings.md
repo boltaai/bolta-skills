@@ -14,11 +14,11 @@ Top-level settings of `create-routine` and `update-routine`; `output_config`: [r
 ## When it runs
 
 - `trigger_type`: `schedule`, `manual` or `source_event`. Default `manual`, unless a create sends a `schedule`. Send `schedule` for anything that repeats: manual runs only on run now (seen: 5 of 6 manual routines never ran). `source_event` is for routines fed by an app.
-- `schedule` and `timezone` (both required; the zone has no fallback): [routine-schedules.md](routine-schedules.md). A cron Bolta can't read is refused at save. Weekly, one weekday morning, is the default shape (Bolta's planner: Monday 09:00; seen: 4 of 7 daily routines got paused).
+- For `schedule`, both `schedule` and `timezone` are required; the zone has no fallback: [routine-schedules.md](routine-schedules.md). Honor the user's cadence; unknown day, time or network is a question, not a web default. A cron Bolta can't read is refused at save.
 
 ## Where it posts
 
-- `source_bindings` (up to 25, replaced whole on update): `[{"provider":"social_account","ref":"<id from list-accounts>"}]`, one per network. With none, Bolta may post from any connected account. An account on a network the routine doesn't write for is refused. Apps (GitHub, a blog, Square, HubSpot) are bound by Bolta's planner once connected; a Drive file only by picking it on bolta.ai/dashboard/routines.
+- `source_bindings` (up to 25, replaced whole on update): `[{"provider":"social_account","ref":"<id from list-accounts>"}]`. Bind selected usable accounts; never silently target others. With no accounts, compatible review-only drafts may omit these and use requested `output_config.platforms`. Source, published-history and company-page requirements remain. Apps belong to this brand; Drive uses a selected file id read through its grant, not a connection id.
 
 ## Who decides
 
@@ -26,7 +26,7 @@ Top-level settings of `create-routine` and `update-routine`; `output_config`: [r
   - `auto` only on their words, and only on `weekly_social_posts`, `founder_story_series`, `customer_win_social_proof`, `linkedin_thought_leadership` and `square_service_spotlight`; anywhere else it is refused at save, and one saved earlier fails every run (`unsupported_execution_mode`): switch it to ask me first.
   - Also refused while the brand's `safe_mode` is on or its `autonomy_mode` (`list-workspaces`) is manual or assisted. Client sign-off still reviews everything. `auto` turns off sending straight to the client. The brand is the ceiling: [no-approval](routine-no-approval.md).
 - `default_reviewer_ids` (up to 20): teammates who review its drafts, ids from `list-workspace-members`; client reviewers are refused. Left out: the brand's default reviewer. On update it replaces the list; `[]` restores the default.
-- `destination_config`: `{"voice_profile_id":"<id from get-voice-context all_profiles>"}`, a voice of this brand; left out, the brand's default voice. Accepted by post routines on Bolta's main writer (weekly posts, founder stories, customer wins, LinkedIn positions, Square), research series and weekly articles; refused on best-posts, thread, reply and report routines and on those fed by GitHub, a blog, HubSpot, Drive or a meeting. A person's voice for first-person and story routines; else the brand voice.
+- `destination_config`: `{"voice_profile_id":"<id from get-voice-context all_profiles>"}`, an optional voice of this brand; left out, available default context applies. Compatible drafts need no saved voice or brand record. Accepted by Bolta's main writer, research series and weekly articles; other kinds may refuse it. First-person founder stories still need real owner-supplied events and permission to retell them; a voice is not factual evidence.
 
 ## Settings that do nothing
 
@@ -34,5 +34,5 @@ Top-level settings of `create-routine` and `update-routine`; `output_config`: [r
 
 ## Always
 
-- Send `trigger_type: "schedule"`, `schedule`, the brand's `timezone`, bound accounts and `approval_policy` explicitly on every create.
+- Honor the agreed trigger, network and review policy; only scheduled work needs a schedule and timezone. Keep selected usable accounts scoped to this brand.
 - Put every rule in `instructions`, written as the user said it.

@@ -5,7 +5,7 @@
 ## Always sent
 
 - `artifact_type`: `post`, `article` (weekly article), `reply` (reply routines) or `report` (reports). Required whenever `output_config` is sent, or the save is refused.
-- `count`: posts per run. One post everywhere (`"cross-platform"`): each goes to every bound account. One per network (`"platform-specific"`): `count` ideas, each written once per account ([weekly-networks](routine-weekly-networks.md)). Send it every time. Sent without it, Bolta uses its writer's default, not the routine's: founder stories, customer wins and LinkedIn positions jump from 2 to 4 (Bolta). Most per run:
+- `count`: pieces per run. One post everywhere (`"cross-platform"`): each goes to every selected account. One per network (`"platform-specific"`): `count` ideas, each written once per account ([weekly-networks](routine-weekly-networks.md)). Send the saved or template count explicitly unless the owner chose another. Do not pad proof posts beyond distinct supplied results; report a shortfall privately. Most per run:
 
 | Makes | Most |
 |-|-|
@@ -22,7 +22,7 @@ These are limits per run, not per week: a daily routine at 10 is 70 drafts a wee
 
 ## Only when it fits
 
-- `platforms`: only when the user limits networks ("LinkedIn only"). Left out, Bolta takes them from the bound accounts, so an account added later is used. Values: `x`, `threads`, `linkedin`, `facebook`, `instagram`, `reddit`, `bluesky`, `mastodon`, `tiktok`, `youtube`, `pinterest`, `wordpress`.
+- `platforms`: send the requested network for accountless drafts; ask if unknown. With bound accounts, use their networks unless the owner narrowed them. Never invent a network or copy a web default. Values: `x`, `threads`, `linkedin`, `facebook`, `instagram`, `reddit`, `bluesky`, `mastodon`, `tiktok`, `youtube`, `pinterest`, `wordpress`.
 - `source_urls`: exactly one public page Bolta reads at every run ("from my blog page", a changelog, a newsletter archive). On weekly posts, research series and weekly articles. A page that changed nothing since the last run skips that scheduled run; one that can't be read refuses the run. A page that never changes skips every week: use it only for pages that change.
 - `topics` (reply routines, required, up to 10 phrases of 120 characters): what people say when they need the business, in the user's words. `communities` (up to 10 subreddits, Reddit only). A reply routine made on Bolta's web page has no topics, so every run fails: read `get-routine` `output_config.topics` and, with a yes, add them with `update-routine`.
 - `cta`: `{"text":"Book a free consult","url":"https://..."}`, text up to 200 characters, written exactly as it should read; a link only the user gave. On weekly posts and its siblings, best posts again and the weekly article. One call to action, not every post a pitch (advice).

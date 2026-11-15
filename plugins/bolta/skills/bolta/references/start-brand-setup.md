@@ -1,16 +1,16 @@
 # Start: setting up the brand and voice
 
-How [start](start.md) and [voice](voice.md) set up a brand: the setup bolta.ai runs on a website. It saves about your business, makes and links the voice, its language, accounts, starter rules per network and the site's product.
+Optional brand and voice setup from [start](start.md) and [voice](voice.md). It saves about your business, makes and links the voice, its language, accounts, starter rules per network and the site's product. Compatible draft routines need not wait for it.
 
 ## What you already know
 
-No account connected: the connect link opens this reply, with why ([start](start.md)). Start from this conversation and what you remember of them: business, site, audience, products, goals, how they write, likes and dislikes. Show it in a few lines; ask only the gaps, in one question:
+For requested setup, use their supplied business, site, audience, products, goals and writing preferences. Show it; ask only gaps. Publishing needs an account; this setup and compatible review-only routines do not:
 
 > From our chats: you run Harbor Physio in Leeds, for runners and desk workers, you sell sports massage and rehab plans, and you write short and plain. Right? What's your website? If you don't have one, I'll build it from what you've told me.
 
 - Only what they said or shared; never stretch a finding. A correction replaces the finding.
 - The site is in what you know: use it, show it as a finding, never ask again.
-- No site known: ask once, as above. Never skip to the no-site setup without asking.
+- No site known: ask once if they want setup; use their words without a site if they prefer. Do not detour a compatible routine request into brand setup.
 
 ## With a website
 

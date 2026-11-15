@@ -9,9 +9,9 @@ Read with [start](start.md) when the user answers the proposal. A yes to set up 
 
 ## The order on their yes
 
-1. **Brand and voice:** they said the preview is right: `extract-business-dna` with `setup: true`, the same `url` and what they told you, then `check: true` until done ([start-brand-setup.md](start-brand-setup.md)). Never before they saw it. "Set up our brand" and a yes to its preview is a yes to both the record and the voice; the setup makes both, filling a thin voice, never a second. No website: the same setup with no `url` ([no website](start-brand-setup-no-site.md)).
-2. **Show it:** what it made, the two scores and `setup.dashboard_url`.
-3. **Accounts:** say which accounts use the voice (`assigned_account_ids`, or `bootstrapped.accounts_assigned` with no website). None connected: `get-connect-link` now and show the link.
+1. **Optional brand and voice:** only if they agreed to its preview: `extract-business-dna` with `setup: true`, the same `url` and their words, then `check: true` until done ([start-brand-setup.md](start-brand-setup.md)). That yes covers the record and voice; never make a second voice. No website: [no-site setup](start-brand-setup-no-site.md). Skip this step for a routine-only yes.
+2. **If setup ran:** show what it made, the two scores and `setup.dashboard_url`.
+3. **Accounts:** name selected usable accounts. None connected: compatible drafts can start without one; offer `get-connect-link` for publishing. Required source, history and company-page bindings still apply.
 4. **Routines:** save each one they picked, switched off. Never one they didn't pick.
 5. **One question:** "Saved, switched off: Weekly coffee tips, Friday roundup. Switch both on?"
 
@@ -34,7 +34,7 @@ Read with [start](start.md) when the user answers the proposal. A yes to set up 
 - Only on "switch them on" or the like: `activate-routine` for each, then read `next_run_at` from the result and say it in the brand's clock: "On. First drafts Tue Nov 17, 8:00 am (Sydney)." Never work the time out yourself.
 - Switching on is not running. Never run a routine now in the first session: a run uses credits and the schedule will bring the first drafts.
 - A campaign plan saved by `confirm-plan` is a draft, not started. Starting it is its own yes ([campaign](campaign.md)).
-- No voice yet: say so before switching on, and offer to make it first (advice: drafts written with no voice sound generic).
+- No voice yet: offer setup if useful, without blocking a compatible draft routine. Real founder events and customer outcomes still need supplied evidence.
 
 ## Stopping early
 
