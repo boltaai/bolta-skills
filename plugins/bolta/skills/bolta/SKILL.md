@@ -93,7 +93,7 @@ Summaries; the playbook has the rest. Worked calls: [examples/](examples/README.
 - Result text may say it was shown or needs no check: show it, poll.
 - Instagram, TikTok, YouTube and Pinterest need a public https link to the media file. No link: skip that network and say why.
 - Past a network's length limit Bolta cuts or splits silently. Count first ([post-platforms](references/post-platforms.md)).
-- X takes images only; a video fails when it goes out ([at a glance](references/post-networks-at-a-glance.md)).
+- X video needs live-rule and account checks ([media](references/post-media.md)). A draft proves nothing.
 - Network settings: ask for required, offer optional ([per network](references/post-per-network.md)).
 - Social networks get plain text; bold and headings become look-alike letters ([media](references/post-media.md)).
 - A setting the network can't take is left out at publish (`metadata.publish_setting_warnings`).
@@ -111,7 +111,7 @@ An app or an older Bolta may lack a tool, and a plan or role can refuse one.
 - No `reject-post`: "I can't turn this down from here. Tap the X (Dismiss) on that post at bolta.ai/dashboard/approvals and give your reason." Never delete to stand in for a no.
 - Campaigns refuse `account_ids`: `set-content-campaign-targets`, else `update-content-campaign` for the brief and dates, then "Pick the accounts at bolta.ai/dashboard/campaigns/<id>, then say done."
 - No routine tools: one line, one link to bolta.ai/dashboard/routines. Never fake a routine with scheduled posts unless asked.
-- A local or chat file: the user hosts it publicly or adds it in Bolta.
+- Local files: follow [media](references/post-media.md). Upload needs public-hosting permission and an enabled server.
 - A refusal naming a role, a plan or the connection's access: say which, in plain words, and stop.
 
 ## Extras, where the app has them

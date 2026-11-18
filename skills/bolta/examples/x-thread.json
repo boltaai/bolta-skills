@@ -77,7 +77,7 @@
   "never": [
     "save-post parts for this thread: its media goes on part 1 only, not on the part the user named.",
     "A poll in the thread: Bolta refuses it.",
-    "A video on X: it takes images only.",
+    "Video without checking live rules and account support; mixed image/video attachments.",
     "Saying the thread is fully out without checking: a part that fails stops it, and the parts already out stay up."
   ]
 }

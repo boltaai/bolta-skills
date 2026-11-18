@@ -33,7 +33,7 @@ Set X on the saving call: `platform_specific` `{"x": {...}}` on `save-post` work
 
 ## Not possible here
 
-Video or GIF (images only; a video fails when it goes out), media with no text (refused at scheduling), Communities, editing a later part of a thread, a repost without comment.
+GIF, video on deployments without support ([media](post-media.md)), media with no text (refused at scheduling), Communities, editing a later part of a thread, a repost without comment.
 
 ## Always
 

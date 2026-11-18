@@ -17,7 +17,7 @@ Read with [fix-symptoms.md](fix-symptoms.md). One cause, one fix.
 | Scheduled posts after a reconnect | Posts still Scheduled for that network go out at their time on their own. | Don't recreate them or ask for a new yes. If the brand has two handles on that network, confirm the destination with `get-post`. |
 | Approved, no time, nothing connected | A post whose `awaiting_connection` is set waits for its account. Once it connects, it moves to Scheduled at its chosen time if still ahead, else the next free slot. | Give `get-connect-link`. Missing media, or a missing client yes, keeps it waiting. |
 | An account shows `token_status` `ghost` | Added without connecting: Bolta writes for it but can't post. | Never offer a reconnect. The person connects it for the first time, then finishes in Bolta: [bolta.ai/dashboard/knowledge-base?tab=accounts](https://bolta.ai/dashboard/knowledge-base?tab=accounts). |
-| Failed on X with a video | X takes images only. | Fix the media in Bolta, then Retry. Back on the review list instead? Fix it, then a new yes ([review](review.md)). |
+| Failed on X with video | Check live support and account access ([media](post-media.md)). | Inspect receipts and X before retrying uncertainty. Fix confirmed failures; review again if required. |
 | Failed on Instagram, text only | Instagram needs an image or video. | Retry refuses it, even after media is added. On the review list: add media, then a new yes. Else a new post with media (`save-post`, no `post_id`). |
 | Failed on TikTok or YouTube | Both need a video. | Add a video, then Retry or a new yes. |
 | Back on the review list after a yes | Review mode is on and the send failed; Bolta asks again. | Say the reason, fix it, then a new yes. |

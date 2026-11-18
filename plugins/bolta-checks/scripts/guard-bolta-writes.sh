@@ -243,6 +243,8 @@ if [ "$ok" != 1 ] || [ -z "$tool" ]; then
 fi
 
 case "$tool" in
+  upload-library-image)
+    ask "Check public hosting ($conn): this image becomes publicly retrievable and may be analyzed by a vision provider. OK only if you approved this specific image. This does not publish a social post." ;;
   publish-post)
     ask "Check before it goes out ($conn): this post goes public right now and can't be undone. OK only if the text and account match what you agreed." ;;
   send-outreach-reply|publish-engagement-reply|reply-to-social-content)
