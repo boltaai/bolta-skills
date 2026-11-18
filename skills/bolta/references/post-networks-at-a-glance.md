@@ -7,7 +7,7 @@ One row per network. The live limits come first; trust them over this page. Wher
 | Network | Length, and past it | Media needed | Extra parts become | Worth asking about | Not possible here |
 |-|-|-|-|-|-|
 | LinkedIn | 3,000; longer is refused at approval | None | Text dropped | Personal profile or company page (`list-accounts`), `visibility` | Polls, documents; comments, resharing (not sent) |
-| X | 280 (more on X Premium); longer is refused at approval | Images only; a video fails at publish | Replies, in a thread | Poll, quote, `reply_settings`, subscribers only | A poll inside a thread; video |
+| X | 280 (more on X Premium); longer is refused at approval | Live rules: one MP4 if supported; no image mix | Replies, in a thread | Poll, quote, `reply_settings`, subscribers only | A poll inside a thread; unsupported video |
 | Threads | 500; longer splits into a reply chain | Optional | Replies to the first post, not a chain; a later part over 500 is cut | Topic, ghost post, spoiler, who can reply (`reply_control`) | Quoting a post |
 | Bluesky | 300; cut with "..." | Optional | Replies, in a thread | `languages`, alt text | Reply settings (not sent) |
 | Mastodon | 500, or the server's own; cut | Optional | Text dropped | `visibility`, content warning, poll, `language` | A poll with media |
@@ -28,7 +28,7 @@ One row per network. The live limits come first; trust them over this page. Wher
 
 ## Always
 
-- Read the live limits once per brand before writing for a network ([platforms](post-platforms.md), section 1), and reuse them.
+- Read live limits per brand before writing for a network ([platforms](post-platforms.md), section 1), and reuse them.
 - Never offer a setting marked not sent; Bolta refuses it. Say plainly it isn't possible here.
 - Never invent a Page, board, subreddit, channel or place id.
 - Say every setting you changed, with the post it's on.

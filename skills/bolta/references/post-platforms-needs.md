@@ -5,7 +5,7 @@ Part of [networks: limits, media and settings](post-platforms.md). Live rules fr
 These are accepted, then fail when the post goes out, with only a notification in Bolta:
 
 - TikTok, YouTube: a video. Instagram: an image or video (2-10 make a carousel; over 10 fails); a bulk item aimed at Instagram without media lands in `rejected`. Pinterest: an image or video, and a board ([Pinterest](post-settings-pinterest.md)).
-- X: needs text (an image alone isn't supported) and takes images only; a video fails.
+- X: needs text. Check live rules for video support; see [media](post-media.md).
 
 Refused at schedule or publish: Facebook with two videos or a video plus images; Reddit without a subreddit and title (approval refuses it too), or with a video; X media with no text.
 

@@ -6,7 +6,7 @@ Bolta facts for images, video and how text is shown. Which links work, file size
 
 - On `save-post`, a link: `media_urls: [{"url": "https://...", "alt_text": "..."}]`. A file uploaded in the chat: `media`, the host's file object (`download_url`, `file_id`); never a link there. A new multi-part post (`parts`) gets it on the first part only; a later part goes through a batch item, key `media_url` ([post parts](post-parts.md)). On an edit (`post_id`) both only add.
 - `url` works although the listed schema names a host file: `{download_url, file_id, mime_type, file_name}` (the last two optional). If a call is refused for lacking them, send the same link as `download_url` with `file_id: "url"`, and `mime_type` (`image/jpeg`) and `file_name` when known.
-- Media is attached per post, from a public link the user gave, at most 25 items per call; Bolta tries to copy each file into its own storage. The brand's Media Library (bolta.ai/dashboard/media) is browsed and filled in Bolta only.
+- Media is attached per post, from a public link the user gave, at most 25 items per call; Bolta tries to copy each file into its own storage. For the brand's Media Library, read [Library images](post-media-library.md); browsing and byte upload depend on the connected server.
 - No link yet? Say: "Instagram needs an image or video. Send me a public link to it, or add it to the post in Bolta."
 - Need an image made? Bolta's AI Studio (bolta.ai/dashboard/ai-studio) makes one; the user then attaches it to the post in Bolta. Bolta's post-writing tools make no images. A one-off video is made there too; for a run of videos, a campaign with `feed_video` (16:9) or `short_video` (9:16) ([campaign](campaign.md)).
 - Images and video made on a schedule come from Bolta routines and campaigns ([routine](routine.md), [campaign](campaign.md)).
@@ -20,10 +20,10 @@ Bolta facts for images, video and how text is shown. Which links work, file size
 
 ## What goes wrong at posting time
 
-- X takes images only; a video fails when it posts.
+- X: check `get-posting-rules` for the deployed publisher. Older deployments reject video. Where video is supported: one MP4, no mixed images/video, at most 512 MiB (Bolta limit, not an X entitlement). X still validates duration, codec and account/API access. Upload success does not prove publication; inspect the returned post status and receipts.
 - Instagram pads an image of the wrong shape with white, never crops it.
 - A Facebook comment carries one image.
-- Bolta doesn't check video length or file size, so a network may refuse them when it posts.
+- Media limits differ by platform; a network may still refuse a file at posting time. Never blindly retry an uncertain publish: inspect post receipts and the destination first. Multi-account or thread publishing can partly complete.
 
 ## Formatting and links
 

@@ -84,7 +84,8 @@ DEFAULT_FIXTURE = REPO / "tools" / "fixtures" / "claude_tools_list.json"
 #: Tools the skills and the guard use that production does not list yet. While the
 #: live list lacks one, its schema comes from DEFAULT_FIXTURE. Delete a name here
 #: once the live list has it (the checker says when).
-PENDING_TOOLS = ("approve-many-posts", "reject-post", "analyze-content-campaign-source",
+PENDING_TOOLS = ("list-library-media", "upload-library-image",
+                 "approve-many-posts", "reject-post", "analyze-content-campaign-source",
                  "plan-team-posts", "update-team-post-plan", "generate-team-post-drafts", "get-team-post-plan",
                  "list-workspace-members", "revise-plan", "confirm-plan",
                  "plan-routine", "plan-campaign", "recommend-routines",

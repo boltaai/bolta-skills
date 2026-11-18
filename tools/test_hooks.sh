@@ -249,7 +249,7 @@ input_for() {
   esac
 }
 
-ALWAYS="publish-post send-outreach-reply publish-engagement-reply reply-to-social-content react-to-social-content update-post-platform-details update-social-bucket restore-deleted update-voice-profile update-business-dna extract-business-dna run-routine-now voice-generate archive-routine reject-recurring-review"
+ALWAYS="upload-library-image publish-post send-outreach-reply publish-engagement-reply reply-to-social-content react-to-social-content update-post-platform-details update-social-bucket restore-deleted update-voice-profile update-business-dna extract-business-dna run-routine-now voice-generate archive-routine reject-recurring-review"
 BATCH="approve-post approve-many-posts approve-recurring-review schedule-post delete-post reject-post"
 
 for lvl in standard careful; do
@@ -1285,7 +1285,7 @@ assert "wiring: PostToolUseFailure runs the auth notice" sh -c 'case "$1" in *sc
 assert "wiring: UserPromptSubmit runs the new-message reset" sh -c 'case "$1" in *scripts/bolta-new-turn.sh*) exit 0;; esac; exit 1' x "$(jfield hooks.UserPromptSubmit.0.hooks.0.command < "$hj")"
 assert "wiring: SessionStart runs the house rules" sh -c 'case "$1" in *scripts/bolta-house-rules.sh*) exit 0;; esac; exit 1' x "$(jfield hooks.SessionStart.0.hooks.0.command < "$hj")"
 assert "wiring: UserPromptSubmit does not block on failure" sh -c '[ "$1" != block ]' x "$(jfield hooks.UserPromptSubmit.0.hooks.0.onFailure < "$hj" 2>/dev/null)"
-GATED="publish-post schedule-post approve-post approve-many-posts reject-post approve-recurring-review reject-recurring-review send-outreach-reply publish-engagement-reply reply-to-social-content react-to-social-content activate-routine resume-routine run-routine-now delete-post archive-routine set-content-campaign-status set-content-campaign-targets update-post update-post-platform-details update-social-bucket restore-deleted update-business-dna extract-business-dna update-voice-profile create-routine update-routine create-post bulk-create-posts create-wordpress-blog-post voice-generate confirm-plan decide-routine-recommendation decide-bolta-suggestion save-post decide-suggestion update-content-campaign set-brand-approval submit-for-review"
+GATED="upload-library-image publish-post schedule-post approve-post approve-many-posts reject-post approve-recurring-review reject-recurring-review send-outreach-reply publish-engagement-reply reply-to-social-content react-to-social-content activate-routine resume-routine run-routine-now delete-post archive-routine set-content-campaign-status set-content-campaign-targets update-post update-post-platform-details update-social-bucket restore-deleted update-business-dna extract-business-dna update-voice-profile create-routine update-routine create-post bulk-create-posts create-wordpress-blog-post voice-generate confirm-plan decide-routine-recommendation decide-bolta-suggestion save-post decide-suggestion update-content-campaign set-brand-approval submit-for-review"
 ngated=$(printf '%s\n' $GATED | wc -l | tr -d ' ')
 miss=""
 for pfx in "$P" "$U" "$C" "$CB" "$A" mcp__plugin_bolta_bolta-acme__ mcp__social__ mcp__my-posts__ mcp__claude_ai_Social_posts__ mcp__0a1b2c3d-4e5f-4a6b-8c7d-9e0f1a2b3c4d__; do
@@ -1321,7 +1321,7 @@ for pfx in "$P" "$U" "$C" mcp__social__ mcp__claude_ai_Social_posts__; do
 done
 assert "wiring: the reconnect notice covers Bolta's tools under any server name${miss:+ (missing:$miss)}" test -z "$miss"
 # The server's tool list (tools/fixtures/claude_tools_list.json, the Release 2
-# golden: 67 listed tools): every tool in it is gated or deliberately not, and the reconnect notice
+# golden: 69 listed tools): every tool in it is gated or deliberately not, and the reconnect notice
 # reaches every one, so a new or renamed tool on the server fails here until
 # someone decides about it.
 fixture="$here/fixtures/claude_tools_list.json"
@@ -1330,10 +1330,10 @@ i=0
 while ft=$(jfield "result.tools.$i.name" < "$fixture" 2>/dev/null) && [ -n "$ft" ]; do
   ftools="$ftools $ft"; i=$((i + 1))
 done
-assert "wiring: the server tool list was read ($i tools, 67 expected)" test "$i" -eq 67
+assert "wiring: the server tool list was read ($i tools, 69 expected)" test "$i" -eq 69
 # Not gated, on purpose: reads, drafts, planning without saving,
 # saving a team version's plan (generate-team-post-drafts writes drafts only), campaign briefs.
-UNGATED="add-posts-to-content-campaign analyze-content-campaign-source create-content-campaign create-engagement-opportunity create-social-bucket create-voice-profile cross-platform-analytics draft-engagement-reply draft-inbound-reply get-account-analytics get-business-dna get-team-post-plan get-connect-link get-content-campaign get-engagement-conversation get-engagement-status get-my-capabilities get-post get-post-platform-details get-posting-rules get-routine get-social-content get-voice-context get-voice-profile get-workspace list-account-insights list-suggestions plan list-accounts list-bolta-suggestions list-buckets list-business-dna list-content-campaign-posts list-content-campaigns list-engagement-capabilities list-engagements list-inbox-items list-recently-deleted list-recurring-reviews list-reviews list-routine-recommendations list-routine-runs list-routine-templates list-routines list-scheduled-posts list-voice-profiles list-workspace-members list-workspace-posts list-workspaces pause-routine plan-campaign plan-routine plan-team-posts recommend-routines revise-plan search-engagement-opportunities generate-team-post-drafts update-team-post-plan update-outreach-reply"
+UNGATED="list-library-media add-posts-to-content-campaign analyze-content-campaign-source create-content-campaign create-engagement-opportunity create-social-bucket create-voice-profile cross-platform-analytics draft-engagement-reply draft-inbound-reply get-account-analytics get-business-dna get-team-post-plan get-connect-link get-content-campaign get-engagement-conversation get-engagement-status get-my-capabilities get-post get-post-platform-details get-posting-rules get-routine get-social-content get-voice-context get-voice-profile get-workspace list-account-insights list-suggestions plan list-accounts list-bolta-suggestions list-buckets list-business-dna list-content-campaign-posts list-content-campaigns list-engagement-capabilities list-engagements list-inbox-items list-recently-deleted list-recurring-reviews list-reviews list-routine-recommendations list-routine-runs list-routine-templates list-routines list-scheduled-posts list-voice-profiles list-workspace-members list-workspace-posts list-workspaces pause-routine plan-campaign plan-routine plan-team-posts recommend-routines revise-plan search-engagement-opportunities generate-team-post-drafts update-team-post-plan update-outreach-reply"
 # Release 1 names the Release 2 server no longer lists but still answers by name. The
 # ones that write stay gated (a model can still call them); a name listed here is allowed
 # in GATED or UNGATED without being in the fixture.
