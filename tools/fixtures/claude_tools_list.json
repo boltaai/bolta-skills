@@ -4146,7 +4146,7 @@
    {
     "name": "upload-library-image",
     "title": "Upload Public Library Image",
-    "description": "Upload actual local image bytes to the selected workspace's PUBLIC Media Library. Requires explicit user permission to make this image publicly retrievable and allow_public=true. Never use for confidential material. Strict base64 PNG/JPEG/WebP only, maximum 5 MiB and 20 megapixels. No video, GIF, private upload, URL fetch, overwrite, post creation or publishing. Images are decoded/re-encoded and metadata stripped, then enter standard Library analysis (which may use a vision provider). Returns a media ID and public URL usable by save-post. Not idempotent: do not blindly retry a timeout; inspect Library first. Availability depends on server enablement.",
+    "description": "Upload actual local image bytes to the selected workspace's PUBLIC Media Library. Requires explicit user permission to make this image publicly retrievable and allow_public=true. Never use for confidential material. Strict base64 PNG/JPEG/WebP only, maximum 5 MiB and 20 megapixels. No video, GIF, private upload, URL fetch, overwrite, post creation or publishing. Images are decoded/re-encoded and metadata stripped, then enter standard Library analysis (which may use a vision provider). Returns a media ID and public URL usable by save-post. Requires a stable UUID idempotency_key per upload. Retry only with the same key and identical bytes/filename; completed retries return the same asset, uncertain attempts are not re-uploaded. Never use a new key to bypass an uncertain upload. Availability depends on server enablement.",
     "inputSchema": {
      "type": "object",
      "properties": {
@@ -4165,13 +4165,18 @@
       "allow_public": {
        "type": "boolean",
        "description": "Must be true only after the user authorizes public hosting of this specific image"
+      },
+      "idempotency_key": {
+       "type": "string",
+       "description": "UUID for this exact upload; reuse unchanged on retry, never generate a new key after a timeout"
       }
      },
      "required": [
       "workspace_id",
       "filename",
       "content_base64",
-      "allow_public"
+      "allow_public",
+      "idempotency_key"
      ],
      "additionalProperties": false
     },
