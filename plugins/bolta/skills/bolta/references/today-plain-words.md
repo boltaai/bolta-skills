@@ -39,7 +39,7 @@ Use these in everything the user reads. Left of the colon: Bolta's data. Right: 
 
 ## Never say
 
-MCP, tool, OAuth, connector, fingerprint, artifact, workflow definition, source binding, template key, capability keys, cursor, beat, producer, preflight, Hub, Hype-Man, Hunter, Engager, Essence Capture, HTTP codes, or "in Bolta" as a phrase the user must type. No ids, tool names or error codes.
+MCP, tool, OAuth, connector, fingerprint, artifact, workflow definition, source binding, template key, capability keys, cursor, beat, producer, preflight, Hub, Hype-Man, Hunter, Engager, Essence Capture, HTTP codes, or "in Bolta" as a phrase the user must type. No ids, tool names or error codes, unless the user is debugging ([talk](today-plain-words-talk.md)).
 
 ## How to talk
 

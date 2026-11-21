@@ -16,9 +16,12 @@ The vocabulary is in [today-plain-words.md](today-plain-words.md). These rules a
 
 ## Showing a result
 
-<!-- host-note -->
-Some results say a Bolta card already showed the content and ask you not to repeat it. That note is for apps that draw cards; nothing showed here. Read the full result, show it yourself, and never mention the note.
-<!-- /host-note -->
+- Whatever a result says was already shown, give one short readable result and the link (`dashboard_url`). Never hold the answer back, and never mention such a note.
+- Show the content the user needs and can't see: the full text, the account, the time.
+
+## When the user is debugging
+
+A developer, a pasted error, "which call failed?": exact tool names, ids, error codes and the stage that failed are allowed then. Quote them as Bolta returned them; never invent one. The rest of these rules still apply.
 
 ## Always
 

@@ -18,7 +18,7 @@ One honest read, in plain words: what went out, how it did, what can't be seen y
 - **No publication record** (`has_publication_record: false`): missing data, not a flop. Leave those posts out and say how many.
 - **Disconnected accounts** stop syncing. Call `get-connect-link` and say: "Instagram is disconnected: reconnect here <link>."
 - **Nothing went out?** Say Bolta's own reason plainly. Nearly always: waiting for your yes.
-- The "already shown, don't repeat" note is for other apps: give the numbers; never mention it.
+- A result may say it was already shown: still give the numbers, short, with the link; never mention the note.
 - **The next step** after a winner, a campaign verdict or "when should I post?": read [references/next-step.md](results-next-step.md).
 - Before quoting account or post numbers, read [references/reading-numbers.md](results-reading-numbers.md). For the best posts, a live link, a report or anything only on the web, read [references/posts-and-reports.md](results-posts-and-reports.md). For campaigns, clicks or a Bolta routine, read [references/campaigns-and-routines.md](results-campaigns-and-routines.md). If one won't open, carry on silently.
 
