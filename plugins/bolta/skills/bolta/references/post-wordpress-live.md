@@ -21,7 +21,7 @@ Three answers, each from its own confirmed field:
 - **Published:** only when `published` is true, or `get-post` says Published, with the link. `publication_state` `publishing_queued` (Queued, Processing), `scheduled`, `draft` or `awaiting_approval` (Pending Approval) is not published: say which.
 - **Date:** `publication_date_confirmed` true, with the date WordPress returned. False: say the site shows another date.
 - **Image:** `featured_media_confirmed` true, or that media item's `status` `confirmed_attached`. `uploaded_to_bolta` (kept in Bolta only) or `uploaded_to_wordpress` (on the site): not attached. `failed`: its `stage` and `reason`. Never say the theme shows it.
-- Publishing runs in the background: check one article with `get-post` and its `post_id`, never by listing posts.
+- Publishing runs in the background: check one article with `get-post` and its `post_id`, never by listing posts. Its date and image afterwards: `get-post` with `platform: "wordpress"`, `seo_metadata.publish_confirmation` (`featured_media_confirmed`, `publication_date.confirmed`, `warnings`); `featured_media_id` is set only once WordPress confirmed it.
 
 ## Fixing an article already live
 

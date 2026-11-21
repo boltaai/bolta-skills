@@ -35,7 +35,7 @@
   ],
   "say": "Saved to Acme as a WordPress draft: \"How to keep a sourdough starter alive\", in Baking, with your photo on top, at /sourdough-starter-guide. Nothing goes out yet; when it does, it's public on your site. Want to read it first, or schedule it?",
   "never": [
-    "Publishing or scheduling in the saving call.",
+    "Publishing or scheduling in the saving call without a yes that covers it.",
     "Promising the meta description shows in search results.",
     "A Markdown table in the article."
   ]
