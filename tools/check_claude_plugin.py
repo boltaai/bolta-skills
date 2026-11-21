@@ -104,7 +104,9 @@ PENDING_UPDATES = ("create-routine", "update-routine", "extract-business-dna", "
                    # list-workspace-members gains can_receive_approval_requests)
                    "submit-for-review", "list-workspace-members",
                    # publication_date and featured_image_required
-                   "create-wordpress-blog-post")
+                   "create-wordpress-blog-post",
+                   # title and content: edit a live article in place
+                   "update-wordpress-article")
 #: Claude Code sends "claude-code/<version> (<entrypoint>)" on its MCP requests,
 #: and the server matches "claude" in it. Without it the list lacks the tools made for Claude.
 CLAUDE_USER_AGENT = "claude-code/2.1.302 (cli; bolta-plugin-check)"

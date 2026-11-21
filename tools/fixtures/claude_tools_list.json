@@ -293,7 +293,7 @@
    {
     "name": "save-post",
     "title": "Save Post",
-    "description": "Write a new post or edit an existing one. NEVER public: the result is a Draft (or, for an edit, the post's current state that has not gone out). Without post_id it creates ONE draft; with post_id it edits that post in place (it keeps its id and history; omitted fields stay as they are). Scheduling and publishing are publish-post's job: save-post refuses scheduled_time, status and requested_action. Editing an Approved or Scheduled post sends it back to review, and the result says so (sent_back_for_review). A Published or publishing post cannot be edited. To take a Scheduled post off the schedule, send post_id with unschedule=true: it goes back to Draft with its content and settings, and the result gives was_scheduled_for (the time it no longer goes out at). To move it to another time, use publish-post with the new time. The result carries content_fingerprint, which approve-many-posts takes as expected_fingerprint. Several posts at once: bulk-create-posts. A WordPress article with its SEO settings: create-wordpress-blog-post. Never invent the topic or the destination: ask what the post is about and which accounts it goes to. Quality Blocked post: send the rewritten content with post_id and the check re-runs.",
+    "description": "Write a new post or edit an existing one. NEVER public: the result is a Draft (or, for an edit, the post's current state that has not gone out). Without post_id it creates ONE draft; with post_id it edits that post in place (it keeps its id and history; omitted fields stay as they are). Scheduling and publishing are publish-post's job: save-post refuses scheduled_time, status and requested_action. Editing an Approved or Scheduled post sends it back to review, and the result says so (sent_back_for_review). A Published or publishing post cannot be edited here (a published WordPress article: update-wordpress-article). To take a Scheduled post off the schedule, send post_id with unschedule=true: it goes back to Draft with its content and settings, and the result gives was_scheduled_for (the time it no longer goes out at). To move it to another time, use publish-post with the new time. The result carries content_fingerprint, which approve-many-posts takes as expected_fingerprint. Several posts at once: bulk-create-posts. A WordPress article with its SEO settings: create-wordpress-blog-post. Never invent the topic or the destination: ask what the post is about and which accounts it goes to. Quality Blocked post: send the rewritten content with post_id and the check re-runs.",
     "inputSchema": {
      "type": "object",
      "properties": {
@@ -751,8 +751,8 @@
    },
    {
     "name": "update-wordpress-article",
-    "title": "Repair Published WordPress Article",
-    "description": "Repair ONLY an already-published WordPress article's publication date and/or featured image. Never edits the body, title, excerpt, slug, categories or tags; to change words, use save-post and publish again. Passes the same gate as publish-post (owner or admin; Safe Mode refuses it; an AI connection may change only a post the own-connection rule lets it publish, otherwise approval_required) and needs the user's yes, like any change to a live article. Not a way around a refusal: a brand that requires client sign-off is refused, and a post that is not published is refused. The WordPress article is the one Bolta published for this post_id; you cannot name a WordPress post id. Each part is confirmed from WordPress's own readback: publication_date.confirmed and featured_image.status (confirmed_attached | uploaded_not_attached | failed | unchanged). A failed image upload leaves the existing featured image as it was. Safe to retry with the same input: the image is not uploaded twice.",
+    "title": "Edit Published WordPress Article",
+    "description": "Edit an already-published WordPress article IN PLACE: the same article, address and WordPress post, never a new one. Changes only what you pass: title (the headline; the slug and URL stay), content (the FULL new body as Markdown, e.g. to lengthen or rewrite it), publication_date and/or featured_image. Anything not passed stays as it is, including the date, featured image, excerpt, categories, tags and SEO settings. The title is the page's H1: an opening '# ' line in content is left out. The featured image is never put in the body; to keep an inline image, include it in content as ![alt](url). To lengthen or edit the body, read it first with get-post and send the whole new body. save-post cannot edit a published post; this tool is how a live article changes. Passes the same gate as publish-post (owner or admin; Safe Mode refuses it; an AI connection may change only a post the own-connection rule lets it publish, otherwise approval_required) and needs the user's yes for the exact change, like any change to a live article. Not a way around a refusal: a brand that requires client sign-off is refused, and a post that is not published is refused. The WordPress article is the one Bolta published for this post_id; you cannot name a WordPress post id. Each part is confirmed from WordPress's own readback: title.status and content.status (confirmed | not_confirmed | unchanged), publication_date.confirmed, featured_image.status (confirmed_attached | uploaded_not_attached | failed | unchanged), preserved (each untouched field, true when unchanged), link (the public URL) and bolta_sync.status (synced | unchanged | failed). Safe to retry with the same input (retryable true, or a timeout): it never creates another article, sends nothing already on WordPress, and uploads no image twice.",
     "inputSchema": {
      "type": "object",
      "properties": {
@@ -771,6 +771,14 @@
        "format": "uuid",
        "description": "The WordPress account the post was published to. Omit when there is only one."
       },
+      "title": {
+       "type": "string",
+       "description": "New headline (the page H1). The slug and public URL do not change."
+      },
+      "content": {
+       "type": "string",
+       "description": "The FULL new article body as Markdown (## headings, lists, [links](https://...), ![alt](url) inline images). Replaces the whole body; omit to leave the body as it is."
+      },
       "publication_date": {
        "type": "string",
        "description": "Date to show on the article, WordPress site local time: \"YYYY-MM-DD\" (12:00 site time) or \"YYYY-MM-DDTHH:MM[:SS]\"; no UTC offset. Must not be in the future."
@@ -786,7 +794,7 @@
      ]
     },
     "annotations": {
-     "title": "Repair Published WordPress Article",
+     "title": "Edit Published WordPress Article",
      "readOnlyHint": false,
      "destructiveHint": true,
      "idempotentHint": true,

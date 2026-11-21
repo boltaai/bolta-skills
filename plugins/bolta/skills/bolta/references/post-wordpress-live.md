@@ -23,14 +23,14 @@ Three answers, each from its own confirmed field:
 - **Image:** `featured_media_confirmed` true, or that media item's `status` `confirmed_attached`. `uploaded_to_bolta` (kept in Bolta only) or `uploaded_to_wordpress` (on the site): not attached. `failed`: its `stage` and `reason`. Never say the theme shows it.
 - Publishing runs in the background: check one article with `get-post` and its `post_id`, never by listing posts. Its date and image afterwards: `get-post` with `platform: "wordpress"`, `seo_metadata.publish_confirmation` (`featured_media_confirmed`, `publication_date.confirmed`, `warnings`); `featured_media_id` is set only once WordPress confirmed it.
 
-## Fixing an article already live
+## Changing an article already live
 
-- `update-wordpress-article` with `post_id` changes only the date (`publication_date`) and the featured image (`featured_image`: `{"url": "https://...", "alt_text": "..."}`, a public link or the `url` `upload-library-image` returned). Bolta finds the article it published; never pass a WordPress post number.
-- It never touches the words, title, excerpt, address, categories or tags.
-- It changes a live page: it needs the yes that publishing needs ([whose yes](review-authority.md)). It passes the same checks as `publish-post`: Safe Mode refuses it, and this app may change only a post it may publish itself. A refusal (`approval_required`, Safe Mode, client sign-off, not published) is final: say why.
-- Safe to retry with the same input: the image is not uploaded twice.
-- Read back each part: `publication_date.confirmed` with the returned date; `featured_image.status` `confirmed_attached`, `uploaded_not_attached`, `failed` (with `stage` and `reason`; the old image stays) or `unchanged`.
-- `link_changed` true: the address changed. Give the new `link` and the `previous_link`, and say old links may break.
+- `save-post` refuses a published post. `update-wordpress-article` with `post_id` edits the same article at the same address, never a new one; never pass a WordPress post number.
+- Pass only what changes: `title` (the address stays), `content` (the WHOLE new body, Markdown), `publication_date`, `featured_image` (`{"url": "https://...", "alt_text": "..."}`). Everything else stays as it is.
+- Lengthening or rewriting: `get-post` the body, write the whole new one, show it, send after the yes. No `# ` title line; never the featured image in the body; keep an inline image as a Markdown image.
+- It needs the yes that publishing needs ([whose yes](review-authority.md)) and passes `publish-post`'s checks. A refusal (`approval_required`, Safe Mode, client sign-off, not published) is final: say why.
+- Read back: `title.status`, `content.status` (`confirmed`, with `content.word_count`), `publication_date.confirmed`, `featured_image.status` (`failed` keeps the old image), `preserved` (false: say WordPress changed it). Give the `link`; `link_changed` true: give `previous_link` too.
+- `retryable` true (no readback, or `bolta_sync.status` `failed`): call again with the same input. It never makes a second article.
 
 ## Which number is which
 
