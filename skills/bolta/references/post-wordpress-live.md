@@ -27,7 +27,7 @@ Three answers, each from its own confirmed field:
 
 - `update-wordpress-article` with `post_id` changes only the date (`publication_date`) and the featured image (`featured_image`: `{"url": "https://...", "alt_text": "..."}`, a public link or the `url` `upload-library-image` returned). Bolta finds the article it published; never pass a WordPress post number.
 - It never touches the words, title, excerpt, address, categories or tags.
-- It changes a live page: it needs the yes that publishing needs ([whose yes](review-authority.md)). A refusal (`approval_required`, client sign-off, not published) is final: say why.
+- It changes a live page: it needs the yes that publishing needs ([whose yes](review-authority.md)). It passes the same checks as `publish-post`: Safe Mode refuses it, and this app may change only a post it may publish itself. A refusal (`approval_required`, Safe Mode, client sign-off, not published) is final: say why.
 - Safe to retry with the same input: the image is not uploaded twice.
 - Read back each part: `publication_date.confirmed` with the returned date; `featured_image.status` `confirmed_attached`, `uploaded_not_attached`, `failed` (with `stage` and `reason`; the old image stays) or `unchanged`.
 - `link_changed` true: the address changed. Give the new `link` and the `previous_link`, and say old links may break.
