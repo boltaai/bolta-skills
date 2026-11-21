@@ -9,7 +9,7 @@ The user knows what changed and what still goes out, in the workspace clock: "Pu
 ## Know this
 
 - **Take it back:** `save-post` with `post_id` and `unschedule: true`, nothing else. It keeps its text, loses its time (`was_scheduled_for` in the result is the time it no longer goes out at), and needs a new yes to go out ([review](review.md)). No Bolta check.
-- **Already out**, sending now, or out on some accounts: it can't be recalled; deleting here removes only Bolta's copy, not the network's. Never try to take it back; `unschedule` works only on a Scheduled post. Say: delete or edit it on the network. Offer a correction as a draft ([post](post.md)).
+- **Already out**, sending now, or out on some accounts: it can't be recalled; deleting here removes only Bolta's copy, not the network's. Never try to take it back; `unschedule` works only on a Scheduled post. Say: delete or edit it on the network. Offer a correction as a draft ([post](post.md)). A live WordPress article is edited in place instead ([the live article](post-wordpress-live.md)).
 - **Stop everything:** pause every Bolta routine that's on and every campaign that's on or about to start. No check, no question first. Then say: scheduled posts still go out. List the next 7 days, plus any due now (those can no longer be pulled back), with times: "Pull these 5 back to drafts too?" On yes, soonest first, then list again. Keep the old times in the reply.
 - Switching back on usually asks one Bolta check ([routine](routine.md), [campaign](campaign.md)).
 - **Undo a delete or restore a post:** read [undo a delete](fix-undo-delete.md) first.

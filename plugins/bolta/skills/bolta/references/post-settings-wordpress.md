@@ -28,7 +28,7 @@ When it goes out it is published live on the site, never sent as a WordPress dra
 
 ## Not possible here
 
-A standing page (About, Pricing), editing the words of an article already on the site (its date and featured image: [the live article](post-wordpress-live.md)), choosing an author, scheduling inside WordPress, Markdown tables or code blocks, password-protected or private posts.
+A standing page (About, Pricing), choosing an author, scheduling inside WordPress, Markdown tables or code blocks, password-protected or private posts.
 
 ## Always
 

@@ -14,7 +14,7 @@ Part of [post](post.md). `save-post` with `post_id` edits that post in place: it
 ## Approved, Scheduled or Published
 
 - Editing an Approved or Scheduled post sends it back to review: the result says `sent_back_for_review` (and `approval_reset`), and a client's yes no longer counts. On a Scheduled post any `save-post` does this, even with the same values, so send nothing to it just to check; on an approved post not yet scheduled, the same values keep the yes. Say so before changing it: "Changing this sends the scheduled post back for your yes."
-- A Published post, or one publishing now, can't be edited. A live WordPress article's date and featured image can be fixed: [the live article](post-wordpress-live.md).
+- A Published post, or one publishing now, can't be edited. A live WordPress article is the exception: its headline, body, date and featured image change in place with `update-wordpress-article` ([the live article](post-wordpress-live.md)).
 - **Off the schedule:** `save-post` with `post_id` and `unschedule: true`. It goes back to Draft with its content and settings; the result gives `was_scheduled_for`, the time it no longer goes out at. Refused for a post that isn't Scheduled.
 - **To another time:** `publish-post` with `post_id` and `when`, the new wall-clock time in the workspace clock (no Z, no offset; `timezone` only if the user named a place). On a Scheduled post it moves it, and a time-only move keeps the approval (the result says `rescheduled: true`). Only after a yes: [review](review.md).
 
