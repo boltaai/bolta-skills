@@ -247,6 +247,8 @@ case "$tool" in
     ask "Check public hosting ($conn): this image becomes publicly retrievable and may be analyzed by a vision provider. OK only if you approved this specific image. This does not publish a social post." ;;
   publish-post)
     ask "Check before it goes out ($conn): this post goes public right now and can't be undone. OK only if the text and account match what you agreed." ;;
+  update-wordpress-article)
+    ask "Check before it changes ($conn): this changes an article already live on your site, its date or featured image. OK only if you saw what changes." ;;
   send-outreach-reply|publish-engagement-reply|reply-to-social-content)
     ask "Check before it goes out ($conn): this reply goes public right now, under your account. OK only if you have seen this exact text and where it goes." ;;
   react-to-social-content)

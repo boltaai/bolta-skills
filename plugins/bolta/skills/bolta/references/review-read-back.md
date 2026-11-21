@@ -14,6 +14,7 @@ Read when reporting decisions.
 > Post 2, new version: "…" Schedule this version?
 
 - One line per scheduled post: day, time, city, network, first words.
+- Read one post back with `get-post` and its `post_id`, never a list. Say "went out" only for Published, with its link. A WordPress article: published, date and image, each on its own ([the live article](post-wordpress-live.md)).
 - Library posts never get a time: "Live on your Library link" or "Sent to your client".
 - Decision rate: decided out of shown. "You decided 4 of 6. 2 still waiting."
 - End with one question. A changed post comes first; otherwise the DON'T offer.

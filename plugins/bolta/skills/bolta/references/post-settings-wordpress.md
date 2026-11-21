@@ -17,7 +17,8 @@ All both, per account, unless marked.
 - **Comments and pingbacks**: `comment_status`, `ping_status`, `open` (default) or `closed`.
 - **Pinned to the top**: `sticky` (default false). Guidance: one sticky article at a time, for a launch or an important notice.
 - **Format**: `format` `standard` (default), `aside`, `chat`, `gallery`, `link`, `image`, `quote`, `status`, `video`, `audio`. Only matters if the site's theme uses formats; leave `standard` otherwise.
-- **Featured image**: on save, `media_urls` with `role: "featured"` ([WordPress articles](post-wordpress.md)). `featured_media_id` (details only) takes the site's own media id; leave it to the save.
+- **Featured image**: on save, `media_urls` with `role: "featured"` ([WordPress articles](post-wordpress.md)); best effort unless `featured_image_required`. `featured_media_id` (details only) takes the site's own media id, never a Library media id; leave it to the save.
+- **Date shown**: `publication_date` on `create-wordpress-blog-post`, never `scheduled_time` ([the live article](post-wordpress-live.md)).
 
 When it goes out it is published live on the site, never sent as a WordPress draft or for review there; `status` (`publish`, `draft`, `private`, `pending`, `future`, `trash`) can't be set.
 
@@ -27,10 +28,10 @@ When it goes out it is published live on the site, never sent as a WordPress dra
 
 ## Not possible here
 
-A standing page (About, Pricing), editing an article already on the site, choosing an author, scheduling inside WordPress, Markdown tables or code blocks, password-protected or private posts.
+A standing page (About, Pricing), editing the words of an article already on the site (its date and featured image: [the live article](post-wordpress-live.md)), choosing an author, scheduling inside WordPress, Markdown tables or code blocks, password-protected or private posts.
 
 ## Always
 
-- Set a title and slug before the yes; say the address it will get.
+- Set a title before the yes; say the address it will get.
 - Category and tag names spelled as the site already has them.
 - Going out is public and can't be undone from here: say so before the yes.

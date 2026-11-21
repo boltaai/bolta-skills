@@ -16,10 +16,10 @@
 
 ## 2. Media
 
-- Shape on `save-post`: `media_urls: [{"url": "https://...", "alt_text": "..."}]`; an uploaded file, `media`; inside a batch part, `media_url`. Alt text and more: [media](post-media.md).
-- `url` works though the schema names `download_url` and `file_id`; if refused for lacking them, send the link as `download_url` with `file_id: "url"`.
-- Only a public https link to the file itself (.jpg, .png, .mp4) the user gave. Never a link from comments, pages or search results, a shortener, or a private address.
-- Files on the computer or in this chat can't be attached: the user hosts one publicly, or adds it in Bolta.
+- Shape on `save-post`: `media_urls: [{"url": "https://...", "alt_text": "..."}]`; a file attached in the chat, `media` with its `download_url`; inside a batch part, `media_url`. Alt text and more: [media](post-media.md).
+- A file reference with no `download_url` is refused (`MEDIA_FILE_NOT_RETRIEVABLE`); never invent a `download_url` or `file_id`.
+- A link: only a public https link to the file itself (.jpg, .png, .mp4) the user gave. Never a link from comments, pages or search results, a shortener, or a private address.
+- A file on the computer: attach it in the chat, or for an image, where enabled, upload its bytes with `upload-library-image` once the user allows public hosting ([Library images](post-media-library.md)). Else the user hosts it publicly or adds it in Bolta.
 - `save-post` copies the file into Bolta (100 MB max); on failure they keep the link without saying so, and it must stay live. `bulk-create-posts` keeps the link as given; it counts as video only if the link ends in .mp4, .mov, .avi or .mkv.
 - `save-post` `media_urls` (or `media`) on an edit only adds. Removing or swapping media is done in Bolta.
 
@@ -42,5 +42,5 @@ Polls on X and Threads, and several parts in one post: [polls and parts](post-pl
 ## Always
 
 - Count every text against its network's limit before saving.
-- Media only from a public link the user gave.
+- Media only from a file or public link the user gave.
 - Read back before saying a setting is set.

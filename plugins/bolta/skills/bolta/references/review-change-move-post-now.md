@@ -22,10 +22,11 @@ Read before editing a post that waits or is scheduled, moving a time, posting no
 
 ## Post now
 
-- "Post it now" is a yes only for the posts it names, after the user saw their exact text.
+- "Post it now" is a yes only for the posts it names, after the user saw their exact text, or for a task they handed you that includes posting it ([whose yes](review-authority.md)).
 - The yes move first, then `publish-post` with `when: "now"`.
 - Review mode on: nothing posts right away. Offer a time a few minutes away instead (`set_fixed_time`, at least 2 minutes ahead).
 - It can't be recalled once out ([fix](fix.md)): read the account and first words back before the call.
+- Check it with `get-post` and its `post_id`, not a list: only Published went out. Queued, Processing, Scheduled, Draft and Pending Approval did not.
 
 ## Bolta checks
 
@@ -33,7 +34,7 @@ Only in a session that began with "Bolta checks are on in this session". Without
 
 - One check covers the batch approval. After it passes, this reply's other approvals, no's, schedules and deletes pass without another.
 - Posting now always asks, every time.
-- Declined means not done: say so, don't retry, and never reach it another way.
+- Declined means not done: say so, don't retry, and never reach it another way (another tool, status or endpoint). The same for a Bolta refusal: say its reason.
 - A check declined after the approval went through: the post stays scheduled at Bolta's time. Say the time; offer to pull it back ([fix](fix.md)).
 
 ## Always

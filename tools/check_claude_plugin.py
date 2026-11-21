@@ -90,7 +90,9 @@ PENDING_TOOLS = ("list-library-media", "upload-library-image",
                  "list-workspace-members", "revise-plan", "confirm-plan",
                  "plan-routine", "plan-campaign", "recommend-routines",
                  # Release 2: the folded catalog's new tools
-                 "save-post", "plan", "list-suggestions", "decide-suggestion")
+                 "save-post", "plan", "list-suggestions", "decide-suggestion",
+                 # Repair a published WordPress article's date or featured image
+                 "update-wordpress-article")
 #: Live tools whose saved schema adds arguments production does not take yet. Until it does,
 #: the saved arguments are accepted too. Delete a name once the live list has them (the checker says when).
 PENDING_UPDATES = ("create-routine", "update-routine", "extract-business-dna", "voice-generate",
@@ -100,7 +102,9 @@ PENDING_UPDATES = ("create-routine", "update-routine", "extract-business-dna", "
                    "get-voice-context", "list-business-dna", "create-content-campaign", "update-content-campaign",
                    # Send for approval to named people (reviewer_ids, title, notify_email;
                    # list-workspace-members gains can_receive_approval_requests)
-                   "submit-for-review", "list-workspace-members")
+                   "submit-for-review", "list-workspace-members",
+                   # publication_date and featured_image_required
+                   "create-wordpress-blog-post")
 #: Claude Code sends "claude-code/<version> (<entrypoint>)" on its MCP requests,
 #: and the server matches "claude" in it. Without it the list lacks the tools made for Claude.
 CLAUDE_USER_AGENT = "claude-code/2.1.302 (cli; bolta-plugin-check)"
