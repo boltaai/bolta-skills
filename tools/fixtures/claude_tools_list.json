@@ -65,7 +65,7 @@
    {
     "name": "list-accounts",
     "title": "List Social Accounts",
-    "description": "List all connected social accounts in workspace. Renders a card with Socials and Buckets tabs — connected accounts with their health, plus the workspace's social buckets (named account groups). With groups=true it returns the account groups instead (`buckets`: id, name, description and member accounts).",
+    "description": "List all connected social accounts in workspace: connected accounts with their health, plus the workspace's social buckets (named account groups). With groups=true it returns the account groups instead (`buckets`: id, name, description and member accounts).",
     "inputSchema": {
      "type": "object",
      "properties": {
@@ -490,7 +490,7 @@
    {
     "name": "publish-post",
     "title": "Publish Post",
-    "description": "The ONE tool that makes a post public: publish it now, or schedule it. Every post type, WordPress articles included. Call it only after the user saw the exact post and said yes. when is required, no default: \"now\" publishes immediately; a wall-clock time in the workspace's timezone schedules it. Every call goes through Bolta's approval rules: under Safe Mode, client sign-off or the AI-app approval rule a post that is not approved is refused or sent to review instead (read the result's status, not just ok); approve it first with approve-many-posts. Publishing itself is for owners and admins (creators approve Bolta's drafts and posts they are a named reviewer on; viewers never). AFTER SCHEDULING A BATCH: finish with one list-workspace-posts call (status=scheduled) so the card on screen shows the new state.",
+    "description": "The ONE tool that makes a post public: publish it now, or schedule it. Every post type, WordPress articles included. Call it only after the user said yes: to this exact post, or to a task they delegated (\"write and publish this article\"), which covers that task's retries and continuations but not a material change beyond what they approved. when is required, no default: \"now\" publishes immediately; a wall-clock time in the workspace's timezone schedules it. Every call goes through Bolta's approval rules: under Safe Mode, client sign-off or the AI-app approval rule a post that is not approved is refused or sent to review instead (read the result's status, not just ok); approve it first with approve-many-posts. A refusal for a post that is not approved yet has code=approval_required with post_id, post_status, content_fingerprint, review_pending, can_publish_now=false, next_step (after the user's yes: approve-many-posts with items=[{post_id, expected_fingerprint}], then publish-post) and unattended_option (the owner settings that let this connection publish posts it created without review, and which are missing). The one exception to asking first: when an owner/admin set the brand to Auto with Approve team posts off and turned on 'Approval and automation' for this connection (list-workspaces approval.this_connection_publishes_own_posts is true), a post this connection created may be published without a per-post approval. A Failed post is retried by calling publish-post on it again (now or at a time): it goes out as approved if it was approved, is unchanged since and no network took it yet; never make a copy to retry. A refusal (code retry_partly_published, retry_needs_approval or retry_changed_since_approval) says what to tell the user. Publishing itself is for owners and admins (creators approve Bolta's drafts and posts they are a named reviewer on; viewers never). To verify one post afterwards, call get-post with its post_id and report its status and time.",
     "inputSchema": {
      "type": "object",
      "properties": {
@@ -672,7 +672,7 @@
         ],
         "type": "object"
        },
-       "description": "Images to attach. Each item is the image itself — a file you generated or uploaded in this conversation ({download_url, file_id, mime_type, file_name}), or {\"url\": \"https://...\"} — with the WordPress fields alongside it: role: \"featured\"|\"inline\", alt_text, filename, caption, placement: {type: \"after_heading\"|\"before_heading\"|\"after_paragraph\"|\"append\", heading|paragraph_index}. Each is uploaded to WordPress's real Media Library — the returned wordpress_media_id is what WordPress actually uses, never an internal Bolta media ID."
+       "description": "Images to attach, each the image file itself: a file attached in this conversation as {download_url, file_id, mime_type, file_name}, with the WordPress fields alongside it (role: \"featured\"|\"inline\", alt_text, filename, caption, placement: {type: \"after_heading\"|\"before_heading\"|\"after_paragraph\"|\"append\", heading|paragraph_index}). download_url is required: a file_id alone cannot be fetched and is refused with MEDIA_FILE_NOT_RETRIEVABLE. Images you have as a link go in media_urls. Each is uploaded to the WordPress site's own Media Library; each item's result status is uploaded_to_bolta, uploaded_to_wordpress, confirmed_attached or failed (with stage and reason), and only confirmed_attached means WordPress set that wordpress_media_id on the post."
       },
       "media_urls": {
        "type": "array",
@@ -752,20 +752,23 @@
    {
     "name": "update-wordpress-article",
     "title": "Repair Published WordPress Article",
-    "description": "Repair ONLY an already-published WordPress article's publication date and/or featured image. Never edits the body, title, excerpt, slug, categories or tags; to change words, use save-post and publish again. Needs the same permission as publish-post (owner or admin) and the user's yes, like any change to a live article. Not a way around a refusal: a brand that requires client sign-off is refused, and a post that is not published is refused. The WordPress article is the one Bolta published for this post_id; you cannot name a WordPress post id. Each part is confirmed from WordPress's own readback: publication_date.confirmed and featured_image.status (confirmed_attached | uploaded_not_attached | failed | unchanged). A failed image upload leaves the existing featured image as it was. Safe to retry with the same input: the image is not uploaded twice.",
+    "description": "Repair ONLY an already-published WordPress article's publication date and/or featured image. Never edits the body, title, excerpt, slug, categories or tags; to change words, use save-post and publish again. Passes the same gate as publish-post (owner or admin; Safe Mode refuses it; an AI connection may change only a post the own-connection rule lets it publish, otherwise approval_required) and needs the user's yes, like any change to a live article. Not a way around a refusal: a brand that requires client sign-off is refused, and a post that is not published is refused. The WordPress article is the one Bolta published for this post_id; you cannot name a WordPress post id. Each part is confirmed from WordPress's own readback: publication_date.confirmed and featured_image.status (confirmed_attached | uploaded_not_attached | failed | unchanged). A failed image upload leaves the existing featured image as it was. Safe to retry with the same input: the image is not uploaded twice.",
     "inputSchema": {
      "type": "object",
      "properties": {
       "workspace_id": {
        "type": "string",
+       "format": "uuid",
        "description": "The workspace ID. Defaults to the connected workspace."
       },
       "post_id": {
        "type": "string",
+       "format": "uuid",
        "description": "The Bolta post id of the published article (not a WordPress post id)."
       },
       "wordpress_account_id": {
        "type": "string",
+       "format": "uuid",
        "description": "The WordPress account the post was published to. Omit when there is only one."
       },
       "publication_date": {
@@ -777,10 +780,10 @@
        "description": "{\"url\": \"https://...\", \"alt_text\": \"...\"}: the new featured image. url is the public url upload-library-image returned, or any https image URL."
       }
      },
+     "additionalProperties": false,
      "required": [
       "post_id"
-     ],
-     "additionalProperties": false
+     ]
     },
     "annotations": {
      "title": "Repair Published WordPress Article",
