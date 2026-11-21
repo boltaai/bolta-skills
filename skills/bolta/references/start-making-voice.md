@@ -1,6 +1,6 @@
 # Start: making the voice
 
-How [start](start.md) makes a voice. The brand's first voice comes from Bolta's setup, with or without a website ([start-brand-setup.md](start-brand-setup.md), [no website](start-brand-setup-no-site.md)); there is nothing else to save. If Bolta already learned a starting voice after connecting (`get-voice-context`, or `all_profiles: true` for every voice), show that one instead.
+Optional voice setup from [start](start.md), when wanted; a saved voice is not a prerequisite for compatible draft routines. The brand's first voice can come from Bolta's setup, with or without a website ([start-brand-setup.md](start-brand-setup.md), [no website](start-brand-setup-no-site.md)). If Bolta already has a starting voice (`get-voice-context`, or `all_profiles: true` for every voice), show that one instead.
 
 ## A person voice, a second voice, or an older Bolta: `create-voice-profile`, one save
 
@@ -10,7 +10,7 @@ How [start](start.md) makes a voice. The brand's first voice comes from Bolta's 
 - The audience and content topics you showed: `target_audience`, `topics`.
 - Leave `is_default` and `account_ids` out: it becomes the default only if the brand has none, and takes every connected account not in another voice. Say what Bolta filled in (`bootstrapped` in the result).
 - A person speaking as "I" (a founder): `speaker_mode: "founder"`, with `perspective` and `founder_signals` from what they said; default is `brand` ("we").
-- Always say which accounts use it, by network and name (`bootstrapped.accounts_assigned`). None: `get-connect-link`, show the link, "Connect one and it uses this voice."
+- Say which accounts use it, by network and name (`bootstrapped.accounts_assigned`). None: offer `get-connect-link` for publishing; compatible draft routines can start without one.
 - Then ask once, optionally: "Have brand colours, fonts or a logo? Paste them, or share an image of your logo." ([no website](start-brand-setup-no-site.md)).
 
 ## A voice already there

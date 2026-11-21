@@ -23,6 +23,6 @@ Read for one weekly routine that posts to two or more networks (a Facebook Page,
 
 ## Always
 
-- Bind every account the routine posts to; never leave `source_bindings` empty on a post routine.
+- For this connected-account setup, bind every selected account. Compatible accountless review-only drafts instead use the requested `output_config.platforms` ([settings](routine-settings.md)).
 - Say what `count` means for this routine before the yes.
 - Never say it posts without asking until Bolta's read-back says so.

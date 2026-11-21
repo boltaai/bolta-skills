@@ -1,6 +1,6 @@
 # Start: which Bolta routines fit which business
 
-Read with [start](start.md) when choosing the 3-5 to propose. Bolta's planner (`plan` with `kind: "recommend"`) picks from the brand's own posts, sources and routines; check its picks against this page, and use it directly when there is no planner. Everything here is advice except the numbers marked Bolta's. Every kind, what it needs and its limits: [routine-templates.md](routine-templates.md).
+Read with [start](start.md) when choosing a best-fit routine or several requested jobs. Bolta's planner (`plan`) uses the brand's posts, sources and routines; check its proposal against this page, and use this advice directly when there is no planner. Everything here is advice except the numbers marked Bolta's. Every kind, what it needs and its limits: [routine-templates.md](routine-templates.md).
 
 ## By business
 

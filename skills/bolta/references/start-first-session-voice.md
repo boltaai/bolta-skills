@@ -11,8 +11,8 @@ Part of the [first session](start-first-session.md). Show the voice Bolta alread
 
 - At 0 decisions, end with moment 4's learning line instead.
 - Just connected: Bolta makes a starting voice itself; check `get-voice-context` and show it before asking.
-- No voice, no site known: show what you know of them, then "What's your website? If you don't have one, I'll build it from what you've told me." Never ask what to post about first.
-- No voice, site read: offer it and make it ([start-making-voice.md](start-making-voice.md)).
+- No voice: compatible draft routines can use their goal, instructions and supplied facts. Offer a voice or website setup if useful, without blocking routine creation.
+- They want a voice: preview what they supplied and save only on yes ([start-making-voice.md](start-making-voice.md)).
 - No documents: "Add your one-pager, price list or a Dropbox folder as sources (bolta.ai/dashboard/knowledge-base?tab=references) and posts get more specific."
 
 ## Always

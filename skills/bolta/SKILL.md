@@ -13,7 +13,7 @@ description: >-
 
 Bolta is a content factory: it learns how a brand writes, drafts in that voice, and puts every draft on one review list, where each yes, edit and no with a reason on Bolta's drafts and app posts teaches it.
 
-Getting someone running, in order: an account, brand and voice (Bolta's setup), 3 to 5 Bolta routines, a campaign for anything dated, then the review list weekly ([start](references/start.md)). Every ask: read the house rules, look once, pick one playbook, read it, do the work, read the result back; a difference alone never holds back what was asked, a failure does.
+Start with routines from their goal, campaigns for dated work, then weekly review ([start](references/start.md)). Compatible drafts need no account, saved voice or brand setup. Every ask: read house rules, look once, read one playbook, act and check the result. Only a failure holds back requested work.
 
 ## House rules
 
@@ -47,8 +47,8 @@ Bolta's own writers do the work behind routines and campaigns. Never name them o
 
 On the first Bolta ask, read together and reuse all conversation: `list-workspaces` (name, clock, review mode), then the brand's `list-accounts` and `get-voice-context`. Reread only after an error or change.
 
-- No accounts or no voice: [start](references/start.md).
-- No accounts: `get-connect-link`, its link first in this reply, unasked: drafts need somewhere to go. Name the accounts a voice uses.
+- Setup help: [start](references/start.md). Optional setup never blocks compatible drafts.
+- Customer results and founder events need real facts. Bind selected usable accounts; publishing, required sources, history and company pages keep their prerequisites. Offer `get-connect-link` when needed or wanted.
 - "No voice profile" is an answer, not an error.
 - Never say what is or isn't running ("nothing is on yet") before reading `list-routines`.
 

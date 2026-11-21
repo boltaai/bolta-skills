@@ -4,34 +4,32 @@ Real names, counts and times; these are examples. Skip what's done. Moments 1 to
 
 ## 1. You're in, and this is you
 
-> You're in **Acme Coffee** (Sydney time). Connect an account first: drafts need somewhere to go, and your voice learns from its posts. <link> (with Acme Coffee selected in Bolta)
+> You're in **Acme Coffee** (Sydney time). We can start compatible draft routines from your brief. You can connect accounts when you're ready to publish.
 >
 > **From your site:** a neighbourhood cafe that roasts its own beans and sells brew kits. For locals, commuters and home brewers. Tone: friendly, practical.
 
-- The site part is the preview read, set up only once they say it's right ([brand setup](start-brand-setup.md)). No site known: what you know of them in a few lines, then "What's your website? If you don't have one, I'll build it from what you've told me."
+- The site part is an optional preview, saved only once they say it's right ([brand setup](start-brand-setup.md)). No site known: use their supplied facts; offer setup without delaying a compatible draft routine.
 - Networks with no connect window: [connect](connect-networks.md).
 - UTC: ask their city once; set it in Bolta Settings, Brand, Overview, to keep it.
 
 ## 2. It already knows me
 
-A voice there: show it ([what to show and say](start-first-session-voice.md)). None: the site preview's "Save this?" covers it: on their yes Bolta's setup makes the voice, before any routine is saved. Never a separate voice question.
+A voice there: show it ([what to show and say](start-first-session-voice.md)). None: their goal, instructions and real facts can guide compatible drafts. Offer optional setup; a separate yes to its preview saves the brand and voice. It need not precede routine saving.
 
 ## 3. It keeps going without me
 
-Skip if Bolta routines are on. 3-5, each a different job, sized to their review time:
+Skip if Bolta routines are on. Start with one best-fit job; several only when requested, sized to their review time:
 
-> Here are 3 Bolta routines that fit Acme Coffee:
-> 1. **Weekly coffee tips**: Tuesdays 8:00 am, 2 Instagram and LinkedIn drafts. Your brew guides are your strongest material.
-> 2. **New on the menu**: Thursdays 10:00 am, 1 Instagram draft.
-> 3. **Regulars' stories**: Fridays 9:00 am, 1 Instagram draft from a story you share.
+> **Bolta routine: Weekly coffee tips**
+> Tuesdays 8:00 am, two LinkedIn drafts using the brew guides you shared.
 >
-> About 4 drafts a week, each waiting for your yes. They run on Bolta with this app closed, and use credits each run. Which should I set up (saved switched off), and is a launch, sale or event coming up I should plan for?
+> Both wait for your yes. The routine runs on Bolta with this app closed and uses credits each run. Save this setup switched off? Tell me if a dated launch or event also needs a campaign.
 
-Only networks they post on; unconnected ones are bound once connected ([start-matching.md](start-matching.md)). Anything dated: one campaign as its own line.
+Honor their networks and cadence; the times above are examples, never missing choices to invent. With no accounts, compatible drafts use the requested network and can bind later ([start-matching.md](start-matching.md)). Anything dated: one campaign as its own line.
 
 ## 4. Saved off, then on
 
-They say "set up 1 and 2": save both, switched off, no question first ([start-saving.md](start-saving.md)).
+If several were requested and they say "set up 1 and 2": save both, switched off, no question first ([start-saving.md](start-saving.md)).
 
 > Saved to Acme Coffee, switched off: Weekly coffee tips, New on the menu. Switch both on? First drafts would come Tuesday.
 
