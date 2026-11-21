@@ -11,7 +11,7 @@ For comparing campaigns or reading clicks from a campaign's links. One campaign'
 
 ## Clicks
 
-Links go out exactly as written: Bolta adds no tracking tags and never sees a click, so never state a click count or promise tagged links. To see clicks in their own site analytics, the user gives links that already carry their own `utm_` tags.
+When a post goes out, Bolta swaps each link for a short bolta.ai link that opens the same page with tracking tags (`utm_source=bolta`, `utm_medium=social`, `utm_content` the post, `utm_campaign` the campaign). A link that already has `utm_` tags keeps them. Clicks show on the post in the Bolta dashboard and visits in the user's own site analytics; these tools return no click count, so never state one. A link that would push a post past a network's length limit goes out untracked.
 
 ## Always
 

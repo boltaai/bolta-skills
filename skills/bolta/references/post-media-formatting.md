@@ -15,8 +15,8 @@ Part of [media](post-media.md). Bolta facts for how a post's text is shown when 
 ## Links
 
 - Use only links the user gave.
-- Links go out as written, with one exception: on Threads everything after a `?` or `#` in a link is removed, tracking tags included.
-- Bolta adds no tracking tags; never promise them. If the user wants clicks tracked, they give a link that already carries `utm_` tags; clicks then show in their own site analytics, never in Bolta.
+- Links point where the user wrote them, with one exception: on Threads everything after a `?` or `#` in a link is removed, tracking tags included.
+- When it goes out, Bolta swaps each link for a short tracked bolta.ai link to the same page, tagged with the post and its campaign; a link's own `utm_` tags are kept. Clicks show in the Bolta dashboard, never through these tools: never state a count. Cross-posting an article: put its public URL in every post.
 
 ## Always
 
