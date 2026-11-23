@@ -1,25 +1,28 @@
 # Campaign settings: formats, networks and posts per week
 
-Read when choosing what a campaign makes each week, or when drafts land on a network that can't take them. The mix is `content_mix` on create or update: `{format: posts per week}`, such as `{"still_image": 3, "carousel": 1}`.
+Read when choosing what a campaign makes each week, or when drafts land on a network that can't take them. The mix is `content_mix` on create or update: `{format: posts per week}`, such as `{"text": 3, "email": 1}`.
 
-## Which mix runs
+## A new campaign made here
 
-- One you send wins. Else the brand's saved Content defaults (Campaigns page). Else the strategy's own mix. Send a mix only when the user asked for formats or a network needs one; otherwise leave it out and read `resolved_content_mix` in the reply.
-- A new mix replaces the whole old one and **clears any per-format accounts or days** set on the campaign page. Weeks the page has already laid out keep their old plan. Read `get-content-campaign` first.
+- It is text-based: send `content_mix` on the create with only `text`, `blog` and `email`. Left out, Bolta uses the brand's Content defaults, else the strategy's mix, which can carry pictures. Read `resolved_content_mix` in the reply.
+- Sending a mix skips the defaults' "Crosspost to the same accounts", so send `account_ids` on the same call.
+- Pictures and video are chosen on the campaign page, never from chat. A network that needs them (Instagram, TikTok, YouTube, Pinterest): one line, pictures and video are added at bolta.ai/dashboard/campaigns/<id>. Leave it off a text campaign.
 - Unknown keys drop silently. A topic ("tips", "behind the scenes") goes in the theme or notes, never the mix.
+
+## A campaign that already has a mix
+
+- **Never send `content_mix` on an update unless the user asked to change formats.** Left out, Bolta keeps the campaign's mix, pictures and video set on the web included.
+- Asked to change formats: only `text`, `blog` and `email` change here. Read `get-content-campaign`, then send back its whole `content_mix` with only those counts changed; every other key stays exactly as read. Pictures or video to add, drop or change: the campaign page.
+- A new mix replaces the whole old one and **clears any per-format accounts or days** set on the campaign page. A `content_plan` row with `account_ids` or `days`: warn before sending. Weeks the page has already laid out keep their old plan.
 
 ## Formats, and where each can go
 
 - `text`: words only. X, Threads, LinkedIn, Facebook, Bluesky. **Never for Instagram, Pinterest, TikTok or YouTube**: the draft is held at approval ("Instagram needs an image or video").
-- `still_image`: one generated image. Any network but TikTok and YouTube.
-- `carousel`: a deck of slides read in order. **Instagram, LinkedIn, Facebook, Threads**. Never X, TikTok, YouTube, Pinterest or Bluesky.
-- `short_video`: 9:16 vertical, for Reels, Shorts, TikTok. The only fit for TikTok and YouTube Shorts.
-- `feed_video`: 16:9 landscape, for LinkedIn, Facebook, YouTube.
 - `blog`: a long article for the brand's **WordPress site only**. Check `list-accounts` for WordPress first: without one the blog is accepted, then refused every week ("no connected WordPress site") while the social posts still run.
 - `email`: written for the user to send ("Bolta writes these. Sending them is still yours."). Bolta never sends email.
-- `story`, `avatar_video`: never made. Don't send them.
+- Any other key read back was set on the campaign page. Leave it as it is.
 
-When to pick (guidance): images and carousels for Instagram and LinkedIn launches; carousels to teach steps (Product Education); text for X and Threads opinions; short video when TikTok or Reels matter and the user accepts the cost; a weekly blog only with WordPress and a search goal; email as a weekly recap for an offer.
+Guidance: a weekly blog only with WordPress and a search goal; email as a weekly recap for an offer.
 
 ## How many
 
@@ -27,14 +30,13 @@ When to pick (guidance): images and carousels for Instagram and LinkedIn launche
 - **Hard caps per week:** 10 social posts, 2 articles, 2 emails. More is accepted and silently cut to the cap.
 - Bolta spreads posts Monday to Friday at 9:00, 12:00, 15:00 and 17:00, or the brand's preferred times. Weekday per format: campaign page only ([settings-web.md](campaign-settings-web.md)).
 
-## Cost and media
+## In review
 
-- Text and email cost least; images more; carousels more again; **each video draft costs most** (a paid generation). Say "Each video draft costs more credits than an image post" before the yes; quote no number.
-- Video length is 20 seconds by default; the campaign page offers 12 or 20.
 - A video draft that comes back without its video is not ready: it can't go to TikTok or YouTube and usually expires unreviewed. Say so in review rather than approving it.
 
 ## Always
 
-- Match every format to a network that can post it; leave a format out rather than plan a draft that will be held.
-- Say the video cost before the yes.
+- From chat, send only `text`, `blog` and `email`. Pictures and video are set on the campaign page.
+- Never drop, clear or change a format set on the web.
+- Never plan a draft for a network that can't post it.
 - Follow the house rules in the Bolta skill.

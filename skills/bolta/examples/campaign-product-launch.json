@@ -14,16 +14,16 @@
           "https://acme.com/inbox"
         ]
       },
-      "why": "The date is in the ask, so no question first. The planner picks the strategy, accounts, mix and dates and creates nothing. Its plan came back starting tomorrow (its default when it reads no start date) for 2 weeks (the default when weeks aren't said), so it ended before launch day; Problem / Solution, and notes. Always read the plan's dates: a launch date can also be taken as the start. Show it in a few lines: name, strategy and its gloss, dates, posts a week × weeks = drafts to review."
+      "why": "The date is in the ask, so no question first. The planner picks the strategy, accounts, mix and dates and creates nothing. Its plan came back starting tomorrow (its default when it reads no start date) for 2 weeks (the default when weeks aren't said), so it ended before launch day; Problem / Solution, image posts for Instagram, and notes. Always read the plan's dates: a launch date can also be taken as the start. Show it in a few lines: name, strategy and its gloss, dates, posts a week × weeks = drafts to review."
     },
     {
       "tool": "revise-plan",
       "arguments": {
         "workspace_id": "<brand's workspace id>",
         "proposal_id": "<plan id from plan>",
-        "change": "3 weeks from Monday Nov 23 to Sunday Dec 13, so launch day Dec 8 falls in the last week."
+        "change": "Text posts only, on LinkedIn only. 3 weeks from Monday Nov 23 to Sunday Dec 13, so launch day Dec 8 falls in the last week."
       },
-      "why": "Guidance: a launch runs 3 weeks with launch day in the last week. Weeks start on the start date's weekday, so a Monday start puts Tue Dec 8 in week 3. The user said yes to that change. The reply has a new id; the old one can't be saved."
+      "why": "A campaign made here is text-based: a plan with pictures goes back to text posts, and Instagram, which needs a picture, comes off; its pictures are added on the campaign page. Guidance: a launch runs 3 weeks with launch day in the last week. Weeks start on the start date's weekday, so a Monday start puts Tue Dec 8 in week 3. The user said yes to that change. The reply has a new id; the old one can't be saved."
     },
     {
       "tool": "confirm-plan",
@@ -39,7 +39,7 @@
         "workspace_id": "<brand's workspace id>",
         "campaign_id": "<campaign id from confirm-plan>"
       },
-      "why": "The pre-start check: strategy_key set, starts_on Nov 23 (not past), account_ids has LinkedIn and Instagram, every context_sources row ready, resolved_content_mix has no text (Instagram can't take text posts). Then show the plan and ask \"Start it?\" on its own."
+      "why": "The pre-start check: strategy_key set, starts_on Nov 23 (not past), account_ids has LinkedIn, every context_sources row ready, resolved_content_mix is text only. Then show the plan and ask \"Start it?\" on its own."
     },
     {
       "tool": "set-content-campaign-status",
@@ -51,10 +51,11 @@
       "why": "The second, separate yes. This is what makes Bolta write. Read generation.scheduled_for, then status back as active."
     }
   ],
-  "say": "Campaign on for Acme: Acme Inbox launch, Nov 23 to Dec 13, launch day Dec 8 in week 3, LinkedIn and Instagram. Week 1's drafts land around Sat Nov 21 and wait for your yes.",
+  "say": "Campaign on for Acme: Acme Inbox launch, Nov 23 to Dec 13, launch day Dec 8 in week 3, text posts on LinkedIn. Week 1's drafts land around Sat Nov 21 and wait for your yes. Instagram needs pictures: add them at bolta.ai/dashboard/campaigns/<id>.",
   "never": [
     "Starting it in the same yes that saved the plan.",
     "Offer & Promotion for a launch with no price or deadline.",
-    "Leaving the campaign saved and not started without saying so: a saved campaign writes nothing."
+    "Leaving the campaign saved and not started without saying so: a saved campaign writes nothing.",
+    "Saving a plan with pictures or video from chat: revise it to text posts first."
   ]
 }

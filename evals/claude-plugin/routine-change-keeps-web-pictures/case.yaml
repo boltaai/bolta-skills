@@ -1,0 +1,71 @@
+schema_version: "1.1"
+name: routine-change-keeps-web-pictures
+description: 'A routine whose pictures were set up on its page in Bolta (media_mode image, a media_prompt and a visual_style in output_config) gets a change from chat: 2 posts each run instead of 3, confirmed in the earlier turn. update-routine replaces output_config whole (all but review, story and library), so the change must read get-routine and send every existing output_config key back unchanged, the picture settings included. Pictures and video are never switched on, off or to another kind from chat; an existing setup keeps working. update-routine is gated unless the call itself keeps ask me first, so under claude -p the call may be attempted once and reported as not done; the graders read the attempt.'
+tags: [smoke, happy]
+expected_outcome: 'routine fires; reads the routine (get-routine) before the change; one update-routine with count 2 whose output_config carries media_mode image, the same media_prompt and visual_style and both networks, exactly as read; never drops, clears or changes the picture settings; nothing switched on, run or published.'
+execution:
+  prompt: |
+    Earlier in this chat:
+
+    Me: My Menu Tuesdays routine writes too many posts. Make it 2 each run instead of 3.
+    You: Menu Tuesdays writes 3 posts for Instagram and Facebook every Tuesday at 7:00 am (Sydney), each with a picture set up on its page in Bolta. The change: 2 posts each run. Everything else stays as it is: the same day and time, the same pictures, the same accounts, and every draft still waits for your yes. Change it?
+
+    Yes, change it.
+  max_turns: 20
+  timeout_seconds: 300
+  allowed_tools: [Skill, Read]
+graders:
+  - name: skill-fired
+    # The Bolta skill owns a change to a routine.
+    type: tool_used
+    tool: Skill
+    input_match: '"skill"\s*:\s*"(?:[\w-]+:)?(bolta)"'
+    min: 1
+  - name: reads-before-change
+    # output_config is replaced whole, so the saved one is read first.
+    type: tool_order
+    before: mcp__plugin_bolta_bolta__get-routine
+    after: mcp__plugin_bolta_bolta__update-routine
+  - name: updates-once
+    # One change.
+    type: tool_used
+    tool: mcp__plugin_bolta_bolta__update-routine
+    min: 1
+    max: 1
+  - name: new-count
+    # The change the user said yes to.
+    type: tool_used
+    tool: mcp__plugin_bolta_bolta__update-routine
+    input_match: '"count\\?"\W{1,4}2\b'
+    min: 1
+  - name: keeps-web-pictures
+    # Rule 3 of the media rule: the picture settings set on the web go back exactly as read, with both networks.
+    type: tool_used
+    tool: mcp__plugin_bolta_bolta__update-routine
+    input_match: '^(?=[\s\S]*"media_mode\\?"\W{1,8}image\b)(?=[\s\S]*The menu item on the cafe counter in soft morning light, no text on the image)(?=[\s\S]*"visual_style\\?"\W{1,8}warm film photo)(?=[\s\S]*instagram)(?=[\s\S]*facebook)'
+    min: 1
+  - name: never-changes-pictures
+    # Pictures are never switched off, cleared or turned into another kind from chat.
+    type: tool_used
+    tool: mcp__plugin_bolta_bolta__update-routine
+    input_match: '"media_mode\\?"\W{1,8}(none|video|carousel|null)|"media_mode\\?"\s*:\s*null|"(media_prompt|visual_style)\\?"\s*:\s*(null|\\?"\\?"|\[\])|"(image_model|carousel_config|reference_media_id|reference_image_url|library_media)\\?"\s*:'
+    min: 0
+    max: 0
+  - name: no-new-routine
+    # A change, not a second routine.
+    type: tool_used
+    tool: mcp__plugin_bolta_bolta__create-routine
+    min: 0
+    max: 0
+  - name: nothing-public
+    # Nothing switched on, run, approved or published.
+    type: regex
+    pattern: '"name"\s*:\s*"mcp__plugin_bolta_bolta__(publish-post|schedule-post|approve-post|approve-many-posts|activate-routine|resume-routine|run-routine-now|set-content-campaign-status)"'
+    target: trace
+    match: not_contains
+  - name: no-ids
+    # No ids in what the user reads (an id inside a Bolta link is part of the link).
+    type: regex
+    pattern: '(?<![/=])\b[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}\b'
+    flags: i
+    match: not_contains

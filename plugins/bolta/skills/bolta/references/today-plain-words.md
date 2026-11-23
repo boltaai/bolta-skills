@@ -18,7 +18,7 @@ Use these in everything the user reads. Left of the colon: Bolta's data. Right: 
 - Content Campaign: campaign. The only name; never "push".
 - Calendar campaign label: calendar tag. Keyword monitor: conversations Bolta watches for you. Never "campaign" for either.
 - strategy_key: strategy, by the dashboard's name with a short gloss ("Problem / Solution: a real frustration, then the fix").
-- content_mix: posts a week, by kind ("3 images and 1 carousel a week").
+- content_mix: posts a week, by kind ("3 posts and 1 email a week").
 - duration_weeks: how many weeks.
 - Campaign status draft / scheduled / active / paused / completed / archived: not started / starts on its date / on / paused / finished / retired.
 - Campaign state needs_accounts / needs_review / scheduled / generating / posting / done: needs accounts / waiting for you / next drafts on a date / writing drafts now / posting / finished.

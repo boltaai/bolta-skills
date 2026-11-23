@@ -1,12 +1,12 @@
 # Start: which Bolta routines fit which business
 
-Read with [start](start.md) when choosing a best-fit routine or several requested jobs. Bolta's planner (`plan`) uses the brand's posts, sources and routines; check its proposal against this page, and use this advice directly when there is no planner. Everything here is advice except the numbers marked Bolta's. Every kind, what it needs and its limits: [routine-templates.md](routine-templates.md).
+Read with [start](start.md) when choosing a best-fit routine or several jobs. Bolta's planner (`plan`) uses the brand's posts, sources and routines; check its proposal against this page, and use this advice directly when there is no planner. Everything here is advice except the numbers marked Bolta's. Every kind, what it needs and its limits: [routine-templates.md](routine-templates.md).
 
 ## By business
 
 | They are | Propose first | Add if true |
 |-|-|-|
-| A shop, cafe, maker or local business | Weekly posts with a picture each (`weekly_social_posts`) | Customer stories (`customer_win_social_proof`) once they have real ones to share |
+| A shop, cafe, maker or local business | Weekly posts (`weekly_social_posts`) | Customer stories (`customer_win_social_proof`) once they have real ones to share |
 | A salon, studio or clinic taking bookings | Weekly posts | The Square routines, if Square is connected; customer stories with the customer's yes |
 | A service or B2B company | Weekly posts; customer stories | LinkedIn positions (`linkedin_thought_leadership`) if they post on LinkedIn |
 | A founder, consultant or coach | Founder stories (`founder_story_series`), in a person's voice | LinkedIn positions |
@@ -16,7 +16,7 @@ Read with [start](start.md) when choosing a best-fit routine or several requeste
 
 - Each routine is a different job. Two doing the same job on the same network is one too many.
 - Stories and customer wins need real events from the user; with none to share, leave them out. Never invent one.
-- Instagram, TikTok, YouTube and Pinterest need a picture or video: pictures are set as [routine-outputs.md](routine-outputs.md) says.
+- Routines made here write text: never plan one to Instagram, TikTok, YouTube or Pinterest. Pictures and video: "Add them on the routine's page: bolta.ai/dashboard/routines."
 - A report posts nothing and costs no review time. Offer one beside 1-2 writing routines, once there are published posts to read.
 - Name them in their words: "Weekly candle care tips".
 

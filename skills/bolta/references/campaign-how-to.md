@@ -17,6 +17,8 @@ Show it in a few lines and ask "Save it?".
 
 `revise-plan` with `change` in the user's words ("3 weeks, LinkedIn only") or exact `changes`. It returns a new id; the old one can't be saved. Show what changed.
 
+A plan from chat is text posts (blog, email too). One with pictures or video, or a network that needs them: revise it to text posts on networks that take text, and say pictures and video are added on the campaign page, bolta.ai/dashboard/campaigns/<id>.
+
 ## 4. Save it, not started
 
 `confirm-plan` with the current id and no `switch_on`: the campaign is saved **not started**; nothing is written. It reads up to 5 linked pages itself: report each `sources` row that failed. `plan_not_ready` names what is missing. No planner: `create-content-campaign` ([settings.md](campaign-settings.md)), which can carry the accounts, notes and sources of step 5 in the same call.
@@ -27,7 +29,7 @@ Show it in a few lines and ask "Save it?".
 
 ## 6. Start it, on a separate yes
 
-Show: accounts, when week 1's drafts land, and the cost line for video. Ask "Start it?". On the yes: `set-content-campaign-status` with `action: "activate"`. Read the reply's `generation` and `get-content-campaign`: `status` must read active and `schedule_status.state` not `needs_accounts`. Say when drafts land, in the workspace clock, with "around" ([settings-status.md](campaign-settings-status.md)).
+Show: accounts and when week 1's drafts land. Ask "Start it?". On the yes: `set-content-campaign-status` with `action: "activate"`. Read the reply's `generation` and `get-content-campaign`: `status` must read active and `schedule_status.state` not `needs_accounts`. Say when drafts land, in the workspace clock, with "around" ([settings-status.md](campaign-settings-status.md)).
 
 ## 7. Each week: decide the drafts
 

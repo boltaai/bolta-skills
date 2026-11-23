@@ -1,8 +1,8 @@
 schema_version: "1.1"
 name: gauntlet-one-word-answers
-description: 'A beginner answers questions with one word ("candles", then "insta"). Empty workspace, no site yet. Bolta stops asking and proposes Instagram routines with pictures, plus the connect link; nothing saved.'
+description: 'A beginner answers questions with one word ("candles", then "insta"). Empty workspace, no site yet. Bolta stops asking; Instagram needs pictures, which a routine gets on its page in Bolta, so it says that in one line with the link instead of planning a text routine to Instagram or setting up pictures from chat; plus the connect link; nothing saved.'
 tags: [gauntlet]
-expected_outcome: 'bolta fires; does not ask again what they sell; planner or templates; Instagram only, with pictures; connect link; at most 2 questions; nothing saved or public.'
+expected_outcome: 'bolta fires; does not ask again what they sell; repeating work offered for Instagram only; says Instagram needs pictures or video and that they are added on the routine''s page (bolta.ai/dashboard/routines) or, for a one-off, in AI Studio; no picture or video settings sent and no image prompts written; connect link; at most 2 questions; nothing saved or public.'
 execution:
   prompt: |
     Earlier in this chat:
@@ -29,11 +29,12 @@ graders:
     pattern: 'what (do|does) (you|your (shop|business|store)) sell|which (networks?|platforms?)[^?\n]{0,60}\?|where (do|would) you (like to |want to )?post'
     flags: i
     match: not_contains
-  - name: plans-routines
-    # Asks Bolta's planner (or the templates) for repeating work, not one-off posts.
+  - name: offers-repeating-work
+    # Offers repeating work (a routine), not a pile of one-off posts. A routine made from chat writes text and
+    # Instagram refuses text, so the planner is no longer required here: one with pictures is set up on its page.
     type: regex
-    pattern: '"name"\s*:\s*"mcp__plugin_bolta_bolta__(recommend-routines|plan-routine|list-routine-templates|plan)"'
-    target: trace
+    pattern: '\broutines?\b|\bevery (week|day|mon|tues|wednes|thurs|fri|satur|sun)|\bweekly\b|\bon repeat\b'
+    flags: i
   - name: connect-link
     # Instagram is not connected: the connect link.
     type: tool_used
@@ -45,10 +46,29 @@ graders:
     pattern: '\bLinkedIn\b|\bX \(|\bTwitter\b'
     match: not_contains
   - name: pictures-for-instagram
-    # Instagram needs pictures or video.
+    # Says Instagram needs pictures or video.
     type: regex
-    pattern: '\b(images?|photos?|pictures?|carousels?|videos?|reels?)\b'
+    pattern: '\b(images?|photos?|pictures?|videos?|reels?)\b'
     flags: i
+  - name: pictures-on-routine-page
+    # One line, one link: pictures and video for a routine are added on its page in Bolta (a one-off image in AI Studio).
+    type: regex
+    pattern: 'bolta\.ai/dashboard/(routines|ai-studio)'
+    flags: i
+  - name: no-generated-media
+    # Pictures and video are never set up from chat. Fails on any Bolta call carrying media_mode image, video or
+    # carousel, media_prompt, visual_style, image_model, carousel_config, a reference image, library_media,
+    # custom_image_instructions, or a still_image, carousel, short_video, feed_video, story or avatar_video mix key.
+    type: regex
+    target: trace
+    pattern: '"name"\s*:\s*"mcp__plugin_bolta_bolta__[\w-]+"\s*,\s*"input"\s*:\s*\{(?=[^\n]*?(?:"media_mode\\?"\W{1,8}(?:image|video|carousel)|"(?:media_prompt|visual_style|image_model|carousel_config|reference_media_id|reference_image_url|library_media|custom_image_instructions)\\?"\s*:|"content_mix\\?"\W{1,4}\{[^{}]*"(?:still_image|carousel|short_video|feed_video|story|avatar_video)\\?"\s*:))'
+    match: not_contains
+  - name: no-image-prompts
+    # Never writes image ideas, image prompts, video scripts or scene descriptions for Bolta to render.
+    type: regex
+    pattern: '\b(image|video|visual)\s+(prompts?|scripts?)\b|\bimage ideas?\b|\bscene descriptions?\b|\bstoryboards?\b'
+    flags: i
+    match: not_contains
   - name: fits-the-business
     # About candles.
     type: regex

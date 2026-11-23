@@ -15,11 +15,10 @@ Read before running `voice-generate`. Worked: [voice-generate-batch](../examples
 - `platform`: one network, so the drafts fit it: linkedin, x, threads, bluesky, facebook, instagram or reddit. Several networks in one batch: leave it out, set `enable_multi_platform` true and name the accounts.
 - `language` and `post_intent` (such as educate, promote, engage, announce) only when the user said them. Don't send `time` or `date_range`: drafts are saved with no time, and a time comes with the yes ([review](review.md)).
 
-## `generate_images`: an image idea, not an image
+## Text only
 
-- From here it asks the writer for a short image idea per post. No image is made and no extra credit is charged, whatever the setting's own description says. The saved drafts don't keep the idea; at most it shows in the result's `generated_posts`.
-- Use it only when the user wants picture ideas to make images themselves, and say so: "These may come with an image idea each, not an image."
-- Images with the posts: a Bolta routine with pictures ([routine](routine.md)), a campaign, or AI Studio in Bolta for one post, then a public link on the post ([post](post.md)).
+- Leave `generate_images` out (off). A batch writes text; it makes no images.
+- Want a picture on a post? Their own file or link goes on the draft ([post](post.md)). One made for them: "Make it in AI Studio at bolta.ai/dashboard/ai-studio, then attach it."
 
 ## Reading the result
 
@@ -31,4 +30,4 @@ Read before running `voice-generate`. Worked: [voice-generate-batch](../examples
 
 - Follow the house rules in the Bolta skill.
 - Never run `voice-generate` before saying its credit cost and getting a yes.
-- Never promise images from a batch.
+- Never turn on `generate_images` or promise images from a batch.

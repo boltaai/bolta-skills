@@ -13,12 +13,12 @@ Bolta sets these, ignores them, or only its own pages can fill them; some the to
 - `capability_keys`: a label, not a permission. Leave it out.
 - `conditions`, `guardrails`, `performance_objective`, `autonomy_override`, `trigger_config`: `get-routine` shows them, but `create-routine` and `update-routine` don't take them. Put the rule in `instructions` instead.
 - `destination_config` `behavior` (`save_draft` or `schedule`) and `account_refs`: `update-routine` only (`create-routine` takes just `voice_profile_id`). `schedule` schedules nothing, and is refused without `account_refs`. Posting without asking is `approval_policy: "auto"`, and accounts are `source_bindings`. On update, sending `destination_config` with only `voice_profile_id` resets `behavior` to `save_draft`: harmless.
-- `reference_image_url` in `get-routine` `output_config` is a preview of `reference_media_id`; sending it does nothing.
 - `time_window` is refused.
 
 ## Filled by Bolta's own pages
 
 - App sources in `source_bindings` beyond `provider` and `ref`: `kind` is fixed by the routine; `filters` narrow what an app sends; `meeting_category` (meeting transcripts only: `internal_strategy`, the strictest and the default, `customer_conversation`, `webinar_public`, `sales_call`) decides what may be quoted. Bolta's builder or planner sets them when the app is picked; never guess them.
+- Picture and video settings in `output_config` (any key about pictures, video or slides; see [routine-outputs.md](routine-outputs.md)) belong to the routine's page. Never set or change them here; on an update, resend them as `get-routine` shows them.
 - A Library-only routine's `library` settings (`per_topic` 1-5, default 2; `voice_mode` `rotate` or `cascade`; `include_images`; `send_to_client`; up to 10 `voice_profile_ids`) belong to the routine Brand > Library makes (bolta.ai/dashboard/knowledge-base?tab=library). `create-routine` refuses that kind; on a post routine `library` takes only `enabled`, `voice_profile_ids` and `send_to_client` ([routine-outputs.md](routine-outputs.md)).
 
 ## Two people editing

@@ -2,7 +2,7 @@ schema_version: "1.1"
 name: tools-campaign-targets
 description: 'The campaign tools are offered: accounts, notes and a page to read are set through set-content-campaign-targets, the page is read with analyze-content-campaign-source, and the campaign is started only after it has accounts. Claude made the campaign in this session, so setting its targets passes without a check; starting it is a check, denied under claude -p.'
 tags: [smoke, newtools]
-expected_outcome: 'campaign fires; one create (Problem / Solution, dated, waitlist link); set-content-campaign-targets with LinkedIn and X and the pricing page as a url source; analyze for that source after it; start attempted only after the accounts are set; no dashboard hand-off; no drafts saved into it; never says it is running.'
+expected_outcome: 'campaign fires; one create (Problem / Solution, dated, waitlist link, a text-only mix: never picture or video formats); set-content-campaign-targets with LinkedIn and X and the pricing page as a url source; analyze for that source after it; start attempted only after the accounts are set; no dashboard hand-off; no drafts saved into it; never says it is running.'
 execution:
   prompt: |
     We launch new pricing on Dec 8. Run it for 3 weeks from Nov 23 and get people on the waitlist: bolta.ai/waitlist. Post it on LinkedIn and X, and have Bolta read https://northwind.example/pricing for the details. Start the campaign.
@@ -41,6 +41,13 @@ graders:
     input_match: '"ends_on"\W{1,3}null'
     min: 0
     max: 0
+  - name: text-mix-only
+    # A campaign made from chat is text-based: its mix holds only text, blog and email. A still_image, carousel,
+    # short_video, feed_video, story or avatar_video key, or a carousel_config, fails: pictures and video are set up on the campaign page.
+    type: regex
+    target: trace
+    pattern: '"name"\s*:\s*"mcp__plugin_bolta_bolta__(?:create-content-campaign|update-content-campaign)"\s*,\s*"input"\s*:\s*\{(?=[^\n]*?(?:"content_mix"\W{1,3}\{[^{}]*"(?!(?:text|blog|email)")[^"]+"\s*:|"carousel_config"\W{1,3}\{\s*"))'
+    match: not_contains
   - name: sets-accounts
     # LinkedIn and X, by their ids.
     type: regex

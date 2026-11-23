@@ -57,7 +57,8 @@ agents/ in the full plugin only; no commands/), agent shape (read-only tool list
 no frontmatter Claude Code ignores), skill frontmatter (strict YAML, name, description),
 skill shape (the five sections, house rules, hand-offs), word budgets, tool ids
 and call-site arguments, links, host-neutral and plain-words lint, citations of
-server code, hook wiring (scripts, matchers, the guard's tool list, settings).
+server code, generated-media setup (DP_TAG_BAN: none in the listed plugin), hook
+wiring (scripts, matchers, the guard's tool list, settings).
 Exit status is non-zero when any ERROR is reported (or any WARN with --strict).
 """
 
@@ -249,6 +250,25 @@ CITATIONS = [
     (re.compile(r"\b[\w./-]+\.(?:md|json|ya?ml|sh|txt):\d+"), "cites a file and line"),
     (re.compile(r"\bPR\s*#\d+|\bpull/\d+\b"), "cites a pull request (say what is true for the user instead)"),
 ]
+
+#: Generated-media setup the listed plugin must never send or teach. On 2026-11-23 Anthropic's
+#: plugin directory refused the plugin under DP_TAG_BAN ("drafts generation jobs your service
+#: renders"): routines and campaigns set up from chat drafted image, video and carousel jobs that
+#: Bolta then rendered. Generated media stays a Bolta feature, set up only in the web app (the
+#: routine and campaign pages, AI Studio); from chat the plugin makes text, attaches media the user
+#: gives, and resends a routine's existing settings unchanged without naming them. Any of these
+#: words in a shipped file of plugins/bolta is an ERROR. The checks plugin is not scanned: its
+#: hooks list tool names, not settings.
+GENERATION_SETUP_TOKENS = (
+    "media_mode", "media_prompt", "visual_style", "image_model", "carousel_config",
+    "reference_media_id", "reference_image_url", "library_media",
+    "still_image", "short_video", "feed_video", "avatar_video",
+    "custom_image_instructions",
+    "gpt-image", "nano-banana", "fal-ai",
+)
+#: A token, not part of a longer name; a model name may carry a version after it (gpt-image-1).
+GENERATION_SETUP = re.compile(
+    r"(?<![A-Za-z0-9_-])(" + "|".join(re.escape(t) for t in GENERATION_SETUP_TOKENS) + r")(?![A-Za-z0-9_])", re.I)
 
 PUBLISH_CAPABLE_CREATE_TOOLS = ("save-post", "bulk-create-posts", "create-wordpress-blog-post")
 
@@ -1089,6 +1109,19 @@ def check_citations(plugin):
                 break
 
 
+def check_generation_setup(plugin):
+    """No shipped file of the listed plugin (skill, references, examples, agents, README, manifests)
+    names a generated-media setting or an image model (GENERATION_SETUP_TOKENS)."""
+    for path in shipped_text_files(plugin):
+        rel = path.relative_to(plugin)
+        for n, line in enumerate(path.read_text().split("\n"), 1):
+            hits = sorted({m.group(1).lower() for m in GENERATION_SETUP.finditer(line)})
+            if hits:
+                err(f"{rel}:{n}", f"names {', '.join(hits)}: directory rule DP_TAG_BAN (refused 2026-11-23): "
+                                  f"generated media is set up on the web (routine or campaign page, AI Studio); "
+                                  f"the plugin never drafts or queues it, and resends existing settings without naming them")
+
+
 # --------------------------------------------------------------------------- hooks
 
 def hook_groups(cfg, event):
@@ -1330,6 +1363,7 @@ def run_checks(plugin, marketplace, tools_by_name, checks, gated, bundle=False, 
     check_links(plugin)
     check_lint(plugin, skills)
     check_citations(plugin)
+    check_generation_setup(plugin)
     check_agents(plugin, tools_by_name, gated)
     _ctx[0] = ""
     return referenced

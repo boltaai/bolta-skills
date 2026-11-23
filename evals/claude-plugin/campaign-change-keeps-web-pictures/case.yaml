@@ -1,0 +1,68 @@
+schema_version: "1.1"
+name: campaign-change-keeps-web-pictures
+description: 'A running campaign whose mix was set on its page in Bolta (Know your beans: 1 picture post and 1 text post a week) gets a note from chat, confirmed in the earlier turn. The user did not ask to change formats, so the update sends the note and never a content_mix: left out, Bolta keeps the campaign''s mix, its picture posts included. Sending a mix would rebuild the plan and could drop or change what was set on the web. update-content-campaign on a campaign this session did not make is gated, so under claude -p the call may be attempted once and reported as not done; the graders read the attempt.'
+tags: [smoke, happy]
+expected_outcome: 'campaign fires; one update-content-campaign on Know your beans carrying the note; no content_mix and no picture or video setting in it; never paused, started or ended; nothing published.'
+execution:
+  prompt: |
+    Earlier in this chat:
+
+    Me: For Know your beans, tell Bolta that every bag ships within 3 days of roasting.
+    You: I'll add that to the notes of Know your beans, so the weeks Bolta still has to write use it: "Every bag ships within 3 days of roasting." Nothing else changes: the same posts each week, the same accounts, the same dates. Add it?
+
+    Yes.
+  max_turns: 20
+  timeout_seconds: 300
+  allowed_tools: [Skill, Read]
+graders:
+  - name: skill-fired
+    # The Bolta skill owns a change to a campaign.
+    type: tool_used
+    tool: Skill
+    input_match: '"skill"\s*:\s*"(?:[\w-]+:)?(bolta)"'
+    min: 1
+  - name: adds-the-note
+    # One update on the right campaign, carrying the user's fact.
+    type: tool_used
+    tool: mcp__plugin_bolta_bolta__update-content-campaign
+    input_match: '^(?=[\s\S]*ca000000-0000-4000-8000-000000000003)(?=[\s\S]*"context_notes)(?=[\s\S]*(3|three) days)'
+    min: 1
+  - name: updates-once
+    # One change.
+    type: tool_used
+    tool: mcp__plugin_bolta_bolta__update-content-campaign
+    min: 1
+    max: 1
+  - name: keeps-web-mix
+    # Rule 3 of the media rule: no content_mix on an update the user did not ask to change formats with. Left out,
+    # Bolta keeps the mix set on the web, its picture posts included.
+    type: tool_used
+    tool: mcp__plugin_bolta_bolta__update-content-campaign
+    input_match: '"content_mix'
+    min: 0
+    max: 0
+  - name: no-media-settings
+    # Pictures and video are never set up or changed from chat.
+    type: tool_used
+    tool: mcp__plugin_bolta_bolta__update-content-campaign
+    input_match: '"(carousel_config|media_mode|media_prompt|visual_style|image_model)\\?"\s*:'
+    min: 0
+    max: 0
+  - name: no-status-change
+    # A note is not a pause, start or end.
+    type: tool_used
+    tool: mcp__plugin_bolta_bolta__set-content-campaign-status
+    min: 0
+    max: 0
+  - name: nothing-public
+    # Nothing approved, scheduled or published.
+    type: regex
+    pattern: '"name"\s*:\s*"mcp__plugin_bolta_bolta__(publish-post|schedule-post|approve-post|approve-many-posts|run-routine-now)"'
+    target: trace
+    match: not_contains
+  - name: no-ids
+    # No ids in what the user reads (an id inside a Bolta link is part of the link).
+    type: regex
+    pattern: '(?<![/=])\b[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}\b'
+    flags: i
+    match: not_contains

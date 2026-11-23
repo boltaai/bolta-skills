@@ -14,11 +14,10 @@ Read before editing about your business, reading a second site, calling `update-
 `update-business-dna` with `fields`: only the changed keys. Edit the record the voice in use reads. Show the before and after in one line first; it gets the same Bolta check as a voice change.
 
 - **Basics:** `name`, `tagline`, `business_overview`, `website_url`, `brand_values`.
-- **Image look:** `colors` (hex), `fonts`, `visual_aesthetics`, `logo_url`, `logo_placement` (bottom-right, top-left, center, subtle-background or none), `custom_image_instructions`, `tagline_on_images`.
 - **Local details:** `city`, `neighborhood`, `service_area`, `years_in_business`, `owner_name`, `staff_names`.
 - **Story:** `origin_story`, `community_involvement`, `testimonials` as `[{"name": "...", "quote": "..."}]`, real ones only.
 
-Image fields steer images Bolta makes. Fonts and logo placement are guidance to the image model, not exact layout: never promise them.
+The brand's look (colors, fonts, logo, image instructions) is set in Bolta, not here: "Change it under Brand > Business in Bolta." Never send those fields.
 
 Why it matters: routine and campaign drafts take their facts from this record. A thin overview gives generic drafts, however good the voice.
 

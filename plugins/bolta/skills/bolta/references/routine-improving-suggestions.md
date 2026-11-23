@@ -4,7 +4,7 @@ Read after [routine-improving.md](routine-improving.md) when the user asks what 
 
 ## What they are
 
-`list-suggestions` with `kind: "brand"` turns approvals, edits and rejections into one change each. Bolta finds them itself, shortly after review decisions, and keeps at most 2 open. Examples: pause a routine whose last 3 decided drafts were all no; post less often; move a routine's time to when drafts get moved to; add a phrase the user keeps adding to its brief; carousels of the brand's own photos; only their own photos; a seasonal campaign; reuse best posts. Show its title, reason and every change it lists: accepting can change a voice or schedule, switch a routine on or off, or start a campaign. Only an owner or admin can decide (`can_decide`). On a yes: `decide-suggestion` with its `suggestion_id` and `decision: "accept"`; `decline` turns it down; `undo` works for 7 days.
+`list-suggestions` with `kind: "brand"` turns approvals, edits and rejections into one change each. Bolta finds them itself, shortly after review decisions, and keeps at most 2 open. Examples: pause a routine whose last 3 decided drafts were all no; post less often; move a routine's time to when drafts get moved to; add a phrase the user keeps adding to its brief; a seasonal campaign; reuse best posts. Show its title, reason and every change it lists: accepting can change a voice or schedule, switch a routine on or off, or start a campaign. Only an owner or admin can decide (`can_decide`). On a yes: `decide-suggestion` with its `suggestion_id` and `decision: "accept"`; `decline` turns it down; `undo` works for 7 days.
 
 ## Deciding one
 
@@ -14,6 +14,7 @@ Read after [routine-improving.md](routine-improving.md) when the user asks what 
 | `decline` | Turns it down | They said no |
 | `undo` | Reverses an accepted one | Within 7 days, while what it changed still exists |
 
+- A suggestion that adds or changes pictures, video or carousels: don't accept it here; say it's decided in Bolta, on the routine's page.
 - Never accept to "try it": a suggestion can switch a routine on or start a campaign, which leads to posts and uses credits.
 - `can_decide` false: say "Only the brand's owner or an admin can accept this", and show it anyway.
 - After accepting, read the routine back (`get-routine`) and say what changed.

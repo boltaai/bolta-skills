@@ -2,7 +2,7 @@ schema_version: "1.1"
 name: gauntlet-vague-help
 description: 'A beginner says only "help me with social media". Bolta already knows the business from its site and Instagram and Facebook are connected; there is no voice and nothing running. The first reply proposes 3-5 Bolta routines for a candle maker and the voice, without making the user explain their business.'
 tags: [gauntlet]
-expected_outcome: 'bolta fires; looks (accounts); never re-reads the site (a business record exists); asks the planner; 3 to 5 weekly routines for a candle business in the reply; voice mentioned; at most 2 questions; nothing saved, nothing public; plain words, no ids.'
+expected_outcome: 'bolta fires; looks (accounts); never re-reads the site (a business record exists); asks the planner; 3 to 5 weekly routines for a candle business in the reply, as text where text can go; Instagram''s pictures pointed to the routine''s page (bolta.ai/dashboard/routines), never set up from chat; voice mentioned; at most 2 questions; nothing saved, nothing public; plain words, no ids.'
 execution:
   prompt: |
     help me with social media
@@ -61,6 +61,19 @@ graders:
     # At most 2 questions in the reply.
     type: regex
     pattern: '(?:\?(?=[\s*_)\]]|$)[\s\S]*){3}'
+    match: not_contains
+  - name: pictures-on-routine-page
+    # The planner proposes Instagram, which needs pictures: one line, one link, they are added on the routine's page in Bolta.
+    type: regex
+    pattern: 'bolta\.ai/dashboard/(routines|ai-studio)'
+    flags: i
+  - name: no-generated-media
+    # Pictures and video are never set up from chat. Fails on any Bolta call carrying media_mode image, video or
+    # carousel, media_prompt, visual_style, image_model, carousel_config, a reference image, library_media,
+    # custom_image_instructions, or a still_image, carousel, short_video, feed_video, story or avatar_video mix key.
+    type: regex
+    target: trace
+    pattern: '"name"\s*:\s*"mcp__plugin_bolta_bolta__[\w-]+"\s*,\s*"input"\s*:\s*\{(?=[^\n]*?(?:"media_mode\\?"\W{1,8}(?:image|video|carousel)|"(?:media_prompt|visual_style|image_model|carousel_config|reference_media_id|reference_image_url|library_media|custom_image_instructions)\\?"\s*:|"content_mix\\?"\W{1,4}\{[^{}]*"(?:still_image|carousel|short_video|feed_video|story|avatar_video)\\?"\s*:))'
     match: not_contains
   - name: nothing-saved-yet
     # A proposal, not a setup: no routine, campaign or post saved before a yes.

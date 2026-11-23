@@ -1,7 +1,7 @@
 {
   "ask": "Start it.",
   "playbook": "campaign",
-  "before": "The plan was shown in the previous reply: New pricing, Problem / Solution, Nov 16 to Dec 6 (3 weeks, launch in week 3), 3 images and 1 carousel a week, 12 drafts to review, Bolta writes it.",
+  "before": "The plan was shown in the previous reply: New pricing, Problem / Solution, Nov 16 to Dec 6 (3 weeks, launch in week 3), 4 text posts a week on LinkedIn, 12 drafts to review, Bolta writes it. The user also uses Instagram; the plan said its pictures are added on the campaign page.",
   "steps": [
     {
       "tool": "create-content-campaign",
@@ -15,9 +15,11 @@
         "cta_url": "https://example.com/pricing",
         "starts_on": "2026-11-16",
         "ends_on": "2026-12-06",
+        "content_mix": {
+          "text": 4
+        },
         "account_ids": [
-          "<LinkedIn account id>",
-          "<Instagram account id>"
+          "<LinkedIn account id>"
         ],
         "context_notes": "Launch day is Dec 1. Three plans. Facts the user gave, nothing else.",
         "context_sources": [
@@ -28,7 +30,7 @@
           }
         ]
       },
-      "why": "A launch is problem_solution (guidance; always send a strategy). theme is the writer's goal sentence; cta_text is used word for word. ends_on is a real date: null is ignored, not refused, and the campaign would keep 1 week. Launch day Dec 1 sits in week 3 because weeks start on the start date's weekday (Monday). No content_mix: the brand's saved Content defaults apply, else the strategy's own mix (3 images and 1 carousel). Check resolved_content_mix in the reply. If the user asks for a different mix, send only known mix keys; others are dropped silently. Accounts, notes and the page go on the same create call, so the campaign is made with its accounts. Left out, account_ids would come back empty (the brand's Content defaults fill it only when crosspost is on), and with accounts in the workspace and none on the campaign, activating would stall at needs accounts. If the call refuses these fields: the user picks accounts on the campaign's page, then says done."
+      "why": "A launch is problem_solution (guidance; always send a strategy). theme is the writer's goal sentence; cta_text is used word for word. ends_on is a real date: null is ignored, not refused, and the campaign would keep 1 week. Launch day Dec 1 sits in week 3 because weeks start on the start date's weekday (Monday). A campaign made here is text-based, so content_mix is sent with the plan's 4 text posts: left out, the brand's Content defaults or the strategy's mix could carry pictures. Check resolved_content_mix in the reply. Instagram needs a picture, so it stays off a text campaign. Accounts, notes and the page go on the same create call, so the campaign is made with its accounts. Left out, account_ids would come back empty (a mix sent on the create skips the Content defaults' crosspost fill), and with accounts in the workspace and none on the campaign, activating would stall at needs accounts. If the call refuses these fields: the user picks accounts on the campaign's page, then says done."
     },
     {
       "tool": "analyze-content-campaign-source",
@@ -55,9 +57,10 @@
       "why": "Read status (active) and schedule_status (not needs_accounts), and next_generation_at: week 1's drafts are written about 2 days before the week, starting around midnight UTC, so say \"around\"."
     }
   ],
-  "say": "Campaign on for Acme: New pricing, Nov 16 to Dec 6. Week 1's drafts land around Sat Nov 14 and wait for your yes.",
+  "say": "Campaign on for Acme: New pricing, Nov 16 to Dec 6 on LinkedIn. Week 1's drafts land around Sat Nov 14 and wait for your yes. Pictures for Instagram are added at bolta.ai/dashboard/campaigns/<id>.",
   "never": [
     "Starting a campaign and also writing its posts by hand: Bolta would write a second set.",
-    "Sending content_mix when the plan uses the default mix: it skips the brand's saved Content defaults."
+    "Leaving content_mix out of a campaign made here: the brand's Content defaults or the strategy's mix can carry pictures.",
+    "Putting Instagram on a text campaign: its drafts would be held."
   ]
 }

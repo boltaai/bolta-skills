@@ -52,11 +52,12 @@
       "why": "About every 15 seconds until succeeded or failed. setup.without_website lists what a site would add."
     }
   ],
-  "say": "Harbor Physio is set up from what you told me: about your business, your services, and your voice (short and plain, no jargon, for runners and desk workers in Leeds); your Facebook page uses it. Voice setup 73%, business 80% (no colours or fonts yet). A website would add your colours and more detail; share it any time and it only fills gaps. Have brand colours, fonts or a logo? Paste them, or share an image of your logo.",
+  "say": "Harbor Physio is set up from what you told me: about your business, your services, and your voice (short and plain, no jargon, for runners and desk workers in Leeds); your Facebook page uses it. Voice setup 73%, business 80%. A website would add more detail; share it any time and it only fills gaps.",
   "never": [
     "Setting up from a website guessed from the name.",
     "Skipping the website question.",
-    "A fact, colour or font they didn't give.",
+    "A fact they didn't give.",
+    "Asking for or saving colours, fonts or a logo: the brand's look is set in Bolta.",
     "A second voice next to a Starter Voice."
   ]
 }

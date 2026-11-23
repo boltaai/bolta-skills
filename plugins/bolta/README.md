@@ -7,7 +7,7 @@ Tell your AI app what you want to post about. Bolta writes it in your voice ever
 - "Plan a week of LinkedIn posts about our new pricing." Drafts in your voice; "yes to 1, 3 and 4" schedules them.
 - "Keep me posting every week." A **Bolta routine** writes drafts every Monday, even with this app closed.
 - "We launch on Nov 3." A **campaign**: 1 to 4 weeks, a strategy, a verdict.
-- "What's waiting?" or "Any mentions?" With 8 or more drafts or 10 or more mentions, read-only **clearing-house** and **community-triage** helpers sort them first, in apps that run subagents. You decide.
+- "What's waiting?" or "Any mentions?" With 8+ drafts or 10+ mentions, read-only **clearing-house** and **community-triage** helpers sort them first, in apps that run subagents. You decide.
 
 Start with `/bolta:bolta` or "set me up".
 
@@ -46,7 +46,7 @@ Saving drafts needs none. **Bolta checks** `careful` in `/config` checks every a
 
 ## Limits
 
-- No media upload: media goes in as a public link. Instagram and Pinterest need an image or video, TikTok and YouTube a video.
+- No media upload: media goes in as a public link; Bolta makes pictures and video only on bolta.ai. Instagram and Pinterest need an image or video, TikTok and YouTube a video.
 - One connection is one organization and reaches the brands you tick in it; agencies tick their client brands. New brand: reconnect and tick it.
 - The checks need `sh` and `awk` (Windows: [Git for Windows](https://git-scm.com/downloads/win) first).
 
@@ -54,4 +54,4 @@ Saving drafts needs none. **Bolta checks** `careful` in `/config` checks every a
 
 Bolta (mcp.bolta.ai) gets your requests and decisions. Sign-in is your AI app's: the plugin never sees a password and makes no network calls of its own.
 
-v0.5.3 (beta). [Privacy](https://bolta.ai/privacy-policy) · [Terms](https://bolta.ai/tos) · [Support](https://bolta.ai/support) · MIT licence
+v0.5.4 (beta). [Privacy](https://bolta.ai/privacy-policy) · [Terms](https://bolta.ai/tos) · [Support](https://bolta.ai/support) · MIT licence

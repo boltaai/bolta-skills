@@ -1,8 +1,8 @@
 schema_version: "1.1"
 name: ui-routine-instagram-preview
-description: 'The routine panel prompt with another network and cadence: Harbor Physio, two Instagram posts each week. Same outcomes, plus Instagram needs a picture or video for every post.'
+description: 'The routine panel prompt with another network and cadence: Harbor Physio, two Instagram posts each week. Instagram needs a picture or video for every post, and a routine made from chat writes text, so Bolta never plans or saves a text routine to Instagram and never sets up pictures from chat: it says in one line that pictures and video are added on the routine''s page in Bolta, with the link. Before the media rule this case graded the shown plan (output, schedule, Melbourne time, reviewer); those graders were dropped because that plan was a text routine to Instagram.'
 tags: [uiprompts-screens]
-expected_outcome: 'bolta fires; reads the voice; plan or templates; shows output, schedule, Melbourne time, the Instagram account, reviewer; says Instagram needs a picture or video; nothing saved.'
+expected_outcome: 'bolta fires; reads the voice; names the Instagram account; says Instagram needs a picture or video and that they are added on the routine''s page (bolta.ai/dashboard/routines); no text routine planned to Instagram as if it could run; no picture or video settings sent and no image prompts written; nothing saved.'
 execution:
   prompt: |
     Use Bolta to prepare a draft routine for Harbor Physio that writes two Instagram posts each week. Use our saved brand voice and a routine template that supports this.
@@ -25,11 +25,6 @@ graders:
     type: 'regex'
     pattern: '"name"\s*:\s*"mcp__plugin_bolta_bolta__(get-voice-context|get-voice-profile)"'
     target: 'trace'
-  - name: fitting-template
-    # A routine template or Bolta's plan.
-    type: 'regex'
-    pattern: '"name"\s*:\s*"mcp__plugin_bolta_bolta__(plan|list-routine-templates)"'
-    target: 'trace'
   - name: nothing-saved
     # Nothing saved before the confirm.
     type: 'regex'
@@ -42,36 +37,35 @@ graders:
     pattern: '"name"\s*:\s*"mcp__plugin_bolta_bolta__(publish-post|schedule-post|approve-post|approve-many-posts|activate-routine|resume-routine|run-routine-now|set-content-campaign-status|voice-generate)"'
     target: 'trace'
     match: 'not_contains'
-  - name: shows-output
-    # What each run produces.
-    type: 'regex'
-    pattern: '\b(2|two)\b[^\n]{0,60}(Instagram )?(post|draft)'
-    flags: 'i'
-  - name: shows-schedule
-    # Day and time.
-    type: 'regex'
-    pattern: '(Mon|Tue|Wed|Thu|Fri|Sat|Sun)[a-z]*\W[^\n]{0,40}\d{1,2}(:\d\d)?\s?(am|pm|AM|PM)?|\d{1,2}:\d\d'
-    flags: 'i'
-  - name: shows-timezone
-    # The timezone.
-    type: 'regex'
-    pattern: 'Melbourne|Australia|AEDT|AEST'
-    flags: 'i'
   - name: shows-destination
     # The destination account.
     type: 'regex'
     pattern: '@?harborphysio|Harbor Physio[^\n]{0,20}Instagram|Instagram[^\n]{0,30}(account|Harbor)'
-    flags: 'i'
-  - name: shows-reviewer
-    # Who reviews the drafts.
-    type: 'regex'
-    pattern: 'review(s|ed|er|ers)?\b[^\n]{0,80}(you|Anna|Tom|owner|approve)|(you|Anna|Tom)[^\n]{0,60}review|who should review'
     flags: 'i'
   - name: instagram-needs-media
     # Instagram needs a picture or video.
     type: 'regex'
     pattern: '(image|photo|picture|video|visual|media)'
     flags: 'i'
+  - name: pictures-on-routine-page
+    # One line, one link: pictures and video for a routine are added on its page in Bolta.
+    type: 'regex'
+    pattern: 'bolta\.ai/dashboard/routines'
+    flags: 'i'
+  - name: no-generated-media
+    # Pictures and video are never set up from chat. Fails on any Bolta call carrying media_mode image, video or
+    # carousel, media_prompt, visual_style, image_model, carousel_config, a reference image, library_media,
+    # custom_image_instructions, or a still_image, carousel, short_video, feed_video, story or avatar_video mix key.
+    type: regex
+    target: trace
+    pattern: '"name"\s*:\s*"mcp__plugin_bolta_bolta__[\w-]+"\s*,\s*"input"\s*:\s*\{(?=[^\n]*?(?:"media_mode\\?"\W{1,8}(?:image|video|carousel)|"(?:media_prompt|visual_style|image_model|carousel_config|reference_media_id|reference_image_url|library_media|custom_image_instructions)\\?"\s*:|"content_mix\\?"\W{1,4}\{[^{}]*"(?:still_image|carousel|short_video|feed_video|story|avatar_video)\\?"\s*:))'
+    match: not_contains
+  - name: no-image-prompts
+    # Never writes image ideas, image prompts, video scripts or scene descriptions for Bolta to render.
+    type: 'regex'
+    pattern: '\b(image|video|visual)\s+(prompts?|scripts?)\b|\bimage ideas?\b|\bscene descriptions?\b|\bstoryboards?\b'
+    flags: 'i'
+    match: 'not_contains'
   - name: at-most-two-questions
     # Asks only for what is missing: at most 2 questions (lines with a question mark; an either/or on one line is one).
     type: 'regex'

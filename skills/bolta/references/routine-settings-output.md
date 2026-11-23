@@ -33,7 +33,7 @@ Most post routines and the weekly article take one unused idea per piece from th
 
 ## Changing it
 
-`update-routine` replaces `output_config` whole, except `review`, `story` and `library`, which are kept when left out. Read `get-routine`, change one key, resend all the rest, `artifact_type` and `count` included. Sending only `{"count":2}` is refused for a missing `artifact_type`, and drops media, settings and topics.
+`update-routine` replaces `output_config` whole, except `review`, `story` and `library`, which are kept when left out. Read `get-routine`, change one key, resend all the rest, `artifact_type` and `count` included. Sending only `{"count":2}` is refused for a missing `artifact_type`, and drops settings, topics and pictures set on its page.
 
 ## Always
 

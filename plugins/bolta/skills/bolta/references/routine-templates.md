@@ -28,7 +28,7 @@ Outreach replies, Comment replies and Insights (reports): [routine-templates-rep
 
 ## Rules that change the setup
 
-- **Founder, customer-win, LinkedIn positions and Square** share Bolta's main writer with weekly posts: they take pictures, a voice and writing settings. Posting without asking, on the user's words only: these, except Square's openings and weekly-momentum routines.
+- **Founder, customer-win, LinkedIn positions and Square** share Bolta's main writer with weekly posts: they take a voice and writing settings (and pictures, set on the routine's page). Posting without asking, on the user's words only: these, except Square's openings and weekly-momentum routines.
 - Saved voice and brand setup are optional for compatible drafts. Product features do not establish a customer result or founder event. Source, published-history and company-page routines still need their declared inputs.
 - **A thread** from scratch: weekly posts on X only with `contentTypes: ["thread"]`, or a research series with `outputFormat: "thread"`, each with exactly one X account ([routine-settings-writing.md](routine-settings-writing.md)).
 - **A launch, a sale, an event** is a campaign. Product launch routines can't be made: hand to [campaign](campaign.md).

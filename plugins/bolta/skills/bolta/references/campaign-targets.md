@@ -14,10 +14,10 @@ Read when a campaign needs accounts, notes or a source.
 
 ## A page, file or brand-kit section to read
 
-- `context_sources` is a list of `{"kind", "ref", "title"}`, such as `[{"kind": "url", "ref": "https://..."}]`, 20 at most. It replaces the whole list: send the sources to keep.
+- `context_sources` is a list of `{"kind", "ref", "title"}`, such as `[{"kind": "url", "ref": "https://..."}]`, 20 at most. It replaces the whole list: send back every source already there, as read, plus the new one.
   - `url`: a web page, `https://...`.
   - `file`: only an id `get-content-campaign` already shows in `context_sources`. Otherwise the user attaches the file to the campaign in Bolta, or use a `url` or the notes.
-  - `brand_kit`: a pointer naming one section to lean on (its text is not copied in): `tagline`, `business_overview`, `origin_story`, `community_involvement`, `customer_testimonials`, `brand_values`, `dos`, `donts`, `tone_of_voice`, `custom_image_instructions`.
+  - `brand_kit`: a pointer naming one section to lean on (its text is not copied in): `tagline`, `business_overview`, `origin_story`, `community_involvement`, `customer_testimonials`, `brand_values`, `dos`, `donts`, `tone_of_voice`.
 - A new source is pending. The writer ignores it until `analyze-content-campaign-source` has read it: one source per call, `kind` and `ref` exactly as on the campaign. It only reads. Web-made and duplicated campaigns start with all sources pending.
 - A page is read in that call (up to about 25 seconds): ready, or failed. A file stays pending until Bolta has read it: analyze it again later. A brand-kit section is ready when the brand kit has text there.
 - Say "Bolta read the page", or "Bolta couldn't read it: <the failed row's `error`, as given>". Offer to put the key facts in the notes.
