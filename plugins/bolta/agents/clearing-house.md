@@ -11,7 +11,7 @@ description: >-
 model: sonnet
 maxTurns: 30
 color: blue
-tools: mcp__plugin_bolta_bolta__list-workspaces, mcp__bolta__list-workspaces, mcp__plugin_bolta_bolta__list-inbox-items, mcp__bolta__list-inbox-items, mcp__plugin_bolta_bolta__list-workspace-posts, mcp__bolta__list-workspace-posts, mcp__plugin_bolta_bolta__get-post, mcp__bolta__get-post, mcp__plugin_bolta_bolta__list-accounts, mcp__bolta__list-accounts, mcp__plugin_bolta_bolta__get-voice-context, mcp__bolta__get-voice-context, mcp__plugin_bolta_bolta__list-routines, mcp__bolta__list-routines, mcp__plugin_bolta_bolta__list-routine-runs, mcp__bolta__list-routine-runs, mcp__plugin_bolta_bolta__list-content-campaigns, mcp__bolta__list-content-campaigns
+tools: mcp__plugin_bolta_bolta__list-workspaces, mcp__plugin_bolta_bolta__list-inbox-items, mcp__plugin_bolta_bolta__list-workspace-posts, mcp__plugin_bolta_bolta__get-post, mcp__plugin_bolta_bolta__list-accounts, mcp__plugin_bolta_bolta__get-voice-context, mcp__plugin_bolta_bolta__list-routines, mcp__plugin_bolta_bolta__list-routine-runs, mcp__plugin_bolta_bolta__list-content-campaigns
 ---
 
 # Clearing house

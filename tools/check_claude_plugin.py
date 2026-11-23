@@ -149,7 +149,9 @@ AGENT_IGNORED_KEYS = {"permissionMode", "hooks", "mcpServers", "initialPrompt", 
 #: The two server prefixes an agent's tool list names: the plugin's own server and one added as "bolta".
 #: A wildcard in the server part is not supported, so a connection named anything else gives the agent
 #: no Bolta tools; its prompt says to stop and the skill does the work itself.
-AGENT_PREFIXES = ("mcp__plugin_bolta_bolta__", "mcp__bolta__")
+#: The plugin ships its own server, so its agents name tools under the plugin scope only. A bare
+#: mcp__bolta__ name is flagged by the plugin directory ("missing plugin scope").
+AGENT_PREFIXES = ("mcp__plugin_bolta_bolta__",)
 #: An agent may call these and nothing else: reads only.
 AGENT_READ_PREFIXES = ("list-", "get-")
 AGENT_READ_EXTRA = {"search-engagement-opportunities"}
@@ -674,7 +676,7 @@ def check_agents(plugin, tools_by_name, gated):
                 err(rel, f"tools lists {tool!r}: an agent only reads (list-, get-); anything that saves, sends or changes belongs to the main conversation behind the user's yes")
         for tool, prefixes in sorted(by_tool.items()):
             if prefixes != set(AGENT_PREFIXES):
-                err(rel, f"{tool!r} is listed under only one server name; list it under {' and '.join(AGENT_PREFIXES)}")
+                err(rel, f"{tool!r} is not listed under {' and '.join(AGENT_PREFIXES)}")
         secs = [h for h, _ in sections(body)]
         if "Hard limits" not in secs:
             err(rel, "needs a '## Hard limits' section that says the agent only reads")

@@ -9,7 +9,7 @@ description: >-
 model: sonnet
 maxTurns: 25
 color: orange
-tools: mcp__plugin_bolta_bolta__list-workspaces, mcp__bolta__list-workspaces, mcp__plugin_bolta_bolta__list-inbox-items, mcp__bolta__list-inbox-items, mcp__plugin_bolta_bolta__list-engagements, mcp__bolta__list-engagements, mcp__plugin_bolta_bolta__get-social-content, mcp__bolta__get-social-content, mcp__plugin_bolta_bolta__list-accounts, mcp__bolta__list-accounts, mcp__plugin_bolta_bolta__get-post, mcp__bolta__get-post, mcp__plugin_bolta_bolta__list-workspace-posts, mcp__bolta__list-workspace-posts
+tools: mcp__plugin_bolta_bolta__list-workspaces, mcp__plugin_bolta_bolta__list-inbox-items, mcp__plugin_bolta_bolta__list-engagements, mcp__plugin_bolta_bolta__get-social-content, mcp__plugin_bolta_bolta__list-accounts, mcp__plugin_bolta_bolta__get-post, mcp__plugin_bolta_bolta__list-workspace-posts
 ---
 
 # Community triage
