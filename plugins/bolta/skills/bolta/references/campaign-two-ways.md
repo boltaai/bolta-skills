@@ -15,18 +15,18 @@ Read after the yes to the plan. One way per campaign, or the posts double up.
 
 - **Create with a text mix:** `content_mix` with the plan's `text` count (and `blog`, `email` when they fit). Left out, Bolta uses the Content defaults or the strategy's mix, which can carry pictures. A mix skips the defaults' account fill, so send `account_ids` too (with `blog`, the WordPress site's).
 - **Read its reply** (no second read needed): `resolved_content_mix`, and `accounts` (name the ones Bolta picked).
-- **Mix not what you sent?** Say so in one line; change it only if the user asks ([settings-formats.md](campaign-settings-formats.md)). Pictures or video in it: start it on its page, not here.
+- **Mix not what you sent?** Say so in one line; change it only if the user asks ([settings-formats.md](campaign-settings-formats.md)). Pictures or video in it: never start it here.
 - **No accounts:** set them, with the notes and any page to read ([targets.md](campaign-targets.md)). Start it once the user said yes (they said start, or "Start it?" got a yes): `set-content-campaign-status` with `action: "activate"`, one Bolta check, uses credits.
-- **Told to start: start**, once it has accounts. A read-back that differs in a detail you chose (a mix, the notes' wording), or a link the user typed on another site, is no reason to hold it: start, then name the difference. A failed call does hold it.
+- **Told to start: start**, once it has accounts and its read-back mix has only `text`, `blog` and `email`. A read-back that differs in a detail you chose (a text count, the notes' wording), or a link the user typed on another site, is no reason to hold it: start, then name the difference. Pictures or video in it hold it: one line, "It has pictures or video, so it's started on its page: bolta.ai/dashboard/campaigns/<id>." A failed call also holds it.
 - **Never start it with no accounts when the workspace has some.** It switches on, then stalls (`schedule_status.state` reads `needs_accounts`). If it happens, say so; setting accounts restarts a dated campaign on its own.
 - Nothing connected at all: it still drafts for review. Offer [connect](connect.md).
 - **Read `generation`:** `started` true: Bolta is writing week 1 now, drafts in a few minutes. `scheduled_for`: when the first drafts come. `error_code`: say the reason plainly.
-- In the workspace clock, with "around": "On. Week 1 drafts land in your review list around Sat Oct 24. Each week's drafts come 2 days before that week." The lead is `review_lead_days`; writing starts around midnight UTC, the evening before in the Americas.
+- In the workspace clock, with "around": "On. Week 1 drafts land in your review list around Sat Oct 24. Each week's drafts come 2 days before that week." ([settings-status.md](campaign-settings-status.md)).
 - Campaign drafts always wait for a yes, whatever the workspace setting.
 
 ## I write it now (1 week to see now, or "show me all")
 
-Same brief; I write up to 12 drafts, attach them to the campaign at once, and show them. **Never start this campaign**: Bolta would write a second set. Steps and tool calls: [two-ways-i-write.md](campaign-two-ways-i-write.md).
+Same brief; I write up to 12 drafts, attach them at once, and show them. **Never start this campaign**: Bolta would write a second set. Steps and tool calls: [two-ways-i-write.md](campaign-two-ways-i-write.md).
 
 ## Always
 

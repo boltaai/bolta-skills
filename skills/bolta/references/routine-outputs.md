@@ -1,14 +1,14 @@
 # What a Bolta routine makes: pictures, the client, stories, Library posts
 
-All live in `output_config`; read `get-routine` first.
+All in `output_config`; read `get-routine` first.
 
 ## Pictures and video
 
 - **Has pictures:** `get-routine` `output_config` has a picture, video, slide or visual setting that is on or filled in (a flag ending in `_supported` is not one), or its `story` has `image`, `video` or `carousel` above 0. Here: read, list runs, review drafts, pause. Anything else (a change, run now, switching on, a copy, a suggestion for it), and any picture request: one line, "That's done on its page in Bolta: bolta.ai/dashboard/routines/<id>."
 - A routine made here writes text. Pictures, video, and Instagram, TikTok, YouTube and Pinterest (they refuse text-only posts) stay out of the plan. Asked for them, after saving: "Pictures and Instagram are added on its page: bolta.ai/dashboard/routines/<id>."
-- Only those four networks wanted or connected: save nothing; say: "Instagram needs a picture on every post, so this routine is set up in Bolta: bolta.ai/dashboard/routines. Here I can write single posts for a photo you attach."
+- Only those networks wanted, or none named and only those connected: save nothing: "Instagram needs a picture on every post, so this routine is set up in Bolta: bolta.ai/dashboard/routines. Here I can write single posts for a photo you attach."
 - Never write picture ideas, image prompts or video scripts, anywhere.
-- A draft missing the picture or video it should carry is not ready: don't approve it.
+- A draft missing the picture or video it should carry is not ready to approve.
 
 ## Straight to the client
 
@@ -17,7 +17,7 @@ All live in `output_config`; read `get-routine` first.
 - Works only on a post routine, ask me first (not `auto`), story off, with at least one client reviewer. Otherwise nothing is sent; with no reviewer, `review.last_status` is `no_reviewer`.
 - `bank_target` (1-200, optional): how many to keep waiting. Below it, Bolta runs again on its own to fill the bank (more credits) while runs add drafts and the idea bank has ideas. Scheduled runs skip once that many wait or 8 weeks are approved ahead; run now always runs.
 - The client gets one notice per fill; the team a daily summary. A client yes takes the next open slot. Drafts reach the client unseen by the team: say so.
-- Check `get-routine` `review.waiting` and `review.last_status`.
+- Check `review.waiting` and `review.last_status`.
 
 ## One idea, several formats
 
@@ -25,7 +25,7 @@ All live in `output_config`; read `get-routine` first.
 
 ## Library posts alongside
 
-`library: {"enabled": true, "voice_profile_ids": [...], "send_to_client": false}` on a post routine (voices from `get-voice-context` with `all_profiles: true`): up to 4 Library posts a run, at most once a day, reviewed first, skipped while a story is on. A routine that only makes Library posts is set up in Brand > Library (bolta.ai/dashboard/knowledge-base?tab=library); `list-routine-runs` stays empty for it, so read `get-routine` `library.last_status`.
+`library: {"enabled": true, "voice_profile_ids": [...], "send_to_client": false}` on a post routine (voices from `get-voice-context` with `all_profiles: true`): up to 4 Library posts a run, at most once a day, reviewed first, skipped while a story is on. A routine that only makes Library posts is set up in Brand > Library (bolta.ai/dashboard/knowledge-base?tab=library); `list-routine-runs` stays empty for it; read `get-routine` `library.last_status`.
 
 Best posts again (`repurposing`): [routine-settings-writing.md](routine-settings-writing.md).
 

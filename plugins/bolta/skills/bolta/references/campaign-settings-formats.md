@@ -6,7 +6,7 @@ Read when choosing what a campaign makes each week, or when drafts land on a net
 
 - It is text-based: send `content_mix` on the create with only `text`, `blog` and `email`, and `account_ids` on the same call (a mix skips the defaults' "Crosspost to the same accounts"). With `blog`, include the WordPress site's account id. Left out, the brand's defaults can carry pictures. Read `resolved_content_mix` in the reply.
 - Never put pictures, video, or Instagram, TikTok, YouTube or Pinterest in the plan ([how-to.md](campaign-how-to.md)). A network that needs them: leave it off and say in one line that pictures and video are set up at bolta.ai/dashboard/campaigns.
-- Only those networks wanted or connected: save no campaign. One line: "Instagram needs a picture on every post, so this campaign is set up in Bolta: bolta.ai/dashboard/campaigns. Here I can write single posts for a photo you attach."
+- Only those networks wanted, or none named and only those connected: save none; one line: "Instagram needs a picture on every post, so this campaign is set up in Bolta: bolta.ai/dashboard/campaigns. Here I can write single posts for a photo you attach."
 - Unknown keys drop silently. A topic goes in the theme or notes, never the mix.
 
 ## A campaign with pictures or video
