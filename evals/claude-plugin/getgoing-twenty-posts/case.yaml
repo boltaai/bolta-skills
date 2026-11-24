@@ -2,7 +2,7 @@ schema_version: "1.1"
 name: getgoing-twenty-posts
 description: '20 posts a month for LinkedIn and Instagram: a repeating setup or one batch of drafts, never 20 separate calls; nothing public. Instagram is disconnected in the mock world.'
 tags: [getgoing]
-expected_outcome: 'bolta fires; a routine or campaign plan, or one all-draft bulk-create-posts; never 3+ single create/schedule/publish calls; nothing approved, scheduled, published or switched on.'
+expected_outcome: 'bolta fires; a routine or campaign plan, or one all-draft bulk-create-posts; never 3+ single create/schedule/publish calls; no picture or video settings sent (a routine or campaign made from chat is text); nothing approved, scheduled, published or switched on.'
 execution:
   prompt: |
     I need 20 posts this month for LinkedIn and Instagram.
@@ -34,6 +34,14 @@ graders:
     input_match: '"(scheduled_time|scheduled_at)"\W{1,6}\d|"status"\W{1,6}(?!draft)\w'
     min: 0
     max: 0
+  - name: no-generated-media
+    # Pictures and video are never set up from chat. Fails on any Bolta call carrying media_mode image, video or
+    # carousel, media_prompt, visual_style, image_model, carousel_config, a reference image, library_media,
+    # custom_image_instructions, or a still_image, carousel, short_video, feed_video, story or avatar_video mix key.
+    type: regex
+    target: trace
+    pattern: '"name"\s*:\s*"mcp__plugin_bolta_bolta__[\w-]+"\s*,\s*"input"\s*:\s*\{(?=[^\n]*?(?:"media_mode\\?"\W{1,8}(?:image|video|carousel)|"(?:media_prompt|visual_style|image_model|carousel_config|reference_media_id|reference_image_url|library_media|custom_image_instructions)\\?"\s*:|"content_mix\\?"\W{1,4}\{[^{}]*"(?:still_image|carousel|short_video|feed_video|story|avatar_video)\\?"\s*:))'
+    match: not_contains
   - name: no-switch-on-via-plan
     # confirm-plan never switches on without a separate yes.
     type: regex

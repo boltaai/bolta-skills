@@ -1,14 +1,14 @@
 {
   "ask": "Yes, send them straight to the client and keep 20 waiting.",
   "playbook": "routine",
-  "before": "get-routine showed the weekly LinkedIn routine, ask me first, no story, and the brand has a client reviewer. The reply said: from now on each run's drafts go to the client without the team seeing them first; Bolta keeps up to 20 waiting, running extra times on its own to fill that (more credits) while the idea bank has ideas, and skips scheduled runs once that many wait; a client yes takes the next open slot.",
+  "before": "get-routine showed the weekly LinkedIn routine, ask me first, no story, its output_config only artifact_type, count and platforms, with no picture or video settings, and the brand has a client reviewer. The reply said: from now on each run's drafts go to the client without the team seeing them first; Bolta keeps up to 20 waiting, running extra times on its own to fill that (more credits) while the idea bank has ideas, and skips scheduled runs once that many wait; a client yes takes the next open slot.",
   "steps": [
     {
       "tool": "get-routine",
       "arguments": {
         "routine_id": "<routine id>"
       },
-      "why": "output_config is replaced whole on update, so read it first and resend every key."
+      "why": "output_config is replaced whole on update, so read it first and resend every key it shows, unchanged. It has no pictures; a routine with pictures is changed only on its page."
     },
     {
       "tool": "update-routine",

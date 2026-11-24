@@ -17,11 +17,11 @@ Reports fit every business. A business in none of these rows (a shop, a cafe): s
 
 Each set is 3-5 Bolta routines doing different jobs, about 3-6 drafts a week in total. Reports add no review.
 
-- **Local service** (salon, gym, groomer): weekly posts, 2 for Instagram and Facebook; customer wins, 1, only from wins the customer agreed to share; the weekly report. With Square connected, add open slots, 2.
+- **Local service** (salon, gym, groomer): weekly posts, 2 for Facebook (Instagram needs pictures, added on the routine's page: [routine-outputs.md](routine-outputs.md)); customer wins, 1, only from wins the customer agreed to share; the weekly report. With Square connected, add open slots, 2.
 - **Practice** (clinic, dentist, law firm): weekly posts, 2; a research series, 1, on the question patients or clients keep asking; a weekly article, 1, if they have a site; the weekly report.
 - **Founder or software company**: founder stories, 2, in a person voice, from real events; LinkedIn positions, 2; the weekly report. GitHub connected: posts from each merged pull request.
 - **Consultant, coach or agency**: LinkedIn positions, 2; founder stories, 1; a weekly article, 1; the weekly report.
-- **Shop, cafe or restaurant**: weekly posts, 3, with an image each when Instagram is bound ([routine-outputs.md](routine-outputs.md)); the weekly report.
+- **Shop, cafe or restaurant**: weekly posts, 3, as text (pictures and Instagram are added on the routine's page, [routine-outputs.md](routine-outputs.md)); the weekly report.
 
 ## Choosing within a set
 

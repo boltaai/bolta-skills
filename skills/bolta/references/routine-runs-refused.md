@@ -1,6 +1,6 @@
 # Bolta routine runs: run now refused, and credits
 
-Read when `run-routine-now` comes back refused, or for credits. Back to the run's state and failures: [references/routine-runs.md](routine-runs.md).
+Read when `run-routine-now` comes back refused, or for credits. A routine with pictures is run, switched on and copied only on its page ([routine-outputs.md](routine-outputs.md)). Back to the run's state and failures: [references/routine-runs.md](routine-runs.md).
 
 ## Run now refused
 
@@ -12,7 +12,7 @@ Read when `run-routine-now` comes back refused, or for credits. Back to the run'
 | `run_now_member_daily_cap` | Teammates' 25 manual runs a day (shared by everyone but the owner) are used up |
 | `routine_invalid` | `detail.errors` names the setting; fix it with `update-routine` |
 | `routine_not_runnable`, `routine_not_active` | Paused or a draft: resume or switch it on first |
-| `routine_archived` | Stopped for good: copy it instead |
+| `routine_archived` | Stopped for good: copy it instead (one with pictures: on its page, bolta.ai/dashboard/routines/<id>) |
 | `hidden_job_paused` | Its writer was paused by hand; switch it back on at bolta.ai/dashboard/agents |
 
 ## Refused on a setting

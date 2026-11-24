@@ -24,24 +24,8 @@
       "starts_on": "{{input.starts_on}}",
       "ends_on": "{{input.ends_on}}",
       "duration_weeks": 3,
-      "content_mix": {
-        "still_image": 3,
-        "carousel": 1
-      },
-      "content_plan": [
-        {
-          "type": "still_image",
-          "count": 3,
-          "account_ids": [],
-          "days": []
-        },
-        {
-          "type": "carousel",
-          "count": 1,
-          "account_ids": [],
-          "days": []
-        }
-      ],
+      "content_mix": {{input.content_mix}},
+      "content_plan": [],
       "carousel_config": {},
       "settings": {},
       "context_notes": "",
@@ -51,10 +35,7 @@
       "voice_profile_id": null,
       "voice_profile": null,
       "content_types": [],
-      "resolved_content_mix": {
-        "still_image": 3,
-        "carousel": 1
-      },
+      "resolved_content_mix": {{input.content_mix}},
       "status": "draft",
       "status_reason": "",
       "is_runnable": false,

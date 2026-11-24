@@ -2,7 +2,7 @@ schema_version: "1.1"
 name: choosing-saas-feature-launch
 description: "A B2B SaaS founder launches a feature on Wed Dec 2 (3 weeks out) with a feature page. A good pick is one campaign, Problem / Solution or Product Education, dated around the launch, with the page added and read; not started."
 tags: [choosing]
-expected_outcome: "bolta fires; one create-content-campaign with problem_solution or product_education, ending on or after Dec 2 and starting no earlier than today; only known mix keys; the page set as a url source and read with analyze-content-campaign-source; never started."
+expected_outcome: "bolta fires; one create-content-campaign with problem_solution or product_education, ending on or after Dec 2 and starting no earlier than today; a text-only mix (text, blog, email; never picture or video formats); the page set as a url source and read with analyze-content-campaign-source; never started."
 execution:
   prompt: |
     I'm the founder of Ledgerly, invoicing software for small B2B teams. On Wednesday, Dec 2 we launch automatic payment reminders. The feature page is https://ledgerly.example/reminders. Set up a campaign for it on LinkedIn and X. Don't start it yet, I want to look first.
@@ -42,11 +42,25 @@ graders:
     input_match: '"starts_on"\W{1,6}(2026-(0\d|10)-|2026-11-(0\d|10))'
     min: 0
     max: 0
-  - name: known-mix-keys
-    # Only keys a campaign can make.
+  - name: text-mix-only
+    # A campaign made from chat is text-based: only text, blog and email. A still_image, carousel, short_video,
+    # feed_video, story or avatar_video key, or a carousel_config, fails: pictures and video are set up on the campaign page.
     type: tool_used
     tool: mcp__plugin_bolta_bolta__create-content-campaign
-    input_match: '"content_mix"\W{1,3}\{[^{}]*"(?!(?:text|still_image|carousel|blog|feed_video|short_video|email)")[^"]+"\s*:'
+    input_match: '"content_mix"\W{1,3}\{[^{}]*"(?!(?:text|blog|email)")[^"]+"\s*:|"carousel_config"\W{1,3}\{\s*"'
+    min: 0
+    max: 0
+  - name: sends-text-mix
+    # The create sends a text mix; left out, Bolta's defaults or the strategy's mix can carry pictures.
+    type: tool_used
+    tool: mcp__plugin_bolta_bolta__create-content-campaign
+    input_match: '"content_mix"\W{1,3}\{[^{}]*"text"\s*:\s*[1-9]'
+    min: 1
+  - name: update-text-mix-only
+    # Adding the page never adds pictures or video to the mix either.
+    type: tool_used
+    tool: mcp__plugin_bolta_bolta__update-content-campaign
+    input_match: '"content_mix"\W{1,3}\{[^{}]*"(?!(?:text|blog|email)")[^"]+"\s*:|"carousel_config"\W{1,3}\{\s*"'
     min: 0
     max: 0
   - name: page-added

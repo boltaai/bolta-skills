@@ -9,9 +9,9 @@ Each file is one ask from start to finish: the calls in order, why each one is s
 | [routine-without-planner.json](routine-without-planner.json) | No plan tool: create-routine, saved switched off | [routine-without-planner](../references/routine-without-planner.md) |
 | [weekly-three-networks-setup.json](weekly-three-networks-setup.json) | A weekly brief to a Facebook Page, a LinkedIn page and Bluesky, saved asking first | [routine](../references/routine.md) |
 | [weekly-three-networks-no-approval.json](weekly-three-networks-no-approval.json) | The same routine moved to posting without a yes each time, then the summary before switching on | [routine](../references/routine.md) |
-| [routine-with-images.json](routine-with-images.json) | Weekly posts with an image each | [routine](../references/routine.md) |
+| [routine-pictures-on-page.json](routine-pictures-on-page.json) | Weekly posts wanted with pictures: a text routine planned without them, saved switched off, pictures and Instagram added on its page | [routine](../references/routine.md) |
 | [routine-to-client.json](routine-to-client.json) | Send a routine's drafts straight to the client, keeping about 20 waiting | [routine](../references/routine.md) |
-| [fix-a-failed-run.json](fix-a-failed-run.json) | A skipped run: one instructions change, then run now | [routine](../references/routine.md) |
+| [fix-a-failed-run.json](fix-a-failed-run.json) | A skipped run of a text routine: one instructions change, then run now | [routine](../references/routine.md) |
 | [routine-founder-stories.json](routine-founder-stories.json) | Founder stories in a person's voice, from real events, with story settings | [routine](../references/routine.md) |
 | [routine-ship-log.json](routine-ship-log.json) | Posts from each merged pull request: Bolta's plan, LinkedIn only, GitHub connected first | [routine](../references/routine.md) |
 | [routine-new-article-to-social.json](routine-new-article-to-social.json) | The planned new-article routine saved switched off, once the blog is connected | [routine](../references/routine.md) |
@@ -25,7 +25,6 @@ Each file is one ask from start to finish: the calls in order, why each one is s
 | [start-recommend-routines.json](start-recommend-routines.json) | Routines for a clinic, sized to the drafts already waiting | [start](../references/start.md) |
 | [start-save-recommended.json](start-save-recommended.json) | "Set up 1 and 3": saved switched off, then one switch-on question | [start](../references/start.md) |
 | [launch-campaign.json](launch-campaign.json) | A 3-week launch: brief, accounts, a page to read, start | [campaign](../references/campaign.md) |
-| [video-campaign.json](video-campaign.json) | A campaign with two short videos a week, its higher cost said first | [campaign](../references/campaign.md) |
 | [campaign-product-launch.json](campaign-product-launch.json) | A product launch on a date through Bolta's planner: plan, change, save, then start on a second yes | [campaign](../references/campaign.md) |
 | [campaign-flash-sale.json](campaign-flash-sale.json) | A Black Friday sale: the real offer and end date only, no text post for Instagram | [campaign](../references/campaign.md) |
 | [campaign-webinar-countdown.json](campaign-webinar-countdown.json) | A webinar countdown that ends on the event day, every post naming the date | [campaign](../references/campaign.md) |
@@ -34,7 +33,7 @@ Each file is one ask from start to finish: the calls in order, why each one is s
 | [campaign-made-nothing.json](campaign-made-nothing.json) | A campaign that made nothing: diagnosed from one read, fixed, then "Start it?" | [campaign](../references/campaign.md) |
 | [campaign-stop.json](campaign-stop.json) | "Stop the campaign": pause it and say which scheduled posts still go out | [campaign](../references/campaign.md) |
 | [first-voice.json](first-voice.json) | A new brand from its site: connect link first, preview, setup with what they said, check until done | [start](../references/start.md) |
-| [brand-no-website.json](brand-no-website.json) | No website: findings shown, the site asked for once, Bolta's setup from their words, colours asked once | [start](../references/start.md) |
+| [brand-no-website.json](brand-no-website.json) | No website: findings shown, the site asked for once, Bolta's setup from their words | [start](../references/start.md) |
 | [person-voice.json](person-voice.json) | A voice for the founder from posts she pasted, writing as "I" | [voice](../references/voice.md) |
 | [voice-generate-batch.json](voice-generate-batch.json) | A batch in the trained voice (1 credit a post written), then the status poll | [voice](../references/voice.md) |
 | [voice-from-website.json](voice-from-website.json) | A new site on an edited voice: preview, setup, asked before replacing | [voice](../references/voice.md) |

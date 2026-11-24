@@ -8,8 +8,8 @@ Bolta facts for images, video and how text is shown. Which links work, file size
 - A file reference with no `download_url`, or a bare name, is refused: `MEDIA_FILE_NOT_RETRIEVABLE`. Never invent a `download_url` or `file_id`. Instead: attach the file so the app sends its `download_url`, put a public https link in `media_urls`, or upload the image bytes with `upload-library-image` and put its returned `url` in `media_urls` ([Library images](post-media-library.md)).
 - Media is attached per post, from a file or a public link the user gave, at most 25 items per call; Bolta tries to copy each file into its own storage. For the brand's Media Library, read [Library images](post-media-library.md); browsing and byte upload depend on the connected server.
 - No image yet? Say: "Instagram needs an image or video. Attach it here or send me a public link to it."
-- Need an image made? Bolta's AI Studio (bolta.ai/dashboard/ai-studio) makes one; the user then attaches it to the post in Bolta. Bolta's post-writing tools make no images. A one-off video is made there too; for a run of videos, a campaign with `feed_video` (16:9) or `short_video` (9:16) ([campaign](campaign.md)).
-- Images and video made on a schedule come from Bolta routines and campaigns ([routine](routine.md), [campaign](campaign.md)).
+- Need an image or video made? Not from here: "Make it in AI Studio at bolta.ai/dashboard/ai-studio, then attach it here." Never write an image prompt, video script or scene for it.
+- Pictures or video on a routine or campaign: one line, "They're added on its page in Bolta: bolta.ai/dashboard/routines/<id>" (a campaign: bolta.ai/dashboard/campaigns/<id>; not saved yet: the same without the id). Routines and campaigns made here are text ([routine](routine.md), [campaign](campaign.md)).
 
 ## Alt text
 

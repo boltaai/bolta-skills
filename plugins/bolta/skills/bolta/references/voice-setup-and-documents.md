@@ -25,7 +25,7 @@ A person voice or a second voice (a brand with no site: [no website](start-brand
 
 Name the accounts using it (`bootstrapped.accounts_assigned`); none: the connect link. Say what `bootstrapped` lists plainly, then show the voice.
 
-A routine or campaign in another voice: for a campaign, `voice_profile_id` in `create-content-campaign` or `update-content-campaign` ([campaign](campaign.md)); for a routine, `destination_config` {"voice_profile_id": ...} in `create-routine` or `update-routine` (an update replaces the whole object: resend its account_refs and behavior from `get-routine`).
+A routine or campaign in another voice: for a campaign, `voice_profile_id` in `create-content-campaign` or `update-content-campaign` ([campaign](campaign.md)); for a routine, `destination_config` {"voice_profile_id": ...} in `create-routine` or `update-routine` (an update replaces the whole object: resend its account_refs and behavior from `get-routine`). One with pictures or video: changed on its page in Bolta, bolta.ai/dashboard/routines/<id> or bolta.ai/dashboard/campaigns/<id>.
 
 ## Your documents
 

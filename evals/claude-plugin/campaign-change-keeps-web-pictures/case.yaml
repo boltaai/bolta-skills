@@ -1,0 +1,73 @@
+schema_version: "1.1"
+name: campaign-change-keeps-web-pictures
+description: 'A running campaign whose mix was set on its page in Bolta (Know your beans: 1 picture post and 1 text post a week, the suite mock) gets a note asked from chat. A campaign whose content_mix (or resolved_content_mix, when content_mix is empty) has any key other than text, blog and email is managed only on its page: from chat Claude reads it, reviews its drafts and may pause it; any update-content-campaign, targets change, start, resume, finish or copy is one line with one link to its page, bolta.ai/dashboard/campaigns/<id>. So the right answer reads the campaign, sends no update, and points to the page. update-content-campaign.md stays in the mocks so a wrong call reaches a mock and shows in the trace.'
+tags: [smoke, happy]
+expected_outcome: 'campaign fires; reads Know your beans (get-content-campaign or list-content-campaigns) and sees the picture posts in its mix; no update-content-campaign, no set-content-campaign-targets, no status change; no picture or video setting in any call; one line that the note is added on its page, with bolta.ai/dashboard/campaigns/<its id>; never says the note was added; nothing published.'
+execution:
+  prompt: |
+    For Know your beans, tell Bolta that every bag ships within 3 days of roasting.
+  max_turns: 20
+  timeout_seconds: 300
+  allowed_tools: [Skill, Read]
+graders:
+  - name: skill-fired
+    # The Bolta skill owns a change to a campaign.
+    type: tool_used
+    tool: Skill
+    input_match: '"skill"\s*:\s*"(?:[\w-]+:)?(bolta)"'
+    min: 1
+  - name: reads-the-campaign
+    # Whether it has pictures is read from the campaign's mix, never guessed.
+    type: regex
+    pattern: '"name"\s*:\s*"mcp__plugin_bolta_bolta__(get-content-campaign|list-content-campaigns)"'
+    target: trace
+  - name: no-update
+    # campaign-settings-formats.md, "A campaign with pictures or video": it is changed only on its page, notes
+    # included. Any update-content-campaign fails, with or without a content_mix.
+    type: tool_used
+    tool: mcp__plugin_bolta_bolta__update-content-campaign
+    min: 0
+    max: 0
+  - name: no-targets-change
+    # Accounts and pages to read are a change too.
+    type: tool_used
+    tool: mcp__plugin_bolta_bolta__set-content-campaign-targets
+    min: 0
+    max: 0
+  - name: no-status-change
+    # Nobody asked to pause it, and start, resume, finish and retire are on its page.
+    type: tool_used
+    tool: mcp__plugin_bolta_bolta__set-content-campaign-status
+    min: 0
+    max: 0
+  - name: no-generated-media
+    # No picture or video setting in any Bolta call. Fails on media_mode image, video or carousel, media_prompt,
+    # visual_style, image_model, carousel_config, a reference image, library_media, custom_image_instructions, or a
+    # still_image, carousel, short_video, feed_video, story or avatar_video mix key.
+    type: regex
+    target: trace
+    pattern: '"name"\s*:\s*"mcp__plugin_bolta_bolta__[\w-]+"\s*,\s*"input"\s*:\s*\{(?=[^\n]*?(?:"media_mode\\?"\W{1,8}(?:image|video|carousel)|"(?:media_prompt|visual_style|image_model|carousel_config|reference_media_id|reference_image_url|library_media|custom_image_instructions)\\?"\s*:|"content_mix\\?"\W{1,4}\{[^{}]*"(?:still_image|carousel|short_video|feed_video|story|avatar_video)\\?"\s*:))'
+    match: not_contains
+  - name: points-to-its-page
+    # One line, one link: the campaign's own page.
+    type: regex
+    pattern: 'bolta\.ai/dashboard/campaigns/ca000000-0000-4000-8000-000000000003'
+    flags: i
+  - name: no-claimed-note
+    # Never says the note was added.
+    type: regex
+    pattern: '\bI(''ve| have)? (added|saved|updated)\b|\badded (it|that|this|the note|the fact)\b|\b(note|fact) (is|was|has been) (now )?(added|saved)\b|\bnotes now (say|include)\b'
+    flags: i
+    match: not_contains
+  - name: nothing-public
+    # Nothing approved, scheduled, published or run.
+    type: regex
+    pattern: '"name"\s*:\s*"mcp__plugin_bolta_bolta__(publish-post|schedule-post|approve-post|approve-many-posts|run-routine-now)"'
+    target: trace
+    match: not_contains
+  - name: no-ids
+    # No ids in what the user reads (an id inside a Bolta link is part of the link).
+    type: regex
+    pattern: '(?<![/=])\b[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}\b'
+    flags: i
+    match: not_contains

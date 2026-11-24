@@ -4,15 +4,11 @@ All live in `output_config`; read `get-routine` first.
 
 ## Pictures and video
 
-- Only `weekly_social_posts`, `founder_story_series`, `customer_win_social_proof`, `linkedin_thought_leadership` and the Square ones take media (and older `writing_to_posts_weekly`, `company_page_posts` routines); never promise it on others.
-- Keep routines text-first unless the user asks or the network needs pictures (Instagram, TikTok, YouTube). Seen: of 17 image-routine drafts, none approved yet.
-- `media_mode`: `none`, `image`, `video` or `carousel`. `media_prompt`: direction, max 500 characters; required for video. Without it, images use the post and brand look. `visual_style`: 120 max.
-- `image_model` (image only): `fal-ai/nano-banana-2`, `openai/gpt-image-2.6/flare` or `openai/gpt-image-2.6/sunburst` after rollout. Saved 2.5 values remain aliases for the matching variant. Omit for automatic.
-- `reference_media_id` (image only): a picture every image follows. Use only an id the user gives or one `get-routine` already shows; nothing here lists the Media Library.
-- Carousel: `carousel_config: {"slideCount": 2-10, "visualStyle": "auto"|"bold"|"minimal"|"editorial"|"photographic", "aspectRatio": "portrait_4_5"|"square_1_1", "continuity": "brand_lock"|"chain", "useBrand": true}`. `library_media: {"enabled": true, "mix": "library_only"}` builds each deck from the brand's own photos instead (carousel only). Every network must take them.
-- Video is refused if every network is text-only (WordPress, Reddit, Discord, Slack, Mastodon).
-- Switching format: send `carousel_config` and `library_media` cleared, or the change is refused.
-- Pictures cost credits. Short of them, a run steps down instead of failing (video to image, image to text posts); a carousel is never swapped for another format.
+- **Has pictures:** `get-routine` `output_config` has a picture, video, slide or visual setting that is on or filled in (a flag ending in `_supported` is not one), or its `story` has `image`, `video` or `carousel` above 0. Here: read, list runs, review drafts, pause. Anything else (a change, run now, switching on, a copy, a suggestion for it), and any picture request: one line, "That's done on its page in Bolta: bolta.ai/dashboard/routines/<id>."
+- A routine made here writes text. Pictures, video, and Instagram, TikTok, YouTube and Pinterest (they refuse text-only posts) stay out of the plan. Asked for them, after saving: "Pictures and Instagram are added on its page: bolta.ai/dashboard/routines/<id>."
+- Only those four networks wanted or connected: save nothing; say: "Instagram needs a picture on every post, so this routine is set up in Bolta: bolta.ai/dashboard/routines. Here I can write single posts for a photo you attach."
+- Never write picture ideas, image prompts or video scripts, anywhere.
+- A draft missing the picture or video it should carry is not ready: don't approve it.
 
 ## Straight to the client
 
@@ -25,7 +21,7 @@ All live in `output_config`; read `get-routine` first.
 
 ## One idea, several formats
 
-`story: {"enabled": true, "post": 1, "carousel": 0-1, "article": 0-1, "library": 0-4, "send_to_client": false}`, on post routines. Each run takes one unused idea from the brand's idea bank and writes those pieces, overriding `count` and switching off client sending and Library posts alongside. With no ideas left it runs normally (`story.last_status: "no_ideas_ran_normal_run"`). Run now returns `run: null` with a `story` block: not a failure. `send_to_client` covers its Library posts only.
+`story: {"enabled": true, "post": 1, "article": 0-1, "library": 0-4, "send_to_client": false}`, on post routines. Never switch on its `image`, `video` or `carousel` pieces here: switching a story on, leave them out (they stay 0). To change one story setting, resend the whole `story` as read, only that one changed; a piece left out is switched off. Each run takes one unused idea from the brand's idea bank and writes those pieces, overriding `count` and switching off client sending and Library posts alongside. With no ideas left it runs normally (`story.last_status: "no_ideas_ran_normal_run"`). Run now returns `run: null` with a `story` block: not a failure. `send_to_client` covers its Library posts only.
 
 ## Library posts alongside
 
@@ -35,9 +31,8 @@ Best posts again (`repurposing`): [routine-settings-writing.md](routine-settings
 
 ## Changing these
 
-On `update-routine`, `review`, `story` and `library` are kept when left out; to turn one off, send it with `enabled` or `to_client` false. Every other `output_config` key is replaced whole: resend them all.
+Text routines only (pictures: above). On `update-routine`, `review`, `story` and `library` are kept when left out; to turn one off, send it with `enabled` or `to_client` false. Every other `output_config` key is replaced whole: resend every key `get-routine` shows, unchanged, beside the one that changes.
 
 ## Always
 
 - Get a yes before anything goes to a client.
-- Say pictures cost credits before switching them on (decks of the brand's own photos use none).

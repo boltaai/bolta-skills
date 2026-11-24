@@ -28,7 +28,6 @@
             "artifact_type": "post",
             "count": 2,
             "platforms": [
-              "instagram",
               "facebook"
             ]
           },
@@ -68,7 +67,7 @@
             "artifact_type": "post",
             "count": 1,
             "platforms": [
-              "instagram"
+              "facebook"
             ]
           },
           "account_ids": [],
@@ -107,7 +106,6 @@
             "artifact_type": "post",
             "count": 1,
             "platforms": [
-              "instagram",
               "facebook"
             ]
           },

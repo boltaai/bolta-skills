@@ -24,7 +24,6 @@
         "artifact_type": "post",
         "count": 2,
         "platforms": [
-          "instagram",
           "facebook"
         ]
       },

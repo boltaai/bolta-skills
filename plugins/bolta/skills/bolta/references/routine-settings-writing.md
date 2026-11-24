@@ -16,7 +16,7 @@
 ## `editorial`: what the posts cover and look like
 
 - `contentPillars`: up to 20 themes, 200 characters each. Rotation is the point: 3-5 the user names ("pricing mistakes", "client results", "behind the scenes") (advice). Never pillars the business didn't give.
-- `contentTypes`: any of `text_post`, `hook_story`, `listicle`, `carousel`, `thread`, `poll`. `thread`: X only, exactly one X account, no pictures. `poll`: X only. `carousel`: only with carousel pictures. Leave it out to let Bolta vary the shape.
+- `contentTypes`: any of `text_post`, `hook_story`, `listicle`, `carousel`, `thread`, `poll`. `thread`: X only, exactly one X account, no pictures. `poll`: X only. `carousel` needs carousel pictures: never add it here; a routine with it is changed on its page ([routine-outputs.md](routine-outputs.md)). Leave it out to let Bolta vary the shape.
 - `hashtagStrategy`: `none`, `minimal`, `moderate` or `heavy`. `minimal` suits LinkedIn and X; `moderate` Instagram (advice).
 - `promotionalAngle`: true or false, whether posts may sell. False for founder and thought-leadership routines (advice).
 - `includeProductCta` with `productId`: mention one of the brand's products. Only with a product id the user or Bolta's page gave; nothing here lists products.

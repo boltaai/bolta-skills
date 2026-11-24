@@ -11,11 +11,10 @@ Optional voice setup from [start](start.md), when wanted; a saved voice is not a
 - Leave `is_default` and `account_ids` out: it becomes the default only if the brand has none, and takes every connected account not in another voice. Say what Bolta filled in (`bootstrapped` in the result).
 - A person speaking as "I" (a founder): `speaker_mode: "founder"`, with `perspective` and `founder_signals` from what they said; default is `brand` ("we").
 - Say which accounts use it, by network and name (`bootstrapped.accounts_assigned`). None: offer `get-connect-link` for publishing; compatible draft routines can start without one.
-- Then ask once, optionally: "Have brand colours, fonts or a logo? Paste them, or share an image of your logo." ([no website](start-brand-setup-no-site.md)).
 
 ## A voice already there
 
-- A thin voice (no DOs or DON'Ts, such as a Starter Voice) and a website: the setup fills it; it never makes a second. So does the setup with no website. An older Bolta with no setup: update that one with `update-voice-profile` (full lists), then the colours question; never make a second.
+- A thin voice (no DOs or DON'Ts, such as a Starter Voice) and a website: the setup fills it; it never makes a second. So does the setup with no website. An older Bolta with no setup: update that one with `update-voice-profile` (full lists); never make a second.
 - A trained voice and a different website: the setup refuses (`voice_would_be_replaced`); ask before `replace_voice: true` ([start-brand-setup.md](start-brand-setup.md)).
 
 ## A DON'T after a drop

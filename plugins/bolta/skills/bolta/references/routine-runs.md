@@ -21,7 +21,7 @@ Read for "why didn't it run?", "it failed", a refused run now, credits, or Bolta
 
 ## Why a run went wrong
 
-In `list-routine-runs`, each run's `status` is `running`, `awaiting_approval` (drafts wait for a yes), `scheduled`, `completed`, `partial` (some didn't make it), `failed` or `cancelled`. Read `error_code` and `error_summary`; paraphrase the summary, it can be a raw error. `cancelled` with `run_skipped`: Bolta chose not to write; the summary says why (for example no business details and no topic). A run's drafts are its `run_details.artifacts[].id` (`type` `post`).
+In `list-routine-runs`, each run's `status` is `running`, `awaiting_approval` (drafts wait for a yes), `scheduled`, `completed`, `partial` (some didn't make it), `failed` or `cancelled`. Read `error_code` and `error_summary`; paraphrase the summary, it can be a raw error. `cancelled` with `run_skipped`: Bolta chose not to write; the summary says why. A run's drafts are its `run_details.artifacts[].id` (`type` `post`).
 
 No run at all, say the first that fits:
 
@@ -41,13 +41,11 @@ A refused `run-routine-now` or credits run out: [routine-runs-refused.md](routin
 ## Fix a failed run
 
 1. `get-routine` and `list-routine-runs`.
-2. Explain in 2-4 plain sentences what went wrong.
+2. Explain in 2-4 plain sentences what went wrong. A routine with pictures ([routine-outputs.md](routine-outputs.md)): stop there and link its page, bolta.ai/dashboard/routines/<id>.
 3. Propose one change, to `goal`, `instructions`, `schedule` with `timezone`, or the one setting the error names (no reply `topics`; `auto` where the routine can't post without asking: back to ask me first). Offer one run after: "Change it and run it now? Uses credits."
 4. On that one yes: `get-routine` again, `update-routine` (an `instructions` change is the current text plus the new sentence, sent whole), `run-routine-now`.
 
 Example, a skipped run: "Monday's run skipped: Bolta doesn't know what the business does yet, and this routine has no topic, so it didn't write generic posts. Add 'Write about our spring workshops' to its instructions and run it once now? Uses credits." Steps: [fix-a-failed-run](../examples/fix-a-failed-run.json).
-
-A disconnected account or an app to connect: [connect](connect.md).
 
 ## Bolta's weekly recommendations
 

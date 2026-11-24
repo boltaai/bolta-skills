@@ -21,8 +21,8 @@ It's on, changed, paused or stopped; they know when drafts land: "Bolta routine 
 - **Accounts:** bind selected usable accounts, `{"provider":"social_account","ref":"<account id>"}`. With none, compatible drafts use the requested `output_config.platforms`. Publishing, source, history and company-page prerequisites remain. Accounts: [weekly-networks](routine-weekly-networks.md). Clock: [routine-schedules.md](routine-schedules.md).
 - **Switching on is not running.** Run now uses credits, needs it on, and never lands on a week not yet out ([after](routine-weekly-networks-after.md): times, the daily email).
 - **"Post without asking"** only on those words: [no-approval](routine-no-approval.md).
-- **Drafts keep missing, "is it working?":** [routine-improving.md](routine-improving.md). A no with a reason teaches Bolta.
-- Pictures, the client, stories, Library posts: [routine-outputs.md](routine-outputs.md).
+- **Drafts keep missing, "is it working?":** [routine-improving.md](routine-improving.md).
+- Pictures (a routine with them is only read, reviewed or paused here), the client, stories, Library posts: [routine-outputs.md](routine-outputs.md).
 - Change, pause, stop, Monday's drafts: [routine-looking-after.md](routine-looking-after.md). Why it didn't run, a refused run now: [routine-runs.md](routine-runs.md).
 
 ## Tools

@@ -1,8 +1,8 @@
 schema_version: "1.1"
 name: choosing-coffee-instagram-facebook
-description: "A cafe on Instagram and Facebook only (no LinkedIn) wants to post regularly. A good pick is weekly posts with pictures, maybe customer wins; never LinkedIn positions; never text-only Instagram."
+description: "A cafe on Instagram and Facebook only (no LinkedIn) wants to post regularly. A good pick from chat is weekly text posts for Facebook, maybe customer wins, with one line that Instagram's pictures are added on the routine's page in Bolta; never LinkedIn positions; never a text routine on Instagram; never picture or video settings sent from chat."
 tags: [choosing]
-expected_outcome: "bolta fires; proposes or saves weekly post routines with images or carousels for Instagram and Facebook; no linkedin_thought_leadership and nothing on LinkedIn; any routine bound to Instagram carries media; nothing switched on."
+expected_outcome: "bolta fires; proposes or saves weekly text post routines for Facebook; Instagram left off any routine made here (it refuses text), with one line and the bolta.ai/dashboard/routines link saying its pictures or video are added on the routine's page; no media_mode, media_prompt, visual_style, image_model or carousel settings sent; no linkedin_thought_leadership and nothing on LinkedIn; nothing switched on."
 execution:
   prompt: |
     I own Northwind Coffee, a small cafe. We only use Instagram and Facebook. I want to post regularly without having to think about it. What should I set up?
@@ -35,17 +35,36 @@ graders:
     pattern: '\b(every|each)\s+(mon|tues|wednes|thurs|fri|satur|sun)day|\bweekly\b|\ba week\b'
     flags: i
   - name: pictures-for-instagram
-    # Instagram needs media: the proposal says images, photos, carousels or video.
+    # Says Instagram needs pictures or video.
     type: regex
-    pattern: '\b(images?|photos?|pictures?|carousels?|videos?|reels?)\b'
+    pattern: '\b(images?|photos?|pictures?|videos?|reels?)\b'
     flags: i
-  - name: no-text-only-instagram
-    # A routine bound to Instagram always makes media.
+  - name: pictures-on-routine-page
+    # One line, one link: pictures and video for a routine are added on its page in Bolta (or a one-off image in AI Studio).
+    type: regex
+    pattern: 'bolta\.ai/dashboard/(routines|ai-studio)'
+    flags: i
+  - name: no-text-routine-on-instagram
+    # A routine made from chat writes text, and Instagram refuses text-only posts: never bound to Instagram.
     type: tool_used
     tool: mcp__plugin_bolta_bolta__create-routine
-    input_match: '^(?=[\s\S]*(instagram|a1b2c3d4-0001-4a00-8000-000000000003))(?![\s\S]*"media_mode"\W{1,6}(image|carousel|video))'
+    input_match: 'a1b2c3d4-0001-4a00-8000-000000000003|"platforms?"\W{1,6}[^\]}]*instagram'
     min: 0
     max: 0
+  - name: no-generated-media
+    # Pictures and video are never set up from chat: a routine carrying media_mode image, video or carousel,
+    # media_prompt, visual_style, image_model, carousel_config, a reference image or library_media fails.
+    type: tool_used
+    tool: mcp__plugin_bolta_bolta__create-routine
+    input_match: '"media_mode\\?"\W{1,8}(image|video|carousel)|"(media_prompt|visual_style|image_model|carousel_config|reference_media_id|reference_image_url|library_media)\\?"\s*:'
+    min: 0
+    max: 0
+  - name: no-image-prompts
+    # Never writes image ideas, image prompts, video scripts or scene descriptions for Bolta to render.
+    type: regex
+    pattern: '\b(image|video|visual)\s+(prompts?|scripts?)\b|\bimage ideas?\b|\bscene descriptions?\b|\bstoryboards?\b'
+    flags: i
+    match: not_contains
   - name: nothing-public
     # Nothing approved, scheduled, published, switched on, run or started without its own yes.
     type: regex

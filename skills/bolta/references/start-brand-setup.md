@@ -32,7 +32,7 @@ For requested setup, use their supplied business, site, audience, products, goal
 - `failed`: say so; offer another address or the no-site setup.
 - **A different site on a trained voice** answers `voice_would_be_replaced` (409): the voice has their edits or review learning. Ask: "Your voice was built from <old site> and has your edits. Set it up from <new site> instead? That replaces what the old site set up." Only on a yes, again with `replace_voice: true`.
 
-## Without a website, and colours
+## Without a website
 
 No site, or a brand set up without one: [start-brand-setup-no-site.md](start-brand-setup-no-site.md).
 

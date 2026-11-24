@@ -1,25 +1,26 @@
 # Changing Bolta's plan before saving
 
-Read after [routine-planner.md](routine-planner.md) when the user wants a plan changed: a day, a network, the count, pictures.
+Read after [routine-planner.md](routine-planner.md) when the user wants a plan changed: a day, a network, the count.
 
 `revise-plan` with the plan's `proposal_id` and `change` (a sentence: "Tuesdays instead"; Bolta interprets it) or `changes` (exact fields the user said: no guessing, so prefer it), or both (the sentence first). It returns a new plan with a new id; the old id can't be saved. A wrong field is refused and names it. Keys in `changes`:
 
 - `goal`, `instructions`, `name`, `platforms`, `account_ids` (each a connected account on one of the `platforms`), `timezone`, `approval_policy`, `voice_profile_id`, `default_reviewer_ids`, `source_urls`, `template_key`.
 - `count`: drafts per run, 1 up to the routine's most (10 for posts, 5 for a research series, 8 for reused posts, 2 for articles). Advice: 1-3 to start.
 - `schedule`: `{"interval":"weekly","days":["monday","thursday"],"time":"09:00"}` (several days in one routine; `day` also works); `interval` also takes `daily` or `monthly` (with `day_of_month` 1-28); `revise-plan` also accepts `schedule` with `cron`, for example `{"cron":"0 9 * * 1,3"}`.
-- Pictures: `media_mode` (`none`, `image`, `video`, `carousel`), `media_prompt` (what to show; required here for image and video), `visual_style`, `carousel_config` (only with `carousel`): [routine-outputs.md](routine-outputs.md).
 - Replies: `topics` (up to 10), `subreddits` (up to 10). Outreach keyword monitor: `keywords` (up to 20), `subreddits`. Refused on other routines.
 
 Writing settings (pillars, tone, story sources, research topic, call to action) are not plan fields: save, then `update-routine` `output_config` ([routine-settings-writing.md](routine-settings-writing.md)).
+
+Pictures and video are never a plan change here: a plan made here is text posts. Instagram, TikTok, YouTube or Pinterest in a plan: take that network off (`platforms`, `account_ids`), since a text draft to it fails; no network left, save nothing ([routine-outputs.md](routine-outputs.md)). A plan that shows pictures, video or carousels gets exactly this `change`: "Text only, no pictures or other media." (never the words video, reels or shorts in a `change`). Read the new plan: still showing any, save nothing; one line, "This one needs pictures, so it's set up in Bolta: bolta.ai/dashboard/routines."
 
 ## Which to send (advice)
 
 - The user gave a value ("Tuesdays at 10", "LinkedIn only", "one post"): `changes`. Nothing is guessed.
 - The user gave a wish ("make it more about our classes"): `change`, then show the new plan before saving.
 - A shaping plan's `questions` (about its goal, accounts, schedule or count): settle each with the matching `changes` key.
-- Never change what the user didn't mention, and never raise `count` on your own: more drafts is more to review.
+- Never change what the user didn't mention (except taking off pictures and networks as above, said in one line), and never raise `count` on your own: more drafts is more to review.
 
 ## Always
 
 - Show the revised plan and use its new id.
-- Send only fields the user said.
+- Send only fields the user said, plus taking off pictures and the networks that need them (said in one line).

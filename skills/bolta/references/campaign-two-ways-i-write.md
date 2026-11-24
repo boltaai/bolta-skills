@@ -1,6 +1,6 @@
 # I write the campaign now
 
-The second way to fill a campaign ([two-ways.md](campaign-two-ways.md)): 1 week, text only, or the user said "show me all".
+The second way to fill a campaign ([two-ways.md](campaign-two-ways.md)): 1 week the user wants to see now, or "show me all".
 
 - Same brief. It stays "not started" on the dashboard, but its results count my posts.
 - Write from the voice, 2-3 of their best recent posts and the strategy's gloss. Real facts only.
@@ -10,7 +10,7 @@ The second way to fill a campaign ([two-ways.md](campaign-two-ways.md)): 1 week,
 - `list-workspace-posts` with `campaign_id` returns every post and ignores `status` and `limit`: filter the rows yourself (`status`, `has_pending_review`).
 - Show #, account, day and time inside the window, full text. Then [review](review.md) approves each at its time (`set_fixed_time`).
 - **Never start this campaign.** Bolta would write a second set.
-- Instagram, TikTok, YouTube and Pinterest need media I can't make. Leave them out and say why, or suggest Bolta writes it.
+- Instagram, TikTok, YouTube and Pinterest need a picture or video on each post. Leave them out and say in one line: "Instagram needs a picture on each post: attach your own photo to a draft, or have Bolta make the campaign with pictures at bolta.ai/dashboard/campaigns."
 
 ## Always
 

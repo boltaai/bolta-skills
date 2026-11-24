@@ -11,6 +11,14 @@
       "why": "Find the campaign by name. Two with that name: ask which. Attaching works whatever its status, finished ones too."
     },
     {
+      "tool": "get-content-campaign",
+      "arguments": {
+        "workspace_id": "<brand's workspace id>",
+        "campaign_id": "<campaign id>"
+      },
+      "why": "Its content_mix is {\"text\": 3}: text only, so posts are attached here. A mix with any other key has pictures or video: that campaign is changed only on its page, so say so in one line with bolta.ai/dashboard/campaigns/<id>."
+    },
+    {
       "tool": "list-workspace-posts",
       "arguments": {
         "workspace_id": "<brand's workspace id>",

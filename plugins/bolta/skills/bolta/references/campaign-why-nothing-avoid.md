@@ -9,7 +9,7 @@ Read before starting a campaign, and when one made no posts at all. In Bolta, mo
 3. **No strategy.** A blank strategy with a mix or Content defaults reaches the writer with no angle; those drafts get sent back far more often. Fix: always send `strategy_key`.
 4. **Sources never read.** Web-made and duplicated campaigns start with sources unread, so the writer works from the notes alone. Fix: `analyze-content-campaign-source` for each source not `ready`.
 5. **Start date in the past.** Weeks already over are skipped. A 1-week campaign started late can have nothing left (`window_closed`). Fix: move `starts_on` forward before starting.
-6. **Formats the networks can't take.** A blog with no WordPress site, text for Instagram or TikTok, a carousel for X: written, then refused or held ([settings-formats.md](campaign-settings-formats.md)).
+6. **Formats the networks can't take.** A blog with no WordPress site, text for Instagram or TikTok, a carousel for X: written, then refused or held ([settings-formats.md](campaign-settings-formats.md)). Fix: text, blog and email here; pictures and video on the campaign page.
 7. **Billing.** No paid plan ("Your plan doesn't include campaigns yet"), or `insufficient_credits` in `schedule_status.last_error`: Bolta rechecks by itself after a top-up.
 8. **Nobody decided.** Drafts wait for a yes, then expire 30 days after their planned time. Too many a week is the usual reason: size to what the user decides in one sitting.
 9. **Video without its video.** A video draft that came back with no video can't go out and usually expires.
@@ -32,6 +32,7 @@ Read `get-content-campaign` and say any miss in one line:
 3. Active: read `schedule_status.state` and `last_error` ([why-nothing.md](campaign-why-nothing.md)).
 4. Finished: `results.outcome_reason` ([why-nothing-outcome.md](campaign-why-nothing-outcome.md)).
 5. Its dates have passed: a not-started one gets a new `starts_on` (`update-content-campaign`) before starting. A finished one can't start again: offer a new campaign with the same brief, the fixes and a future start.
+6. Pictures or video in its mix ([settings-formats.md](campaign-settings-formats.md)): say each fix, then one line to its page, bolta.ai/dashboard/campaigns/<id>; make none of them here.
 
 Worked example: [campaign-made-nothing](../examples/campaign-made-nothing.json).
 

@@ -4,7 +4,7 @@ Read for campaign formats and settings, or a team version: one idea written for 
 
 ## Formats (`content_mix` keys, per week)
 
-`text`, `still_image`, `carousel`, `feed_video` (16:9), `short_video` (9:16), `blog` (WordPress only), `email` (the user sends it). Which network takes which, the weekly caps, when to pick each and the video cost: [settings-formats.md](campaign-settings-formats.md). Say "Campaigns can't make stories yet." or "Bolta doesn't make avatar videos yet." for `story` and `avatar_video`. Worked example: [video-campaign](../examples/video-campaign.json).
+`text`, `blog` (WordPress only), `email` (the user sends it): what a campaign made here sends. Which network takes which, the weekly caps, and changing a mix a campaign already has: [settings-formats.md](campaign-settings-formats.md). Pictures and video are chosen on the campaign page, bolta.ai/dashboard/campaigns/<id>, never from chat; a campaign with them is changed only there. Worked example: [campaign-webinar-countdown](../examples/campaign-webinar-countdown.json).
 
 ## Whose voice
 
@@ -12,12 +12,12 @@ One campaign writes in one voice: the brand's, or a person's set with `voice_pro
 
 ## Accounts or days per format
 
-The mix can't say which account or weekday a format goes to ("the carousel on LinkedIn, the shorts on TikTok"). That is the content plan, edited on the campaign page under "Content per week". Sending `content_mix` later rebuilds the plan with no accounts or days, so read `get-content-campaign` first ([two-ways.md](campaign-two-ways.md)).
+The mix can't say which account or weekday a format goes to ("text on LinkedIn only, the blog on Tuesdays"). That is the content plan, edited on the campaign page under "Content per week". Sending `content_mix` later rebuilds the plan with no accounts or days, so a campaign with any set changes formats on its page ([settings-formats.md](campaign-settings-formats.md)).
 
 ## Planned posts and settings
 
 - Each planned post (topic, format, accounts, time) is edited under "Post prompts" on the campaign page before its week is written; a written post is fixed.
-- Tone, image quality, video style and length, post time: the campaign page only ([settings-web.md](campaign-settings-web.md)). Send the user there. Post time applies to drafts written after the change and overrides per-post times.
+- Tone, post time, and every picture or video setting: the campaign page only ([settings-web.md](campaign-settings-web.md)). Send the user there. Post time applies to drafts written after the change and overrides per-post times.
 
 ## A team version
 
@@ -26,4 +26,5 @@ One idea written as a post for each person or function (2 to 6), each in their o
 ## Always
 
 - Never promise a format Bolta doesn't make, or an email it sends.
+- Never set up pictures or video from chat.
 - Follow the house rules in the Bolta skill.

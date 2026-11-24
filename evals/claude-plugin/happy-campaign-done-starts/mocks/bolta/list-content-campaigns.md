@@ -26,19 +26,12 @@
         "ends_on": "2026-12-13",
         "duration_weeks": 3,
         "content_mix": {
-          "still_image": 3,
-          "carousel": 1
+          "text": 4
         },
         "content_plan": [
           {
-            "type": "still_image",
-            "count": 3,
-            "account_ids": [],
-            "days": []
-          },
-          {
-            "type": "carousel",
-            "count": 1,
+            "type": "text",
+            "count": 4,
             "account_ids": [],
             "days": []
           }
@@ -71,8 +64,7 @@
         "voice_profile": null,
         "content_types": [],
         "resolved_content_mix": {
-          "still_image": 3,
-          "carousel": 1
+          "text": 4
         },
         "status": "draft",
         "status_reason": "",

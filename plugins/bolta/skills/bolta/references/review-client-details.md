@@ -6,7 +6,7 @@ What client reviewers can do beyond Approve, and when their yes is refused. Read
 
 - Every client request on the brand, not just the ones sent to them, plus its schedule (what is scheduled or already out). They decide only requests sent to them.
 - **Edit the text** of a post they were sent. Refused for a post with its own copy per network, one going to Instagram, Pinterest or YouTube, and a Library post with more than one text or a caption over the Library limit. After an edit the post still needs an Approve, any yes given before no longer counts, and that post keeps needing the client's yes even if the brand's sign-off setting is off.
-- **Swap one image** for one made in their reviewer chat in Bolta. Not for carousels or videos, and refused wherever editing the text is. The image is charged to the brand owner's credits when the post is approved.
+- **Swap one image** in their reviewer chat in Bolta. Not for carousels or videos, and refused wherever editing the text is.
 - **Comment**: comments and change reasons land in the client approvals thread in Bolta, where the team reads and answers them: [bolta.ai/dashboard/approvals](https://bolta.ai/dashboard/approvals).
 - If a post's text changed and nobody on the team edited it, the client may have. Say so; don't guess who.
 

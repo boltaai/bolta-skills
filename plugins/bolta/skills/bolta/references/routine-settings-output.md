@@ -25,7 +25,7 @@ These are limits per run, not per week: a daily routine at 10 is 70 drafts a wee
 - `platforms`: send the requested network for accountless drafts; ask if unknown. With bound accounts, use their networks unless the owner narrowed them. Never invent a network or copy a web default. Values: `x`, `threads`, `linkedin`, `facebook`, `instagram`, `reddit`, `bluesky`, `mastodon`, `tiktok`, `youtube`, `pinterest`, `wordpress`.
 - `source_urls`: exactly one public page Bolta reads at every run ("from my blog page", a changelog, a newsletter archive). On weekly posts, research series and weekly articles. A page that changed nothing since the last run skips that scheduled run; one that can't be read refuses the run. A page that never changes skips every week: use it only for pages that change.
 - `topics` (reply routines, required, up to 10 phrases of 120 characters): what people say when they need the business, in the user's words. `communities` (up to 10 subreddits, Reddit only). A reply routine made on Bolta's web page has no topics, so every run fails: read `get-routine` `output_config.topics` and, with a yes, add them with `update-routine`.
-- `cta`: `{"text":"Book a free consult","url":"https://..."}`, text up to 200 characters, written exactly as it should read; a link only the user gave. On weekly posts and its siblings, best posts again and the weekly article. One call to action, not every post a pitch (advice).
+- `cta`: `{"text":"Book a free consult","url":"https://..."}`, text up to 200 characters, as it should read; a link only the user gave. On weekly posts and its siblings, best posts again and the weekly article. One call to action, not every post a pitch (advice).
 
 ## Where ideas come from
 
@@ -33,7 +33,7 @@ Most post routines and the weekly article take one unused idea per piece from th
 
 ## Changing it
 
-`update-routine` replaces `output_config` whole, except `review`, `story` and `library`, which are kept when left out. Read `get-routine`, change one key, resend all the rest, `artifact_type` and `count` included. Sending only `{"count":2}` is refused for a missing `artifact_type`, and drops media, settings and topics.
+`update-routine` replaces `output_config` whole, except `review`, `story` and `library` (kept when left out). Read `get-routine`, change one key, resend all the rest, `artifact_type` and `count` included. Sending only `{"count":2}` is refused (no `artifact_type`); sending only `{"artifact_type":"post","count":2}` drops its settings and topics. A routine with pictures: its page ([routine-outputs.md](routine-outputs.md)).
 
 ## Always
 
