@@ -1122,6 +1122,24 @@ def check_generation_setup(plugin):
                                   f"the plugin never drafts or queues it, and resends existing settings without naming them")
 
 
+#: Directory rule "Users told to approve everything up front" (refused 2026-11-24, v0.5.4): set-up
+#: text must not tell users to allow every Bolta tool, skip permission prompts or switch checks off.
+#: Prompts appear as they come up; a specific tool may be named only in the hooks and evals.
+BLANKET_PERMISSION = re.compile(
+    r"(?i)(/permissions|--dangerously|bypassPermissions|skip[- ]?permissions|fewer prompts|"
+    r"allow\s+`?mcp__plugin_bolta_bolta`?(?!__)|allow (all|every) (bolta )?tools)")
+
+
+def check_blanket_permission(plugin):
+    """No shipped file tells the user to pre-approve every tool or turn permission prompts off."""
+    for path in shipped_text_files(plugin):
+        rel = path.relative_to(plugin)
+        for n, line in enumerate(path.read_text().split("\n"), 1):
+            m = BLANKET_PERMISSION.search(line)
+            if m:
+                err(f"{rel}:{n}", f"{m.group(0)!r}: directory rule 'Users told to approve everything up front' "
+                                  f"(refused 2026-11-24); let permission prompts appear as they come up")
+
 # --------------------------------------------------------------------------- hooks
 
 def hook_groups(cfg, event):
@@ -1364,6 +1382,7 @@ def run_checks(plugin, marketplace, tools_by_name, checks, gated, bundle=False, 
     check_lint(plugin, skills)
     check_citations(plugin)
     check_generation_setup(plugin)
+    check_blanket_permission(plugin)
     check_agents(plugin, tools_by_name, gated)
     _ctx[0] = ""
     return referenced
