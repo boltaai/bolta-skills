@@ -11,16 +11,16 @@ Read after [routine-planner.md](routine-planner.md) when the user wants a plan c
 
 Writing settings (pillars, tone, story sources, research topic, call to action) are not plan fields: save, then `update-routine` `output_config` ([routine-settings-writing.md](routine-settings-writing.md)).
 
-Pictures and video are never a plan change here: a plan made here is text posts. Asked for them, save the text plan and say they are added on the routine's page; a plan that shows pictures or video gets `change`: "text posts only, no pictures or video" before saving. Instagram, TikTok, YouTube or Pinterest in a plan: take that network off (`platforms`, `account_ids`), since a text draft to it fails ([routine-outputs.md](routine-outputs.md)).
+Pictures and video are never a plan change here: a plan made here is text posts. Instagram, TikTok, YouTube or Pinterest in a plan: take that network off (`platforms`, `account_ids`), since a text draft to it fails; no network left, save nothing ([routine-outputs.md](routine-outputs.md)). A plan that shows pictures, video or carousels gets exactly this `change`: "Text only, no pictures or other media." (never the words video, reels or shorts in a `change`). Read the new plan: still showing any, save nothing; one line, "This one needs pictures, so it's set up in Bolta: bolta.ai/dashboard/routines."
 
 ## Which to send (advice)
 
 - The user gave a value ("Tuesdays at 10", "LinkedIn only", "one post"): `changes`. Nothing is guessed.
 - The user gave a wish ("make it more about our classes"): `change`, then show the new plan before saving.
 - A shaping plan's `questions` (about its goal, accounts, schedule or count): settle each with the matching `changes` key.
-- Never change what the user didn't mention (except pictures and networks as above, said in one line), and never raise `count` on your own: more drafts is more to review.
+- Never change what the user didn't mention (except taking off pictures and networks as above, said in one line), and never raise `count` on your own: more drafts is more to review.
 
 ## Always
 
 - Show the revised plan and use its new id.
-- Send only fields the user said.
+- Send only fields the user said, plus taking off pictures and the networks that need them (said in one line).

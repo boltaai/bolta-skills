@@ -1,7 +1,7 @@
 {
   "ask": "Start it.",
   "playbook": "campaign",
-  "before": "The plan was shown in the previous reply: New pricing, Problem / Solution, Nov 16 to Dec 6 (3 weeks, launch in week 3), 4 text posts a week on LinkedIn, 12 drafts to review, Bolta writes it. The user also uses Instagram; the plan said its pictures are added on the campaign page.",
+  "before": "The plan was shown in the previous reply: New pricing, Problem / Solution, Nov 16 to Dec 6 (3 weeks, launch in week 3), 4 text posts a week on LinkedIn, 12 drafts to review, Bolta writes it. The user also uses Instagram; the plan left it off, since it needs a picture on every post.",
   "steps": [
     {
       "tool": "create-content-campaign",
@@ -57,7 +57,7 @@
       "why": "Read status (active) and schedule_status (not needs_accounts), and next_generation_at: week 1's drafts are written about 2 days before the week, starting around midnight UTC, so say \"around\"."
     }
   ],
-  "say": "Campaign on for Acme: New pricing, Nov 16 to Dec 6 on LinkedIn. Week 1's drafts land around Sat Nov 14 and wait for your yes. Pictures for Instagram are added at bolta.ai/dashboard/campaigns/<id>.",
+  "say": "Campaign on for Acme: New pricing, Nov 16 to Dec 6 on LinkedIn. Week 1's drafts land around Sat Nov 14 and wait for your yes. Instagram needs a picture on every post, so it's set up on the campaign page: bolta.ai/dashboard/campaigns/<id>.",
   "never": [
     "Starting a campaign and also writing its posts by hand: Bolta would write a second set.",
     "Leaving content_mix out of a campaign made here: the brand's Content defaults or the strategy's mix can carry pictures.",

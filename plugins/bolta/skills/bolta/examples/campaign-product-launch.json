@@ -8,22 +8,22 @@
       "arguments": {
         "workspace_id": "<brand's workspace id>",
         "kind": "campaign",
-        "ask": "Launch campaign for Acme Inbox, which launches Tuesday Dec 8, on LinkedIn and Instagram.",
+        "ask": "Launch campaign for Acme Inbox, which launches Tuesday Dec 8, on LinkedIn. Text only.",
         "context": "Product: Acme Inbox. Launch day: Tue Dec 8. Facts the user gave, nothing else.",
         "links": [
           "https://acme.com/inbox"
         ]
       },
-      "why": "The date is in the ask, so no question first. The planner picks the strategy, accounts, mix and dates and creates nothing. Its plan came back starting tomorrow (its default when it reads no start date) for 2 weeks (the default when weeks aren't said), so it ended before launch day; Problem / Solution, image posts for Instagram, and notes. Always read the plan's dates: a launch date can also be taken as the start. Show it in a few lines: name, strategy and its gloss, dates, posts a week × weeks = drafts to review."
+      "why": "The date is in the ask, so no question first. The planner picks the strategy, accounts, mix and dates and creates nothing. Its plan came back starting tomorrow (its default when it reads no start date) for 2 weeks (the default when weeks aren't said), so it ended before launch day; Problem / Solution, text posts on LinkedIn, and notes. A campaign made here is text-based: Instagram needs a picture on every post, so it was left out of the ask, and the reply says in one line that it is set up on the campaign page. Always read the plan's dates: a launch date can also be taken as the start. Show it in a few lines: name, strategy and its gloss, dates, posts a week × weeks = drafts to review."
     },
     {
       "tool": "revise-plan",
       "arguments": {
         "workspace_id": "<brand's workspace id>",
         "proposal_id": "<plan id from plan>",
-        "change": "Text posts only, on LinkedIn only. 3 weeks from Monday Nov 23 to Sunday Dec 13, so launch day Dec 8 falls in the last week."
+        "change": "3 weeks from Monday Nov 23 to Sunday Dec 13, so launch day Dec 8 falls in the last week."
       },
-      "why": "A campaign made here is text-based: a plan with pictures goes back to text posts, and Instagram, which needs a picture, comes off; its pictures are added on the campaign page. Guidance: a launch runs 3 weeks with launch day in the last week. Weeks start on the start date's weekday, so a Monday start puts Tue Dec 8 in week 3. The user said yes to that change. The reply has a new id; the old one can't be saved."
+      "why": "Guidance: a launch runs 3 weeks with launch day in the last week. Weeks start on the start date's weekday, so a Monday start puts Tue Dec 8 in week 3. The user said yes to that change. The reply has a new id; the old one can't be saved. Read the new plan: still text posts on LinkedIn, so it can be saved. One showing pictures, video or carousels would not be saved."
     },
     {
       "tool": "confirm-plan",
@@ -51,11 +51,12 @@
       "why": "The second, separate yes. This is what makes Bolta write. Read generation.scheduled_for, then status back as active."
     }
   ],
-  "say": "Campaign on for Acme: Acme Inbox launch, Nov 23 to Dec 13, launch day Dec 8 in week 3, text posts on LinkedIn. Week 1's drafts land around Sat Nov 21 and wait for your yes. Instagram needs pictures: add them at bolta.ai/dashboard/campaigns/<id>.",
+  "say": "Campaign on for Acme: Acme Inbox launch, Nov 23 to Dec 13, launch day Dec 8 in week 3, text posts on LinkedIn. Week 1's drafts land around Sat Nov 21 and wait for your yes. Instagram needs a picture on every post, so it's set up on the campaign page: bolta.ai/dashboard/campaigns/<id>.",
   "never": [
     "Starting it in the same yes that saved the plan.",
     "Offer & Promotion for a launch with no price or deadline.",
     "Leaving the campaign saved and not started without saying so: a saved campaign writes nothing.",
-    "Saving a plan with pictures or video from chat: revise it to text posts first."
+    "Passing pictures or Instagram to plan: Bolta's planner would plan pictures.",
+    "Saving a plan that still shows pictures or video."
   ]
 }

@@ -1,6 +1,6 @@
 # Start: which Bolta routines fit which business
 
-Read with [start](start.md) when choosing a best-fit routine or several jobs. Bolta's planner (`plan`) uses the brand's posts, sources and routines; check its proposal against this page, and use this advice directly when there is no planner. Everything here is advice except the numbers marked Bolta's. Every kind, what it needs and its limits: [routine-templates.md](routine-templates.md).
+Read with [start](start.md) when choosing a best-fit routine or several jobs. Bolta's planner (`plan`) uses the brand's posts, sources and routines; check its proposal against this page, or use it directly without a planner. Everything here is advice except the numbers marked Bolta's. Every kind, what it needs and its limits: [routine-templates.md](routine-templates.md).
 
 ## By business
 
@@ -15,8 +15,8 @@ Read with [start](start.md) when choosing a best-fit routine or several jobs. Bo
 | A brand with months of published posts | Whatever is missing above | Best posts rewritten (`repurpose_top_posts`): never a first routine |
 
 - Each routine is a different job. Two doing the same job on the same network is one too many.
-- Stories and customer wins need real events from the user; with none to share, leave them out. Never invent one.
-- Routines made here write text: never plan one to Instagram, TikTok, YouTube or Pinterest. Pictures and video: "Add them on the routine's page: bolta.ai/dashboard/routines."
+- Stories and customer wins need real events from the user; none: leave them out. Never invent one.
+- Routines made here write text: no pictures, video, Instagram, TikTok, YouTube or Pinterest in a plan. Only those four networks wanted or connected: save none; one line, one link ([routine-outputs.md](routine-outputs.md)).
 - A report posts nothing and costs no review time. Offer one beside 1-2 writing routines, once there are published posts to read.
 - Name them in their words: "Weekly candle care tips".
 

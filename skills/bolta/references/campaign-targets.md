@@ -5,6 +5,7 @@ Read when a campaign needs accounts, notes or a source.
 ## Set them: `create-content-campaign` or `update-content-campaign`
 
 - Best on the create call: the campaign is made with its accounts in one call. Later, `update-content-campaign` with `campaign_id` and only what you set. Each field replaces what is there, and a list replaces the whole list. It writes, schedules and publishes nothing.
+- A campaign with pictures or video is changed only on its page: one line, bolta.ai/dashboard/campaigns/<id> ([settings-formats.md](campaign-settings-formats.md)).
 - `account_ids`: `id` values from `list-accounts`, at most 50. The user's choice, else the accounts of the networks they named. An empty list removes every account.
 - `context_notes` (8000 characters at most): used word for word in every week's brief. Write the week-by-week plan, the real dates and prices, and the link the user gave. Leave out anything they didn't say, and the strategy's own instruction (Bolta adds it). `""` clears it. Over 2000 characters, an edit on the campaign page cuts them.
 - `duration_weeks` (1 to 4, counted from `starts_on`) sets the end date. Send no end date with it.

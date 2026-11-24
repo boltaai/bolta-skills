@@ -46,7 +46,7 @@ Saving drafts needs none. **Bolta checks** `careful` in `/config` checks every a
 
 ## Limits
 
-- No media upload: media goes in as a public link; Bolta makes pictures and video only on bolta.ai. Instagram and Pinterest need an image or video, TikTok and YouTube a video.
+- Your media goes in as a public link or upload; Bolta makes pictures and video only on bolta.ai. Instagram and Pinterest need an image or video, TikTok and YouTube a video.
 - One connection is one organization and reaches the brands you tick in it; agencies tick their client brands. New brand: reconnect and tick it.
 - The checks need `sh` and `awk` (Windows: [Git for Windows](https://git-scm.com/downloads/win) first).
 

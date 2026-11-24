@@ -1,8 +1,8 @@
 schema_version: "1.1"
 name: ui-routine-instagram-preview
-description: 'The routine panel prompt with another network and cadence: Harbor Physio, two Instagram posts each week. Instagram needs a picture or video for every post, and a routine made from chat writes text, so Bolta never plans or saves a text routine to Instagram and never sets up pictures from chat: it says in one line that pictures and video are added on the routine''s page in Bolta, with the link. Before the media rule this case graded the shown plan (output, schedule, Melbourne time, reviewer); those graders were dropped because that plan was a text routine to Instagram.'
+description: 'The routine panel prompt with another network and cadence: Harbor Physio, two Instagram posts each week. Only Instagram is wanted, and Instagram needs a picture on every post, so no routine is planned or saved from chat (routine-outputs.md and start-matching.md, only Instagram, TikTok, YouTube or Pinterest wanted): one line that the routine is set up in Bolta, bolta.ai/dashboard/routines, and that single posts for a photo they attach can be written here. Instagram, pictures and video never reach the planner. Before the media rule this case graded the shown plan (output, schedule, Melbourne time, reviewer); those graders were dropped because that plan was a text routine to Instagram. The answer for Instagram alone is one line, so reads-voice and shows-destination (the voice read and the Instagram account named) were dropped too: nothing is planned that would use them.'
 tags: [uiprompts-screens]
-expected_outcome: 'bolta fires; reads the voice; names the Instagram account; says Instagram needs a picture or video and that they are added on the routine''s page (bolta.ai/dashboard/routines); no text routine planned to Instagram as if it could run; no picture or video settings sent and no image prompts written; nothing saved.'
+expected_outcome: 'bolta fires; says Instagram needs a picture on every post, so the routine is set up in Bolta (bolta.ai/dashboard/routines); offers single posts for a photo they attach; Instagram, pictures and video never sent to the planner; no picture or video settings sent and no image prompts written; nothing saved.'
 execution:
   prompt: |
     Use Bolta to prepare a draft routine for Harbor Physio that writes two Instagram posts each week. Use our saved brand voice and a routine template that supports this.
@@ -20,11 +20,6 @@ graders:
     tool: 'Skill'
     input_match: '"skill"\s*:\s*"(?:[\w-]+:)?(bolta)"'
     min: 1
-  - name: reads-voice
-    # Uses the saved voice.
-    type: 'regex'
-    pattern: '"name"\s*:\s*"mcp__plugin_bolta_bolta__(get-voice-context|get-voice-profile)"'
-    target: 'trace'
   - name: nothing-saved
     # Nothing saved before the confirm.
     type: 'regex'
@@ -37,21 +32,44 @@ graders:
     pattern: '"name"\s*:\s*"mcp__plugin_bolta_bolta__(publish-post|schedule-post|approve-post|approve-many-posts|activate-routine|resume-routine|run-routine-now|set-content-campaign-status|voice-generate)"'
     target: 'trace'
     match: 'not_contains'
-  - name: shows-destination
-    # The destination account.
-    type: 'regex'
-    pattern: '@?harborphysio|Harbor Physio[^\n]{0,20}Instagram|Instagram[^\n]{0,30}(account|Harbor)'
-    flags: 'i'
   - name: instagram-needs-media
     # Instagram needs a picture or video.
     type: 'regex'
     pattern: '(image|photo|picture|video|visual|media)'
     flags: 'i'
   - name: pictures-on-routine-page
-    # One line, one link: pictures and video for a routine are added on its page in Bolta.
+    # One line, one link: a routine for Instagram alone is set up on bolta.ai/dashboard/routines.
     type: 'regex'
-    pattern: 'bolta\.ai/dashboard/routines'
+    pattern: 'bolta\.ai/dashboard/routines\b'
     flags: 'i'
+  - name: offers-single-posts
+    # The second half of the one line: single posts for a photo they attach are written here.
+    type: 'regex'
+    pattern: '\bsingle posts?\b|\bone[- ]off posts?\b|\bposts? (for|with|around) (a|your|each) (own )?(photo|picture|image)|\b(photo|picture|image)s? (you|that you) (attach|send|share|upload)|\battach (a|your) (own )?(photo|picture|image)'
+    flags: 'i'
+  - name: plan-asks-text-only
+    # routine-planner.md, "Which call": pictures, video, and Instagram, TikTok, YouTube and Pinterest never go into
+    # the planner's ask, goals or context (Bolta's planner would draft a picture plan from them).
+    type: regex
+    target: trace
+    pattern: '"name"\s*:\s*"mcp__plugin_bolta_bolta__(?:plan|plan-routine|plan-campaign|recommend-routines)"\s*,\s*"input"\s*:\s*\{[^{}]*?\b(?:insta(?:gram)?|tik\s?tok|youtube|pinterest|pictures?|photos?|images?|videos?|reels?|carousels?|shorts)\b'
+    flags: i
+    match: not_contains
+  - name: revise-text-only
+    # routine-planner-changes.md and campaign-how-to.md: a plan still showing pictures is revised with exactly
+    # "Text only, no pictures or other media." Any other wording about pictures or media fails.
+    type: tool_used
+    tool: mcp__plugin_bolta_bolta__revise-plan
+    input_match: '^(?=[\s\S]*\b(?:[Pp]ictures?|[Ii]mages?|[Pp]hotos?|[Mm]edia)\b)(?![\s\S]*Text only, no pictures or other media\.)'
+    min: 0
+    max: 0
+  - name: revise-no-video-words
+    # Never the words video, reels or shorts in a revise: Bolta would add a note that the drafts describe a video.
+    type: tool_used
+    tool: mcp__plugin_bolta_bolta__revise-plan
+    input_match: '\b(?:[Vv]ideos?|[Rr]eels?|[Ss]horts)\b'
+    min: 0
+    max: 0
   - name: no-generated-media
     # Pictures and video are never set up from chat. Fails on any Bolta call carrying media_mode image, video or
     # carousel, media_prompt, visual_style, image_model, carousel_config, a reference image, library_media,

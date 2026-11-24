@@ -4,13 +4,11 @@ All live in `output_config`; read `get-routine` first.
 
 ## Pictures and video
 
-Set up on the routine's page in Bolta, never from here.
-
-- A routine made here writes text posts. Asked for pictures or video: save it as text, then say in one line that they are added on the routine's page: bolta.ai/dashboard/routines.
-- Instagram, TikTok, YouTube and Pinterest refuse text-only posts: never plan a text draft to them. Leave that network off and say its pictures or video are added on the routine's page.
-- Never write picture ideas, image prompts, video scripts or scene descriptions for Bolta to draw, in `instructions` or anywhere.
-- A routine already set on its page to make pictures or video keeps them. Never switch them on, off or to another kind; resend them unchanged on updates (below).
-- A draft that should carry a picture or video and came back without it is not ready: don't approve it.
+- **Has pictures:** `get-routine` `output_config` has a picture, video, slide or visual setting that is on or filled in (a flag ending in `_supported` is not one), or its `story` has `image`, `video` or `carousel` above 0. Here: read, list runs, review drafts, pause. Anything else (a change, run now, switching on, a copy, a suggestion for it), and any picture request: one line, "That's done on its page in Bolta: bolta.ai/dashboard/routines/<id>."
+- A routine made here writes text. Pictures, video, and Instagram, TikTok, YouTube and Pinterest (they refuse text-only posts) stay out of the plan. Asked for them, after saving: "Pictures and Instagram are added on its page: bolta.ai/dashboard/routines/<id>."
+- Only those four networks wanted or connected: save nothing; say: "Instagram needs a picture on every post, so this routine is set up in Bolta: bolta.ai/dashboard/routines. Here I can write single posts for a photo you attach."
+- Never write picture ideas, image prompts or video scripts, anywhere.
+- A draft missing the picture or video it should carry is not ready: don't approve it.
 
 ## Straight to the client
 
@@ -23,7 +21,7 @@ Set up on the routine's page in Bolta, never from here.
 
 ## One idea, several formats
 
-`story: {"enabled": true, "post": 1, "article": 0-1, "library": 0-4, "send_to_client": false}`, on post routines. Its `carousel` piece is pictures: set on the routine's page; when changing a story, resend `carousel` as `get-routine` shows it. Each run takes one unused idea from the brand's idea bank and writes those pieces, overriding `count` and switching off client sending and Library posts alongside. With no ideas left it runs normally (`story.last_status: "no_ideas_ran_normal_run"`). Run now returns `run: null` with a `story` block: not a failure. `send_to_client` covers its Library posts only.
+`story: {"enabled": true, "post": 1, "article": 0-1, "library": 0-4, "send_to_client": false}`, on post routines. Never switch on its `image`, `video` or `carousel` pieces here: switching a story on, leave them out (they stay 0). To change one story setting, resend the whole `story` as read, only that one changed; a piece left out is switched off. Each run takes one unused idea from the brand's idea bank and writes those pieces, overriding `count` and switching off client sending and Library posts alongside. With no ideas left it runs normally (`story.last_status: "no_ideas_ran_normal_run"`). Run now returns `run: null` with a `story` block: not a failure. `send_to_client` covers its Library posts only.
 
 ## Library posts alongside
 
@@ -33,11 +31,8 @@ Best posts again (`repurposing`): [routine-settings-writing.md](routine-settings
 
 ## Changing these
 
-On `update-routine`, `review`, `story` and `library` are kept when left out; to turn one off, send it with `enabled` or `to_client` false. Every other `output_config` key is replaced whole: read `get-routine` and resend every key it shows, unchanged, beside the one that changes.
-
-That includes every picture and video setting made on the routine's page, whatever its name. Left out, the routine loses its pictures: copy them back exactly as read; never drop, clear or change them.
+Text routines only (pictures: above). On `update-routine`, `review`, `story` and `library` are kept when left out; to turn one off, send it with `enabled` or `to_client` false. Every other `output_config` key is replaced whole: resend every key `get-routine` shows, unchanged, beside the one that changes.
 
 ## Always
 
 - Get a yes before anything goes to a client.
-- Never set up pictures or video from here; keep every picture setting a routine already has.

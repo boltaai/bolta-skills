@@ -35,6 +35,7 @@ Read `results.outcome` and `results.outcome_reason`: [why-nothing-outcome.md](ca
 
 - "Nothing went out" is nearly always waiting for your yes.
 - A campaign I wrote shows `nothing_approved`: its drafts were never sent for review. Say they're still drafts, then [review](review.md).
+- A campaign with pictures or video ([settings-formats.md](campaign-settings-formats.md)): name the cause and the fix here; starting, resuming, accounts, dates and "Generate again" are on its page, bolta.ai/dashboard/campaigns/<id>.
 - A full calendar proves nothing: it shows what exists, not what went out.
 - Drafts landing late around 17:45-18:15 UTC (say it in the workspace clock): Bolta's servers were busy, not a problem with the campaign.
 

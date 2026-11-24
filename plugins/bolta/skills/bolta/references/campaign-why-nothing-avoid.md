@@ -32,6 +32,7 @@ Read `get-content-campaign` and say any miss in one line:
 3. Active: read `schedule_status.state` and `last_error` ([why-nothing.md](campaign-why-nothing.md)).
 4. Finished: `results.outcome_reason` ([why-nothing-outcome.md](campaign-why-nothing-outcome.md)).
 5. Its dates have passed: a not-started one gets a new `starts_on` (`update-content-campaign`) before starting. A finished one can't start again: offer a new campaign with the same brief, the fixes and a future start.
+6. Pictures or video in its mix ([settings-formats.md](campaign-settings-formats.md)): say each fix, then one line to its page, bolta.ai/dashboard/campaigns/<id>; make none of them here.
 
 Worked example: [campaign-made-nothing](../examples/campaign-made-nothing.json).
 

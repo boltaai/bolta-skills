@@ -9,7 +9,7 @@ Bolta facts for images, video and how text is shown. Which links work, file size
 - Media is attached per post, from a file or a public link the user gave, at most 25 items per call; Bolta tries to copy each file into its own storage. For the brand's Media Library, read [Library images](post-media-library.md); browsing and byte upload depend on the connected server.
 - No image yet? Say: "Instagram needs an image or video. Attach it here or send me a public link to it."
 - Need an image or video made? Not from here: "Make it in AI Studio at bolta.ai/dashboard/ai-studio, then attach it here." Never write an image prompt, video script or scene for it.
-- Pictures or video on a routine or campaign: "Add them on its page in Bolta." Routines and campaigns made here are text ([routine](routine.md), [campaign](campaign.md)).
+- Pictures or video on a routine or campaign: one line, "They're added on its page in Bolta: bolta.ai/dashboard/routines/<id>" (a campaign: bolta.ai/dashboard/campaigns/<id>; not saved yet: the same without the id). Routines and campaigns made here are text ([routine](routine.md), [campaign](campaign.md)).
 
 ## Alt text
 

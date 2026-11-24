@@ -9,6 +9,7 @@ Read before changing a campaign's status, or when the user asks when drafts come
 - **`resume`**: from paused. Bolta writes every week still owed, on its usual days; weeks already over are skipped. If the campaign's only account was removed, set one first or it is refused.
 - **`complete`** (finish): from on or paused. Final: it can't start again; results stay.
 - **`archive`** (retire): from any status. Final, hidden from the list, nothing deleted. Only when asked.
+- **A campaign with pictures or video** (a mix key other than `text`, `blog`, `email`: [settings-formats.md](campaign-settings-formats.md)): only `pause` here. Any other action: one line, "It has pictures or video, so that's done on its page: bolta.ai/dashboard/campaigns/<id>."
 
 ## Stopping is not unscheduling
 
@@ -29,7 +30,7 @@ An on campaign finishes on its own shortly after its end date (`status_reason` r
 ## Only on the campaign page
 
 - **Generate now**: writes the next week early (uses credits). **Generate again**: retries a failed week. No call does either; send the user to bolta.ai/dashboard/campaigns/<id>.
-- **Duplicate** (copy icon on the cover): a new not-started copy with the same brief, accounts, plan and settings. Its sources come back **unread**: after a duplicate, run `analyze-content-campaign-source` on each.
+- **Duplicate** (copy icon on the cover): a new not-started copy with the same brief, accounts, plan and settings. Its sources come back **unread**: after a duplicate, run `analyze-content-campaign-source` on each (with pictures or video: Read on its page).
 - **Remove a post** from a campaign: calendar campaign picker only.
 
 ## Always

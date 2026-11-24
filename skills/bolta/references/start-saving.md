@@ -21,6 +21,7 @@ Read with [start](start.md) when the user answers the proposal. A yes to set up 
   - `switch_on` default false: a routine is saved switched off, a campaign as a draft; nothing runs.
   - `switch_on: true` saves, switches on and starts the first run at once, which uses credits. Never send it here: switch on with `activate-routine` instead, which waits for the schedule.
 - Each plan has its own id; save them one by one.
+- A plan showing pictures, video, carousels, or Instagram, TikTok, YouTube or Pinterest: revise it first ([routine-planner-changes.md](routine-planner-changes.md)). Still showing them: save nothing; one line: "That one is set up in Bolta: bolta.ai/dashboard/routines."
 - A change first ("Tuesdays instead", "only 2"): `revise-plan` with their words as `change`. It returns a new id; the old id can no longer be saved.
 - Refused as `plan_not_ready`: the plan still needs something (a connection, reply topics). Say what, in plain words; save the others.
 - Confirming the same id twice returns what was saved and runs nothing.

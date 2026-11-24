@@ -29,7 +29,7 @@ Read when a campaign's end date has passed, or the user asks how one did. Read `
 
 ## One next step
 
-- It worked: "Run it again with the same strategy?" The fastest way is the copy icon ("Duplicate this campaign") on the cover at bolta.ai/dashboard/campaigns/<id>: a not-started copy with the same strategy, brief, accounts, weekly plan, voice and settings, dated from the day after this one ends (or today). Its sources come back unread: analyze each, then start it on a yes. Or I make a new one with the same brief; then the accounts and Context step comes back unless Content defaults fill the accounts.
+- It worked: "Run it again with the same strategy?" The fastest way is the copy icon ("Duplicate this campaign") on the cover at bolta.ai/dashboard/campaigns/<id>: a not-started copy with the same strategy, brief, accounts, weekly plan, voice and settings, dated from the day after this one ends (or today). Its sources come back unread: analyze each, then start it on a yes (with pictures or video, both on its page). Or I make a new one with the same brief (not for one with pictures or video); then the accounts and Context step comes back unless Content defaults fill the accounts.
 - It didn't: name one other strategy, using the week 1 signs in [strategies.md](campaign-strategies.md): "Try Product Education next?"
 - A leftover draft or two: one line, not the question ("1 X draft never went out."). The question stays the run-again or strategy one.
 

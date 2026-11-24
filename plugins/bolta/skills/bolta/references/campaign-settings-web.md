@@ -11,7 +11,7 @@ Where `plan` (`kind: "campaign"`) is offered, it sets these from the user's word
 
 ## Context Settings (campaign page)
 
-- **Pictures and video**: which posts carry them and how they look. Set here only, never from chat. A campaign for Instagram, TikTok, YouTube or Pinterest gets its pictures or video here. Ones already set keep working: never change or clear them from chat.
+- **Pictures and video**: which posts carry them and how they look. Set here only, never from chat. A campaign for Instagram, TikTok, YouTube or Pinterest gets its pictures or video here. A campaign with them is managed only here; from chat, read it, review its drafts, pause it ([settings-formats.md](campaign-settings-formats.md)).
 - **Use about your business**: on by default. Off suits a one-off event or a sub-brand the saved profile would pull the wrong way.
 - **Sources**: the campaign's own only, or the brand's documents too.
 - **Media scope** and the **cover** do nothing to the posts. Never tell the user they limit media.
@@ -38,7 +38,7 @@ Where `plan` (`kind: "campaign"`) is offered, it sets these from the user's word
 
 ## The web create dialog
 
-"Start campaign" makes it and starts it in one press. Its sources are **not read yet**: until someone presses Read on the campaign page, or you run `analyze-content-campaign-source` for each, the writer ignores them. Check a web-made campaign's `context_sources`; any not `ready` need reading.
+"Start campaign" makes it and starts it in one press. Its sources are **not read yet**: until someone presses Read on the campaign page, or you run `analyze-content-campaign-source` for each, the writer ignores them. Check a web-made campaign's `context_sources`; any not `ready` need reading (with pictures or video: Read on its page).
 
 ## Always
 

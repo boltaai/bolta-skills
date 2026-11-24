@@ -9,9 +9,9 @@ Each file is one ask from start to finish: the calls in order, why each one is s
 | [routine-without-planner.json](routine-without-planner.json) | No plan tool: create-routine, saved switched off | [routine-without-planner](../references/routine-without-planner.md) |
 | [weekly-three-networks-setup.json](weekly-three-networks-setup.json) | A weekly brief to a Facebook Page, a LinkedIn page and Bluesky, saved asking first | [routine](../references/routine.md) |
 | [weekly-three-networks-no-approval.json](weekly-three-networks-no-approval.json) | The same routine moved to posting without a yes each time, then the summary before switching on | [routine](../references/routine.md) |
-| [routine-with-images.json](routine-with-images.json) | Weekly posts with pictures: text routine saved switched off, pictures added on its page | [routine](../references/routine.md) |
+| [routine-pictures-on-page.json](routine-pictures-on-page.json) | Weekly posts wanted with pictures: a text routine planned without them, saved switched off, pictures and Instagram added on its page | [routine](../references/routine.md) |
 | [routine-to-client.json](routine-to-client.json) | Send a routine's drafts straight to the client, keeping about 20 waiting | [routine](../references/routine.md) |
-| [fix-a-failed-run.json](fix-a-failed-run.json) | A skipped run: one instructions change, then run now | [routine](../references/routine.md) |
+| [fix-a-failed-run.json](fix-a-failed-run.json) | A skipped run of a text routine: one instructions change, then run now | [routine](../references/routine.md) |
 | [routine-founder-stories.json](routine-founder-stories.json) | Founder stories in a person's voice, from real events, with story settings | [routine](../references/routine.md) |
 | [routine-ship-log.json](routine-ship-log.json) | Posts from each merged pull request: Bolta's plan, LinkedIn only, GitHub connected first | [routine](../references/routine.md) |
 | [routine-new-article-to-social.json](routine-new-article-to-social.json) | The planned new-article routine saved switched off, once the blog is connected | [routine](../references/routine.md) |

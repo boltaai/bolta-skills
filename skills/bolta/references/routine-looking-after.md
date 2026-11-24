@@ -14,11 +14,12 @@ Read for changes, pausing, stopping, running now and Monday's drafts. Start with
 | "Run it now" | `run-routine-now` | One: "Uses credits now. Drafts usually land in a few minutes." |
 | "Copy it" | `get-routine`, then `create-routine` with the same settings | As for a new one |
 
-- `update-routine` takes only what changes. `source_bindings`, `output_config` and `destination_config` are replaced whole: read, then resend them complete. Inside `output_config`, `review`, `story` and `library` are kept when left out.
+- **A routine with pictures** ([routine-outputs.md](routine-outputs.md)): here only read, review drafts, pause. Anything else: "That's done on its page in Bolta: bolta.ai/dashboard/routines/<id>."
+- `update-routine` takes only what changes. `source_bindings`, `output_config` and `destination_config` are replaced whole: read, then resend them complete.
 - **A change needs no check** on a routine made here as ask me first, or on one already ask me first when the change resends `approval_policy: "review_every_artifact"`. Resend it only where it is already set.
 - "Use my workspace setting" or "post without asking" only on their words: one Bolta check, plus one to switch on. Which routines and brands allow `auto`: [routine-settings.md](routine-settings.md). The brand's rule changes in Bolta: Settings > Rules > Approvals.
 - **Schedules:** daily, weekly with a `day`, or monthly (the 1st). Another day of the month, or weekdays: a cron, `{"cron":"0 9 15 * *"}` or `{"cron":"0 9 * * 1-5"}`; "weekdays" is not an interval. After any schedule or clock change, read `next_run_at` back.
-- **Voice and reviewers:** `get-routine` `destination_config.voice_profile_id` (empty: brand default) and `default_reviewer_ids`. Change the voice with `update-routine` `destination_config`: the new `voice_profile_id` plus the `account_refs` and `behavior` `get-routine` returned, or those are cleared. Copy both onto a copy.
+- **Voice and reviewers:** `get-routine` `destination_config.voice_profile_id` (empty: brand default) and `default_reviewer_ids`. Change the voice with `update-routine` `destination_config`: the new `voice_profile_id` plus the `account_refs` and `behavior` `get-routine` returned, or those are cleared.
 - Its kind can't change. Make a new one.
 - Switching on can be refused (a missing source, a disconnected account, a plan limit, a paused writer). Say the reason; it stays off. Don't retry.
 - Pausing: a run already going may still deliver drafts. Stopped, its history stays.

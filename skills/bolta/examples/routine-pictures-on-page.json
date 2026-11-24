@@ -1,0 +1,23 @@
+{
+  "ask": "Yes, save it.",
+  "playbook": "routine",
+  "before": "The user asked for 2 posts every Tuesday about new menu items on Instagram and LinkedIn, each with an image. The reply said first, in one line: a routine made here writes text, and its pictures, with Instagram, are added on its page in Bolta (bolta.ai/dashboard/routines). plan with ask '2 posts every Tuesday about new menu items on LinkedIn' showed: every Tuesday 9:00 am (Chicago), 2 LinkedIn drafts about new menu items, each waiting for your yes, uses credits each run, saved switched off. It showed no pictures, video or carousels, so no revise-plan was needed.",
+  "steps": [
+    {
+      "tool": "confirm-plan",
+      "arguments": {
+        "workspace_id": "<brand's workspace id>",
+        "proposal_id": "<plan id from plan>"
+      },
+      "why": "'Save it' is a yes to save, not to switch on: no switch_on. The plan is text posts for LinkedIn; pictures and Instagram were never passed to plan, so Bolta's planner drew up no picture plan."
+    }
+  ],
+  "say": "Saved, switched off: Tuesday menu posts on LinkedIn, 2 drafts every Tuesday at 9:00 am (Chicago), each waiting for your yes. Pictures and Instagram are added on its page: bolta.ai/dashboard/routines/<id>. Switch it on?",
+  "never": [
+    "Passing pictures or Instagram to plan: Bolta's planner would draw up a picture plan.",
+    "Writing image ideas, prompts or scene descriptions into the routine's instructions: pictures are set up on the routine's page.",
+    "Keeping Instagram on a text routine: an Instagram draft without a picture fails when it goes out.",
+    "Once pictures are added on its page, changing or running it from here: it is then read, reviewed and paused here, and everything else happens on its page.",
+    "switch_on true on a yes to save."
+  ]
+}

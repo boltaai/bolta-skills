@@ -75,6 +75,29 @@ graders:
     target: trace
     pattern: '"name"\s*:\s*"mcp__plugin_bolta_bolta__[\w-]+"\s*,\s*"input"\s*:\s*\{(?=[^\n]*?(?:"media_mode\\?"\W{1,8}(?:image|video|carousel)|"(?:media_prompt|visual_style|image_model|carousel_config|reference_media_id|reference_image_url|library_media|custom_image_instructions)\\?"\s*:|"content_mix\\?"\W{1,4}\{[^{}]*"(?:still_image|carousel|short_video|feed_video|story|avatar_video)\\?"\s*:))'
     match: not_contains
+  - name: plan-asks-text-only
+    # routine-planner.md, "Which call": pictures, video, and Instagram, TikTok, YouTube and Pinterest never go into
+    # the planner's ask, goals or context, even when Instagram is connected (Bolta's planner would draft a picture plan).
+    type: regex
+    target: trace
+    pattern: '"name"\s*:\s*"mcp__plugin_bolta_bolta__(?:plan|plan-routine|plan-campaign|recommend-routines)"\s*,\s*"input"\s*:\s*\{[^{}]*?\b(?:insta(?:gram)?|tik\s?tok|youtube|pinterest|pictures?|photos?|images?|videos?|reels?|carousels?|shorts)\b'
+    flags: i
+    match: not_contains
+  - name: revise-text-only
+    # routine-planner-changes.md and campaign-how-to.md: a plan still showing pictures is revised with exactly
+    # "Text only, no pictures or other media." Any other wording about pictures or media fails.
+    type: tool_used
+    tool: mcp__plugin_bolta_bolta__revise-plan
+    input_match: '^(?=[\s\S]*\b(?:[Pp]ictures?|[Ii]mages?|[Pp]hotos?|[Mm]edia)\b)(?![\s\S]*Text only, no pictures or other media\.)'
+    min: 0
+    max: 0
+  - name: revise-no-video-words
+    # Never the words video, reels or shorts in a revise: Bolta would add a note that the drafts describe a video.
+    type: tool_used
+    tool: mcp__plugin_bolta_bolta__revise-plan
+    input_match: '\b(?:[Vv]ideos?|[Rr]eels?|[Ss]horts)\b'
+    min: 0
+    max: 0
   - name: nothing-saved-yet
     # A proposal, not a setup: no routine, campaign or post saved before a yes.
     type: regex

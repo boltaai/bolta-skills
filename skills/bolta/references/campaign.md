@@ -8,7 +8,7 @@ The plan got a yes and the campaign is filled one way. At the end: a verdict, on
 
 ## Know this
 
-- **Size it:** posts a week × weeks = drafts to review, plus what active routines and campaigns send. Over about 6, cut posts a week, not weeks (cap: 10 social). A first one gets 2 weeks. Subject taken? Offer that one. Campaign or routine: [choosing.md](campaign-choosing.md).
+- **Size it:** posts a week × weeks = drafts to review, plus what active routines and campaigns send. Over about 6, cut posts a week, not weeks. A first one gets 2 weeks. Subject taken? Offer that one. Campaign or routine: [choosing.md](campaign-choosing.md).
 - **Strategy:** always send one, from [strategies.md](campaign-strategies.md): dashboard name, a gloss. A launch is Problem / Solution; Offer & Promotion needs a real price and end date.
 - **Dates:** `starts_on` today or later, a real `ends_on` (`null` is ignored), the event in the last week.
 - **From what you know:** the chat plus what Bolta holds, one "Based on..." line, as `context` ([planner-context](routine-planner-context.md)). Never re-ask a given date.
@@ -20,11 +20,11 @@ The plan got a yes and the campaign is filled one way. At the end: a verdict, on
   > - Posts: 4 text posts a week × 3 weeks = **12 drafts to review**
   > - Who writes: **Bolta.** Or I write 12 now.
 - **Fill it one way, never both** ([two-ways.md](campaign-two-ways.md)):
-  - **Bolta writes it:** default for 2+ weeks. Send a text `content_mix`, `account_ids` (ask which only if several, none named) and `context_notes` (the plan, the user's facts) on the create (or `update-content-campaign`: [targets.md](campaign-targets.md)). Start on the yes (uses credits). Fields refused: "Pick accounts at bolta.ai/dashboard/campaigns/<id>, then say done." "Done" is the yes: accounts there, start.
-  - **I write it now:** 1 week or "show me all": up to 12 Drafts in one batch; poll it, attach its post ids (not the batch's) at once, show each. Never start it: Bolta would write a second set.
+  - **Bolta writes it:** the default. Send a text `content_mix`, `account_ids` (ask which only if several, none named) and `context_notes` (the plan, the user's facts) on the create (later: `update-content-campaign`, [targets.md](campaign-targets.md); a mix only when asked). Start on the yes (uses credits). Fields refused: "Pick accounts at bolta.ai/dashboard/campaigns/<id>, then say done." "Done" is the yes: accounts there, start.
+  - **I write it now:** 1 week the user wants to see now, or "show me all": up to 12 Drafts in one batch; poll it, attach its post ids (not the batch's) at once, show each. Never start it: Bolta would write a second set.
 - **A page to read:** a `url` in `context_sources`, then `analyze-content-campaign-source` each; only read ones reach the writer.
-- **Every setting:** [settings.md](campaign-settings.md) and the pages it links.
-- **Text, blog, email only from chat;** a plan with pictures or video: `revise-plan` to text. Instagram, TikTok, YouTube, Pinterest: pictures and video are added at bolta.ai/dashboard/campaigns/<id>. An existing mix: change it only when asked; keep web-set formats ([formats-and-team.md](campaign-formats-and-team.md); team version, Library).
+- **Every setting:** [settings.md](campaign-settings.md).
+- **Text, blog, email only from chat:** no pictures, video or networks that need them in the plan ([how-to.md](campaign-how-to.md)). A campaign with pictures or video: read, review, pause here; the rest on its page ([settings-formats.md](campaign-settings-formats.md)). Team version, Library: [formats-and-team.md](campaign-formats-and-team.md).
 - **Posting without a yes:** [no-approval](routine-no-approval.md).
 - **Pause, resume, finish (`complete`), retire (`archive`):** ask once; the last two are final.
 - **Verdict** after the end date: [verdict.md](campaign-verdict.md). **Nothing happened:** [why-nothing.md](campaign-why-nothing.md); usually never started ([avoid](campaign-why-nothing-avoid.md)) or awaiting a yes.

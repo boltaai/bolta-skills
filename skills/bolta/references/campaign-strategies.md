@@ -35,7 +35,7 @@ Read week 1's drafts as a set, not one by one.
 - **Pretty scenes that sell nothing:** Lifestyle with no product moment: Product Education.
 - **Explaining what nobody asked:** Product Education aimed too deep: Quick Tips.
 
-- Switch after week 1, not week 3: `update-content-campaign` with the new `strategy_key`. Only the instruction for unwritten weeks changes; the mix stays unless you send `content_mix`. Pair a switch with better notes.
+- Switch after week 1, not week 3: `update-content-campaign` with the new `strategy_key` (a campaign with pictures or video: on its page). Only the instruction for unwritten weeks changes; the mix stays unless you send `content_mix`. Pair a switch with better notes.
 - The strategy page's "Make default" doesn't change what Bolta writes for a campaign made here.
 - Vague everywhere is thin context; switching gives differently vague posts. Fix in order: about your business, the campaign's Context, a source page, your documents.
 

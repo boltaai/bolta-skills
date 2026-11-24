@@ -13,7 +13,7 @@ description: >-
 
 Bolta is a content factory: it learns how a brand writes, drafts in that voice, and puts every draft on one review list, where each yes, edit and no with a reason on Bolta's drafts and app posts teaches it.
 
-Start with routines from their goal, campaigns for dated work, then weekly review ([start](references/start.md)). Compatible drafts need no account, saved voice or brand setup. Every ask: read house rules, look once, read one playbook, act and check the result. Only a failure holds back requested work.
+Start with routines from their goal, campaigns for dated work, then weekly review ([start](references/start.md)). Compatible drafts need no account, saved voice or brand setup. Every ask: read house rules, look once, read one playbook, act, check the result. Only a failure holds back requested work.
 
 ## House rules
 
@@ -92,7 +92,7 @@ Summaries; the playbook has the rest. Worked calls: [examples/](examples/README.
 - A time, "now" or "schedule" in the first ask is not a yes to unseen text (a whole task handed over is: [whose yes](references/review-authority.md)): save a plain draft, show it, then the yes move.
 - Result text may say it was shown or needs no check: give a short result and link; check one post with `get-post`.
 - Instagram, TikTok, YouTube and Pinterest need media: the user's file, public https link or upload ([media](references/post-media.md)). None: skip that network and say why.
-- Generated pictures and video: set up only in Bolta. Routines and campaigns made here are text; changes keep their existing media settings.
+- Routines and campaigns made here are text: no pictures, video or those networks in a plan. One with pictures or video: read, review, pause here; the rest on its page in Bolta.
 - Past a network's length limit Bolta cuts or splits silently. Count first ([post-platforms](references/post-platforms.md)).
 - X video needs live-rule and account checks ([media](references/post-media.md)). A draft proves nothing.
 - Network settings: ask for required, offer optional ([per network](references/post-per-network.md)).
@@ -106,7 +106,7 @@ Summaries; the playbook has the rest. Worked calls: [examples/](examples/README.
 
 ## When something is missing
 
-An app or an older Bolta may lack a tool, and a plan or role can refuse one.
+A tool may be missing, or refused by a plan or role.
 
 - No `approve-many-posts`: `approve-post` for each yes, the first one alone.
 - No `reject-post`: "I can't turn this down from here. Tap the X (Dismiss) on that post at bolta.ai/dashboard/approvals and give your reason." Never delete to stand in for a no.

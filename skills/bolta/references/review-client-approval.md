@@ -10,20 +10,20 @@ Agencies and teams need a client's yes before a post goes out. Three things send
 
 ## What reaches a client from here
 
-- **A Bolta routine set to send its drafts straight to the client** (`update-routine`, `output_config.review` with `to_client`): each run's drafts skip the team and go to the client ([routine-outputs.md](routine-outputs.md)).
+- **A Bolta routine set to send its drafts straight to the client** (`update-routine`, `output_config.review` with `to_client`): each run's drafts skip the team and go to the client. One with pictures or video: on its page ([routine-outputs.md](routine-outputs.md)).
 - **A Library post made with "send to the client" ticked**: `approve-many-posts` sends it to the client instead of putting it live (its item: `scheduled` false, status not Approved).
 - **A hand-picked send to named people**: `submit-for-review` with `reviewer_ids` ([send to a person](review-client-send.md)). Without it, the team's list. Resends, withdrawals and replies to client comments happen in Approvals in Bolta.
 
 ## The steps
 
-1. The team sends up to 50 posts not yet approved (none too long for its network) to the brand's client reviewers or, without required sign-off, creators, never the sender, marking some required if it wants. Email can be switched off per send.
+1. The team sends up to 50 posts not yet approved (none too long for its network) to the brand's client reviewers or, without required sign-off, creators, never the sender, some marked required. Email can be switched off per send.
 2. The client gets a notice and, with email on, Approve and Ask for changes buttons per post. Reminders: [howto](review-client-howto.md).
 3. Each post is answered on its own:
    - **Approve**: sign-off recorded; the post is scheduled at the time the client saw if still ahead, else the next open slot.
    - **Ask for changes**: a comment, tagged tone, message, image, timing or other. The post returns to the team as Needs Revision ([review-more-decisions.md](review-more-decisions.md)). Bolta doesn't learn from it.
    - **Dismiss**: the post is Rejected, never deleted, and Bolta learns what to avoid.
 4. **Required reviewers**: a yes waits until every required reviewer approves that same version. One change request or dismissal settles it.
-5. **Stale:** a post changed after it was sent (text, media, accounts or its time) no longer matches what the client saw. Yeses given stop counting; it has to be sent again. After the client's yes a time move is fine; other edits void it ([review-client-signoff.md](review-client-signoff.md)).
+5. **Stale:** a post changed after it was sent (text, media, accounts or its time) no longer matches what the client saw. Yeses given stop counting; send it again. After the client's yes a time move is fine; other edits void it ([review-client-signoff.md](review-client-signoff.md)).
 
 ## Where a post stands
 

@@ -18,7 +18,7 @@ Bolta sets these, ignores them, or only its own pages can fill them; some the to
 ## Filled by Bolta's own pages
 
 - App sources in `source_bindings` beyond `provider` and `ref`: `kind` is fixed by the routine; `filters` narrow what an app sends; `meeting_category` (meeting transcripts only: `internal_strategy`, the strictest and the default, `customer_conversation`, `webinar_public`, `sales_call`) decides what may be quoted. Bolta's builder or planner sets them when the app is picked; never guess them.
-- Picture and video settings in `output_config` (any key about pictures, video or slides; see [routine-outputs.md](routine-outputs.md)) belong to the routine's page. Never set or change them here; on an update, resend them as `get-routine` shows them.
+- Picture and video settings in `output_config` (any key about pictures, video or slides) belong to the routine's page. A routine with them is changed only there ([routine-outputs.md](routine-outputs.md)); never set them here.
 - A Library-only routine's `library` settings (`per_topic` 1-5, default 2; `voice_mode` `rotate` or `cascade`; `include_images`; `send_to_client`; up to 10 `voice_profile_ids`) belong to the routine Brand > Library makes (bolta.ai/dashboard/knowledge-base?tab=library). `create-routine` refuses that kind; on a post routine `library` takes only `enabled`, `voice_profile_ids` and `send_to_client` ([routine-outputs.md](routine-outputs.md)).
 
 ## Two people editing

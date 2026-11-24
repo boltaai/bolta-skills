@@ -4,7 +4,7 @@ Read for campaign formats and settings, or a team version: one idea written for 
 
 ## Formats (`content_mix` keys, per week)
 
-`text`, `blog` (WordPress only), `email` (the user sends it): what a campaign made here sends. Which network takes which, the weekly caps, and changing a mix a campaign already has: [settings-formats.md](campaign-settings-formats.md). Pictures and video are chosen on the campaign page, bolta.ai/dashboard/campaigns/<id>, never from chat; a mix set there stays as it is. Worked example: [campaign-webinar-countdown](../examples/campaign-webinar-countdown.json).
+`text`, `blog` (WordPress only), `email` (the user sends it): what a campaign made here sends. Which network takes which, the weekly caps, and changing a mix a campaign already has: [settings-formats.md](campaign-settings-formats.md). Pictures and video are chosen on the campaign page, bolta.ai/dashboard/campaigns/<id>, never from chat; a campaign with them is changed only there. Worked example: [campaign-webinar-countdown](../examples/campaign-webinar-countdown.json).
 
 ## Whose voice
 
@@ -12,7 +12,7 @@ One campaign writes in one voice: the brand's, or a person's set with `voice_pro
 
 ## Accounts or days per format
 
-The mix can't say which account or weekday a format goes to ("text on LinkedIn only, the blog on Tuesdays"). That is the content plan, edited on the campaign page under "Content per week". Sending `content_mix` later rebuilds the plan with no accounts or days, so send one only when the user asked to change formats, after `get-content-campaign` ([settings-formats.md](campaign-settings-formats.md)).
+The mix can't say which account or weekday a format goes to ("text on LinkedIn only, the blog on Tuesdays"). That is the content plan, edited on the campaign page under "Content per week". Sending `content_mix` later rebuilds the plan with no accounts or days, so a campaign with any set changes formats on its page ([settings-formats.md](campaign-settings-formats.md)).
 
 ## Planned posts and settings
 

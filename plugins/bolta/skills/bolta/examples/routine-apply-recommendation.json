@@ -1,7 +1,7 @@
 {
   "ask": "Do Bolta's one.",
   "playbook": "routine",
-  "before": "The reply showed Bolta's recommendation for Weekly posts (high_rejection: 2 drafts a run instead of 4, because 3 of 5 decided drafts were turned down) and offered an instructions line instead.",
+  "before": "Weekly posts is a text routine: get-routine showed no picture or video settings. The reply showed Bolta's recommendation for it (high_rejection: 2 drafts a run instead of 4, because 3 of 5 decided drafts were turned down) and offered an instructions line instead.",
   "steps": [
     {
       "tool": "decide-suggestion",

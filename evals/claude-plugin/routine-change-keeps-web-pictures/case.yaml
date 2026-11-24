@@ -1,16 +1,11 @@
 schema_version: "1.1"
 name: routine-change-keeps-web-pictures
-description: 'A routine whose pictures were set up on its page in Bolta (media_mode image, a media_prompt and a visual_style in output_config) gets a change from chat: 2 posts each run instead of 3, confirmed in the earlier turn. update-routine replaces output_config whole (all but review, story and library), so the change must read get-routine and send every existing output_config key back unchanged, the picture settings included. Pictures and video are never switched on, off or to another kind from chat; an existing setup keeps working. update-routine is gated unless the call itself keeps ask me first, so under claude -p the call may be attempted once and reported as not done; the graders read the attempt.'
+description: 'A routine whose pictures were set up on its page in Bolta (Menu Tuesdays: a picture mode, a picture description and a look in output_config) gets a change asked from chat: 2 posts each run instead of 3. A routine with pictures or video is managed only on its page: from chat Claude reads it, lists its runs, reviews its drafts and may pause it; any change, run now, switching on or copy is one line with one link to its page, bolta.ai/dashboard/routines/<id>. So the right answer reads the routine, sends no update-routine (which would echo its picture settings back), and points to the page. Pausing is allowed but not asked, so it is not graded. update-routine.md stays in the mocks so a wrong call reaches a mock and shows in the trace.'
 tags: [smoke, happy]
-expected_outcome: 'routine fires; reads the routine (get-routine) before the change; one update-routine with count 2 whose output_config carries media_mode image, the same media_prompt and visual_style and both networks, exactly as read; never drops, clears or changes the picture settings; nothing switched on, run or published.'
+expected_outcome: 'routine fires; reads the routine (get-routine or list-routines) and sees its pictures; no update-routine, create-routine, run now or switch-on; no picture or video settings in any call; one line that the change is made on its page, with bolta.ai/dashboard/routines/<its id>; never says the count was changed; nothing published.'
 execution:
   prompt: |
-    Earlier in this chat:
-
-    Me: My Menu Tuesdays routine writes too many posts. Make it 2 each run instead of 3.
-    You: Menu Tuesdays writes 3 posts for Instagram and Facebook every Tuesday at 7:00 am (Sydney), each with a picture set up on its page in Bolta. The change: 2 posts each run. Everything else stays as it is: the same day and time, the same pictures, the same accounts, and every draft still waits for your yes. Change it?
-
-    Yes, change it.
+    My Menu Tuesdays routine writes too many posts. Make it 2 each run instead of 3.
   max_turns: 20
   timeout_seconds: 300
   allowed_tools: [Skill, Read]
@@ -21,47 +16,48 @@ graders:
     tool: Skill
     input_match: '"skill"\s*:\s*"(?:[\w-]+:)?(bolta)"'
     min: 1
-  - name: reads-before-change
-    # output_config is replaced whole, so the saved one is read first.
-    type: tool_order
-    before: mcp__plugin_bolta_bolta__get-routine
-    after: mcp__plugin_bolta_bolta__update-routine
-  - name: updates-once
-    # One change.
+  - name: reads-the-routine
+    # Whether it has pictures is read from the routine, never guessed.
+    type: regex
+    pattern: '"name"\s*:\s*"mcp__plugin_bolta_bolta__(get-routine|list-routines)"'
+    target: trace
+  - name: no-update
+    # routine-outputs.md, "Pictures and video": a routine with pictures is changed only on its page. An
+    # update-routine from chat would send its picture settings back, so any call fails, even a faithful resend.
     type: tool_used
     tool: mcp__plugin_bolta_bolta__update-routine
-    min: 1
-    max: 1
-  - name: new-count
-    # The change the user said yes to.
-    type: tool_used
-    tool: mcp__plugin_bolta_bolta__update-routine
-    input_match: '"count\\?"\W{1,4}2\b'
-    min: 1
-  - name: keeps-web-pictures
-    # Rule 3 of the media rule: the picture settings set on the web go back exactly as read, with both networks.
-    type: tool_used
-    tool: mcp__plugin_bolta_bolta__update-routine
-    input_match: '^(?=[\s\S]*"media_mode\\?"\W{1,8}image\b)(?=[\s\S]*The menu item on the cafe counter in soft morning light, no text on the image)(?=[\s\S]*"visual_style\\?"\W{1,8}warm film photo)(?=[\s\S]*instagram)(?=[\s\S]*facebook)'
-    min: 1
-  - name: never-changes-pictures
-    # Pictures are never switched off, cleared or turned into another kind from chat.
-    type: tool_used
-    tool: mcp__plugin_bolta_bolta__update-routine
-    input_match: '"media_mode\\?"\W{1,8}(none|video|carousel|null)|"media_mode\\?"\s*:\s*null|"(media_prompt|visual_style)\\?"\s*:\s*(null|\\?"\\?"|\[\])|"(image_model|carousel_config|reference_media_id|reference_image_url|library_media)\\?"\s*:'
     min: 0
     max: 0
   - name: no-new-routine
-    # A change, not a second routine.
+    # Nor a copy made from chat with the new count.
     type: tool_used
     tool: mcp__plugin_bolta_bolta__create-routine
     min: 0
     max: 0
-  - name: nothing-public
-    # Nothing switched on, run, approved or published.
+  - name: no-run-or-switch-on
+    # Run now, switching on and resuming are on its page too; nothing approved or published either.
     type: regex
-    pattern: '"name"\s*:\s*"mcp__plugin_bolta_bolta__(publish-post|schedule-post|approve-post|approve-many-posts|activate-routine|resume-routine|run-routine-now|set-content-campaign-status)"'
+    pattern: '"name"\s*:\s*"mcp__plugin_bolta_bolta__(run-routine-now|activate-routine|resume-routine|publish-post|schedule-post|approve-post|approve-many-posts|set-content-campaign-status)"'
     target: trace
+    match: not_contains
+  - name: no-generated-media
+    # No picture or video setting in any Bolta call. Fails on media_mode image, video or carousel, media_prompt,
+    # visual_style, image_model, carousel_config, a reference image, library_media, custom_image_instructions, or a
+    # still_image, carousel, short_video, feed_video, story or avatar_video mix key.
+    type: regex
+    target: trace
+    pattern: '"name"\s*:\s*"mcp__plugin_bolta_bolta__[\w-]+"\s*,\s*"input"\s*:\s*\{(?=[^\n]*?(?:"media_mode\\?"\W{1,8}(?:image|video|carousel)|"(?:media_prompt|visual_style|image_model|carousel_config|reference_media_id|reference_image_url|library_media|custom_image_instructions)\\?"\s*:|"content_mix\\?"\W{1,4}\{[^{}]*"(?:still_image|carousel|short_video|feed_video|story|avatar_video)\\?"\s*:))'
+    match: not_contains
+  - name: points-to-its-page
+    # One line, one link: the routine's own page.
+    type: regex
+    pattern: 'bolta\.ai/dashboard/routines/e5000000-0000-4000-8000-000000000030'
+    flags: i
+  - name: no-claimed-change
+    # Never says the count was changed.
+    type: regex
+    pattern: '\bnow (writes|makes|drafts|creates)\s+(2|two)\b|\b(changed|updated|set|cut|lowered|reduced)\s+(it\s+)?to\s+(2|two)\b(?![^\n.]{0,40}\bpage\b)'
+    flags: i
     match: not_contains
   - name: no-ids
     # No ids in what the user reads (an id inside a Bolta link is part of the link).

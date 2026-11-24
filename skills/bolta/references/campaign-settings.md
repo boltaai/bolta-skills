@@ -1,6 +1,6 @@
 # Campaign settings: the brief and the dates
 
-Read when filling or changing a campaign's brief, or when the user asks what a setting does. Set on `create-content-campaign` or `update-content-campaign` (the dashboard shows the same fields). Accounts, notes, sources and voice: [targets.md](campaign-targets.md). Formats and posts per week: [settings-formats.md](campaign-settings-formats.md). Start, pause, finish: [settings-status.md](campaign-settings-status.md). Settings only the campaign page has: [settings-web.md](campaign-settings-web.md). "Guidance" below is marketing judgement, not a Bolta rule.
+Read when filling or changing a campaign's brief, or when the user asks what a setting does. Set on `create-content-campaign` or `update-content-campaign` (the dashboard shows the same fields). Accounts, notes, sources and voice: [targets.md](campaign-targets.md). Formats and posts per week: [settings-formats.md](campaign-settings-formats.md). Start, pause, finish: [settings-status.md](campaign-settings-status.md). Settings only the campaign page has: [settings-web.md](campaign-settings-web.md). A campaign with pictures or video is changed only on its page ([settings-formats.md](campaign-settings-formats.md)). "Guidance" below is marketing judgement, not a Bolta rule.
 
 ## What it's about
 

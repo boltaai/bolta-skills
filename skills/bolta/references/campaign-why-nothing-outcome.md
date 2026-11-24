@@ -15,7 +15,7 @@ Bolta names the first thing that stopped it.
 
 - `no_accounts_connected`: the brand has no accounts at all, so nothing could go out. [connect](connect.md).
 - `runs_failed`: every time Bolta tried to write, it failed. Say the last error.
-- `not_started`: it never started. Start it, or check the start date.
+- `not_started`: it never started. Start it (with pictures or video: on its page), or check the start date.
 - `nothing_generated`: Bolta ran but wrote no drafts. Check the mix and the last error.
 - `quality_blocked`: Bolta's quality check held the drafts back; they need a human edit before they can go. [review](review.md).
 - `publishing_failed`: sends failed and nothing went out, usually a disconnected account. [connect](connect.md).

@@ -18,5 +18,5 @@ The brand's look is set in Bolta, not here. Never ask for it or send `colors`, `
 
 ## Always
 
-- Never invent a fact; ask once, then leave it.
+- Never invent a fact.
 - Never save colours, fonts or a logo from here.

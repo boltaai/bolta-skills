@@ -8,7 +8,7 @@
       "arguments": {
         "routine_id": "<routine id>"
       },
-      "why": "Read it again just before changing it: someone may have edited it since."
+      "why": "Read it again just before changing it: someone may have edited it since. It has no picture or video settings, so the change and the run happen here; one with pictures is fixed and run on its page."
     },
     {
       "tool": "update-routine",
@@ -30,6 +30,7 @@
   "never": [
     "Changing more than the one thing the user said yes to.",
     "Quoting a raw error to the user instead of saying it plainly.",
-    "Retrying run-routine-now in a loop."
+    "Retrying run-routine-now in a loop.",
+    "Changing or running a routine with pictures from here: one line to its page, bolta.ai/dashboard/routines/<id>."
   ]
 }

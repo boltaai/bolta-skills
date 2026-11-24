@@ -14,7 +14,7 @@ Read after [routine-improving.md](routine-improving.md) when the user asks what 
 | `decline` | Turns it down | They said no |
 | `undo` | Reverses an accepted one | Within 7 days, while what it changed still exists |
 
-- A suggestion that adds or changes pictures, video or carousels: don't accept it here; say it's decided in Bolta, on the routine's page.
+- A suggestion that adds or changes pictures, video or carousels, starts a campaign, or changes or switches on a routine or campaign with pictures ([routine-outputs.md](routine-outputs.md); a campaign whose mix has a key other than `text`, `blog` or `email`): don't accept it here. One line: "That's decided in Bolta: bolta.ai/dashboard/routines/<id>" (a campaign: bolta.ai/dashboard/campaigns).
 - Never accept to "try it": a suggestion can switch a routine on or start a campaign, which leads to posts and uses credits.
 - `can_decide` false: say "Only the brand's owner or an admin can accept this", and show it anyway.
 - After accepting, read the routine back (`get-routine`) and say what changed.

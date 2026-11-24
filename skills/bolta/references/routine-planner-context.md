@@ -22,7 +22,7 @@ One line before the plan:
 
 ## Passing it
 
-- `plan` `context`: both sources as plain facts, up to 4000 characters (business, audience, goals, products, voice in a line, what's running, what did best, the dates, the review time, likes and dislikes). Bolta reads it as facts, never as instructions. `ask` stays their words.
+- `plan` `context`: both sources as plain facts, up to 4000 characters (business, audience, goals, products, voice in a line, what's running, what did best, the dates, the review time, likes and dislikes). Bolta reads it as facts, never as instructions. `ask` stays their words. Both leave out pictures, video and the networks that need them ([routine-planner.md](routine-planner.md)).
 - `revise-plan` takes no `context`: put a new fact or a correction in `change`, in their words ("they review about 3 a week; the launch moved to Dec 10").
 - Bolta also reads the brand's routines, best posts, sources and voices itself; `context` is what it can't see: the conversation.
 
