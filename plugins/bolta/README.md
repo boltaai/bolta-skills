@@ -23,7 +23,7 @@ In apps that have plugin marketplaces (for example Claude Code 2.1.295 or later)
 /plugin install bolta@bolta-marketplace
 ```
 
-Then `/mcp`, pick `bolta`, sign in. `/plugin install bolta-checks@bolta-marketplace` adds the Bolta checks. Fewer prompts: in `/permissions`, allow `mcp__plugin_bolta_bolta`.
+Then `/mcp`, pick `bolta`, sign in. `/plugin install bolta-checks@bolta-marketplace` adds the Bolta checks.
 
 claude.ai and Cowork (untested): add this repository as a marketplace, install BOLTA, connect Bolta under Customize > Connectors; keep approve, schedule, publish and reject on "Needs approval".
 <!-- /host-note -->
@@ -54,4 +54,4 @@ Saving drafts needs none. **Bolta checks** `careful` in `/config` checks every a
 
 Bolta (mcp.bolta.ai) gets your requests and decisions. Sign-in is your AI app's: the plugin never sees a password and makes no network calls of its own.
 
-v0.5.4 (beta). [Privacy](https://bolta.ai/privacy-policy) · [Terms](https://bolta.ai/tos) · [Support](https://bolta.ai/support) · MIT licence
+v0.5.5 (beta). [Privacy](https://bolta.ai/privacy-policy) · [Terms](https://bolta.ai/tos) · [Support](https://bolta.ai/support) · MIT licence

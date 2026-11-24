@@ -23,7 +23,7 @@ Read when a campaign's end date has passed, or the user asks how one did. Read `
 ## Closing it
 
 - Read `status` first. **Completed** (`status_reason` `window_ended`): an on campaign finishes by itself after its end date; nothing to do.
-- **Paused, or on before its end:** offer to finish it: `set-content-campaign-status` with `action: "complete"`. One Bolta check. Final: it can't start again; its results stay. Scheduled posts still go out ([settings-status.md](campaign-settings-status.md)).
+- **Paused, or on before its end:** offer to finish it: `set-content-campaign-status` with `action: "complete"` (one with pictures or video: finished on its page, bolta.ai/dashboard/campaigns/<id>). One Bolta check. Final: it can't start again; its results stay. Scheduled posts still go out ([settings-status.md](campaign-settings-status.md)).
 - **Not started** (one I wrote): give the verdict and leave the status alone. It can't be finished from there.
 - **Retire** (`action: "archive"`) only when asked. One check, final. Pause is usually what they meant.
 

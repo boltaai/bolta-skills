@@ -4,9 +4,10 @@ Read only when `plan` is an unknown tool. With it, use [routine-planner.md](rout
 
 ## Save it switched off
 
-- Before saving, show one summary using their goal, a creatable template and its defaults. Honor their stated cadence, network and count; propose missing choices for confirmation instead of asking about every field. Ask only what blocks valid setup; never invent account IDs, source bindings or permission. On their yes: `create-routine` with `name`, `goal` (their words), `template_key` and the confirmed choices. Scheduled: send `trigger_type: "schedule"`, the agreed `schedule` and IANA `timezone`; manual: `trigger_type: "manual"`, no schedule.
+- Before saving, show one summary using their goal, a creatable template and its defaults. Honor their stated cadence, network and count, text only: no pictures, video, Instagram, TikTok, YouTube or Pinterest ([routine-outputs.md](routine-outputs.md)); propose missing choices for confirmation instead of asking about every field. Ask only what blocks valid setup; never invent account IDs, source bindings or permission. On their yes: `create-routine` with `name`, `goal` (their words), `template_key` and the confirmed choices. Scheduled: send `trigger_type: "schedule"`, the agreed `schedule` and IANA `timezone`; manual: `trigger_type: "manual"`, no schedule.
 - Keep `approval_policy: "review_every_artifact"` for draft routines. Bind selected usable accounts when present. With no accounts, compatible review-only drafts may omit social bindings and use the requested `output_config.platforms`; publishing, source, history and company-page requirements still apply. A saved voice or brand record is optional.
 - `output_config` includes `artifact_type`; preserve the template count unless they chose another. `instructions`: their words and supplied facts, never invented founder/customer history or results. No `activate-routine` yet.
+- Text only, as [routine-outputs.md](routine-outputs.md) says: no picture, video or slide keys in `output_config`, and no Instagram, TikTok, YouTube or Pinterest in `platforms` or `source_bindings`. Named anyway: leave them off and say in one line they are added on its page; only those networks wanted, or none named and only those connected: save nothing.
 - Say it is saved, switched off: "Saved to Acme, switched off. Switch it on?"
 
 ## Switch it on

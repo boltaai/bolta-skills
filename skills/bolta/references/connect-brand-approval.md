@@ -17,6 +17,7 @@ The brand's `list-workspaces` row: `approval` (in plain words, whether work publ
 `set-brand-approval` with `autonomy_mode`, `safe_mode` or both, and `expected_updated_at`: the `approval.updated_at` as read, on every call.
 
 1. Looser: the first call, without `acknowledge`, changes nothing (`needs_confirmation`). Show the user exactly what it returns: `message`, `notes` and what would publish without review (`newly_without_review`).
+   If `newly_without_review` names a routine or campaign with pictures or video, don't loosen it here: "That would let <name>'s pictures or video post without review, so that's changed in Bolta: Settings > Rules > Approvals."
 2. Only if their latest message says yes: call again with the same values, `acknowledge: true` and the same `expected_updated_at`.
 3. Tell them what changed from the result's `message`. To undo, send the previous values.
 

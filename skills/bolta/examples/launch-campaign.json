@@ -47,7 +47,7 @@
         "campaign_id": "<campaign id>",
         "action": "activate"
       },
-      "why": "One Bolta check, and it uses credits. Never for a campaign the assistant filled with its own drafts."
+      "why": "One Bolta check, and it uses credits. Only once resolved_content_mix read back text, blog or email keys (any other: one line to its page, not started here). Never for a campaign the assistant filled with its own drafts."
     },
     {
       "tool": "get-content-campaign",

@@ -1,6 +1,6 @@
 # Bolta routine runs: state, why, and fixing a failed one
 
-Read for "why didn't it run?", "it failed", a refused run now, credits, or Bolta's suggestions. Start with `get-routine`, then `list-routine-runs`.
+Read for "why didn't it run?", "it failed", a refused run now, credits, or Bolta's suggestions. Start with `get-routine`, then `list-routine-runs`. A routine with pictures ([routine-outputs.md](routine-outputs.md)): say its state and why here; turning it on, running or changing it: one line, "That's done on its page in Bolta: bolta.ai/dashboard/routines/<id>."
 
 ## Its state
 
@@ -41,11 +41,11 @@ A refused `run-routine-now` or credits run out: [routine-runs-refused.md](routin
 ## Fix a failed run
 
 1. `get-routine` and `list-routine-runs`.
-2. Explain in 2-4 plain sentences what went wrong. A routine with pictures ([routine-outputs.md](routine-outputs.md)): stop there and link its page, bolta.ai/dashboard/routines/<id>.
+2. Explain in 2-4 plain sentences what went wrong. A routine with pictures: stop there.
 3. Propose one change, to `goal`, `instructions`, `schedule` with `timezone`, or the one setting the error names (no reply `topics`; `auto` where the routine can't post without asking: back to ask me first). Offer one run after: "Change it and run it now? Uses credits."
 4. On that one yes: `get-routine` again, `update-routine` (an `instructions` change is the current text plus the new sentence, sent whole), `run-routine-now`.
 
-Example, a skipped run: "Monday's run skipped: Bolta doesn't know what the business does yet, and this routine has no topic, so it didn't write generic posts. Add 'Write about our spring workshops' to its instructions and run it once now? Uses credits." Steps: [fix-a-failed-run](../examples/fix-a-failed-run.json).
+Example, a skipped run (no topic, business unknown): "Add 'Write about our spring workshops' to its instructions and run it once now? Uses credits." Steps: [fix-a-failed-run](../examples/fix-a-failed-run.json).
 
 ## Bolta's weekly recommendations
 

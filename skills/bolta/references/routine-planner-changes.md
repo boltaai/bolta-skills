@@ -11,7 +11,7 @@ Read after [routine-planner.md](routine-planner.md) when the user wants a plan c
 
 Writing settings (pillars, tone, story sources, research topic, call to action) are not plan fields: save, then `update-routine` `output_config` ([routine-settings-writing.md](routine-settings-writing.md)).
 
-Pictures and video are never a plan change here: a plan made here is text posts. Instagram, TikTok, YouTube or Pinterest in a plan: take that network off (`platforms`, `account_ids`), since a text draft to it fails; no network left, save nothing ([routine-outputs.md](routine-outputs.md)). A plan that shows pictures, video or carousels gets exactly this `change`: "Text only, no pictures or other media." (never the words video, reels or shorts in a `change`). Read the new plan: still showing any, save nothing; one line, "This one needs pictures, so it's set up in Bolta: bolta.ai/dashboard/routines."
+Pictures and video are never a plan change here: a plan made here is text posts. Instagram, TikTok, YouTube or Pinterest in a plan: take that network off (`platforms`, `account_ids`), since a text draft to it fails; no network left, save nothing ([routine-outputs.md](routine-outputs.md)). A plan that shows pictures, video or carousels gets exactly this `change`: "Text only, no pictures or other media." (never the words video, reels or shorts in a `change`). Read the new plan: still showing any, or one of those networks, save nothing; one line, "This one needs pictures, so it's set up in Bolta: bolta.ai/dashboard/routines."
 
 ## Which to send (advice)
 

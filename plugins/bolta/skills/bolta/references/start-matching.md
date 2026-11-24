@@ -14,9 +14,9 @@ Read with [start](start.md) when choosing a best-fit routine or several jobs. Bo
 | A brand with a blog or wanting search traffic | Weekly posts | A weekly article (`weekly_blog_article`); posts from each new article, blog connected |
 | A brand with months of published posts | Whatever is missing above | Best posts rewritten (`repurpose_top_posts`): never a first routine |
 
-- Each routine is a different job. Two doing the same job on the same network is one too many.
+- Each routine is a different job: never two doing the same job on one network.
 - Stories and customer wins need real events from the user; none: leave them out. Never invent one.
-- Routines made here write text: no pictures, video, Instagram, TikTok, YouTube or Pinterest in a plan. Only those four networks wanted or connected: save none; one line, one link ([routine-outputs.md](routine-outputs.md)).
+- Routines made here write text: no pictures, video, Instagram, TikTok, YouTube or Pinterest in a plan. Only those networks wanted, or none named and only those connected: save none; one line, one link ([routine-outputs.md](routine-outputs.md)).
 - A report posts nothing and costs no review time. Offer one beside 1-2 writing routines, once there are published posts to read.
 - Name them in their words: "Weekly candle care tips".
 

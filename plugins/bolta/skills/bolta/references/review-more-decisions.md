@@ -7,7 +7,7 @@ Read when a row is a Library post, a post came back for changes, an approval is 
 - A row with `is_library` true or a `library_topic` is a post for the employee Library link. Group these as "Library", never as "one idea, N versions".
 - A yes never schedules it. It goes live on the link, or to the client if "send to the client" was chosen when it was made.
 - Approve with `approve-many-posts`, one item each, `approve_only`, with no time. Never `publish-post`: it refuses them, with any `when`.
-- `image_pending` (image still being made): wait, then approve again.
+- `image_pending` (its picture isn't attached yet): not approvable now. Say so and leave it on the list; it's decided once the picture shows on the draft, or in Bolta at bolta.ai/dashboard/approvals.
 - `client_review_pending` (already with the client): the client decides it. Stop.
 - In `approve-many-posts`, ok with `scheduled` false and a status other than Approved most likely means it went to the client.
 - Say "live on your Library link" or "sent to your client". Never "scheduled".

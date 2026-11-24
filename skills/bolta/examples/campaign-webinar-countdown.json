@@ -33,7 +33,7 @@
         "campaign_id": "<campaign id>",
         "action": "activate"
       },
-      "why": "The user said start and saw the plan. Week 1 starts Fri Nov 27, written around Wed Nov 25."
+      "why": "The user said start and saw the plan, and the create's resolved_content_mix read back text only (a picture or video key: started on its page instead). Week 1 starts Fri Nov 27, written around Wed Nov 25."
     },
     {
       "tool": "get-content-campaign",

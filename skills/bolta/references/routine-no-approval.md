@@ -20,6 +20,8 @@ The brand's automation level (`autonomy_mode`) and review mode (`safe_mode`) are
 2. **The brand.** `autonomy_mode` manual or assisted, or `safe_mode` on: it must go to Auto.
 3. **The routine or campaign.** `approval_policy` to `auto` (routines: weekly posts, founder stories, customer wins, LinkedIn positions, Square only); a campaign's stricter `autonomy_override` to `""`.
 
+A routine or campaign with pictures or video ([routine-outputs.md](routine-outputs.md), [settings-formats.md](campaign-settings-formats.md)): not from here; this is changed on its page. One line, bolta.ai/dashboard/routines/<id> or bolta.ai/dashboard/campaigns/<id>.
+
 Put everything needed in one plain sentence and one question:
 
 > To post this without asking you, I'll switch Acme to Auto and set Weekly posts to publish on its own. The client still signs off, and the 3 drafts already waiting still need you. OK?
@@ -28,7 +30,7 @@ Leave out the brand part when the brand already allows it.
 
 ## On one yes, make all of them
 
-1. Brand, if needed: `set-brand-approval` preview (no `acknowledge`), then the same call with `acknowledge: true` ([brand approval](connect-brand-approval.md)). If the preview shows more publishing without review than the sentence said (`newly_without_review`), show that and ask again before acknowledging.
+1. Brand, if needed: `set-brand-approval` preview (no `acknowledge`), then the same call with `acknowledge: true` ([brand approval](connect-brand-approval.md)). If the preview shows more publishing without review than the sentence said (`newly_without_review`), show that and ask again before acknowledging. One naming a routine or campaign with pictures or video: don't loosen it here: "That would let <name>'s pictures or video post without review, so that's changed in Bolta: Settings > Rules > Approvals."
 2. `update-routine` (or `update-content-campaign`): `approval_policy: "auto"` and `expected_updated_at` (the exact `updated_at` they saw). `configuration_changed`: someone changed it; read again, show it, ask again; never resend under the old yes.
 3. Read `get-routine` back. Say "posts without asking" only when `effective_policy.approval_required` is false; otherwise say what still decides, from `decided_explanation`. Still `not_resolved`: "Set. Bolta confirms it after the first run; until then treat drafts as waiting for you."
 

@@ -1,6 +1,6 @@
 # Bolta routine settings: what each run makes
 
-`output_config` on `create-routine` and `update-routine`. The tool describes it only as "platforms, counts"; every key below is real. Writing settings: [routine-settings-writing.md](routine-settings-writing.md). Pictures, the client, stories, Library posts: [routine-outputs.md](routine-outputs.md). Labels as in [routine-settings.md](routine-settings.md).
+`output_config` on `create-routine` and `update-routine`. Writing settings: [routine-settings-writing.md](routine-settings-writing.md). Pictures, the client, stories, Library posts: [routine-outputs.md](routine-outputs.md). Labels as in [routine-settings.md](routine-settings.md).
 
 ## Always sent
 
@@ -18,12 +18,12 @@
 | Weekly article, HubSpot win | 2 |
 | Reports | 1 |
 
-These are limits per run, not per week: a daily routine at 10 is 70 drafts a week. Size to what gets decided, 3-6 a week for most people (advice; seen: weekly at 3 is what people keep, and one daily 10-a-run routine wrote 167 drafts, most never decided).
+Limits are per run, not per week: a daily routine at 10 is 70 drafts a week. Size to what gets decided, 3-6 a week for most people (advice: weekly at 3 is what people keep; a daily 10-a-run one wrote 167 drafts, most undecided).
 
 ## Only when it fits
 
-- `platforms`: send the requested network for accountless drafts; ask if unknown. With bound accounts, use their networks unless the owner narrowed them. Never invent a network or copy a web default. Values: `x`, `threads`, `linkedin`, `facebook`, `instagram`, `reddit`, `bluesky`, `mastodon`, `tiktok`, `youtube`, `pinterest`, `wordpress`.
-- `source_urls`: exactly one public page Bolta reads at every run ("from my blog page", a changelog, a newsletter archive). On weekly posts, research series and weekly articles. A page that changed nothing since the last run skips that scheduled run; one that can't be read refuses the run. A page that never changes skips every week: use it only for pages that change.
+- `platforms`: send the requested network for accountless drafts; ask if unknown. Bound accounts: their networks, unless the owner narrowed them. Never invent a network or copy a web default. Values from here: `x`, `threads`, `linkedin`, `facebook`, `reddit`, `bluesky`, `mastodon`, `wordpress`. Never `instagram`, `tiktok`, `youtube` or `pinterest`, and never bind their accounts: a text draft to them fails; they need pictures or video, added on the routine's page ([routine-outputs.md](routine-outputs.md)).
+- `source_urls`: exactly one public page Bolta reads at every run ("from my blog page", a changelog, a newsletter archive). On weekly posts, research series and weekly articles. A page unchanged since the last run skips that run (one that never changes skips every week: use only pages that change); one that can't be read refuses the run.
 - `topics` (reply routines, required, up to 10 phrases of 120 characters): what people say when they need the business, in the user's words. `communities` (up to 10 subreddits, Reddit only). A reply routine made on Bolta's web page has no topics, so every run fails: read `get-routine` `output_config.topics` and, with a yes, add them with `update-routine`.
 - `cta`: `{"text":"Book a free consult","url":"https://..."}`, text up to 200 characters, as it should read; a link only the user gave. On weekly posts and its siblings, best posts again and the weekly article. One call to action, not every post a pitch (advice).
 

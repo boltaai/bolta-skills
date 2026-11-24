@@ -12,7 +12,7 @@ Read when an approve, reject or batch call refuses or comes back unclear. The or
 | `self_approval_not_allowed` | "Bolta needs someone else to approve posts you wrote here." Stop: no retry, no `publish-post`. |
 | out of credits | Say `credits_needed` and `credits_remaining`; send them to bolta.ai/dashboard/settings/billing; approve again after. |
 | billing unavailable | Credits couldn't be checked just now. Retry once shortly. |
-| Library image still being made | Wait for the image, then approve again. |
+| Library picture not attached yet | Say it isn't ready and leave it on the list; never wait on it or retry in a loop. |
 | permission refusal | Say the reason plainly: your role can't approve, your plan doesn't include it, or this connection wasn't given that access. Stop after sending for review. |
 | "Cannot approve post with status" | Not on the review list: send it first. |
 | video not ready; Reddit needs a subreddit and title | Say what's missing; fix with `save-post` and `post_id` (Reddit: `platform_details`), then send it again. |
